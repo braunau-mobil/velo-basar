@@ -1,0 +1,70 @@
+﻿@page
+@model BraunauMobil.VeloBasar.Pages.Products.DeleteModel
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Product</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Product.FrameNumber)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Product.FrameNumber)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Product.Color)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Product.Color)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Product.Brand)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Product.Brand)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Product.Description)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Product.Description)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Product.Type)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Product.Type)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Product.TireSize)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Product.TireSize)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Product.Price)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Product.Price)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Product.Status)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Product.Status)
+        </dd>
+    </dl>
+    
+    <form method="post">
+        <input type="hidden" asp-for="Product.ID" />
+        <input type="submit" value="Delete" class="btn btn-default" /> |
+        <a asp-page="./Index">Back to List</a>
+    </form>
+</div>

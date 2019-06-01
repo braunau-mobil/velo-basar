@@ -1,0 +1,82 @@
+﻿@page
+@model BraunauMobil.VeloBasar.Pages.Sellers.DeleteModel
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Seller</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Seller.FirstName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Seller.FirstName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Seller.LastName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Seller.LastName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Seller.Street)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Seller.Street)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Seller.City)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Seller.City)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Seller.ZIP)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Seller.ZIP)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Seller.CountryCode)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Seller.CountryCode)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Seller.IBAN)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Seller.IBAN)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Seller.BIC)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Seller.BIC)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Seller.BankAccountHolder)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Seller.BankAccountHolder)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Seller.Token)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Seller.Token)
+        </dd>
+    </dl>
+    
+    <form method="post">
+        <input type="hidden" asp-for="Seller.ID" />
+        <input type="submit" value="Delete" class="btn btn-default" /> |
+        <a asp-page="./Index">Back to List</a>
+    </form>
+</div>

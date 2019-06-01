@@ -1,0 +1,79 @@
+﻿@page
+@model BraunauMobil.VeloBasar.Pages.Sellers.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h2>Create</h2>
+
+<h4>Seller</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Seller.FirstName" class="control-label"></label>
+                <input asp-for="Seller.FirstName" class="form-control" />
+                <span asp-validation-for="Seller.FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Seller.LastName" class="control-label"></label>
+                <input asp-for="Seller.LastName" class="form-control" />
+                <span asp-validation-for="Seller.LastName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Seller.Street" class="control-label"></label>
+                <input asp-for="Seller.Street" class="form-control" />
+                <span asp-validation-for="Seller.Street" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Seller.City" class="control-label"></label>
+                <input asp-for="Seller.City" class="form-control" />
+                <span asp-validation-for="Seller.City" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Seller.ZIP" class="control-label"></label>
+                <input asp-for="Seller.ZIP" class="form-control" />
+                <span asp-validation-for="Seller.ZIP" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Seller.CountryCode" class="control-label"></label>
+                <input asp-for="Seller.CountryCode" class="form-control" />
+                <span asp-validation-for="Seller.CountryCode" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Seller.IBAN" class="control-label"></label>
+                <input asp-for="Seller.IBAN" class="form-control" />
+                <span asp-validation-for="Seller.IBAN" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Seller.BIC" class="control-label"></label>
+                <input asp-for="Seller.BIC" class="form-control" />
+                <span asp-validation-for="Seller.BIC" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Seller.BankAccountHolder" class="control-label"></label>
+                <input asp-for="Seller.BankAccountHolder" class="form-control" />
+                <span asp-validation-for="Seller.BankAccountHolder" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Seller.Token" class="control-label"></label>
+                <input asp-for="Seller.Token" class="form-control" />
+                <span asp-validation-for="Seller.Token" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

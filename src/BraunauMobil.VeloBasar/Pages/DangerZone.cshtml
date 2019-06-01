@@ -1,0 +1,59 @@
+﻿@page
+@model BraunauMobil.VeloBasar.Pages.DangerZoneModel
+@{
+    ViewData["Title"] = "Danger Zone1";
+}
+
+<h2>DangerZone</h2>
+
+<h4>Drop Database and genereate sample data, this can take very long!!</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div class="form-group">
+                <label class="control-label">Generator.FirstBasarDate</label>
+                <input asp-for="Config.FirstBasarDate" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label class="control-label">Generator.BasarCount</label>
+                <input asp-for="Config.BasarCount" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label class="control-label">Generator.MinAcceptancesPerSeller</label>
+                <input asp-for="Config.MinAcceptancesPerSeller" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label class="control-label">Config.MaxAcceptancesPerSeller</label>
+                <input asp-for="Config.MaxAcceptancesPerSeller" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label class="control-label">Config.MinSellers</label>
+                <input asp-for="Config.MinSellers" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label class="control-label">Config.MaxSellers</label>
+                <input asp-for="Config.MaxSellers" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label class="control-label">Config.MeanProductsPerSeller</label>
+                <input asp-for="Config.MeanProductsPerSeller" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label class="control-label">Config.StdDevProductsPerSeller</label>
+                <input asp-for="Config.StdDevProductsPerSeller" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label class="control-label">Config.MeanPrice</label>
+                <input asp-for="Config.MeanPrice" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label class="control-label">Config.StdDevPrice</label>
+                <input asp-for="Config.StdDevPrice" class="form-control" />
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Start" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
