@@ -20,6 +20,7 @@ namespace BraunauMobil.VeloBasar.Data
         private readonly VeloBasarContext _context;
         private readonly Dictionary<Basar, Dictionary<TransactionType, DateTime>> _timeStamps = new Dictionary<Basar, Dictionary<TransactionType, DateTime>>();
         private readonly DataGeneratorConfiguration _config;
+        private int _acceptanceNumber;
 
         public DataGenerator(VeloBasarContext context, DataGeneratorConfiguration config)
         {
@@ -51,6 +52,8 @@ namespace BraunauMobil.VeloBasar.Data
             await _context.Basar.AddAsync(basar);
             await _context.SaveChangesAsync();
 
+            _acceptanceNumber = 1;
+
             var sellerCount = _rand.Next(_config.MinSellers, _config.MaxSellers);
             for (var sellerNumber = 1; sellerNumber <= sellerCount; sellerNumber++)
             {
@@ -66,10 +69,11 @@ namespace BraunauMobil.VeloBasar.Data
             await _context.Seller.AddAsync(seller);
             await _context.SaveChangesAsync();
 
-            var acceptanceCount = _rand.Next(_config.MinAcceptancesPerSeller, _config.MaxAcceptancesPerSeller);
-            for (var acceptanceNumber = 1; acceptanceNumber <= acceptanceCount; acceptanceNumber++)
+            var acceptancePerCustomerCount = _rand.Next(_config.MinAcceptancesPerSeller, _config.MaxAcceptancesPerSeller);
+            while (acceptancePerCustomerCount > 0)
             {
-                await CreateAcceptanceAsync(basar, seller, acceptanceNumber);
+                await CreateAcceptanceAsync(basar, seller, _acceptanceNumber++);
+                acceptancePerCustomerCount--;
             }
         }
 
