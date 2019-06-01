@@ -8,6 +8,8 @@ namespace BraunauMobil.VeloBasar.Models
 
         public DateTime Date { get; set; }
 
+        public bool IsLocked { get; set; }
+
         public string Name { get; set; }
 
         public decimal ProductCommission { get; set; }
