@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using BraunauMobil.VeloBasar.Models;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace BraunauMobil.VeloBasar.Data
 {
-    public class VeloBasarContext : DbContext
+    public class VeloBasarContext : IdentityDbContext
     {
         public VeloBasarContext (DbContextOptions<VeloBasarContext> options)
             : base(options)
