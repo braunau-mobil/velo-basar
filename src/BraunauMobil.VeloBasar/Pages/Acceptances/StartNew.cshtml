@@ -1,0 +1,17 @@
+﻿@page
+@model BraunauMobil.VeloBasar.Pages.Acceptances.StartNewModel
+
+@{
+    ViewData["Title"] = "Neue Annahme";
+}
+
+<h2>Neue Annahme</h2>
+<p>
+    <a asp-page="/Sellers/Create" asp-route-id="@Model.Basar.Id">Neue Verkäuferin</a>
+</p>
+<p>
+    <a asp-page="/Sellers/SearchWithId" asp-route-id="@Model.Basar.Id">Verkäuferin mit ID suchen</a>
+</p>
+<p>
+    <a asp-page="/Sellers/Search" asp-route-id="@Model.Basar.Id">Verkäuferin suchen</a>
+</p>

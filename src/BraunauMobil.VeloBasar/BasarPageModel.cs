@@ -21,6 +21,9 @@ namespace BraunauMobil.VeloBasar
 
         public virtual async Task<IActionResult> OnGetAsync(int? id)
         {
+#if DEBUG
+            id = 1;
+#endif
             if (id != null)
             {
                 Basar = await Context.Basar.FirstOrDefaultAsync(m => m.Id == id);
