@@ -3,8 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using BraunauMobil.VeloBasar.Data;
 using BraunauMobil.VeloBasar.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
 
 namespace BraunauMobil.VeloBasar.Pages.Sellers
 {
@@ -17,11 +15,11 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
         [BindProperty]
         public Seller Seller { get; set; }
 
-        public override async Task<IActionResult> OnGetAsync(int? basarId)
+        public async Task OnGetAsync(int? basarId)
         {
-            ViewData["Countries"] = new SelectList(Context.Country, "Id", "Name");
+            await LoadBasarAsync(basarId);
 
-            return await base.OnGetAsync(basarId);
+            ViewData["Countries"] = new SelectList(Context.Country, "Id", "Name");
         }
 
         public async Task<IActionResult> OnPostAsync()

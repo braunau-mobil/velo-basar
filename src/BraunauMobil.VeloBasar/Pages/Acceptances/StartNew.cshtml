@@ -6,6 +6,5 @@
 }
 
 <h2>Neue Annahme</h2>
-<a asp-page="/Sellers/Create" asp-route-id="@Model.Basar.Id" class="btn btn-default">Neue Verkäuferin</a>
-<a asp-page="/Sellers/SearchWithId" asp-route-id="@Model.Basar.Id" class="btn btn-default">Verkäuferin mit ID suchen</a>
-<a asp-page="/Sellers/Search" asp-route-id="@Model.Basar.Id" class="btn btn-default">Verkäuferin suchen</a>
+<a asp-page="/Sellers/Create" asp-route-basarId="@Model.Basar.Id" class="btn btn-default">Neue Verkäuferin</a>
+<a asp-page="/Sellers/List" asp-route-basarId="@Model.Basar.Id" class="btn btn-default">Verkäuferin suchen</a>

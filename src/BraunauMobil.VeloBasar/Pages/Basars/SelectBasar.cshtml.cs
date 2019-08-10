@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using BraunauMobil.VeloBasar.Data;
 using BraunauMobil.VeloBasar.Models;
-using Microsoft.AspNetCore.Mvc;
 
 namespace BraunauMobil.VeloBasar.Pages.Basars
 {
@@ -15,11 +14,11 @@ namespace BraunauMobil.VeloBasar.Pages.Basars
 
         public IList<Basar> Basars { get; set; }
 
-        public override async Task<IActionResult> OnGetAsync(int? basarId)
+        public async Task OnGetAsync(int? basarId)
         {
-            Basars = await Context.Basar.ToListAsync();
+            await LoadBasarAsync(basarId);
 
-            return await base.OnGetAsync(basarId);
+            Basars = await Context.Basar.ToListAsync();
         }
     }
 }

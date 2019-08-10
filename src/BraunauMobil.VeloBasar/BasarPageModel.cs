@@ -19,7 +19,7 @@ namespace BraunauMobil.VeloBasar
         [BindProperty]
         public Basar Basar { get; set; }
 
-        public virtual async Task<IActionResult> OnGetAsync(int? basarId)
+        protected async Task LoadBasarAsync(int? basarId)
         {
 #if DEBUG
             basarId = 1;
@@ -28,7 +28,6 @@ namespace BraunauMobil.VeloBasar
             {
                 Basar = await Context.Basar.FirstOrDefaultAsync(m => m.Id == basarId);
             }
-            return Page();
         }
     }
 }
