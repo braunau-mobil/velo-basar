@@ -19,6 +19,8 @@ namespace BraunauMobil.VeloBasar.Data
 
         public DbSet<Cancellation> Cancellation { get; set; }
 
+        public DbSet<Country> Country { get; set; }
+
         //public DbSet<Number> Number { get; set; }
 
         public DbSet<Product> Product { get; set; }

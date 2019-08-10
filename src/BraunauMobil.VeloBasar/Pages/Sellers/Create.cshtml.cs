@@ -1,31 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using BraunauMobil.VeloBasar.Data;
 using BraunauMobil.VeloBasar.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 
 namespace BraunauMobil.VeloBasar.Pages.Sellers
 {
-    public class CreateModel : PageModel
+    public class CreateModel : BasarPageModel
     {
-        private readonly BraunauMobil.VeloBasar.Data.VeloBasarContext _context;
-
-        public CreateModel(BraunauMobil.VeloBasar.Data.VeloBasarContext context)
+        public CreateModel(VeloBasarContext context) : base(context)
         {
-            _context = context;
-        }
-
-        public IActionResult OnGet()
-        {
-            return Page();
         }
 
         [BindProperty]
         public Seller Seller { get; set; }
+
+        public override async Task<IActionResult> OnGetAsync(int? basarId)
+        {
+            ViewData["Countries"] = new SelectList(Context.Country, "Id", "Name");
+
+            return await base.OnGetAsync(basarId);
+        }
 
         public async Task<IActionResult> OnPostAsync()
         {
@@ -34,10 +31,10 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
                 return Page();
             }
 
-            _context.Seller.Add(Seller);
-            await _context.SaveChangesAsync();
+            Context.Seller.Add(Seller);
+            await Context.SaveChangesAsync();
 
-            return RedirectToPage("./Index");
+            return RedirectToPage("./Details", new { basarId = Basar.Id, sellerId = Seller.Id });
         }
     }
 }

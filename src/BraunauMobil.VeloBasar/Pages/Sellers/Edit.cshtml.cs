@@ -30,6 +30,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
                 return NotFound();
             }
 
+            ViewData["Countries"] = new SelectList(_context.Country, "Id", "Name");
             Seller = await _context.Seller.FirstOrDefaultAsync(m => m.Id == id);
 
             if (Seller == null)
