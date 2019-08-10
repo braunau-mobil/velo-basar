@@ -75,9 +75,9 @@
                     @Html.DisplayFor(modelItem => item.Country.Name)
                 </td>
                 <td>
-                    <a asp-page="./Edit" asp-route-basarId="@Model.Basar.Id" asp-route-id="@item.Id">Bearbeiten</a> |
-                    <a asp-page="./Details" asp-route-basarId="@Model.Basar.Id" asp-route-id="@item.Id">Details</a> |
-                    <a asp-page="./Delete" asp-route-basarId="@Model.Basar.Id" asp-route-id="@item.Id">Löschen</a>
+                    <a asp-page="./Edit" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@item.Id">Bearbeiten</a> |
+                    <a asp-page="./Details" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@item.Id">Details</a> |
+                    <a asp-page="./Delete" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@item.Id">Löschen</a>
                 </td>
             </tr>
         }
@@ -89,14 +89,14 @@
 }
 
 <a asp-page="./List"
-   asp-route-basarId="@Model.Basar.Id"
+   asp-all-route-data="@Model.GetRoute()"
    asp-route-pageIndex="@(Model.Sellers.PageIndex - 1)"
    asp-route-currentFilter="@Model.CurrentFilter"
    class="btn btn-default @prevDisabled">
     Previous
 </a>
 <a asp-page="./List"
-   asp-route-basarId="@Model.Basar.Id"
+   asp-all-route-data="@Model.GetRoute()"
    asp-route-pageIndex="@(Model.Sellers.PageIndex + 1)"
    asp-route-currentFilter="@Model.CurrentFilter"
    class="btn btn-default @nextDisabled">
