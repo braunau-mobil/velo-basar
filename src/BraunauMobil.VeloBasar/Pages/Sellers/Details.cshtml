@@ -11,7 +11,7 @@
 {
     <a asp-page="/Settlements/CreateAndPrint" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@Model.Seller.Id" target="_blank" class="btn btn-default">Abrechnen</a>
 }
-<a asp-page="/.CreateAndPrintLabels" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@Model.Seller.Id" target="_blank" class="btn btn-default">Etiketten drucken</a>
+<a asp-page="./CreateAndPrintLabels" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@Model.Seller.Id" target="_blank" class="btn btn-default">Etiketten drucken</a>
 |
 <a asp-page="./Edit" asp-all-route-data="@Model.GetSellerRoute()" class="btn btn-default">Bearbeiten</a>
 <a asp-page="./Delete" asp-all-route-data="@Model.GetSellerRoute()" class="btn btn-default">Löschen</a>
@@ -92,6 +92,10 @@
                     <td>
                         <a asp-page="/Products/Edit" asp-all-route-data="@Model.GetItemRoute(item)">Bearbeiten</a> |
                         <a asp-page="/Products/Delete" asp-all-route-data="@Model.GetItemRoute(item)">Löschen</a>
+                        @if (item.Label != null)
+                        {
+                            <a asp-page="/ShowFile" asp-all-route-data="@Model.GetRoute()" asp-rout-fileId="@item.Label" target = "_blank">Etikett</a>
+                        }
                     </td>
                 </tr>
             }

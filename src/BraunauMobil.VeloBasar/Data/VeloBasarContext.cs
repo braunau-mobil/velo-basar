@@ -168,12 +168,12 @@ namespace BraunauMobil.VeloBasar.Data
             return true;
         }
 
-        public async Task GenerateLabel(Product product)
+        public async Task GenerateLabel(Basar basar, Product product)
         {
             var fileStore = new FileStore
             {
                 ContentType = PdfContentType,
-                Data = _pdfCreator.CreateLabel(product)
+                Data = _pdfCreator.CreateLabel(basar, product)
             };
             await FileStore.AddAsync(fileStore);
             await SaveChangesAsync();
@@ -197,10 +197,11 @@ namespace BraunauMobil.VeloBasar.Data
 
         public async Task GenerateMissingLabelsAsync(int basarId, int sellerId)
         {
+            var basar = await GetBasarAsync(basarId);
             var products = await GetProductsForSeller(basarId, sellerId).Where(p => p.Label == null).ToListAsync();
             foreach (var product in products)
             {
-                await GenerateLabel(product);
+                await GenerateLabel(basar, product);
             }
 
             await SaveChangesAsync();
@@ -241,7 +242,7 @@ namespace BraunauMobil.VeloBasar.Data
 
         public async Task<FileStore> GetAllLabelsAsyncAsCombinedPdf(int basarId, int sellerId)
         {
-            var products = await GetProductsForSeller(basarId, sellerId).Where(p => p.Label == null).ToListAsync();
+            var products = await GetProductsForSeller(basarId, sellerId).Where(p => p.Label != null).ToListAsync();
             var files = new List<byte[]>();
             foreach (var product in products)
             {
@@ -255,6 +256,11 @@ namespace BraunauMobil.VeloBasar.Data
                 ContentType = PdfContentType
             };
             return result;
+        }
+
+        public async Task<Basar> GetBasarAsync(int basarId)
+        {
+            return await Basar.FirstOrDefaultAsync(b => b.Id == basarId);
         }
 
         public async Task<FileStore> GetFileAsync(int fileId)
