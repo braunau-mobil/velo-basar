@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@model BasarPageModel
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -26,7 +27,14 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a asp-page="/Index" class="navbar-brand">Velo Basar</a>
+                @if (Model.Basar == null)
+                {
+                    <a asp-page="/Basars/SelectBasar" class="navbar-brand">ACHTUNG! es ist kein Basar ausgewählt.</a>
+                }
+                else
+                {
+                    <a asp-page="/Index" class="navbar-brand">@Model.Basar.Name</a>
+                }
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">

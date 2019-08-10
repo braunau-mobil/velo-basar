@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using BraunauMobil.VeloBasar.Data;
 
 namespace BraunauMobil.VeloBasar.Pages
 {
-    public class IndexModel : PageModel
+    public class IndexModel : BasarPageModel
     {
-        public void OnGet()
+        public IndexModel(VeloBasarContext context) : base(context)
         {
-
         }
     }
 }
