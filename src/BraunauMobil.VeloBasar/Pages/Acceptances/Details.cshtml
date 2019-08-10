@@ -1,0 +1,12 @@
+﻿@page
+@model BraunauMobil.VeloBasar.Pages.Acceptances.DetailsModel
+
+@{
+    ViewData["Title"] = $"Annahme #{@Model.Acceptance.Number}";
+}
+
+TODO - Hier schöne Übersicht machen
+
+<p>
+    <a class="btn btn-default" asp-page="/Acceptances/Print" asp-all-route-data="@Model.GetRoute()" asp-route-acceptanceId="@Model.Acceptance.Number" target="_blank">Drucken</a>
+</p>

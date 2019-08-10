@@ -102,6 +102,11 @@ namespace BraunauMobil.VeloBasar.Data
             await SaveChangesAsync();
         }
 
+        public async Task<Acceptance> GetAcceptanceAsync(int acceptanceId)
+        {
+            return await Acceptance.FirstAsync(a => a.Id == acceptanceId);
+        }
+
         public int NextNumber(int basarId, TransactionType transactionType)
         {
             var number = -1;
@@ -122,6 +127,11 @@ namespace BraunauMobil.VeloBasar.Data
             connection.Close();
 
             return number;
+        }
+
+        public async Task<string> PrintAcceptanceAsync(int acceptanceId)
+        {
+            return "~/temp/mypdf.pdf";
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

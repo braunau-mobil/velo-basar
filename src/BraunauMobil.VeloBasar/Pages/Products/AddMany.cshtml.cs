@@ -69,7 +69,7 @@ namespace BraunauMobil.VeloBasar.Pages.Products
             await Context.Acceptance.AddAsync(acceptance);
             await Context.SaveChangesAsync();
 
-            return RedirectToPage("/Sellers/Details", new { basarId = Basar.Id, sellerId = Seller.Id });
+            return RedirectToPage("/Acceptances/Details", new { basarId = Basar.Id, acceptanceId = acceptance.Id });
         }
 
         private async Task LoadSellerAsync(int sellerId)
