@@ -38,10 +38,10 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a asp-page="/Acceptances/StartNew" asp-route-basarId="@Model.Basar?.Id">Annahme</a></li>
+                    <li><a asp-page="/Acceptances/StartNew" asp-all-route-data="@Model.GetRoute()">Annahme</a></li>
                     <li><a asp-page="/Index">Home</a></li>
                     <li><a asp-page="/Basars/Index">Basare</a></li>
-                    <li><a asp-page="/Sellers/List"  asp-route-basarId="@Model.Basar?.Id">Sellers</a></li>
+                    <li><a asp-page="/Sellers/List" asp-all-route-data="@Model.GetRoute()">Sellers</a></li>
                     <li><a asp-page="/Products/Index">Products</a></li>
                     <li><a asp-page="/Acceptances/Index">Acceptances</a></li>
                     <li><a asp-page="/About">About</a></li>
