@@ -35,8 +35,10 @@ namespace BraunauMobil.VeloBasar.Data
 
         public DbSet<Seller> Seller { get; set; }
 
-        public async Task AddProductToSaleAsync(Sale sale, Product product)
+        public async Task<Sale> AddProductToSaleAsync(int basarId, int? saleId, Product product)
         {
+            var sale = await CreateOrGetSaleAsync(basarId, saleId);
+
             if (sale.Products == null)
             {
                 sale.Products = new List<ProductSale>();
@@ -47,7 +49,11 @@ namespace BraunauMobil.VeloBasar.Data
                 Sale = sale
             });
 
+            product.Status = ProductStatus.Sold;
+
             await SaveChangesAsync();
+
+            return sale;
         }
 
         public async Task<Acceptance> AcceptProductsAsync(int basarId, int sellerId, int? acceptanceId, params Product[] products)
@@ -150,6 +156,11 @@ namespace BraunauMobil.VeloBasar.Data
 
         public int NextNumber(int basarId, TransactionType transactionType)
         {
+            if (basarId <= 0)
+            {
+                throw new ArgumentException("Invalid basarId");
+            }
+
             var number = -1;
             
             //  @todo i was ned wieso, aber wann i de drecks Connection in using pack, dann krachts da gewaltig
@@ -162,7 +173,7 @@ namespace BraunauMobil.VeloBasar.Data
                 command.Parameters.AddWithValue("@BasarId", basarId);
                 command.Parameters.AddWithValue("@Type", (int)transactionType);
 
-                number  = (int)command.ExecuteScalar();
+                number = (int) command.ExecuteScalar();
             }
 
             connection.Close();

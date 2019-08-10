@@ -44,6 +44,11 @@ namespace BraunauMobil.VeloBasar
         public static async Task<PaginatedList<T>> CreateAsync(
             IQueryable<T> source, int pageIndex, int pageSize)
         {
+            if (pageIndex == 0)
+            {
+                pageIndex = 1;
+            }
+
             var count = await source.CountAsync();
             var items = await source.Skip(
                 (pageIndex - 1) * pageSize)

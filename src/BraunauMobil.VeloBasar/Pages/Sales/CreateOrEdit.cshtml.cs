@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using BraunauMobil.VeloBasar.Data;
 using BraunauMobil.VeloBasar.Models;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
@@ -30,6 +29,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
 
             if (saleId != null)
             {
+                Sale = await Context.Sale.FirstOrDefaultAsync(s => s.Id == saleId);
                 Products = await PaginatedList<Product>.CreateAsync(Context.Sale.Where(s => s.Id == saleId).SelectMany(s => s.Products).Select(ps => ps.Product).AsNoTracking(), pageIndex ?? 1, PageSize);
             }
             else
@@ -40,6 +40,8 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
 
         public async Task<IActionResult> OnPostAsync(int basarId, int? saleId, int? pageIndex)
         {
+            await LoadBasarAsync(basarId);
+
             var product = await Context.Product.FirstOrDefaultAsync(p => p.Id == ProductId);
             if (product == null)
             {
@@ -52,8 +54,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
                 return Page();
             }
 
-            var sale = await Context.CreateOrGetSaleAsync(basarId, saleId);
-            await Context.AddProductToSaleAsync(sale, product);
+            var sale = await Context.AddProductToSaleAsync(basarId, saleId, product);
 
             return RedirectToPage("/Sales/CreateOrEdit", new { basarId, saleId = sale.Id, pageIndex });
         }

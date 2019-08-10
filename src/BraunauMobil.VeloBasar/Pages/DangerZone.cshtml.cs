@@ -19,7 +19,7 @@ namespace BraunauMobil.VeloBasar.Pages
             var generator = new DataGenerator(Context, Config);
             await generator.GenerateAsync();
 
-            return Page();
+            return RedirectToPage("/Index");
         }
     }
 }
