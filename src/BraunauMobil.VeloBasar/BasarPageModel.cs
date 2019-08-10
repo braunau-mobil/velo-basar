@@ -20,7 +20,7 @@ namespace BraunauMobil.VeloBasar
         [BindProperty]
         public Basar Basar { get; set; }
 
-        protected void DecorateRoute(IDictionary<string, string> route)
+        protected virtual void DecorateRoute(IDictionary<string, string> route)
         {
         }
 
