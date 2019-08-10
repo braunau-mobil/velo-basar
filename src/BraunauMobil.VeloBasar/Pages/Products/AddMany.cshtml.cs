@@ -1,11 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using BraunauMobil.VeloBasar.Data;
 using BraunauMobil.VeloBasar.Models;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
 namespace BraunauMobil.VeloBasar.Pages.Products
@@ -16,12 +13,15 @@ namespace BraunauMobil.VeloBasar.Pages.Products
         {
         }
 
+        [BindProperty]
+        public int? AcceptanceId { get; set; }
+
         public Seller Seller { get; set; }
 
         [BindProperty]
         public PartialValidatedList<Product> Products { get; set; }
-
-        public async Task OnGetAsync(int basarId, int sellerId)
+        
+        public async Task OnGetAsync(int basarId, int sellerId, int? acceptanceId)
         {
             await LoadBasarAsync(basarId);
             await LoadSellerAsync(sellerId);
@@ -32,9 +32,11 @@ namespace BraunauMobil.VeloBasar.Pages.Products
             {
                 Products.Add(new Product() { Price = 1 });
             }
+
+            AcceptanceId = acceptanceId;
         }
 
-        public async Task<IActionResult> OnPostAsync(int basarId, int sellerId)
+        public async Task<IActionResult> OnPostAsync(int basarId, int sellerId, bool? addAdditional, int? acceptanceId)
         {
             await LoadBasarAsync(basarId);
             await LoadSellerAsync(sellerId);
@@ -43,31 +45,13 @@ namespace BraunauMobil.VeloBasar.Pages.Products
             {
                 return Page();
             }
+             
+            var acceptance = await Context.AcceptProductsAsync(basarId, sellerId, acceptanceId, Products.Where(p => !p.IsEmtpy()).ToArray());
 
-            var acceptance = new Acceptance
+            if (addAdditional == true)
             {
-                Basar = Basar,
-                Seller = Seller,
-                TimeStamp = DateTime.Now,
-                Products = new List<ProductAcceptance>(),
-            };
-
-            foreach (var product in Products.Where(p => !p.IsEmtpy()))
-            {
-                await Context.Product.AddAsync(product);
-                await Context.SaveChangesAsync();
-
-                var productAcceptance = new ProductAcceptance
-                {
-                    Acceptance = acceptance,
-                    Product = product
-                };
-                acceptance.Products.Add(productAcceptance);
+                return RedirectToPage("/Products/AddMany", new { basarId = Basar.Id, sellerId = sellerId, acceptanceId = acceptance.Id });
             }
-
-            acceptance.Number = Context.NextNumber(basarId, TransactionType.Acceptance);
-            await Context.Acceptance.AddAsync(acceptance);
-            await Context.SaveChangesAsync();
 
             return RedirectToPage("/Acceptances/Details", new { basarId = Basar.Id, acceptanceId = acceptance.Id });
         }

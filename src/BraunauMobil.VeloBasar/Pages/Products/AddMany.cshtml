@@ -60,6 +60,7 @@
     </table>
     <span asp-validation-for="Products" class="text-danger"></span>
     <div class="form-group">
-        <input type="submit" value="Speichern" class="btn btn-default" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@Model.Seller.Id" />
+        <input type="submit" value="Speichern und weitere Artikel eingeben" class="btn btn-default" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@Model.Seller.Id"  asp-route-acceptanceId="@Model.AcceptanceId" asp-route-addAdditional="@true" />
+        <input type="submit" value="Speichern und Annahmebeleg drucken" class="btn btn-default" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@Model.Seller.Id" asp-route-acceptanceId="@Model.AcceptanceId" />
     </div>
 </form>

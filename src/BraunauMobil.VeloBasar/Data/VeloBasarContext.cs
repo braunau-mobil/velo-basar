@@ -50,6 +50,47 @@ namespace BraunauMobil.VeloBasar.Data
             await SaveChangesAsync();
         }
 
+        public async Task<Acceptance> AcceptProductsAsync(int basarId, int sellerId, int? acceptanceId, params Product[] products)
+        {
+            Acceptance acceptance;
+            if (acceptanceId == null)
+            {
+                acceptance = new Acceptance
+                {
+                    BasarId = basarId,
+                    SellerId = sellerId,
+                    TimeStamp = DateTime.Now,
+                    Products = new List<ProductAcceptance>()
+                };
+            }
+            else
+            {
+                acceptance = await Acceptance.Include(a => a.Products).FirstAsync(a => a.Id == acceptanceId);
+            }
+
+            foreach (var product in products)
+            {
+                await Product.AddAsync(product);
+
+                var productAcceptance = new ProductAcceptance
+                {
+                    Acceptance = acceptance,
+                    Product = product
+                };
+                acceptance.Products.Add(productAcceptance);
+            }
+
+            if (acceptanceId == null)
+            {
+                acceptance.Number = NextNumber(basarId, TransactionType.Acceptance);
+                await Acceptance.AddAsync(acceptance);
+            }
+
+            await SaveChangesAsync();
+
+            return acceptance;
+        }
+
         public async Task<Sale> CreateOrGetSaleAsync(int basarId, int? saleId)
         {
             if (saleId == null)
