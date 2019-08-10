@@ -26,7 +26,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
                 return NotFound();
             }
 
-            Seller = await Context.Seller.FirstOrDefaultAsync(m => m.Id == sellerId);
+            Seller = await Context.Seller.Include(s => s.Country).FirstOrDefaultAsync(m => m.Id == sellerId);
             if (Seller == null)
             {
                 return NotFound();
