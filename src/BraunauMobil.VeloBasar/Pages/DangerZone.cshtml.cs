@@ -1,17 +1,13 @@
 ﻿using System.Threading.Tasks;
 using BraunauMobil.VeloBasar.Data;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace BraunauMobil.VeloBasar.Pages
 {
-    public class DangerZoneModel : PageModel
+    public class DangerZoneModel : BasarPageModel
     {
-        private readonly VeloBasarContext _context;
-
-        public DangerZoneModel(VeloBasarContext context)
+        public DangerZoneModel(VeloBasarContext context) : base(context)
         {
-            _context = context;
             Config = new DataGeneratorConfiguration();
         }
 
@@ -20,7 +16,7 @@ namespace BraunauMobil.VeloBasar.Pages
 
         public async Task<IActionResult> OnPostAsync()
         {
-            var generator = new DataGenerator(_context, Config);
+            var generator = new DataGenerator(Context, Config);
             await generator.GenerateAsync();
 
             return Page();
