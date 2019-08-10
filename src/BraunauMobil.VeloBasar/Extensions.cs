@@ -1,9 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace BraunauMobil.VeloBasar
 {
     public static class Extensions
     {
+        public static void AddIfNotNull<T>(this IList<T> list, T value) where T : class
+        {
+            if (value != null)
+            {
+                list.Add(value);
+            }
+        }
+
         public static T TakeRandom<T>(this T[] array, Random rand)
         {
             return array[rand.Next(0, array.Length - 1)];

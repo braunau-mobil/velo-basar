@@ -1,0 +1,65 @@
+﻿@page
+@model BraunauMobil.VeloBasar.Pages.Products.AddManyModel
+
+@{
+    ViewData["Title"] = "Neue Annahme";
+}
+
+<h2>Neue Annahme</h2>
+#@Model.Seller.Id @Html.DisplayFor(model => model.Seller.FirstName) @Html.DisplayFor(model => model.Seller.LastName)
+
+<form method="post">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.Products[0].Type)</th>
+                <th>@Html.DisplayNameFor(model => model.Products[0].Brand)</th>
+                <th>@Html.DisplayNameFor(model => model.Products[0].Color)</th>
+                <th>@Html.DisplayNameFor(model => model.Products[0].Description)</th>
+                <th>@Html.DisplayNameFor(model => model.Products[0].FrameNumber)</th>
+                <th>@Html.DisplayNameFor(model => model.Products[0].TireSize)</th>
+                <th>@Html.DisplayNameFor(model => model.Products[0].Price)</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @for (var index = 0; index < Model.Products.Count; index++)
+{
+                <tr>
+                    <td>
+                        <input asp-for="Products[index].Type" class="form-control" />
+                        <span asp-validation-for="Products[index].Type" class="text-danger"></span>
+                    </td>
+                    <td>
+                        <input asp-for="Products[index].Brand" class="form-control" />
+                        <span asp-validation-for="Products[index].Brand" class="text-danger"></span>
+                    </td>
+                    <td>
+                        <input asp-for="Products[index].Color" class="form-control" />
+                        <span asp-validation-for="Products[index].Color" class="text-danger"></span>
+                    </td>
+                    <td>
+                        <input asp-for="Products[index].Description" class="form-control" />
+                        <span asp-validation-for="Products[index].Description" class="text-danger"></span>
+                    </td>
+                    <td>
+                        <input asp-for="Products[index].FrameNumber" class="form-control" />
+                        <span asp-validation-for="Products[index].FrameNumber" class="text-danger"></span>
+                    </td>
+                    <td>
+                        <input asp-for="Products[index].TireSize" class="form-control" />
+                        <span asp-validation-for="Products[index].TireSize" class="text-danger"></span>
+                    </td>
+                    <td>
+                        <input asp-for="Products[index].Price" class="form-control" />
+                        <span asp-validation-for="Products[index].Price" class="text-danger"></span>
+                    </td>
+                </tr>
+}
+        </tbody>
+    </table>
+    <span asp-validation-for="Products" class="text-danger"></span>
+    <div class="form-group">
+        <input type="submit" value="Speichern" class="btn btn-default" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@Model.Seller.Id" />
+    </div>
+</form>

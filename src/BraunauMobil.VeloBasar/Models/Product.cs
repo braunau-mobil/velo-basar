@@ -1,4 +1,7 @@
-﻿namespace BraunauMobil.VeloBasar.Models
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+
+namespace BraunauMobil.VeloBasar.Models
 {
     public enum ProductStatus
     {
@@ -9,7 +12,7 @@
         PickedUp
     }
 
-    public class Product
+    public class Product : IValidatableObject
     {
         public int Id { get; set; }
 
@@ -28,5 +31,34 @@
         public decimal Price { get; set; }
 
         public ProductStatus Status { get; set; }
+
+        public bool IsEmtpy()
+        {
+            return string.IsNullOrEmpty(Color)
+                && string.IsNullOrEmpty(Brand)
+                && string.IsNullOrEmpty(Description)
+                && string.IsNullOrEmpty(Type)
+                && string.IsNullOrEmpty(Type)
+                && string.IsNullOrEmpty(TireSize);
+        }
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            var result = new List<ValidationResult>();
+
+            if (!IsEmtpy())
+            {
+                var requiredAttribute = new RequiredAttribute();
+
+                result.AddIfNotNull(requiredAttribute.GetValidationResult(Brand, validationContext));
+                result.AddIfNotNull(requiredAttribute.GetValidationResult(Type, validationContext));
+                result.AddIfNotNull(requiredAttribute.GetValidationResult(Price, validationContext));
+                result.AddIfNotNull(requiredAttribute.GetValidationResult(TireSize, validationContext));
+                result.AddIfNotNull(requiredAttribute.GetValidationResult(Description, validationContext));
+                result.AddIfNotNull(requiredAttribute.GetValidationResult(Color, validationContext));
+            }
+
+            return result;
+        }
     }
 }
