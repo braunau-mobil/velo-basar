@@ -19,14 +19,14 @@ namespace BraunauMobil.VeloBasar
         [BindProperty]
         public Basar Basar { get; set; }
 
-        public virtual async Task<IActionResult> OnGetAsync(int? id)
+        public virtual async Task<IActionResult> OnGetAsync(int? basarId)
         {
 #if DEBUG
-            id = 1;
+            basarId = 1;
 #endif
-            if (id != null)
+            if (basarId != null)
             {
-                Basar = await Context.Basar.FirstOrDefaultAsync(m => m.Id == id);
+                Basar = await Context.Basar.FirstOrDefaultAsync(m => m.Id == basarId);
             }
             return Page();
         }

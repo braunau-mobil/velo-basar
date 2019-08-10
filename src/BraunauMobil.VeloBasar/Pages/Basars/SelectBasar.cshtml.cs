@@ -15,11 +15,11 @@ namespace BraunauMobil.VeloBasar.Pages.Basars
 
         public IList<Basar> Basars { get; set; }
 
-        public override async Task<IActionResult> OnGetAsync(int? id)
+        public override async Task<IActionResult> OnGetAsync(int? basarId)
         {
             Basars = await Context.Basar.ToListAsync();
 
-            return await base.OnGetAsync(id);
+            return await base.OnGetAsync(basarId);
         }
     }
 }
