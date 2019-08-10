@@ -1,0 +1,65 @@
+﻿@page
+@model BraunauMobil.VeloBasar.Pages.Sales.CreateOrEditModel
+
+@{
+    ViewData["Title"] = "Neuer Verkauf";
+}
+
+<h2>Neuer Verkauf</h2>
+
+<h4>Artikel</h4>
+<div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.Products[0].Brand)</th>
+                <th>@Html.DisplayNameFor(model => model.Products[0].Type)</th>
+                <th>@Html.DisplayNameFor(model => model.Products[0].Color)</th>
+                <th>@Html.DisplayNameFor(model => model.Products[0].FrameNumber)</th>
+                <th>@Html.DisplayNameFor(model => model.Products[0].Description)</th>
+                <th>@Html.DisplayNameFor(model => model.Products[0].TireSize)</th>
+                <th>@Html.DisplayNameFor(model => model.Products[0].Price)</th>
+                <th>@Html.DisplayNameFor(model => model.Products[0].Status)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Products)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.Brand)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Type)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Color)</td>
+                    <td>@Html.DisplayFor(modelItem => item.FrameNumber)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Description)</td>
+                    <td>@Html.DisplayFor(modelItem => item.TireSize)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Price)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Status)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    @{
+        var prevDisabled = !Model.Products.HasPreviousPage ? "disabled" : "";
+        var nextDisabled = !Model.Products.HasNextPage ? "disabled" : "";
+    }
+    <a asp-page="/Sales/CreateOrEdit" asp-all-route-data="@Model.GetRoute()" asp-route-saleId="@Model.Sale?.Id" asp-route-pageIndex="@(Model.Products.PageIndex - 1)" class="btn btn-default @prevDisabled">Previous</a>
+    <a asp-page="/Sales/CreateOrEdit" asp-all-route-data="@Model.GetRoute()" asp-route-saleId="@Model.Sale?.Id" asp-route-pageIndex="@(Model.Products.PageIndex + 1)" class="btn btn-default @nextDisabled">Next</a>
+</div>
+
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="ProductId" class="control-label"></label>
+                <input asp-for="ProductId" class="form-control" />
+                <span asp-validation-for="ProductId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Hinzufügen" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>

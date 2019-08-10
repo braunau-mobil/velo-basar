@@ -11,6 +11,12 @@ namespace BraunauMobil.VeloBasar
         public int PageIndex { get; private set; }
         public int TotalPages { get; private set; }
 
+        public PaginatedList()
+        {
+            PageIndex = 0;
+            TotalPages = 0;
+        }
+
         public PaginatedList(List<T> items, int count, int pageIndex, int pageSize)
         {
             PageIndex = pageIndex;

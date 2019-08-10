@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using System.Threading.Tasks;
 using System;
 using Npgsql;
+using System.Collections.Generic;
 
 namespace BraunauMobil.VeloBasar.Data
 {
@@ -33,6 +34,40 @@ namespace BraunauMobil.VeloBasar.Data
         public DbSet<Sale> Sale { get; set; }
 
         public DbSet<Seller> Seller { get; set; }
+
+        public async Task AddProductToSaleAsync(Sale sale, Product product)
+        {
+            if (sale.Products == null)
+            {
+                sale.Products = new List<ProductSale>();
+            }
+            sale.Products.Add(new ProductSale
+            {
+                Product = product,
+                Sale = sale
+            });
+
+            await SaveChangesAsync();
+        }
+
+        public async Task<Sale> CreateOrGetSaleAsync(int basarId, int? saleId)
+        {
+            if (saleId == null)
+            {
+                var sale = new Sale
+                {
+                    BasarId = basarId,
+                    Number = NextNumber(basarId, TransactionType.Sale),
+                    TimeStamp = DateTime.Now,
+                    Products = new List<ProductSale>()
+                };
+                Sale.Add(sale);
+                await SaveChangesAsync();
+                return sale;
+            }
+
+            return await Sale.FirstAsync(s => s.Id == saleId);
+        }
 
         public async Task<Basar> CreateNewBasarAsync(DateTime date, string name, decimal productCommission, decimal productDiscount, decimal sellerDiscount)
         {
