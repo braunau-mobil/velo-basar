@@ -4,6 +4,6 @@
     {
         public TransactionType Type { get; set; }
 
-        public int NextNumber { get; set; }
+        public int Value { get; set; }
     }
 }

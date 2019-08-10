@@ -21,7 +21,6 @@ namespace BraunauMobil.VeloBasar.Data
         private readonly Dictionary<Basar, Dictionary<TransactionType, DateTime>> _timeStamps = new Dictionary<Basar, Dictionary<TransactionType, DateTime>>();
         private readonly DataGeneratorConfiguration _config;
         private Country[] _countries;
-        private int _acceptanceNumber;
 
         public DataGenerator(VeloBasarContext context, DataGeneratorConfiguration config)
         {
@@ -60,18 +59,7 @@ namespace BraunauMobil.VeloBasar.Data
 
         private async Task CreateBasarAsync(DateTime date, string name)
         {
-            var basar = new Basar
-            {
-                Date = date,
-                Name = name,
-                ProductCommission = 0.9m,
-                ProductDiscount = 0.0m,
-                SellerDiscount = 0.0m
-            };
-            await _context.Basar.AddAsync(basar);
-            await _context.SaveChangesAsync();
-
-            _acceptanceNumber = 1;
+            var basar = await _context.CreateNewBasarAsync(date, name, 0.9m, 0.0m, 0.0m);
 
             var sellerCount = _rand.Next(_config.MinSellers, _config.MaxSellers);
             for (var sellerNumber = 1; sellerNumber <= sellerCount; sellerNumber++)
@@ -91,17 +79,17 @@ namespace BraunauMobil.VeloBasar.Data
             var acceptancePerCustomerCount = _rand.Next(_config.MinAcceptancesPerSeller, _config.MaxAcceptancesPerSeller);
             while (acceptancePerCustomerCount > 0)
             {
-                await CreateAcceptanceAsync(basar, seller, _acceptanceNumber++);
+                await CreateAcceptanceAsync(basar, seller);
                 acceptancePerCustomerCount--;
             }
         }
 
-        private async Task CreateAcceptanceAsync(Basar basar, Seller seller, int number)
+        private async Task CreateAcceptanceAsync(Basar basar, Seller seller)
         {
             var acceptance = new Acceptance
             {
                 Basar = basar,
-                Number = number,
+                Number = _context.NextNumber(basar.Id, TransactionType.Acceptance),
                 Seller = seller,
                 TimeStamp = NextTimeStamp(basar, TransactionType.Acceptance),
                 Products = new List<ProductAcceptance>()
@@ -110,7 +98,7 @@ namespace BraunauMobil.VeloBasar.Data
             var productCount = NextProductCount();
             for (var productNumber = 1; productNumber <= productCount; productNumber++)
             {
-                await CreateProductAsync(acceptance, number);
+                await CreateProductAsync(acceptance, acceptance.Number);
             }
 
             await _context.Acceptance.AddAsync(acceptance);
@@ -123,7 +111,7 @@ namespace BraunauMobil.VeloBasar.Data
             {
                 Brand = NextBrand(),
                 Color = NextColor(),
-                Description = $"Beschreibung für Produkt #{number}",
+                Description = $"Beschreibung für Produkt aus Annahme #{number}",
                 FrameNumber = NextFrameNumber(),
                 Price = NextPrice(),
                 Status = ProductStatus.Available,

@@ -47,10 +47,9 @@ namespace BraunauMobil.VeloBasar.Pages.Products
             var acceptance = new Acceptance
             {
                 Basar = Basar,
-                Number = 666,
                 Seller = Seller,
                 TimeStamp = DateTime.Now,
-                Products = new List<ProductAcceptance>()
+                Products = new List<ProductAcceptance>(),
             };
 
             foreach (var product in Products.Where(p => !p.IsEmtpy()))
@@ -66,6 +65,7 @@ namespace BraunauMobil.VeloBasar.Pages.Products
                 acceptance.Products.Add(productAcceptance);
             }
 
+            acceptance.Number = Context.NextNumber(basarId, TransactionType.Acceptance);
             await Context.Acceptance.AddAsync(acceptance);
             await Context.SaveChangesAsync();
 
