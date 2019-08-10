@@ -1,39 +1,40 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using BraunauMobil.VeloBasar.Data;
 using BraunauMobil.VeloBasar.Models;
+using System.Linq;
 
 namespace BraunauMobil.VeloBasar.Pages.Sellers
 {
-    public class DetailsModel : PageModel
+    public class DetailsModel : BasarPageModel
     {
-        private readonly BraunauMobil.VeloBasar.Data.VeloBasarContext _context;
-
-        public DetailsModel(BraunauMobil.VeloBasar.Data.VeloBasarContext context)
+        public DetailsModel(VeloBasarContext context) : base(context)
         {
-            _context = context;
         }
 
         public Seller Seller { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public PaginatedList<Product> Products { get; set; }
+
+        public async Task<IActionResult> OnGetAsync(int? basarId, int? sellerId, int? pageIndex)
         {
-            if (id == null)
+            await LoadBasarAsync(basarId);
+
+            if (sellerId == null)
             {
                 return NotFound();
             }
 
-            Seller = await _context.Seller.FirstOrDefaultAsync(m => m.Id == id);
-
+            Seller = await Context.Seller.FirstOrDefaultAsync(m => m.Id == sellerId);
             if (Seller == null)
             {
                 return NotFound();
             }
+
+            var pageSize = 10;
+            Products = await PaginatedList<Product>.CreateAsync(Context.Acceptance.Where(a => a.SellerId == Seller.Id).SelectMany(a => a.Products).Select(pa => pa.Product).AsNoTracking(), pageIndex ?? 1, pageSize);
+
             return Page();
         }
     }

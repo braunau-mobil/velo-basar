@@ -1,79 +1,81 @@
 ﻿@page
 @model BraunauMobil.VeloBasar.Pages.Sellers.DetailsModel
-
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Verkäuferin";
 }
 
-<h2>Details</h2>
+<h2>#@Model.Seller.Id @Html.DisplayFor(model => model.Seller.FirstName) @Html.DisplayFor(model => model.Seller.LastName)</h2>
+
+<a asp-page="/Products/AddMany" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@Model.Seller.Id" class="btn btn-default">Artikel annehmen</a>
+<a asp-page="/Sellers/Edit" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@Model.Seller.Id" class="btn btn-default">Bearbeiten</a>
 
 <div>
-    <h4>Seller</h4>
-    <hr />
     <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Seller.FirstName)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Seller.FirstName)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Seller.LastName)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Seller.LastName)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Seller.Street)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Seller.Street)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Seller.City)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Seller.City)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Seller.ZIP)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Seller.ZIP)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Seller.Country.Name)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Seller.Country.Name)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Seller.IBAN)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Seller.IBAN)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Seller.BIC)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Seller.BIC)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Seller.BankAccountHolder)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Seller.BankAccountHolder)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Seller.Token)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Seller.Token)
-        </dd>
+        <dt>@Html.DisplayNameFor(model => model.Seller.Street)</dt>
+        <dd>@Html.DisplayFor(model => model.Seller.Street)</dd>
+        
+        <dt>@Html.DisplayNameFor(model => model.Seller.City)</dt>
+        <dd>@Html.DisplayFor(model => model.Seller.City)</dd>
+        
+        <dt>@Html.DisplayNameFor(model => model.Seller.ZIP)</dt>
+        <dd>@Html.DisplayFor(model => model.Seller.ZIP)</dd>
+        
+        <dt>@Html.DisplayNameFor(model => model.Seller.Country.Name)</dt>
+        <dd>@Html.DisplayFor(model => model.Seller.Country.Name)</dd>
+        
+        <dt>@Html.DisplayNameFor(model => model.Seller.IBAN)</dt>
+        <dd>@Html.DisplayFor(model => model.Seller.IBAN)</dd>
+        
+        <dt>@Html.DisplayNameFor(model => model.Seller.BIC)</dt>
+        <dd>@Html.DisplayFor(model => model.Seller.BIC)</dd>
+        
+        <dt>@Html.DisplayNameFor(model => model.Seller.BankAccountHolder)</dt>
+        <dd>@Html.DisplayFor(model => model.Seller.BankAccountHolder)</dd>
     </dl>
+    <hr />
 </div>
+
+<h4>Artikel</h4>
 <div>
-    <a asp-page="./Edit" asp-route-id="@Model.Seller.Id">Edit</a> |
-    <a asp-page="./Index">Back to List</a>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.Products[0].Brand)</th>
+                <th>@Html.DisplayNameFor(model => model.Products[0].Type)</th>
+                <th>@Html.DisplayNameFor(model => model.Products[0].Color)</th>
+                <th>@Html.DisplayNameFor(model => model.Products[0].FrameNumber)</th>
+                <th>@Html.DisplayNameFor(model => model.Products[0].Description)</th>
+                <th>@Html.DisplayNameFor(model => model.Products[0].TireSize)</th>
+                <th>@Html.DisplayNameFor(model => model.Products[0].Price)</th>
+                <th>@Html.DisplayNameFor(model => model.Products[0].Status)</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Products)
+            {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Brand)</td>
+                <td>@Html.DisplayFor(modelItem => item.Type)</td>
+                <td>@Html.DisplayFor(modelItem => item.Color)</td>
+                <td>@Html.DisplayFor(modelItem => item.FrameNumber)</td>
+                <td>@Html.DisplayFor(modelItem => item.Description)</td>
+                <td>@Html.DisplayFor(modelItem => item.TireSize)</td>
+                <td>@Html.DisplayFor(modelItem => item.Price)</td>
+                <td>@Html.DisplayFor(modelItem => item.Status)</td>
+                <td>
+                    <a asp-page="/Products/Edit" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@Model.Seller.Id" asp-route-productId="@item.Id">Bearbeiten</a> |
+                    <a asp-page="/Products/Details" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@Model.Seller.Id" asp-route-productId="@item.Id">Details</a> |
+                    <a asp-page="/Products/Delete" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@Model.Seller.Id" asp-route-productId="@item.Id">Löschen</a>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+    @{
+        var prevDisabled = !Model.Products.HasPreviousPage ? "disabled" : "";
+        var nextDisabled = !Model.Products.HasNextPage ? "disabled" : "";
+    }
+    <a asp-page="/Sellers/Details" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@Model.Seller.Id" asp-route-pageIndex="@(Model.Products.PageIndex - 1)" class="btn btn-default @prevDisabled">Previous</a>
+    <a asp-page="/Sellers/Details" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@Model.Seller.Id" asp-route-pageIndex="@(Model.Products.PageIndex + 1)" class="btn btn-default @nextDisabled">Next</a>
 </div>
