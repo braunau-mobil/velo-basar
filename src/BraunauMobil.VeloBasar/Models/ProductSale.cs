@@ -1,10 +1,10 @@
 ﻿namespace BraunauMobil.VeloBasar.Models
 {
-    public class PurchasedProduct
+    public class ProductSale
     {
-        public int PurchaseId { get; set; }
+        public int SaleId { get; set; }
 
-        public Purchase Purchase { get; set; }
+        public Sale Sale { get; set; }
 
         public int ProductId { get; set; }
 

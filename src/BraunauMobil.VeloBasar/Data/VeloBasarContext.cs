@@ -30,7 +30,7 @@ namespace BraunauMobil.VeloBasar.Data
 
         public DbSet<Product> Product { get; set; }
 
-        public DbSet<Purchase> Purchase { get; set; }
+        public DbSet<Sale> Sale { get; set; }
 
         public DbSet<Seller> Seller { get; set; }
 
@@ -50,7 +50,7 @@ namespace BraunauMobil.VeloBasar.Data
             await CreateNewNumberAsync(basar.Id, TransactionType.Acceptance);
             await CreateNewNumberAsync(basar.Id, TransactionType.Billing);
             await CreateNewNumberAsync(basar.Id, TransactionType.Cancellation);
-            await CreateNewNumberAsync(basar.Id, TransactionType.Purchase);
+            await CreateNewNumberAsync(basar.Id, TransactionType.Sale);
 
             return basar;
         }
@@ -95,7 +95,7 @@ namespace BraunauMobil.VeloBasar.Data
 
             modelBuilder.Entity<ProductAcceptance>().HasKey(ap => new { ap.AcceptanceId, ap.ProductId });
             modelBuilder.Entity<BilledAcceptance>().HasKey(ba => new { ba.BillingId, ba.AcceptanceId });
-            modelBuilder.Entity<PurchasedProduct>().HasKey(pp => new { pp.PurchaseId, pp.ProductId });
+            modelBuilder.Entity<ProductSale>().HasKey(pp => new { pp.SaleId, pp.ProductId });
             modelBuilder.Entity<Number>().HasKey(n => new { n.BasarId, n.Type });
         }
     }

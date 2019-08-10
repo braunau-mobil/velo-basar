@@ -7,7 +7,7 @@ namespace BraunauMobil.VeloBasar.Models
         Acceptance,
         Billing,
         Cancellation,
-        Purchase
+        Sale
     };
 
     public abstract class TransactionBase : BasarModel
