@@ -21,8 +21,8 @@ namespace BraunauMobil.VeloBasar.Pages.Acceptances
 
         public IActionResult OnGet()
         {
-        ViewData["BasarId"] = new SelectList(_context.Basar, "Id", "Id");
-        ViewData["SellerId"] = new SelectList(_context.Seller, "ID", "ID");
+            ViewData["BasarId"] = new SelectList(_context.Basar, "Id", "Id");
+            ViewData["SellerId"] = new SelectList(_context.Seller, "Id", "Id");
             return Page();
         }
 

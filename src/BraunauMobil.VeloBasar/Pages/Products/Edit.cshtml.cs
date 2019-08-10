@@ -30,7 +30,7 @@ namespace BraunauMobil.VeloBasar.Pages.Products
                 return NotFound();
             }
 
-            Product = await _context.Product.FirstOrDefaultAsync(m => m.ID == id);
+            Product = await _context.Product.FirstOrDefaultAsync(m => m.Id == id);
 
             if (Product == null)
             {
@@ -54,7 +54,7 @@ namespace BraunauMobil.VeloBasar.Pages.Products
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ProductExists(Product.ID))
+                if (!ProductExists(Product.Id))
                 {
                     return NotFound();
                 }
@@ -69,7 +69,7 @@ namespace BraunauMobil.VeloBasar.Pages.Products
 
         private bool ProductExists(int id)
         {
-            return _context.Product.Any(e => e.ID == id);
+            return _context.Product.Any(e => e.Id == id);
         }
     }
 }

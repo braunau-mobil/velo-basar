@@ -5,7 +5,7 @@ namespace BraunauMobil.VeloBasar.Models
 {
     public class Acceptance : TransactionBase
     {
-        public int ID { get; set; }
+        public int Id { get; set; }
 
         public int SellerId { get; set; }
 

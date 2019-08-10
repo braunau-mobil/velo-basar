@@ -30,7 +30,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
                 return NotFound();
             }
 
-            Seller = await _context.Seller.FirstOrDefaultAsync(m => m.ID == id);
+            Seller = await _context.Seller.FirstOrDefaultAsync(m => m.Id == id);
 
             if (Seller == null)
             {
@@ -54,7 +54,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!SellerExists(Seller.ID))
+                if (!SellerExists(Seller.Id))
                 {
                     return NotFound();
                 }
@@ -69,7 +69,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
 
         private bool SellerExists(int id)
         {
-            return _context.Seller.Any(e => e.ID == id);
+            return _context.Seller.Any(e => e.Id == id);
         }
     }
 }

@@ -30,7 +30,7 @@ namespace BraunauMobil.VeloBasar.Pages.Acceptances
 
             Acceptance = await _context.Acceptance
                 .Include(a => a.Basar)
-                .Include(a => a.Seller).FirstOrDefaultAsync(m => m.ID == id);
+                .Include(a => a.Seller).FirstOrDefaultAsync(m => m.Id == id);
 
             if (Acceptance == null)
             {

@@ -16,7 +16,7 @@
             @Html.DisplayNameFor(model => model.Acceptance.Seller)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Acceptance.Seller.ID)
+            @Html.DisplayFor(model => model.Acceptance.Seller.Id)
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Acceptance.Number)
@@ -39,7 +39,7 @@
     </dl>
     
     <form method="post">
-        <input type="hidden" asp-for="Acceptance.ID" />
+        <input type="hidden" asp-for="Acceptance.Id" />
         <input type="submit" value="Delete" class="btn btn-default" /> |
         <a asp-page="./Index">Back to List</a>
     </form>

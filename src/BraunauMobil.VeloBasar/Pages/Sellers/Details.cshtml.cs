@@ -28,7 +28,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
                 return NotFound();
             }
 
-            Seller = await _context.Seller.FirstOrDefaultAsync(m => m.ID == id);
+            Seller = await _context.Seller.FirstOrDefaultAsync(m => m.Id == id);
 
             if (Seller == null)
             {
