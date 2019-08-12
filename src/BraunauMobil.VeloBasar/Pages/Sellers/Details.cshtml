@@ -57,6 +57,7 @@
     <table class="table">
         <thead>
             <tr>
+                <th>@Html.DisplayNameFor(model => model.Products[0].Id)</th>
                 <th>@Html.DisplayNameFor(model => model.Products[0].Brand)</th>
                 <th>@Html.DisplayNameFor(model => model.Products[0].Type)</th>
                 <th>@Html.DisplayNameFor(model => model.Products[0].Color)</th>
@@ -72,6 +73,7 @@
             @foreach (var item in Model.Products)
             {
             <tr>
+                <td>@Html.DisplayFor(modelItem => item.Id)</td>
                 <td>@Html.DisplayFor(modelItem => item.Brand)</td>
                 <td>@Html.DisplayFor(modelItem => item.Type)</td>
                 <td>@Html.DisplayFor(modelItem => item.Color)</td>
