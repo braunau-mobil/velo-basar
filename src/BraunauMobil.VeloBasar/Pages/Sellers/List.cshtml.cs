@@ -4,6 +4,7 @@ using BraunauMobil.VeloBasar.Models;
 using System.Linq;
 using BraunauMobil.VeloBasar.Data;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc;
 
 namespace BraunauMobil.VeloBasar.Pages.Sellers
 {
@@ -17,7 +18,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
 
         public PaginatedList<Seller> Sellers { get;set; }
 
-        public async Task OnGetAsync(int? basarId, string currentFilter, string searchString, int? pageIndex)
+        public async Task<IActionResult> OnGetAsync(int basarId, string currentFilter, string searchString, int? pageIndex)
         {
             await LoadBasarAsync(basarId);
 
@@ -38,6 +39,10 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
 
             if (int.TryParse(searchString, out int id))
             {
+                if (await Context.Seller.ExistsAsync(id))
+                {
+                    return RedirectToPage("./Details", new { basarId, sellerId = id });
+                }
                 sellerIq = sellerIq.Where(s => s.Id == id);
             }
             else if (!string.IsNullOrEmpty(searchString))
@@ -48,6 +53,8 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
             var pageSize = 20;
             Sellers = await PaginatedList<Seller>.CreateAsync(
                 sellerIq.AsNoTracking(), pageIndex ?? 1, pageSize);
+
+            return Page();
         }
 
         public IDictionary<string, string> GetItemRoute(Seller seller)
