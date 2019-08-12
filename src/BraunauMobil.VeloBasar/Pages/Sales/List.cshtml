@@ -1,0 +1,68 @@
+﻿@page
+@model BraunauMobil.VeloBasar.Pages.Sales.ListModel
+
+@{
+    ViewData["Title"] = "Verkäufe";
+}
+
+<h2>Verkäufe</h2>
+
+<form asp-page="./List" method="get" asp-route-basarId="@Model.Basar.Id">
+    <div class="form-actions no-color">
+        <p>
+            Suchen:
+            <input type="text" name="SearchString" value="@Model.CurrentFilter" />
+            <input type="submit" value="Suchen" class="btn btn-default" /> |
+            <a asp-page="./List" asp-route-basarId="@Model.Basar.Id">Zurücksetzen</a>
+        </p>
+    </div>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Sales[0].Number)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Sales[0].TimeStamp)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Sales)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Number)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TimeStamp)
+                </td>
+                <td>
+                    <a asp-page="./Details" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@item.Id">Details</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@{
+    var prevDisabled = !Model.Sales.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.Sales.HasNextPage ? "disabled" : "";
+}
+
+<a asp-page="./List"
+   asp-all-route-data="@Model.GetRoute()"
+   asp-route-pageIndex="@(Model.Sales.PageIndex - 1)"
+   asp-route-currentFilter="@Model.CurrentFilter"
+   class="btn btn-default @prevDisabled">
+    Previous
+</a>
+<a asp-page="./List"
+   asp-all-route-data="@Model.GetRoute()"
+   asp-route-pageIndex="@(Model.Sales.PageIndex + 1)"
+   asp-route-currentFilter="@Model.CurrentFilter"
+   class="btn btn-default @nextDisabled">
+    Next
+</a>
