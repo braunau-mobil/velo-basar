@@ -1,4 +1,6 @@
-﻿namespace BraunauMobil.VeloBasar.Data
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace BraunauMobil.VeloBasar.Data
 {
     public class SellerStatistics
     {
@@ -8,6 +10,7 @@
 
         public int NotSoldProductCount { get; set; }
 
+        [DisplayFormat(DataFormatString = "{0:C}")]
         public decimal BillAmout { get; set; }
     }
 }
