@@ -7,7 +7,10 @@
 <h2>#@Model.Seller.Id @Html.DisplayFor(model => model.Seller.FirstName) @Html.DisplayFor(model => model.Seller.LastName)</h2>
 
 <a asp-page="/Products/AddMany" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@Model.Seller.Id" class="btn btn-default">Artikel annehmen</a>
-<a asp-page="/Billing/Create" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@Model.Seller.Id" class="btn btn-default">Abrechnen</a>
+@if (Model.CanSettle)
+{
+    <a asp-page="/Settlement/Create" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@Model.Seller.Id" class="btn btn-default">Abrechnen</a>
+}
 |
 <a asp-page="./Edit" asp-all-route-data="@Model.GetSellerRoute()" class="btn btn-default">Bearbeiten</a>
 <a asp-page="./Delete" asp-all-route-data="@Model.GetSellerRoute()" class="btn btn-default">Löschen</a>
@@ -44,8 +47,8 @@
         <dt>@Html.DisplayNameFor(model => model.Stats.NotSoldProductCount)</dt>
         <dd>@Html.DisplayFor(model => model.Stats.NotSoldProductCount)</dd>
 
-        <dt>@Html.DisplayNameFor(model => model.Stats.BillAmout)</dt>
-        <dd>@Html.DisplayFor(model => model.Stats.BillAmout)</dd>
+        <dt>@Html.DisplayNameFor(model => model.Stats.SettlementAmout)</dt>
+        <dd>@Html.DisplayFor(model => model.Stats.SettlementAmout)</dd>
 
 
     </dl>

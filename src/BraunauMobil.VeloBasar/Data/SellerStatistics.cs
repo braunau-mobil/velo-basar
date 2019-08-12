@@ -11,6 +11,6 @@ namespace BraunauMobil.VeloBasar.Data
         public int NotSoldProductCount { get; set; }
 
         [DataType(DataType.Currency)]
-        public decimal BillAmout { get; set; }
+        public decimal SettlementAmout { get; set; }
     }
 }

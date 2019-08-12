@@ -5,9 +5,9 @@ namespace BraunauMobil.VeloBasar.Models
     public enum TransactionType
     {
         Acceptance,
-        Billing,
         Cancellation,
-        Sale
+        Sale,
+        Settlement,
     };
 
     public abstract class TransactionBase : BasarModel

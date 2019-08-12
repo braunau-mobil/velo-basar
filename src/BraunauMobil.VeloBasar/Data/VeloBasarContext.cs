@@ -22,8 +22,6 @@ namespace BraunauMobil.VeloBasar.Data
 
         public DbSet<Basar> Basar { get; set; }
 
-        public DbSet<Billing> Billing { get; set; }
-
         public DbSet<Cancellation> Cancellation { get; set; }
 
         public DbSet<Country> Country { get; set; }
@@ -35,6 +33,8 @@ namespace BraunauMobil.VeloBasar.Data
         public DbSet<Sale> Sale { get; set; }
 
         public DbSet<Seller> Seller { get; set; }
+
+        public DbSet<Settlement> Settlement { get; set; }
 
         public async Task<Sale> AddProductToSaleAsync(int basarId, int? saleId, Product product)
         {
@@ -131,7 +131,7 @@ namespace BraunauMobil.VeloBasar.Data
             await SaveChangesAsync();
 
             await CreateNewNumberAsync(basar.Id, TransactionType.Acceptance);
-            await CreateNewNumberAsync(basar.Id, TransactionType.Billing);
+            await CreateNewNumberAsync(basar.Id, TransactionType.Settlement);
             await CreateNewNumberAsync(basar.Id, TransactionType.Cancellation);
             await CreateNewNumberAsync(basar.Id, TransactionType.Sale);
 
@@ -174,7 +174,7 @@ namespace BraunauMobil.VeloBasar.Data
             return new SellerStatistics
             {
                 AceptedProductCount = products.Length,
-                BillAmout = soldProducts.Sum(p => p.Price),
+                SettlementAmout = soldProducts.Sum(p => p.Price),
                 NotSoldProductCount = products.NotSold().Count(),
                 SoldProductCount = soldProducts.Length
             };
@@ -217,8 +217,8 @@ namespace BraunauMobil.VeloBasar.Data
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<ProductAcceptance>().HasKey(ap => new { ap.AcceptanceId, ap.ProductId });
-            modelBuilder.Entity<BilledAcceptance>().HasKey(ba => new { ba.BillingId, ba.AcceptanceId });
             modelBuilder.Entity<ProductSale>().HasKey(pp => new { pp.SaleId, pp.ProductId });
+            modelBuilder.Entity<ProductSettlement>().HasKey(ps => new { ps.SettlementId, ps.ProductId});
             modelBuilder.Entity<Number>().HasKey(n => new { n.BasarId, n.Type });
         }
     }
