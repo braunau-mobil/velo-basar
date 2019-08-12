@@ -14,10 +14,11 @@ namespace BraunauMobil.VeloBasar.Pages.Settlements
         {
             await LoadBasarAsync(basarId);
 
-            var printResultPath = await Context.CreateAndPrintSettlementAsync(basarId, sellerId);
+            var settlement = await Context.SettleSellerAsync(basarId, sellerId);
 
-            return Redirect(printResultPath);
+            var fileStore = await Context.GenerateSettlementDocIfNotExistAsync(settlement);
 
+            return File(fileStore.Data, fileStore.ContentType);
         }
     }
 }

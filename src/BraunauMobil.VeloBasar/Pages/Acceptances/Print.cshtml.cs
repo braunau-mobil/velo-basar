@@ -10,12 +10,13 @@ namespace BraunauMobil.VeloBasar.Pages.Acceptances
         {
         }
 
-        public async Task<IActionResult> OnGetAsync(int acceptanceId)
+        public async Task<IActionResult> OnGetAsync(int basarId, int acceptanceId)
         {
-            var printResultPath = await Context.PrintAcceptanceAsync(acceptanceId);
+            await LoadBasarAsync(basarId);
 
-            return Redirect(printResultPath);
+            var doc = await Context.GenerateAcceptanceDocIfNotExistAsync(acceptanceId);
 
+            return File(doc.Data, doc.ContentType);
         }
     }
 }

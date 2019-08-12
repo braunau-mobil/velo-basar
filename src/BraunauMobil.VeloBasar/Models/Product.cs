@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace BraunauMobil.VeloBasar.Models
@@ -33,6 +34,8 @@ namespace BraunauMobil.VeloBasar.Models
         public decimal Price { get; set; }
 
         public ProductStatus Status { get; set; }
+
+        public int? Label { get; set; }
 
         public bool IsEmtpy()
         {

@@ -49,7 +49,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
         public IDictionary<string, string> GetItemRoute<T>(TransactionStatistic<T> statistic) where T : TransactionBase
         {
             var route = GetRoute();
-            route.Add("path", Context.GetPdf(statistic.Transaction));
+            route.Add("path", statistic.Transaction.DocumentId.ToString());
             return route;
         }
 

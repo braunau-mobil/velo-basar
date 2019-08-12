@@ -11,6 +11,7 @@
 {
     <a asp-page="/Settlements/CreateAndPrint" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@Model.Seller.Id" target="_blank" class="btn btn-default">Abrechnen</a>
 }
+<a asp-page="/.CreateAndPrintLabels" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@Model.Seller.Id" target="_blank" class="btn btn-default">Etiketten drucken</a>
 |
 <a asp-page="./Edit" asp-all-route-data="@Model.GetSellerRoute()" class="btn btn-default">Bearbeiten</a>
 <a asp-page="./Delete" asp-all-route-data="@Model.GetSellerRoute()" class="btn btn-default">Löschen</a>
@@ -119,7 +120,7 @@
                     <td>@Html.DisplayFor(modelItem => item.ProductCount)</td>
                     <td>@Html.DisplayFor(modelItem => item.Amount)</td>
                     <td>
-                        <a asp-page="/ShowPdf" asp-all-route-data="@Model.GetItemRoute(item)" target="_blank">Beleg</a>
+                        <a asp-page="/ShowFile" asp-all-route-data="@Model.GetItemRoute(item)" target="_blank">Beleg</a>
                     </td>
                 </tr>
             }
@@ -148,7 +149,7 @@
                     <td>@Html.DisplayFor(modelItem => item.ProductCount)</td>
                     <td>@Html.DisplayFor(modelItem => item.Amount)</td>
                     <td>
-                        <a asp-page="/ShowPdf" asp-all-route-data="@Model.GetItemRoute(item)" target="_blank">Beleg</a>
+                        <a asp-page="/ShowFile" asp-all-route-data="@Model.GetItemRoute(item)" target="_blank">Beleg</a>
                     </td>
                 </tr>
             }

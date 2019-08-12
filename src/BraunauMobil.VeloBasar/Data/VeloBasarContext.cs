@@ -6,12 +6,16 @@ using System;
 using Npgsql;
 using System.Collections.Generic;
 using System.Linq;
+using BraunauMobil.VeloBasar.Pdf;
 
 namespace BraunauMobil.VeloBasar.Data
 {
     public class VeloBasarContext : IdentityDbContext
     {
         private const string NextNumberSql = "update \"Number\" set \"Value\"=\"Value\" + 1 where \"BasarId\" = @BasarId and \"Type\" = @Type;select \"Value\" from \"Number\"  where \"BasarId\" = @BasarId and \"Type\" = @Type";
+        private const string PdfContentType = "application/pdf";
+
+        private readonly PdfCreator _pdfCreator = new PdfCreator();
 
         public VeloBasarContext (DbContextOptions<VeloBasarContext> options)
             : base(options)
@@ -25,6 +29,8 @@ namespace BraunauMobil.VeloBasar.Data
         public DbSet<Cancellation> Cancellation { get; set; }
 
         public DbSet<Country> Country { get; set; }
+
+        public DbSet<FileStore> FileStore { get; set; }
 
         public DbSet<Number> Number { get; set; }
 
@@ -117,44 +123,6 @@ namespace BraunauMobil.VeloBasar.Data
             return await Sale.FirstAsync(s => s.Id == saleId);
         }
 
-        public async Task<string> CreateAndPrintSettlementAsync(int basarId, int sellerId)
-        {
-            var settlement = new Settlement
-            {
-                BasarId = basarId,
-                SellerId = sellerId,
-                TimeStamp = DateTime.Now,
-                Products = new List<ProductSettlement>()
-            };
-
-            var products = await GetProductsForSeller(basarId, sellerId).ToArrayAsync();
-            foreach (var product  in products)
-            {
-                if (product.Status == ProductStatus.Available)
-                {
-                    product.Status = ProductStatus.PickedUp;
-                }
-                else if (product.Status == ProductStatus.Sold)
-                {
-                    product.Status = ProductStatus.Settled;
-                }
-
-                var productSettlement = new ProductSettlement
-                {
-                    Product = product,
-                    Settlement = settlement
-                };
-                settlement.Products.Add(productSettlement);
-            }
-
-            settlement.Number = NextNumber(basarId, TransactionType.Settlement);
-            await Settlement.AddAsync(settlement);
-
-            await SaveChangesAsync();
-
-            return "~/temp/mypdf.pdf";
-        }
-
         public async Task<Basar> CreateNewBasarAsync(DateTime date, string name, decimal productCommission, decimal productDiscount, decimal sellerDiscount)
         {
             var basar = new Basar
@@ -200,6 +168,57 @@ namespace BraunauMobil.VeloBasar.Data
             return true;
         }
 
+        public async Task GenerateLabel(Product product)
+        {
+            var fileStore = new FileStore
+            {
+                ContentType = PdfContentType,
+                Data = _pdfCreator.CreateLabel(product)
+            };
+            await FileStore.AddAsync(fileStore);
+            await SaveChangesAsync();
+
+            product.Label = fileStore.Id;
+        }
+
+        public async Task<FileStore> GenerateAcceptanceDocIfNotExistAsync(int acceptanceId)
+        {
+            var acceptance = await GetAcceptanceAsync(acceptanceId);
+            var fileStore = new FileStore
+            {
+                ContentType = PdfContentType,
+                Data = _pdfCreator.CreateAcceptance(acceptance)
+            };
+            await FileStore.AddAsync(fileStore);
+            await SaveChangesAsync();
+
+            return fileStore;
+        }
+
+        public async Task GenerateMissingLabelsAsync(int basarId, int sellerId)
+        {
+            var products = await GetProductsForSeller(basarId, sellerId).Where(p => p.Label == null).ToListAsync();
+            foreach (var product in products)
+            {
+                await GenerateLabel(product);
+            }
+
+            await SaveChangesAsync();
+        }
+
+        public async Task<FileStore> GenerateSettlementDocIfNotExistAsync(Settlement settlement)
+        {
+            var fileStore = new FileStore
+            {
+                ContentType = PdfContentType,
+                Data = _pdfCreator.CreateSettlement(settlement)
+            };
+            await FileStore.AddAsync(fileStore);
+            await SaveChangesAsync();
+
+            return fileStore;
+        }
+
         public async Task<Acceptance> GetAcceptanceAsync(int acceptanceId)
         {
             return await Acceptance.FirstAsync(a => a.Id == acceptanceId);
@@ -220,9 +239,27 @@ namespace BraunauMobil.VeloBasar.Data
             }).ToArrayAsync();
         }
 
-        public string GetPdf(TransactionBase transaction)
+        public async Task<FileStore> GetAllLabelsAsyncAsCombinedPdf(int basarId, int sellerId)
         {
-            return "~/temp/mypdf.pdf";
+            var products = await GetProductsForSeller(basarId, sellerId).Where(p => p.Label == null).ToListAsync();
+            var files = new List<byte[]>();
+            foreach (var product in products)
+            {
+                var file = await GetFileAsync(product.Label.Value);
+                files.Add(file.Data);
+            }
+
+            var result = new FileStore
+            {
+                Data = _pdfCreator.Combine(files),
+                ContentType = PdfContentType
+            };
+            return result;
+        }
+
+        public async Task<FileStore> GetFileAsync(int fileId)
+        {
+            return await FileStore.FirstOrDefaultAsync(f => f.Id == fileId);
         }
 
         public IQueryable<Product> GetProductsForSeller(int basarId, int sellerId)
@@ -286,9 +323,42 @@ namespace BraunauMobil.VeloBasar.Data
             return number;
         }
 
-        public async Task<string> PrintAcceptanceAsync(int acceptanceId)
+        public async Task<Settlement> SettleSellerAsync(int basarId, int sellerId)
         {
-            return "~/temp/mypdf.pdf";
+            var settlement = new Settlement
+            {
+                BasarId = basarId,
+                SellerId = sellerId,
+                TimeStamp = DateTime.Now,
+                Products = new List<ProductSettlement>()
+            };
+
+            var products = await GetProductsForSeller(basarId, sellerId).ToArrayAsync();
+            foreach (var product in products)
+            {
+                if (product.Status == ProductStatus.Available)
+                {
+                    product.Status = ProductStatus.PickedUp;
+                }
+                else if (product.Status == ProductStatus.Sold)
+                {
+                    product.Status = ProductStatus.Settled;
+                }
+
+                var productSettlement = new ProductSettlement
+                {
+                    Product = product,
+                    Settlement = settlement
+                };
+                settlement.Products.Add(productSettlement);
+            }
+
+            settlement.Number = NextNumber(basarId, TransactionType.Settlement);
+            await Settlement.AddAsync(settlement);
+
+            await SaveChangesAsync();
+
+            return settlement;
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

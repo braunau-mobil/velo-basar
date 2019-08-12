@@ -16,6 +16,8 @@ namespace BraunauMobil.VeloBasar.Models
 
         public int Number { get; set; }
 
+        public int? DocumentId { get; set; }
+
         public DateTime TimeStamp { get; set; }
 
         public abstract TransactionType Type { get; }
