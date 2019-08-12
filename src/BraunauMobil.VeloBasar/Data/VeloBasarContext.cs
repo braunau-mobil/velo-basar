@@ -209,6 +209,21 @@ namespace BraunauMobil.VeloBasar.Data
             return Acceptance.Where(a => a.BasarId == basarId && a.SellerId == sellerId);
         }
 
+        public async Task<string> GetAcceptancePdfAsync(int acceptanceId)
+        {
+            return "~/temp/mypdf.pdf";
+        }
+
+        public async Task<AcceptanceStatistic[]> GetAcceptanceStatisticsAsync(int basarId, int sellerId)
+        {
+            return await GetAcceptancesForSeller(basarId, sellerId).Include(a => a.Products).AsNoTracking().Select(a => new AcceptanceStatistic
+            {
+                Acceptance = a,
+                ProductCount = a.Products.Count,
+                Amount = a.Products.Sum(p => p.Product.Price)
+            }).ToArrayAsync();
+        }
+
         public IQueryable<Product> GetProductsForSeller(int basarId, int sellerId)
         {
             return GetAcceptancesForSeller(basarId, sellerId).SelectMany(a => a.Products).Select(pa => pa.Product);

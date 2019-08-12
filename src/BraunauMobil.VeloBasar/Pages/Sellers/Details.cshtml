@@ -94,3 +94,33 @@
         </tbody>
     </table>
 </div>
+
+<h4>Annahmen</h4>
+<div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.AcceptanceStatistics[0].Acceptance.Number)</th>
+                <th>@Html.DisplayNameFor(model => model.AcceptanceStatistics[0].Acceptance.TimeStamp)</th>
+                <th>@Html.DisplayNameFor(model => model.AcceptanceStatistics[0].ProductCount)</th>
+                <th>@Html.DisplayNameFor(model => model.AcceptanceStatistics[0].Amount)</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.AcceptanceStatistics)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.Acceptance.Number)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Acceptance.TimeStamp)</td>
+                    <td>@Html.DisplayFor(modelItem => item.ProductCount)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Amount)</td>
+                    <td>
+                        <a asp-page="/ShowPdf" asp-all-route-data="@Model.GetItemRoute(item)" target="_blank">Beleg</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+

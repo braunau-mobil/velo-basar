@@ -14,6 +14,8 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
         {
         }
 
+        public IList<AcceptanceStatistic> AcceptanceStatistics { get; set; }
+
         public bool CanSettle { get; set; }
 
         public Seller Seller { get; set; }
@@ -32,12 +34,20 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
                 return NotFound();
             }
 
+            AcceptanceStatistics = await Context.GetAcceptanceStatisticsAsync(basarId, sellerId);
             Products = await Context.GetProductsForSeller(basarId, sellerId).AsNoTracking().ToListAsync();
             Stats = await Context.GetSellerStatisticsAsync(basarId, Seller.Id);
 
             CanSettle = Products.NotSold().Any();
 
             return Page();
+        }
+
+        public IDictionary<string, string> GetItemRoute(AcceptanceStatistic acceptanceStatistic)
+        {
+            var route = GetRoute();
+            route.Add("acceptanceId", acceptanceStatistic.Acceptance.Id.ToString());
+            return route;
         }
 
         public IDictionary<string, string> GetItemRoute(Product product)
