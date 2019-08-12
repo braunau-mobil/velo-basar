@@ -13,13 +13,13 @@ namespace BraunauMobil.VeloBasar.Models
 
         public string Name { get; set; }
 
-        [DisplayFormat(DataFormatString = "{0:C}")]
+        [DataType(DataType.Currency)]
         public decimal ProductCommission { get; set; }
 
-        [DisplayFormat(DataFormatString = "{0:C}")]
+        [DataType(DataType.Currency)]
         public decimal ProductDiscount { get; set; }
 
-        [DisplayFormat(DataFormatString = "{0:C}")]
+        [DataType(DataType.Currency)]
         public decimal SellerDiscount { get; set; }
     }
 }

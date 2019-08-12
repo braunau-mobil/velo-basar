@@ -28,7 +28,7 @@ namespace BraunauMobil.VeloBasar.Models
 
         public string TireSize { get; set; }
 
-        [DisplayFormat(DataFormatString = "{0:C}")]
+        [DataType(DataType.Currency)]
         public decimal Price { get; set; }
 
         public ProductStatus Status { get; set; }

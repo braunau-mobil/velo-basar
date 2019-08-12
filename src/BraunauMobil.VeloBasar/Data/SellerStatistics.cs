@@ -10,7 +10,7 @@ namespace BraunauMobil.VeloBasar.Data
 
         public int NotSoldProductCount { get; set; }
 
-        [DisplayFormat(DataFormatString = "{0:C}")]
+        [DataType(DataType.Currency)]
         public decimal BillAmout { get; set; }
     }
 }
