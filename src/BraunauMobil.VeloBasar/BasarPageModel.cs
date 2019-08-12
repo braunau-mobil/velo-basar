@@ -20,8 +20,17 @@ namespace BraunauMobil.VeloBasar
         [BindProperty]
         public Basar Basar { get; set; }
 
+        public string BackToPage { get; set; } = "./List";
+
+        public IDictionary<string, string> BackToRoute { get; set; }
+
         protected virtual void DecorateRoute(IDictionary<string, string> route)
         {
+        }
+
+        protected string GetReferer()
+        {
+            return Request.Headers["Referer"];
         }
 
         protected async Task LoadBasarAsync(int? basarId)

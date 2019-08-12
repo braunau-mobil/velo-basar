@@ -1,60 +1,52 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BraunauMobil.VeloBasar.Data;
 using BraunauMobil.VeloBasar.Models;
 
 namespace BraunauMobil.VeloBasar.Pages.Products
 {
-    public class EditModel : PageModel
+    public class EditModel : BasarPageModel
     {
-        private readonly BraunauMobil.VeloBasar.Data.VeloBasarContext _context;
-
-        public EditModel(BraunauMobil.VeloBasar.Data.VeloBasarContext context)
+        public EditModel(VeloBasarContext context) : base(context)
         {
-            _context = context;
         }
 
         [BindProperty]
         public Product Product { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public async Task<IActionResult> OnGetAsync(int basarId, int productId)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            await LoadBasarAsync(basarId);
 
-            Product = await _context.Product.FirstOrDefaultAsync(m => m.Id == id);
+            Product = await Context.Product.FirstOrDefaultAsync(p => p.Id == productId);
 
             if (Product == null)
             {
                 return NotFound();
             }
+
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(int basarId, string target)
         {
             if (!ModelState.IsValid)
             {
                 return Page();
             }
 
-            _context.Attach(Product).State = EntityState.Modified;
+            await LoadBasarAsync(basarId);
+            Context.Attach(Product).State = EntityState.Modified;
 
             try
             {
-                await _context.SaveChangesAsync();
+                await Context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ProductExists(Product.Id))
+                if (!await Context.Product.ExistsAsync(Product.Id))
                 {
                     return NotFound();
                 }
@@ -64,12 +56,7 @@ namespace BraunauMobil.VeloBasar.Pages.Products
                 }
             }
 
-            return RedirectToPage("./Index");
-        }
-
-        private bool ProductExists(int id)
-        {
-            return _context.Product.Any(e => e.Id == id);
+            return Redirect(target);
         }
     }
 }

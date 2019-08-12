@@ -150,7 +150,13 @@ namespace BraunauMobil.VeloBasar.Data
             await SaveChangesAsync();
         }
 
-        public async Task<bool> DeleteSellerAsync(int sellerId)
+        public async Task<bool> DeleteProductAsync(int id)
+        {
+            //  @todo
+            return true;
+        }
+
+        public async Task<bool> DeleteSellerAsync(int id)
         {
             //  @todo
             return true;
