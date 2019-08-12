@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System;
 using Npgsql;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace BraunauMobil.VeloBasar.Data
 {
@@ -152,6 +153,19 @@ namespace BraunauMobil.VeloBasar.Data
         public async Task<Acceptance> GetAcceptanceAsync(int acceptanceId)
         {
             return await Acceptance.FirstAsync(a => a.Id == acceptanceId);
+        }
+
+        public async Task<SellerStatistics> GetSellerStatisticsAsync(int sellerId)
+        {
+            var products = await Acceptance.Where(a => a.SellerId == sellerId).SelectMany(a => a.Products).Select(pa => pa.Product).ToArrayAsync();
+            var soldProducts = products.Sold().ToArray();
+            return new SellerStatistics
+            {
+                AceptedProductCount = products.Length,
+                BillAmout = soldProducts.Sum(p => p.Price),
+                NotSoldProductCount = products.NotSold().Count(),
+                SoldProductCount = soldProducts.Length
+            };
         }
 
         public int NextNumber(int basarId, TransactionType transactionType)

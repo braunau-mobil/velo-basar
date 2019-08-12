@@ -15,6 +15,8 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
 
         public Seller Seller { get; set; }
 
+        public SellerStatistics Stats { get; set; }
+
         public PaginatedList<Product> Products { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? basarId, int? sellerId, int? pageIndex)
@@ -34,6 +36,8 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
 
             var pageSize = 10;
             Products = await PaginatedList<Product>.CreateAsync(Context.Acceptance.Where(a => a.SellerId == Seller.Id).SelectMany(a => a.Products).Select(pa => pa.Product).AsNoTracking(), pageIndex ?? 1, pageSize);
+
+            Stats = await Context.GetSellerStatisticsAsync(Seller.Id);
 
             return Page();
         }

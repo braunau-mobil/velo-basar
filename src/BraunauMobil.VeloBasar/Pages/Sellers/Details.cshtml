@@ -7,30 +7,45 @@
 <h2>#@Model.Seller.Id @Html.DisplayFor(model => model.Seller.FirstName) @Html.DisplayFor(model => model.Seller.LastName)</h2>
 
 <a asp-page="/Products/AddMany" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@Model.Seller.Id" class="btn btn-default">Artikel annehmen</a>
+<a asp-page="/Billing/Create" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@Model.Seller.Id" class="btn btn-default">Abrechnen</a>
 <a asp-page="/Sellers/Edit" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@Model.Seller.Id" class="btn btn-default">Bearbeiten</a>
 
 <div>
     <dl class="dl-horizontal">
         <dt>@Html.DisplayNameFor(model => model.Seller.Street)</dt>
         <dd>@Html.DisplayFor(model => model.Seller.Street)</dd>
-        
+
         <dt>@Html.DisplayNameFor(model => model.Seller.City)</dt>
         <dd>@Html.DisplayFor(model => model.Seller.City)</dd>
-        
+
         <dt>@Html.DisplayNameFor(model => model.Seller.ZIP)</dt>
         <dd>@Html.DisplayFor(model => model.Seller.ZIP)</dd>
-        
+
         <dt>@Html.DisplayNameFor(model => model.Seller.Country)</dt>
         <dd>@Html.DisplayFor(model => model.Seller.Country.Name)</dd>
-        
+
         <dt>@Html.DisplayNameFor(model => model.Seller.IBAN)</dt>
         <dd>@Html.DisplayFor(model => model.Seller.IBAN)</dd>
-        
+
         <dt>@Html.DisplayNameFor(model => model.Seller.BIC)</dt>
         <dd>@Html.DisplayFor(model => model.Seller.BIC)</dd>
-        
+
         <dt>@Html.DisplayNameFor(model => model.Seller.BankAccountHolder)</dt>
         <dd>@Html.DisplayFor(model => model.Seller.BankAccountHolder)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Stats.AceptedProductCount)</dt>
+        <dd>@Html.DisplayFor(model => model.Stats.AceptedProductCount)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Stats.SoldProductCount)</dt>
+        <dd>@Html.DisplayFor(model => model.Stats.SoldProductCount)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Stats.NotSoldProductCount)</dt>
+        <dd>@Html.DisplayFor(model => model.Stats.NotSoldProductCount)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Stats.BillAmout)</dt>
+        <dd>@Html.DisplayFor(model => model.Stats.BillAmout)</dd>
+
+
     </dl>
     <hr />
 </div>
