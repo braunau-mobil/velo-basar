@@ -4,13 +4,12 @@ using BraunauMobil.VeloBasar.Data;
 using BraunauMobil.VeloBasar.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace BraunauMobil.VeloBasar.Pages.Sales
 {
     public class CreateOrEditModel : BasarPageModel
     {
-        private const int PageSize = 10;
-
         public CreateOrEditModel(VeloBasarContext context) : base(context)
         {
         }
@@ -18,19 +17,19 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
         public Sale Sale { get; set; }
 
         [BindProperty]
-        public PaginatedList<Product> Products { get; set; }
+        public IList<Product> Products { get; set; }
 
         [BindProperty]
         public int ProductId { get; set; }
 
-        public async Task OnGetAsync(int basarId, int? saleId, int? pageIndex)
+        public async Task OnGetAsync(int basarId, int? saleId)
         {
             await LoadBasarAsync(basarId);
 
             if (saleId != null)
             {
                 Sale = await Context.Sale.FirstOrDefaultAsync(s => s.Id == saleId);
-                Products = await PaginatedList<Product>.CreateAsync(Context.Sale.Where(s => s.Id == saleId).SelectMany(s => s.Products).Select(ps => ps.Product).AsNoTracking(), pageIndex ?? 1, PageSize);
+                Products = await Context.Sale.Where(s => s.Id == saleId).SelectMany(s => s.Products).Select(ps => ps.Product).AsNoTracking().ToListAsync();
             }
             else
             {
@@ -38,7 +37,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
             }
         }
 
-        public async Task<IActionResult> OnPostAsync(int basarId, int? saleId, int? pageIndex)
+        public async Task<IActionResult> OnPostAsync(int basarId, int? saleId)
         {
             await LoadBasarAsync(basarId);
 
@@ -56,7 +55,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
 
             var sale = await Context.AddProductToSaleAsync(basarId, saleId, product);
 
-            return RedirectToPage("/Sales/CreateOrEdit", new { basarId, saleId = sale.Id, pageIndex });
+            return RedirectToPage("/Sales/CreateOrEdit", new { basarId, saleId = sale.Id });
         }
     }
 }
