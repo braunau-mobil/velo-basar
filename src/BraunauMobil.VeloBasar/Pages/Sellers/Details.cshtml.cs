@@ -33,7 +33,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
             }
 
             Products = await Context.GetProductsForSeller(basarId, sellerId).AsNoTracking().ToListAsync();
-            Stats = await Context.GetSellerStatisticsAsync(Seller.Id);
+            Stats = await Context.GetSellerStatisticsAsync(basarId, Seller.Id);
 
             CanSettle = Products.NotSold().Any();
 

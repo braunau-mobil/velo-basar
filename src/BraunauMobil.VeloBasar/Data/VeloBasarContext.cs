@@ -214,9 +214,9 @@ namespace BraunauMobil.VeloBasar.Data
             return GetAcceptancesForSeller(basarId, sellerId).SelectMany(a => a.Products).Select(pa => pa.Product);
         }
 
-        public async Task<SellerStatistics> GetSellerStatisticsAsync(int sellerId)
+        public async Task<SellerStatistics> GetSellerStatisticsAsync(int basarId, int sellerId)
         {
-            var products = await Acceptance.Where(a => a.SellerId == sellerId).SelectMany(a => a.Products).Select(pa => pa.Product).ToArrayAsync();
+            var products = await GetProductsForSeller(basarId, sellerId).ToArrayAsync();
             var soldProducts = products.Sold().ToArray();
             return new SellerStatistics
             {
