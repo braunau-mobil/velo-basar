@@ -2,12 +2,11 @@
 @model BraunauMobil.VeloBasar.Pages.Sellers.EditModel
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Verkäufer bearbeiten";
 }
 
-<h2>Edit</h2>
+<h2>Verkäufer bearbeiten</h2>
 
-<h4>Seller</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -65,14 +64,11 @@
                 <span asp-validation-for="Seller.Token" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-default" />
+                <input type="submit" value="Save" class="btn btn-default" asp-route-basarId="@Model.Basar.Id" />
+                <a asp-page="@Model.GetCancelPage()" asp-all-route-data="@Model.GetCancelRoute()" class="btn btn-default">Abbrechen</a>
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-page="./Index">Back to List</a>
 </div>
 
 @section Scripts {

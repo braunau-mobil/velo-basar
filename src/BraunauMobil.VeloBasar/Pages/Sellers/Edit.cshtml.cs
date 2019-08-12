@@ -1,61 +1,60 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BraunauMobil.VeloBasar.Data;
 using BraunauMobil.VeloBasar.Models;
+using System.Collections.Generic;
 
 namespace BraunauMobil.VeloBasar.Pages.Sellers
 {
-    public class EditModel : PageModel
+    public class EditModel : BasarPageModel
     {
-        private readonly BraunauMobil.VeloBasar.Data.VeloBasarContext _context;
+        private string _cancelPage;
 
-        public EditModel(BraunauMobil.VeloBasar.Data.VeloBasarContext context)
+        public EditModel(VeloBasarContext context) : base(context)
         {
-            _context = context;
         }
 
         [BindProperty]
         public Seller Seller { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public async Task<IActionResult> OnGetAsync(int basarId, int sellerId, string sourcePage)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            await LoadBasarAsync(basarId);
 
-            ViewData["Countries"] = new SelectList(_context.Country, "Id", "Name");
-            Seller = await _context.Seller.FirstOrDefaultAsync(m => m.Id == id);
+            ViewData["Countries"] = new SelectList(Context.Country, "Id", "Name");
+
+            Seller = await Context.Seller.FirstOrDefaultAsync(m => m.Id == sellerId);
 
             if (Seller == null)
             {
                 return NotFound();
             }
+
+            _cancelPage = sourcePage;
+
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(int basarId)
         {
             if (!ModelState.IsValid)
             {
                 return Page();
             }
 
-            _context.Attach(Seller).State = EntityState.Modified;
+            await LoadBasarAsync(basarId);
+
+            Context.Attach(Seller).State = EntityState.Modified;
 
             try
             {
-                await _context.SaveChangesAsync();
+                await Context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!SellerExists(Seller.Id))
+                if (!await Context.Seller.ExistsAsync(Seller.Id))
                 {
                     return NotFound();
                 }
@@ -65,12 +64,24 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
                 }
             }
 
-            return RedirectToPage("./Index");
+            return RedirectToPage("./Details", new { basarId, sellerId = Seller.Id });
         }
 
-        private bool SellerExists(int id)
+        public string GetCancelPage()
         {
-            return _context.Seller.Any(e => e.Id == id);
+            return $"./{_cancelPage}";
+        }
+
+        public IDictionary<string, string> GetCancelRoute()
+        {
+            var route = GetRoute();
+
+            if (_cancelPage == "Details")
+            {
+                route.Add("sellerId", Seller.Id.ToString());
+            }
+
+            return route;
         }
     }
 }

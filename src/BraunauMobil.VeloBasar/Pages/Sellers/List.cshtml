@@ -75,9 +75,9 @@
                     @Html.DisplayFor(modelItem => item.Country.Name)
                 </td>
                 <td>
-                    <a asp-page="./Edit" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@item.Id">Bearbeiten</a> |
-                    <a asp-page="./Details" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@item.Id">Details</a> |
-                    <a asp-page="./Delete" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@item.Id">Löschen</a>
+                    <a asp-page="./Edit" asp-all-route-data="@Model.GetItemRoute(item)">Bearbeiten</a> |
+                    <a asp-page="./Details" asp-all-route-data="@Model.GetItemRoute(item)">Details</a> |
+                    <a asp-page="./Delete" asp-all-route-data="@Model.GetItemRoute(item)">Löschen</a>
                 </td>
             </tr>
         }

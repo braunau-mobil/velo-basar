@@ -49,5 +49,13 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
             Sellers = await PaginatedList<Seller>.CreateAsync(
                 sellerIq.AsNoTracking(), pageIndex ?? 1, pageSize);
         }
+
+        public IDictionary<string, string> GetItemRoute(Seller seller)
+        {
+            var route = GetRoute();
+            route.Add("sellerId", seller.Id.ToString());
+            route.Add("sourcePage", "List");
+            return route;
+        }
     }
 }

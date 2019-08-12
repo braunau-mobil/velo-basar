@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using BraunauMobil.VeloBasar.Data;
 using BraunauMobil.VeloBasar.Models;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace BraunauMobil.VeloBasar.Pages.Sellers
 {
@@ -17,16 +18,11 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
 
         public SellerStatistics Stats { get; set; }
 
-        public PaginatedList<Product> Products { get; set; }
+        public IList<Product> Products { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int? basarId, int? sellerId, int? pageIndex)
+        public async Task<IActionResult> OnGetAsync(int basarId, int sellerId)
         {
             await LoadBasarAsync(basarId);
-
-            if (sellerId == null)
-            {
-                return NotFound();
-            }
 
             Seller = await Context.Seller.Include(s => s.Country).FirstOrDefaultAsync(m => m.Id == sellerId);
             if (Seller == null)
@@ -34,12 +30,27 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
                 return NotFound();
             }
 
-            var pageSize = 10;
-            Products = await PaginatedList<Product>.CreateAsync(Context.Acceptance.Where(a => a.SellerId == Seller.Id).SelectMany(a => a.Products).Select(pa => pa.Product).AsNoTracking(), pageIndex ?? 1, pageSize);
+            Products = await Context.Acceptance.Where(a => a.SellerId == Seller.Id).SelectMany(a => a.Products).Select(pa => pa.Product).AsNoTracking().ToListAsync();
 
             Stats = await Context.GetSellerStatisticsAsync(Seller.Id);
 
             return Page();
+        }
+
+        public IDictionary<string, string> GetItemRoute(Product product)
+        {
+            var route = GetRoute();
+            route.Add("sellerId", Seller.Id.ToString());
+            route.Add("productId", product.Id.ToString());
+            return route;
+        }
+
+        public IDictionary<string, string> GetSellerRoute()
+        {
+            var route = GetRoute();
+            route.Add("sellerId", Seller.Id.ToString());
+            route.Add("sourcePage", "Details");
+            return route;
         }
     }
 }

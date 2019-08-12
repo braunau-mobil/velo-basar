@@ -8,7 +8,9 @@
 
 <a asp-page="/Products/AddMany" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@Model.Seller.Id" class="btn btn-default">Artikel annehmen</a>
 <a asp-page="/Billing/Create" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@Model.Seller.Id" class="btn btn-default">Abrechnen</a>
-<a asp-page="/Sellers/Edit" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@Model.Seller.Id" class="btn btn-default">Bearbeiten</a>
+|
+<a asp-page="./Edit" asp-all-route-data="@Model.GetSellerRoute()" class="btn btn-default">Bearbeiten</a>
+<a asp-page="./Delete" asp-all-route-data="@Model.GetSellerRoute()" class="btn btn-default">Löschen</a>
 
 <div>
     <dl class="dl-horizontal">
@@ -79,18 +81,12 @@
                 <td>@Html.DisplayFor(modelItem => item.Price)</td>
                 <td>@Html.DisplayFor(modelItem => item.Status)</td>
                 <td>
-                    <a asp-page="/Products/Edit" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@Model.Seller.Id" asp-route-productId="@item.Id">Bearbeiten</a> |
-                    <a asp-page="/Products/Details" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@Model.Seller.Id" asp-route-productId="@item.Id">Details</a> |
-                    <a asp-page="/Products/Delete" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@Model.Seller.Id" asp-route-productId="@item.Id">Löschen</a>
+                    <a asp-page="/Products/Edit" asp-all-route-data="@Model.GetItemRoute(item)">Bearbeiten</a> |
+                    <a asp-page="/Products/Details" asp-all-route-data="@Model.GetItemRoute(item)">Details</a> |
+                    <a asp-page="/Products/Delete" asp-all-route-data="@Model.GetItemRoute(item)">Löschen</a>
                 </td>
             </tr>
             }
         </tbody>
     </table>
-    @{
-        var prevDisabled = !Model.Products.HasPreviousPage ? "disabled" : "";
-        var nextDisabled = !Model.Products.HasNextPage ? "disabled" : "";
-    }
-    <a asp-page="/Sellers/Details" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@Model.Seller.Id" asp-route-pageIndex="@(Model.Products.PageIndex - 1)" class="btn btn-default @prevDisabled">Previous</a>
-    <a asp-page="/Sellers/Details" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@Model.Seller.Id" asp-route-pageIndex="@(Model.Products.PageIndex + 1)" class="btn btn-default @nextDisabled">Next</a>
 </div>

@@ -1,59 +1,71 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using BraunauMobil.VeloBasar.Data;
 using BraunauMobil.VeloBasar.Models;
 
 namespace BraunauMobil.VeloBasar.Pages.Sellers
 {
-    public class DeleteModel : PageModel
+    public class DeleteModel : BasarPageModel
     {
-        private readonly BraunauMobil.VeloBasar.Data.VeloBasarContext _context;
+        private string _sourcePage;
 
-        public DeleteModel(BraunauMobil.VeloBasar.Data.VeloBasarContext context)
+        public DeleteModel(VeloBasarContext context) : base(context)
         {
-            _context = context;
         }
 
-        [BindProperty]
         public Seller Seller { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public async Task<IActionResult> OnGetAsync(int basarId, int sellerId, string sourcePage)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            await LoadBasarAsync(basarId);
 
-            Seller = await _context.Seller.FirstOrDefaultAsync(m => m.Id == id);
+            Seller = await Context.Seller.FirstOrDefaultAsync(m => m.Id == sellerId);
 
             if (Seller == null)
             {
                 return NotFound();
             }
+
+            _sourcePage = sourcePage;
+
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync(int? id)
+        public async Task<IActionResult> OnPostAsync(int basarId, int sellerId)
         {
-            if (id == null)
+            await LoadBasarAsync(basarId);
+
+            if (!await Context.DeleteSellerAsync(sellerId))
             {
-                return NotFound();
+                return RedirectToPage("/Dialogs/Error", new
+                {
+                    basarId,
+                    sellerId,
+                    targetPage = _sourcePage,
+                    message = "Der Verkäufer konnte nicht gelöscht werden."
+                });
+            }
+           
+            return RedirectToPage("./List", new { basarId = Basar.Id });
+        }
+
+        public string GetCancelPage()
+        {
+            return $"./{_sourcePage}";
+        }
+
+        public IDictionary<string, string> GetCancelRoute()
+        {
+            var route = GetRoute();
+
+            if (_sourcePage == "Details")
+            {
+                route.Add("sellerId", Seller.Id.ToString());
             }
 
-            Seller = await _context.Seller.FindAsync(id);
-
-            if (Seller != null)
-            {
-                _context.Seller.Remove(Seller);
-                await _context.SaveChangesAsync();
-            }
-
-            return RedirectToPage("./Index");
+            return route;
         }
     }
 }
