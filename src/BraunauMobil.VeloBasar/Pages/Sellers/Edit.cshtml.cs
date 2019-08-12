@@ -10,7 +10,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
 {
     public class EditModel : BasarPageModel
     {
-        private string _cancelPage;
+        private string _sourcePage;
 
         public EditModel(VeloBasarContext context) : base(context)
         {
@@ -32,7 +32,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
                 return NotFound();
             }
 
-            _cancelPage = sourcePage;
+            _sourcePage = sourcePage;
 
             return Page();
         }
@@ -64,19 +64,19 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
                 }
             }
 
-            return RedirectToPage("./Details", new { basarId, sellerId = Seller.Id });
+            return RedirectToPage(GetCancelPage(), GetCancelRoute());
         }
 
         public string GetCancelPage()
         {
-            return $"./{_cancelPage}";
+            return $"./{_sourcePage}";
         }
 
         public IDictionary<string, string> GetCancelRoute()
         {
             var route = GetRoute();
 
-            if (_cancelPage == "Details")
+            if (_sourcePage == "Details")
             {
                 route.Add("sellerId", Seller.Id.ToString());
             }
