@@ -233,12 +233,13 @@ namespace BraunauMobil.VeloBasar.Data
         public async Task<SellerStatistics> GetSellerStatisticsAsync(int basarId, int sellerId)
         {
             var products = await GetProductsForSeller(basarId, sellerId).ToArrayAsync();
-            var soldProducts = products.Sold().ToArray();
+            var soldProducts = products.State(ProductStatus.Sold).ToArray();
             return new SellerStatistics
             {
                 AceptedProductCount = products.Length,
                 SettlementAmout = soldProducts.Sum(p => p.Price),
-                NotSoldProductCount = products.NotSold().Count(),
+                NotSoldProductCount = products.NotState(ProductStatus.Sold).Count(),
+                PickedUpProductCount = products.State(ProductStatus.PickedUp).Count(),
                 SoldProductCount = soldProducts.Length
             };
         }

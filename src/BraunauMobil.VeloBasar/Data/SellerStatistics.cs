@@ -10,6 +10,8 @@ namespace BraunauMobil.VeloBasar.Data
 
         public int NotSoldProductCount { get; set; }
 
+        public int PickedUpProductCount { get; set; }
+
         [DataType(DataType.Currency)]
         public decimal SettlementAmout { get; set; }
     }

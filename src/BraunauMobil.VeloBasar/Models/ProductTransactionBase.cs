@@ -5,8 +5,6 @@ namespace BraunauMobil.VeloBasar.Models
 {
     public abstract class ProductTransactionBase<T> : TransactionBase
     {
-        public int Id { get; set; }
-
         public int SellerId { get; set; }
 
         public Seller Seller { get; set; }

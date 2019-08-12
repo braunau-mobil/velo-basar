@@ -18,19 +18,29 @@ namespace BraunauMobil.VeloBasar.Data
             return await dbSet.AnyAsync(s => s.Id == id);
         }
 
-        public static IEnumerable<Product> Sold(this IEnumerable<Product> products)
+        public static IEnumerable<Product> State(this IEnumerable<Product> products, ProductStatus state)
         {
-            return products.Where(p => p.Status == ProductStatus.Sold);
+            return products.Where(p => p.Is(state));
         }
 
-        public static IEnumerable<Product> NotSold(this IEnumerable<Product> products)
+        public static IQueryable<Product> State(this IQueryable<Product> products, ProductStatus state)
         {
-            return products.Where(p => p.Status != ProductStatus.Sold);
+            return products.Where(p => p.Is(state));
         }
 
-        public static IQueryable<Product> NotSold(this IQueryable<Product> products)
+        public static IEnumerable<Product> NotState(this IEnumerable<Product> products, ProductStatus state)
         {
-            return products.Where(p => p.Status != ProductStatus.Sold);
+            return products.Where(p => p.IsNot(state));
+        }
+
+        public static bool Is(this Product product, ProductStatus state)
+        {
+            return product.Status == state;
+        }
+
+        public static bool IsNot(this Product product, ProductStatus state)
+        {
+            return product.Status != state;
         }
     }
 }
