@@ -117,6 +117,43 @@ namespace BraunauMobil.VeloBasar.Data
             return await Sale.FirstAsync(s => s.Id == saleId);
         }
 
+        public async Task<string> CreateAndPrintSettlementAsync(int basarId, int sellerId)
+        {
+            var settlement = new Settlement
+            {
+                BasarId = basarId,
+                TimeStamp = DateTime.Now,
+                Products = new List<ProductSettlement>()
+            };
+
+            var products = await GetProductsForSeller(basarId, sellerId).ToArrayAsync();
+            foreach (var product  in products)
+            {
+                if (product.Status == ProductStatus.Available)
+                {
+                    product.Status = ProductStatus.PickedUp;
+                }
+                else if (product.Status == ProductStatus.Sold)
+                {
+                    product.Status = ProductStatus.Settled;
+                }
+
+                var productSettlement = new ProductSettlement
+                {
+                    Product = product,
+                    Settlement = settlement
+                };
+                settlement.Products.Add(productSettlement);
+            }
+
+            settlement.Number = NextNumber(basarId, TransactionType.Settlement);
+            await Settlement.AddAsync(settlement);
+
+            await SaveChangesAsync();
+
+            return "~/temp/mypdf.pdf";
+        }
+
         public async Task<Basar> CreateNewBasarAsync(DateTime date, string name, decimal productCommission, decimal productDiscount, decimal sellerDiscount)
         {
             var basar = new Basar
@@ -165,6 +202,16 @@ namespace BraunauMobil.VeloBasar.Data
         public async Task<Acceptance> GetAcceptanceAsync(int acceptanceId)
         {
             return await Acceptance.FirstAsync(a => a.Id == acceptanceId);
+        }
+
+        public IQueryable<Acceptance> GetAcceptancesForSeller(int basarId, int sellerId)
+        {
+            return Acceptance.Where(a => a.BasarId == basarId && a.SellerId == sellerId);
+        }
+
+        public IQueryable<Product> GetProductsForSeller(int basarId, int sellerId)
+        {
+            return GetAcceptancesForSeller(basarId, sellerId).SelectMany(a => a.Products).Select(pa => pa.Product);
         }
 
         public async Task<SellerStatistics> GetSellerStatisticsAsync(int sellerId)

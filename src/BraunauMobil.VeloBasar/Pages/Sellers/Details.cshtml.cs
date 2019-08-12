@@ -14,6 +14,8 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
         {
         }
 
+        public bool CanSettle { get; set; }
+
         public Seller Seller { get; set; }
 
         public SellerStatistics Stats { get; set; }
@@ -30,9 +32,10 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
                 return NotFound();
             }
 
-            Products = await Context.Acceptance.Where(a => a.SellerId == Seller.Id).SelectMany(a => a.Products).Select(pa => pa.Product).AsNoTracking().ToListAsync();
-
+            Products = await Context.GetProductsForSeller(basarId, sellerId).AsNoTracking().ToListAsync();
             Stats = await Context.GetSellerStatisticsAsync(Seller.Id);
+
+            CanSettle = Products.NotSold().Any();
 
             return Page();
         }

@@ -9,7 +9,7 @@
 <a asp-page="/Products/AddMany" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@Model.Seller.Id" class="btn btn-default">Artikel annehmen</a>
 @if (Model.CanSettle)
 {
-    <a asp-page="/Settlement/Create" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@Model.Seller.Id" class="btn btn-default">Abrechnen</a>
+    <a asp-page="/Settlements/CreateAndPrint" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@Model.Seller.Id" target="_blank" class="btn btn-default">Abrechnen</a>
 }
 |
 <a asp-page="./Edit" asp-all-route-data="@Model.GetSellerRoute()" class="btn btn-default">Bearbeiten</a>

@@ -27,5 +27,10 @@ namespace BraunauMobil.VeloBasar.Data
         {
             return products.Where(p => p.Status != ProductStatus.Sold);
         }
+
+        public static IQueryable<Product> NotSold(this IQueryable<Product> products)
+        {
+            return products.Where(p => p.Status != ProductStatus.Sold);
+        }
     }
 }

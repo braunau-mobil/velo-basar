@@ -9,7 +9,8 @@ namespace BraunauMobil.VeloBasar.Models
         Sold,
         Deleted,
         Stolen,
-        PickedUp
+        PickedUp,
+        Settled
     }
 
     public class Product : IValidatableObject
