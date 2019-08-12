@@ -14,7 +14,9 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
         {
         }
 
-        public IList<AcceptanceStatistic> AcceptanceStatistics { get; set; }
+        public IList<TransactionStatistic<Acceptance>> AcceptanceStatistics { get; set; }
+
+        public IList<TransactionStatistic<Settlement>> SettlementStatistics { get; set; }
 
         public bool CanSettle { get; set; }
 
@@ -35,6 +37,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
             }
 
             AcceptanceStatistics = await Context.GetAcceptanceStatisticsAsync(basarId, sellerId);
+            SettlementStatistics = await Context.GetSettlementStatisticsAsync(basarId, sellerId);
             Products = await Context.GetProductsForSeller(basarId, sellerId).AsNoTracking().ToListAsync();
             Stats = await Context.GetSellerStatisticsAsync(basarId, Seller.Id);
 
@@ -43,10 +46,10 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
             return Page();
         }
 
-        public IDictionary<string, string> GetItemRoute(AcceptanceStatistic acceptanceStatistic)
+        public IDictionary<string, string> GetItemRoute<T>(TransactionStatistic<T> statistic) where T : TransactionBase
         {
             var route = GetRoute();
-            route.Add("acceptanceId", acceptanceStatistic.Acceptance.Id.ToString());
+            route.Add("path", Context.GetPdf(statistic.Transaction));
             return route;
         }
 

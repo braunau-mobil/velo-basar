@@ -122,6 +122,7 @@ namespace BraunauMobil.VeloBasar.Data
             var settlement = new Settlement
             {
                 BasarId = basarId,
+                SellerId = sellerId,
                 TimeStamp = DateTime.Now,
                 Products = new List<ProductSettlement>()
             };
@@ -209,19 +210,19 @@ namespace BraunauMobil.VeloBasar.Data
             return Acceptance.Where(a => a.BasarId == basarId && a.SellerId == sellerId);
         }
 
-        public async Task<string> GetAcceptancePdfAsync(int acceptanceId)
+        public async Task<TransactionStatistic<Acceptance>[]> GetAcceptanceStatisticsAsync(int basarId, int sellerId)
         {
-            return "~/temp/mypdf.pdf";
-        }
-
-        public async Task<AcceptanceStatistic[]> GetAcceptanceStatisticsAsync(int basarId, int sellerId)
-        {
-            return await GetAcceptancesForSeller(basarId, sellerId).Include(a => a.Products).AsNoTracking().Select(a => new AcceptanceStatistic
+            return await GetAcceptancesForSeller(basarId, sellerId).Include(a => a.Products).AsNoTracking().Select(a => new TransactionStatistic<Acceptance>
             {
-                Acceptance = a,
+                Transaction = a,
                 ProductCount = a.Products.Count,
                 Amount = a.Products.Sum(p => p.Product.Price)
             }).ToArrayAsync();
+        }
+
+        public string GetPdf(TransactionBase transaction)
+        {
+            return "~/temp/mypdf.pdf";
         }
 
         public IQueryable<Product> GetProductsForSeller(int basarId, int sellerId)
@@ -240,6 +241,21 @@ namespace BraunauMobil.VeloBasar.Data
                 NotSoldProductCount = products.NotSold().Count(),
                 SoldProductCount = soldProducts.Length
             };
+        }
+
+        public IQueryable<Settlement> GetSettlementsForSeller(int basarId, int sellerId)
+        {
+            return Settlement.Where(s => s.BasarId == basarId && s.SellerId == sellerId);
+        }
+
+        public async Task<TransactionStatistic<Settlement>[]> GetSettlementStatisticsAsync(int basarId, int sellerId)
+        {
+            return await GetSettlementsForSeller(basarId, sellerId).Include(s => s.Products).AsNoTracking().Select(s => new TransactionStatistic<Settlement>
+            {
+                Transaction = s,
+                ProductCount = s.Products.Count,
+                Amount = s.Products.Sum(p => p.Product.Price)
+            }).ToArrayAsync();
         }
 
         public int NextNumber(int basarId, TransactionType transactionType)

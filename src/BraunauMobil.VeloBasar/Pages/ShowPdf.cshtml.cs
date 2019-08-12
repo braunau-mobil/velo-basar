@@ -10,22 +10,16 @@ namespace BraunauMobil.VeloBasar.Pages
         {
         }
 
-        public async Task<IActionResult> OnGetAsync(int basarId, int? acceptanceId)
+        public async Task<IActionResult> OnGetAsync(int basarId, string path)
         {
             await LoadBasarAsync(basarId);
 
-            string pdfPath = "";
-            if (acceptanceId != null)
-            {
-                pdfPath = await Context.GetAcceptancePdfAsync(acceptanceId.Value);
-            }
-
-            if (string.IsNullOrEmpty(pdfPath))
+            if (string.IsNullOrEmpty(path))
             {
                 return NotFound();
             }
 
-            return Redirect(pdfPath);
+            return Redirect(path);
         }
     }
 }
