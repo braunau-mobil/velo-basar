@@ -82,7 +82,6 @@
                 <td>@Html.DisplayFor(modelItem => item.Status)</td>
                 <td>
                     <a asp-page="/Products/Edit" asp-all-route-data="@Model.GetItemRoute(item)">Bearbeiten</a> |
-                    <a asp-page="/Products/Details" asp-all-route-data="@Model.GetItemRoute(item)">Details</a> |
                     <a asp-page="/Products/Delete" asp-all-route-data="@Model.GetItemRoute(item)">Löschen</a>
                 </td>
             </tr>

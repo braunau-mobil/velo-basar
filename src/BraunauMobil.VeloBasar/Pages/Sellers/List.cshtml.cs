@@ -54,7 +54,6 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
         {
             var route = GetRoute();
             route.Add("sellerId", seller.Id.ToString());
-            route.Add("sourcePage", "List");
             return route;
         }
     }

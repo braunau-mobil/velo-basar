@@ -76,6 +76,6 @@
     
     <form method="post">
         <input type="submit" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@Model.Seller.Id" value="Delete" class="btn btn-default" />
-        <a asp-page="@Model.GetCancelPage()" asp-all-route-data="@Model.GetCancelRoute()" class="btn btn-default">Abbrechen</a>
+        <a href="@Request.Headers["Referer"]" class="btn btn-default">Abbrechen</a>
     </form>
 </div>

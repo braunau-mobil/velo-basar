@@ -4,14 +4,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BraunauMobil.VeloBasar.Data;
 using BraunauMobil.VeloBasar.Models;
-using System.Collections.Generic;
 
 namespace BraunauMobil.VeloBasar.Pages.Sellers
 {
     public class EditModel : BasarPageModel
     {
-        private string _sourcePage;
-
         public EditModel(VeloBasarContext context) : base(context)
         {
         }
@@ -19,7 +16,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
         [BindProperty]
         public Seller Seller { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int basarId, int sellerId, string sourcePage)
+        public async Task<IActionResult> OnGetAsync(int basarId, int sellerId)
         {
             await LoadBasarAsync(basarId);
 
@@ -32,12 +29,10 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
                 return NotFound();
             }
 
-            _sourcePage = sourcePage;
-
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync(int basarId)
+        public async Task<IActionResult> OnPostAsync(int basarId, string target)
         {
             if (!ModelState.IsValid)
             {
@@ -64,24 +59,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
                 }
             }
 
-            return RedirectToPage(GetCancelPage(), GetCancelRoute());
-        }
-
-        public string GetCancelPage()
-        {
-            return $"./{_sourcePage}";
-        }
-
-        public IDictionary<string, string> GetCancelRoute()
-        {
-            var route = GetRoute();
-
-            if (_sourcePage == "Details")
-            {
-                route.Add("sellerId", Seller.Id.ToString());
-            }
-
-            return route;
+            return Redirect(target);
         }
     }
 }
