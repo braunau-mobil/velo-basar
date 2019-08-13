@@ -94,7 +94,8 @@
                         <a asp-page="/Products/Delete" asp-all-route-data="@Model.GetItemRoute(item)">Löschen</a>
                         @if (item.Label != null)
                         {
-                            <a asp-page="/ShowFile" asp-all-route-data="@Model.GetRoute()" asp-rout-fileId="@item.Label" target = "_blank">Etikett</a>
+                            @:|
+                            <a asp-page="/ShowFile" asp-all-route-data="@Model.GetRoute()" asp-route-fileId="@item.Label" target="_blank">Etikett</a>
                         }
                     </td>
                 </tr>
