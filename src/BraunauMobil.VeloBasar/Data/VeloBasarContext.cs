@@ -262,7 +262,10 @@ namespace BraunauMobil.VeloBasar.Data
 
         public async Task<Acceptance> GetAcceptanceAsync(int acceptanceId)
         {
-            return await Acceptance.FirstAsync(a => a.Id == acceptanceId);
+            return await Acceptance
+                .Include(a => a.Products)
+                    .ThenInclude(pa => pa.Product)
+                .FirstAsync(a => a.Id == acceptanceId);
         }
 
         public IQueryable<Acceptance> GetAcceptancesForSeller(Basar basar, int sellerId)
@@ -315,7 +318,10 @@ namespace BraunauMobil.VeloBasar.Data
 
         public async Task<Sale> GetSaleAsync(int saleId)
         {
-            return await Sale.FirstOrDefaultAsync(s => s.Id == saleId);
+            return await Sale
+                .Include(s => s.Products)
+                    .ThenInclude(ps => ps.Product)
+                .FirstOrDefaultAsync(s => s.Id == saleId);
         }
 
         public async Task<SellerStatistics> GetSellerStatisticsAsync(Basar basar, int sellerId)
