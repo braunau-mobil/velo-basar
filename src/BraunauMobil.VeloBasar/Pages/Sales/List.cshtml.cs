@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using BraunauMobil.VeloBasar.Models;
 using System.Linq;
 using BraunauMobil.VeloBasar.Data;
-using System.Collections.Generic;
 
 namespace BraunauMobil.VeloBasar.Pages.Sales
 {
@@ -43,6 +42,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
             }
             else if (!string.IsNullOrEmpty(searchString))
             {
+                //  @todo
                 //salesIq = salesIq.Where(s => s.FirstName.Contains(searchString, System.StringComparison.InvariantCultureIgnoreCase) ||s.LastName.Contains(searchString, System.StringComparison.InvariantCultureIgnoreCase));
             }
 

@@ -1,0 +1,12 @@
+﻿@page
+@model BraunauMobil.VeloBasar.Pages.Sales.DetailsModel
+
+@{
+    ViewData["Title"] = $"Verkauf #{@Model.Sale.Number}";
+}
+
+TODO - Hier schöne Übersicht machen
+
+<p>
+    <a class="btn btn-default" asp-page="./Print" asp-all-route-data="@Model.GetRoute()" asp-route-saleId="@Model.Sale.Id" target="_blank">Drucken</a>
+</p>

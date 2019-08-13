@@ -41,7 +41,7 @@
                     @Html.DisplayFor(modelItem => item.TimeStamp)
                 </td>
                 <td>
-                    <a asp-page="./Details" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@item.Id">Details</a>
+                    <a asp-page="./Details" asp-all-route-data="@Model.GetRoute()" asp-route-saleId="@item.Id">Details</a>
                 </td>
             </tr>
         }
