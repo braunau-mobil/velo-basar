@@ -125,7 +125,10 @@
                     <td>@Html.DisplayFor(modelItem => item.ProductCount)</td>
                     <td>@Html.DisplayFor(modelItem => item.Amount)</td>
                     <td>
-                        <a asp-page="/ShowFile" asp-all-route-data="@Model.GetItemRoute(item)" target="_blank">Beleg</a>
+                        @if (item.Transaction.DocumentId != null)
+                        {
+                            <a asp-page="/ShowFile" asp-all-route-data="@Model.GetItemRoute(item)" target="_blank">Beleg</a>
+                        }
                     </td>
                 </tr>
             }
