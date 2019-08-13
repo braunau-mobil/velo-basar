@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using BraunauMobil.VeloBasar.Models;
 using iText.Barcodes;
 using iText.Kernel.Geom;
@@ -73,10 +74,32 @@ namespace BraunauMobil.VeloBasar.Pdf
         {
             return CreatePdf((pdfDoc, doc) =>
             {
-                var page = pdfDoc.AddNewPage(PageSize.A5);
+                pdfDoc.SetDefaultPageSize(PageSize.A5);
 
-                doc.Add(new Paragraph($"Braunau mobil - {basar.Name}"));
-                doc.Add(new Paragraph($"Verkaufsbeleg #{sale.Number}"));
+                var p = new Paragraph($"Braunau, {sale.TimeStamp:dd.MM.yyyy}");
+                p.SetFontSize(10);
+                p.SetTextAlignment(iText.Layout.Properties.TextAlignment.RIGHT);
+                doc.Add(p);
+
+                p = new Paragraph($"Verkaufsbeleg: Braunau mobil: {basar.Name}");
+                p.SetFontSize(14);
+                p.SetBold();
+                doc.Add(p);
+
+                var table = new Table(4);
+                table.UseAllAvailableWidth();
+                table.AddHeaderCell("PID");
+                table.AddHeaderCell("Brand");
+                table.AddHeaderCell("Type");
+                table.AddHeaderCell("Price");
+                foreach (var product in sale.Products.Select(ps => ps.Product))
+                {
+                    table.AddCell(product.Id.ToString())
+                        .AddCell(product.Brand)
+                        .AddCell(product.Type)
+                        .AddCell($"{product.Price:C}");
+                }
+                doc.Add(table);
             });
         }
 
