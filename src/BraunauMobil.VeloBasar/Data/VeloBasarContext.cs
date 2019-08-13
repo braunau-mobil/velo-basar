@@ -181,16 +181,29 @@ namespace BraunauMobil.VeloBasar.Data
             product.Label = fileStore.Id;
         }
 
-        public async Task<FileStore> GenerateAcceptanceDocIfNotExistAsync(int acceptanceId)
+        public async Task<FileStore> GenerateAcceptanceDocIfNotExistAsync(int basarId, int acceptanceId)
         {
+            var basar = await GetBasarAsync(basarId);
             var acceptance = await GetAcceptanceAsync(acceptanceId);
-            var fileStore = new FileStore
+
+            FileStore fileStore;
+            if (acceptance.DocumentId == null)
             {
-                ContentType = PdfContentType,
-                Data = _pdfCreator.CreateAcceptance(acceptance)
-            };
-            await FileStore.AddAsync(fileStore);
-            await SaveChangesAsync();
+                fileStore = new FileStore
+                {
+                    ContentType = PdfContentType,
+                    Data = _pdfCreator.CreateAcceptance(basar, acceptance)
+                };
+                await FileStore.AddAsync(fileStore);
+                await SaveChangesAsync();
+
+                acceptance.DocumentId = fileStore.Id;
+                await SaveChangesAsync();
+            }
+            else
+            {
+                fileStore = await GetFileAsync(acceptance.DocumentId.Value);
+            }
 
             return fileStore;
         }
@@ -207,14 +220,17 @@ namespace BraunauMobil.VeloBasar.Data
             await SaveChangesAsync();
         }
 
-        public async Task<FileStore> GenerateSettlementDocIfNotExistAsync(Settlement settlement)
+        public async Task<FileStore> GenerateSettlementDocIfNotExistAsync(Basar basar, Settlement settlement)
         {
             var fileStore = new FileStore
             {
                 ContentType = PdfContentType,
-                Data = _pdfCreator.CreateSettlement(settlement)
+                Data = _pdfCreator.CreateSettlement(basar, settlement)
             };
             await FileStore.AddAsync(fileStore);
+            await SaveChangesAsync();
+
+            settlement.DocumentId = fileStore.Id;
             await SaveChangesAsync();
 
             return fileStore;

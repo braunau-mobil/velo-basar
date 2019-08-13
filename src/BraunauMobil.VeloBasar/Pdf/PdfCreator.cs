@@ -36,12 +36,51 @@ namespace BraunauMobil.VeloBasar.Pdf
             return bytes;
         }
 
-        public byte[] CreateAcceptance(Acceptance acceptance)
+        public byte[] CreateAcceptance(Basar basar, Acceptance acceptance)
         {
-            throw new NotImplementedException();
+            return CreatePdf((pdfDoc, doc) =>
+            {
+                var page = pdfDoc.AddNewPage(PageSize.A5);
+
+                doc.Add(new Paragraph($"Braunau mobil - {basar.Name}"));
+                doc.Add(new Paragraph($"Annahme #{acceptance.Number}"));
+            });
         }
 
         public byte[] CreateLabel(Basar basar, Product product)
+        {
+            return CreatePdf((pdfDoc, doc) =>
+            {
+                doc.SetMargins(0, 0, 0, 0);
+                doc.SetFontSize(7);
+
+                var page = pdfDoc.AddNewPage(new PageSize(50f.ToUnit(), 79f.ToUnit()));
+
+                doc.Add(new Paragraph($"Braunau mobil - {basar.Name}"));
+                doc.Add(new Paragraph(product.Brand));
+                doc.Add(new Paragraph(product.Type));
+                doc.Add(new Paragraph(product.Description));
+                doc.Add(new Paragraph($"Reifengröße: {product.TireSize}"));
+                doc.Add(new Paragraph(product.Price.ToString()));
+
+                var barcode = new BarcodeEAN(pdfDoc);
+                barcode.SetCode($"{product.Id:0000000000000}");
+                doc.Add(new Image(barcode.CreateFormXObject(pdfDoc)));
+            });
+        }
+
+        public byte[] CreateSettlement(Basar basar, Settlement settlement)
+        {
+            return CreatePdf((pdfDoc, doc) =>
+            {
+                var page = pdfDoc.AddNewPage(PageSize.A5);
+
+                doc.Add(new Paragraph($"Braunau mobil - {basar.Name}"));
+                doc.Add(new Paragraph($"Abrechnung #{settlement.Number}"));
+            });
+        }
+
+        private byte[] CreatePdf(Action<PdfDocument, Document> decorate)
         {
             byte[] bytes;
             using (var memoryStream = new MemoryStream())
@@ -50,31 +89,12 @@ namespace BraunauMobil.VeloBasar.Pdf
                 using (var pdfDoc = new PdfDocument(pdfWriter))
                 using (var doc = new Document(pdfDoc))
                 {
-                    doc.SetMargins(0, 0, 0, 0);
-                    doc.SetFontSize(7);
-
-                    var page = pdfDoc.AddNewPage(new PageSize(50f.ToUnit(), 79f.ToUnit()));
-
-                    doc.Add(new Paragraph($"Braunau mobil - {basar.Name}"));
-                    doc.Add(new Paragraph(product.Brand));
-                    doc.Add(new Paragraph(product.Type));
-                    doc.Add(new Paragraph(product.Description));
-                    doc.Add(new Paragraph($"Reifengröße: {product.TireSize}"));
-                    doc.Add(new Paragraph(product.Price.ToString()));
-
-                    var barcode = new BarcodeEAN(pdfDoc);
-                    barcode.SetCode($"{product.Id:0000000000000}");
-                    doc.Add(new Image(barcode.CreateFormXObject(pdfDoc)));
+                    decorate(pdfDoc, doc);
                 }
 
                 bytes = memoryStream.GetBuffer();
             }
             return bytes;
-        }
-
-        public byte[] CreateSettlement(Settlement settlement)
-        {
-            throw new NotImplementedException();
         }
     }
 }
