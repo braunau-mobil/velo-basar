@@ -42,9 +42,9 @@ namespace BraunauMobil.VeloBasar.Data
 
         public DbSet<Settlement> Settlement { get; set; }
 
-        public async Task<Sale> AddProductToSaleAsync(int basarId, int? saleId, Product product)
+        public async Task<Sale> AddProductToSaleAsync(Basar basar, int? saleId, Product product)
         {
-            var sale = await CreateOrGetSaleAsync(basarId, saleId);
+            var sale = await CreateOrGetSaleAsync(basar, saleId);
 
             if (sale.Products == null)
             {
@@ -63,14 +63,14 @@ namespace BraunauMobil.VeloBasar.Data
             return sale;
         }
 
-        public async Task<Acceptance> AcceptProductsAsync(int basarId, int sellerId, int? acceptanceId, params Product[] products)
+        public async Task<Acceptance> AcceptProductsAsync(Basar basar, int sellerId, int? acceptanceId, params Product[] products)
         {
             Acceptance acceptance;
             if (acceptanceId == null)
             {
                 acceptance = new Acceptance
                 {
-                    BasarId = basarId,
+                    Basar = basar,
                     SellerId = sellerId,
                     TimeStamp = DateTime.Now,
                     Products = new List<ProductAcceptance>()
@@ -95,7 +95,7 @@ namespace BraunauMobil.VeloBasar.Data
 
             if (acceptanceId == null)
             {
-                acceptance.Number = NextNumber(basarId, TransactionType.Acceptance);
+                acceptance.Number = NextNumber(basar, TransactionType.Acceptance);
                 await Acceptance.AddAsync(acceptance);
             }
 
@@ -104,14 +104,14 @@ namespace BraunauMobil.VeloBasar.Data
             return acceptance;
         }
 
-        public async Task<Sale> CreateOrGetSaleAsync(int basarId, int? saleId)
+        public async Task<Sale> CreateOrGetSaleAsync(Basar basar, int? saleId)
         {
             if (saleId == null)
             {
                 var sale = new Sale
                 {
-                    BasarId = basarId,
-                    Number = NextNumber(basarId, TransactionType.Sale),
+                    Basar = basar,
+                    Number = NextNumber(basar, TransactionType.Sale),
                     TimeStamp = DateTime.Now,
                     Products = new List<ProductSale>()
                 };
@@ -136,19 +136,19 @@ namespace BraunauMobil.VeloBasar.Data
             await Basar.AddAsync(basar);
             await SaveChangesAsync();
 
-            await CreateNewNumberAsync(basar.Id, TransactionType.Acceptance);
-            await CreateNewNumberAsync(basar.Id, TransactionType.Settlement);
-            await CreateNewNumberAsync(basar.Id, TransactionType.Cancellation);
-            await CreateNewNumberAsync(basar.Id, TransactionType.Sale);
+            await CreateNewNumberAsync(basar, TransactionType.Acceptance);
+            await CreateNewNumberAsync(basar, TransactionType.Settlement);
+            await CreateNewNumberAsync(basar, TransactionType.Cancellation);
+            await CreateNewNumberAsync(basar, TransactionType.Sale);
 
             return basar;
         }
 
-        public async Task CreateNewNumberAsync(int basarId, TransactionType type)
+        public async Task CreateNewNumberAsync(Basar basar, TransactionType type)
         {
             var number = new Number
             {
-                BasarId = basarId,
+                Basar = basar,
                 Value = 0,
                 Type = type
             };
@@ -181,9 +181,8 @@ namespace BraunauMobil.VeloBasar.Data
             product.Label = fileStore.Id;
         }
 
-        public async Task<FileStore> GenerateAcceptanceDocIfNotExistAsync(int basarId, int acceptanceId)
+        public async Task<FileStore> GenerateAcceptanceDocIfNotExistAsync(Basar basar, int acceptanceId)
         {
-            var basar = await GetBasarAsync(basarId);
             var acceptance = await GetAcceptanceAsync(acceptanceId);
 
             FileStore fileStore;
@@ -208,16 +207,41 @@ namespace BraunauMobil.VeloBasar.Data
             return fileStore;
         }
 
-        public async Task GenerateMissingLabelsAsync(int basarId, int sellerId)
+        public async Task GenerateMissingLabelsAsync(Basar basar, int sellerId)
         {
-            var basar = await GetBasarAsync(basarId);
-            var products = await GetProductsForSeller(basarId, sellerId).Where(p => p.Label == null).ToListAsync();
+            var products = await GetProductsForSeller(basar, sellerId).Where(p => p.Label == null).ToListAsync();
             foreach (var product in products)
             {
                 await GenerateLabel(basar, product);
             }
 
             await SaveChangesAsync();
+        }
+
+        public async Task<FileStore> GenerateSaleDocIfNotExistAsync(Basar basar, int saleId)
+        {
+            var sale = await GetSaleAsync(saleId);
+
+            FileStore fileStore;
+            if (sale.DocumentId == null)
+            {
+                fileStore = new FileStore
+                {
+                    ContentType = PdfContentType,
+                    Data = _pdfCreator.CreateSale(basar, sale)
+                };
+                await FileStore.AddAsync(fileStore);
+                await SaveChangesAsync();
+
+                sale.DocumentId = fileStore.Id;
+                await SaveChangesAsync();
+            }
+            else
+            {
+                fileStore = await GetFileAsync(sale.DocumentId.Value);
+            }
+
+            return fileStore;
         }
 
         public async Task<FileStore> GenerateSettlementDocIfNotExistAsync(Basar basar, Settlement settlement)
@@ -241,14 +265,14 @@ namespace BraunauMobil.VeloBasar.Data
             return await Acceptance.FirstAsync(a => a.Id == acceptanceId);
         }
 
-        public IQueryable<Acceptance> GetAcceptancesForSeller(int basarId, int sellerId)
+        public IQueryable<Acceptance> GetAcceptancesForSeller(Basar basar, int sellerId)
         {
-            return Acceptance.Where(a => a.BasarId == basarId && a.SellerId == sellerId);
+            return Acceptance.Where(a => a.BasarId == basar.Id && a.SellerId == sellerId);
         }
 
-        public async Task<TransactionStatistic<Acceptance>[]> GetAcceptanceStatisticsAsync(int basarId, int sellerId)
+        public async Task<TransactionStatistic<Acceptance>[]> GetAcceptanceStatisticsAsync(Basar basar, int sellerId)
         {
-            return await GetAcceptancesForSeller(basarId, sellerId).Include(a => a.Products).AsNoTracking().Select(a => new TransactionStatistic<Acceptance>
+            return await GetAcceptancesForSeller(basar, sellerId).Include(a => a.Products).AsNoTracking().Select(a => new TransactionStatistic<Acceptance>
             {
                 Transaction = a,
                 ProductCount = a.Products.Count,
@@ -256,9 +280,9 @@ namespace BraunauMobil.VeloBasar.Data
             }).ToArrayAsync();
         }
 
-        public async Task<FileStore> GetAllLabelsAsyncAsCombinedPdf(int basarId, int sellerId)
+        public async Task<FileStore> GetAllLabelsAsyncAsCombinedPdf(Basar basar, int sellerId)
         {
-            var products = await GetProductsForSeller(basarId, sellerId).Where(p => p.Label != null).ToListAsync();
+            var products = await GetProductsForSeller(basar, sellerId).Where(p => p.Label != null).ToListAsync();
             var files = new List<byte[]>();
             foreach (var product in products)
             {
@@ -284,14 +308,19 @@ namespace BraunauMobil.VeloBasar.Data
             return await FileStore.FirstOrDefaultAsync(f => f.Id == fileId);
         }
 
-        public IQueryable<Product> GetProductsForSeller(int basarId, int sellerId)
+        public IQueryable<Product> GetProductsForSeller(Basar basar, int sellerId)
         {
-            return GetAcceptancesForSeller(basarId, sellerId).SelectMany(a => a.Products).Select(pa => pa.Product);
+            return GetAcceptancesForSeller(basar, sellerId).SelectMany(a => a.Products).Select(pa => pa.Product);
         }
 
-        public async Task<SellerStatistics> GetSellerStatisticsAsync(int basarId, int sellerId)
+        public async Task<Sale> GetSaleAsync(int saleId)
         {
-            var products = await GetProductsForSeller(basarId, sellerId).ToArrayAsync();
+            return await Sale.FirstOrDefaultAsync(s => s.Id == saleId);
+        }
+
+        public async Task<SellerStatistics> GetSellerStatisticsAsync(Basar basar, int sellerId)
+        {
+            var products = await GetProductsForSeller(basar, sellerId).ToArrayAsync();
             var soldProducts = products.State(ProductStatus.Sold).ToArray();
             return new SellerStatistics
             {
@@ -303,14 +332,14 @@ namespace BraunauMobil.VeloBasar.Data
             };
         }
 
-        public IQueryable<Settlement> GetSettlementsForSeller(int basarId, int sellerId)
+        public IQueryable<Settlement> GetSettlementsForSeller(Basar basar, int sellerId)
         {
-            return Settlement.Where(s => s.BasarId == basarId && s.SellerId == sellerId);
+            return Settlement.Where(s => s.BasarId == basar.Id && s.SellerId == sellerId);
         }
 
-        public async Task<TransactionStatistic<Settlement>[]> GetSettlementStatisticsAsync(int basarId, int sellerId)
+        public async Task<TransactionStatistic<Settlement>[]> GetSettlementStatisticsAsync(Basar basar, int sellerId)
         {
-            return await GetSettlementsForSeller(basarId, sellerId).Include(s => s.Products).AsNoTracking().Select(s => new TransactionStatistic<Settlement>
+            return await GetSettlementsForSeller(basar, sellerId).Include(s => s.Products).AsNoTracking().Select(s => new TransactionStatistic<Settlement>
             {
                 Transaction = s,
                 ProductCount = s.Products.Count,
@@ -318,11 +347,11 @@ namespace BraunauMobil.VeloBasar.Data
             }).ToArrayAsync();
         }
 
-        public int NextNumber(int basarId, TransactionType transactionType)
+        public int NextNumber(Basar basar, TransactionType transactionType)
         {
-            if (basarId <= 0)
+            if (basar == null)
             {
-                throw new ArgumentException("Invalid basarId");
+                throw new ArgumentException("Invalid basar");
             }
 
             var number = -1;
@@ -334,7 +363,7 @@ namespace BraunauMobil.VeloBasar.Data
             using (var command = connection.CreateCommand())
             {
                 command.CommandText = NextNumberSql;
-                command.Parameters.AddWithValue("@BasarId", basarId);
+                command.Parameters.AddWithValue("@BasarId", basar.Id);
                 command.Parameters.AddWithValue("@Type", (int)transactionType);
 
                 number = (int) command.ExecuteScalar();
@@ -345,17 +374,17 @@ namespace BraunauMobil.VeloBasar.Data
             return number;
         }
 
-        public async Task<Settlement> SettleSellerAsync(int basarId, int sellerId)
+        public async Task<Settlement> SettleSellerAsync(Basar basar, int sellerId)
         {
             var settlement = new Settlement
             {
-                BasarId = basarId,
+                Basar = basar,
                 SellerId = sellerId,
                 TimeStamp = DateTime.Now,
                 Products = new List<ProductSettlement>()
             };
 
-            var products = await GetProductsForSeller(basarId, sellerId).ToArrayAsync();
+            var products = await GetProductsForSeller(basar, sellerId).ToArrayAsync();
             foreach (var product in products)
             {
                 if (product.Status == ProductStatus.Available)
@@ -375,7 +404,7 @@ namespace BraunauMobil.VeloBasar.Data
                 settlement.Products.Add(productSettlement);
             }
 
-            settlement.Number = NextNumber(basarId, TransactionType.Settlement);
+            settlement.Number = NextNumber(basar, TransactionType.Settlement);
             await Settlement.AddAsync(settlement);
 
             await SaveChangesAsync();

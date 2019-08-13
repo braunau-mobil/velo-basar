@@ -83,7 +83,7 @@ namespace BraunauMobil.VeloBasar.Data
                 acceptancePerCustomerCount--;
             }
 
-            await _context.GenerateMissingLabelsAsync(basar.Id, seller.Id);
+            await _context.GenerateMissingLabelsAsync(basar, seller.Id);
         }
 
         private async Task CreateAcceptanceAsync(Basar basar, Seller seller)
@@ -91,7 +91,7 @@ namespace BraunauMobil.VeloBasar.Data
             var acceptance = new Acceptance
             {
                 Basar = basar,
-                Number = _context.NextNumber(basar.Id, TransactionType.Acceptance),
+                Number = _context.NextNumber(basar, TransactionType.Acceptance),
                 Seller = seller,
                 TimeStamp = NextTimeStamp(basar, TransactionType.Acceptance),
                 Products = new List<ProductAcceptance>()
@@ -105,7 +105,7 @@ namespace BraunauMobil.VeloBasar.Data
 
             await _context.Acceptance.AddAsync(acceptance);
             await _context.SaveChangesAsync();
-            await _context.GenerateAcceptanceDocIfNotExistAsync(basar.Id, acceptance.Id);
+            await _context.GenerateAcceptanceDocIfNotExistAsync(basar, acceptance.Id);
         }
 
         private async Task CreateProductAsync(Acceptance acceptance, int number)

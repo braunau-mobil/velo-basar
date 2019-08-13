@@ -18,9 +18,9 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
         {
             await LoadBasarAsync(basarId);
 
-            await Context.GenerateMissingLabelsAsync(basarId, sellerId);
+            await Context.GenerateMissingLabelsAsync(Basar, sellerId);
 
-            var file = await Context.GetAllLabelsAsyncAsCombinedPdf(basarId, sellerId);
+            var file = await Context.GetAllLabelsAsyncAsCombinedPdf(Basar, sellerId);
 
             return File(file.Data, file.ContentType);
         }

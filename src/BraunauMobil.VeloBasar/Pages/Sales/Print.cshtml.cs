@@ -2,7 +2,7 @@
 using BraunauMobil.VeloBasar.Data;
 using Microsoft.AspNetCore.Mvc;
 
-namespace BraunauMobil.VeloBasar.Pages.Settlements
+namespace BraunauMobil.VeloBasar.Pages.Sales
 {
     public class CreateAndPrintModel : BasarPageModel
     {
@@ -10,13 +10,11 @@ namespace BraunauMobil.VeloBasar.Pages.Settlements
         {
         }
 
-        public async Task<IActionResult> OnGetAsync(int basarId, int sellerId)
+        public async Task<IActionResult> OnGetAsync(int basarId, int saleId)
         {
             await LoadBasarAsync(basarId);
 
-            var settlement = await Context.SettleSellerAsync(Basar, sellerId);
-
-            var fileStore = await Context.GenerateSettlementDocIfNotExistAsync(Basar, settlement);
+            var fileStore = await Context.GenerateSaleDocIfNotExistAsync(Basar, saleId);
 
             return File(fileStore.Data, fileStore.ContentType);
         }

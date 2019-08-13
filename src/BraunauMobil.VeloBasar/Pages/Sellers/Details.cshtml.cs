@@ -36,10 +36,10 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
                 return NotFound();
             }
 
-            AcceptanceStatistics = await Context.GetAcceptanceStatisticsAsync(basarId, sellerId);
-            SettlementStatistics = await Context.GetSettlementStatisticsAsync(basarId, sellerId);
-            Products = await Context.GetProductsForSeller(basarId, sellerId).AsNoTracking().ToListAsync();
-            Stats = await Context.GetSellerStatisticsAsync(basarId, Seller.Id);
+            AcceptanceStatistics = await Context.GetAcceptanceStatisticsAsync(Basar, sellerId);
+            SettlementStatistics = await Context.GetSettlementStatisticsAsync(Basar, sellerId);
+            Products = await Context.GetProductsForSeller(Basar, sellerId).AsNoTracking().ToListAsync();
+            Stats = await Context.GetSellerStatisticsAsync(Basar, Seller.Id);
 
             CanSettle = Products.Any(p => p.Status == ProductStatus.Sold || p.Status == ProductStatus.Available);
 

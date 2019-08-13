@@ -69,6 +69,17 @@ namespace BraunauMobil.VeloBasar.Pdf
             });
         }
 
+        public byte[] CreateSale(Basar basar, Sale sale)
+        {
+            return CreatePdf((pdfDoc, doc) =>
+            {
+                var page = pdfDoc.AddNewPage(PageSize.A5);
+
+                doc.Add(new Paragraph($"Braunau mobil - {basar.Name}"));
+                doc.Add(new Paragraph($"Verkaufsbeleg #{sale.Number}"));
+            });
+        }
+
         public byte[] CreateSettlement(Basar basar, Settlement settlement)
         {
             return CreatePdf((pdfDoc, doc) =>

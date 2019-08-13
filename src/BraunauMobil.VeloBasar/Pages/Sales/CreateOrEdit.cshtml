@@ -5,7 +5,15 @@
     ViewData["Title"] = "Neuer Verkauf";
 }
 
-<h2>Neuer Verkauf</h2>
+@if (Model.Sale != null)
+{
+    <h2>Verkauf #@Model.Sale.Number</h2>
+    <a asp-page="./Print" asp-all-route-data="@Model.GetRoute()" asp-route-saleID="@Model.Sale.Id" target="_blank" class="btn btn-default">Rechnung drucken</a>
+}
+else
+{
+    <h2>Neuer Verkauf</h2>
+}
 
 <h4>Artikel</h4>
 <div>
@@ -47,7 +55,7 @@
         <form method="post">
             @if (!string.IsNullOrEmpty(Model.ErrorText))
             {
-                <div  class="text-danger">@Model.ErrorText</div>
+                <div class="text-danger">@Model.ErrorText</div>
             }
             <div class="form-group">
                 <label asp-for="ProductId" class="control-label"></label>

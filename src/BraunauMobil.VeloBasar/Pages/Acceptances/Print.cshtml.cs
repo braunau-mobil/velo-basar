@@ -14,7 +14,7 @@ namespace BraunauMobil.VeloBasar.Pages.Acceptances
         {
             await LoadBasarAsync(basarId);
 
-            var doc = await Context.GenerateAcceptanceDocIfNotExistAsync(basarId, acceptanceId);
+            var doc = await Context.GenerateAcceptanceDocIfNotExistAsync(Basar, acceptanceId);
 
             return File(doc.Data, doc.ContentType);
         }

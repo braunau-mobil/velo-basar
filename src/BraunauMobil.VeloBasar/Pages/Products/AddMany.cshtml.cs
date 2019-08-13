@@ -46,7 +46,7 @@ namespace BraunauMobil.VeloBasar.Pages.Products
                 return Page();
             }
              
-            var acceptance = await Context.AcceptProductsAsync(basarId, sellerId, acceptanceId, Products.Where(p => !p.IsEmtpy()).ToArray());
+            var acceptance = await Context.AcceptProductsAsync(Basar, sellerId, acceptanceId, Products.Where(p => !p.IsEmtpy()).ToArray());
 
             if (addAdditional == true)
             {
