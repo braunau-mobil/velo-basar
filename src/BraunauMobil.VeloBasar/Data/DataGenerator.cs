@@ -1,4 +1,5 @@
 ﻿using BraunauMobil.VeloBasar.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -18,13 +19,15 @@ namespace BraunauMobil.VeloBasar.Data
 
         private readonly Random _rand = new Random();
         private readonly VeloBasarContext _context;
+        private readonly UserManager<IdentityUser> _userManager;
         private readonly Dictionary<Basar, Dictionary<TransactionType, DateTime>> _timeStamps = new Dictionary<Basar, Dictionary<TransactionType, DateTime>>();
         private readonly DataGeneratorConfiguration _config;
         private Country[] _countries;
 
-        public DataGenerator(VeloBasarContext context, DataGeneratorConfiguration config)
+        public DataGenerator(VeloBasarContext context, UserManager<IdentityUser> userManager , DataGeneratorConfiguration config)
         {
             _context = context;
+            _userManager = userManager;
             _config = config;
         }
 
@@ -32,6 +35,13 @@ namespace BraunauMobil.VeloBasar.Data
         {
             await _context.Database.EnsureDeletedAsync();
             await _context.Database.EnsureCreatedAsync();
+
+            var adminUser = new IdentityUser
+            {
+                Email = _config.AdminUserEMail,
+                UserName = _config.AdminUserEMail
+            };
+            await _userManager.CreateAsync(adminUser, "123456");
 
             await CreateCountriesAsync();
 

@@ -6,7 +6,7 @@ namespace BraunauMobil.VeloBasar.Data
     {
         public DataGeneratorConfiguration()
         {
-            FirstBasarDate  = new DateTime(2063, 4, 5);
+            FirstBasarDate = new DateTime(2063, 4, 5);
             BasarCount = 1;
             MinAcceptancesPerSeller = 1;
             MaxAcceptancesPerSeller = 3;
@@ -17,6 +17,8 @@ namespace BraunauMobil.VeloBasar.Data
             MeanProductsPerSeller = 1.3;
             StdDevProductsPerSeller = 4.5;
         }
+
+        public string AdminUserEMail { get; set; }
 
         public DateTime FirstBasarDate { get; set; }
 
