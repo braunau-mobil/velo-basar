@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace BraunauMobil.VeloBasar.Models
 {
@@ -7,8 +7,10 @@ namespace BraunauMobil.VeloBasar.Models
     {
         public int SellerId { get; set; }
 
+        [Display(Name = "Verkäufer")]
         public Seller Seller { get; set; }
 
+        [Display(Name = "Artikel")]
         public ICollection<T> Products { get; set; }
     }
 }

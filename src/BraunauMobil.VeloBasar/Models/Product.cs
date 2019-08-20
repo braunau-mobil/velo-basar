@@ -1,40 +1,55 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace BraunauMobil.VeloBasar.Models
 {
     public enum ProductStatus
     {
+        [Display(Name = "Verfügbar")]
         Available,
+        [Display(Name = "Verkauft")]
         Sold,
+        [Display(Name = "Gelöscht")]
         Deleted,
+        [Display(Name = "Gestohlen")]
         Stolen,
+        [Display(Name = "Abgeholt")]
         PickedUp,
+        [Display(Name = "Abgerechnet")]
         Settled
     }
 
+    [Display(Name = "Artikel")]
     public class Product : IValidatableObject
     {
         public int Id { get; set; }
 
+        [Display(Name = "Rahmennummer")]
         public string FrameNumber { get; set; }
 
+        [Display(Name = "Farbe")]
         public string Color { get; set; }
 
+        [Display(Name = "Marke")]
         public string Brand { get; set; }
 
+        [Display(Name = "Beschreibung")]
         public string Description { get; set; }
 
+        [Display(Name = "Typ")]
         public string Type { get; set; }
 
+        [Display(Name = "Reifengröße")]
         public string TireSize { get; set; }
 
         [DataType(DataType.Currency)]
+        [Display(Name = "Preis")]
         public decimal Price { get; set; }
 
+        [Display(Name = "Status")]
         public ProductStatus Status { get; set; }
 
+        [Display(Name = "Etikett")]
         public int? Label { get; set; }
 
         public bool IsEmtpy()
