@@ -50,7 +50,7 @@ namespace BraunauMobil.VeloBasar.Pages.Products
 
             if (addAdditional == true)
             {
-                return RedirectToPage("/Products/AddMany", new { basarId = Basar.Id, sellerId = sellerId, acceptanceId = acceptance.Id });
+                return RedirectToPage("/Products/AddMany", new { basarId = Basar.Id, sellerId, acceptanceId = acceptance.Id });
             }
 
             return RedirectToPage("/Acceptances/Details", new { basarId = Basar.Id, acceptanceId = acceptance.Id });
