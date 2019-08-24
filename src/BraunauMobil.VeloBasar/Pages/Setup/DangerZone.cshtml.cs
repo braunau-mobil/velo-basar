@@ -3,7 +3,7 @@ using BraunauMobil.VeloBasar.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
-namespace BraunauMobil.VeloBasar.Pages
+namespace BraunauMobil.VeloBasar.Pages.Setup
 {
     public class DangerZoneModel : BasarPageModel
     {

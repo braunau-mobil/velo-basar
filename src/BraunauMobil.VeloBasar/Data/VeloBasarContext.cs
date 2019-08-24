@@ -353,6 +353,11 @@ namespace BraunauMobil.VeloBasar.Data
             }).ToArrayAsync();
         }
 
+        public bool IsInitialized()
+        {
+            return true;
+        }
+
         public int NextNumber(Basar basar, TransactionType transactionType)
         {
             if (basar == null)
