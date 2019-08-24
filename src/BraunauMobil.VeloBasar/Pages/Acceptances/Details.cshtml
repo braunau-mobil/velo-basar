@@ -1,17 +1,34 @@
 ﻿@page
 @model BraunauMobil.VeloBasar.Pages.Acceptances.DetailsModel
 
+@using BraunauMobil.VeloBasar.Models;
 @using Microsoft.AspNetCore.Mvc.Localization
 @using VeloBasar.Resources
+@addTagHelper *, BraunauMobil.VeloBasar
 
-@inject IHtmlLocalizer<SharedResource> SharedLocalizer
+@inject IHtmlLocalizer<SharedResource> Localizer
 
 @{
-    ViewData["Title"] = SharedLocalizer["Annahme #{0}", Model.Acceptance.Number];
+    ViewData["Title"] = $"{Html.DisplayNameFor(x => x.Acceptance)} #{Model.Acceptance.Number}";
 }
 
-TODO - Hier schöne Übersicht machen
+<h2>@ViewData["Title"]</h2>
+
+<div>
+    <p>@Model.Acceptance.TimeStamp</p>
+</div>
+
+<partial name="/Pages/Sellers/_SmallDetails.cshtml" model="@new ViewModel<Seller>(Model.Basar, Model.Acceptance.Seller);" />
+
+<partial name="/Pages/Products/_List.cshtml" model="@new ListViewModel<Product>(Model.Basar, Model.Acceptance.Products.Select(pa => pa.Product))" />
 
 <p>
-    <a class="btn btn-default" asp-page="/Acceptances/Print" asp-all-route-data="@Model.GetRoute()" asp-route-acceptanceId="@Model.Acceptance.Number" target="_blank">@SharedLocalizer["Drucken"]</a>
+    @if (Model.Acceptance.DocumentId == null)
+    {
+        <a class="btn btn-default" asp-page="/Acceptances/Print" asp-all-route-data="@Model.GetRoute()" asp-route-acceptanceId="@Model.Acceptance.Number" target="_blank">@Localizer["Drucken"]</a>
+    }
+    else
+    {
+        <a class="btn btn-default" asp-page="/ShowFile" asp-route-fileId="@Model.Acceptance.DocumentId" target="_blank">@Localizer["Beleg"]</a>
+    }
 </p>

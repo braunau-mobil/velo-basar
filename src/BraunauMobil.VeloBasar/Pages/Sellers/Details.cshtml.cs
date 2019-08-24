@@ -46,6 +46,13 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
             return Page();
         }
 
+        public IDictionary<string, string> GetItemRoute(Acceptance acceptance)
+        {
+            var route = GetRoute();
+            route.Add("acceptanceId", acceptance.Id.ToString());
+            return route;
+        }
+
         public IDictionary<string, string> GetItemRoute<T>(TransactionStatistic<T> statistic) where T : TransactionBase
         {
             var route = GetRoute();
