@@ -1,11 +1,16 @@
 ﻿@page
 @model BraunauMobil.VeloBasar.Pages.Sellers.CreateModel
 
+@using Microsoft.AspNetCore.Mvc.Localization
+@using VeloBasar.Resources
+
+@inject IHtmlLocalizer<SharedResource> Localizer
+
 @{
-    ViewData["Title"] = "Neue Verkäuferin";
+    ViewData["Title"] = Localizer["Neue Verkäuferin"];
 }
 
-<h2>Neue Verkäuferin</h2>
+<h2>@Localizer["Neuer Verkäufer"]</h2>
 
 <hr />
 <div class="row">
@@ -13,32 +18,32 @@
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Seller.FirstName" class="control-label">Vorname</label>
+                <label asp-for="Seller.FirstName" class="control-label"></label>
                 <input asp-for="Seller.FirstName" class="form-control" />
                 <span asp-validation-for="Seller.FirstName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Seller.LastName" class="control-label">Nachname</label>
+                <label asp-for="Seller.LastName" class="control-label"></label>
                 <input asp-for="Seller.LastName" class="form-control" />
                 <span asp-validation-for="Seller.LastName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Seller.Street" class="control-label">Straße</label>
+                <label asp-for="Seller.Street" class="control-label"></label>
                 <input asp-for="Seller.Street" class="form-control" />
                 <span asp-validation-for="Seller.Street" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Seller.City" class="control-label">Stadt</label>
+                <label asp-for="Seller.City" class="control-label"></label>
                 <input asp-for="Seller.City" class="form-control" />
                 <span asp-validation-for="Seller.City" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Seller.ZIP" class="control-label">Postleitzahl</label>
+                <label asp-for="Seller.ZIP" class="control-label"></label>
                 <input asp-for="Seller.ZIP" class="form-control" />
                 <span asp-validation-for="Seller.ZIP" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Seller.CountryId" class="control-label">Land</label>
+                <label asp-for="Seller.Country" class="control-label"></label>
                 <select asp-for="Seller.CountryId" class="form-control" asp-items="ViewBag.Countries"></select>
                 <span asp-validation-for="Seller.CountryId" class="text-danger"></span>
             </div>
@@ -53,7 +58,7 @@
                 <span asp-validation-for="Seller.BIC" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Seller.BankAccountHolder" class="control-label">Name der Kontoinhaberin</label>
+                <label asp-for="Seller.BankAccountHolder" class="control-label"></label>
                 <input asp-for="Seller.BankAccountHolder" class="form-control" />
                 <span asp-validation-for="Seller.BankAccountHolder" class="text-danger"></span>
             </div>

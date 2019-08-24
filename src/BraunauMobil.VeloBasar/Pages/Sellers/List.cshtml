@@ -1,14 +1,19 @@
 ﻿@page
 @model BraunauMobil.VeloBasar.Pages.Sellers.ListModel
 
+@using Microsoft.AspNetCore.Mvc.Localization
+@using VeloBasar.Resources
+
+@inject IHtmlLocalizer<SharedResource> Localizer
+
 @{
-    ViewData["Title"] = "Verkäuferinnen";
+    ViewData["Title"] = Localizer["Verkäufer"];
 }
 
-<h2>Verkäuferinnen</h2>
+    <h2>@Localizer["Verkäufer"]</h2>
 
 <p>
-    <a asp-page="Create">Neue Verkäuferin</a>
+    <a asp-page="Create">@Localizer["Neuer Verkäufer"]</a>
 </p>
 
 <form asp-page="./List" method="get" asp-route-basarId="@Model.Basar.Id">
@@ -16,8 +21,8 @@
         <p>
             Suchen:
             <input type="text" name="SearchString" value="@Model.CurrentFilter" />
-            <input type="submit" value="Suchen" class="btn btn-default" /> |
-            <a asp-page="./List" asp-route-basarId="@Model.Basar.Id">Zurücksetzen</a>
+            <input type="submit" value="@Localizer["Suchen"]" class="btn btn-default" /> |
+            <a asp-page="./List" asp-route-basarId="@Model.Basar.Id">@Localizer["Zurücksetzen"]</a>
         </p>
     </div>
 </form>
@@ -44,7 +49,7 @@
                 @Html.DisplayNameFor(model => model.Sellers[0].ZIP)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Sellers[0].Country.Name)
+                @Html.DisplayNameFor(model => model.Sellers[0].Country)
             </th>
             <th></th>
         </tr>
@@ -75,9 +80,9 @@
                     @Html.DisplayFor(modelItem => item.Country.Name)
                 </td>
                 <td>
-                    <a asp-page="./Edit" asp-all-route-data="@Model.GetItemRoute(item)">Bearbeiten</a> |
-                    <a asp-page="./Details" asp-all-route-data="@Model.GetItemRoute(item)">Details</a> |
-                    <a asp-page="./Delete" asp-all-route-data="@Model.GetItemRoute(item)">Löschen</a>
+                    <a asp-page="./Edit" asp-all-route-data="@Model.GetItemRoute(item)">@Localizer["Bearbeiten"]</a> |
+                    <a asp-page="./Details" asp-all-route-data="@Model.GetItemRoute(item)">@Localizer["Details"]</a> |
+                    <a asp-page="./Delete" asp-all-route-data="@Model.GetItemRoute(item)">@Localizer["Löschen"]</a>
                 </td>
             </tr>
         }
@@ -93,12 +98,12 @@
    asp-route-pageIndex="@(Model.Sellers.PageIndex - 1)"
    asp-route-currentFilter="@Model.CurrentFilter"
    class="btn btn-default @prevDisabled">
-    Previous
+    @Localizer["<<<"]
 </a>
 <a asp-page="./List"
    asp-all-route-data="@Model.GetRoute()"
    asp-route-pageIndex="@(Model.Sellers.PageIndex + 1)"
    asp-route-currentFilter="@Model.CurrentFilter"
    class="btn btn-default @nextDisabled">
-    Next
+    @Localizer[">>>"]
 </a>

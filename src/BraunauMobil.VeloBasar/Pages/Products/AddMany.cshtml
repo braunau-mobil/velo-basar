@@ -1,11 +1,16 @@
 ﻿@page
 @model BraunauMobil.VeloBasar.Pages.Products.AddManyModel
 
+@using Microsoft.AspNetCore.Mvc.Localization
+@using VeloBasar.Resources
+
+@inject IHtmlLocalizer<SharedResource> Localizer
+
 @{
-    ViewData["Title"] = "Neue Annahme";
+    ViewData["Title"] = Localizer["Neue Annahme"];
 }
 
-<h2>Neue Annahme</h2>
+<h2>@Localizer["Neue Annahme"]</h2>
 #@Model.Seller.Id @Html.DisplayFor(model => model.Seller.FirstName) @Html.DisplayFor(model => model.Seller.LastName)
 
 <form method="post">
@@ -60,7 +65,7 @@
     </table>
     <span asp-validation-for="Products" class="text-danger"></span>
     <div class="form-group">
-        <input type="submit" value="Speichern und weitere Artikel eingeben" class="btn btn-default" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@Model.Seller.Id"  asp-route-acceptanceId="@Model.AcceptanceId" asp-route-addAdditional="@true" />
-        <input type="submit" value="Speichern und Annahmebeleg drucken" class="btn btn-default" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@Model.Seller.Id" asp-route-acceptanceId="@Model.AcceptanceId" />
+        <input type="submit" value="@Localizer["Speichern und weitere Artikel eingeben"]" class="btn btn-default" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@Model.Seller.Id" asp-route-acceptanceId="@Model.AcceptanceId" asp-route-addAdditional="@true" />
+        <input type="submit" value="@Localizer["Speichern und Annahmebeleg drucken"]" class="btn btn-default" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@Model.Seller.Id" asp-route-acceptanceId="@Model.AcceptanceId" />
     </div>
 </form>

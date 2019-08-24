@@ -1,14 +1,19 @@
 ﻿@page
 @model BraunauMobil.VeloBasar.Pages.Sales.CreateOrEditModel
 
+@using Microsoft.AspNetCore.Mvc.Localization
+@using VeloBasar.Resources
+
+@inject IHtmlLocalizer<SharedResource> Localizer
+
 @{
-    ViewData["Title"] = "Neuer Verkauf";
+    ViewData["Title"] = Localizer["Neuer Verkauf"];
 }
 
 @if (Model.Sale != null)
 {
-    <h2>Verkauf #@Model.Sale.Number</h2>
-    <a asp-page="./Print" asp-all-route-data="@Model.GetRoute()" asp-route-saleID="@Model.Sale.Id" target="_blank" class="btn btn-default">Rechnung drucken</a>
+    <h2>@Localizer["Verkauf #{0}", Model.Sale.Number]</h2>
+    <a asp-page="./Print" asp-all-route-data="@Model.GetRoute()" asp-route-saleID="@Model.Sale.Id" target="_blank" class="btn btn-default">@Localizer["Rechnung drucken"]</a>
 }
 else
 {
@@ -20,6 +25,7 @@ else
     <table class="table">
         <thead>
             <tr>
+                <th>@Html.DisplayNameFor(model => model.Products[0].Id)</th>
                 <th>@Html.DisplayNameFor(model => model.Products[0].Brand)</th>
                 <th>@Html.DisplayNameFor(model => model.Products[0].Type)</th>
                 <th>@Html.DisplayNameFor(model => model.Products[0].Color)</th>
@@ -34,6 +40,7 @@ else
             @foreach (var item in Model.Products)
             {
                 <tr>
+                    <td>@Html.DisplayFor(modelItem => item.Id)</td>
                     <td>@Html.DisplayFor(modelItem => item.Brand)</td>
                     <td>@Html.DisplayFor(modelItem => item.Type)</td>
                     <td>@Html.DisplayFor(modelItem => item.Color)</td>
@@ -63,7 +70,7 @@ else
                 <span asp-validation-for="ProductId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Hinzufügen" class="btn btn-default" asp-all-route-data="@Model.GetRoute()" asp-route-saleId="@Model.Sale?.Id" />
+                <input type="submit" value="@Localizer["Hinzufügen"]" class="btn btn-default" asp-all-route-data="@Model.GetRoute()" asp-route-saleId="@Model.Sale?.Id" />
             </div>
         </form>
     </div>

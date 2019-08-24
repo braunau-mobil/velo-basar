@@ -1,20 +1,25 @@
 ﻿@page
 @model BraunauMobil.VeloBasar.Pages.Sales.ListModel
 
+@using Microsoft.AspNetCore.Mvc.Localization
+@using VeloBasar.Resources
+
+@inject IHtmlLocalizer<SharedResource> Localizer
+
 @{
-    ViewData["Title"] = "Verkäufe";
+    ViewData["Title"] = Localizer["Verkäufe"];
 }
 
-<h2>Verkäufe</h2>
+<h2>@Localizer["Verkäufe"]</h2>
 
 <form asp-page="./List" method="get" asp-route-basarId="@Model.Basar.Id">
     <div class="form-actions no-color">
         <p>
-            Suchen:
+            @Localizer["Suchen:"]
             <input type="text" name="SearchString" value="@Model.CurrentFilter" />
-            <input type="submit" value="Suchen" class="btn btn-default" /> |
-            <a asp-page="./List" asp-route-basarId="@Model.Basar.Id">Zurücksetzen</a>
-        </p>
+            <input type="submit" value="@Localizer["Suchen"]" class="btn btn-default" /> |
+            <a asp-page="./List" asp-route-basarId="@Model.Basar.Id">@Localizer["Zurücksetzen"]</a>
+</p>
     </div>
 </form>
 
@@ -41,8 +46,8 @@
                     @Html.DisplayFor(modelItem => item.TimeStamp)
                 </td>
                 <td>
-                    <a asp-page="./Details" asp-all-route-data="@Model.GetRoute()" asp-route-saleId="@item.Id">Details</a>
-                </td>
+                    <a asp-page="./Details" asp-all-route-data="@Model.GetRoute()" asp-route-saleId="@item.Id">@Localizer["Details"]</a>
+</td>
             </tr>
         }
     </tbody>
@@ -57,12 +62,12 @@
    asp-route-pageIndex="@(Model.Sales.PageIndex - 1)"
    asp-route-currentFilter="@Model.CurrentFilter"
    class="btn btn-default @prevDisabled">
-    Previous
+    @Localizer["<<<"]
 </a>
 <a asp-page="./List"
    asp-all-route-data="@Model.GetRoute()"
    asp-route-pageIndex="@(Model.Sales.PageIndex + 1)"
    asp-route-currentFilter="@Model.CurrentFilter"
    class="btn btn-default @nextDisabled">
-    Next
+    @Localizer[">>>"]
 </a>

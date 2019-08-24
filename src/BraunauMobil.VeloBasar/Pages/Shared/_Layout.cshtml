@@ -1,10 +1,16 @@
 ﻿@model BasarPageModel
+
+@using Microsoft.AspNetCore.Mvc.Localization
+@using VeloBasar.Resources
+
+@inject IHtmlLocalizer<SharedResource> Localizer
+
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Velo Basar</title>
+    <title>@ViewData["Title"]@Localizer[" - Velo Basar"]</title>
 
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
@@ -29,7 +35,7 @@
                 </button>
                 @if (Model.Basar == null)
                 {
-                    <a asp-page="/Basars/SelectBasar" class="navbar-brand">ACHTUNG! es ist kein Basar ausgewählt.</a>
+                    <a asp-page="/Basars/SelectBasar" class="navbar-brand">@Localizer["ACHTUNG! es ist kein Basar ausgewählt."]</a>
                 }
                 else
                 {
@@ -38,10 +44,10 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a asp-page="/Sellers/Create" asp-all-route-data="@Model.GetRoute()">Neue Annahme</a></li>
-                    <li><a asp-page="/Sellers/List" asp-all-route-data="@Model.GetRoute()">Verkäuferinnen</a></li>
-                    <li><a asp-page="/Sales/CreateOrEdit" asp-all-route-data="@Model.GetRoute()">Neuer Verkauf</a></li>
-                    <li><a asp-page="/Sales/List" asp-all-route-data="@Model.GetRoute()">Verkäufe</a></li>
+                    <li><a asp-page="/Sellers/Create" asp-all-route-data="@Model.GetRoute()">@Localizer["Neue Annahme"]</a></li>
+                    <li><a asp-page="/Sellers/List" asp-all-route-data="@Model.GetRoute()">@Localizer["Verkäufer"]</a></li>
+                    <li><a asp-page="/Sales/CreateOrEdit" asp-all-route-data="@Model.GetRoute()">@Localizer["Neuer Verkauf"]</a></li>
+                    <li><a asp-page="/Sales/List" asp-all-route-data="@Model.GetRoute()">@Localizer["Verkäufe"]</a></li>
                     <li><a asp-page="/DangerZone">Danger Zone!</a></li>
                 </ul>
                 <partial name="_LoginPartial" />

@@ -1,20 +1,26 @@
 ﻿@page
 @model BraunauMobil.VeloBasar.Pages.Sellers.DetailsModel
+
+@using Microsoft.AspNetCore.Mvc.Localization
+@using VeloBasar.Resources
+
+@inject IHtmlLocalizer<SharedResource> Localizer
+
 @{
-    ViewData["Title"] = "Verkäuferin";
+    ViewData["Title"] = Localizer["Verkäuferin"];
 }
 
 <h2>#@Model.Seller.Id @Html.DisplayFor(model => model.Seller.FirstName) @Html.DisplayFor(model => model.Seller.LastName)</h2>
 
-<a asp-page="/Products/AddMany" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@Model.Seller.Id" class="btn btn-default">Artikel annehmen</a>
+<a asp-page="/Products/AddMany" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@Model.Seller.Id" class="btn btn-default">@Localizer["Artikel annehmen"]</a>
 @if (Model.CanSettle)
 {
-    <a asp-page="/Settlements/CreateAndPrint" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@Model.Seller.Id" target="_blank" class="btn btn-default">Abrechnen</a>
+    <a asp-page="/Settlements/CreateAndPrint" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@Model.Seller.Id" target="_blank" class="btn btn-default">@Localizer["Abrechnen"]</a>
 }
-<a asp-page="./CreateAndPrintLabels" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@Model.Seller.Id" target="_blank" class="btn btn-default">Etiketten drucken</a>
+<a asp-page="./CreateAndPrintLabels" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@Model.Seller.Id" target="_blank" class="btn btn-default">@Localizer["Etiketten drucken"]</a>
 |
-<a asp-page="./Edit" asp-all-route-data="@Model.GetSellerRoute()" class="btn btn-default">Bearbeiten</a>
-<a asp-page="./Delete" asp-all-route-data="@Model.GetSellerRoute()" class="btn btn-default">Löschen</a>
+<a asp-page="./Edit" asp-all-route-data="@Model.GetSellerRoute()" class="btn btn-default">@Localizer["Bearbeiten"]</a>
+<a asp-page="./Delete" asp-all-route-data="@Model.GetSellerRoute()" class="btn btn-default">@Localizer["Löschen"]</a>
 
 <div>
     <dl class="dl-horizontal">
@@ -90,12 +96,12 @@
                     <td>@Html.DisplayFor(modelItem => item.Price)</td>
                     <td>@Html.DisplayFor(modelItem => item.Status)</td>
                     <td>
-                        <a asp-page="/Products/Edit" asp-all-route-data="@Model.GetItemRoute(item)">Bearbeiten</a> |
-                        <a asp-page="/Products/Delete" asp-all-route-data="@Model.GetItemRoute(item)">Löschen</a>
+                        <a asp-page="/Products/Edit" asp-all-route-data="@Model.GetItemRoute(item)">@Localizer["Bearbeiten"]</a> |
+                        <a asp-page="/Products/Delete" asp-all-route-data="@Model.GetItemRoute(item)">@Localizer["Löschen"]</a>
                         @if (item.Label != null)
                         {
                             @:|
-                            <a asp-page="/ShowFile" asp-all-route-data="@Model.GetRoute()" asp-route-fileId="@item.Label" target="_blank">Etikett</a>
+                            <a asp-page="/ShowFile" asp-all-route-data="@Model.GetRoute()" asp-route-fileId="@item.Label" target="_blank">@Localizer["Etikett"]</a>
                         }
                     </td>
                 </tr>
@@ -104,7 +110,7 @@
     </table>
 </div>
 
-<h4>Annahmen</h4>
+<h4>@Localizer["Annahmen"]</h4>
 <div>
     <table class="table">
         <thead>
@@ -127,7 +133,7 @@
                     <td>
                         @if (item.Transaction.DocumentId != null)
                         {
-                            <a asp-page="/ShowFile" asp-all-route-data="@Model.GetItemRoute(item)" target="_blank">Beleg</a>
+                            <a asp-page="/ShowFile" asp-all-route-data="@Model.GetItemRoute(item)" target="_blank">@Localizer["Beleg"]</a>
                         }
                     </td>
                 </tr>
@@ -136,7 +142,7 @@
     </table>
 </div>
 
-<h4>Abrechnugnen</h4>
+<h4>@Localizer["Abrechnugnen"]</h4>
 <div>
     <table class="table">
         <thead>
@@ -157,7 +163,7 @@
                     <td>@Html.DisplayFor(modelItem => item.ProductCount)</td>
                     <td>@Html.DisplayFor(modelItem => item.Amount)</td>
                     <td>
-                        <a asp-page="/ShowFile" asp-all-route-data="@Model.GetItemRoute(item)" target="_blank">Beleg</a>
+                        <a asp-page="/ShowFile" asp-all-route-data="@Model.GetItemRoute(item)" target="_blank">@Localizer["Beleg"]</a>
                     </td>
                 </tr>
             }

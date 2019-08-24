@@ -1,12 +1,17 @@
 ﻿@page
 @model BraunauMobil.VeloBasar.Pages.Acceptances.DetailsModel
 
+@using Microsoft.AspNetCore.Mvc.Localization
+@using VeloBasar.Resources
+
+@inject IHtmlLocalizer<SharedResource> SharedLocalizer
+
 @{
-    ViewData["Title"] = $"Annahme #{@Model.Acceptance.Number}";
+    ViewData["Title"] = SharedLocalizer["Annahme #{0}", Model.Acceptance.Number];
 }
 
 TODO - Hier schöne Übersicht machen
 
 <p>
-    <a class="btn btn-default" asp-page="/Acceptances/Print" asp-all-route-data="@Model.GetRoute()" asp-route-acceptanceId="@Model.Acceptance.Number" target="_blank">Drucken</a>
+    <a class="btn btn-default" asp-page="/Acceptances/Print" asp-all-route-data="@Model.GetRoute()" asp-route-acceptanceId="@Model.Acceptance.Number" target="_blank">@SharedLocalizer["Drucken"]</a>
 </p>

@@ -1,13 +1,17 @@
 ﻿@page
 @model BraunauMobil.VeloBasar.Pages.Products.CreateModel
 
+@using Microsoft.AspNetCore.Mvc.Localization
+@using VeloBasar.Resources
+
+@inject IHtmlLocalizer<SharedResource> Localizer
+
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = Localizer["Neuen Artikel anlegen"];
 }
 
-<h2>Create</h2>
+<h2>@Localizer["Neuen Artikel anlegen"]</h2>
 
-<h4>Product</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -61,7 +65,7 @@
 </div>
 
 <div>
-    <a asp-page="Index">Back to List</a>
+    <a asp-page="Index">@Localizer["Zurück zur Liste"]</a>
 </div>
 
 @section Scripts {

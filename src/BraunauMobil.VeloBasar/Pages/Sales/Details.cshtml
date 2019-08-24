@@ -1,12 +1,17 @@
 ﻿@page
 @model BraunauMobil.VeloBasar.Pages.Sales.DetailsModel
 
+@using Microsoft.AspNetCore.Mvc.Localization
+@using VeloBasar.Resources
+
+@inject IHtmlLocalizer<SharedResource> Localizer
+
 @{
-    ViewData["Title"] = $"Verkauf #{@Model.Sale.Number}";
+    ViewData["Title"] = Localizer["Verkauf #{0}", Model.Sale.Number];
 }
 
 TODO - Hier schöne Übersicht machen
 
 <p>
-    <a class="btn btn-default" asp-page="./Print" asp-all-route-data="@Model.GetRoute()" asp-route-saleId="@Model.Sale.Id" target="_blank">Drucken</a>
+    <a class="btn btn-default" asp-page="./Print" asp-all-route-data="@Model.GetRoute()" asp-route-saleId="@Model.Sale.Id" target="_blank">@Localizer["Drucken"]</a>
 </p>

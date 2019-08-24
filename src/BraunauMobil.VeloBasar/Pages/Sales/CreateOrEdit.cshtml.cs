@@ -24,6 +24,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
 
         [BindProperty]
         [Required]
+        [Display(Name = "Artikel Id")]
         public int ProductId { get; set; }
 
         public async Task OnGetAsync(int basarId, int? saleId, string errorText)

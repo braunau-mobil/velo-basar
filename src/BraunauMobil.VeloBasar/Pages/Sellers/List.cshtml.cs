@@ -34,7 +34,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
 
             CurrentFilter = searchString;
 
-            IQueryable<Seller> sellerIq = from s in Context.Seller
+            IQueryable<Seller> sellerIq = from s in Context.Seller.Include(s => s.Country)
                                             select s;
 
             if (int.TryParse(searchString, out int id))

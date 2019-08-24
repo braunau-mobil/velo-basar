@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using BraunauMobil.VeloBasar.Data;
 using Microsoft.AspNetCore.Identity;
 using System;
+using BraunauMobil.VeloBasar.Resources;
 
 namespace BraunauMobil.VeloBasar
 {
@@ -56,7 +57,12 @@ namespace BraunauMobil.VeloBasar
                 options.User.RequireUniqueEmail = true;
             });
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc()
+                .AddViewLocalization(options =>
+                {
+                    options.ResourcesPath = "Resources";
+                })
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
