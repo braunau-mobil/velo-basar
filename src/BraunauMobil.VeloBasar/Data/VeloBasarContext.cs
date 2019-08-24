@@ -263,6 +263,7 @@ namespace BraunauMobil.VeloBasar.Data
         public async Task<Acceptance> GetAcceptanceAsync(int acceptanceId)
         {
             return await Acceptance
+                .Include(a => a.Seller)
                 .Include(a => a.Products)
                     .ThenInclude(pa => pa.Product)
                 .FirstAsync(a => a.Id == acceptanceId);
