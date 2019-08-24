@@ -1,0 +1,55 @@
+﻿@model ListViewModel<BraunauMobil.VeloBasar.Models.Product>
+
+@using Microsoft.AspNetCore.Mvc.Localization
+@using VeloBasar.Resources
+
+@inject IHtmlLocalizer<SharedResource> Localizer
+
+@{
+    ViewData["Title"] = Localizer["Artikel bearbeiten"];
+}
+
+<h4>Artikel</h4>
+<div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.List.First().Id)</th>
+                <th>@Html.DisplayNameFor(model => model.List.First().Brand)</th>
+                <th>@Html.DisplayNameFor(model => model.List.First().Type)</th>
+                <th>@Html.DisplayNameFor(model => model.List.First().Color)</th>
+                <th>@Html.DisplayNameFor(model => model.List.First().FrameNumber)</th>
+                <th>@Html.DisplayNameFor(model => model.List.First().Description)</th>
+                <th>@Html.DisplayNameFor(model => model.List.First().TireSize)</th>
+                <th>@Html.DisplayNameFor(model => model.List.First().Price)</th>
+                <th>@Html.DisplayNameFor(model => model.List.First().Status)</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.List)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.Id)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Brand)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Type)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Color)</td>
+                    <td>@Html.DisplayFor(modelItem => item.FrameNumber)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Description)</td>
+                    <td>@Html.DisplayFor(modelItem => item.TireSize)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Price)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Status)</td>
+                    <td>
+                        <a asp-page="/Products/Edit" asp-all-route-data="@Model.GetItemRoute(item)">@Localizer["Bearbeiten"]</a> |
+                        <a asp-page="/Products/Delete" asp-all-route-data="@Model.GetItemRoute(item)">@Localizer["Löschen"]</a>
+                        @if (item.Label != null)
+                        {
+                            @:|
+                            <a asp-page="/ShowFile" asp-all-route-data="@Model.GetRoute()" asp-route-fileId="@item.Label" target="_blank">@Localizer["Etikett"]</a>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
