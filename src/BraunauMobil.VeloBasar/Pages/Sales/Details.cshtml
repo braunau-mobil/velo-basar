@@ -1,17 +1,31 @@
 ﻿@page
 @model BraunauMobil.VeloBasar.Pages.Sales.DetailsModel
 
+@using BraunauMobil.VeloBasar.Models;
 @using Microsoft.AspNetCore.Mvc.Localization
 @using VeloBasar.Resources
 
 @inject IHtmlLocalizer<SharedResource> Localizer
 
 @{
-    ViewData["Title"] = Localizer["Verkauf #{0}", Model.Sale.Number];
+    ViewData["Title"] = $"{Html.DisplayNameFor(x => x.Sale)} #{Model.Sale.Number}";
 }
 
-TODO - Hier schöne Übersicht machen
+<h2>@ViewData["Title"]</h2>
+
+<div>
+    <p>@Model.Sale.TimeStamp</p>
+</div>
+
+<partial name="/Pages/Products/_List.cshtml" model="@new ListViewModel<Product>(Model.Basar, Model.Sale.Products.Select(pa => pa.Product))" />
 
 <p>
-    <a class="btn btn-default" asp-page="./Print" asp-all-route-data="@Model.GetRoute()" asp-route-saleId="@Model.Sale.Id" target="_blank">@Localizer["Drucken"]</a>
+    @if (Model.Sale.DocumentId == null)
+    {
+        <a class="btn btn-default" asp-page="/Acceptances/Print" asp-all-route-data="@Model.GetRoute()" asp-route-acceptanceId="@Model.Sale.Number" target="_blank">@Localizer["Drucken"]</a>
+    }
+    else
+    {
+        <a class="btn btn-default" asp-page="/ShowFile" asp-route-fileId="@Model.Sale.DocumentId" target="_blank">@Localizer["Beleg"]</a>
+    }
 </p>
