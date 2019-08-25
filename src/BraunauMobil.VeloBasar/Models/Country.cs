@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace BraunauMobil.VeloBasar.Models
 {
@@ -12,5 +13,10 @@ namespace BraunauMobil.VeloBasar.Models
 
         [Display(Name = "ISO-3166 Code")]
         public string Iso3166Alpha3Code { get; set; }
+
+        public bool Match(string searchString)
+        {
+            return Name.Contains(searchString, StringComparison.InvariantCultureIgnoreCase);
+        }
     }
 }

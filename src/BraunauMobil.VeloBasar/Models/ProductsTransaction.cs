@@ -19,5 +19,10 @@ namespace BraunauMobil.VeloBasar.Models
         {
             return Products.Select(pt => pt.Product);
         }
+
+        public bool Match(string searchString)
+        {
+            return (Seller != null && Seller.Match(searchString));
+        }
     }
 }

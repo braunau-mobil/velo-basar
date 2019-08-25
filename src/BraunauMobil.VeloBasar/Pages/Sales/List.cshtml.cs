@@ -34,16 +34,19 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
 
             CurrentFilter = searchString;
 
-            var salesIq = from s in Context.GetSales(Basar) select s;
+            IQueryable<ProductsTransaction> salesIq;
 
             if (int.TryParse(searchString, out int id))
             {
-                salesIq = salesIq.Where(s => s.Id == id);
+                salesIq = Context.Transactions.Where(t => t.Id == id);
             }
             else if (!string.IsNullOrEmpty(searchString))
             {
-                //  @todo
-                //salesIq = salesIq.Where(s => s.FirstName.Contains(searchString, System.StringComparison.InvariantCultureIgnoreCase) ||s.LastName.Contains(searchString, System.StringComparison.InvariantCultureIgnoreCase));
+                salesIq = Context.GetSales(Basar, s => s.Match(searchString));
+            }
+            else
+            {
+                salesIq = Context.GetSales(Basar);
             }
 
             Sales = await PaginatedList<ProductsTransaction>.CreateAsync(salesIq.AsNoTracking(), pageIndex ?? 1, PageSize);
