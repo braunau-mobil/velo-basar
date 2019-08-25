@@ -34,20 +34,21 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
 
             CurrentFilter = searchString;
 
-            IQueryable<Seller> sellerIq = from s in Context.Seller.Include(s => s.Country)
-                                            select s;
-
+            IQueryable<Seller> sellerIq = null;
             if (int.TryParse(searchString, out int id))
             {
                 if (await Context.Seller.ExistsAsync(id))
                 {
                     return RedirectToPage("./Details", new { basarId, sellerId = id });
                 }
-                sellerIq = sellerIq.Where(s => s.Id == id);
             }
             else if (!string.IsNullOrEmpty(searchString))
             {
-                sellerIq = sellerIq.Where(s => s.FirstName.Contains(searchString, System.StringComparison.InvariantCultureIgnoreCase) ||s.LastName.Contains(searchString, System.StringComparison.InvariantCultureIgnoreCase));
+                sellerIq = Context.GetSellers(searchString);
+            }
+            else
+            {
+                sellerIq = Context.GetSellers();
             }
 
             var pageSize = 20;

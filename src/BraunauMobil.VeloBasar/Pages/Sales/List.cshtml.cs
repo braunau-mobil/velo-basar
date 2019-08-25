@@ -42,7 +42,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
             }
             else if (!string.IsNullOrEmpty(searchString))
             {
-                salesIq = Context.GetSales(Basar, s => s.Match(searchString));
+                salesIq = Context.GetSales(Basar, searchString);
             }
             else
             {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.Linq.Expressions;
 
 namespace BraunauMobil.VeloBasar.Models
 {
@@ -44,15 +45,5 @@ namespace BraunauMobil.VeloBasar.Models
         public string BankAccountHolder { get; set; }
 
         public string Token { get; set; }
-
-        public bool Match(string searchString)
-        {
-            return FirstName.Contains(searchString, StringComparison.InvariantCultureIgnoreCase)
-                || LastName.Contains(searchString, StringComparison.InvariantCultureIgnoreCase)
-                || City.Contains(searchString, StringComparison.InvariantCultureIgnoreCase)
-                || Country.Match(searchString)
-                || (BankAccountHolder != null && BankAccountHolder.Contains(searchString, StringComparison.InvariantCultureIgnoreCase));
-                
-        }
     }
 }

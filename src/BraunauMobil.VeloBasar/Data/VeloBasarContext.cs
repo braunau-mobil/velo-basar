@@ -9,6 +9,7 @@ using System.Linq;
 using BraunauMobil.VeloBasar.Pdf;
 using Microsoft.AspNetCore.Identity;
 using BraunauMobil.VeloBasar.Models.Base;
+using System.Linq.Expressions;
 
 namespace BraunauMobil.VeloBasar.Data
 {
@@ -305,7 +306,7 @@ namespace BraunauMobil.VeloBasar.Data
                 .FirstAsync(a => a.Id == acceptanceId);
         }
 
-        public IQueryable<ProductsTransaction> GetAcceptances(Basar basar, Func<ProductsTransaction, bool> additionalPredicate = null)
+        public IQueryable<ProductsTransaction> GetAcceptances(Basar basar, Expression<Func<ProductsTransaction, bool>> additionalPredicate = null)
         {
             return GetTransactions(basar, TransactionType.Acceptance, additionalPredicate);
         }
@@ -348,7 +349,7 @@ namespace BraunauMobil.VeloBasar.Data
             return await Basar.FirstOrDefaultAsync(b => b.Id == basarId);
         }
 
-        public IQueryable<ProductsTransaction> GetCacncellations(Basar basar, Func<ProductsTransaction, bool> additionalPredicate = null)
+        public IQueryable<ProductsTransaction> GetCacncellations(Basar basar, Expression<Func<ProductsTransaction, bool>> additionalPredicate = null)
         {
             return GetTransactions(basar, TransactionType.Cancellation, additionalPredicate);
         }
@@ -376,9 +377,22 @@ namespace BraunauMobil.VeloBasar.Data
                 .FirstOrDefaultAsync(s => s.Id == saleId);
         }
 
-        public IQueryable<ProductsTransaction> GetSales(Basar basar, Func<ProductsTransaction, bool> additionalPredicate = null)
+        public IQueryable<ProductsTransaction> GetSales(Basar basar, string searchString = null)
         {
-            return GetTransactions(basar, TransactionType.Sale, additionalPredicate);
+            return GetTransactions(basar, TransactionType.Sale, Expressions.TransactionSearch(searchString));
+        }
+
+        public IQueryable<Seller> GetSellers(string searchString = null)
+        {
+            var res = Seller
+                .Include(s => s.Country);
+
+            if (string.IsNullOrEmpty(searchString))
+            {
+                return res;
+            }
+
+            return res.Where(Expressions.SellerSearch(searchString));
         }
 
         public async Task<SellerStatistics> GetSellerStatisticsAsync(Basar basar, int sellerId)
@@ -395,7 +409,7 @@ namespace BraunauMobil.VeloBasar.Data
             };
         }
 
-        public IQueryable<ProductsTransaction> GetSettlements(Basar basar, Func<ProductsTransaction, bool> additionalPredicate = null)
+        public IQueryable<ProductsTransaction> GetSettlements(Basar basar, Expression<Func<ProductsTransaction, bool>> additionalPredicate = null)
         {
             return GetTransactions(basar, TransactionType.Settlement, additionalPredicate);
         }
@@ -415,13 +429,16 @@ namespace BraunauMobil.VeloBasar.Data
             }).ToArrayAsync();
         }
 
-        public IQueryable<ProductsTransaction> GetTransactions(Basar basar, TransactionType type , Func<ProductsTransaction, bool> additionalPredicate = null)
+        public IQueryable<ProductsTransaction> GetTransactions(Basar basar, TransactionType type , Expression<Func<ProductsTransaction, bool>> additionalPredicate = null)
         {
-            if (additionalPredicate == null)
+            var result = Transactions.Where(t => t.Type == type && t.Basar == basar);
+
+            if (additionalPredicate != null)
             {
-                additionalPredicate = t => true;
+                return result.Where(additionalPredicate);
             }
-            return Transactions.Where(t => t.Type == type && t.Basar == basar && additionalPredicate(t));
+
+            return result;
         }
 
         public async Task InitializeDatabase(UserManager<IdentityUser> userManager, InitializationConfiguration config)
