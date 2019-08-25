@@ -5,6 +5,7 @@ using BraunauMobil.VeloBasar.Data;
 using BraunauMobil.VeloBasar.Models;
 using System.Linq;
 using System.Collections.Generic;
+using BraunauMobil.VeloBasar.Models.Base;
 
 namespace BraunauMobil.VeloBasar.Pages.Sellers
 {
@@ -53,7 +54,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
             return route;
         }
 
-        public IDictionary<string, string> GetItemRoute<T>(TransactionStatistic<T> statistic) where T : TransactionBase
+        public IDictionary<string, string> GetItemRoute<T>(TransactionStatistic<T> statistic) where T : Transaction
         {
             var route = GetRoute();
             route.Add("fileId", statistic.Transaction.DocumentId.ToString());

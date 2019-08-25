@@ -2,7 +2,7 @@
 
 namespace BraunauMobil.VeloBasar.Data
 {
-    public class DataGeneratorConfiguration
+    public class DataGeneratorConfiguration : InitializationConfiguration
     {
         public DataGeneratorConfiguration()
         {
@@ -17,8 +17,6 @@ namespace BraunauMobil.VeloBasar.Data
             MeanProductsPerSeller = 1.3;
             StdDevProductsPerSeller = 4.5;
         }
-
-        public string AdminUserEMail { get; set; }
 
         public DateTime FirstBasarDate { get; set; }
 

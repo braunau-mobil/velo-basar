@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace BraunauMobil.VeloBasar.Models
+namespace BraunauMobil.VeloBasar.Models.Base
 {
     public class BasarModel
     {

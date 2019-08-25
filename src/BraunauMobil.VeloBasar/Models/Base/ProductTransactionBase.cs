@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace BraunauMobil.VeloBasar.Models
+namespace BraunauMobil.VeloBasar.Models.Base
 {
-    public abstract class ProductTransactionBase<T> : TransactionBase
+    public abstract class ProductTransaction<T> : Transaction
     {
         public int SellerId { get; set; }
 

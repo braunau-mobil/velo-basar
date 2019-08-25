@@ -1,17 +1,9 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace BraunauMobil.VeloBasar.Models
+namespace BraunauMobil.VeloBasar.Models.Base
 {
-    public enum TransactionType
-    {
-        Acceptance,
-        Cancellation,
-        Sale,
-        Settlement,
-    };
-
-    public abstract class TransactionBase : BasarModel
+    public abstract class Transaction : BasarModel
     {
         public int Id { get; set; }
 

@@ -1,4 +1,6 @@
-﻿namespace BraunauMobil.VeloBasar.Models
+﻿using BraunauMobil.VeloBasar.Models.Base;
+
+namespace BraunauMobil.VeloBasar.Models
 {
     public class Number : BasarModel
     {

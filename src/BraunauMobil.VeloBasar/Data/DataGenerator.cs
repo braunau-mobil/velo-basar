@@ -1,4 +1,5 @@
 ﻿using BraunauMobil.VeloBasar.Models;
+using BraunauMobil.VeloBasar.Models.Base;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;

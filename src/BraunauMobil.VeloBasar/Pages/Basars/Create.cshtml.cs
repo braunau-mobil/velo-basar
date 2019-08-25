@@ -1,31 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using BraunauMobil.VeloBasar.Data;
 using BraunauMobil.VeloBasar.Models;
+using System;
 
 namespace BraunauMobil.VeloBasar.Pages.Basars
 {
-    public class CreateModel : PageModel
+    public class CreateModel : BasarPageModel
     {
-        private readonly BraunauMobil.VeloBasar.Data.VeloBasarContext _context;
-
-        public CreateModel(BraunauMobil.VeloBasar.Data.VeloBasarContext context)
+        public CreateModel(BraunauMobil.VeloBasar.Data.VeloBasarContext context) : base(context)
         {
-            _context = context;
+            Basar = new Basar
+            {
+                Date = DateTime.Now
+            };
         }
 
         public IActionResult OnGet()
         {
             return Page();
         }
-
-        [BindProperty]
-        public Basar Basar { get; set; }
 
         public async Task<IActionResult> OnPostAsync()
         {
@@ -34,10 +27,10 @@ namespace BraunauMobil.VeloBasar.Pages.Basars
                 return Page();
             }
 
-            _context.Basar.Add(Basar);
-            await _context.SaveChangesAsync();
+            Context.Basar.Add(Basar);
+            await Context.SaveChangesAsync();
 
-            return RedirectToPage("./Index");
+            return RedirectToPage("/Index", new { basarId = Basar.Id });
         }
     }
 }

@@ -7,6 +7,8 @@ using Npgsql;
 using System.Collections.Generic;
 using System.Linq;
 using BraunauMobil.VeloBasar.Pdf;
+using Microsoft.AspNetCore.Identity;
+using BraunauMobil.VeloBasar.Models.Base;
 
 namespace BraunauMobil.VeloBasar.Data
 {
@@ -41,6 +43,16 @@ namespace BraunauMobil.VeloBasar.Data
         public DbSet<Seller> Seller { get; set; }
 
         public DbSet<Settlement> Settlement { get; set; }
+
+        public DbSet<Settings> SettingsSet { get; set; }
+
+        public Settings Settings
+        {
+            get
+            {
+                return SettingsSet.First();
+            }
+        }
 
         public async Task<Sale> AddProductToSaleAsync(Basar basar, int? saleId, Product product)
         {
@@ -354,9 +366,35 @@ namespace BraunauMobil.VeloBasar.Data
             }).ToArrayAsync();
         }
 
+        public async Task InitializeDatabase(UserManager<IdentityUser> userManager, InitializationConfiguration config)
+        {
+            await Database.EnsureCreatedAsync();
+
+            var adminUser = new IdentityUser
+            {
+                Email = config.AdminUserEMail,
+                UserName = config.AdminUserEMail
+            };
+            await userManager.CreateAsync(adminUser, "root");
+
+            var settings = new Settings
+            {
+                IsInitialized = true
+            };
+            await SettingsSet.AddAsync(settings);
+            await SaveChangesAsync();
+        }
+
         public bool IsInitialized()
         {
-            return true;
+            try
+            {
+                return Settings.IsInitialized;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         public int NextNumber(Basar basar, TransactionType transactionType)

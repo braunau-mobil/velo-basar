@@ -1,9 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using BraunauMobil.VeloBasar.Models.Base;
+using System.ComponentModel.DataAnnotations;
 
 namespace BraunauMobil.VeloBasar.Models
 {
     [Display(Name = "Storno")]
-    public class Cancellation : TransactionBase
+    public class Cancellation : Transaction
     {
         public int SellerId { get; set; }
 

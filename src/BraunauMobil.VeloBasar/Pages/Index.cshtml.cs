@@ -15,7 +15,7 @@ namespace BraunauMobil.VeloBasar.Pages
             //  check if we need initial setup
             if (!Context.IsInitialized())
             {
-                return RedirectToPage("/Setup/InitialSetup");
+                return RedirectToPage("/Setup/Index");
             }
 
             if (basarId == null)
