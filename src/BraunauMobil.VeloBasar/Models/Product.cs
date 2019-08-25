@@ -36,6 +36,16 @@ namespace BraunauMobil.VeloBasar.Models
         [Display(Name = "Etikett")]
         public int? Label { get; set; }
 
+        public bool Is(ProductStatus state)
+        {
+            return Status == state;
+        }
+
+        public bool IsNot(ProductStatus state)
+        {
+            return Status != state;
+        }
+
         public bool IsEmtpy()
         {
             return string.IsNullOrEmpty(Color)
@@ -64,5 +74,7 @@ namespace BraunauMobil.VeloBasar.Models
 
             return result;
         }
+
+
     }
 }

@@ -32,15 +32,5 @@ namespace BraunauMobil.VeloBasar.Data
         {
             return products.Where(p => p.IsNot(state));
         }
-
-        public static bool Is(this Product product, ProductStatus state)
-        {
-            return product.Status == state;
-        }
-
-        public static bool IsNot(this Product product, ProductStatus state)
-        {
-            return product.Status != state;
-        }
     }
 }
