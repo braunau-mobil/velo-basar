@@ -17,7 +17,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
 
         public string ErrorText { get; set; }
 
-        public Sale Sale { get; set; }
+        public ProductsTransaction Sale { get; set; }
 
         [BindProperty]
         public IList<Product> Products { get; set; }
@@ -33,8 +33,8 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
 
             if (saleId != null)
             {
-                Sale = await Context.Sale.FirstOrDefaultAsync(s => s.Id == saleId);
-                Products = await Context.Sale.Where(s => s.Id == saleId).SelectMany(s => s.Products).Select(ps => ps.Product).AsNoTracking().ToListAsync();
+                Sale = await Context.GetSaleAsync(saleId.Value);
+                Products = Sale.Products.Select(ps => ps.Product).ToList();
             }
             else
             {
@@ -54,7 +54,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
 
             await LoadBasarAsync(basarId);
 
-            var product = await Context.Product.FirstOrDefaultAsync(p => p.Id == ProductId);
+            var product = await Context.GetProductAsync(ProductId);
             if (product == null)
             {
                 return RedirectToPage("/Sales/CreateOrEdit", new { basarId, saleId, errorText = $"Es wurde kein Produkt mit der id {ProductId} gefunden" });

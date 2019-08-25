@@ -1,6 +1,7 @@
 ﻿@page
 @model BraunauMobil.VeloBasar.Pages.Acceptances.DetailsModel
 
+@using BraunauMobil.VeloBasar.ViewModels;
 @using BraunauMobil.VeloBasar.Models;
 @using Microsoft.AspNetCore.Mvc.Localization
 @using VeloBasar.Resources
@@ -20,7 +21,7 @@
 
 <partial name="/Pages/Sellers/_SmallDetails.cshtml" model="@new ViewModel<Seller>(Model.Basar, Model.Acceptance.Seller);" />
 
-<partial name="/Pages/Products/_List.cshtml" model="@new ListViewModel<Product>(Model.Basar, Model.Acceptance.Products.Select(pa => pa.Product))" />
+<partial name="/Pages/Products/_List.cshtml" model="@new ProductsViewModel(Model.Basar, Model.Acceptance.Products.Select(pa => pa.Product))" />
 
 <p>
     @if (Model.Acceptance.DocumentId == null)

@@ -1,0 +1,48 @@
+﻿@page
+@model BraunauMobil.VeloBasar.Pages.Products.CancelModel
+
+@using Microsoft.AspNetCore.Mvc.Localization
+@using VeloBasar.Resources
+
+@inject IHtmlLocalizer<SharedResource> Localizer
+
+@{
+    ViewData["Title"] = Localizer["Artikel stornieren"];
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<h3>@Localizer["Sind sie sicher, dass sie diesen Artikel stornieren wollen?"]</h3>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>@Html.DisplayNameFor(model => model.Product.Id)</dt>
+        <dd>@Html.DisplayFor(model => model.Product.Id)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Product.FrameNumber)</dt>
+        <dd>@Html.DisplayFor(model => model.Product.FrameNumber)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Product.Color)</dt>
+        <dd>@Html.DisplayFor(model => model.Product.Color)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Product.Brand)</dt>
+        <dd>@Html.DisplayFor(model => model.Product.Brand)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Product.Description)</dt>
+        <dd>@Html.DisplayFor(model => model.Product.Description)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Product.Type)</dt>
+        <dd>@Html.DisplayFor(model => model.Product.Type)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Product.TireSize)</dt>
+        <dd>@Html.DisplayFor(model => model.Product.TireSize)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Product.Price)</dt>
+        <dd>@Html.DisplayFor(model => model.Product.Price)</dd>
+    </dl>
+
+    <form method="post">
+        <input type="submit" asp-all-route-data="@Model.GetRoute()" asp-route-productId="@Model.Product.Id" asp-route-target="@Request.Headers["Referer"]" value="@Localizer["Stornieren"]" class="btn btn-default" />
+        <a href="@Request.Headers["Referer"]" class="btn btn-default">@Localizer["Abbrechen"]</a>
+    </form>
+</div>

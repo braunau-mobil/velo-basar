@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 
-namespace BraunauMobil.VeloBasar
+namespace BraunauMobil.VeloBasar.ViewModels
 {
     public class BasarViewModel
     {

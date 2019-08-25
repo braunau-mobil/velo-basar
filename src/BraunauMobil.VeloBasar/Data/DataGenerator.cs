@@ -1,5 +1,4 @@
 ﻿using BraunauMobil.VeloBasar.Models;
-using BraunauMobil.VeloBasar.Models.Base;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -37,12 +36,7 @@ namespace BraunauMobil.VeloBasar.Data
             await _context.Database.EnsureDeletedAsync();
             await _context.Database.EnsureCreatedAsync();
 
-            var adminUser = new IdentityUser
-            {
-                Email = _config.AdminUserEMail,
-                UserName = _config.AdminUserEMail
-            };
-            await _userManager.CreateAsync(adminUser, "123456");
+            await _context.InitializeDatabase(_userManager, _config);
 
             await CreateCountriesAsync();
 
@@ -99,13 +93,13 @@ namespace BraunauMobil.VeloBasar.Data
 
         private async Task CreateAcceptanceAsync(Basar basar, Seller seller)
         {
-            var acceptance = new Acceptance
+            var acceptance = new ProductsTransaction
             {
                 Basar = basar,
                 Number = _context.NextNumber(basar, TransactionType.Acceptance),
                 Seller = seller,
                 TimeStamp = NextTimeStamp(basar, TransactionType.Acceptance),
-                Products = new List<ProductAcceptance>()
+                Products = new List<ProductToTransaction>()
             };
 
             var productCount = NextProductCount();
@@ -114,12 +108,12 @@ namespace BraunauMobil.VeloBasar.Data
                 await CreateProductAsync(acceptance, acceptance.Number);
             }
 
-            await _context.Acceptance.AddAsync(acceptance);
+            await _context.Transactions.AddAsync(acceptance);
             await _context.SaveChangesAsync();
             await _context.GenerateAcceptanceDocIfNotExistAsync(basar, acceptance.Id);
         }
 
-        private async Task CreateProductAsync(Acceptance acceptance, int number)
+        private async Task CreateProductAsync(ProductsTransaction acceptance, int number)
         {
             var product = new Product
             {
@@ -135,9 +129,9 @@ namespace BraunauMobil.VeloBasar.Data
             await _context.Product.AddAsync(product);
             await _context.SaveChangesAsync();
 
-            var productAcceptance = new ProductAcceptance
+            var productAcceptance = new ProductToTransaction
             {
-                Acceptance = acceptance,
+                Transaction = acceptance,
                 Product = product
             };
             acceptance.Products.Add(productAcceptance);

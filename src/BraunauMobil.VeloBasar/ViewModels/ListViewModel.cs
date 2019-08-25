@@ -1,7 +1,7 @@
 ﻿using BraunauMobil.VeloBasar.Models;
 using System.Collections.Generic;
 
-namespace BraunauMobil.VeloBasar
+namespace BraunauMobil.VeloBasar.ViewModels
 {
     public class ListViewModel<T> : BasarViewModel
     {
@@ -14,13 +14,6 @@ namespace BraunauMobil.VeloBasar
         {
             get;
             set;
-        }
-
-        public IDictionary<string, string> GetItemRoute(Product product)
-        {
-            var route = GetRoute();
-            route.Add("productId", product.Id.ToString());
-            return route;
         }
     }
 }

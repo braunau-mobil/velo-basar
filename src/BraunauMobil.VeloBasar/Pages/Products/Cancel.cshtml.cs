@@ -6,9 +6,9 @@ using BraunauMobil.VeloBasar.Models;
 
 namespace BraunauMobil.VeloBasar.Pages.Products
 {
-    public class DeleteModel : BasarPageModel
+    public class CancelModel : BasarPageModel
     {
-        public DeleteModel(VeloBasarContext context) : base(context)
+        public CancelModel(VeloBasarContext context) : base(context)
         {
         }
 
@@ -31,7 +31,7 @@ namespace BraunauMobil.VeloBasar.Pages.Products
         {
             await LoadBasarAsync(basarId);
 
-            await Context.DeleteProductAsync(productId);
+            await Context.CancelProductAsync(Basar, productId);
 
             return Redirect(target);
         }

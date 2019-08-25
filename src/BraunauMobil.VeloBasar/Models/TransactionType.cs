@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace BraunauMobil.VeloBasar.Models.Base
+namespace BraunauMobil.VeloBasar.Models
 {
     public enum TransactionType
     {

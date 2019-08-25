@@ -1,6 +1,6 @@
 ﻿using BraunauMobil.VeloBasar.Models;
 
-namespace BraunauMobil.VeloBasar
+namespace BraunauMobil.VeloBasar.ViewModels
 {
     public class ViewModel<T> : BasarViewModel
     {

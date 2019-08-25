@@ -16,7 +16,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
 
         public string CurrentFilter { get; set; }
 
-        public PaginatedList<Sale> Sales { get;set; }
+        public PaginatedList<ProductsTransaction> Sales { get;set; }
 
         public async Task OnGetAsync(int? basarId, string currentFilter, string searchString, int? pageIndex)
         {
@@ -34,7 +34,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
 
             CurrentFilter = searchString;
 
-            var salesIq = from s in Context.Sale select s;
+            var salesIq = from s in Context.GetSales(Basar) select s;
 
             if (int.TryParse(searchString, out int id))
             {
@@ -46,7 +46,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
                 //salesIq = salesIq.Where(s => s.FirstName.Contains(searchString, System.StringComparison.InvariantCultureIgnoreCase) ||s.LastName.Contains(searchString, System.StringComparison.InvariantCultureIgnoreCase));
             }
 
-            Sales = await PaginatedList<Sale>.CreateAsync(salesIq.AsNoTracking(), pageIndex ?? 1, PageSize);
+            Sales = await PaginatedList<ProductsTransaction>.CreateAsync(salesIq.AsNoTracking(), pageIndex ?? 1, PageSize);
         }
     }
 }

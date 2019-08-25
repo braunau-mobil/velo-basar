@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BraunauMobil.VeloBasar.Models.Base
 {
-    public abstract class Transaction : BasarModel
+    public class TransactionModel : BasarModel
     {
         public int Id { get; set; }
 
@@ -15,6 +15,6 @@ namespace BraunauMobil.VeloBasar.Models.Base
         [Display(Name = "Datum und Uhrzeit")]
         public DateTime TimeStamp { get; set; }
 
-        public abstract TransactionType Type { get; }
+        public TransactionType Type { get; set; }
     }
 }

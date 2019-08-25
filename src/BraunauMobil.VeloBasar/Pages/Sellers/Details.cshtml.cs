@@ -5,7 +5,6 @@ using BraunauMobil.VeloBasar.Data;
 using BraunauMobil.VeloBasar.Models;
 using System.Linq;
 using System.Collections.Generic;
-using BraunauMobil.VeloBasar.Models.Base;
 
 namespace BraunauMobil.VeloBasar.Pages.Sellers
 {
@@ -15,9 +14,9 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
         {
         }
 
-        public IList<TransactionStatistic<Acceptance>> AcceptanceStatistics { get; set; }
+        public IList<TransactionStatistic> AcceptanceStatistics { get; set; }
 
-        public IList<TransactionStatistic<Settlement>> SettlementStatistics { get; set; }
+        public IList<TransactionStatistic> SettlementStatistics { get; set; }
 
         public bool CanSettle { get; set; }
 
@@ -47,14 +46,14 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
             return Page();
         }
 
-        public IDictionary<string, string> GetItemRoute(Acceptance acceptance)
+        public IDictionary<string, string> GetItemRoute(ProductsTransaction acceptance)
         {
             var route = GetRoute();
             route.Add("acceptanceId", acceptance.Id.ToString());
             return route;
         }
 
-        public IDictionary<string, string> GetItemRoute<T>(TransactionStatistic<T> statistic) where T : Transaction
+        public IDictionary<string, string> GetItemRoute(TransactionStatistic statistic)
         {
             var route = GetRoute();
             route.Add("fileId", statistic.Transaction.DocumentId.ToString());

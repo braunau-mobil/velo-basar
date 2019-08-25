@@ -10,7 +10,7 @@ namespace BraunauMobil.VeloBasar.Pages.Acceptances
         {
         }
 
-        public Acceptance Acceptance { get; set; }
+        public ProductsTransaction Acceptance { get; set; }
 
         public async Task OnGetAsync(int basarId, int acceptanceId)
         {

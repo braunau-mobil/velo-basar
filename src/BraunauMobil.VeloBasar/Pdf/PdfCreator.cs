@@ -37,7 +37,7 @@ namespace BraunauMobil.VeloBasar.Pdf
             return bytes;
         }
 
-        public byte[] CreateAcceptance(Basar basar, Acceptance acceptance)
+        public byte[] CreateAcceptance(Basar basar, ProductsTransaction acceptance)
         {
             return CreatePdf((pdfDoc, doc) =>
             {
@@ -70,7 +70,7 @@ namespace BraunauMobil.VeloBasar.Pdf
             });
         }
 
-        public byte[] CreateSale(Basar basar, Sale sale)
+        public byte[] CreateSale(Basar basar, ProductsTransaction sale)
         {
             return CreatePdf((pdfDoc, doc) =>
             {
@@ -103,7 +103,7 @@ namespace BraunauMobil.VeloBasar.Pdf
             });
         }
 
-        public byte[] CreateSettlement(Basar basar, Settlement settlement)
+        public byte[] CreateSettlement(Basar basar, ProductsTransaction settlement)
         {
             return CreatePdf((pdfDoc, doc) =>
             {
