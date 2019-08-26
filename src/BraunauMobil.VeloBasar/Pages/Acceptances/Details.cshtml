@@ -10,7 +10,7 @@
 @inject IHtmlLocalizer<SharedResource> Localizer
 
 @{
-    ViewData["Title"] = $"{Html.DisplayNameFor(x => x.Acceptance)} #{Model.Acceptance.Number}";
+    ViewData["Title"] = $"{Localizer["Annahme"].Value} #{Model.Acceptance.Number}";
 }
 
 <h2>@ViewData["Title"]</h2>
@@ -20,6 +20,8 @@
 </div>
 
 <partial name="/Pages/Sellers/_SmallDetails.cshtml" model="@new ViewModel<Seller>(Model.Basar, Model.Acceptance.Seller);" />
+
+<hr />
 
 <partial name="/Pages/Products/_List.cshtml" model="@new ProductsViewModel(Model.Basar, Model.Acceptance.Products.Select(pa => pa.Product))" />
 
