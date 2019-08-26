@@ -2,84 +2,27 @@
 @model BraunauMobil.VeloBasar.Pages.Sellers.DeleteModel
 
 @using Microsoft.AspNetCore.Mvc.Localization
+@using VeloBasar.Models
 @using VeloBasar.Resources
+@using VeloBasar.ViewModels;
 
 @inject IHtmlLocalizer<SharedResource> Localizer
 
 @{
-    ViewData["Title"] = Localizer["Delete"];
+    ViewData["Title"] = Localizer["Verkäufer Löschen"];
 }
 
-<h2>@Localizer["Löschen"]</h2>
+<h2>@ViewData["Title"]</h2>
 
 <h3>@Localizer["Sind Sie sicher, dass sie diesen Verkäufer löschen wollen?"]</h3>
+
+
 <div>
     <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Seller.FirstName)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Seller.FirstName)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Seller.LastName)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Seller.LastName)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Seller.Street)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Seller.Street)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Seller.City)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Seller.City)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Seller.ZIP)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Seller.ZIP)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Seller.Country)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Seller.Country.Name)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Seller.IBAN)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Seller.IBAN)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Seller.BIC)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Seller.BIC)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Seller.BankAccountHolder)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Seller.BankAccountHolder)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Seller.Token)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Seller.Token)
-        </dd>
-    </dl>
+    <partial name="/Pages/Sellers/_SmallDetails.cshtml" model="@new ViewModel<Seller>(Model.Basar, Model.Seller);" />
 
     <form method="post">
         <input type="submit" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@Model.Seller.Id" value="@Localizer["Löschen"]" class="btn btn-default" />
         <a href="@Request.Headers["Referer"]" class="btn btn-default">@Localizer["Abbrechen"]</a>
-</form>
+    </form>
 </div>
