@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using BraunauMobil.VeloBasar.Models;
-using System.Linq;
 using BraunauMobil.VeloBasar.Data;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
@@ -34,7 +33,6 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
 
             CurrentFilter = searchString;
 
-            IQueryable<Seller> sellerIq = null;
             if (int.TryParse(searchString, out int id))
             {
                 if (await Context.Seller.ExistsAsync(id))
@@ -42,14 +40,8 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
                     return RedirectToPage("/Sellers/Details", new { basarId, sellerId = id });
                 }
             }
-            else if (!string.IsNullOrEmpty(searchString))
-            {
-                sellerIq = Context.GetSellers(searchString);
-            }
-            else
-            {
-                sellerIq = Context.GetSellers();
-            }
+
+            var sellerIq = Context.GetSellers(searchString);
 
             var pageSize = 20;
             Sellers = await PaginatedList<Seller>.CreateAsync(
