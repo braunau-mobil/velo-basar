@@ -5,40 +5,19 @@
 
 @inject IHtmlLocalizer<SharedResource> Localizer
 
-<h4>@Localizer["Verkäufer"]</h4>
-
-<a asp-page="/Sellers/Details" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@Model.Value.Id">@Localizer["Details"]</a>
+<h4>@($"{Localizer["Verkäufer"].Value} #{Model.Value.Id}")</h4>
 
 <div>
-    <dl class="dl-horizontal">
-        <dt>@Html.DisplayNameFor(model => model.Value.Id)</dt>
-        <dd>@Html.DisplayFor(model => model.Value.Id)</dd>
-
-        <dt>@Html.DisplayNameFor(model => model.Value.FirstName)</dt>
-        <dd>@Html.DisplayFor(model => model.Value.FirstName)</dd>
-
-        <dt>@Html.DisplayNameFor(model => model.Value.LastName)</dt>
-        <dd>@Html.DisplayFor(model => model.Value.LastName)</dd>
-
-        <dt>@Html.DisplayNameFor(model => model.Value.Street)</dt>
-        <dd>@Html.DisplayFor(model => model.Value.Street)</dd>
-
-        <dt>@Html.DisplayNameFor(model => model.Value.City)</dt>
-        <dd>@Html.DisplayFor(model => model.Value.City)</dd>
-
-        <dt>@Html.DisplayNameFor(model => model.Value.ZIP)</dt>
-        <dd>@Html.DisplayFor(model => model.Value.ZIP)</dd>
-
-        <dt>@Html.DisplayNameFor(model => model.Value.Country)</dt>
-        <dd>@Html.DisplayFor(model => model.Value.Country.Name)</dd>
-
-        <dt>@Html.DisplayNameFor(model => model.Value.IBAN)</dt>
-        <dd>@Html.DisplayFor(model => model.Value.IBAN)</dd>
-
-        <dt>@Html.DisplayNameFor(model => model.Value.BIC)</dt>
-        <dd>@Html.DisplayFor(model => model.Value.BIC)</dd>
-
-        <dt>@Html.DisplayNameFor(model => model.Value.BankAccountHolder)</dt>
-        <dd>@Html.DisplayFor(model => model.Value.BankAccountHolder)</dd>
-    </dl>
+    @Html.DisplayFor(model => model.Value.FirstName)
+    @Html.DisplayFor(model => model.Value.LastName)
+    <br />
+    @Html.DisplayFor(model => model.Value.Street)
+    <br />
+    @Html.DisplayFor(model => model.Value.ZIP)
+    -
+    @Html.DisplayFor(model => model.Value.City)
+    <br />
+    @Html.DisplayFor(model => model.Value.Country.Name)
+    <br />
+    <a asp-page="/Sellers/Details" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@Model.Value.Id">@Localizer["Details"]</a>
 </div>
