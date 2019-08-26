@@ -39,7 +39,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
             {
                 if (await Context.Seller.ExistsAsync(id))
                 {
-                    return RedirectToPage("./Details", new { basarId, sellerId = id });
+                    return RedirectToPage("/Sellers/Details", new { basarId, sellerId = id });
                 }
             }
             else if (!string.IsNullOrEmpty(searchString))

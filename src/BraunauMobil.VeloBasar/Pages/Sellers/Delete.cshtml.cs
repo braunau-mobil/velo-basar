@@ -43,7 +43,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
                 });
             }
            
-            return RedirectToPage("./List", GetRoute());
+            return RedirectToPage("/Sellers/List", GetRoute());
         }
     }
 }

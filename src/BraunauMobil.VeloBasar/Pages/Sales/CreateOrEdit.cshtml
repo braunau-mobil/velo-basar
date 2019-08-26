@@ -13,7 +13,7 @@
 @if (Model.Sale != null)
 {
     <h2>@Localizer["Verkauf #{0}", Model.Sale.Number]</h2>
-    <a asp-page="./Print" asp-all-route-data="@Model.GetRoute()" asp-route-saleID="@Model.Sale.Id" target="_blank" class="btn btn-default">@Localizer["Rechnung drucken"]</a>
+    <a asp-page="/Sales/Print" asp-all-route-data="@Model.GetRoute()" asp-route-saleID="@Model.Sale.Id" target="_blank" class="btn btn-default">@Localizer["Rechnung drucken"]</a>
 }
 else
 {

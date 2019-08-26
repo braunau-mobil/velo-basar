@@ -12,13 +12,13 @@
 
 <h2>@Localizer["Verkäufe"]</h2>
 
-<form asp-page="./List" method="get" asp-route-basarId="@Model.Basar.Id">
+<form asp-page="/Sales/List" method="get" asp-route-basarId="@Model.Basar.Id">
     <div class="form-actions no-color">
         <p>
             @Localizer["Suchen:"]
             <input type="text" name="SearchString" value="@Model.CurrentFilter" />
             <input type="submit" value="@Localizer["Suchen"]" class="btn btn-default" /> |
-            <a asp-page="./List" asp-route-basarId="@Model.Basar.Id">@Localizer["Zurücksetzen"]</a>
+            <a asp-page="/Sales/List" asp-route-basarId="@Model.Basar.Id">@Localizer["Zurücksetzen"]</a>
 </p>
     </div>
 </form>
@@ -46,7 +46,7 @@
                     @Html.DisplayFor(modelItem => item.TimeStamp)
                 </td>
                 <td>
-                    <a asp-page="./Details" asp-all-route-data="@Model.GetRoute()" asp-route-saleId="@item.Id">@Localizer["Details"]</a>
+                    <a asp-page="/Sales/Details" asp-all-route-data="@Model.GetRoute()" asp-route-saleId="@item.Id">@Localizer["Details"]</a>
 </td>
             </tr>
         }

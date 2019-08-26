@@ -32,7 +32,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
             Context.Seller.Add(Seller);
             await Context.SaveChangesAsync();
 
-            return RedirectToPage("./Details", new { basarId = Basar.Id, sellerId = Seller.Id });
+            return RedirectToPage("/Sellers/Details", new { basarId = Basar.Id, sellerId = Seller.Id });
         }
     }
 }
