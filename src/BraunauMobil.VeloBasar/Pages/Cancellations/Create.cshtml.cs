@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using BraunauMobil.VeloBasar.Data;
 using BraunauMobil.VeloBasar.Models;
 
-namespace BraunauMobil.VeloBasar.Pages.Products
+namespace BraunauMobil.VeloBasar.Pages.Cancellations
 {
-    public class CancelModel : BasarPageModel
+    public class CreateModel : BasarPageModel
     {
-        public CancelModel(VeloBasarContext context) : base(context)
+        public CreateModel(VeloBasarContext context) : base(context)
         {
         }
 
