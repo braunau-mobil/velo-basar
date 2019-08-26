@@ -301,6 +301,7 @@ namespace BraunauMobil.VeloBasar.Data
         {
             return await Transactions
                 .Include(a => a.Seller)
+                    .ThenInclude(s => s.Country)
                 .Include(a => a.Products)
                     .ThenInclude(pa => pa.Product)
                 .FirstAsync(a => a.Id == acceptanceId);
