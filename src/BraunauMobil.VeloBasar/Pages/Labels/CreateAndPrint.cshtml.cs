@@ -3,11 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using BraunauMobil.VeloBasar.Data;
 using BraunauMobil.VeloBasar.Models;
 
-namespace BraunauMobil.VeloBasar.Pages.Sellers
+namespace BraunauMobil.VeloBasar.Pages.Labels
 {
-    public class CreateAndPrintLabelsModel : BasarPageModel
+    public class CreateAndPrintModel : BasarPageModel
     {
-        public CreateAndPrintLabelsModel(VeloBasarContext context) : base(context)
+        public CreateAndPrintModel(VeloBasarContext context) : base(context)
         {
         }
 
