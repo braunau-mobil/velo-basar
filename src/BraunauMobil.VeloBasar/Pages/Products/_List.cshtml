@@ -34,7 +34,11 @@
                     <td>@Html.DisplayFor(modelItem => item.Description)</td>
                     <td>@Html.DisplayFor(modelItem => item.TireSize)</td>
                     <td>@Html.DisplayFor(modelItem => item.Price)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Status)</td>
+                    <td>
+                        <div class="@Model.GetStatusClass(item.Status)">
+                            @Html.DisplayFor(modelItem => item.Status)
+                        </div>
+                    </td>
                     <td>
                         <a asp-page="/Products/Edit" asp-all-route-data="@Model.GetItemRoute(item)">@Localizer["Bearbeiten"]</a>
                         @if (Model.CanDelete(item))

@@ -35,3 +35,39 @@ body {
         display: none;
     }
 }
+
+.ProductStatus {
+    text-align: center;
+    border-radius: 4px;
+    border: solid;
+}
+
+.ProductStatus-Available {
+    color: white;
+    background-color: green;
+    border-color: green;
+}
+
+.ProductStatus-PickedUp {
+    color: white;
+    background-color: gray;
+    border-color: gray;
+}
+
+.ProductStatus-Settled {
+    color: white;
+    background-color: gray;
+    border-color: gray;
+}
+
+.ProductStatus-Sold {
+    color: white;
+    background-color: orange;
+    border-color: orange;
+}
+
+.ProductStatus-Stolen {
+    color: white;
+    background-color: red;
+    border-color: red;
+}
