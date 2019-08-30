@@ -13,6 +13,7 @@ namespace BraunauMobil.VeloBasar.Models.Base
         public int? DocumentId { get; set; }
 
         [Display(Name = "Datum und Uhrzeit")]
+        [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy HH:mm}")]
         public DateTime TimeStamp { get; set; }
 
         public TransactionType Type { get; set; }
