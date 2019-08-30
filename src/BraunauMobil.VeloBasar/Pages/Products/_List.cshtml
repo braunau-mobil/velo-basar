@@ -49,7 +49,7 @@
                         @if (Model.CanCancel(item))
                         {
                             <br />
-                            <a asp-page="/Products/Cancel" asp-all-route-data="@Model.GetItemRoute(item)">@Localizer["Stornieren"]</a>
+                            <a asp-page="/Cancellations/Create" asp-all-route-data="@Model.GetItemRoute(item)">@Localizer["Stornieren"]</a>
                         }
                         @if (item.Label != null)
                         {
