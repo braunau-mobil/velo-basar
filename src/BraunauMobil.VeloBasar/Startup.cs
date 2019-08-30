@@ -9,6 +9,7 @@ using BraunauMobil.VeloBasar.Data;
 using Microsoft.AspNetCore.Identity;
 using System;
 using BraunauMobil.VeloBasar.Resources;
+using System.Globalization;
 
 namespace BraunauMobil.VeloBasar
 {
@@ -68,6 +69,10 @@ namespace BraunauMobil.VeloBasar
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            var cultureInfo = CultureInfo.GetCultureInfo("de-AT");
+            CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+            CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
