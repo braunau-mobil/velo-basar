@@ -1,0 +1,46 @@
+﻿@page
+@model BraunauMobil.VeloBasar.Pages.Products.ListModel
+
+@using Microsoft.AspNetCore.Mvc.Localization
+@using VeloBasar.Resources
+
+@inject IHtmlLocalizer<SharedResource> Localizer
+
+@{
+    ViewData["Title"] = Localizer["Artikel"];
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-page="/Products/List" method="get" asp-route-basarId="@Model.Basar.Id">
+    <div class="form-actions no-color">
+        <p>
+            Suchen:
+            <input type="text" name="SearchString" value="@Model.CurrentFilter" />
+            <input type="submit" value="@Localizer["Suchen"]" class="btn btn-default" /> |
+            <a asp-page="/Products/List" asp-route-basarId="@Model.Basar.Id">@Localizer["Zurücksetzen"]</a>
+        </p>
+    </div>
+</form>
+
+<partial name="/Pages/Products/_List.cshtml" model="@new ViewModels.ProductsViewModel(Model.Basar, Model.Products)" />
+
+@{
+    var prevDisabled = !Model.Products.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.Products.HasNextPage ? "disabled" : "";
+}
+
+<a asp-page="/Products/List"
+   asp-all-route-data="@Model.GetRoute()"
+   asp-route-pageIndex="@(Model.Products.PageIndex - 1)"
+   asp-route-currentFilter="@Model.CurrentFilter"
+   class="btn btn-default @prevDisabled">
+    @Localizer["<<<"]
+</a>
+<a asp-page="/Products/List"
+   asp-all-route-data="@Model.GetRoute()"
+   asp-route-pageIndex="@(Model.Products.PageIndex + 1)"
+   asp-route-currentFilter="@Model.CurrentFilter"
+   class="btn btn-default @nextDisabled">
+    @Localizer[">>>"]
+</a>

@@ -6,6 +6,16 @@ namespace BraunauMobil.VeloBasar.Data
 {
     public static class Expressions
     {
+        public static Expression<Func<Product, bool>> ProductSearch(string searchString)
+        {
+            return p => p.Brand.Contains(searchString, StringComparison.InvariantCultureIgnoreCase)
+                || p.Color.Contains(searchString, StringComparison.InvariantCultureIgnoreCase)
+                || p.Description.Contains(searchString, StringComparison.InvariantCultureIgnoreCase)
+                || p.FrameNumber.Contains(searchString, StringComparison.InvariantCultureIgnoreCase)
+                || p.TireSize.Contains(searchString, StringComparison.InvariantCultureIgnoreCase)
+                || p.Type.Contains(searchString, StringComparison.InvariantCultureIgnoreCase);
+        }
+
         public static Expression<Func<Seller, bool>> SellerSearch(string searchString)
         {
             return s => s.FirstName.Contains(searchString, StringComparison.InvariantCultureIgnoreCase)

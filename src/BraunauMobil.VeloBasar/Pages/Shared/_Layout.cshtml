@@ -46,6 +46,7 @@
                 <ul class="nav navbar-nav">
                     <li><a asp-page="/Sellers/Create" asp-all-route-data="@Model.GetRoute()">@Localizer["Neue Annahme"]</a></li>
                     <li><a asp-page="/Sellers/List" asp-all-route-data="@Model.GetRoute()">@Localizer["Verkäufer"]</a></li>
+                    <li><a asp-page="/Products/List" asp-all-route-data="@Model.GetRoute()">@Localizer["Artikel"]</a></li>
                     <li><a asp-page="/Sales/CreateOrEdit" asp-all-route-data="@Model.GetRoute()">@Localizer["Neuer Verkauf"]</a></li>
                     <li><a asp-page="/Sales/List" asp-all-route-data="@Model.GetRoute()">@Localizer["Verkäufe"]</a></li>
                     <li><a asp-page="/Setup/DangerZone">Danger Zone!</a></li>

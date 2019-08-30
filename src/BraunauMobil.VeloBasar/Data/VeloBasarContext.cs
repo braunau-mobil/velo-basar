@@ -365,6 +365,18 @@ namespace BraunauMobil.VeloBasar.Data
             return await Product.FirstOrDefaultAsync(p => p.Id == productId);
         }
 
+        public IQueryable<Product> GetProducts(string searchString = null)
+        {
+            var res = Product.OrderBy(p => p.Id);
+
+            if (string.IsNullOrEmpty(searchString))
+            {
+                return res;
+            }
+
+            return res.Where(Expressions.ProductSearch(searchString));
+        }
+
         public IQueryable<Product> GetProductsForSeller(Basar basar, int sellerId)
         {
             return GetAcceptancesForSeller(basar, sellerId).SelectMany(a => a.Products).Select(pa => pa.Product);
@@ -386,7 +398,7 @@ namespace BraunauMobil.VeloBasar.Data
         public IQueryable<Seller> GetSellers(string searchString = null)
         {
             var res = Seller
-                .Include(s => s.Country);
+                .Include(s => s.Country).OrderBy(s => s.Id);
 
             if (string.IsNullOrEmpty(searchString))
             {
