@@ -21,50 +21,64 @@
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @if (Model.Basar == null)
-                {
-                    <a asp-page="/Basars/SelectOrCreate" class="navbar-brand">@Localizer["ACHTUNG! es ist kein Basar ausgewählt."]</a>
-                }
-                else
-                {
-                    <a asp-page="/Index" class="navbar-brand">@Model.Basar.Name</a>
-                }
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li><a asp-page="/Sellers/Create" asp-all-route-data="@Model.GetRoute()">@Localizer["Neue Annahme"]</a></li>
-                    <li><a asp-page="/Sellers/List" asp-all-route-data="@Model.GetRoute()">@Localizer["Verkäufer"]</a></li>
-                    <li><a asp-page="/Products/List" asp-all-route-data="@Model.GetRoute()">@Localizer["Artikel"]</a></li>
-                    <li><a asp-page="/Sales/CreateOrEdit" asp-all-route-data="@Model.GetRoute()">@Localizer["Neuer Verkauf"]</a></li>
-                    <li><a asp-page="/Sales/List" asp-all-route-data="@Model.GetRoute()">@Localizer["Verkäufe"]</a></li>
-                    <li><a asp-page="/Setup/DangerZone">Danger Zone!</a></li>
-                </ul>
-                <partial name="_LoginPartial" />
-            </div>
-        </div>
-    </nav>
+    <div class="container-fluid">
+        <div class="row">
+            <nav class="col-md-2 d-none d-md-block sidebar">
+                <div class="sidebar-sticky">
+                    <h6 class="d-flex justify-content-between align-items-center mt-3 mb-3">
+                        @if (Model.Basar == null)
+                        {
+                            <a asp-page="/Basars/SelectOrCreate" class="navbar-brand">@Localizer["ACHTUNG! es ist kein Basar ausgewählt."]</a>
+                        }
+                        else
+                        {
+                            @Model.Basar.Name
+                        }
+                    </h6>
+                    @if (Model.Basar != null)
+                    {
+                        <ul class="nav flex-column nav-pills">
+                            <li class="nav-item">
+                                <a class="nav-link" asp-page="/Sellers/Create" asp-all-route-data="@Model.GetRoute()">@Localizer["Neue Annahme"]</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-page="/Sellers/List" asp-all-route-data="@Model.GetRoute()">@Localizer["Verkäufer"]</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-page="/Products/List" asp-all-route-data="@Model.GetRoute()">@Localizer["Artikel"]</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-page="/Sales/CreateOrEdit" asp-all-route-data="@Model.GetRoute()">@Localizer["Neuer Verkauf"]</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-page="/Sales/List" asp-all-route-data="@Model.GetRoute()">@Localizer["Verkäufe"]</a>
+                            </li>
 
-    <partial name="_CookieConsentPartial" />
+                        </ul>
+                    }
 
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <div class="row">
-                <div class="col-md-6">
-                    <p>&copy; 2019 - Braunau mobil</p>
+                    <h6 class="d-flex justify-content-between align-items-center mt-3 mb-3">
+                        Admin
+                    </h6>
+                    <ul class="nav flex-column mb-2">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-page="/Setup/DangerZone">Danger Zone!</a>
+                        </li>
+                    </ul>
+
+                    <div class="d-flex justify-content-between align-items-center px-3 mt-3 mb-3 fixed-bottom">
+                        <footer>
+                            <p>&copy; 2019 - Braunau mobil</p>
+                            <partial name="_CookieConsentPartial" />
+                        </footer>
+                    </div>
                 </div>
-            </div>
-        </footer>
+            </nav>
+
+            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4 py-4">
+                @RenderBody()
+            </main>
+        </div>
     </div>
 
     <script src="~/lib/jquery/dist/jquery.js"></script>
