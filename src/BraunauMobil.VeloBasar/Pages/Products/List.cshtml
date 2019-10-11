@@ -10,9 +10,45 @@
     ViewData["Title"] = Localizer["Artikel"];
 }
 
-<h2>@ViewData["Title"]</h2>
+<div class="card my-3">
+    <div class="card-header d-flex justify-content-between align-items-md-center">
+        <div><h5 class="mx-2">@Localizer["Artikel"]</h5></div>
+        <form asp-page="/Products/List" method="get" asp-route-basarId="@Model.Basar.Id">
+            <div class="d-flex form-actions no-color align-items-md-center">
+                <div class="mx-2">Suchen:</div>
+                <input class="mx-2" type="text" name="SearchString" value="@Model.CurrentFilter" />
+                <input type="submit" value="@Localizer["Suchen"]" class="btn btn-secondary mx-2" /> |
+                <a class="mx-2" asp-page="/Products/List" asp-route-basarId="@Model.Basar.Id">@Localizer["Zurücksetzen"]</a>
+            </div>
+        </form>
+    </div>
 
-<form asp-page="/Products/List" method="get" asp-route-basarId="@Model.Basar.Id">
+    <div class="card-body p-0">
+        <partial name="/Pages/Products/_List.cshtml" model="@new ViewModels.ProductsViewModel(Model.Basar, Model.Products)" />
+    </div>
+</div>
+
+
+<partial name="/Pages/Shared/_Pagination.cshtml" model="@Model" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@*<form asp-page="/Products/List" method="get" asp-route-basarId="@Model.Basar.Id">
     <div class="form-actions no-color">
         <p>
             Suchen:
@@ -43,4 +79,4 @@
    asp-route-currentFilter="@Model.CurrentFilter"
    class="btn btn-default @nextDisabled">
     @Localizer[">>>"]
-</a>
+</a>*@

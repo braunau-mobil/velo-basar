@@ -10,100 +10,56 @@
     ViewData["Title"] = Localizer["Verkäufer"];
 }
 
-    <h2>@Localizer["Verkäufer"]</h2>
-
-<p>
-    <a asp-page="/Sellers/Create">@Localizer["Neuer Verkäufer"]</a>
-</p>
-
-<form asp-page="/Sellers/List" method="get" asp-route-basarId="@Model.Basar.Id">
-    <div class="form-actions no-color">
-        <p>
-            Suchen:
-            <input type="text" name="SearchString" value="@Model.CurrentFilter" />
-            <input type="submit" value="@Localizer["Suchen"]" class="btn btn-default" /> |
-            <a asp-page="/Sellers/List" asp-route-basarId="@Model.Basar.Id">@Localizer["Zurücksetzen"]</a>
-        </p>
+<div class="card my-3">
+    <div class="card-header d-flex justify-content-between align-items-md-center">
+        <div><h5 class="mx-2">@Localizer["Verkäufer"]</h5></div>
+        <form asp-page="/Sellers/List" method="get" asp-route-basarId="@Model.Basar.Id">
+            <div class="d-flex form-actions no-color align-items-md-center">
+                <div class="mx-2">Suchen:</div>
+                <input class="mx-2" type="text" name="SearchString" value="@Model.CurrentFilter" />
+                <input type="submit" value="@Localizer["Suchen"]" class="btn btn-secondary mx-2" /> |
+                <a class="mx-2" asp-page="/Sellers/List" asp-route-basarId="@Model.Basar.Id">@Localizer["Zurücksetzen"]</a>
+            </div>
+        </form>
+        <div><a class="ml-auto btn btn-primary" asp-page="/Sellers/Create">@Localizer["Neuer Verkäufer"]</a></div>
     </div>
-</form>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Sellers[0].Id)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Sellers[0].FirstName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Sellers[0].LastName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Sellers[0].Street)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Sellers[0].City)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Sellers[0].ZIP)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Sellers[0].Country)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.Sellers)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Id)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.FirstName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.LastName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Street)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.City)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ZIP)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Country.Name)
-                </td>
-                <td>
-                    <a asp-page="/Sellers/Edit" asp-all-route-data="@Model.GetItemRoute(item)">@Localizer["Bearbeiten"]</a> |
-                    <a asp-page="/Sellers/Details" asp-all-route-data="@Model.GetItemRoute(item)">@Localizer["Details"]</a> |
-                    <a asp-page="/Sellers/Delete" asp-all-route-data="@Model.GetItemRoute(item)">@Localizer["Löschen"]</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
-@{
-    var prevDisabled = !Model.Sellers.HasPreviousPage ? "disabled" : "";
-    var nextDisabled = !Model.Sellers.HasNextPage ? "disabled" : "";
-}
+    <div class="card-body p-0">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">@Html.DisplayNameFor(model => model.Sellers[0].Id)</th>
+                    <th scope="col">@Html.DisplayNameFor(model => model.Sellers[0].FirstName)</th>
+                    <th scope="col">@Html.DisplayNameFor(model => model.Sellers[0].LastName)</th>
+                    <th scope="col">@Html.DisplayNameFor(model => model.Sellers[0].Street)</th>
+                    <th scope="col">@Html.DisplayNameFor(model => model.Sellers[0].City)</th>
+                    <th scope="col">@Html.DisplayNameFor(model => model.Sellers[0].ZIP)</th>
+                    <th scope="col">@Html.DisplayNameFor(model => model.Sellers[0].Country)</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Sellers)
+                {
+                    <tr>
+                        <th scope="row">@Html.DisplayFor(modelItem => item.Id)</th>
+                        <td>@Html.DisplayFor(modelItem => item.FirstName)</td>
+                        <td>@Html.DisplayFor(modelItem => item.LastName)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Street)</td>
+                        <td>@Html.DisplayFor(modelItem => item.City)</td>
+                        <td>@Html.DisplayFor(modelItem => item.ZIP)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Country.Name)</td>
+                        <td>
+                            <a asp-page="/Sellers/Edit" asp-all-route-data="@Model.GetItemRoute(item)">@Localizer["Bearbeiten"]</a> |
+                            <a asp-page="/Sellers/Details" asp-all-route-data="@Model.GetItemRoute(item)">@Localizer["Details"]</a> |
+                            <a asp-page="/Sellers/Delete" asp-all-route-data="@Model.GetItemRoute(item)">@Localizer["Löschen"]</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
 
-<a asp-page="/Sellers/List"
-   asp-all-route-data="@Model.GetRoute()"
-   asp-route-pageIndex="@(Model.Sellers.PageIndex - 1)"
-   asp-route-currentFilter="@Model.CurrentFilter"
-   class="btn btn-default @prevDisabled">
-    @Localizer["<<<"]
-</a>
-<a asp-page="/Sellers/List"
-   asp-all-route-data="@Model.GetRoute()"
-   asp-route-pageIndex="@(Model.Sellers.PageIndex + 1)"
-   asp-route-currentFilter="@Model.CurrentFilter"
-   class="btn btn-default @nextDisabled">
-    @Localizer[">>>"]
-</a>
+
+<partial name="/Pages/Shared/_Pagination.cshtml" model="@Model" />

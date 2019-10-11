@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BraunauMobil.VeloBasar.Pages.Sellers
 {
-    public class ListModel : BasarPageModel
+    public class ListModel : BasarPageModel, IPagination
     {
         public ListModel(VeloBasarContext context) : base(context)
         {
@@ -16,6 +16,16 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
         public string CurrentFilter { get; set; }
 
         public PaginatedList<Seller> Sellers { get;set; }
+
+        public int PageIndex => Sellers.PageIndex;
+
+        public int TotalPages => Sellers.TotalPages;
+
+        public bool HasPreviousPage => Sellers.HasPreviousPage;
+
+        public bool HasNextPage => Sellers.HasNextPage;
+
+        string IPagination.Page => "/Sellers/List";
 
         public async Task<IActionResult> OnGetAsync(int basarId, string currentFilter, string searchString, int? pageIndex)
         {
@@ -55,6 +65,11 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
             var route = GetRoute();
             route.Add("sellerId", seller.Id.ToString());
             return route;
+        }
+
+        public IDictionary<string, string> GetPaginationRoute()
+        {
+            return GetRoute();
         }
     }
 }

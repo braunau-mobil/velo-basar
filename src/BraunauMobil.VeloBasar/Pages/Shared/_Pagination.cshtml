@@ -1,0 +1,42 @@
+﻿@model IPagination
+
+@using Microsoft.AspNetCore.Mvc.Localization
+@using VeloBasar.Resources
+
+@inject IHtmlLocalizer<SharedResource> Localizer
+
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+<nav aria-label="...">
+    <ul class="pagination">
+        <li class="page-item @prevDisabled">
+            <a class="page-link @prevDisabled"
+               asp-page="@Model.Page"
+               asp-all-route-data="@Model.GetPaginationRoute()"
+               asp-route-pageIndex="@(Model.PageIndex - 1)"
+               asp-route-currentFilter="@Model.CurrentFilter">
+                @Localizer["<<<"]
+            </a>
+        </li>
+        @for (var pageNumber = 1; pageNumber <= Model.TotalPages; pageNumber++)
+        {
+            var isActive = pageNumber == Model.PageIndex ? "active" : "";
+            <li class="page-item @isActive" aria-current="page">
+                <a class="page-link"  asp-page="@Model.Page"
+               asp-all-route-data="@Model.GetPaginationRoute()"
+               asp-route-pageIndex="@pageNumber"
+               asp-route-currentFilter="@Model.CurrentFilter">@pageNumber</a> 
+            </li>
+        }
+        <li class="page-item @nextDisabled">
+            <a class="page-link" asp-page="@Model.Page"
+               asp-all-route-data="@Model.GetPaginationRoute()"
+               asp-route-pageIndex="@(Model.PageIndex + 1)"
+               asp-route-currentFilter="@Model.CurrentFilter">
+                @Localizer[">>>"]
+            </a>
+        </li>
+    </ul>
+</nav>

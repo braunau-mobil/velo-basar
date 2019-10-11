@@ -11,122 +11,140 @@
     ViewData["Title"] = Localizer["Verkäuferin"];
 }
 
-<h2>#@Model.Seller.Id @Html.DisplayFor(model => model.Seller.FirstName) @Html.DisplayFor(model => model.Seller.LastName)</h2>
+<div class="card my-3">
+    <div class="card-header d-flex justify-content-between align-items-md-center">
+        <div class="mr-auto"><h5>#@Model.Seller.Id @Html.DisplayFor(model => model.Seller.FirstName) @Html.DisplayFor(model => model.Seller.LastName)</h5></div>
+        <div class="d-flex justify-content-end">
+            <a asp-page="/Products/AddMany" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@Model.Seller.Id" class="btn btn-primary mx-1">@Localizer["Artikel annehmen"]</a>
+            @if (Model.CanSettle)
+            {
+                <a asp-page="/Settlements/CreateAndPrint" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@Model.Seller.Id" target="_blank" class="btn btn-primary mx-1">@Localizer["Abrechnen"]</a>
+            }
+            <a asp-page="/Sellers/CreateAndPrintLabels" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@Model.Seller.Id" target="_blank" class="btn btn-primary mx-1">@Localizer["Etiketten drucken"]</a>
+            <a asp-page="/Sellers/Edit" asp-all-route-data="@Model.GetSellerRoute()" class="btn btn-secondary mx-1">@Localizer["Bearbeiten"]</a>
+            <a asp-page="/Sellers/Delete" asp-all-route-data="@Model.GetSellerRoute()" class="btn btn-secondary mx-1">@Localizer["Löschen"]</a>
+        </div>
+        
+    </div>    
 
-<a asp-page="/Products/AddMany" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@Model.Seller.Id" class="btn btn-default">@Localizer["Artikel annehmen"]</a>
-@if (Model.CanSettle)
-{
-    <a asp-page="/Settlements/CreateAndPrint" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@Model.Seller.Id" target="_blank" class="btn btn-default">@Localizer["Abrechnen"]</a>
-}
-<a asp-page="/Sellers/CreateAndPrintLabels" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@Model.Seller.Id" target="_blank" class="btn btn-default">@Localizer["Etiketten drucken"]</a>
-|
-<a asp-page="/Sellers/Edit" asp-all-route-data="@Model.GetSellerRoute()" class="btn btn-default">@Localizer["Bearbeiten"]</a>
-<a asp-page="/Sellers/Delete" asp-all-route-data="@Model.GetSellerRoute()" class="btn btn-default">@Localizer["Löschen"]</a>
-
-<div>
-    <dl class="dl-horizontal">
-        <dt>@Html.DisplayNameFor(model => model.Seller.Street)</dt>
-        <dd>@Html.DisplayFor(model => model.Seller.Street)</dd>
-
-        <dt>@Html.DisplayNameFor(model => model.Seller.City)</dt>
-        <dd>@Html.DisplayFor(model => model.Seller.City)</dd>
-
-        <dt>@Html.DisplayNameFor(model => model.Seller.ZIP)</dt>
-        <dd>@Html.DisplayFor(model => model.Seller.ZIP)</dd>
-
-        <dt>@Html.DisplayNameFor(model => model.Seller.Country)</dt>
-        <dd>@Html.DisplayFor(model => model.Seller.Country.Name)</dd>
-
-        <dt>@Html.DisplayNameFor(model => model.Seller.IBAN)</dt>
-        <dd>@Html.DisplayFor(model => model.Seller.IBAN)</dd>
-
-        <dt>@Html.DisplayNameFor(model => model.Seller.BIC)</dt>
-        <dd>@Html.DisplayFor(model => model.Seller.BIC)</dd>
-
-        <dt>@Html.DisplayNameFor(model => model.Seller.BankAccountHolder)</dt>
-        <dd>@Html.DisplayFor(model => model.Seller.BankAccountHolder)</dd>
-
-        <dt>@Html.DisplayNameFor(model => model.Stats.AceptedProductCount)</dt>
-        <dd>@Html.DisplayFor(model => model.Stats.AceptedProductCount)</dd>
-
-        <dt>@Html.DisplayNameFor(model => model.Stats.SoldProductCount)</dt>
-        <dd>@Html.DisplayFor(model => model.Stats.SoldProductCount)</dd>
-
-        <dt>@Html.DisplayNameFor(model => model.Stats.NotSoldProductCount)</dt>
-        <dd>@Html.DisplayFor(model => model.Stats.NotSoldProductCount)</dd>
-
-        <dt>@Html.DisplayNameFor(model => model.Stats.PickedUpProductCount)</dt>
-        <dd>@Html.DisplayFor(model => model.Stats.PickedUpProductCount)</dd>
-
-        <dt>@Html.DisplayNameFor(model => model.Stats.SettlementAmout)</dt>
-        <dd>@Html.DisplayFor(model => model.Stats.SettlementAmout)</dd>
-
-
-    </dl>
-    <hr />
+    <div class="card-body">
+        <div class="row">
+            <div class="col">
+                <h5 class="card-title">@Localizer["Anschrift"]</h5>
+                <p class="card-text">
+                    @Html.DisplayFor(model => model.Seller.Street)<br />
+                    @Html.DisplayFor(model => model.Seller.City)<br />
+                    @Html.DisplayFor(model => model.Seller.ZIP)<br />
+                    @Html.DisplayFor(model => model.Seller.Country.Name)<br />
+                </p>
+                <h5 class="card-title">@Localizer["Bankdaten"]</h5>
+                <p class="card-text">
+                    @Html.DisplayNameFor(model => model.Seller.IBAN):
+                    @Html.DisplayFor(model => model.Seller.IBAN)<br />
+                    @Html.DisplayNameFor(model => model.Seller.BIC):
+                    @Html.DisplayFor(model => model.Seller.BIC)<br />
+                    @Html.DisplayNameFor(model => model.Seller.BankAccountHolder):
+                    @Html.DisplayFor(model => model.Seller.BankAccountHolder)<br />
+                </p>                
+            </div>
+            <div class="col">
+                <ul class="list-group">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        @Html.DisplayNameFor(model => model.Stats.AceptedProductCount)
+                        <span class="badge badge-primary badge-pill">@Html.DisplayFor(model => model.Stats.AceptedProductCount)</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        @Html.DisplayNameFor(model => model.Stats.SoldProductCount)
+                        <span class="badge badge-primary badge-pill">@Html.DisplayFor(model => model.Stats.SoldProductCount)</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        @Html.DisplayNameFor(model => model.Stats.NotSoldProductCount)
+                        <span class="badge badge-primary badge-pill">@Html.DisplayFor(model => model.Stats.NotSoldProductCount)</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        @Html.DisplayNameFor(model => model.Stats.PickedUpProductCount)
+                        <span class="badge badge-primary badge-pill">@Html.DisplayFor(model => model.Stats.PickedUpProductCount)</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        @Html.DisplayNameFor(model => model.Stats.SettlementAmout)
+                        <span class="badge badge-primary badge-pill">@Html.DisplayFor(model => model.Stats.SettlementAmout)</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
 </div>
 
-<partial name="/Pages/Products/_List.cshtml" model="@new ViewModels.ProductsViewModel(Model.Basar, Model.Products)" />
+<div class="card my-3">
+    <h5 class="card-header">@Localizer["Artikel"]</h5>
+    <div class="card-body p-0">
+        <partial name="/Pages/Products/_List.cshtml" model="@new ViewModels.ProductsViewModel(Model.Basar, Model.Products)" />
+    </div>
+</div>
 
-<h4>@Localizer["Annahmen"]</h4>
-<div>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>@Html.DisplayNameFor(model => model.AcceptanceStatistics[0].Transaction.Number)</th>
-                <th>@Html.DisplayNameFor(model => model.AcceptanceStatistics[0].Transaction.TimeStamp)</th>
-                <th>@Html.DisplayNameFor(model => model.AcceptanceStatistics[0].ProductCount)</th>
-                <th>@Html.DisplayNameFor(model => model.AcceptanceStatistics[0].Amount)</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.AcceptanceStatistics)
-            {
+<div class="card my-3">
+    <h5 class="card-header">@Localizer["Annahmen"]</h5>
+    <div class="card-body p-0">
+        <table class="table table-striped">
+            <thead>
                 <tr>
-                    <td>@Html.DisplayFor(modelItem => item.Transaction.Number)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Transaction.TimeStamp)</td>
-                    <td>@Html.DisplayFor(modelItem => item.ProductCount)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Amount)</td>
-                    <td>
-                        <a asp-page="/Acceptances/Details" asp-all-route-data="@Model.GetItemRoute(item.Transaction)" target="_blank">@Localizer["Details"]</a>
-                        @if (item.Transaction.DocumentId != null)
-                        {
-                            @:|
+                    <th scope="col">@Html.DisplayNameFor(model => model.AcceptanceStatistics[0].Transaction.Number)</th>
+                    <th scope="col">@Html.DisplayNameFor(model => model.AcceptanceStatistics[0].Transaction.TimeStamp)</th>
+                    <th scope="col">@Html.DisplayNameFor(model => model.AcceptanceStatistics[0].ProductCount)</th>
+                    <th scope="col">@Html.DisplayNameFor(model => model.AcceptanceStatistics[0].Amount)</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.AcceptanceStatistics)
+                {
+                    <tr>
+                        <th scope="row">@Html.DisplayFor(modelItem => item.Transaction.Number)</th>
+                        <td>@Html.DisplayFor(modelItem => item.Transaction.TimeStamp)</td>
+                        <td>@Html.DisplayFor(modelItem => item.ProductCount)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Amount)</td>
+                        <td>
+                            <a asp-page="/Acceptances/Details" asp-all-route-data="@Model.GetItemRoute(item.Transaction)" target="_blank">@Localizer["Details"]</a>
+                            @if (item.Transaction.DocumentId != null)
+                            {
+                                @:|
+                                <a asp-page="/ShowFile" asp-all-route-data="@Model.GetItemRoute(item)" target="_blank">@Localizer["Beleg"]</a>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="card my-3">
+    <h5 class="card-header">@Localizer["Abrechnugnen"]</h5>
+    <div class="card-body p-0">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">@Html.DisplayNameFor(model => model.SettlementStatistics[0].Transaction.Number)</th>
+                    <th scope="col">@Html.DisplayNameFor(model => model.SettlementStatistics[0].Transaction.TimeStamp)</th>
+                    <th scope="col">@Html.DisplayNameFor(model => model.SettlementStatistics[0].ProductCount)</th>
+                    <th scope="col">@Html.DisplayNameFor(model => model.SettlementStatistics[0].Amount)</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.SettlementStatistics)
+                {
+                    <tr>
+                        <th scope="row">@Html.DisplayFor(modelItem => item.Transaction.Number)</th>
+                        <td>@Html.DisplayFor(modelItem => item.Transaction.TimeStamp)</td>
+                        <td>@Html.DisplayFor(modelItem => item.ProductCount)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Amount)</td>
+                        <td>
                             <a asp-page="/ShowFile" asp-all-route-data="@Model.GetItemRoute(item)" target="_blank">@Localizer["Beleg"]</a>
-                        }
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-</div>
-
-<h4>@Localizer["Abrechnugnen"]</h4>
-<div>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>@Html.DisplayNameFor(model => model.SettlementStatistics[0].Transaction.Number)</th>
-                <th>@Html.DisplayNameFor(model => model.SettlementStatistics[0].Transaction.TimeStamp)</th>
-                <th>@Html.DisplayNameFor(model => model.SettlementStatistics[0].ProductCount)</th>
-                <th>@Html.DisplayNameFor(model => model.SettlementStatistics[0].Amount)</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.SettlementStatistics)
-            {
-                <tr>
-                    <td>@Html.DisplayFor(modelItem => item.Transaction.Number)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Transaction.TimeStamp)</td>
-                    <td>@Html.DisplayFor(modelItem => item.ProductCount)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Amount)</td>
-                    <td>
-                        <a asp-page="/ShowFile" asp-all-route-data="@Model.GetItemRoute(item)" target="_blank">@Localizer["Beleg"]</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
