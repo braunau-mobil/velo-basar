@@ -2,7 +2,6 @@
 using BraunauMobil.VeloBasar.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -19,10 +18,6 @@ namespace BraunauMobil.VeloBasar
 
         [BindProperty]
         public Basar Basar { get; set; }
-
-        public string BackToPage { get; set; } = "./List";
-
-        public IDictionary<string, string> BackToRoute { get; set; }
 
         protected virtual void DecorateRoute(IDictionary<string, string> route)
         {
