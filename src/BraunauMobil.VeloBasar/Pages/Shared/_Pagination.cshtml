@@ -10,7 +10,7 @@
     var nextDisabled = !Model.HasNextPage ? "disabled" : "";
 }
 <nav aria-label="...">
-    <ul class="pagination">
+    <ul class="pagination flex-wrap">
         <li class="page-item @prevDisabled">
             <a class="page-link @prevDisabled"
                asp-page="@Model.Page"
