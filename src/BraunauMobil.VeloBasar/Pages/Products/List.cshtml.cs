@@ -25,7 +25,7 @@ namespace BraunauMobil.VeloBasar.Pages.Products
 
         public bool HasNextPage => Products.HasNextPage;
 
-        string IPagination.Page => "/Products/List";
+        public string MyPath => "/Products/List";
 
         public async Task<IActionResult> OnGetAsync(int basarId, string currentFilter, string searchString, int? pageIndex)
         {

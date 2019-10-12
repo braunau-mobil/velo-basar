@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BraunauMobil.VeloBasar.Pages.Sellers
 {
-    public class ListModel : BasarPageModel, IPagination
+    public class ListModel : BasarPageModel, IPagination, ISearchable
     {
         public ListModel(VeloBasarContext context) : base(context)
         {
@@ -25,7 +25,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
 
         public bool HasNextPage => Sellers.HasNextPage;
 
-        string IPagination.Page => "/Sellers/List";
+        public string MyPath => "/Sellers/List";
 
         public async Task<IActionResult> OnGetAsync(int basarId, string currentFilter, string searchString, int? pageIndex)
         {

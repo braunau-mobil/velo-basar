@@ -27,7 +27,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
 
         public bool HasNextPage => Sales.HasNextPage;
 
-        string IPagination.Page => "/Sales/List";
+        public string MyPath => "/Sales/List";
 
         public IDictionary<string, string> GetPaginationRoute()
         {

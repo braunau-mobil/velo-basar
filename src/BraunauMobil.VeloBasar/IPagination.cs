@@ -2,15 +2,13 @@
 
 namespace BraunauMobil.VeloBasar
 {
-    public interface IPagination
+    public interface IPagination : ISearchable
     {
         int PageIndex { get; }
         int TotalPages { get; }
         bool HasPreviousPage { get; }
         bool HasNextPage { get;  }
-        string Page { get; }
-        string CurrentFilter { get; }
-        
+
         IDictionary<string, string> GetPaginationRoute();
     }
 }
