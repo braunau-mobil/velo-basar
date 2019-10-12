@@ -59,7 +59,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
             {
                 return RedirectToPage("/Sales/CreateOrEdit", new { basarId, saleId, errorText = $"Es wurde kein Produkt mit der id {ProductId} gefunden" });
             }
-            if (product.Status != ProductStatus.Available)
+            if (!product.CanSell())
             {
                 return RedirectToPage("/Sales/CreateOrEdit", new { basarId, saleId, errorText = $"Das Produkt {product.Brand} {product.Type} mit der id {ProductId} ist nicht mehr verfügbar." });
             }

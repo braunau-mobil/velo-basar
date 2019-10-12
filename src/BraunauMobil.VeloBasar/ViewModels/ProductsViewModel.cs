@@ -9,16 +9,6 @@ namespace BraunauMobil.VeloBasar.ViewModels
         {
         }
 
-        public string GetStatusClass(ProductStatus status)
-        {
-            return $"ProductStatus ProductStatus-{status.ToString()}";
-        }
-
-        public bool CanCancel(Product product)
-        {
-            return product.Status == ProductStatus.Sold;
-        }
-
         public IDictionary<string, string> GetItemRoute(Product product)
         {
             var route = GetRoute();

@@ -3,6 +3,7 @@
 
 @using Microsoft.AspNetCore.Mvc.Localization
 @using VeloBasar.Resources
+@using VeloBasar.Models
 
 @inject IHtmlLocalizer<SharedResource> Localizer
 
@@ -15,15 +16,15 @@
         <div class="mr-auto"><h5>#@Model.Seller.Id @Html.DisplayFor(model => model.Seller.FirstName) @Html.DisplayFor(model => model.Seller.LastName)</h5></div>
         <div class="d-flex justify-content-end">
             <a asp-page="/Products/AddMany" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@Model.Seller.Id" class="btn btn-primary mx-1">@Localizer["Artikel annehmen"]</a>
-            @if (Model.CanSettle)
+            @if (Model.Products.CanSettle())
             {
                 <a asp-page="/Settlements/CreateAndPrint" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@Model.Seller.Id" target="_blank" class="btn btn-primary mx-1">@Localizer["Abrechnen"]</a>
             }
             <a asp-page="/Sellers/CreateAndPrintLabels" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@Model.Seller.Id" target="_blank" class="btn btn-primary mx-1">@Localizer["Etiketten drucken"]</a>
             <a asp-page="/Sellers/Edit" asp-all-route-data="@Model.GetSellerRoute()" class="btn btn-secondary mx-1">@Localizer["Bearbeiten"]</a>
         </div>
-        
-    </div>    
+
+    </div>
 
     <div class="card-body">
         <div class="row">
@@ -40,7 +41,7 @@
                     @Html.DisplayFor(model => model.Seller.BIC)<br />
                     @Html.DisplayNameFor(model => model.Seller.BankAccountHolder):
                     @Html.DisplayFor(model => model.Seller.BankAccountHolder)<br />
-                </p>                
+                </p>
             </div>
             <div class="col">
                 <ul class="list-group">
@@ -73,7 +74,7 @@
 <div class="card my-3">
     <h5 class="card-header">@Localizer["Artikel"]</h5>
     <div class="card-body p-0">
-        <partial name="/Pages/Products/_List.cshtml" model="@new ViewModels.ProductsViewModel(Model.Basar, Model.Products)" />
+        <partial name="/Pages/Products/_TableWithControls.cshtml" model="@new ViewModels.ProductsViewModel(Model.Basar, Model.Products)" />
     </div>
 </div>
 

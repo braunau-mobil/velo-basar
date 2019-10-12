@@ -1,0 +1,54 @@
+﻿@model Product
+
+@using VeloBasar.Resources
+@using VeloBasar.Models
+@using Microsoft.Extensions.Localization
+
+@inject IStringLocalizer<SharedResource> Localizer
+
+@{
+    var css = "";
+    var text = "";
+    var icon = "";
+
+    if (Model.StorageStatus == StorageStatus.Available && Model.ValueStatus == ValueStatus.NotSettled)
+    {
+        text = Localizer["Verfügbar"];
+        css = "badge-success";
+    }
+    else if (Model.StorageStatus == Models.StorageStatus.Sold && Model.ValueStatus == ValueStatus.NotSettled)
+    {
+        text = Localizer["Verkauft"];
+        css = "badge-warning";
+        icon = "$";
+    }
+    else if (Model.StorageStatus == StorageStatus.Available && Model.ValueStatus == ValueStatus.Settled)
+    {
+        text = Localizer["Abgerechnet"];
+        css = "badge-secondary";
+    }
+    else if (Model.StorageStatus == StorageStatus.Sold && Model.ValueStatus == ValueStatus.Settled)
+    {
+        text = Localizer["Abgeholt"];
+        css = "badge-secondary";
+        icon = "$";
+    }
+    else if (Model.StorageStatus == StorageStatus.Locked)
+    {
+        text = Localizer["Gesperrt"];
+        css = "badge-danger";
+    }
+    else if (Model.StorageStatus == StorageStatus.Gone)
+    {
+        text = Localizer["Verscwhunden"];
+        css = "badge-danger";
+    }
+}
+
+<span class="badge badge-pill @css">
+    @if (!string.IsNullOrEmpty(icon))
+    {
+        @icon
+    }
+    @text
+</span>

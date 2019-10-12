@@ -62,7 +62,7 @@ namespace BraunauMobil.VeloBasar.Data
                 Transaction = sale
             });
 
-            product.Status = ProductStatus.Sold;
+            product.StorageStatus = StorageStatus.Sold;
 
             await SaveChangesAsync();
 
@@ -130,7 +130,7 @@ namespace BraunauMobil.VeloBasar.Data
                     Product = product
                 }
             };
-            product.Status = ProductStatus.Available;
+            product.StorageStatus = StorageStatus.Available;
 
             await SaveChangesAsync();
         }
@@ -394,13 +394,13 @@ namespace BraunauMobil.VeloBasar.Data
         public async Task<SellerStatistics> GetSellerStatisticsAsync(Basar basar, int sellerId)
         {
             var products = await GetProductsForSeller(basar, sellerId).ToArrayAsync();
-            var soldProducts = products.State(ProductStatus.Sold).ToArray();
+            var soldProducts = products.WhereStorageState(StorageStatus.Sold).ToArray();
             return new SellerStatistics
             {
                 AceptedProductCount = products.Length,
                 SettlementAmout = soldProducts.Sum(p => p.Price),
-                NotSoldProductCount = products.NotState(ProductStatus.Sold).Count(),
-                PickedUpProductCount = products.State(ProductStatus.PickedUp).Count(),
+                NotSoldProductCount = products.WhereStorageStateIsNot(StorageStatus.Sold).Count(),
+                PickedUpProductCount = products.Where(p => p.StorageStatus == StorageStatus.Gone && p.ValueStatus == ValueStatus.Settled).Count(),
                 SoldProductCount = soldProducts.Length
             };
         }
@@ -509,14 +509,15 @@ namespace BraunauMobil.VeloBasar.Data
             var products = await GetProductsForSeller(basar, sellerId).ToArrayAsync();
             foreach (var product in products)
             {
-                if (product.Status == ProductStatus.Available)
+                if (product.StorageStatus == StorageStatus.Available)
                 {
-                    product.Status = ProductStatus.PickedUp;
+                    product.StorageStatus = StorageStatus.Gone;
                 }
-                else if (product.Status == ProductStatus.Sold)
+                else if (product.StorageStatus == StorageStatus.Sold)
                 {
-                    product.Status = ProductStatus.Settled;
+                    product.StorageStatus = StorageStatus.Gone;
                 }
+                product.ValueStatus = ValueStatus.Settled;
 
                 var productSettlement = new ProductToTransaction
                 {

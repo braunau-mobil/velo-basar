@@ -1,0 +1,55 @@
+﻿@model ViewModels.ProductsViewModel
+
+@using Microsoft.AspNetCore.Mvc.Localization
+@using VeloBasar.Resources
+
+@inject IHtmlLocalizer<SharedResource> Localizer
+
+
+<table class="table table-striped m-0">
+    <thead>
+        <tr>
+            <th scope="col">@Html.DisplayNameFor(model => model.List.First().Id)</th>
+            <th scope="col">@Html.DisplayNameFor(model => model.List.First().Brand)</th>
+            <th scope="col">@Html.DisplayNameFor(model => model.List.First().Type)</th>
+            <th scope="col">@Html.DisplayNameFor(model => model.List.First().Color)</th>
+            <th scope="col">@Html.DisplayNameFor(model => model.List.First().FrameNumber)</th>
+            <th scope="col">@Html.DisplayNameFor(model => model.List.First().Description)</th>
+            <th scope="col">@Html.DisplayNameFor(model => model.List.First().TireSize)</th>
+            <th scope="col">@Html.DisplayNameFor(model => model.List.First().Price)</th>
+            <th scope="col">@Localizer["Status"]</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.List)
+        {
+            <tr>
+                <th scope="row">@Html.DisplayFor(modelItem => item.Id)</th>
+                <td>@Html.DisplayFor(modelItem => item.Brand)</td>
+                <td>@Html.DisplayFor(modelItem => item.Type)</td>
+                <td>@Html.DisplayFor(modelItem => item.Color)</td>
+                <td>@Html.DisplayFor(modelItem => item.FrameNumber)</td>
+                <td>@Html.DisplayFor(modelItem => item.Description)</td>
+                <td>@Html.DisplayFor(modelItem => item.TireSize)</td>
+                <td>@Html.DisplayFor(modelItem => item.Price)</td>
+                <td>
+                    <partial name="/Pages/Products/_StatusBadge.cshtml" model="@item" />
+                </td>
+                <td>
+                    <a asp-page="/Products/Edit" asp-all-route-data="@Model.GetItemRoute(item)">@Localizer["Bearbeiten"]</a>
+                    @if (item.CanCancel())
+                    {
+                        <br />
+                        <a asp-page="/Cancellations/Create" asp-all-route-data="@Model.GetItemRoute(item)">@Localizer["Stornieren"]</a>
+                    }
+                    @if (item.Label != null)
+                    {
+                        <br />
+                        <a asp-page="/ShowFile" asp-all-route-data="@Model.GetRoute()" asp-route-fileId="@item.Label" target="_blank">@Localizer["Etikett"]</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

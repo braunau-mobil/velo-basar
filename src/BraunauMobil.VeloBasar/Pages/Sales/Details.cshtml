@@ -18,7 +18,7 @@
     <p>@Model.Sale.TimeStamp</p>
 </div>
 
-<partial name="/Pages/Products/_List.cshtml" model="@new ProductsViewModel(Model.Basar, Model.Sale.GetProducts())" />
+<partial name="/Pages/Products/_Table.cshtml" model="@new ProductsViewModel(Model.Basar, Model.Sale.GetProducts())" />
 
 <p>
     @if (Model.Sale.DocumentId == null)

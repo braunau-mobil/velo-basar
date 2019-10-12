@@ -34,6 +34,6 @@
 <div class="card my-3">
     <h5 class="card-header">@Localizer["Artikel"]</h5>
     <div class="card-body p-0">
-        <partial name="/Pages/Products/_List.cshtml" model="@new ProductsViewModel(Model.Basar, Model.Acceptance.Products.Select(pa => pa.Product))" />
+        <partial name="/Pages/Products/_Table.cshtml" model="@new ProductsViewModel(Model.Basar, Model.Acceptance.Products.Select(pa => pa.Product))" />
     </div>
 </div>

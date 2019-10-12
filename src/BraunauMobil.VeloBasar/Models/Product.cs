@@ -30,21 +30,17 @@ namespace BraunauMobil.VeloBasar.Models
         [Display(Name = "Preis")]
         public decimal Price { get; set; }
 
-        [Display(Name = "Status")]
-        public ProductStatus Status { get; set; }
+        [Display(Name = "Lagerstatus")]
+        public StorageStatus StorageStatus { get; set; }
+
+        [Display(Name = "Wertstatus")]
+        public ValueStatus ValueStatus { get; set; }
 
         [Display(Name = "Etikett")]
         public int? Label { get; set; }
 
-        public bool Is(ProductStatus state)
-        {
-            return Status == state;
-        }
-
-        public bool IsNot(ProductStatus state)
-        {
-            return Status != state;
-        }
+        [Display(Name = "Anmerkungen")]
+        public string Notes { get; set; }
 
         public bool IsEmtpy()
         {
@@ -75,6 +71,17 @@ namespace BraunauMobil.VeloBasar.Models
             return result;
         }
 
-
+        public bool CanCancel()
+        {
+            return StorageStatus == StorageStatus.Sold && ValueStatus != ValueStatus.Settled;
+        }
+        public bool CanSell()
+        {
+            return StorageStatus == StorageStatus.Available && ValueStatus != ValueStatus.Settled;
+        }
+        public bool CanSettle()
+        {
+            return (StorageStatus == StorageStatus.Available || StorageStatus == StorageStatus.Sold) && ValueStatus == ValueStatus.NotSettled;
+        }
     }
 }

@@ -31,37 +31,7 @@
     </div>
 
     <div class="card-body p-0">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>@Html.DisplayNameFor(model => model.Products[0].Id)</th>
-                    <th>@Html.DisplayNameFor(model => model.Products[0].Brand)</th>
-                    <th>@Html.DisplayNameFor(model => model.Products[0].Type)</th>
-                    <th>@Html.DisplayNameFor(model => model.Products[0].Color)</th>
-                    <th>@Html.DisplayNameFor(model => model.Products[0].FrameNumber)</th>
-                    <th>@Html.DisplayNameFor(model => model.Products[0].Description)</th>
-                    <th>@Html.DisplayNameFor(model => model.Products[0].TireSize)</th>
-                    <th>@Html.DisplayNameFor(model => model.Products[0].Price)</th>
-                    <th>@Html.DisplayNameFor(model => model.Products[0].Status)</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model.Products)
-                {
-                    <tr>
-                        <td>@Html.DisplayFor(modelItem => item.Id)</td>
-                        <td>@Html.DisplayFor(modelItem => item.Brand)</td>
-                        <td>@Html.DisplayFor(modelItem => item.Type)</td>
-                        <td>@Html.DisplayFor(modelItem => item.Color)</td>
-                        <td>@Html.DisplayFor(modelItem => item.FrameNumber)</td>
-                        <td>@Html.DisplayFor(modelItem => item.Description)</td>
-                        <td>@Html.DisplayFor(modelItem => item.TireSize)</td>
-                        <td>@Html.DisplayFor(modelItem => item.Price)</td>
-                        <td>@Html.DisplayFor(modelItem => item.Status)</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+        <partial name="/Pages/Products/_Table.cshtml" model="@new ViewModels.ProductsViewModel(Model.Basar, Model.Products)" />
 
         <div class="col-md-4">
             <form method="post">
