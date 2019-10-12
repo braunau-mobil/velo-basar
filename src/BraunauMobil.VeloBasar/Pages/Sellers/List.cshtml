@@ -44,7 +44,7 @@
                         <td>@Html.DisplayFor(modelItem => item.Country.Name)</td>
                         <td>
                             <a asp-page="/Sellers/Edit" asp-all-route-data="@Model.GetItemRoute(item)">@Localizer["Bearbeiten"]</a> |
-                            <a asp-page="/Sellers/Details" asp-all-route-data="@Model.GetItemRoute(item)">@Localizer["Details"]</a> |
+                            <a asp-page="/Sellers/Details" asp-all-route-data="@Model.GetItemRoute(item)">@Localizer["Details"]</a>
                         </td>
                     </tr>
                 }
