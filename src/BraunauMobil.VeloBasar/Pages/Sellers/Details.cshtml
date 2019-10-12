@@ -32,10 +32,7 @@
             <div class="col">
                 <h5 class="card-title">@Localizer["Anschrift"]</h5>
                 <p class="card-text">
-                    @Html.DisplayFor(model => model.Seller.Street)<br />
-                    @Html.DisplayFor(model => model.Seller.City)<br />
-                    @Html.DisplayFor(model => model.Seller.ZIP)<br />
-                    @Html.DisplayFor(model => model.Seller.Country.Name)<br />
+                    <partial name="/Pages/Sellers/_Address.cshtml" model="@Model.Seller" />
                 </p>
                 <h5 class="card-title">@Localizer["Bankdaten"]</h5>
                 <p class="card-text">

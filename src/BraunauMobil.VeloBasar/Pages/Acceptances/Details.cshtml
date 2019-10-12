@@ -2,10 +2,8 @@
 @model BraunauMobil.VeloBasar.Pages.Acceptances.DetailsModel
 
 @using BraunauMobil.VeloBasar.ViewModels;
-@using BraunauMobil.VeloBasar.Models;
 @using Microsoft.AspNetCore.Mvc.Localization
 @using VeloBasar.Resources
-@addTagHelper *, BraunauMobil.VeloBasar
 
 @inject IHtmlLocalizer<SharedResource> Localizer
 
@@ -13,25 +11,29 @@
     ViewData["Title"] = $"{Localizer["Annahme"].Value} #{Model.Acceptance.Number}";
 }
 
-<h2>@ViewData["Title"]</h2>
+<div class="card my-3">
+    <div class="card-header d-flex justify-content-between align-items-md-center">
+        <div class="mr-auto"><h5>@ViewData["Title"]</h5></div>
+        <div><h5>@Model.Acceptance.TimeStamp</h5></div>
+        @if (Model.Acceptance.DocumentId == null)
+        {
+            <a asp-page="/Acceptances/Print" asp-all-route-data="@Model.GetRoute()" asp-route-acceptanceId="@Model.Acceptance.Number" target="_blank" class="btn btn-primary mx-1 ml-auto">@Localizer["Drucken"]</a>
+        }
+        else
+        {
+            <a asp-page="/ShowFile" asp-route-fileId="@Model.Acceptance.DocumentId" target="_blank" class="btn btn-primary mx-1 ml-auto">@Localizer["Beleg"]</a>
+        }
+    </div>
 
-<div>
-    <p>@Model.Acceptance.TimeStamp</p>
+    <div class="card-body">
+        <partial name="/Pages/Sellers/_SmallDetails.cshtml" model="@Model.Acceptance.Seller" />
+        <a asp-page="/Sellers/Details" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@Model.Acceptance.Seller.Id">@Localizer["Details"]</a>
+    </div>
 </div>
 
-<partial name="/Pages/Sellers/_SmallDetails.cshtml" model="@new ViewModel<Seller>(Model.Basar, Model.Acceptance.Seller);" />
-
-<hr />
-
-<partial name="/Pages/Products/_List.cshtml" model="@new ProductsViewModel(Model.Basar, Model.Acceptance.Products.Select(pa => pa.Product))" />
-
-<p>
-    @if (Model.Acceptance.DocumentId == null)
-    {
-        <a class="btn btn-default" asp-page="/Acceptances/Print" asp-all-route-data="@Model.GetRoute()" asp-route-acceptanceId="@Model.Acceptance.Number" target="_blank">@Localizer["Drucken"]</a>
-    }
-    else
-    {
-        <a class="btn btn-default" asp-page="/ShowFile" asp-route-fileId="@Model.Acceptance.DocumentId" target="_blank">@Localizer["Beleg"]</a>
-    }
-</p>
+<div class="card my-3">
+    <h5 class="card-header">@Localizer["Artikel"]</h5>
+    <div class="card-body p-0">
+        <partial name="/Pages/Products/_List.cshtml" model="@new ProductsViewModel(Model.Basar, Model.Acceptance.Products.Select(pa => pa.Product))" />
+    </div>
+</div>
