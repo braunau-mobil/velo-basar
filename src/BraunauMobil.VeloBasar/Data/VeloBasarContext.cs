@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using System.Linq;
 using BraunauMobil.VeloBasar.Pdf;
 using Microsoft.AspNetCore.Identity;
-using BraunauMobil.VeloBasar.Models.Base;
 using System.Linq.Expressions;
 
 namespace BraunauMobil.VeloBasar.Data
@@ -187,22 +186,6 @@ namespace BraunauMobil.VeloBasar.Data
             };
             await Number.AddAsync(number);
             await SaveChangesAsync();
-        }
-
-        public async Task DeleteProductAsync(int id)
-        {
-            await DeleteProductsFromTransactionsAsync(id);
-
-            var product = await Product.FirstOrDefaultAsync(p => p.Id == id);
-            Product.Remove(product);
-
-            await SaveChangesAsync();
-        }
-
-        public async Task<bool> DeleteSellerAsync(int id)
-        {
-            //  @todo
-            return true;
         }
 
         public async Task GenerateLabel(Basar basar, Product product)
@@ -557,27 +540,6 @@ namespace BraunauMobil.VeloBasar.Data
 
             modelBuilder.Entity<ProductToTransaction>().HasKey(ap => new { ap.ProductId, ap.TransactionId});
             modelBuilder.Entity<Number>().HasKey(n => new { n.BasarId, n.Type });
-        }
-
-        private async Task DeleteProductsFromTransactionsAsync(int productId)
-        {
-            var affectedTransactions = Transactions.Where(t => t.Products.Any(p => p.ProductId == productId));
-            var transactionsToDelete = new List<ProductsTransaction>();
-            foreach (var transacion in affectedTransactions)
-            {
-                var productsToDelete = transacion.Products.Where(p => p.ProductId == productId);
-                foreach (var product in productsToDelete)
-                {
-                    transacion.Products.Remove(product);
-                }
-
-                if (!transacion.Products.Any())
-                {
-                    Transactions.Remove(transacion);
-                }
-            }
-
-            await SaveChangesAsync();
         }
     }
 }

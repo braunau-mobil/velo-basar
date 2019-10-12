@@ -19,11 +19,6 @@ namespace BraunauMobil.VeloBasar.ViewModels
             return product.Status == ProductStatus.Sold;
         }
 
-        public bool CanDelete(Product product)
-        {
-            return product.Status == ProductStatus.Available;
-        }
-
         public IDictionary<string, string> GetItemRoute(Product product)
         {
             var route = GetRoute();

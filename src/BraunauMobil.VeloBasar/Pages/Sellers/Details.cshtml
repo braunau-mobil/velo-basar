@@ -3,7 +3,6 @@
 
 @using Microsoft.AspNetCore.Mvc.Localization
 @using VeloBasar.Resources
-@using VeloBasar.Models
 
 @inject IHtmlLocalizer<SharedResource> Localizer
 
@@ -22,7 +21,6 @@
             }
             <a asp-page="/Sellers/CreateAndPrintLabels" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@Model.Seller.Id" target="_blank" class="btn btn-primary mx-1">@Localizer["Etiketten drucken"]</a>
             <a asp-page="/Sellers/Edit" asp-all-route-data="@Model.GetSellerRoute()" class="btn btn-secondary mx-1">@Localizer["Bearbeiten"]</a>
-            <a asp-page="/Sellers/Delete" asp-all-route-data="@Model.GetSellerRoute()" class="btn btn-secondary mx-1">@Localizer["Löschen"]</a>
         </div>
         
     </div>    

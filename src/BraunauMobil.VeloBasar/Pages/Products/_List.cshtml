@@ -40,11 +40,6 @@
                 </td>
                 <td>
                     <a asp-page="/Products/Edit" asp-all-route-data="@Model.GetItemRoute(item)">@Localizer["Bearbeiten"]</a>
-                    @if (Model.CanDelete(item))
-                    {
-                        <br />
-                        <a asp-page="/Products/Delete" asp-all-route-data="@Model.GetItemRoute(item)">@Localizer["Löschen"]</a>
-                    }
                     @if (Model.CanCancel(item))
                     {
                         <br />
