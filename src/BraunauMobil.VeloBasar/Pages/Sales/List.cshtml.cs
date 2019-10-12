@@ -3,10 +3,11 @@ using Microsoft.EntityFrameworkCore;
 using BraunauMobil.VeloBasar.Models;
 using System.Linq;
 using BraunauMobil.VeloBasar.Data;
+using System.Collections.Generic;
 
 namespace BraunauMobil.VeloBasar.Pages.Sales
 {
-    public class ListModel : BasarPageModel
+    public class ListModel : BasarPageModel, IPagination
     {
         private const int PageSize = 20;
 
@@ -17,6 +18,21 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
         public string CurrentFilter { get; set; }
 
         public PaginatedList<ProductsTransaction> Sales { get;set; }
+
+        public int PageIndex => Sales.PageIndex;
+
+        public int TotalPages => Sales.TotalPages;
+
+        public bool HasPreviousPage => Sales.HasPreviousPage;
+
+        public bool HasNextPage => Sales.HasNextPage;
+
+        string IPagination.Page => "/Sales/List";
+
+        public IDictionary<string, string> GetPaginationRoute()
+        {
+            return GetRoute();
+        }
 
         public async Task OnGetAsync(int? basarId, string currentFilter, string searchString, int? pageIndex)
         {

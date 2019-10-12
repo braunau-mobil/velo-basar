@@ -10,64 +10,53 @@
     ViewData["Title"] = Localizer["Verkäufe"];
 }
 
-<h2>@Localizer["Verkäufe"]</h2>
-
-<form asp-page="/Sales/List" method="get" asp-route-basarId="@Model.Basar.Id">
-    <div class="form-actions no-color">
-        <p>
-            @Localizer["Suchen:"]
-            <input type="text" name="SearchString" value="@Model.CurrentFilter" />
-            <input type="submit" value="@Localizer["Suchen"]" class="btn btn-default" /> |
-            <a asp-page="/Sales/List" asp-route-basarId="@Model.Basar.Id">@Localizer["Zurücksetzen"]</a>
-</p>
+<div class="card my-3">
+    <div class="card-header d-flex justify-content-between align-items-md-center">
+        <div><h5 class="mx-2">@Localizer["Verkäufe"]</h5></div>
+        <form asp-page="/Sales/List" method="get" asp-route-basarId="@Model.Basar.Id">
+            <div class="d-flex form-actions no-color align-items-md-center">
+                <div class="mx-2">Suchen:</div>
+                <input class="mx-2" type="text" name="SearchString" value="@Model.CurrentFilter" />
+                <input type="submit" value="@Localizer["Suchen"]" class="btn btn-secondary mx-2" /> |
+                <a class="mx-2" asp-page="/Sales/List" asp-route-basarId="@Model.Basar.Id">@Localizer["Zurücksetzen"]</a>
+            </div>
+        </form>
+        <div><a class="ml-auto btn btn-primary" asp-page="/Sales/CreateOrEdit">@Localizer["Neuer Verkauf"]</a></div>
     </div>
-</form>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Sales[0].Number)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Sales[0].TimeStamp)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.Sales)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Number)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.TimeStamp)
-                </td>
-                <td>
-                    <a asp-page="/Sales/Details" asp-all-route-data="@Model.GetRoute()" asp-route-saleId="@item.Id">@Localizer["Details"]</a>
-</td>
-            </tr>
-        }
-    </tbody>
-</table>
-@{
-    var prevDisabled = !Model.Sales.HasPreviousPage ? "disabled" : "";
-    var nextDisabled = !Model.Sales.HasNextPage ? "disabled" : "";
-}
+    <div class="card-body p-0">
 
-<a asp-page="./List"
-   asp-all-route-data="@Model.GetRoute()"
-   asp-route-pageIndex="@(Model.Sales.PageIndex - 1)"
-   asp-route-currentFilter="@Model.CurrentFilter"
-   class="btn btn-default @prevDisabled">
-    @Localizer["<<<"]
-</a>
-<a asp-page="./List"
-   asp-all-route-data="@Model.GetRoute()"
-   asp-route-pageIndex="@(Model.Sales.PageIndex + 1)"
-   asp-route-currentFilter="@Model.CurrentFilter"
-   class="btn btn-default @nextDisabled">
-    @Localizer[">>>"]
-</a>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Sales[0].Number)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Sales[0].TimeStamp)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Sales)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Number)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TimeStamp)
+                        </td>
+                        <td>
+                            <a asp-page="/Sales/Details" asp-all-route-data="@Model.GetRoute()" asp-route-saleId="@item.Id">@Localizer["Details"]</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<partial name="/Pages/Shared/_Pagination.cshtml" model="@Model" />
