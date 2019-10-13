@@ -18,9 +18,9 @@
 <body>
     <div class="container-fluid">
         <div class="row">
-            <nav class="col-md-2 d-none d-md-block sidebar">
+            <nav class="col-2 d-none sidebar d-flex flex-column px-0">
                 <div class="sidebar-sticky">
-                    <h6 class="d-flex justify-content-between align-items-center mt-3 mb-3">
+                    <h6 class="d-flex justify-content-between align-items-center m-3">
                         @if (Model.Basar == null)
                         {
                             <a asp-page="/Basars/SelectOrCreate" class="navbar-brand">@Localizer["ACHTUNG! es ist kein Basar ausgewählt."]</a>
@@ -52,7 +52,7 @@
                         </ul>
                     }
 
-                    <h6 class="d-flex justify-content-between align-items-center mt-3 mb-3">
+                    <h6 class="d-flex justify-content-between align-items-center m-3">
                         Admin
                     </h6>
                     <ul class="nav flex-column mb-2">
@@ -60,18 +60,16 @@
                             <a class="nav-link" asp-page="/Setup/DangerZone">Danger Zone!</a>
                         </li>
                     </ul>
+                </div>
 
-                    <!-- Der Blöde Footer ist Breit wie der Viewport das sollte er aber nicht!-->
-                    @*<div class="d-flex justify-content-between align-items-center px-3 mt-3 mb-3 fixed-bottom">
-                            <footer>
-                                <p>&copy; 2019 - Braunau mobil</p>
-                                <partial name="_CookieConsentPartial" />
-                            </footer>
-                        </div>*@
+                <div class="mt-auto" id="debug">
+                    <footer class="mx-3">
+                        <p>&copy; 2019 - Braunau mobil</p>
+                    </footer>
                 </div>
             </nav>
 
-            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+            <main role="main" class="ml-auto col-10 px-4">
                 @RenderBody()
             </main>
         </div>
