@@ -19,30 +19,29 @@
                 }
             </h5>
         </div>
-        @if (Model.Sale != null)
-        {
-            <div><a asp-page="/Sales/Print" asp-all-route-data="@Model.GetRoute()" asp-route-saleID="@Model.Sale.Id" target="_blank" class="ml-auto btn btn-primary">@Localizer["Rechnung drucken"]</a></div>
-        }
-    </div>
-
-    <div class="card-body p-0">
-        <partial name="/Pages/Products/_Table.cshtml" model="@new ViewModels.ProductsViewModel(Model.Basar, Model.Products)" />
-
-        <div class="col-md-4">
-            <form method="post">
+        
+        <form method="post">
+            <div class="d-flex form-actions no-color align-items-md-center">
+                <div class="mx-2">@Localizer["Artikel ID:"]</div>
+                <input asp-for="ProductId" />
+                <input type="submit" value="@Localizer["Hinzufügen"]" class="btn btn-primary mx-2" asp-all-route-data="@Model.GetRoute()" asp-route-saleId="@Model.Sale?.Id" />
+                <span asp-validation-for="ProductId" class="text-danger"></span>
                 @if (!string.IsNullOrEmpty(Model.ErrorText))
                 {
                     <div class="text-danger">@Model.ErrorText</div>
                 }
-                <div class="form-group">
-                    <label asp-for="ProductId" class="control-label"></label>
-                    <input asp-for="ProductId" class="form-control" />
-                    <span asp-validation-for="ProductId" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <input type="submit" value="@Localizer["Hinzufügen"]" class="btn btn-primary" asp-all-route-data="@Model.GetRoute()" asp-route-saleId="@Model.Sale?.Id" />
-                </div>
-            </form>
+            </div>
+        </form>
+        
+        <div>
+            @if (Model.Sale != null)
+            {
+                <a asp-page="/Sales/Print" asp-all-route-data="@Model.GetRoute()" asp-route-saleID="@Model.Sale.Id" target="_blank" class="ml-auto btn btn-primary">@Localizer["Rechnung drucken"]</a>
+            }
         </div>
+    </div>
+
+    <div class="card-body p-0">
+        <partial name="/Pages/Products/_Table.cshtml" model="@new ViewModels.ProductsViewModel(Model.Basar, Model.Products)" />
     </div>
 </div>
