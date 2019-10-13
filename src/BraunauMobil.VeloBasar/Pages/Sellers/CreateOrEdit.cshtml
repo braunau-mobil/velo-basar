@@ -1,0 +1,89 @@
+﻿@page
+@model BraunauMobil.VeloBasar.Pages.Sellers.CreateOrEdit
+
+@{
+    ViewData["Title"] = Localizer["Neuer Verkäufer"];
+}
+
+<div class="card my-3">
+    <div class="card-header d-flex justify-content-between align-items-md-center">
+        <div class="mr-auto"><h5>@ViewData["Title"]</h5></div>
+    </div>
+
+    <div class="card-body">
+        <form method="post">
+            <div Condition="@Model.IsValidationEnabled" asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <input Condition="@Model.AreWeInEditMode" type="hidden" asp-for="Seller.Id" />
+            <input type="hidden" asp-for="Seller.Token" />
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="Seller.FirstName" class="control-label"></label>
+                    <input asp-for="Seller.FirstName" class="form-control" />
+                    <span asp-validation-for="Seller.FirstName" class="invalid-feedback"></span>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label asp-for="Seller.LastName" class="control-label"></label>
+                    <input asp-for="Seller.LastName" class="form-control" />
+                    <span asp-validation-for="Seller.LastName" class="invalid-feedback"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <input asp-all-route-data="@Model.GetPostRoute(true)" type="submit" value="@Localizer["Suchen"]" class="btn btn-primary" />
+            </div>
+
+            <div condition="Model.HasSellers">
+                <partial name="/Pages/Sellers/_SelectionTable.cshtml" model="@Model.Sellers" />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Seller.Street" class="control-label"></label>
+                <input asp-for="Seller.Street" class="form-control" />
+                <span Condition="@Model.IsValidationEnabled" asp-validation-for="Seller.Street" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Seller.City" class="control-label"></label>
+                <input asp-for="Seller.City" class="form-control" />
+                <span Condition="@Model.IsValidationEnabled" asp-validation-for="Seller.City" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Seller.ZIP" class="control-label"></label>
+                <input asp-for="Seller.ZIP" class="form-control" />
+                <span Condition="@Model.IsValidationEnabled" asp-validation-for="Seller.ZIP" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Seller.CountryId" class="control-label"></label>
+                <select asp-for="Seller.CountryId" class="form-control" asp-items="ViewBag.Countries"></select>
+                <span Condition="@Model.IsValidationEnabled" asp-validation-for="Seller.CountryId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Seller.IBAN" class="control-label"></label>
+                <input asp-for="Seller.IBAN" class="form-control" />
+                <span Condition="@Model.IsValidationEnabled" asp-validation-for="Seller.IBAN" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Seller.BIC" class="control-label"></label>
+                <input asp-for="Seller.BIC" class="form-control" />
+                <span Condition="@Model.IsValidationEnabled" asp-validation-for="Seller.BIC" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Seller.BankAccountHolder" class="control-label"></label>
+                <input asp-for="Seller.BankAccountHolder" class="form-control" />
+                <span Condition="@Model.IsValidationEnabled" asp-validation-for="Seller.BankAccountHolder" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="@Localizer["Speichern"]" class="btn btn-primary" asp-all-route-data="@Model.GetPostRoute()" />
+            </div>
+        </form>
+
+
+    </div>
+</div>
+
+@section Scripts {
+    @if (Model.IsValidationEnabled)
+    {
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -1,0 +1,36 @@
+﻿@model SelectionListViewModel<Seller>
+
+<div class="card-body p-0">
+    <table class="table table-striped m-0">
+        <thead>
+            <tr>
+                <th scope="col">@Html.DisplayNameFor(model => model.List.First().Id)</th>
+                <th scope="col">@Html.DisplayNameFor(model => model.List.First().FirstName)</th>
+                <th scope="col">@Html.DisplayNameFor(model => model.List.First().LastName)</th>
+                <th scope="col">@Html.DisplayNameFor(model => model.List.First().Street)</th>
+                <th scope="col">@Html.DisplayNameFor(model => model.List.First().City)</th>
+                <th scope="col">@Html.DisplayNameFor(model => model.List.First().ZIP)</th>
+                <th scope="col">@Html.DisplayNameFor(model => model.List.First().Country)</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.List)
+            {
+                <tr>
+                    <th scope="row">@Html.DisplayFor(modelItem => item.Id)</th>
+                    <td>@Html.DisplayFor(modelItem => item.FirstName)</td>
+                    <td>@Html.DisplayFor(modelItem => item.LastName)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Street)</td>
+                    <td>@Html.DisplayFor(modelItem => item.City)</td>
+                    <td>@Html.DisplayFor(modelItem => item.ZIP)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Country.Name)</td>
+                    <td>
+                        <a asp-page="@Model.TargetPage" asp-all-route-data="@Model.GetRoute(item.Id)">@Localizer["Übernehmen"]</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+

@@ -378,6 +378,11 @@ namespace BraunauMobil.VeloBasar.Data
             return GetTransactions(basar, TransactionType.Sale, Expressions.TransactionSearch(searchString));
         }
 
+        public async Task<Seller> GetSellerAsync(int sellerId)
+        {
+            return await Seller.FirstOrDefaultAsync(b => b.Id == sellerId);
+        }
+
         public IQueryable<Seller> GetSellers(string searchString = null)
         {
             var res = Seller
@@ -389,6 +394,14 @@ namespace BraunauMobil.VeloBasar.Data
             }
 
             return res.Where(Expressions.SellerSearch(searchString));
+        }
+
+        public IQueryable<Seller> GetSellers(string firstName, string lastName)
+        {
+            var res = Seller
+                .Include(s => s.Country).OrderBy(s => s.Id);
+
+            return res.Where(Expressions.SellerSearch(firstName, lastName));
         }
 
         public async Task<SellerStatistics> GetSellerStatisticsAsync(Basar basar, int sellerId)

@@ -25,6 +25,21 @@ namespace BraunauMobil.VeloBasar.Data
               || (s.BankAccountHolder != null && s.BankAccountHolder.Contains(searchString, StringComparison.InvariantCultureIgnoreCase));
         }
 
+        public static Expression<Func<Seller, bool>> SellerSearch(string firstName, string lastName)
+        {
+            if (!string.IsNullOrEmpty(firstName) && string.IsNullOrEmpty(lastName))
+            {
+                return s => string.Equals(s.FirstName, firstName, StringComparison.InvariantCultureIgnoreCase);
+            }
+            else if (string.IsNullOrEmpty(firstName) && !string.IsNullOrEmpty(lastName))
+            {
+                return s => string.Equals(s.LastName, lastName, StringComparison.InvariantCultureIgnoreCase);
+            }
+
+            return s => string.Equals(s.FirstName, firstName, StringComparison.InvariantCultureIgnoreCase)
+              && string.Equals(s.LastName, lastName, StringComparison.InvariantCultureIgnoreCase);
+        }
+
         public static Expression<Func<ProductsTransaction, bool>> TransactionSearch(string searchString)
         {
             return x => (x.Seller == null) ? true : 
