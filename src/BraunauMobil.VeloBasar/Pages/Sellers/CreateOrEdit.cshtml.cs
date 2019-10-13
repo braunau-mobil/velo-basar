@@ -67,11 +67,11 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
             }
             else
             {
-                Context.Seller.Add(Seller);                
+                Context.Seller.Add(Seller);
             }
 
             await Context.SaveChangesAsync();
-            return RedirectToPage("/Sellers/Details", new { basarId = Basar.Id, sellerId = Seller.Id });
+            return RedirectToPage("/Products/AddMany", new { basarId = Basar.Id, sellerId = Seller.Id });
         }
         public IDictionary<string, string> GetRoute(bool search)
         {

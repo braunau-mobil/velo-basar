@@ -29,15 +29,15 @@ namespace BraunauMobil.VeloBasar.Data
         {
             if (!string.IsNullOrEmpty(firstName) && string.IsNullOrEmpty(lastName))
             {
-                return s => string.Equals(s.FirstName, firstName, StringComparison.InvariantCultureIgnoreCase);
+                return s => s.FirstName.StartsWith(firstName, StringComparison.InvariantCultureIgnoreCase);
             }
             else if (string.IsNullOrEmpty(firstName) && !string.IsNullOrEmpty(lastName))
             {
-                return s => string.Equals(s.LastName, lastName, StringComparison.InvariantCultureIgnoreCase);
+                return s => s.LastName.StartsWith(lastName, StringComparison.InvariantCultureIgnoreCase);
             }
 
-            return s => string.Equals(s.FirstName, firstName, StringComparison.InvariantCultureIgnoreCase)
-              && string.Equals(s.LastName, lastName, StringComparison.InvariantCultureIgnoreCase);
+            return s => s.FirstName.StartsWith(firstName, StringComparison.InvariantCultureIgnoreCase)
+              && s.LastName.StartsWith(lastName, StringComparison.InvariantCultureIgnoreCase);
         }
 
         public static Expression<Func<ProductsTransaction, bool>> TransactionSearch(string searchString)
