@@ -20,12 +20,12 @@
     }
     else if (Model.StorageStatus == StorageStatus.Available && Model.ValueStatus == ValueStatus.Settled)
     {
-        text = Localizer["Abgerechnet"];
+        text = Localizer["Abgeholt"];
         css = "badge-secondary";
     }
     else if (Model.StorageStatus == StorageStatus.Sold && Model.ValueStatus == ValueStatus.Settled)
     {
-        text = Localizer["Abgeholt"];
+        text = Localizer["Abgerechnet"];
         css = "badge-secondary";
         icon = "$";
     }
