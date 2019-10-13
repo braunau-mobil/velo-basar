@@ -522,14 +522,6 @@ namespace BraunauMobil.VeloBasar.Data
             var products = await GetProductsForSeller(basar, sellerId).ToArrayAsync();
             foreach (var product in products)
             {
-                if (product.StorageStatus == StorageStatus.Available)
-                {
-                    product.StorageStatus = StorageStatus.Gone;
-                }
-                else if (product.StorageStatus == StorageStatus.Sold)
-                {
-                    product.StorageStatus = StorageStatus.Gone;
-                }
                 product.ValueStatus = ValueStatus.Settled;
 
                 var productSettlement = new ProductToTransaction
