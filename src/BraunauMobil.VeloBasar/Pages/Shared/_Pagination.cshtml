@@ -4,34 +4,38 @@
     var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
     var nextDisabled = !Model.HasNextPage ? "disabled" : "";
 }
-<nav aria-label="...">
-    <ul class="pagination flex-wrap">
-        <li class="page-item @prevDisabled">
-            <a class="page-link @prevDisabled"
-               asp-page="@Model.MyPath"
-               asp-all-route-data="@Model.GetPaginationRoute()"
-               asp-route-pageIndex="@(Model.PageIndex - 1)"
-               asp-route-currentFilter="@Model.CurrentFilter">
-                @Localizer["<<<"]
-            </a>
-        </li>
-        @for (var pageNumber = 1; pageNumber <= Model.TotalPages; pageNumber++)
-        {
-            var isActive = pageNumber == Model.PageIndex ? "active" : "";
-            <li class="page-item @isActive" aria-current="page">
-                <a class="page-link"  asp-page="@Model.MyPath"
-               asp-all-route-data="@Model.GetPaginationRoute()"
-               asp-route-pageIndex="@pageNumber"
-               asp-route-currentFilter="@Model.CurrentFilter">@pageNumber</a> 
+@if (Model.TotalPages > 1)
+{
+    <nav aria-label="...">
+        <ul class="pagination flex-wrap">
+            <li class="page-item @prevDisabled">
+                <a class="page-link @prevDisabled"
+                   asp-page="@Model.MyPath"
+                   asp-all-route-data="@Model.GetPaginationRoute()"
+                   asp-route-pageIndex="@(Model.PageIndex - 1)"
+                   asp-route-currentFilter="@Model.CurrentFilter">
+                    @Localizer["<<<"]
+                </a>
             </li>
-        }
-        <li class="page-item @nextDisabled">
-            <a class="page-link" asp-page="@Model.MyPath"
-               asp-all-route-data="@Model.GetPaginationRoute()"
-               asp-route-pageIndex="@(Model.PageIndex + 1)"
-               asp-route-currentFilter="@Model.CurrentFilter">
-                @Localizer[">>>"]
-            </a>
-        </li>
-    </ul>
-</nav>
+            @for (var pageNumber = 1; pageNumber <= Model.TotalPages; pageNumber++)
+            {
+                var isActive = pageNumber == Model.PageIndex ? "active" : "";
+                <li class="page-item @isActive" aria-current="page">
+                    <a class="page-link" asp-page="@Model.MyPath"
+                       asp-all-route-data="@Model.GetPaginationRoute()"
+                       asp-route-pageIndex="@pageNumber"
+                       asp-route-currentFilter="@Model.CurrentFilter">@pageNumber</a>
+                </li>
+            }
+            <li class="page-item @nextDisabled">
+                <a class="page-link" asp-page="@Model.MyPath"
+                   asp-all-route-data="@Model.GetPaginationRoute()"
+                   asp-route-pageIndex="@(Model.PageIndex + 1)"
+                   asp-route-currentFilter="@Model.CurrentFilter">
+                    @Localizer[">>>"]
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+}
