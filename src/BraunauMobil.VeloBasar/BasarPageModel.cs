@@ -1,5 +1,6 @@
 ﻿using BraunauMobil.VeloBasar.Data;
 using BraunauMobil.VeloBasar.Models;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Collections.Generic;
@@ -48,6 +49,15 @@ namespace BraunauMobil.VeloBasar
             }
             DecorateRoute(route);
             return route;
+        }
+
+        public bool IsDebug
+        {
+#if DEBUG
+            get => true;
+#else
+            get => false;
+#endif
         }
     }
 }

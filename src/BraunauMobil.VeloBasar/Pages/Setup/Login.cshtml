@@ -1,0 +1,47 @@
+﻿@page
+@model LoginModel
+
+@{
+    ViewData["Title"] = Localizer["Einloggen"];
+}
+
+<div class="card my-3">
+    <div class="card-header d-flex justify-content-between align-items-md-center">
+        <div class="mr-auto"><h5>@ViewData["Title"]</h5></div>
+    </div>
+
+    <div class="card-body">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="Email"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Password"></label>
+                <input asp-for="Password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <div class="checkbox">
+                    <label asp-for="RememberMe">
+                        <input asp-for="RememberMe" />
+                        @Html.DisplayNameFor(m => m.RememberMe)
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="@Localizer["Einloggen"]" class="btn btn-primary" asp-all-route-data="@Model.GetRoute()" />
+            </div>
+        </form>
+
+
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

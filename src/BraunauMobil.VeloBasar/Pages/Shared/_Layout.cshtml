@@ -1,5 +1,10 @@
 ﻿@model BasarPageModel
 
+@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,7 +25,7 @@
         <div class="row">
             <nav class="col-2 d-none sidebar d-flex flex-column px-0">
                 <div class="sidebar-sticky">
-                    <h6 class="d-flex justify-content-between align-items-center m-3">
+                    <h6 class="d-flex justify-content-between align-items-center mx-3 mt-3">
                         @if (Model.Basar == null)
                         {
                             <a asp-page="/Basars/SelectOrCreate" class="navbar-brand">@Localizer["ACHTUNG! es ist kein Basar ausgewählt."]</a>
@@ -52,14 +57,31 @@
                         </ul>
                     }
 
-                    <h6 class="d-flex justify-content-between align-items-center m-3">
-                        Admin
-                    </h6>
+                    <h6 class="d-flex justify-content-between align-items-center mx-3 mt-4">@Localizer["Administration"]</h6>
                     <ul class="nav flex-column mb-2">
-                        <li class="nav-item">
-                            <a class="nav-link" asp-page="/Setup/DangerZone">Danger Zone!</a>
-                        </li>
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-page="/Setup/Logout">@Localizer["Ausloggen"] - @UserManager.GetUserName(User)</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-page="/Setup/Login" asp-all-route-data="@Model.GetRoute()">@Localizer["Einloggen"]</a>
+                            </li>
+                        }
                     </ul>
+
+                    @if (Model.IsDebug)
+                    {
+                        <h6 class="d-flex justify-content-between align-items-center mx-3 mt-4">Dev</h6>
+                        <ul class="nav flex-column mb-2">
+                            <li class="nav-item">
+                                <a class="nav-link" asp-page="/Setup/DangerZone">Danger Zone!</a>
+                            </li>
+                        </ul>
+                    }
                 </div>
 
                 <div class="mt-auto" id="debug">
