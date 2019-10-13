@@ -1,10 +1,5 @@
 ﻿@model ISearchable
 
-@using Microsoft.AspNetCore.Mvc.Localization
-@using VeloBasar.Resources
-
-@inject IHtmlLocalizer<SharedResource> Localizer
-
 <form asp-page="@Model.MyPath" method="get" asp-route-basarId="@Model.Basar.Id">
     <div class="d-flex form-actions no-color align-items-md-center">
         <div class="mx-2">Suchen:</div>

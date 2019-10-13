@@ -1,10 +1,6 @@
 ﻿@model Product
 
-@using VeloBasar.Resources
-@using VeloBasar.Models
-@using Microsoft.Extensions.Localization
-
-@inject IStringLocalizer<SharedResource> Localizer
+@inject Microsoft.Extensions.Localization.IStringLocalizer<SharedResource> Localizer
 
 @{
     var css = "";

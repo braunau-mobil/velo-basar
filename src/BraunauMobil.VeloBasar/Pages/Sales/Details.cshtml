@@ -1,12 +1,5 @@
 ﻿@page
-@model BraunauMobil.VeloBasar.Pages.Sales.DetailsModel
-
-@using BraunauMobil.VeloBasar.Models;
-@using BraunauMobil.VeloBasar.ViewModels;
-@using Microsoft.AspNetCore.Mvc.Localization
-@using VeloBasar.Resources
-
-@inject IHtmlLocalizer<SharedResource> Localizer
+@model Sales.DetailsModel
 
 @{
     ViewData["Title"] = $"{Html.DisplayNameFor(x => x.Sale)} #{Model.Sale.Number}";
