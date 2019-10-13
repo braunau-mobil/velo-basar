@@ -31,7 +31,7 @@
                     <partial name="/Pages/Products/_StatusBadge.cshtml" model="@item" />
                 </td>
                 <td>
-                    <a asp-page="/Products/Edit" asp-all-route-data="@Model.GetItemRoute(item)">@Localizer["Bearbeiten"]</a>
+                    <a asp-page="/Products/Details" asp-all-route-data="@Model.GetItemRoute(item)">@Localizer["Details"]</a>
                     @if (item.CanCancel())
                     {
                         <br />
