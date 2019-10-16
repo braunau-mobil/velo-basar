@@ -1,0 +1,44 @@
+﻿@page
+@model Brands.ListModel
+
+@{
+    ViewData["Title"] = Localizer["Marken"];
+}
+
+<div class="card my-3">
+    <div class="card-header d-flex justify-content-between align-items-md-center">
+        <div><h5 class="mx-2">@ViewData["Title"]</h5></div>
+        <partial name="/Pages/Shared/_Search.cshtml" model="@Model" />
+    </div>
+
+    <div class="card-body p-0">
+        <table class="table table-striped m-0">
+            <thead>
+                <tr>
+                    <th scope="col">@Html.DisplayNameFor(model => model.Brands.First().Id)</th>
+                    <th scope="col">@Html.DisplayNameFor(model => model.Brands.First().Name)</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Brands)
+                {
+                    <tr>
+                        <th scope="row">@Html.DisplayFor(modelItem => item.Id)</th>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            <a asp-page="/Brands/Edit" asp-all-route-data="@Model.GetItemRoute(item)">@Localizer["Bearbeiten"]</a>
+                            <a asp-page="/Brands/Delete" asp-all-route-data="@Model.GetItemRoute(item)">@Localizer["Löschen"]</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+
+<partial name="/Pages/Shared/_Pagination.cshtml" model="@Model" />

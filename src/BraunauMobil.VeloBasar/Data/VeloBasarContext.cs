@@ -26,6 +26,8 @@ namespace BraunauMobil.VeloBasar.Data
 
         public DbSet<Basar> Basar { get; set; }
 
+        public DbSet<Brand> Brand { get; set; }
+
         public DbSet<Country> Country { get; set; }
 
         public DbSet<FileStore> FileStore { get; set; }
@@ -188,6 +190,21 @@ namespace BraunauMobil.VeloBasar.Data
             await SaveChangesAsync();
         }
 
+        public async Task DeleteBrand(int brandId)
+        {
+            var brand = await GetBrandAsync(brandId);
+            if (brand != null)
+            {
+                Brand.Remove(brand);
+                await SaveChangesAsync();
+            }
+        }
+
+        public async Task<bool> ExistsBrand(int brandId)
+        {
+            return await Brand.AnyAsync(b => b.Id == brandId);
+        }
+
         public async Task GenerateLabel(Basar basar, Product product)
         {
             var fileStore = new FileStore
@@ -287,6 +304,7 @@ namespace BraunauMobil.VeloBasar.Data
                     .ThenInclude(s => s.Country)
                 .Include(a => a.Products)
                     .ThenInclude(pa => pa.Product)
+                    .ThenInclude(p => p.Brand)
                 .FirstAsync(a => a.Id == acceptanceId);
         }
 
@@ -332,6 +350,21 @@ namespace BraunauMobil.VeloBasar.Data
         {
             return await Basar.FirstOrDefaultAsync(b => b.Id == basarId);
         }
+        
+        public async Task<Brand> GetBrandAsync(int brandId)
+        {
+            return await Brand.FindAsync(brandId);
+        }
+
+        public IQueryable<Brand> GetBrands(string searchString = null)
+        {
+            if (string.IsNullOrEmpty(searchString))
+            {
+                return Brand.OrderBy(b => b.Name);
+            }
+            return Brand.Where(Expressions.BrandSearch(searchString)).OrderBy(b => b.Name);
+        }
+
 
         public IQueryable<ProductsTransaction> GetCacncellations(Basar basar, Expression<Func<ProductsTransaction, bool>> additionalPredicate = null)
         {
@@ -345,12 +378,16 @@ namespace BraunauMobil.VeloBasar.Data
 
         public async Task<Product> GetProductAsync(int productId)
         {
-            return await Product.FirstOrDefaultAsync(p => p.Id == productId);
+            return await Product
+                .Include(p => p.Brand)
+                .FirstOrDefaultAsync(p => p.Id == productId);
         }
 
         public IQueryable<Product> GetProducts(string searchString = null)
         {
-            var res = Product.OrderBy(p => p.Id);
+            var res = Product
+                .Include(p => p.Brand)
+                .OrderBy(p => p.Id);
 
             if (string.IsNullOrEmpty(searchString))
             {
@@ -362,7 +399,7 @@ namespace BraunauMobil.VeloBasar.Data
 
         public IQueryable<Product> GetProductsForSeller(Basar basar, int sellerId)
         {
-            return GetAcceptancesForSeller(basar, sellerId).SelectMany(a => a.Products).Select(pa => pa.Product);
+            return GetAcceptancesForSeller(basar, sellerId).SelectMany(a => a.Products).Select(pa => pa.Product).Include(p => p.Brand);
         }
 
         public async Task<ProductsTransaction> GetSaleAsync(int saleId)
@@ -370,6 +407,7 @@ namespace BraunauMobil.VeloBasar.Data
             return await Transactions
                 .Include(s => s.Products)
                     .ThenInclude(ps => ps.Product)
+                    .ThenInclude(p => p.Brand)
                 .FirstOrDefaultAsync(s => s.Id == saleId);
         }
 

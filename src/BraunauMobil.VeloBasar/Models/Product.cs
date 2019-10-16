@@ -14,8 +14,11 @@ namespace BraunauMobil.VeloBasar.Models
         [Display(Name = "Farbe")]
         public string Color { get; set; }
 
+        [Required]
+        public int BrandId { get; set; }
+
         [Display(Name = "Marke")]
-        public string Brand { get; set; }
+        public Brand Brand { get; set; }
 
         [Display(Name = "Beschreibung")]
         public string Description { get; set; }
@@ -45,11 +48,11 @@ namespace BraunauMobil.VeloBasar.Models
         public bool IsEmtpy()
         {
             return string.IsNullOrEmpty(Color)
-                && string.IsNullOrEmpty(Brand)
                 && string.IsNullOrEmpty(Description)
                 && string.IsNullOrEmpty(Type)
                 && string.IsNullOrEmpty(Type)
-                && string.IsNullOrEmpty(TireSize);
+                && string.IsNullOrEmpty(TireSize)
+                && Brand == null;
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

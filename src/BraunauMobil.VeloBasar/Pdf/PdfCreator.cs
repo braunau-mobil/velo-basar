@@ -58,7 +58,7 @@ namespace BraunauMobil.VeloBasar.Pdf
                 var page = pdfDoc.AddNewPage(new PageSize(50f.ToUnit(), 79f.ToUnit()));
 
                 doc.Add(new Paragraph($"Braunau mobil - {basar.Name}"));
-                doc.Add(new Paragraph(product.Brand));
+                doc.Add(new Paragraph(product.Brand.Name));
                 doc.Add(new Paragraph(product.Type));
                 doc.Add(new Paragraph(product.Description));
                 doc.Add(new Paragraph($"Reifengröße: {product.TireSize}"));
@@ -95,7 +95,7 @@ namespace BraunauMobil.VeloBasar.Pdf
                 foreach (var product in sale.Products.Select(ps => ps.Product))
                 {
                     table.AddCell(product.Id.ToString())
-                        .AddCell(product.Brand)
+                        .AddCell(product.Brand.Name)
                         .AddCell(product.Type)
                         .AddCell($"{product.Price:C}");
                 }

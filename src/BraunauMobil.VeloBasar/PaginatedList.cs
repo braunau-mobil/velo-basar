@@ -17,12 +17,12 @@ namespace BraunauMobil.VeloBasar
             TotalPages = 0;
         }
 
-        public PaginatedList(List<T> items, int count, int pageIndex, int pageSize)
+        public PaginatedList(List<T> items, int totalPages, int pageIndex, int pageSize)
         {
             PageIndex = pageIndex;
-            TotalPages = (int)Math.Ceiling(count / (double)pageSize);
+            TotalPages = totalPages;
 
-            this.AddRange(items);
+            AddRange(items);
         }
 
         public bool HasPreviousPage
@@ -50,8 +50,15 @@ namespace BraunauMobil.VeloBasar
             }
 
             var count = await source.CountAsync();
+            var totalPages = CalcTotalPages(count, pageSize);
+            pageIndex = Math.Min(pageIndex, totalPages);
             var items = await source.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
-            return new PaginatedList<T>(items, count, pageIndex, pageSize);
+            return new PaginatedList<T>(items, totalPages, pageIndex, pageSize);
+        }
+
+        private static int CalcTotalPages(int count, int pageSize)
+        {
+            return (int)Math.Ceiling(count / (double)pageSize);
         }
     }
 }
