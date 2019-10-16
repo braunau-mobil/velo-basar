@@ -139,6 +139,15 @@ namespace BraunauMobil.VeloBasar.Data
             await SaveChangesAsync();
         }
 
+        public async Task<bool> CanDeleteBrandAsync(Brand item)
+        {
+            return !await Product.AnyAsync(p => p.BrandId == item.Id);
+        }
+        public async Task<bool> CanDeleteProductTypeAsync(ProductType item)
+        {
+            return !await Product.AnyAsync(p => p.TypeId == item.Id);
+        }
+
         public async Task<ProductsTransaction> CreateOrGetSaleAsync(Basar basar, int? saleId)
         {
             if (saleId == null)

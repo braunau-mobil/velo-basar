@@ -52,18 +52,24 @@ namespace BraunauMobil.VeloBasar.Pages.Brands
 
             return Page();
         }
-
         public IDictionary<string, string> GetPaginationRoute()
         {
             return GetRoute();
         }
-
-        public IDictionary<string, string> GetItemRoute(Brand brand)
+        public IDictionary<string, string> GetItemRoute(Brand brand, ModelStatus? statusToSet = null)
         {
             var route = GetRoute();
             route.Add("brandId", brand.Id.ToString());
             route.Add("pageIndex", PageIndex.ToString());
+            if (statusToSet != null)
+            {
+                route.Add("status", statusToSet.ToString());
+            }
             return route;
+        }
+        public async Task<bool> CanDeleteAsync(Brand item)
+        {
+            return await Context.CanDeleteBrandAsync(item);
         }
     }
 }

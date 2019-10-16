@@ -30,7 +30,21 @@
                         </td>
                         <td>
                             <a asp-page="/Brands/Edit" asp-all-route-data="@Model.GetItemRoute(item)">@Localizer["Bearbeiten"]</a>
-                            <a asp-page="/Brands/Delete" asp-all-route-data="@Model.GetItemRoute(item)">@Localizer["Löschen"]</a>
+                            @if (await Model.CanDeleteAsync(item))
+                            {
+                                <a asp-page="/Brands/Delete" asp-all-route-data="@Model.GetItemRoute(item)">@Localizer["Löschen"]</a>
+                            }
+                            else
+                            {
+                                var text = "Deaktivieren";
+                                var statusToSet = ModelStatus.Disabled;
+                                @if (item.Status == ModelStatus.Disabled)
+                                {
+                                    statusToSet = ModelStatus.Enabled;
+                                    text = "Aktivieren";
+                                }
+                                <a asp-page="/Brands/SetStatus" asp-all-route-data="@Model.GetItemRoute(item, statusToSet)">@Localizer[text]</a>
+                            }
                         </td>
                     </tr>
                 }

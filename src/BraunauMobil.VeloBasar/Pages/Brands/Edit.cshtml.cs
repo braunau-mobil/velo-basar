@@ -44,9 +44,9 @@ namespace BraunauMobil.VeloBasar.Pages.Brands
             return RedirectToPage("/Brands/List", new { pageIndex });
         }
 
-        public IDictionary<string, string> GetListRoute()
+        public override IDictionary<string, string> GetRoute()
         {
-            var route = new Dictionary<string, string>();
+            var route = base.GetRoute();
             route.Add("pageIndex", _pageIndex.ToString());
             return route;
         }

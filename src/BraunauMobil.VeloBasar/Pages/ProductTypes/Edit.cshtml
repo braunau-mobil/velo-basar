@@ -10,8 +10,8 @@
         <div class="card-header d-flex justify-content-between align-items-md-center">
             <div class="mr-auto"><h5>@ViewData["Title"]</h5></div>
             <div class="d-flex justify-content-end">
-                <input type="submit" value="@Localizer["Speichern"]" class="btn btn-primary mx-1" asp-all-route-data="@Model.GetListRoute()" asp-route-target="/ProductTypes/List" />
-                <a asp-all-route-data="@Model.GetListRoute()" asp-route-target="/ProductTypes/List" class="btn btn-secondary mx-1">@Localizer["Abbrechen"]</a>
+                <input type="submit" value="@Localizer["Speichern"]" class="btn btn-primary mx-1" asp-all-route-data="@Model.GetRoute()" asp-route-target="/ProductTypes/List" />
+                <a asp-all-route-data="@Model.GetRoute()" asp-page="/ProductTypes/List" class="btn btn-secondary mx-1">@Localizer["Abbrechen"]</a>
             </div>
         </div>
 
@@ -23,6 +23,11 @@
                     <label asp-for="ProductType.Name" class="control-label"></label>
                     <input asp-for="ProductType.Name" class="form-control" />
                     <span asp-validation-for="ProductType.Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ProductType.Status" class="control-label"></label>
+                    <select asp-for="ProductType.Status" asp-items="@Html.GetEnumSelectList<ModelStatus>()" class="form-control"></select>
+                    <span asp-validation-for="ProductType.Status" class="text-danger"></span>
                 </div>
             </div>
         </div>

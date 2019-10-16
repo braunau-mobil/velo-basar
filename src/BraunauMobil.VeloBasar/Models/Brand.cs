@@ -6,9 +6,10 @@ namespace BraunauMobil.VeloBasar.Models
     public class Brand
     {
         public int Id { get; set; }
-
         [Required]
         [Display(Name = "Name")]
         public string Name { get; set; }
+        [Display(Name = "Status")]
+        public ModelStatus Status { get; set; }
     }
 }
