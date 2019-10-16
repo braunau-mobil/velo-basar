@@ -59,7 +59,7 @@ namespace BraunauMobil.VeloBasar.Pdf
 
                 doc.Add(new Paragraph($"Braunau mobil - {basar.Name}"));
                 doc.Add(new Paragraph(product.Brand.Name));
-                doc.Add(new Paragraph(product.Type));
+                doc.Add(new Paragraph(product.Type.Name));
                 doc.Add(new Paragraph(product.Description));
                 doc.Add(new Paragraph($"Reifengröße: {product.TireSize}"));
                 doc.Add(new Paragraph(product.Price.ToString()));
@@ -96,7 +96,7 @@ namespace BraunauMobil.VeloBasar.Pdf
                 {
                     table.AddCell(product.Id.ToString())
                         .AddCell(product.Brand.Name)
-                        .AddCell(product.Type)
+                        .AddCell(product.Type.Name)
                         .AddCell($"{product.Price:C}");
                 }
                 doc.Add(table);

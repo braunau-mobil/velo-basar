@@ -23,8 +23,11 @@ namespace BraunauMobil.VeloBasar.Models
         [Display(Name = "Beschreibung")]
         public string Description { get; set; }
 
+        [Required]
+        public int TypeId { get; set; }
+
         [Display(Name = "Typ")]
-        public string Type { get; set; }
+        public ProductType Type { get; set; }
 
         [Display(Name = "Reifengröße")]
         public string TireSize { get; set; }
@@ -49,10 +52,9 @@ namespace BraunauMobil.VeloBasar.Models
         {
             return string.IsNullOrEmpty(Color)
                 && string.IsNullOrEmpty(Description)
-                && string.IsNullOrEmpty(Type)
-                && string.IsNullOrEmpty(Type)
                 && string.IsNullOrEmpty(TireSize)
-                && Brand == null;
+                && Brand == null
+                && Type == null;
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

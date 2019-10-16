@@ -65,7 +65,10 @@
                                 <a class="nav-link" asp-page="/Setup/Logout">@Localizer["Ausloggen"] - @UserManager.GetUserName(User)</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" asp-page="/Brands/List" asp-all-route-data="@Model.GetRoute()" >@Localizer["Marken"]</a>
+                                <a class="nav-link" asp-page="/Brands/List" asp-all-route-data="@Model.GetRoute()">@Localizer["Marken"]</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-page="/ProductTypes/List" asp-all-route-data="@Model.GetRoute()">@Localizer["Artikel Typen"]</a>
                             </li>
                         }
                         else

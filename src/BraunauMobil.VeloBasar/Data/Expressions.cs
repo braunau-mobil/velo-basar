@@ -21,7 +21,15 @@ namespace BraunauMobil.VeloBasar.Data
                 || p.Description.Contains(searchString, StringComparison.InvariantCultureIgnoreCase)
                 || p.FrameNumber.Contains(searchString, StringComparison.InvariantCultureIgnoreCase)
                 || p.TireSize.Contains(searchString, StringComparison.InvariantCultureIgnoreCase)
-                || p.Type.Contains(searchString, StringComparison.InvariantCultureIgnoreCase);
+                || p.Type.Name.Contains(searchString, StringComparison.InvariantCultureIgnoreCase);
+        }
+        public static Expression<Func<ProductType, bool>> ProductTypeSearch(string searchString)
+        {
+            if (int.TryParse(searchString, out int id))
+            {
+                return b => b.Id == id;
+            }
+            return b => b.Name.Contains(searchString, StringComparison.InvariantCultureIgnoreCase);
         }
 
         public static Expression<Func<Seller, bool>> SellerSearch(string searchString)

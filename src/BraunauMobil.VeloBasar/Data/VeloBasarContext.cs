@@ -42,6 +42,8 @@ namespace BraunauMobil.VeloBasar.Data
 
         public DbSet<ProductsTransaction> Transactions { get; set; }
 
+        public DbSet<ProductType> ProductTypes { get; set; }
+
         public Settings Settings
         {
             get
@@ -200,9 +202,24 @@ namespace BraunauMobil.VeloBasar.Data
             }
         }
 
+        public async Task DeleteProductType(int id)
+        {
+            var productType = await GetProductTypeAsync(id);
+            if (productType != null)
+            {
+                ProductTypes.Remove(productType);
+                await SaveChangesAsync();
+            }
+        }
+
         public async Task<bool> ExistsBrand(int brandId)
         {
             return await Brand.AnyAsync(b => b.Id == brandId);
+        }
+
+        public async Task<bool> ExistsProductType(int id)
+        {
+            return await ProductTypes.AnyAsync(b => b.Id == id);
         }
 
         public async Task GenerateLabel(Basar basar, Product product)
@@ -304,7 +321,10 @@ namespace BraunauMobil.VeloBasar.Data
                     .ThenInclude(s => s.Country)
                 .Include(a => a.Products)
                     .ThenInclude(pa => pa.Product)
-                    .ThenInclude(p => p.Brand)
+                        .ThenInclude(p => p.Brand)
+                .Include(a => a.Products)
+                    .ThenInclude(pa => pa.Product)
+                        .ThenInclude(p => p.Type)
                 .FirstAsync(a => a.Id == acceptanceId);
         }
 
@@ -379,14 +399,14 @@ namespace BraunauMobil.VeloBasar.Data
         public async Task<Product> GetProductAsync(int productId)
         {
             return await Product
-                .Include(p => p.Brand)
+                .Include(p => p.Brand).Include(p => p.Type)
                 .FirstOrDefaultAsync(p => p.Id == productId);
         }
 
         public IQueryable<Product> GetProducts(string searchString = null)
         {
             var res = Product
-                .Include(p => p.Brand)
+                .Include(p => p.Brand).Include(p => p.Type)
                 .OrderBy(p => p.Id);
 
             if (string.IsNullOrEmpty(searchString))
@@ -399,7 +419,20 @@ namespace BraunauMobil.VeloBasar.Data
 
         public IQueryable<Product> GetProductsForSeller(Basar basar, int sellerId)
         {
-            return GetAcceptancesForSeller(basar, sellerId).SelectMany(a => a.Products).Select(pa => pa.Product).Include(p => p.Brand);
+            return GetAcceptancesForSeller(basar, sellerId).SelectMany(a => a.Products).Select(pa => pa.Product).Include(p => p.Brand).Include(p => p.Type);
+        }
+
+        public async Task<ProductType> GetProductTypeAsync(int id)
+        {
+            return await ProductTypes.FindAsync(id);
+        }
+        public IQueryable<ProductType> GetProductTypes(string searchString = null)
+        {
+            if (string.IsNullOrEmpty(searchString))
+            {
+                return ProductTypes.OrderBy(b => b.Name);
+            }
+            return ProductTypes.Where(Expressions.ProductTypeSearch(searchString)).OrderBy(b => b.Name);
         }
 
         public async Task<ProductsTransaction> GetSaleAsync(int saleId)
@@ -407,7 +440,10 @@ namespace BraunauMobil.VeloBasar.Data
             return await Transactions
                 .Include(s => s.Products)
                     .ThenInclude(ps => ps.Product)
-                    .ThenInclude(p => p.Brand)
+                        .ThenInclude(p => p.Brand)
+                .Include(a => a.Products)
+                    .ThenInclude(pa => pa.Product)
+                        .ThenInclude(p => p.Type)
                 .FirstOrDefaultAsync(s => s.Id == saleId);
         }
 
