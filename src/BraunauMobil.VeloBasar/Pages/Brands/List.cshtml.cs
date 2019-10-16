@@ -29,7 +29,7 @@ namespace BraunauMobil.VeloBasar.Pages.Brands
 
         public string MyPath => "/Brands/List";
 
-        public async Task<IActionResult> OnGetAsync(int basarId, string currentFilter, string searchString, int? pageIndex)
+        public async Task<IActionResult> OnGetAsync(string currentFilter, string searchString, int? pageIndex, int? basarId)
         {
             await LoadBasarAsync(basarId);
 

@@ -1,30 +1,26 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using BraunauMobil.VeloBasar.Data;
 
 namespace BraunauMobil.VeloBasar.Pages.Brands
 {
-    public class DeleteModel : PageModel
+    public class DeleteModel : BasarPageModel
     {
-        private readonly VeloBasarContext _context;
-
-        public DeleteModel(VeloBasarContext context) 
+        public DeleteModel(VeloBasarContext context)  : base(context)
         {
-            _context = context;
         }
 
-        public async Task<IActionResult> OnGetAsync(int brandId, int pageIndex)
+        public async Task<IActionResult> OnGetAsync(int brandId, int pageIndex, int? basarId)
         {
-            if (await _context.ExistsBrand(brandId))
+            if (await Context.ExistsBrand(brandId))
             {
-                await _context.DeleteBrand(brandId);
+                await Context.DeleteBrand(brandId);
             }
             else
             {
                 return NotFound();
             }
-            return RedirectToPage("/Brands/List", new { pageIndex });
+            return RedirectToPage("/Brands/List", new { pageIndex, basarId });
         }
     }
 }
