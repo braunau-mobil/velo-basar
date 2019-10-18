@@ -5,11 +5,12 @@ using BraunauMobil.VeloBasar.Data;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using BraunauMobil.VeloBasar.ViewModels;
 
 namespace BraunauMobil.VeloBasar.Pages.Brands
 {
     [Authorize]
-    public class ListModel : BasarPageModel, IPagination
+    public class ListModel : BasarPageModel, ISearchable
     {
         public ListModel(VeloBasarContext context) : base(context)
         {
@@ -17,15 +18,7 @@ namespace BraunauMobil.VeloBasar.Pages.Brands
 
         public string CurrentFilter { get; set; }
 
-        public PaginatedList<Brand> Brands { get;set; }
-
-        public int PageIndex => Brands.PageIndex;
-
-        public int TotalPages => Brands.TotalPages;
-
-        public bool HasPreviousPage => Brands.HasPreviousPage;
-
-        public bool HasNextPage => Brands.HasNextPage;
+        public PaginatedListViewModel<Brand> Brands { get;set; }
 
         public string MyPath => "/Brands/List";
 
@@ -47,20 +40,15 @@ namespace BraunauMobil.VeloBasar.Pages.Brands
 
             var brandIq = Context.GetBrands(searchString);
             var pageSize = 10;
-            Brands = await PaginatedList<Brand>.CreateAsync(
-                brandIq.AsNoTracking(), pageIndex ?? 1, pageSize);
+            Brands = await PaginatedListViewModel<Brand>.CreateAsync(Basar, brandIq.AsNoTracking(), pageIndex ?? 1, pageSize, Request.Path, GetRoute);
 
             return Page();
-        }
-        public IDictionary<string, string> GetPaginationRoute()
-        {
-            return GetRoute();
         }
         public IDictionary<string, string> GetItemRoute(Brand brand, ModelStatus? statusToSet = null)
         {
             var route = GetRoute();
             route.Add("brandId", brand.Id.ToString());
-            route.Add("pageIndex", PageIndex.ToString());
+            route.Add("pageIndex", Brands.PageIndex.ToString());
             if (statusToSet != null)
             {
                 route.Add("status", statusToSet.ToString());

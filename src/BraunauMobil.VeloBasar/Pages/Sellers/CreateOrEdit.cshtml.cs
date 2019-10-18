@@ -6,18 +6,23 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using BraunauMobil.VeloBasar.ViewModels;
+using Microsoft.Extensions.Localization;
+using BraunauMobil.VeloBasar.Resources;
 
 namespace BraunauMobil.VeloBasar.Pages.Sellers
 {
     public class CreateOrEdit : BasarPageModel
     {
-        public CreateOrEdit(VeloBasarContext context) : base(context)
+        private readonly IStringLocalizer<SharedResource> _localizer;
+
+        public CreateOrEdit(VeloBasarContext context, IStringLocalizer<SharedResource> localizer) : base(context)
         {
+            _localizer = localizer;
         }
 
         [BindProperty]
         public Seller Seller { get; set; }
-        public SelectionListViewModel<Seller> Sellers { get; set; }
+        public ListViewModel<Seller> Sellers { get; set; }
         [BindProperty]
         public bool IsValidationEnabled { get; set; }
         [BindProperty]
@@ -50,7 +55,13 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
                 var sellers = await Context.GetSellers(Seller.FirstName, Seller.LastName).ToListAsync();
                 if (sellers.Count > 0)
                 {
-                    Sellers = new SelectionListViewModel<Seller>(Basar, sellers, "/Sellers/CreateOrEdit", "sellerId");
+                    Sellers = new ListViewModel<Seller>(Basar, sellers, new[]{
+                        new ListCommand<Seller>(GetItemRoute)
+                        {
+                            Page = "/Sellers/CreateOrEdit",
+                            Text = _localizer["Übernehmen"]
+                        }
+                    });
                 }
                 return Page();
             }
@@ -77,6 +88,12 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
         {
             var route = GetRoute();
             route.Add(nameof(search), search.ToString());
+            return route;
+        }
+        public IDictionary<string, string> GetItemRoute(Seller seller)
+        {
+            var route = GetRoute();
+            route.Add("sellerId", seller.Id.ToString());
             return route;
         }
         public IDictionary<string, string> GetPostRoute(bool? search = null)

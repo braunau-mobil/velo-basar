@@ -16,18 +16,18 @@
         <table class="table table-striped m-0">
             <thead>
                 <tr>
-                    <th scope="col">@Html.DisplayNameFor(model => model.Sellers[0].Id)</th>
-                    <th scope="col">@Html.DisplayNameFor(model => model.Sellers[0].FirstName)</th>
-                    <th scope="col">@Html.DisplayNameFor(model => model.Sellers[0].LastName)</th>
-                    <th scope="col">@Html.DisplayNameFor(model => model.Sellers[0].Street)</th>
-                    <th scope="col">@Html.DisplayNameFor(model => model.Sellers[0].City)</th>
-                    <th scope="col">@Html.DisplayNameFor(model => model.Sellers[0].ZIP)</th>
-                    <th scope="col">@Html.DisplayNameFor(model => model.Sellers[0].Country)</th>
+                    <th scope="col">@Html.DisplayNameFor(model => model.Sellers.List[0].Id)</th>
+                    <th scope="col">@Html.DisplayNameFor(model => model.Sellers.List[0].FirstName)</th>
+                    <th scope="col">@Html.DisplayNameFor(model => model.Sellers.List[0].LastName)</th>
+                    <th scope="col">@Html.DisplayNameFor(model => model.Sellers.List[0].Street)</th>
+                    <th scope="col">@Html.DisplayNameFor(model => model.Sellers.List[0].City)</th>
+                    <th scope="col">@Html.DisplayNameFor(model => model.Sellers.List[0].ZIP)</th>
+                    <th scope="col">@Html.DisplayNameFor(model => model.Sellers.List[0].Country)</th>
                     <th scope="col"></th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model.Sellers)
+                @foreach (var item in Model.Sellers.List)
                 {
                     <tr>
                         <th scope="row">@Html.DisplayFor(modelItem => item.Id)</th>
@@ -48,4 +48,4 @@
     </div>
 </div>
 
-<partial name="/Pages/Shared/_Pagination.cshtml" model="@Model" />
+<partial name="/Pages/Shared/_Pagination.cshtml" model="@Model.Sellers" />

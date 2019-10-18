@@ -11,7 +11,7 @@
     </div>
 
     <div class="card-body p-0">
-        <partial name="/Pages/Products/_Table.cshtml" model="new ProductsViewModel(Model.Basar, Model.Cancellation.Products)" />
+        <partial name="/Pages/Products/_Table.cshtml" model="Model.Cancellation.Products.CreateListViewModel(Model.Basar)" />
     </div>
 
     <div class="card-footer">
@@ -33,7 +33,7 @@
 
     <div class="card-body">
         <div class="column">
-            <partial name="/Pages/Products/_Table.cshtml" model="new ProductsViewModel(Model.Basar, Model.Sale.Products)" />
+            <partial name="/Pages/Products/_Table.cshtml" model="Model.Sale.Products.CreateListViewModel(Model.Basar)" />
         </div>
     </div>
 </div>

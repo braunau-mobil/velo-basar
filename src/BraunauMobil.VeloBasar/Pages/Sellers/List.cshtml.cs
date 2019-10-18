@@ -4,10 +4,11 @@ using BraunauMobil.VeloBasar.Models;
 using BraunauMobil.VeloBasar.Data;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
+using BraunauMobil.VeloBasar.ViewModels;
 
 namespace BraunauMobil.VeloBasar.Pages.Sellers
 {
-    public class ListModel : BasarPageModel, IPagination, ISearchable
+    public class ListModel : BasarPageModel, ISearchable
     {
         public ListModel(VeloBasarContext context) : base(context)
         {
@@ -15,15 +16,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
 
         public string CurrentFilter { get; set; }
 
-        public PaginatedList<Seller> Sellers { get;set; }
-
-        public int PageIndex => Sellers.PageIndex;
-
-        public int TotalPages => Sellers.TotalPages;
-
-        public bool HasPreviousPage => Sellers.HasPreviousPage;
-
-        public bool HasNextPage => Sellers.HasNextPage;
+        public PaginatedListViewModel<Seller> Sellers { get;set; }
 
         public string MyPath => "/Sellers/List";
 
@@ -54,8 +47,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
             var sellerIq = Context.GetSellers(searchString);
 
             var pageSize = 20;
-            Sellers = await PaginatedList<Seller>.CreateAsync(
-                sellerIq.AsNoTracking(), pageIndex ?? 1, pageSize);
+            Sellers = await PaginatedListViewModel<Seller>.CreateAsync(Basar, sellerIq.AsNoTracking(), pageIndex ?? 1, pageSize, Request.Path, GetRoute);
 
             return Page();
         }
@@ -65,11 +57,6 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
             var route = GetRoute();
             route.Add("sellerId", seller.Id.ToString());
             return route;
-        }
-
-        public IDictionary<string, string> GetPaginationRoute()
-        {
-            return GetRoute();
         }
     }
 }

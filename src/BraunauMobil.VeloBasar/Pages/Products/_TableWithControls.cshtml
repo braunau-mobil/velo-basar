@@ -1,4 +1,4 @@
-﻿@model ProductsViewModel
+﻿@model ListViewModel<Product>
 
 <table class="table table-striped m-0">
     <thead>
@@ -31,11 +31,12 @@
                     <partial name="/Pages/Products/_StatusBadge.cshtml" model="@item" />
                 </td>
                 <td>
-                    <a asp-page="/Products/Details" asp-all-route-data="@Model.GetItemRoute(item)">@Localizer["Details"]</a>
-                    @if (item.Label != null)
+                    @foreach (var command in Model.Commands)
                     {
-                        <br />
-                        <a asp-page="/ShowFile" asp-all-route-data="@Model.GetRoute()" asp-route-fileId="@item.Label" target="_blank">@Localizer["Etikett"]</a>
+                        if (command.IsEnabled(item))
+                        {
+                            <a asp-page="@command.Page" asp-all-route-data="@command.GetRoute(item)">@command.Text</a>
+                        }
                     }
                 </td>
             </tr>

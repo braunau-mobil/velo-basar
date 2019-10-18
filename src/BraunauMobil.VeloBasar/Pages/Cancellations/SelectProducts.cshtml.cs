@@ -34,7 +34,7 @@ namespace BraunauMobil.VeloBasar.Pages.Cancellations
             var products = await Context.GetProductsForSaleAsync(saleId);
             var viewModels = products.Select(p => new SelectableViewModel<Product> { Value = p });
 
-            Products = new ListViewModel<SelectableViewModel<Product>>(Basar, viewModels);
+            Products = new ListViewModel<SelectableViewModel<Product>>(Basar, viewModels.ToList());
         }
 
         public async Task<IActionResult> OnPostAsync(int basarId, int saleId)

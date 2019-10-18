@@ -48,7 +48,10 @@
                                 <a class="nav-link" asp-page="/Products/List" asp-all-route-data="@Model.GetRoute()">@Localizer["Artikel"]</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" asp-page="/Sales/CreateOrEdit" asp-all-route-data="@Model.GetRoute()">@Localizer["Neuer Verkauf"]</a>
+                                <a class="nav-link" asp-page="/Sales/CreateOrEdit" asp-all-route-data="@Model.GetRoute()">@Localizer["Neuer Verkauf Legacy"]</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-page="/Sales/Start" asp-all-route-data="@Model.GetRoute()">@Localizer["Neuer Verkauf"]</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" asp-page="/Sales/List" asp-all-route-data="@Model.GetRoute()">@Localizer["Verkäufe"]</a>

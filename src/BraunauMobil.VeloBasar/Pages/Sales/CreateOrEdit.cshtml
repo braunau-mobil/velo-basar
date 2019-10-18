@@ -42,6 +42,6 @@
     </div>
 
     <div class="card-body p-0">
-        <partial name="/Pages/Products/_Table.cshtml" model="@new ViewModels.ProductsViewModel(Model.Basar, Model.Products)" />
+        <partial name="/Pages/Products/_Table.cshtml" model="new ListViewModel<Product>(Model.Basar, Model.Products)" />
     </div>
 </div>

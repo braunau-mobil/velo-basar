@@ -1,29 +1,26 @@
 ﻿using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using BraunauMobil.VeloBasar.Models;
 using BraunauMobil.VeloBasar.Data;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
+using BraunauMobil.VeloBasar.ViewModels;
+using Microsoft.Extensions.Localization;
+using BraunauMobil.VeloBasar.Resources;
 
 namespace BraunauMobil.VeloBasar.Pages.Products
 {
-    public class ListModel : BasarPageModel, IPagination
+    public class ListModel : BasarPageModel, ISearchable
     {
-        public ListModel(VeloBasarContext context) : base(context)
+        private readonly IStringLocalizer<SharedResource> _localizer;
+
+        public ListModel(VeloBasarContext context, IStringLocalizer<SharedResource> localizer) : base(context)
         {
+            _localizer = localizer;
         }
 
         public string CurrentFilter { get; set; }
 
-        public PaginatedList<Product> Products { get;set; }
-
-        public int PageIndex => Products.PageIndex;
-
-        public int TotalPages => Products.TotalPages;
-
-        public bool HasPreviousPage => Products.HasPreviousPage;
-
-        public bool HasNextPage => Products.HasNextPage;
+        public PaginatedListViewModel<Product> Products { get; set; }
 
         public string MyPath => "/Products/List";
 
@@ -54,22 +51,33 @@ namespace BraunauMobil.VeloBasar.Pages.Products
             var productIq = Context.GetProducts(searchString);
 
             var pageSize = 11;
-            Products = await PaginatedList<Product>.CreateAsync(
-                productIq.AsNoTracking(), pageIndex ?? 1, pageSize);
-
+            Products = await PaginatedListViewModel<Product>.CreateAsync(Basar, productIq, pageIndex ?? 1, pageSize, Request.Path, GetRoute, new[]
+            {
+                new ListCommand<Product>(GetItemDetailsRoute)
+                {
+                    Text = _localizer["Details"],
+                    Page = "/Products/Details"
+                },
+                new ListCommand<Product>(item => item.Label != null, GetItemDocumentRoute)
+                {
+                    Text = _localizer["Etikett"],
+                    Page = "/ShowFile"
+                }
+            });
             return Page();
         }
 
-        public IDictionary<string, string> GetItemRoute(Product product)
+        public IDictionary<string, string> GetItemDetailsRoute(Product product)
         {
             var route = GetRoute();
             route.Add("productId", product.Id.ToString());
             return route;
         }
-
-        public IDictionary<string, string> GetPaginationRoute()
+        public IDictionary<string, string> GetItemDocumentRoute(Product product)
         {
-            return GetRoute();
+            var route = GetRoute();
+            route.Add("fileId", product.Label.Value.ToString());
+            return route;
         }
     }
 }

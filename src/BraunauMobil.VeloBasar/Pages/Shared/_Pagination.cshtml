@@ -1,5 +1,4 @@
-﻿@model IPagination
-
+﻿@model IPaginatable
 @{
     var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
     var nextDisabled = !Model.HasNextPage ? "disabled" : "";
@@ -10,10 +9,9 @@
         <ul class="pagination flex-wrap">
             <li class="page-item @prevDisabled">
                 <a class="page-link @prevDisabled"
-                   asp-page="@Model.MyPath"
+                   asp-page="@Model.PaginationPagePath"
                    asp-all-route-data="@Model.GetPaginationRoute()"
-                   asp-route-pageIndex="@(Model.PageIndex - 1)"
-                   asp-route-currentFilter="@Model.CurrentFilter">
+                   asp-route-pageIndex="@(Model.PageIndex - 1)">
                     @Localizer["<<<"]
                 </a>
             </li>
@@ -21,17 +19,15 @@
             {
                 var isActive = pageNumber == Model.PageIndex ? "active" : "";
                 <li class="page-item @isActive" aria-current="page">
-                    <a class="page-link" asp-page="@Model.MyPath"
+                    <a class="page-link" asp-page="@Model.PaginationPagePath"
                        asp-all-route-data="@Model.GetPaginationRoute()"
-                       asp-route-pageIndex="@pageNumber"
-                       asp-route-currentFilter="@Model.CurrentFilter">@pageNumber</a>
+                       asp-route-pageIndex="@pageNumber">@pageNumber</a>
                 </li>
             }
             <li class="page-item @nextDisabled">
-                <a class="page-link" asp-page="@Model.MyPath"
+                <a class="page-link" asp-page="@Model.PaginationPagePath"
                    asp-all-route-data="@Model.GetPaginationRoute()"
-                   asp-route-pageIndex="@(Model.PageIndex + 1)"
-                   asp-route-currentFilter="@Model.CurrentFilter">
+                   asp-route-pageIndex="@(Model.PageIndex + 1)">
                     @Localizer[">>>"]
                 </a>
             </li>

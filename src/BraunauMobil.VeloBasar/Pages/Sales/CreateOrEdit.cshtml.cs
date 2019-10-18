@@ -38,7 +38,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
             }
             else
             {
-                Products = new PaginatedList<Product>();
+                Products = new List<Product>();
             }
 
             ErrorText = errorText;

@@ -18,16 +18,16 @@
             <thead>
                 <tr>
                     <th>
-                        @Html.DisplayNameFor(model => model.Sales[0].Number)
+                        @Html.DisplayNameFor(model => model.Sales.List[0].Number)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Sales[0].TimeStamp)
+                        @Html.DisplayNameFor(model => model.Sales.List[0].TimeStamp)
                     </th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model.Sales)
+                @foreach (var item in Model.Sales.List)
                 {
                     <tr>
                         <td>
@@ -47,4 +47,4 @@
 </div>
 
 
-<partial name="/Pages/Shared/_Pagination.cshtml" model="@Model" />
+<partial name="/Pages/Shared/_Pagination.cshtml" model="@Model.Sales" />

@@ -15,13 +15,13 @@
         <table class="table table-striped m-0">
             <thead>
                 <tr>
-                    <th scope="col">@Html.DisplayNameFor(model => model.Brands.First().Id)</th>
-                    <th scope="col">@Html.DisplayNameFor(model => model.Brands.First().Name)</th>
+                    <th scope="col">@Html.DisplayNameFor(model => model.Brands.List.First().Id)</th>
+                    <th scope="col">@Html.DisplayNameFor(model => model.Brands.List.First().Name)</th>
                     <th scope="col"></th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model.Brands)
+                @foreach (var item in Model.Brands.List)
                 {
                     <tr>
                         <th scope="row">@Html.DisplayFor(modelItem => item.Id)</th>
@@ -55,4 +55,4 @@
 </div>
 
 
-<partial name="/Pages/Shared/_Pagination.cshtml" model="@Model" />
+<partial name="/Pages/Shared/_Pagination.cshtml" model="@Model.Brands" />

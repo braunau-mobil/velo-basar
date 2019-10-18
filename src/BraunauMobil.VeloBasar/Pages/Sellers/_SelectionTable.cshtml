@@ -1,4 +1,4 @@
-﻿@model SelectionListViewModel<Seller>
+﻿@model ListViewModel<Seller>
 
 <div class="card-body p-0">
     <table class="table table-striped m-0">
@@ -26,7 +26,13 @@
                     <td>@Html.DisplayFor(modelItem => item.ZIP)</td>
                     <td>@Html.DisplayFor(modelItem => item.Country.Name)</td>
                     <td>
-                        <a asp-page="@Model.TargetPage" asp-all-route-data="@Model.GetRoute(item.Id)">@Localizer["Übernehmen"]</a>
+                        @foreach (var command in Model.Commands)
+                        {
+                            if (command.IsEnabled(item))
+                            {
+                                <a asp-page="@command.Page" asp-all-route-data="@command.GetRoute(item)">@command.Text</a>
+                            }
+                        }
                     </td>
                 </tr>
             }

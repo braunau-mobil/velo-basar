@@ -12,9 +12,9 @@
     </div>
 
     <div class="card-body p-0">
-        <partial name="/Pages/Products/_TableWithControls.cshtml" model="@new ViewModels.ProductsViewModel(Model.Basar, Model.Products)" />
+        <partial name="/Pages/Products/_TableWithControls.cshtml" model="@Model.Products" />
     </div>
 </div>
 
 
-<partial name="/Pages/Shared/_Pagination.cshtml" model="@Model" />
+<partial name="/Pages/Shared/_Pagination.cshtml" model="@Model.Products"/>
