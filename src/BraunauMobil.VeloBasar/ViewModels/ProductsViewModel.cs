@@ -1,10 +1,14 @@
 ﻿using BraunauMobil.VeloBasar.Models;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace BraunauMobil.VeloBasar.ViewModels
 {
     public class ProductsViewModel : ListViewModel<Product>
     {
+        public ProductsViewModel(Basar basar, IEnumerable<ProductToTransaction> list) : base(basar, list.Select(pt => pt.Product))
+        {
+        }
         public ProductsViewModel(Basar basar, IEnumerable<Product> list) : base(basar, list)
         {
         }

@@ -19,5 +19,13 @@ namespace BraunauMobil.VeloBasar.Models
         {
             return Products.Select(pt => pt.Product);
         }
+        public bool CanCancelNothing()
+        {
+            return !Products.All(p => p.Product.CanCancel());
+        }
+        public decimal GetSum()
+        {
+            return Products.Sum(pt => pt.Product.Price);
+        }
     }
 }

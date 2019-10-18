@@ -115,6 +115,45 @@ namespace BraunauMobil.VeloBasar.Data
             return acceptance;
         }
 
+        public async Task<ProductsTransaction> CancelProductsAsync(Basar basar, int saleId, int[] productIds)
+        {
+            var sale = await Transactions.GetAsync(saleId);
+            var cancellation = new ProductsTransaction
+            {
+                Type = TransactionType.Cancellation,
+                Basar = basar,
+                Number = NextNumber(basar, TransactionType.Cancellation),
+                TimeStamp = DateTime.Now,
+                Products = new List<ProductToTransaction>()
+            };
+            foreach (var productId in productIds)
+            {
+                var product = await GetProductAsync(productId);
+                cancellation.Products.Add(new ProductToTransaction
+                {
+                    Transaction = cancellation,
+                    Product = product
+                });
+                product.StorageStatus = StorageStatus.Available;
+
+                sale.Products.Remove(sale.Products.First(s => s.ProductId == product.Id));
+            }
+            await Transactions.AddAsync(cancellation);
+
+            if (sale.Products.Count <= 0)
+            {
+                Transactions.Remove(sale);
+            }
+            else
+            {
+                await GenerateSaleDocAsync(basar, sale);
+            }
+
+            await SaveChangesAsync();
+
+            return cancellation;
+        }
+
         public async Task CancelProductAsync(Basar basar, int productId)
         {
             var product = await GetProductAsync(productId);
@@ -281,6 +320,29 @@ namespace BraunauMobil.VeloBasar.Data
             await SaveChangesAsync();
         }
 
+        public async Task<FileStore> GenerateSaleDocAsync(Basar basar, ProductsTransaction sale)
+        {
+            FileStore fileStore;
+            if (sale.DocumentId == null)
+            {
+                fileStore = new FileStore
+                {
+                    ContentType = PdfContentType
+                };
+                await FileStore.AddAsync(fileStore);
+                await SaveChangesAsync();
+
+                sale.DocumentId = fileStore.Id;
+            }
+            else
+            {
+                fileStore = await GetFileAsync(sale.DocumentId.Value);
+            }
+            fileStore.Data = _pdfCreator.CreateSale(basar, sale);
+            await SaveChangesAsync();
+
+            return fileStore;
+        }
         public async Task<FileStore> GenerateSaleDocIfNotExistAsync(Basar basar, int saleId)
         {
             var sale = await GetSaleAsync(saleId);
@@ -424,6 +486,20 @@ namespace BraunauMobil.VeloBasar.Data
             }
 
             return res.Where(Expressions.ProductSearch(searchString));
+        }
+
+        public async Task<IEnumerable<Product>> GetProductsForSaleAsync(int saleId)
+        {
+            var transaction = await Transactions
+                .Include(s => s.Products)
+                    .ThenInclude(ps => ps.Product)
+                        .ThenInclude(p => p.Brand)
+                .Include(a => a.Products)
+                    .ThenInclude(pa => pa.Product)
+                        .ThenInclude(p => p.Type)
+                .FirstOrDefaultAsync(s => s.Id == saleId);
+            
+            return transaction.Products.Select(t => t.Product);
         }
 
         public IQueryable<Product> GetProductsForSeller(Basar basar, int sellerId)

@@ -6,6 +6,7 @@ namespace BraunauMobil.VeloBasar.ViewModels
 {
     public class BasarViewModel
     {
+        public BasarViewModel() { }
         public BasarViewModel(Basar basar)
         {
             Basar = basar;

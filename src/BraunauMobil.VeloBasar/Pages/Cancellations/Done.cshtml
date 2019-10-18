@@ -1,0 +1,40 @@
+﻿@page
+@model DoneModel
+
+@{
+    ViewData["Title"] = Localizer["Storno erfolgreich"];
+}
+
+<div class="card my-3">
+    <div class="card-header d-flex justify-content-between align-items-md-center">
+        <div class="mr-auto"><h5>@Localizer["Stornierte Artikel"]</h5></div>
+    </div>
+
+    <div class="card-body p-0">
+        <partial name="/Pages/Products/_Table.cshtml" model="new ProductsViewModel(Model.Basar, Model.Cancellation.Products)" />
+    </div>
+
+    <div class="card-footer">
+        <div class="row d-flex justify-content-between align-items-center m-1">
+            <h5>@Html.DisplayNameFor(model => model.PayoutAmout)</h5> 
+            <h5>@Html.DisplayFor(model => model.PayoutAmout)</h5>
+        </div>
+    </div>
+</div>
+
+
+<div Condition="Model.Sale != null" class="card my-3">
+    <div class="card-header d-flex justify-content-between align-items-md-center">
+        <div class="mr-auto"><h5>@Localizer["Aktualisierter Verkauf"]</h5></div>
+        <div class="d-flex justify-content-end">
+            <a asp-page="/ShowFile" asp-all-route-data="Model.GetSaleDocumentRoute()" class="btn btn-primary" target="_blank">@Localizer["Rechnugsbeleg"]</a>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <div class="column">
+            <partial name="/Pages/Products/_Table.cshtml" model="new ProductsViewModel(Model.Basar, Model.Sale.Products)" />
+        </div>
+    </div>
+</div>
+

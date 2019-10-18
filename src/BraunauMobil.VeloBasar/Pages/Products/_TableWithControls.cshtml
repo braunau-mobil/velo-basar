@@ -32,11 +32,6 @@
                 </td>
                 <td>
                     <a asp-page="/Products/Details" asp-all-route-data="@Model.GetItemRoute(item)">@Localizer["Details"]</a>
-                    @if (item.CanCancel())
-                    {
-                        <br />
-                        <a asp-page="/Cancellations/Create" asp-all-route-data="@Model.GetItemRoute(item)">@Localizer["Stornieren"]</a>
-                    }
                     @if (item.Label != null)
                     {
                         <br />
