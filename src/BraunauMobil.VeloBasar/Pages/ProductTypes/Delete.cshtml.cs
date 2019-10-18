@@ -12,7 +12,7 @@ namespace BraunauMobil.VeloBasar.Pages.ProductTypes
 
         public async Task<IActionResult> OnGetAsync(int ProductTypeId, int pageIndex, int? basarId)
         {
-            if (await Context.ExistsProductType(ProductTypeId))
+            if (await Context.ProductTypes.ExistsAsync(ProductTypeId))
             {
                 await Context.DeleteProductType(ProductTypeId);
             }

@@ -14,7 +14,7 @@ namespace BraunauMobil.VeloBasar.Pages.ProductTypes
 
         public async Task<IActionResult> OnGetAsync(int productTypeId, ModelStatus status, int pageIndex, int? basarId)
         {
-            if (await Context.ExistsProductType(productTypeId))
+            if (await Context.ProductTypes.ExistsAsync(productTypeId))
             {
                 var productType = await Context.GetProductTypeAsync(productTypeId);
                 productType.Status = status;

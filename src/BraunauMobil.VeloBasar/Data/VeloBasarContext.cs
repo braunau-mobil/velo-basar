@@ -260,16 +260,6 @@ namespace BraunauMobil.VeloBasar.Data
             }
         }
 
-        public async Task<bool> ExistsBrand(int brandId)
-        {
-            return await Brand.AnyAsync(b => b.Id == brandId);
-        }
-
-        public async Task<bool> ExistsProductType(int id)
-        {
-            return await ProductTypes.AnyAsync(b => b.Id == id);
-        }
-
         public async Task GenerateLabel(Basar basar, Product product)
         {
             var fileStore = new FileStore
