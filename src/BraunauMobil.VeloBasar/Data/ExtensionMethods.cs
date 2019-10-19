@@ -8,6 +8,28 @@ namespace BraunauMobil.VeloBasar.Data
 {
     public static class ExtensionMethods
     {
+        public static async Task<FileStore> GetAsync(this DbSet<FileStore> dbSet, int id)
+        {
+            return await dbSet.FindAsync(id);
+        }
+        public static async Task<Product> GetAsync(this DbSet<Product> dbSet, int id)
+        {
+            return await dbSet.IncludeAll().FirstOrDefaultAsync(p => p.Id == id);
+        }
+        public static async Task<IList<Product>> GetManyAsync(this DbSet<Product> dbSet, IList<int> ids)
+        {
+            return await dbSet.Where(p => ids.Contains(p.Id)).IncludeAll().ToListAsync();
+        }
+        public static IQueryable<Product> IncludeAll(this IQueryable<Product> products)
+        {
+            return products
+                .Include(p => p.Brand)
+                .Include(p => p.Type);
+        }
+
+
+
+
         public static async Task<bool> ExistsAsync(this DbSet<Brand> dbSet, int id)
         {
             return await dbSet.AnyAsync(p => p.Id == id);
@@ -28,6 +50,10 @@ namespace BraunauMobil.VeloBasar.Data
         {
             return await dbSet.AnyAsync(s => s.Id == id);
         }
+        public static IList<Product> GetProducts(this ICollection<ProductToTransaction> productsTransactions)
+        {
+            return productsTransactions.Select(pt => pt.Product).ToList();
+        }
         public static IEnumerable<Product> WhereStorageState(this IEnumerable<Product> products, StorageStatus state)
         {
             return products.Where(p => p.StorageStatus == state);
@@ -36,12 +62,7 @@ namespace BraunauMobil.VeloBasar.Data
         {
             return products.Where(p => p.StorageStatus != state);
         }
-        public static IQueryable<Product> IncludeAll(this DbSet<Product> products)
-        {
-            return products
-                .Include(p => p.Brand)
-                .Include(p => p.Type);
-        }
+
         public static IQueryable<ProductsTransaction> IncludeAll(this DbSet<ProductsTransaction> transactions)
         {
             return transactions

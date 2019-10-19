@@ -15,10 +15,9 @@ namespace BraunauMobil.VeloBasar.Pages.Settlements
             await LoadBasarAsync(basarId);
 
             var settlement = await Context.SettleSellerAsync(Basar, sellerId);
+            var file = await Context.FileStore.GetAsync(settlement.DocumentId.Value);
 
-            var fileStore = await Context.GenerateSettlementDocIfNotExistAsync(Basar, settlement);
-
-            return File(fileStore.Data, fileStore.ContentType);
+            return File( file.Data, file.ContentType);
         }
     }
 }

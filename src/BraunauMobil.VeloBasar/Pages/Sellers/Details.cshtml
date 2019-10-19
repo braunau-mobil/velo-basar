@@ -10,7 +10,7 @@
         <div class="mr-auto"><h5>#@Model.Seller.Id @Html.DisplayFor(model => model.Seller.FirstName) @Html.DisplayFor(model => model.Seller.LastName)</h5></div>
         <div class="d-flex justify-content-end">
             <a asp-page="/Acceptances/StartWithSeller" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@Model.Seller.Id" class="btn btn-primary mx-1">@Localizer["Artikel annehmen"]</a>
-            @if (Model.Products.CanSettle())
+            @if (Model.Products.IsAllowed(TransactionType.Settlement))
             {
                 <a asp-page="/Settlements/CreateAndPrint" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@Model.Seller.Id" target="_blank" class="btn btn-primary mx-1">@Localizer["Abrechnen"]</a>
             }

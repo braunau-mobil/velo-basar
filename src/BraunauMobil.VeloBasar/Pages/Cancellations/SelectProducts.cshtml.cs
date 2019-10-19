@@ -43,7 +43,7 @@ namespace BraunauMobil.VeloBasar.Pages.Cancellations
                 return Page();
             }
 
-            var cancellation = await Context.CancelProductsAsync(Basar, saleId, Products.List.Where(vm => vm.IsSelected).Select(vm => vm.Item.Id).ToArray());
+            var cancellation = await Context.CancelProductsAsync(Basar, saleId, Products.List.Where(vm => vm.IsSelected).Select(vm => vm.Item).ToArray());
             if (await Context.Transactions.ExistsAsync(saleId))
             {
                 return RedirectToPage("/Cancellations/Done", new { basarId, cancellationId = cancellation.Id, saleId });

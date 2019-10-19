@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using BraunauMobil.VeloBasar.Data;
 using BraunauMobil.VeloBasar.Models;
 using System.Collections.Generic;
@@ -20,7 +19,7 @@ namespace BraunauMobil.VeloBasar.Pages.Products
         {
             await LoadBasarAsync(basarId);
 
-            Product = await Context.Product.FirstOrDefaultAsync(p => p.Id == productId);
+            Product = await Context.GetProductAsync(productId);
 
             if (Product == null)
             {
@@ -34,6 +33,13 @@ namespace BraunauMobil.VeloBasar.Pages.Products
         {
             var route = base.GetRoute();
             route.Add("productId", Product.Id.ToString());
+            return route;
+        }
+        public IDictionary<string, string> GetRoute(TransactionType transactionType)
+        {
+            var route = base.GetRoute();
+            route.Add("productId", Product.Id.ToString());
+            route.Add(nameof(transactionType), transactionType.ToString());
             return route;
         }
     }

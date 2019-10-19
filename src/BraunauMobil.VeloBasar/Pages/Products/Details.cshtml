@@ -1,20 +1,41 @@
 ﻿@page
 @model DetailsModel
 
+@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<IdentityUser> SignInManager
+
 @{
     ViewData["Title"] = Localizer["Artikel"];
+    var cardStyle = "";
+    if (Model.Product.IsLocked())
+    {
+        cardStyle = "border-danger ";
+    }
+    else if (Model.Product.IsGone())
+    {
+        cardStyle = "border-warning";
+    }
 }
 
-<div class="card my-3">
+<div class="card my-3 @cardStyle">
     <div class="card-header d-flex justify-content-between align-items-md-center">
         <div><h5>@ViewData["Title"] #@Model.Product.Id</h5></div>
 
         <partial name="/Pages/Products/_StatusBadge.cshtml" model="@Model.Product" />
 
         <div class="d-flex justify-content-end">
-            @if (Model.Product.CanCancel())
+            @if (SignInManager.IsSignedIn(User) && Model.Product.IsAllowed(TransactionType.Release))
             {
-                <a class="btn btn-primary mx-1" asp-page="/Cancellations/Create" asp-all-route-data="@Model.GetRoute()">@Localizer["Stornieren"]</a>
+                <a class="btn btn-danger mx-1" asp-page="/Transactions/CreateSingle" asp-all-route-data="@Model.GetRoute(TransactionType.Release)">@Localizer["Entsperren"]</a>
+            }
+            @if (Model.Product.IsAllowed(TransactionType.Lock))
+            {
+                <a class="btn btn-danger mx-1" asp-page="/Transactions/CreateSingle" asp-all-route-data="@Model.GetRoute(TransactionType.Lock)">@Localizer["Sperren"]</a>
+            }
+            @if (Model.Product.IsAllowed(TransactionType.MarkAsGone))
+            {
+                <a class="btn btn-warning mx-1" asp-page="/Transactions/CreateSingle" asp-all-route-data="@Model.GetRoute(TransactionType.MarkAsGone)">@Localizer["Verschwunden"]</a>
             }
             @if (Model.Product.Label != null)
             {
@@ -25,51 +46,25 @@
     </div>
 
     <div class="card-body">
-        <dl class="dl-horizontal">
-            <dt>
-                @Html.DisplayNameFor(model => model.Product.Brand)
-            </dt>
-            <dd>
-                @Html.DisplayFor(model => model.Product.Brand)
+        <dl class="row m-0">
+            <dt class="col-1"><label asp-for="@Model.Product.Type"></label></dt>
+            <dd class="col-11">@Model.Product.Type.Name</dd>
+
+            <dt class="col-1"><label asp-for="@Model.Product.Brand"></label></dt>
+            <dd class="col-11">@Model.Product.Brand.Name</dd>
+
+            <dt class="col-1"><label asp-for="@Model.Product.Description"></label></dt>
+            <dd class="col-11">
+                <p>@Model.Product.Description</p>
             </dd>
 
-            <dt>
-                @Html.DisplayNameFor(model => model.Product.Type)
-            </dt>
-            <dd>
-                @Html.DisplayFor(model => model.Product.Type)
-            </dd>
+            <dt class="col-1"><label asp-for="@Model.Product.Color"></label></dt>
+            <dd class="col-11">@Model.Product.Color</dd>
 
-            <dt>
-                @Html.DisplayNameFor(model => model.Product.Color)
-            </dt>
-            <dd>
-                @Html.DisplayFor(model => model.Product.Color)
-            </dd>
+            <dt class="col-1"><label asp-for="@Model.Product.Price"></label></dt>
+            <dd class="col-11">@Model.Product.Price</dd>
 
-            <dt>
-                @Html.DisplayNameFor(model => model.Product.Price)
-            </dt>
-            <dd>
-                @Html.DisplayFor(model => model.Product.Price)
-            </dd>
-
-            <dt>
-                @Html.DisplayNameFor(model => model.Product.Description)
-            </dt>
-            <dd>
-                @Html.DisplayFor(model => model.Product.Description)
-            </dd>
-
-            @if (!string.IsNullOrEmpty(Model.Product.Notes))
-            {
-                <dt>
-                    @Html.DisplayNameFor(model => model.Product.Notes)
-                </dt>
-                <dd>
-                    @Html.DisplayFor(model => model.Product.Notes)
-                </dd>
-            }
+            @@todo hier schöne TX Liste anzeigen!!!
         </dl>
     </div>
 </div>

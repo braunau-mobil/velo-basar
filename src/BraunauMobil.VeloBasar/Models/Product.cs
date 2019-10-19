@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace BraunauMobil.VeloBasar.Models
 {
@@ -46,8 +47,57 @@ namespace BraunauMobil.VeloBasar.Models
         [Display(Name = "Etikett")]
         public int? Label { get; set; }
 
-        [Display(Name = "Anmerkungen")]
-        public string Notes { get; set; }
+        public bool IsAllowed(TransactionType transactionType)
+        {
+            if (ValueStatus == ValueStatus.Settled)
+            {
+                return false;
+            }
+
+            switch (transactionType)
+            {
+                case TransactionType.Acceptance: return false;
+                case TransactionType.Cancellation: return StorageStatus == StorageStatus.Sold && ValueStatus != ValueStatus.Settled;
+                case TransactionType.Lock: return StorageStatus == StorageStatus.Available || StorageStatus == StorageStatus.Sold;
+                case TransactionType.MarkAsGone: return StorageStatus == StorageStatus.Available;
+                case TransactionType.Release: return StorageStatus == StorageStatus.Locked || StorageStatus == StorageStatus.Gone;
+                case TransactionType.Sale: return StorageStatus == StorageStatus.Available;
+                case TransactionType.Settlement: return StorageStatus == StorageStatus.Available || StorageStatus == StorageStatus.Sold;
+            }
+
+            throw new InvalidOperationException($"Invalid transationType: {transactionType}");
+        }
+        public void SetState(TransactionType transactionType)
+        {
+            switch (transactionType)
+            {
+                case TransactionType.Acceptance:
+                    ValueStatus = ValueStatus.NotSettled;
+                    StorageStatus = StorageStatus.Available;
+                    return;
+                case TransactionType.Cancellation:
+                    StorageStatus = StorageStatus.Available;
+                    return;
+                case TransactionType.Lock:
+                    StorageStatus = StorageStatus.Locked;
+                    return;
+                case TransactionType.MarkAsGone:
+                    StorageStatus = StorageStatus.Gone;
+                    return;
+                case TransactionType.Release:
+                    StorageStatus = StorageStatus.Available;
+                    return;
+                case TransactionType.Sale:
+                    StorageStatus = StorageStatus.Sold;
+                    return;
+                case TransactionType.Settlement:
+                    ValueStatus = ValueStatus.Settled;
+                    return;
+            }
+
+            throw new InvalidOperationException($"Invalid transationType: {transactionType}");
+        }
+
 
         public bool IsEmtpy()
         {
@@ -57,18 +107,13 @@ namespace BraunauMobil.VeloBasar.Models
                 && Brand == null
                 && Type == null;
         }
-
-        public bool CanCancel()
+        public bool IsGone()
         {
-            return StorageStatus == StorageStatus.Sold && ValueStatus != ValueStatus.Settled;
+            return StorageStatus == StorageStatus.Gone;
         }
-        public bool CanSell()
+        public bool IsLocked()
         {
-            return StorageStatus == StorageStatus.Available && ValueStatus != ValueStatus.Settled;
-        }
-        public bool CanSettle()
-        {
-            return (StorageStatus == StorageStatus.Available || StorageStatus == StorageStatus.Sold) && ValueStatus == ValueStatus.NotSettled;
+            return StorageStatus == StorageStatus.Locked;
         }
     }
 }

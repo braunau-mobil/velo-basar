@@ -9,14 +9,7 @@
     <div class="card-header d-flex justify-content-between align-items-md-center">
         <div class="mr-auto"><h5>@ViewData["Title"]</h5></div>
         <div><h5>@Model.Acceptance.TimeStamp</h5></div>
-        @if (Model.Acceptance.DocumentId == null)
-        {
-            <a asp-page="/Acceptances/Print" asp-all-route-data="@Model.GetRoute()" asp-route-acceptanceId="@Model.Acceptance.Number" target="_blank" class="btn btn-primary mx-1 ml-auto">@Localizer["Drucken"]</a>
-        }
-        else
-        {
-            <a asp-page="/ShowFile" asp-route-fileId="@Model.Acceptance.DocumentId" target="_blank" class="btn btn-primary mx-1 ml-auto">@Localizer["Beleg"]</a>
-        }
+        <a asp-page="/ShowFile" asp-route-fileId="@Model.Acceptance.DocumentId" target="_blank" class="btn btn-primary mx-1 ml-auto">@Localizer["Beleg"]</a>
     </div>
 
     <div class="card-body">

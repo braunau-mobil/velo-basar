@@ -17,5 +17,7 @@ namespace BraunauMobil.VeloBasar.Models.Base
         public DateTime TimeStamp { get; set; }
 
         public TransactionType Type { get; set; }
+
+        public string Notes { get; set; }
     }
 }

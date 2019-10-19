@@ -14,8 +14,8 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
         {
             await LoadBasarAsync(basarId);
 
-            var products = Request.Cookies.GetCart();
-            var sale = await Context.CheckoutProductsAsync(Basar, products);
+            var productIds = Request.Cookies.GetCart();
+            var sale = await Context.CheckoutProductsAsync(Basar, productIds);
             
             if (sale == null)
             {

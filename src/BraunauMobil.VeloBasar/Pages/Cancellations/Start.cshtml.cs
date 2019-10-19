@@ -4,6 +4,7 @@ using BraunauMobil.VeloBasar.Data;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.Extensions.Localization;
 using BraunauMobil.VeloBasar.Resources;
+using BraunauMobil.VeloBasar.Models;
 
 namespace BraunauMobil.VeloBasar.Pages.Cancellations
 {
@@ -44,7 +45,7 @@ namespace BraunauMobil.VeloBasar.Pages.Cancellations
                 ErrorMessage = _localizer["Es konnte kein Verkauf mit der Nummer {0} gefunden werden", SaleNumber];
                 return Page();
             }
-            if (sale.CanCancelNothing())
+            if (sale.Products.IsAllowed(TransactionType.Cancellation))
             {
                 ErrorMessage = _localizer["Es wurden bereits alle Artikel des Verkaufs abgerechnet. Ein Storno ist nicht mehr möglich."];
                 return Page();

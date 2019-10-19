@@ -57,7 +57,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
 
             var cart = Request.Cookies.GetCart();
             var product = await Context.GetProductAsync(productId);
-            if (product != null && product.CanSell())
+            if (product != null && product.IsAllowed(TransactionType.Sale))
             {
                 cart.Add(productId);
                 Response.Cookies.SetCart(cart);
@@ -85,7 +85,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
                 {
                     Item = product
                 };
-                if (!product.CanSell())
+                if (!product.IsAllowed(TransactionType.Sale))
                 {
                     viewModel.HasAlert = true;
                     viewModel.Alert = await GetProductErrorAsync(product, product.Id);
@@ -114,11 +114,13 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
             }
             else if (product.StorageStatus == StorageStatus.Gone)
             {
-                return _localizer["Der Artikel wurde als verschwunden markiert. Anmerkungen: {0}", product.Notes];
+                //  @todo Letzte TX anzeigen!
+                return _localizer["Der Artikel wurde als verschwunden markiert. Anmerkungen: @todo"];
             }
             else if (product.StorageStatus == StorageStatus.Locked)
             {
-                return _localizer["Der Artikel wurde gesperrt. Anmerkungen: {0}", product.Notes];
+                //  @todo Letzte TX anzeigen!
+                return _localizer["Der Artikel wurde gesperrt. Anmerkungen: @todo"];
             }
             else if (product.StorageStatus == StorageStatus.Sold)
             {

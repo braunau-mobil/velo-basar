@@ -20,7 +20,6 @@ namespace BraunauMobil.VeloBasar.Data
         private readonly Random _rand = new Random();
         private readonly VeloBasarContext _context;
         private readonly UserManager<IdentityUser> _userManager;
-        private readonly Dictionary<Basar, Dictionary<TransactionType, DateTime>> _timeStamps = new Dictionary<Basar, Dictionary<TransactionType, DateTime>>();
         private readonly DataGeneratorConfiguration _config;
         private Brand[] _brands;
         private Country[] _countries;
@@ -125,33 +124,22 @@ namespace BraunauMobil.VeloBasar.Data
 
         private async Task CreateAcceptanceAsync(Basar basar, Seller seller)
         {
-            var acceptance = new ProductsTransaction
-            {
-                Basar = basar,
-                Number = _context.NextNumber(basar, TransactionType.Acceptance),
-                Seller = seller,
-                TimeStamp = NextTimeStamp(basar, TransactionType.Acceptance),
-                Products = new List<ProductToTransaction>()
-            };
-
             var productCount = NextProductCount();
+            var products = new List<Product>();
             for (var productNumber = 1; productNumber <= productCount; productNumber++)
             {
-                await CreateProductAsync(acceptance, acceptance.Number);
+                products.Add(await CreateProductAsync());
             }
-
-            await _context.Transactions.AddAsync(acceptance);
-            await _context.SaveChangesAsync();
-            await _context.GenerateAcceptanceDocIfNotExistAsync(basar, acceptance.Id);
+            await _context.AcceptProductsAsync(basar, seller.Id, products);
         }
 
-        private async Task CreateProductAsync(ProductsTransaction acceptance, int number)
+        private async Task<Product> CreateProductAsync()
         {
             var product = new Product
             {
                 Brand = NextBrand(),
                 Color = NextColor(),
-                Description = $"Beschreibung für Produkt aus Annahme #{number}",
+                Description = $"Beschreibung für Produkt",
                 FrameNumber = NextFrameNumber(),
                 Price = NextPrice(),
                 StorageStatus = StorageStatus.Available,
@@ -162,12 +150,7 @@ namespace BraunauMobil.VeloBasar.Data
             await _context.Product.AddAsync(product);
             await _context.SaveChangesAsync();
 
-            var productAcceptance = new ProductToTransaction
-            {
-                Transaction = acceptance,
-                Product = product
-            };
-            acceptance.Products.Add(productAcceptance);
+            return product;
         }
 
         private void SetSellerName(Seller seller)
@@ -183,25 +166,6 @@ namespace BraunauMobil.VeloBasar.Data
             seller.Street = $"{_streets.TakeRandom(_rand)} {_rand.Next(1, 50)}";
             seller.ZIP = $"{_rand.Next(1,9)}{_rand.Next(1, 9)}{_rand.Next(1, 9)}{_rand.Next(1, 9)}";
         }
-
-        private DateTime NextTimeStamp(Basar basar, TransactionType transactionType)
-        {
-            if (!_timeStamps.ContainsKey(basar))
-            {
-                _timeStamps.Add(basar, new Dictionary<TransactionType, DateTime>());
-            }
-            if (!_timeStamps[basar].ContainsKey(transactionType))
-            {
-                _timeStamps[basar].Add(transactionType, basar.Date.AddHours(8));
-            }
-            var lastTimeStamp = _timeStamps[basar][transactionType];
-            var offsetSeconds = _rand.Next(1, 5 * 60);
-            var newTimeStamp = lastTimeStamp.AddSeconds(offsetSeconds);
-
-            _timeStamps[basar][transactionType] = newTimeStamp;
-            return newTimeStamp;
-        }
-
         private int NextProductCount()
         {
             //  wir wollen keine annahmen mit 0 produkten

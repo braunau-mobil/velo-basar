@@ -37,13 +37,13 @@ namespace BraunauMobil.VeloBasar.Pdf
             return bytes;
         }
 
-        public byte[] CreateAcceptance(Basar basar, ProductsTransaction acceptance)
+        public byte[] CreateAcceptance(ProductsTransaction acceptance)
         {
             return CreatePdf((pdfDoc, doc) =>
             {
                 var page = pdfDoc.AddNewPage(PageSize.A5);
 
-                doc.Add(new Paragraph($"Braunau mobil - {basar.Name}"));
+                doc.Add(new Paragraph($"Braunau mobil - {acceptance.Basar.Name}"));
                 doc.Add(new Paragraph($"Annahme #{acceptance.Number}"));
             });
         }
@@ -70,7 +70,7 @@ namespace BraunauMobil.VeloBasar.Pdf
             });
         }
 
-        public byte[] CreateSale(Basar basar, ProductsTransaction sale)
+        public byte[] CreateSale(ProductsTransaction sale)
         {
             return CreatePdf((pdfDoc, doc) =>
             {
@@ -81,7 +81,7 @@ namespace BraunauMobil.VeloBasar.Pdf
                 p.SetTextAlignment(iText.Layout.Properties.TextAlignment.RIGHT);
                 doc.Add(p);
 
-                p = new Paragraph($"Verkaufsbeleg: Braunau mobil: {basar.Name}");
+                p = new Paragraph($"Verkaufsbeleg: Braunau mobil: {sale.Basar.Name}");
                 p.SetFontSize(14);
                 p.SetBold();
                 doc.Add(p);
@@ -103,13 +103,13 @@ namespace BraunauMobil.VeloBasar.Pdf
             });
         }
 
-        public byte[] CreateSettlement(Basar basar, ProductsTransaction settlement)
+        public byte[] CreateSettlement(ProductsTransaction settlement)
         {
             return CreatePdf((pdfDoc, doc) =>
             {
                 var page = pdfDoc.AddNewPage(PageSize.A5);
 
-                doc.Add(new Paragraph($"Braunau mobil - {basar.Name}"));
+                doc.Add(new Paragraph($"Braunau mobil - {settlement.Basar.Name}"));
                 doc.Add(new Paragraph($"Abrechnung #{settlement.Number}"));
             });
         }

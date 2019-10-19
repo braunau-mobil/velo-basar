@@ -12,5 +12,11 @@ namespace BraunauMobil.VeloBasar.Models
         Sale,
         [Display(Name = "Abrechnung")]
         Settlement,
+        [Display(Name = "Sperren")]
+        Lock,
+        [Display(Name = "Als verschwunden markieren")]
+        MarkAsGone,
+        [Display(Name = "Freischalten")]
+        Release
     };
 }

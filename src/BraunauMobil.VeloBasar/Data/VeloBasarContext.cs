@@ -9,6 +9,8 @@ using System.Linq;
 using BraunauMobil.VeloBasar.Pdf;
 using Microsoft.AspNetCore.Identity;
 using System.Linq.Expressions;
+using Microsoft.Extensions.Localization;
+using BraunauMobil.VeloBasar.Resources;
 
 namespace BraunauMobil.VeloBasar.Data
 {
@@ -19,9 +21,12 @@ namespace BraunauMobil.VeloBasar.Data
 
         private readonly PdfCreator _pdfCreator = new PdfCreator();
 
-        public VeloBasarContext (DbContextOptions<VeloBasarContext> options)
+        private readonly IStringLocalizer<SharedResource> _localizer;
+
+        public VeloBasarContext (DbContextOptions<VeloBasarContext> options, IStringLocalizer<SharedResource> localizer)
             : base(options)
         {
+            _localizer = localizer;
         }
 
         public DbSet<Basar> Basar { get; set; }
@@ -54,64 +59,150 @@ namespace BraunauMobil.VeloBasar.Data
 
         public async Task<ProductsTransaction> AcceptProductsAsync(Basar basar, int sellerId, IList<Product> products)
         {
-            //  1. instert all the products
             var productsInserted = await InsertProductsAsync(products);
 
-            var acceptance = new ProductsTransaction
-            {
-                Type = TransactionType.Acceptance,
-                Basar = basar,
-                SellerId = sellerId,
-                TimeStamp = DateTime.Now,
-                Products = new List<ProductToTransaction>()
-            };
+            var tx = await CreateTransactionAsync(basar, TransactionType.Acceptance, sellerId, productsInserted.ToArray());
+            await GenerateTransactionDocumentAsync(tx);
 
-            acceptance.Products = productsInserted.Select(p => new ProductToTransaction { Product = p, Transaction = acceptance }).ToList();
-            Transactions.Add(acceptance);
+            return tx;
+        }
+        public async Task<ProductsTransaction> CancelProductsAsync(Basar basar, int saleId, IList<Product> products)
+        {
+            if (!products.IsAllowed(TransactionType.Cancellation))
+            {
+                return null;
+            }
+
+            products.SetState(TransactionType.Cancellation);
             await SaveChangesAsync();
 
-            await GenerateAcceptanceDocAsync(basar, acceptance);
-
-            return acceptance;
-        }
-        public async Task<ProductsTransaction> CancelProductsAsync(Basar basar, int saleId, int[] productIds)
-        {
             var sale = await Transactions.GetAsync(saleId);
-            var cancellation = new ProductsTransaction
-            {
-                Type = TransactionType.Cancellation,
-                Basar = basar,
-                Number = NextNumber(basar, TransactionType.Cancellation),
-                TimeStamp = DateTime.Now,
-                Products = new List<ProductToTransaction>()
-            };
-            foreach (var productId in productIds)
-            {
-                var product = await GetProductAsync(productId);
-                cancellation.Products.Add(new ProductToTransaction
-                {
-                    Transaction = cancellation,
-                    Product = product
-                });
-                product.StorageStatus = StorageStatus.Available;
+            await RemoveProductsFromTransactionAsync(sale, products);
 
-                sale.Products.Remove(sale.Products.First(s => s.ProductId == product.Id));
+            return await CreateTransactionAsync(basar, TransactionType.Cancellation, products.ToArray());
+        }
+        public async Task<ProductsTransaction> CheckoutProductsAsync(Basar basar, IList<int> productIds)
+        {
+            var products = await Product.GetManyAsync(productIds);
+            return await DoTransactionAsync(basar, TransactionType.Sale, null, products.ToArray());
+        }
+        public async Task<ProductsTransaction> SettleSellerAsync(Basar basar, int sellerId)
+        {
+            var products = await GetProductsForSeller(basar, sellerId).Where(p => p.IsAllowed(TransactionType.Settlement)).ToListAsync();
+            products.SetState(TransactionType.Settlement);
+
+            return await CreateTransactionAsync(basar, TransactionType.Settlement, sellerId, products.ToArray());
+        }
+        public async Task<ProductsTransaction> DoTransactionAsync(Basar basar, TransactionType transactionType, string notes, params Product[] products)
+        {
+            if (!products.IsAllowed(transactionType))
+            {
+                return null;
             }
-            await Transactions.AddAsync(cancellation);
 
-            if (sale.Products.Count <= 0)
+            products.SetState(transactionType);
+            await SaveChangesAsync();
+
+            return await CreateTransactionAsync(basar, transactionType, null, notes, products);
+        }
+
+        public int NextNumber(Basar basar, TransactionType transactionType)
+        {
+            var number = -1;
+
+            //  @todo i was ned wieso, aber wann i de drecks Connection in using pack, dann krachts da gewaltig
+            var connection = Database.GetDbConnection() as NpgsqlConnection;
+            connection.Open();
+
+            using (var command = connection.CreateCommand())
             {
-                Transactions.Remove(sale);
+                command.CommandText = NextNumberSql;
+                command.Parameters.AddWithValue("@BasarId", basar.Id);
+                command.Parameters.AddWithValue("@Type", (int)transactionType);
+
+                var x = command.ExecuteScalar();
+                number = (int)command.ExecuteScalar();
+            }
+
+            connection.Close();
+
+            return number;
+        }
+
+        private async Task<ProductsTransaction> CreateTransactionAsync(Basar basar, TransactionType transactionType, params Product[] products)
+        {
+            return await CreateTransactionAsync(basar, transactionType, null, null, products);
+        }
+        private async Task<ProductsTransaction> CreateTransactionAsync(Basar basar, TransactionType transactionType, int? sellerId, params Product[] products)
+        {
+            return await CreateTransactionAsync(basar, transactionType, sellerId, null, products);
+        }
+        private async Task<ProductsTransaction> CreateTransactionAsync(Basar basar, TransactionType transactionType, int? sellerId, string notes, params Product[] products)
+        {
+            var tx = new ProductsTransaction
+            {
+                BasarId = basar.Id,
+                Number = NextNumber(basar, transactionType),
+                TimeStamp = DateTime.Now,
+                Notes = notes,
+                Type = transactionType,
+                SellerId = sellerId
+            };
+            tx.Products = products.Select(p => new ProductToTransaction { Product = p, Transaction = tx }).ToList();
+            await Transactions.AddAsync(tx);
+            await SaveChangesAsync();
+
+            await GenerateTransactionDocumentAsync(tx);
+
+            return tx;
+        }
+        private async Task<FileStore> GenerateTransactionDocumentAsync(ProductsTransaction transaction)
+        {
+            FileStore fileStore;
+            if (transaction.DocumentId == null)
+            {
+                fileStore = new FileStore
+                {
+                    ContentType = PdfContentType
+                };
+                await FileStore.AddAsync(fileStore);
+                await SaveChangesAsync();
+
+                transaction.DocumentId = fileStore.Id;
             }
             else
             {
-                await GenerateSaleDocAsync(basar, sale);
+                fileStore = await GetFileAsync(transaction.DocumentId.Value);
+            }
+
+            if (transaction.Type == TransactionType.Acceptance)
+            {
+                fileStore.Data = _pdfCreator.CreateAcceptance(transaction);
+            }
+            else if (transaction.Type == TransactionType.Sale)
+            {
+                fileStore.Data = _pdfCreator.CreateSale(transaction);
+            }
+            else if (transaction.Type == TransactionType.Settlement)
+            {
+                fileStore.Data = _pdfCreator.CreateSettlement(transaction);
             }
 
             await SaveChangesAsync();
 
-            return cancellation;
+            return fileStore;
         }
+        private async Task RemoveProductsFromTransactionAsync(ProductsTransaction transaction, IList<Product> productsToRemove)
+        {
+            foreach (var product in productsToRemove)
+            {
+                transaction.Products.Remove(transaction.Products.First(s => s.ProductId == product.Id));
+            }
+            await SaveChangesAsync();
+        }
+
+
+
         public async Task<bool> CanDeleteBrandAsync(Brand item)
         {
             return !await Product.AnyAsync(p => p.BrandId == item.Id);
@@ -120,35 +211,7 @@ namespace BraunauMobil.VeloBasar.Data
         {
             return !await Product.AnyAsync(p => p.TypeId == item.Id);
         }
-        public async Task<ProductsTransaction> CheckoutProductsAsync(Basar basar, IList<int> productIds)
-        {
-            //  1. checkout all products
-            var products = await Product.Get(productIds).AsTracking().ToArrayAsync();
-            if (products.Any(p => !p.CanSell()))
-            {
-                return null;
-            }
-            foreach (var product in products)
-            {
-                product.StorageStatus = StorageStatus.Sold;
-            }
-            await SaveChangesAsync();
 
-            var sale = new ProductsTransaction
-            {
-                Type = TransactionType.Sale,
-                Basar = basar,
-                Number = NextNumber(basar, TransactionType.Sale),
-                TimeStamp = DateTime.Now,
-            };
-            sale.Products = products.Select(p => new ProductToTransaction { Product = p, Transaction = sale }).ToList();
-            Transactions.Add(sale);            
-            await SaveChangesAsync();
-
-            await GenerateSaleDocAsync(basar, sale);
-            
-            return sale;
-        }
         public async Task<Basar> CreateNewBasarAsync(DateTime date, string name, decimal productCommission, decimal productDiscount, decimal sellerDiscount)
         {
             var basar = new Basar
@@ -162,10 +225,10 @@ namespace BraunauMobil.VeloBasar.Data
             await Basar.AddAsync(basar);
             await SaveChangesAsync();
 
-            await CreateNewNumberAsync(basar, TransactionType.Acceptance);
-            await CreateNewNumberAsync(basar, TransactionType.Settlement);
-            await CreateNewNumberAsync(basar, TransactionType.Cancellation);
-            await CreateNewNumberAsync(basar, TransactionType.Sale);
+            foreach (var enumValue in Enum.GetValues(typeof(TransactionType)))
+            {
+                await CreateNewNumberAsync(basar, (TransactionType)enumValue);
+            }
 
             return basar;
         }
@@ -215,55 +278,6 @@ namespace BraunauMobil.VeloBasar.Data
             product.Label = fileStore.Id;
         }
 
-        public async Task<FileStore> GenerateAcceptanceDocAsync(Basar basar, ProductsTransaction sale)
-        {
-            FileStore fileStore;
-            if (sale.DocumentId == null)
-            {
-                fileStore = new FileStore
-                {
-                    ContentType = PdfContentType
-                };
-                await FileStore.AddAsync(fileStore);
-                await SaveChangesAsync();
-
-                sale.DocumentId = fileStore.Id;
-            }
-            else
-            {
-                fileStore = await GetFileAsync(sale.DocumentId.Value);
-            }
-            fileStore.Data = _pdfCreator.CreateAcceptance(basar, sale);
-            await SaveChangesAsync();
-
-            return fileStore;
-        }
-
-        public async Task<FileStore> GenerateAcceptanceDocIfNotExistAsync(Basar basar, int acceptanceId)
-        {
-            var acceptance = await GetAcceptanceAsync(acceptanceId);
-
-            FileStore fileStore;
-            if (acceptance.DocumentId == null)
-            {
-                fileStore = new FileStore
-                {
-                    ContentType = PdfContentType,
-                    Data = _pdfCreator.CreateAcceptance(basar, acceptance)
-                };
-                await FileStore.AddAsync(fileStore);
-                await SaveChangesAsync();
-
-                acceptance.DocumentId = fileStore.Id;
-                await SaveChangesAsync();
-            }
-            else
-            {
-                fileStore = await GetFileAsync(acceptance.DocumentId.Value);
-            }
-
-            return fileStore;
-        }
 
         public async Task GenerateMissingLabelsAsync(Basar basar, int sellerId)
         {
@@ -274,71 +288,6 @@ namespace BraunauMobil.VeloBasar.Data
             }
 
             await SaveChangesAsync();
-        }
-
-        public async Task<FileStore> GenerateSaleDocAsync(Basar basar, ProductsTransaction sale)
-        {
-            FileStore fileStore;
-            if (sale.DocumentId == null)
-            {
-                fileStore = new FileStore
-                {
-                    ContentType = PdfContentType
-                };
-                await FileStore.AddAsync(fileStore);
-                await SaveChangesAsync();
-
-                sale.DocumentId = fileStore.Id;
-            }
-            else
-            {
-                fileStore = await GetFileAsync(sale.DocumentId.Value);
-            }
-            fileStore.Data = _pdfCreator.CreateSale(basar, sale);
-            await SaveChangesAsync();
-
-            return fileStore;
-        }
-        public async Task<FileStore> GenerateSaleDocIfNotExistAsync(Basar basar, int saleId)
-        {
-            var sale = await GetSaleAsync(saleId);
-
-            FileStore fileStore;
-            if (sale.DocumentId == null)
-            {
-                fileStore = new FileStore
-                {
-                    ContentType = PdfContentType,
-                    Data = _pdfCreator.CreateSale(basar, sale)
-                };
-                await FileStore.AddAsync(fileStore);
-                await SaveChangesAsync();
-
-                sale.DocumentId = fileStore.Id;
-                await SaveChangesAsync();
-            }
-            else
-            {
-                fileStore = await GetFileAsync(sale.DocumentId.Value);
-            }
-
-            return fileStore;
-        }
-
-        public async Task<FileStore> GenerateSettlementDocIfNotExistAsync(Basar basar, ProductsTransaction settlement)
-        {
-            var fileStore = new FileStore
-            {
-                ContentType = PdfContentType,
-                Data = _pdfCreator.CreateSettlement(basar, settlement)
-            };
-            await FileStore.AddAsync(fileStore);
-            await SaveChangesAsync();
-
-            settlement.DocumentId = fileStore.Id;
-            await SaveChangesAsync();
-
-            return fileStore;
         }
 
         public async Task<ProductsTransaction> GetAcceptanceAsync(int acceptanceId)
@@ -420,7 +369,8 @@ namespace BraunauMobil.VeloBasar.Data
         public async Task<Product> GetProductAsync(int productId)
         {
             return await Product
-                .Include(p => p.Brand).Include(p => p.Type)
+                .Include(p => p.Brand)
+                .Include(p => p.Type)
                 .FirstOrDefaultAsync(p => p.Id == productId);
         }
 
@@ -595,7 +545,6 @@ namespace BraunauMobil.VeloBasar.Data
                     Description = product.Description,
                     FrameNumber = product.FrameNumber,
                     Label = product.Label,
-                    Notes = product.Notes,
                     Price = product.Price,
                     StorageStatus = StorageStatus.Available,
                     TireSize = product.TireSize,
@@ -623,64 +572,16 @@ namespace BraunauMobil.VeloBasar.Data
             }
         }
 
-        public int NextNumber(Basar basar, TransactionType transactionType)
-        {
-            if (basar == null)
-            {
-                throw new ArgumentException("Invalid basar");
-            }
 
-            var number = -1;
+        public async Task SetStorageStatusAsync(int basarId, int productId, string notes, StorageStatus storageStatus)
+        {
+            var product = await GetProductAsync(productId);
+            product.StorageStatus = storageStatus;
             
-            //  @todo i was ned wieso, aber wann i de drecks Connection in using pack, dann krachts da gewaltig
-            var connection = Database.GetDbConnection() as NpgsqlConnection;
-            connection.Open();
-
-            using (var command = connection.CreateCommand())
-            {
-                command.CommandText = NextNumberSql;
-                command.Parameters.AddWithValue("@BasarId", basar.Id);
-                command.Parameters.AddWithValue("@Type", (int)transactionType);
-
-                number = (int) command.ExecuteScalar();
-            }
-
-            connection.Close();
-
-            return number;
-        }
-
-        public async Task<ProductsTransaction> SettleSellerAsync(Basar basar, int sellerId)
-        {
-            var settlement = new ProductsTransaction
-            {
-                Type = TransactionType.Settlement,
-                Basar = basar,
-                SellerId = sellerId,
-                TimeStamp = DateTime.Now,
-                Products = new List<ProductToTransaction>()
-            };
-
-            var products = await GetProductsForSeller(basar, sellerId).ToArrayAsync();
-            foreach (var product in products)
-            {
-                product.ValueStatus = ValueStatus.Settled;
-
-                var productSettlement = new ProductToTransaction
-                {
-                    Product = product,
-                    Transaction = settlement
-                };
-                settlement.Products.Add(productSettlement);
-            }
-
-            settlement.Number = NextNumber(basar, TransactionType.Settlement);
-            await Transactions.AddAsync(settlement);
-
             await SaveChangesAsync();
-
-            return settlement;
         }
+
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
