@@ -6,7 +6,7 @@ namespace BraunauMobil.VeloBasar.Models
     public class Brand
     {
         public int Id { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Bitte einen Namen eingeben.")]
         [Display(Name = "Name")]
         public string Name { get; set; }
         [Display(Name = "Status")]

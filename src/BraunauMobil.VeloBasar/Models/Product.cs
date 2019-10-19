@@ -13,17 +13,17 @@ namespace BraunauMobil.VeloBasar.Models
         [Display(Name = "Farbe")]
         public string Color { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Bitte eine Marke auswählen.")]
         public int BrandId { get; set; }
 
         [Display(Name = "Marke")]
         public Brand Brand { get; set; }
 
         [Display(Name = "Beschreibung")]
-        [Required]
+        [Required(ErrorMessage = "Bitte eine Beschreibung eingeben.")]
         public string Description { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Bitte einen Typ auswählen.")]
         public int TypeId { get; set; }
 
         [Display(Name = "Typ")]
@@ -34,7 +34,7 @@ namespace BraunauMobil.VeloBasar.Models
 
         [DataType(DataType.Currency)]
         [Display(Name = "Preis")]
-        [Required]
+        [Required(ErrorMessage = "Bitte einen Preis eingeben.")]
         public decimal Price { get; set; }
 
         [Display(Name = "Lagerstatus")]

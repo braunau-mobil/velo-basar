@@ -9,27 +9,27 @@ namespace BraunauMobil.VeloBasar.Models
     {
         public int Id { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Bitte einen Vornamen eingeben.")]
         [Display(Name = "Vorname")]
         public string FirstName { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Bitte einen Nachnamen eingeben.")]
         [Display(Name = "Nachname")]
         public string LastName { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Bitte eine Straße eingeben.")]
         [Display(Name = "Straße")]
         public string Street { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Bitte eine Stadt eingeben.")]
         [Display(Name = "Stadt")]
         public string City { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Bitte eine Postleitzahl eingeben.")]
         [Display(Name = "PLZ")]
         public string ZIP { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Bitte ein Land auswählen eingeben.")]
         public int CountryId { get; set; }
 
         [Display(Name = "Land")]
