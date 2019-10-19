@@ -20,6 +20,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
             _localizer = localizer;
         }
 
+        public string ErrorText { get; set; }
         [BindProperty]
         public Seller Seller { get; set; }
         public ListViewModel<Seller> Sellers { get; set; }
@@ -52,6 +53,12 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
 
             if (search == true)
             {
+                if (string.IsNullOrEmpty(Seller.FirstName) && string.IsNullOrEmpty(Seller.LastName))
+                {
+                    ErrorText = _localizer["Bitte Vor und/oder Nachnamen eingeben für die Suche"];
+                    return Page();
+                }
+
                 var sellers = await Context.GetSellers(Seller.FirstName, Seller.LastName).ToListAsync();
                 if (sellers.Count > 0)
                 {
@@ -63,6 +70,16 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
                         }
                     });
                 }
+                else
+                {
+                    ErrorText = _localizer["Es konnte kein Verkäufer gefunden werden."];
+                }
+                return Page();
+            }
+
+            if (string.IsNullOrEmpty(Seller.FirstName) || string.IsNullOrEmpty(Seller.LastName))
+            {
+                IsValidationEnabled = true;
                 return Page();
             }
 
@@ -96,17 +113,19 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
             route.Add("sellerId", seller.Id.ToString());
             return route;
         }
-        public IDictionary<string, string> GetPostRoute(bool? search = null)
+        public IDictionary<string, string> GetNextRoute()
         {
             var route = GetRoute();
-            if(search != null)
-            {
-                route.Add(nameof(search), search.ToString());
-            }
-            else if (AreWeInEditMode)
+            if (AreWeInEditMode)
             {
                 route.Add("sellerId", Seller.Id.ToString());
             }
+            return route;
+        }
+        public IDictionary<string, string> GetSearchRoute()
+        {
+            var route = GetRoute();
+            route.Add("search", true.ToString());
             return route;
         }
 

@@ -12,8 +12,6 @@
 
     <div class="card-body">
         <form method="post">
-            <div Condition="@Model.IsValidationEnabled" asp-validation-summary="ModelOnly" class="text-danger"></div>
-
             <input Condition="@Model.AreWeInEditMode" type="hidden" asp-for="Seller.Id" />
             <input type="hidden" asp-for="Seller.Token" />
 
@@ -29,8 +27,12 @@
                     <span Condition="@Model.IsValidationEnabled" asp-validation-for="Seller.LastName" class="text-danger"></span>
                 </div>
             </div>
+            <div Condition="@Model.ErrorText != null" class="alert alert-danger" role="alert">
+                @Model.ErrorText
+            </div>
+
             <div class="form-group">
-                <input asp-all-route-data="@Model.GetPostRoute(true)" type="submit" value="@Localizer["Suchen"]" class="btn btn-primary" />
+                <input asp-all-route-data="@Model.GetSearchRoute()" type="submit" value="@Localizer["Suchen"]" class="btn btn-primary" />
             </div>
 
             <div condition="Model.HasSellers">
@@ -73,17 +75,8 @@
                 <span Condition="@Model.IsValidationEnabled" asp-validation-for="Seller.BankAccountHolder" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="@Localizer["Weiter"]" class="btn btn-primary" asp-all-route-data="@Model.GetPostRoute()" />
+                <input type="submit" value="@Localizer["Weiter"]" class="btn btn-primary" asp-all-route-data="@Model.GetNextRoute()" />
             </div>
         </form>
-
-
     </div>
 </div>
-
-@section Scripts {
-    @if (Model.IsValidationEnabled)
-    {
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-}
