@@ -11,11 +11,11 @@ using BraunauMobil.VeloBasar.Resources;
 
 namespace BraunauMobil.VeloBasar.Pages.Acceptances
 {
-    public class StartModel : BasarPageModel
+    public class StartWithNewSeller : BasarPageModel
     {
         private readonly IStringLocalizer<SharedResource> _localizer;
 
-        public StartModel(VeloBasarContext context, IStringLocalizer<SharedResource> localizer) : base(context)
+        public StartWithNewSeller(VeloBasarContext context, IStringLocalizer<SharedResource> localizer) : base(context)
         {
             _localizer = localizer;
         }
@@ -99,7 +99,7 @@ namespace BraunauMobil.VeloBasar.Pages.Acceptances
             }
 
             await Context.SaveChangesAsync();
-            return RedirectToPage("/Products/AddMany", new { basarId = Basar.Id, sellerId = Seller.Id });
+            return RedirectToPage("/Acceptances/EnterProducts", new { basarId = Basar.Id, sellerId = Seller.Id });
         }
         public IDictionary<string, string> GetItemRoute(Seller seller)
         {

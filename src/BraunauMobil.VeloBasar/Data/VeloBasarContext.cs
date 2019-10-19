@@ -52,48 +52,28 @@ namespace BraunauMobil.VeloBasar.Data
             }
         }
 
-        public async Task<ProductsTransaction> AcceptProductsAsync(Basar basar, int sellerId, int? acceptanceId, params Product[] products)
+        public async Task<ProductsTransaction> AcceptProductsAsync(Basar basar, int sellerId, IList<Product> products)
         {
-            ProductsTransaction acceptance;
-            if (acceptanceId == null)
-            {
-                acceptance = new ProductsTransaction
-                {
-                    Type = TransactionType.Acceptance,
-                    Basar = basar,
-                    SellerId = sellerId,
-                    TimeStamp = DateTime.Now,
-                    Products = new List<ProductToTransaction>()
-                };
-            }
-            else
-            {
-                acceptance = await Transactions.Include(a => a.Products).FirstAsync(a => a.Id == acceptanceId);
-            }
+            //  1. instert all the products
+            var productsInserted = await InsertProductsAsync(products);
 
-            foreach (var product in products)
+            var acceptance = new ProductsTransaction
             {
-                await Product.AddAsync(product);
+                Type = TransactionType.Acceptance,
+                Basar = basar,
+                SellerId = sellerId,
+                TimeStamp = DateTime.Now,
+                Products = new List<ProductToTransaction>()
+            };
 
-                var productAcceptance = new ProductToTransaction
-                {
-                    Transaction = acceptance,
-                    Product = product
-                };
-                acceptance.Products.Add(productAcceptance);
-            }
-
-            if (acceptanceId == null)
-            {
-                acceptance.Number = NextNumber(basar, TransactionType.Acceptance);
-                await Transactions.AddAsync(acceptance);
-            }
-
+            acceptance.Products = productsInserted.Select(p => new ProductToTransaction { Product = p, Transaction = acceptance }).ToList();
+            Transactions.Add(acceptance);
             await SaveChangesAsync();
+
+            await GenerateAcceptanceDocAsync(basar, acceptance);
 
             return acceptance;
         }
-
         public async Task<ProductsTransaction> CancelProductsAsync(Basar basar, int saleId, int[] productIds)
         {
             var sale = await Transactions.GetAsync(saleId);
@@ -233,6 +213,30 @@ namespace BraunauMobil.VeloBasar.Data
             await SaveChangesAsync();
 
             product.Label = fileStore.Id;
+        }
+
+        public async Task<FileStore> GenerateAcceptanceDocAsync(Basar basar, ProductsTransaction sale)
+        {
+            FileStore fileStore;
+            if (sale.DocumentId == null)
+            {
+                fileStore = new FileStore
+                {
+                    ContentType = PdfContentType
+                };
+                await FileStore.AddAsync(fileStore);
+                await SaveChangesAsync();
+
+                sale.DocumentId = fileStore.Id;
+            }
+            else
+            {
+                fileStore = await GetFileAsync(sale.DocumentId.Value);
+            }
+            fileStore.Data = _pdfCreator.CreateAcceptance(basar, sale);
+            await SaveChangesAsync();
+
+            return fileStore;
         }
 
         public async Task<FileStore> GenerateAcceptanceDocIfNotExistAsync(Basar basar, int acceptanceId)
@@ -577,6 +581,34 @@ namespace BraunauMobil.VeloBasar.Data
             };
             await SettingsSet.AddAsync(settings);
             await SaveChangesAsync();
+        }
+
+        public async Task<IList<Product>> InsertProductsAsync(IList<Product> products)
+        {
+            var newProducts = new List<Product>();
+            foreach (var product in products)
+            {
+                var newProduct = new Product
+                {
+                    BrandId = product.BrandId,
+                    Color = product.Color,
+                    Description = product.Description,
+                    FrameNumber = product.FrameNumber,
+                    Label = product.Label,
+                    Notes = product.Notes,
+                    Price = product.Price,
+                    StorageStatus = StorageStatus.Available,
+                    TireSize = product.TireSize,
+                    TypeId = product.TypeId,
+                    ValueStatus = ValueStatus.NotSettled
+                };
+                newProducts.Add(newProduct);
+            }
+
+            await Product.AddRangeAsync(newProducts);
+            await SaveChangesAsync();
+
+            return newProducts;
         }
 
         public bool IsInitialized()

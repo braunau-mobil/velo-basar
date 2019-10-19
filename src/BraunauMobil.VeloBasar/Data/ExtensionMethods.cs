@@ -32,10 +32,6 @@ namespace BraunauMobil.VeloBasar.Data
         {
             return products.Where(p => p.StorageStatus == state);
         }
-        public static IQueryable<Product> WhereStorageState(this IQueryable<Product> products, StorageStatus state)
-        {
-            return products.Where(p => p.StorageStatus == state);
-        }
         public static IEnumerable<Product> WhereStorageStateIsNot(this IEnumerable<Product> products, StorageStatus state)
         {
             return products.Where(p => p.StorageStatus != state);

@@ -11,10 +11,15 @@ namespace BraunauMobil.VeloBasar.Pages.Acceptances
         }
 
         public ProductsTransaction Acceptance { get; set; }
+        public bool ShowSuccess { get; set; }
+        public bool OpenDocument { get; set; }
 
-        public async Task OnGetAsync(int basarId, int acceptanceId)
+        public async Task OnGetAsync(int basarId, int acceptanceId, bool? showSuccess = null, bool? openDocument = null)
         {
             await LoadBasarAsync(basarId);
+
+            ShowSuccess = showSuccess ?? false;
+            OpenDocument = openDocument ?? false;
 
             Acceptance = await Context.GetAcceptanceAsync(acceptanceId);
         }

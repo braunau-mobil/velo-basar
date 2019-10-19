@@ -9,7 +9,7 @@
     <div class="card-header d-flex justify-content-between align-items-md-center">
         <div class="mr-auto"><h5>#@Model.Seller.Id @Html.DisplayFor(model => model.Seller.FirstName) @Html.DisplayFor(model => model.Seller.LastName)</h5></div>
         <div class="d-flex justify-content-end">
-            <a asp-page="/Products/AddMany" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@Model.Seller.Id" class="btn btn-primary mx-1">@Localizer["Artikel annehmen"]</a>
+            <a asp-page="/Acceptances/StartWithSeller" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@Model.Seller.Id" class="btn btn-primary mx-1">@Localizer["Artikel annehmen"]</a>
             @if (Model.Products.CanSettle())
             {
                 <a asp-page="/Settlements/CreateAndPrint" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@Model.Seller.Id" target="_blank" class="btn btn-primary mx-1">@Localizer["Abrechnen"]</a>

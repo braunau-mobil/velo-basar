@@ -31,3 +31,16 @@
         <partial name="/Pages/Products/_Table.cshtml" model="Model.Acceptance.Products.CreateListViewModel(Model.Basar)" />
     </div>
 </div>
+
+<div Condition="@Model.ShowSuccess" class="alert alert-success" role="alert">
+    @Localizer["Annahme erfolgreich!"]
+</div>
+
+@section Scripts {
+    @if (Model.OpenDocument)
+    {
+        <script type="text/javascript">
+        window.open("/ShowFile?basarId=@Model.Basar.Id.ToString()&fileId=@Model.Acceptance.DocumentId.ToString()", "_blank");
+        </script>
+    }
+}

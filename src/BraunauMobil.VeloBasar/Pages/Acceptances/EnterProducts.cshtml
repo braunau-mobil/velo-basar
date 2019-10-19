@@ -1,0 +1,113 @@
+﻿@page
+@model BraunauMobil.VeloBasar.Pages.Acceptances.EnterProductsModel
+@{
+    ViewData["Title"] = Localizer["Annahme - Artikel eingeben"];
+}
+
+<form method="post">
+    <div class="card my-3">
+        <div class="card-header d-flex justify-content-between align-items-md-center">
+            <div class="mr-auto"><h5>@ViewData["Title"]</h5></div>
+            <div class="d-flex justify-content-end">
+                <a asp-all-route-data="@Model.GetCancelRoute()" asp-page="/Sellers/Details" class="btn btn-secondary mx-1">@Localizer["Abbrechen"]</a>
+                <a Condition="@Model.Products.List.Count > 0" class="btn btn-primary mx-1" asp-all-route-data="@Model.GetAcceptRoute()" asp-page="/Acceptances/Accept">@Localizer["Annahmebeleg drucken"]</a>
+            </div>
+        </div>
+
+        <div class="card-body p-0">
+            <input Condition="@Model.AreWeInEditMode" type="hidden" asp-for="NewProduct.Id" />
+            <table class="table m-0">
+                <thead>
+                    <tr>
+                        <th>@Html.DisplayNameFor(model => model.NewProduct.Type)</th>
+                        <th>@Html.DisplayNameFor(model => model.NewProduct.Brand)</th>
+                        <th>@Html.DisplayNameFor(model => model.NewProduct.Color)</th>
+                        <th>@Html.DisplayNameFor(model => model.NewProduct.Description)</th>
+                        <th>@Html.DisplayNameFor(model => model.NewProduct.FrameNumber)</th>
+                        <th>@Html.DisplayNameFor(model => model.NewProduct.TireSize)</th>
+                        <th>@Html.DisplayNameFor(model => model.NewProduct.Price)</th>
+                        <th></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr>
+                        <td>
+                            <select asp-for="NewProduct.TypeId" class="form-control" asp-items="ViewBag.ProductTypes"></select>
+                            <span asp-validation-for="NewProduct.TypeId" class="text-danger"></span>
+                        </td>
+                        <td>
+                            <select asp-for="NewProduct.BrandId" class="form-control" asp-items="ViewBag.Brands"></select>
+                            <span asp-validation-for="NewProduct.BrandId" class="text-danger"></span>
+                        </td>
+                        <td>
+                            <input asp-for="NewProduct.Color" class="form-control" />
+                            <span asp-validation-for="NewProduct.Color" class="text-danger"></span>
+                        </td>
+                        <td>
+                            <input asp-for="NewProduct.Description" class="form-control" />
+                            <span asp-validation-for="NewProduct.Description" class="text-danger"></span>
+                        </td>
+                        <td>
+                            <input asp-for="NewProduct.FrameNumber" class="form-control" />
+                            <span asp-validation-for="NewProduct.FrameNumber" class="text-danger"></span>
+                        </td>
+                        <td>
+                            <input asp-for="NewProduct.TireSize" class="form-control" />
+                            <span asp-validation-for="NewProduct.TireSize" class="text-danger"></span>
+                        </td>
+                        <td>
+                            <input asp-for="NewProduct.Price" class="form-control" />
+                            <span asp-validation-for="NewProduct.Price" class="text-danger"></span>
+                        </td>
+                        <th>
+                            @if (Model.AreWeInEditMode)
+                            {
+                                <input type="submit" value="@Localizer["Aktualisieren"]" class="btn btn-primary mx-1" asp-all-route-data="@Model.GetUpdateRoute()" />
+                            }
+                            else
+                            {
+                                <input type="submit" value="@Localizer["Hinzufügen"]" class="btn btn-primary mx-1" asp-all-route-data="@Model.GetAddRoute()" />
+                            }
+                        </th>
+                    </tr>
+                    @foreach (var itemViewModel in Model.Products.List)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => itemViewModel.Item.Type.Name)</td>
+                            <td>@Html.DisplayFor(modelItem => itemViewModel.Item.Brand.Name)</td>
+                            <td>@Html.DisplayFor(modelItem => itemViewModel.Item.Color)</td>
+                            <td>@Html.DisplayFor(modelItem => itemViewModel.Item.FrameNumber)</td>
+                            <td>@Html.DisplayFor(modelItem => itemViewModel.Item.Description)</td>
+                            <td>@Html.DisplayFor(modelItem => itemViewModel.Item.TireSize)</td>
+                            <td>@Html.DisplayFor(modelItem => itemViewModel.Item.Price)</td>
+                            <td>
+                                @foreach (var command in Model.Products.Commands)
+                                {
+                                    if (command.IsEnabled(itemViewModel.Item))
+                                    {
+                                        <a asp-page="@command.Page" asp-all-route-data="@command.GetRoute(itemViewModel.Item)">@command.Text</a>
+                                    }
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        @*<div Condition="@Model.ErrorText != null" class="card-footer">
+            <div class="alert alert-danger" role="alert">
+                @Model.ErrorText
+            </div>
+        </div>*@
+    </div>
+</form>
+
+
+@*@section Scripts {
+    <script type="text/javascript">
+        $("#ProductId").val("");
+        $("#ProductId").focus();
+    </script>
+}*@

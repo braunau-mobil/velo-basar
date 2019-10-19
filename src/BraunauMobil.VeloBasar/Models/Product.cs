@@ -1,10 +1,9 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace BraunauMobil.VeloBasar.Models
 {
     [Display(Name = "Artikel")]
-    public class Product : IValidatableObject
+    public class Product
     {
         public int Id { get; set; }
 
@@ -21,6 +20,7 @@ namespace BraunauMobil.VeloBasar.Models
         public Brand Brand { get; set; }
 
         [Display(Name = "Beschreibung")]
+        [Required]
         public string Description { get; set; }
 
         [Required]
@@ -34,6 +34,7 @@ namespace BraunauMobil.VeloBasar.Models
 
         [DataType(DataType.Currency)]
         [Display(Name = "Preis")]
+        [Required]
         public decimal Price { get; set; }
 
         [Display(Name = "Lagerstatus")]
@@ -55,25 +56,6 @@ namespace BraunauMobil.VeloBasar.Models
                 && string.IsNullOrEmpty(TireSize)
                 && Brand == null
                 && Type == null;
-        }
-
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-        {
-            var result = new List<ValidationResult>();
-
-            if (!IsEmtpy())
-            {
-                var requiredAttribute = new RequiredAttribute();
-
-                result.AddIfNotNull(requiredAttribute.GetValidationResult(Brand, validationContext));
-                result.AddIfNotNull(requiredAttribute.GetValidationResult(Type, validationContext));
-                result.AddIfNotNull(requiredAttribute.GetValidationResult(Price, validationContext));
-                result.AddIfNotNull(requiredAttribute.GetValidationResult(TireSize, validationContext));
-                result.AddIfNotNull(requiredAttribute.GetValidationResult(Description, validationContext));
-                result.AddIfNotNull(requiredAttribute.GetValidationResult(Color, validationContext));
-            }
-
-            return result;
         }
 
         public bool CanCancel()

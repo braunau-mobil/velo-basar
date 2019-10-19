@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using BraunauMobil.VeloBasar.Models;
+using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,15 @@ namespace BraunauMobil.VeloBasar
         private static readonly Cookie _cart = new Cookie
         {
             Key = "cart",
+            CookieOptions = new CookieOptions
+            {
+                IsEssential = true,
+                MaxAge = TimeSpan.FromDays(2)
+            }
+        };
+        private static readonly Cookie _acceptanceProducts = new Cookie
+        {
+            Key = "acceptanceProducts",
             CookieOptions = new CookieOptions
             {
                 IsEssential = true,
@@ -40,6 +50,25 @@ namespace BraunauMobil.VeloBasar
         {
             var json = JsonConvert.SerializeObject(cart);
             cookies.Append(_cart.Key, json, _cart.CookieOptions);
+        }
+
+        public static void ClearAcceptanceProducts(this IResponseCookies cookies)
+        {
+            cookies.Delete(_acceptanceProducts.Key, _acceptanceProducts.CookieOptions);
+        }
+        public static IList<Product> GetAcceptanceProducts(this IRequestCookieCollection cookies)
+        {
+            var json = cookies[_acceptanceProducts.Key];
+            if (json == null)
+            {
+                return new List<Product>();
+            }
+            return JsonConvert.DeserializeObject<List<Product>>(json);
+        }
+        public static void SetAcceptanceProducts(this IResponseCookies cookies, IList<Product> products)
+        {
+            var json = JsonConvert.SerializeObject(products);
+            cookies.Append(_acceptanceProducts.Key, json);
         }
     }
 }
