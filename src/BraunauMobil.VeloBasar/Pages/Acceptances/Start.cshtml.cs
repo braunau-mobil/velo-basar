@@ -9,13 +9,13 @@ using BraunauMobil.VeloBasar.ViewModels;
 using Microsoft.Extensions.Localization;
 using BraunauMobil.VeloBasar.Resources;
 
-namespace BraunauMobil.VeloBasar.Pages.Sellers
+namespace BraunauMobil.VeloBasar.Pages.Acceptances
 {
-    public class CreateOrEdit : BasarPageModel
+    public class StartModel : BasarPageModel
     {
         private readonly IStringLocalizer<SharedResource> _localizer;
 
-        public CreateOrEdit(VeloBasarContext context, IStringLocalizer<SharedResource> localizer) : base(context)
+        public StartModel(VeloBasarContext context, IStringLocalizer<SharedResource> localizer) : base(context)
         {
             _localizer = localizer;
         }
@@ -65,7 +65,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
                     Sellers = new ListViewModel<Seller>(Basar, sellers, new[]{
                         new ListCommand<Seller>(GetItemRoute)
                         {
-                            Page = "/Sellers/CreateOrEdit",
+                            Page = Request.Path,
                             Text = _localizer["Übernehmen"]
                         }
                     });
@@ -100,12 +100,6 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
 
             await Context.SaveChangesAsync();
             return RedirectToPage("/Products/AddMany", new { basarId = Basar.Id, sellerId = Seller.Id });
-        }
-        public IDictionary<string, string> GetRoute(bool search)
-        {
-            var route = GetRoute();
-            route.Add(nameof(search), search.ToString());
-            return route;
         }
         public IDictionary<string, string> GetItemRoute(Seller seller)
         {
