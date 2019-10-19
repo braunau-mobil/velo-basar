@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace BraunauMobil.VeloBasar.ViewModels
 {
@@ -34,8 +35,14 @@ namespace BraunauMobil.VeloBasar.ViewModels
 
     public class ListViewModel<T> : BasarViewModel
     {
-        public ListViewModel() : this(null, null) { }
-        public ListViewModel(Basar basar, IList<T> items, ListCommand<T>[] commands = null) : base(basar)
+        public ListViewModel() : base(null)
+        {
+            Commands = new ListCommand<T>[0];
+        }
+        public ListViewModel(Basar basar, IList<T> items, ListCommand<T>[] commands = null) : this(basar, items.Select(i => new ItemViewModel<T> { Item = i }).ToList() , commands)
+        {
+        }
+        public ListViewModel(Basar basar, IList<ItemViewModel<T>> items, ListCommand<T>[] commands = null) : base(basar)
         {
             List = items;
             Commands = commands ?? new ListCommand<T>[0];
@@ -43,6 +50,6 @@ namespace BraunauMobil.VeloBasar.ViewModels
 
         public ListCommand<T>[] Commands { get; set; }
         [BindProperty]
-        public IList<T> List { get; set; }
+        public IList<ItemViewModel<T>> List { get; set; }
     }
 }

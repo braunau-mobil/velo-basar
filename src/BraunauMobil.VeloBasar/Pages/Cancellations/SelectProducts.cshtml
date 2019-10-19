@@ -1,7 +1,6 @@
 ﻿@page
 @model SelectProductsModel
 
-@using System.Linq;
 @{
     ViewData["Title"] = Localizer["Artikel zum Stornieren auswählen"];
 }
@@ -23,14 +22,14 @@
                 <thead>
                     <tr>
                         <th scope="col"></th>
-                        <th scope="col">@Html.DisplayNameFor(model => model.Products.List.First().Value.Id)</th>
-                        <th scope="col">@Html.DisplayNameFor(model => model.Products.List.First().Value.Brand)</th>
-                        <th scope="col">@Html.DisplayNameFor(model => model.Products.List.First().Value.Type)</th>
-                        <th scope="col">@Html.DisplayNameFor(model => model.Products.List.First().Value.Color)</th>
-                        <th scope="col">@Html.DisplayNameFor(model => model.Products.List.First().Value.FrameNumber)</th>
-                        <th scope="col">@Html.DisplayNameFor(model => model.Products.List.First().Value.Description)</th>
-                        <th scope="col">@Html.DisplayNameFor(model => model.Products.List.First().Value.TireSize)</th>
-                        <th scope="col">@Html.DisplayNameFor(model => model.Products.List.First().Value.Price)</th>
+                        <th scope="col">@Html.DisplayNameFor(model => model.Products.List[0].Item.Id)</th>
+                        <th scope="col">@Html.DisplayNameFor(model => model.Products.List[0].Item.Brand)</th>
+                        <th scope="col">@Html.DisplayNameFor(model => model.Products.List[0].Item.Type)</th>
+                        <th scope="col">@Html.DisplayNameFor(model => model.Products.List[0].Item.Color)</th>
+                        <th scope="col">@Html.DisplayNameFor(model => model.Products.List[0].Item.FrameNumber)</th>
+                        <th scope="col">@Html.DisplayNameFor(model => model.Products.List[0].Item.Description)</th>
+                        <th scope="col">@Html.DisplayNameFor(model => model.Products.List[0].Item.TireSize)</th>
+                        <th scope="col">@Html.DisplayNameFor(model => model.Products.List[0].Item.Price)</th>
                         <th scope="col">@Localizer["Status"]</th>
                     </tr>
                 </thead>
@@ -42,18 +41,18 @@
                             <input asp-for="Products.List[index].IsSelected" class="form-check" />
                         </td>
                         <td>
-                            <input type="hidden" asp-for="Products.List[index].Value.Id" />
-                            @Html.DisplayFor(modelItem => modelItem.Products.List[index].Value.Id)
+                            <input type="hidden" asp-for="Products.List[index].Item.Id" />
+                            @Html.DisplayFor(modelItem => modelItem.Products.List[index].Item.Id)
                         </td>
-                        <td>@Html.DisplayFor(modelItem => modelItem.Products.List[index].Value.Brand.Name)</td>
-                        <td>@Html.DisplayFor(modelItem => modelItem.Products.List[index].Value.Type.Name)</td>
-                        <td>@Html.DisplayFor(modelItem => modelItem.Products.List[index].Value.Color)</td>
-                        <td>@Html.DisplayFor(modelItem => modelItem.Products.List[index].Value.FrameNumber)</td>
-                        <td>@Html.DisplayFor(modelItem => modelItem.Products.List[index].Value.Description)</td>
-                        <td>@Html.DisplayFor(modelItem => modelItem.Products.List[index].Value.TireSize)</td>
-                        <td>@Html.DisplayFor(modelItem => modelItem.Products.List[index].Value.Price)</td>
+                        <td>@Html.DisplayFor(modelItem => modelItem.Products.List[index].Item.Brand.Name)</td>
+                        <td>@Html.DisplayFor(modelItem => modelItem.Products.List[index].Item.Type.Name)</td>
+                        <td>@Html.DisplayFor(modelItem => modelItem.Products.List[index].Item.Color)</td>
+                        <td>@Html.DisplayFor(modelItem => modelItem.Products.List[index].Item.FrameNumber)</td>
+                        <td>@Html.DisplayFor(modelItem => modelItem.Products.List[index].Item.Description)</td>
+                        <td>@Html.DisplayFor(modelItem => modelItem.Products.List[index].Item.TireSize)</td>
+                        <td>@Html.DisplayFor(modelItem => modelItem.Products.List[index].Item.Price)</td>
                         <td>
-                            <partial name="/Pages/Products/_StatusBadge.cshtml" model="@Model.Products.List[index].Value" />
+                            <partial name="/Pages/Products/_StatusBadge.cshtml" model="@Model.Products.List[index].Item" />
                         </td>
                     </tr>
                     }

@@ -3,31 +3,31 @@
 <table class="table table-striped m-0">
     <thead>
         <tr>
-            <th scope="col">@Html.DisplayNameFor(model => model.List.First().Id)</th>
-            <th scope="col">@Html.DisplayNameFor(model => model.List.First().Brand)</th>
-            <th scope="col">@Html.DisplayNameFor(model => model.List.First().Type)</th>
-            <th scope="col">@Html.DisplayNameFor(model => model.List.First().Color)</th>
-            <th scope="col">@Html.DisplayNameFor(model => model.List.First().FrameNumber)</th>
-            <th scope="col">@Html.DisplayNameFor(model => model.List.First().Description)</th>
-            <th scope="col">@Html.DisplayNameFor(model => model.List.First().TireSize)</th>
-            <th scope="col">@Html.DisplayNameFor(model => model.List.First().Price)</th>
+            <th scope="col">@Html.DisplayNameFor(model => model.List[0].Item.Id)</th>
+            <th scope="col">@Html.DisplayNameFor(model => model.List[0].Item.Brand)</th>
+            <th scope="col">@Html.DisplayNameFor(model => model.List[0].Item.Type)</th>
+            <th scope="col">@Html.DisplayNameFor(model => model.List[0].Item.Color)</th>
+            <th scope="col">@Html.DisplayNameFor(model => model.List[0].Item.FrameNumber)</th>
+            <th scope="col">@Html.DisplayNameFor(model => model.List[0].Item.Description)</th>
+            <th scope="col">@Html.DisplayNameFor(model => model.List[0].Item.TireSize)</th>
+            <th scope="col">@Html.DisplayNameFor(model => model.List[0].Item.Price)</th>
             <th scope="col">@Localizer["Status"]</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.List)
+        @foreach (var itemViewModel in Model.List)
         {
             <tr>
-                <th scope="row">@Html.DisplayFor(modelItem => item.Id)</th>
-                <td>@Html.DisplayFor(modelItem => item.Brand.Name)</td>
-                <td>@Html.DisplayFor(modelItem => item.Type.Name)</td>
-                <td>@Html.DisplayFor(modelItem => item.Color)</td>
-                <td>@Html.DisplayFor(modelItem => item.FrameNumber)</td>
-                <td>@Html.DisplayFor(modelItem => item.Description)</td>
-                <td>@Html.DisplayFor(modelItem => item.TireSize)</td>
-                <td>@Html.DisplayFor(modelItem => item.Price)</td>
+                <th scope="row">@Html.DisplayFor(modelItem => itemViewModel.Item.Id)</th>
+                <td>@Html.DisplayFor(modelItem => itemViewModel.Item.Brand.Name)</td>
+                <td>@Html.DisplayFor(modelItem => itemViewModel.Item.Type.Name)</td>
+                <td>@Html.DisplayFor(modelItem => itemViewModel.Item.Color)</td>
+                <td>@Html.DisplayFor(modelItem => itemViewModel.Item.FrameNumber)</td>
+                <td>@Html.DisplayFor(modelItem => itemViewModel.Item.Description)</td>
+                <td>@Html.DisplayFor(modelItem => itemViewModel.Item.TireSize)</td>
+                <td>@Html.DisplayFor(modelItem => itemViewModel.Item.Price)</td>
                 <td>
-                    <partial name="/Pages/Products/_StatusBadge.cshtml" model="@item" />
+                    <partial name="/Pages/Products/_StatusBadge.cshtml" model="@itemViewModel.Item" />
                 </td>
             </tr>
         }

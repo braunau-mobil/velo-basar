@@ -40,6 +40,12 @@ namespace BraunauMobil.VeloBasar.Data
         {
             return products.Where(p => p.StorageStatus != state);
         }
+        public static IQueryable<Product> IncludeAll(this DbSet<Product> products)
+        {
+            return products
+                .Include(p => p.Brand)
+                .Include(p => p.Type);
+        }
         public static IQueryable<ProductsTransaction> IncludeAll(this DbSet<ProductsTransaction> transactions)
         {
             return transactions
@@ -50,6 +56,10 @@ namespace BraunauMobil.VeloBasar.Data
                 .Include(t => t.Products)
                     .ThenInclude(pt => pt.Product)
                         .ThenInclude(p => p.Type);
+        }
+        public static IQueryable<Product> Get(this DbSet<Product> products, IEnumerable<int> ids)
+        {
+            return products.IncludeAll().Where(p => ids.Contains(p.Id));
         }
         public static async Task<ProductsTransaction> GetAsync(this DbSet<ProductsTransaction> transactions, int id)
         {

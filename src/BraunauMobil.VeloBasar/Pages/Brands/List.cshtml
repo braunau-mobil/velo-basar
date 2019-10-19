@@ -15,35 +15,35 @@
         <table class="table table-striped m-0">
             <thead>
                 <tr>
-                    <th scope="col">@Html.DisplayNameFor(model => model.Brands.List.First().Id)</th>
-                    <th scope="col">@Html.DisplayNameFor(model => model.Brands.List.First().Name)</th>
+                    <th scope="col">@Html.DisplayNameFor(model => model.Brands.List[0].Item.Id)</th>
+                    <th scope="col">@Html.DisplayNameFor(model => model.Brands.List[0].Item.Name)</th>
                     <th scope="col"></th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model.Brands.List)
+                @foreach (var itemViewModel in Model.Brands.List)
                 {
                     <tr>
-                        <th scope="row">@Html.DisplayFor(modelItem => item.Id)</th>
+                        <th scope="row">@Html.DisplayFor(modelItem => itemViewModel.Item.Id)</th>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Name)
+                            @Html.DisplayFor(modelItem => itemViewModel.Item.Name)
                         </td>
                         <td>
-                            <a asp-page="/Brands/Edit" asp-all-route-data="@Model.GetItemRoute(item)">@Localizer["Bearbeiten"]</a>
-                            @if (await Model.CanDeleteAsync(item))
+                            <a asp-page="/Brands/Edit" asp-all-route-data="@Model.GetItemRoute(itemViewModel.Item)">@Localizer["Bearbeiten"]</a>
+                            @if (await Model.CanDeleteAsync(itemViewModel.Item))
                             {
-                                <a asp-page="/Brands/Delete" asp-all-route-data="@Model.GetItemRoute(item)">@Localizer["Löschen"]</a>
+                                <a asp-page="/Brands/Delete" asp-all-route-data="@Model.GetItemRoute(itemViewModel.Item)">@Localizer["Löschen"]</a>
                             }
                             else
                             {
                                 var text = "Deaktivieren";
                                 var statusToSet = ModelStatus.Disabled;
-                                @if (item.Status == ModelStatus.Disabled)
+                                @if (itemViewModel.Item.Status == ModelStatus.Disabled)
                                 {
                                     statusToSet = ModelStatus.Enabled;
                                     text = "Aktivieren";
                                 }
-                                <a asp-page="/Brands/SetStatus" asp-all-route-data="@Model.GetItemRoute(item, statusToSet)">@Localizer[text]</a>
+                                <a asp-page="/Brands/SetStatus" asp-all-route-data="@Model.GetItemRoute(itemViewModel.Item, statusToSet)">@Localizer[text]</a>
                             }
                         </td>
                     </tr>

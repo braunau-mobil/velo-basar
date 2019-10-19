@@ -18,26 +18,26 @@
             <thead>
                 <tr>
                     <th>
-                        @Html.DisplayNameFor(model => model.Sales.List[0].Number)
+                        @Html.DisplayNameFor(model => model.Sales.List[0].Item.Number)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Sales.List[0].TimeStamp)
+                        @Html.DisplayNameFor(model => model.Sales.List[0].Item.TimeStamp)
                     </th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model.Sales.List)
+                @foreach (var itemViewModel in Model.Sales.List)
                 {
                     <tr>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Number)
+                            @Html.DisplayFor(modelItem => itemViewModel.Item.Number)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.TimeStamp)
+                            @Html.DisplayFor(modelItem => itemViewModel.Item.TimeStamp)
                         </td>
                         <td>
-                            <a asp-page="/Sales/Details" asp-all-route-data="@Model.GetRoute()" asp-route-saleId="@item.Id">@Localizer["Details"]</a>
+                            <a asp-page="/Sales/Details" asp-all-route-data="@Model.GetRoute()" asp-route-saleId="@itemViewModel.Item.Id">@Localizer["Details"]</a>
                         </td>
                     </tr>
                 }

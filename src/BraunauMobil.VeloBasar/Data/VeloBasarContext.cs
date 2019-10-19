@@ -52,27 +52,6 @@ namespace BraunauMobil.VeloBasar.Data
             }
         }
 
-        public async Task<ProductsTransaction> AddProductToSaleAsync(Basar basar, int? saleId, Product product)
-        {
-            var sale = await CreateOrGetSaleAsync(basar, saleId);
-
-            if (sale.Products == null)
-            {
-                sale.Products = new List<ProductToTransaction>();
-            }
-            sale.Products.Add(new ProductToTransaction
-            {
-                Product = product,
-                Transaction = sale
-            });
-
-            product.StorageStatus = StorageStatus.Sold;
-
-            await SaveChangesAsync();
-
-            return sale;
-        }
-
         public async Task<ProductsTransaction> AcceptProductsAsync(Basar basar, int sellerId, int? acceptanceId, params Product[] products)
         {
             ProductsTransaction acceptance;
@@ -153,31 +132,6 @@ namespace BraunauMobil.VeloBasar.Data
 
             return cancellation;
         }
-
-        public async Task CancelProductAsync(Basar basar, int productId)
-        {
-            var product = await GetProductAsync(productId);
-
-            var cancellation = new ProductsTransaction
-            {
-                Type = TransactionType.Cancellation,
-                Basar = basar,
-                Number = NextNumber(basar, TransactionType.Cancellation),
-                TimeStamp = DateTime.Now
-            };
-            cancellation.Products = new ProductToTransaction[]
-            {
-                new ProductToTransaction
-                {
-                    Transaction = cancellation,
-                    Product = product
-                }
-            };
-            product.StorageStatus = StorageStatus.Available;
-
-            await SaveChangesAsync();
-        }
-
         public async Task<bool> CanDeleteBrandAsync(Brand item)
         {
             return !await Product.AnyAsync(p => p.BrandId == item.Id);
@@ -186,27 +140,35 @@ namespace BraunauMobil.VeloBasar.Data
         {
             return !await Product.AnyAsync(p => p.TypeId == item.Id);
         }
-
-        public async Task<ProductsTransaction> CreateOrGetSaleAsync(Basar basar, int? saleId)
+        public async Task<ProductsTransaction> CheckoutProductsAsync(Basar basar, IList<int> productIds)
         {
-            if (saleId == null)
+            //  1. checkout all products
+            var products = await Product.Get(productIds).AsTracking().ToArrayAsync();
+            if (products.Any(p => !p.CanSell()))
             {
-                var sale = new ProductsTransaction
-                {
-                    Type = TransactionType.Sale,
-                    Basar = basar,
-                    Number = NextNumber(basar, TransactionType.Sale),
-                    TimeStamp = DateTime.Now,
-                    Products = new List<ProductToTransaction>()
-                };
-                Transactions.Add(sale);
-                await SaveChangesAsync();
-                return sale;
+                return null;
             }
+            foreach (var product in products)
+            {
+                product.StorageStatus = StorageStatus.Sold;
+            }
+            await SaveChangesAsync();
 
-            return await Transactions.FirstAsync(s => s.Id == saleId);
+            var sale = new ProductsTransaction
+            {
+                Type = TransactionType.Sale,
+                Basar = basar,
+                Number = NextNumber(basar, TransactionType.Sale),
+                TimeStamp = DateTime.Now,
+            };
+            sale.Products = products.Select(p => new ProductToTransaction { Product = p, Transaction = sale }).ToList();
+            Transactions.Add(sale);            
+            await SaveChangesAsync();
+
+            await GenerateSaleDocAsync(basar, sale);
+            
+            return sale;
         }
-
         public async Task<Basar> CreateNewBasarAsync(DateTime date, string name, decimal productCommission, decimal productDiscount, decimal sellerDiscount)
         {
             var basar = new Basar
@@ -446,12 +408,6 @@ namespace BraunauMobil.VeloBasar.Data
             return Brand.Where(Expressions.BrandSearch(searchString)).OrderBy(b => b.Name);
         }
 
-
-        public IQueryable<ProductsTransaction> GetCacncellations(Basar basar, Expression<Func<ProductsTransaction, bool>> additionalPredicate = null)
-        {
-            return GetTransactions(basar, TransactionType.Cancellation, additionalPredicate);
-        }
-
         public async Task<FileStore> GetFileAsync(int fileId)
         {
             return await FileStore.FirstOrDefaultAsync(f => f.Id == fileId);
@@ -597,6 +553,11 @@ namespace BraunauMobil.VeloBasar.Data
             }
 
             return result;
+        }
+        public async Task<int> GetTransactionNumberForProductAsync(Basar basar, TransactionType type, int productId)
+        {
+            var transaction = await Transactions.AsNoTracking().Include(t => t.Products).Where(t => t.Type == type && t.BasarId == basar.Id).FirstOrDefaultAsync(t => t.Products.Any(pt => pt.ProductId == productId));
+            return transaction.Number;
         }
 
         public async Task InitializeDatabase(UserManager<IdentityUser> userManager, InitializationConfiguration config)

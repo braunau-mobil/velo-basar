@@ -15,15 +15,28 @@
         }
         else
         {
-            <a asp-page="/ShowFile" asp-route-fileId="@Model.Sale.DocumentId" target="_blank" class="btn btn-primary mx-1 ml-auto">@Localizer["Beleg"]</a>
+            <a asp-page="/ShowFile" asp-all-route-data="@Model.GetRoute()" asp-route-fileId="@Model.Sale.DocumentId" target="_blank" class="btn btn-primary mx-1 ml-auto">@Localizer["Beleg"]</a>
         }
     </div>
 </div>
 
 <div class="card my-3">
     <h5 class="card-header">@Localizer["Artikel"]</h5>
+
     <div class="card-body p-0">
         <partial name="/Pages/Products/_Table.cshtml" model="@Model.Sale.Products.CreateListViewModel(Model.Basar)" />
     </div>
 </div>
 
+<div Condition="@Model.ShowSuccess" class="alert alert-success" role="alert">
+    @Localizer["Verkauf erfolgreich!"]
+</div>
+
+@section Scripts {
+@if (Model.OpenDocument)
+{
+    <script type="text/javascript">
+        window.open("/ShowFile?basarId=@Model.Basar.Id.ToString()&fileId=@Model.Sale.DocumentId.ToString()", "_blank");
+    </script>
+}
+}

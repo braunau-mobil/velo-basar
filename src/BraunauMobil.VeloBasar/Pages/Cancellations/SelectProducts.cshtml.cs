@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BraunauMobil.VeloBasar.Data;
@@ -7,7 +6,6 @@ using BraunauMobil.VeloBasar.Models;
 using BraunauMobil.VeloBasar.Resources;
 using BraunauMobil.VeloBasar.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Localization;
 
 namespace BraunauMobil.VeloBasar.Pages.Cancellations
@@ -23,7 +21,7 @@ namespace BraunauMobil.VeloBasar.Pages.Cancellations
         }
 
         [BindProperty]
-        public ListViewModel<SelectableViewModel<Product>> Products { get; set; }
+        public ListViewModel<Product> Products { get; set; }
         public string ErrorMessage { get; set; }
 
         public async Task OnGetAsync(int basarId, int saleId)
@@ -32,9 +30,7 @@ namespace BraunauMobil.VeloBasar.Pages.Cancellations
             _saleId = saleId;
 
             var products = await Context.GetProductsForSaleAsync(saleId);
-            var viewModels = products.Select(p => new SelectableViewModel<Product> { Value = p });
-
-            Products = new ListViewModel<SelectableViewModel<Product>>(Basar, viewModels.ToList());
+            Products = new ListViewModel<Product>(Basar, products.ToList());
         }
 
         public async Task<IActionResult> OnPostAsync(int basarId, int saleId)
@@ -47,7 +43,7 @@ namespace BraunauMobil.VeloBasar.Pages.Cancellations
                 return Page();
             }
 
-            var cancellation = await Context.CancelProductsAsync(Basar, saleId, Products.List.Where(vm => vm.IsSelected).Select(vm => vm.Value.Id).ToArray());
+            var cancellation = await Context.CancelProductsAsync(Basar, saleId, Products.List.Where(vm => vm.IsSelected).Select(vm => vm.Item.Id).ToArray());
             if (await Context.Transactions.ExistsAsync(saleId))
             {
                 return RedirectToPage("/Cancellations/Done", new { basarId, cancellationId = cancellation.Id, saleId });
