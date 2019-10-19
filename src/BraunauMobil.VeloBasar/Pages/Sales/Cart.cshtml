@@ -10,7 +10,7 @@
         <div>
             <h5 class="mx-2">@ViewData["Title"]</h5>
         </div>
-        
+
         <form method="post">
             <div class="d-flex form-actions no-color align-items-md-center">
                 <div class="mx-2">@Localizer["Artikel ID:"]</div>
@@ -19,7 +19,7 @@
                 <span asp-validation-for="ProductId" class="text-danger"></span>
             </div>
         </form>
-        
+
         <div>
             <a asp-page="/Sales/ClearCart" asp-all-route-data="@Model.GetRoute()" class="ml-auto btn btn-secondary">@Localizer["Warenkob leeren"]</a>
             <a asp-page="/Sales/Checkout" asp-all-route-data="@Model.GetRoute()" class="ml-auto btn btn-primary">@Localizer["Weiter"]</a>
@@ -35,3 +35,10 @@
     @Model.ErrorText
 </div>
 
+
+@section Scripts {
+    <script type="text/javascript">
+        $("#ProductId").val("");
+        $("#ProductId").focus();
+    </script>
+}
