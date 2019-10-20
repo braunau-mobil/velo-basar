@@ -29,8 +29,8 @@ namespace BraunauMobil.VeloBasar.Pages.Cancellations
             await LoadBasarAsync(basarId);
             _saleId = saleId;
 
-            var products = await Context.GetProductsForSaleAsync(saleId);
-            Products = new ListViewModel<Product>(Basar, products.ToList());
+            var sale = await Context.Transactions.GetAsync(saleId);
+            Products = new ListViewModel<Product>(Basar, sale.Products.GetProducts());
         }
 
         public async Task<IActionResult> OnPostAsync(int basarId, int saleId)

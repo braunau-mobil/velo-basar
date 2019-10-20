@@ -36,7 +36,7 @@ namespace BraunauMobil.VeloBasar.Pages.Acceptances
 
             if (sellerId != null)
             {
-                Seller = await Context.GetSellerAsync(sellerId.Value);
+                Seller = await Context.Seller.GetAsync(sellerId.Value);
                 if (Seller == null)
                 {
                     return NotFound();
@@ -59,7 +59,7 @@ namespace BraunauMobil.VeloBasar.Pages.Acceptances
                     return Page();
                 }
 
-                var sellers = await Context.GetSellers(Seller.FirstName, Seller.LastName).ToListAsync();
+                var sellers = await Context.Seller.GetMany(Seller.FirstName, Seller.LastName).ToListAsync();
                 if (sellers.Count > 0)
                 {
                     Sellers = new ListViewModel<Seller>(Basar, sellers, new[]{

@@ -38,7 +38,7 @@ namespace BraunauMobil.VeloBasar.Pages.ProductTypes
 
             CurrentFilter = searchString;
 
-            var ProductTypeIq = Context.GetProductTypes(searchString);
+            var ProductTypeIq = Context.ProductTypes.GetMany(searchString);
             var pageSize = 10;
             ProductTypes = await PaginatedListViewModel<ProductType>.CreateAsync(Basar, ProductTypeIq.AsNoTracking(), pageIndex ?? 1, pageSize, Request.Path, GetRoute);
 

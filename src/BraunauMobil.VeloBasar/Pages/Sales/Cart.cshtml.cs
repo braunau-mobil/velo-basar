@@ -56,7 +56,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
             await LoadBasarAsync(basarId);
 
             var cart = Request.Cookies.GetCart();
-            var product = await Context.GetProductAsync(productId);
+            var product = await Context.Product.GetAsync(productId);
             if (product != null && product.IsAllowed(TransactionType.Sale))
             {
                 cart.Add(productId);
@@ -79,7 +79,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
         private async Task LoadProducts(IList<int> productIds)
         {
             var viewModels = new List<ItemViewModel<Product>>();
-            foreach (var product in await Context.Product.Get(productIds).AsNoTracking().ToArrayAsync())
+            foreach (var product in await Context.Product.GetMany(productIds).ToArrayAsync())
             {
                 var viewModel = new ItemViewModel<Product>
                 {

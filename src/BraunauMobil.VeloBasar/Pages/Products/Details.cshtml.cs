@@ -19,7 +19,7 @@ namespace BraunauMobil.VeloBasar.Pages.Products
         {
             await LoadBasarAsync(basarId);
 
-            Product = await Context.GetProductAsync(productId);
+            Product = await Context.Product.GetAsync(productId);
 
             if (Product == null)
             {

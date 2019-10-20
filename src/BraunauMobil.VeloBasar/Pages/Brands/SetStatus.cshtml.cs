@@ -16,7 +16,7 @@ namespace BraunauMobil.VeloBasar.Pages.Brands
         {
             if (await Context.Brand.ExistsAsync(brandId))
             {
-                var brand = await Context.GetBrandAsync(brandId);
+                var brand = await Context.Brand.GetAsync(brandId);
                 brand.Status = status;
                 Context.Attach(brand).State = EntityState.Modified;
                 await Context.SaveChangesAsync();

@@ -16,7 +16,7 @@ namespace BraunauMobil.VeloBasar.Pages.ProductTypes
         {
             if (await Context.ProductTypes.ExistsAsync(productTypeId))
             {
-                var productType = await Context.GetProductTypeAsync(productTypeId);
+                var productType = await Context.ProductTypes.GetAsync(productTypeId);
                 productType.Status = status;
                 Context.Attach(productType).State = EntityState.Modified;
                 await Context.SaveChangesAsync();

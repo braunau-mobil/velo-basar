@@ -22,7 +22,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
             ShowSuccess = showSuccess ?? false;
             OpenDocument = openDocument ?? false;
 
-            Sale = await Context.GetSaleAsync(saleId);
+            Sale = await Context.Transactions.GetAsync(saleId);
         }
     }
 }

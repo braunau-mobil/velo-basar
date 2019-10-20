@@ -14,7 +14,7 @@ namespace BraunauMobil.VeloBasar.Pages
         {
             await LoadBasarAsync(basarId);
 
-            var file = await Context.GetFileAsync(fileId);
+            var file = await Context.FileStore.GetAsync(fileId);
             if (file == null)
             {
                 return NotFound();

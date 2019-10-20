@@ -21,7 +21,7 @@ namespace BraunauMobil.VeloBasar.Pages.Brands
         public async Task<IActionResult> OnGetAsync(int brandId, int pageIndex, int? basarId)
         {
             await LoadBasarAsync(basarId);
-            Brand = await Context.GetBrandAsync(brandId);
+            Brand = await Context.Brand.GetAsync(brandId);
             _pageIndex = pageIndex;
 
             if (Brand == null)

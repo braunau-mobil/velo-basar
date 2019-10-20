@@ -21,7 +21,7 @@ namespace BraunauMobil.VeloBasar.Pages.Acceptances
             ShowSuccess = showSuccess ?? false;
             OpenDocument = openDocument ?? false;
 
-            Acceptance = await Context.GetAcceptanceAsync(acceptanceId);
+            Acceptance = await Context.Transactions.GetAsync(acceptanceId);
         }
     }
 }

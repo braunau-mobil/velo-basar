@@ -44,7 +44,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
                 }
             }
 
-            var sellerIq = Context.GetSellers(searchString);
+            var sellerIq = Context.Seller.GetMany(searchString);
 
             var pageSize = 20;
             Sellers = await PaginatedListViewModel<Seller>.CreateAsync(Basar, sellerIq.AsNoTracking(), pageIndex ?? 1, pageSize, Request.Path, GetRoute);

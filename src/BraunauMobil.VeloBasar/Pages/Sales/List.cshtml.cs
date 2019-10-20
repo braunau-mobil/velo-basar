@@ -45,11 +45,11 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
             }
             else if (!string.IsNullOrEmpty(searchString))
             {
-                salesIq = Context.GetSales(Basar, searchString);
+                salesIq = Context.Transactions.GetMany(TransactionType.Sale, Basar, searchString);
             }
             else
             {
-                salesIq = Context.GetSales(Basar);
+                salesIq = Context.Transactions.GetMany(TransactionType.Sale, Basar);
             }
 
             Sales = await PaginatedListViewModel<ProductsTransaction>.CreateAsync(Basar, salesIq.AsNoTracking(), pageIndex ?? 1, PageSize, Request.Path, GetRoute);

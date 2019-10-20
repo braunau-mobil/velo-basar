@@ -34,7 +34,7 @@ namespace BraunauMobil.VeloBasar.Pages.Transactions
             await LoadBasarAsync(basarId);
             TransactionType = transactionType;
 
-            Product = await Context.GetProductAsync(productId);
+            Product = await Context.Product.GetAsync(productId);
 
             return Page();
         }

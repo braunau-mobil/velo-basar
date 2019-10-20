@@ -36,7 +36,7 @@ namespace BraunauMobil.VeloBasar
 #endif
             if (basarId != null)
             {
-                Basar = await Context.GetBasarAsync(basarId.Value);
+                Basar = await Context.Basar.GetAsync(basarId.Value);
             }
         }
 
