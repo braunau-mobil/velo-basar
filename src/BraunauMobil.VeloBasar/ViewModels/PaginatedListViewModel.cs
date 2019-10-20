@@ -42,7 +42,8 @@ namespace BraunauMobil.VeloBasar.ViewModels
             var count = await source.CountAsync();
             var totalPages = CalcTotalPages(count, pageSize);
             pageIndex = Math.Min(pageIndex, totalPages);
-            var items = await source.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+            var skipCount = Math.Max(pageIndex - 1, 0) * pageSize;
+            var items = await source.Skip(skipCount).Take(pageSize).ToListAsync();
 
             return new PaginatedListViewModel<T>(basar, items, commands)
             {
