@@ -45,7 +45,7 @@ namespace BraunauMobil.VeloBasar.Pages.Cancellations
                 ErrorMessage = _localizer["Es konnte kein Verkauf mit der Nummer {0} gefunden werden", SaleNumber];
                 return Page();
             }
-            if (sale.Products.IsAllowed(TransactionType.Cancellation))
+            if (!sale.Products.IsAllowed(TransactionType.Cancellation))
             {
                 ErrorMessage = _localizer["Es wurden bereits alle Artikel des Verkaufs abgerechnet. Ein Storno ist nicht mehr möglich."];
                 return Page();
