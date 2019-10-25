@@ -1,10 +1,11 @@
-﻿using System;
+﻿using BraunauMobil.VeloBasar.Models.Interfaces;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace BraunauMobil.VeloBasar.Models
 {
     [Display(Name = "Basar")]
-    public class Basar
+    public class Basar : IModel
     {
         public int Id { get; set; }
 

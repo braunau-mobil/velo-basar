@@ -1,4 +1,5 @@
 ﻿using BraunauMobil.VeloBasar.Models;
+using BraunauMobil.VeloBasar.Models.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -14,51 +15,18 @@ namespace BraunauMobil.VeloBasar.Data
         {
             return brands.OrderBy(b => b.Name);
         }
-        public static IQueryable<Product> DefaultOrder(this IQueryable<Product> products)
+        public static IQueryable<Product> DefaultOrder(this IQueryable<Product> products) => products.OrderById();
+        public static IQueryable<ProductType> DefaultOrder(this IQueryable<ProductType> productTypes) => productTypes.OrderById();
+        public static IQueryable<Seller> DefaultOrder(this IQueryable<Seller> sellers) => sellers.OrderById();
+
+        public static async Task<bool> ExistsAsync<T>(this IQueryable<T> models, int id) where T : IModel
         {
-            return products.OrderBy(p => p.Id);
-        }
-        public static IQueryable<ProductType> DefaultOrder(this IQueryable<ProductType> productTypes)
-        {
-            return productTypes.OrderBy(pt => pt.Name);
-        }
-        public static IQueryable<Seller> DefaultOrder(this IQueryable<Seller> sellers)
-        {
-            return sellers.OrderBy(s => s.Id);
+            return await models.AnyAsync(p => p.Id == id);
         }
 
-        public static async Task<bool> ExistsAsync(this IQueryable<Brand> brands, int id)
+        public static async Task<T> GetAsync<T>(this DbSet<T> models, int id) where  T : class, IModel
         {
-            return await brands.AnyAsync(p => p.Id == id);
-        }
-        public static async Task<bool> ExistsAsync(this IQueryable<Product> products, int id)
-        {
-            return await products.AnyAsync(p => p.Id == id);
-        }
-        public static async Task<bool> ExistsAsync(this IQueryable<ProductType> productTypes, int id)
-        {
-            return await productTypes.AnyAsync(p => p.Id == id);
-        }
-        public static async Task<bool> ExistsAsync(this IQueryable<ProductsTransaction> transactions, int id)
-        {
-            return await transactions.AnyAsync(p => p.Id == id);
-        }
-        public static async Task<bool> ExistsAsync(this IQueryable<Seller> sellers, int id)
-        {
-            return await sellers.AnyAsync(s => s.Id == id);
-        }
-
-        public static async Task<Basar> GetAsync(this DbSet<Basar> basars, int id)
-        {
-            return await basars.FindAsync(id);
-        }
-        public static async Task<Brand> GetAsync(this DbSet<Brand> brands, int id)
-        {
-            return await brands.FindAsync(id);
-        }
-        public static async Task<FileStore> GetAsync(this DbSet<FileStore> fileStores, int id)
-        {
-            return await fileStores.FindAsync(id);
+            return await models.FindAsync(id);
         }
         public static async Task<Product> GetAsync(this IQueryable<Product> products, int id)
         {
@@ -71,10 +39,6 @@ namespace BraunauMobil.VeloBasar.Data
         public static async Task<ProductsTransaction> GetAsync(this IQueryable<ProductsTransaction> transactions, Basar basar, TransactionType type, int number)
         {
             return await transactions.IncludeAll().FirstOrDefaultAsync(t => t.BasarId == basar.Id && t.Type == type && t.Number == number);
-        }
-        public static async Task<ProductType> GetAsync(this DbSet<ProductType> productTypes, int id)
-        {
-            return await productTypes.FindAsync(id);
         }
         public static async Task<Seller> GetAsync(this IQueryable<Seller> sellers, int id)
         {
@@ -166,7 +130,12 @@ namespace BraunauMobil.VeloBasar.Data
             return sellers
                 .Include(s => s.Country);
         }
-        
+
+        public static IQueryable<T> OrderById<T>(this IQueryable<T> models) where T : IModel
+        {
+            return models.OrderBy(p => p.Id);
+        }
+
         public static IEnumerable<Product> WhereStorageState(this IEnumerable<Product> products, StorageStatus state)
         {
             return products.Where(p => p.StorageStatus == state);

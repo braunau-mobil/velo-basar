@@ -1,9 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using BraunauMobil.VeloBasar.Models.Interfaces;
+using System.ComponentModel.DataAnnotations;
 
 namespace BraunauMobil.VeloBasar.Models
 {
     [Display(Name = "Marke")]
-    public class Brand
+    public class Brand : IModel
     {
         public int Id { get; set; }
         [Required(ErrorMessage = "Bitte einen Namen eingeben.")]

@@ -1,8 +1,8 @@
-﻿using System;
+﻿using BraunauMobil.VeloBasar.Models.Interfaces;
 
 namespace BraunauMobil.VeloBasar.Models
 {
-    public class FileStore
+    public class FileStore : IModel
     {
         public int Id { get; set; }
 

@@ -1,6 +1,8 @@
-﻿namespace BraunauMobil.VeloBasar.Models
+﻿using BraunauMobil.VeloBasar.Models.Interfaces;
+
+namespace BraunauMobil.VeloBasar.Models
 {
-    public class Settings
+    public class Settings : IModel
     {
         public int Id { get; set; }
 

@@ -1,9 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using BraunauMobil.VeloBasar.Models.Interfaces;
+using System.ComponentModel.DataAnnotations;
 
 namespace BraunauMobil.VeloBasar.Models
 {
     [Display(Name = "Land")]
-    public class Country
+    public class Country : IModel
     {
         public int Id { get; set; }
 

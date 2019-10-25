@@ -1,9 +1,10 @@
-﻿using System;
+﻿using BraunauMobil.VeloBasar.Models.Interfaces;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace BraunauMobil.VeloBasar.Models.Base
 {
-    public class TransactionModel : BasarModel
+    public class TransactionModel : BasarModel, IModel
     {
         public int Id { get; set; }
 
