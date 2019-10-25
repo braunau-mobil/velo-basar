@@ -17,13 +17,9 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Sales.List[0].Item.Number)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Sales.List[0].Item.TimeStamp)
-                    </th>
-                    <th></th>
+                    <th style="width: auto;">@Html.DisplayNameFor(model => model.Sales.List[0].Item.Number)</th>
+                    <th style="width: 100%;">@Html.DisplayNameFor(model => model.Sales.List[0].Item.TimeStamp)</th>
+                    <th style="width: auto;"></th>
                 </tr>
             </thead>
             <tbody>
@@ -45,6 +41,5 @@
         </table>
     </div>
 </div>
-
 
 <partial name="/Pages/Shared/_Pagination.cshtml" model="@Model.Sales" />

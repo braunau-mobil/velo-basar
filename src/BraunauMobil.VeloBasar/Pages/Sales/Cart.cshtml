@@ -27,7 +27,10 @@
     </div>
 
     <div class="card-body p-0">
-        <partial name="/Pages/Products/_TableWithControls.cshtml" model="@Model.Products" />
+        @if (Model.Products.List.Any())
+        {
+            <partial  name="/Pages/Products/_TableWithControls.cshtml" model="@Model.Products" />
+        }
     </div>
 </div>
 

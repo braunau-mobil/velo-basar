@@ -16,14 +16,15 @@
         <table class="table table-striped m-0">
             <thead>
                 <tr>
-                    <th scope="col">@Html.DisplayNameFor(model => model.Sellers.List[0].Item.Id)</th>
-                    <th scope="col">@Html.DisplayNameFor(model => model.Sellers.List[0].Item.FirstName)</th>
-                    <th scope="col">@Html.DisplayNameFor(model => model.Sellers.List[0].Item.LastName)</th>
-                    <th scope="col">@Html.DisplayNameFor(model => model.Sellers.List[0].Item.Street)</th>
-                    <th scope="col">@Html.DisplayNameFor(model => model.Sellers.List[0].Item.City)</th>
-                    <th scope="col">@Html.DisplayNameFor(model => model.Sellers.List[0].Item.ZIP)</th>
-                    <th scope="col">@Html.DisplayNameFor(model => model.Sellers.List[0].Item.Country)</th>
-                    <th scope="col"></th>
+                    <th style="width: auto;" scope="col">@Html.DisplayNameFor(model => model.Sellers.List[0].Item.Id)</th>
+                    <th style="width: 20%;" scope="col">@Html.DisplayNameFor(model => model.Sellers.List[0].Item.FirstName)</th>
+                    <th style="width: 20%;" scope="col">@Html.DisplayNameFor(model => model.Sellers.List[0].Item.LastName)</th>
+                    <th style="width: 20%;" scope="col">@Html.DisplayNameFor(model => model.Sellers.List[0].Item.Street)</th>
+                    <th style="width: 20%;" scope="col">@Html.DisplayNameFor(model => model.Sellers.List[0].Item.City)</th>
+                    <th style="width: 5%;" scope="col">@Html.DisplayNameFor(model => model.Sellers.List[0].Item.ZIP)</th>
+                    <th style="width: 15%;" scope="col">@Html.DisplayNameFor(model => model.Sellers.List[0].Item.Country)</th>
+                    <th style="width: auto;" scope="col"></th>
+                    <th style="width: auto;" scope="col"></th>
                 </tr>
             </thead>
             <tbody>
@@ -38,7 +39,9 @@
                         <td>@Html.DisplayFor(modelItem => itemViewModel.Item.ZIP)</td>
                         <td>@Html.DisplayFor(modelItem => itemViewModel.Item.Country.Name)</td>
                         <td>
-                            <a asp-page="/Sellers/Edit" asp-all-route-data="@Model.GetItemRoute(itemViewModel.Item)">@Localizer["Bearbeiten"]</a> |
+                            <a asp-page="/Sellers/Edit" asp-all-route-data="@Model.GetItemRoute(itemViewModel.Item)">@Localizer["Bearbeiten"]</a>
+                        </td>
+                        <td>
                             <a asp-page="/Sellers/Details" asp-all-route-data="@Model.GetItemRoute(itemViewModel.Item)">@Localizer["Details"]</a>
                         </td>
                     </tr>

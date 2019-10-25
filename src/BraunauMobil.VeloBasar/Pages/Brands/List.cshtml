@@ -15,9 +15,10 @@
         <table class="table table-striped m-0">
             <thead>
                 <tr>
-                    <th scope="col">@Html.DisplayNameFor(model => model.Brands.List[0].Item.Id)</th>
-                    <th scope="col">@Html.DisplayNameFor(model => model.Brands.List[0].Item.Name)</th>
-                    <th scope="col"></th>
+                    <th style="width: auto;" scope="col">@Html.DisplayNameFor(model => model.Brands.List[0].Item.Id)</th>
+                    <th style="width: 100%;" scope="col">@Html.DisplayNameFor(model => model.Brands.List[0].Item.Name)</th>
+                    <th style="width: auto;" scope="col"></th>
+                    <th style="width: auto;" scope="col"></th>
                 </tr>
             </thead>
             <tbody>
@@ -30,6 +31,8 @@
                         </td>
                         <td>
                             <a asp-page="/Brands/Edit" asp-all-route-data="@Model.GetItemRoute(itemViewModel.Item)">@Localizer["Bearbeiten"]</a>
+                        </td>
+                        <td>
                             @if (await Model.CanDeleteAsync(itemViewModel.Item))
                             {
                                 <a asp-page="/Brands/Delete" asp-all-route-data="@Model.GetItemRoute(itemViewModel.Item)">@Localizer["Löschen"]</a>

@@ -4,14 +4,17 @@
     <table class="table table-striped m-0">
         <thead>
             <tr>
-                <th scope="col">@Html.DisplayNameFor(model => model.List[0].Item.Id)</th>
-                <th scope="col">@Html.DisplayNameFor(model => model.List[0].Item.FirstName)</th>
-                <th scope="col">@Html.DisplayNameFor(model => model.List[0].Item.LastName)</th>
-                <th scope="col">@Html.DisplayNameFor(model => model.List[0].Item.Street)</th>
-                <th scope="col">@Html.DisplayNameFor(model => model.List[0].Item.City)</th>
-                <th scope="col">@Html.DisplayNameFor(model => model.List[0].Item.ZIP)</th>
-                <th scope="col">@Html.DisplayNameFor(model => model.List[0].Item.Country)</th>
-                <th scope="col"></th>
+                <th style="width: auto;" scope="col">@Html.DisplayNameFor(model => model.List[0].Item.Id)</th>
+                <th style="width: 20%;" scope="col">@Html.DisplayNameFor(model => model.List[0].Item.FirstName)</th>
+                <th style="width: 20%;" scope="col">@Html.DisplayNameFor(model => model.List[0].Item.LastName)</th>
+                <th style="width: 20%;" scope="col">@Html.DisplayNameFor(model => model.List[0].Item.Street)</th>
+                <th style="width: 20%;" scope="col">@Html.DisplayNameFor(model => model.List[0].Item.City)</th>
+                <th style="width: 5%;" scope="col">@Html.DisplayNameFor(model => model.List[0].Item.ZIP)</th>
+                <th style="width: 15%;" scope="col">@Html.DisplayNameFor(model => model.List[0].Item.Country)</th>
+                @for (var count = 0; count < Model.List.Count; count++)
+                {
+                    <th style="width: auto;" scope="col"></th>
+                }
             </tr>
         </thead>
         <tbody>
@@ -25,15 +28,12 @@
                     <td>@Html.DisplayFor(modelItem => itemViewModel.Item.City)</td>
                     <td>@Html.DisplayFor(modelItem => itemViewModel.Item.ZIP)</td>
                     <td>@Html.DisplayFor(modelItem => itemViewModel.Item.Country.Name)</td>
-                    <td>
-                        @foreach (var command in Model.Commands)
-                        {
-                            if (command.IsEnabled(itemViewModel.Item))
-                            {
-                                <a asp-page="@command.Page" asp-all-route-data="@command.GetRoute(itemViewModel.Item)">@command.Text</a>
-                            }
-                        }
-                    </td>
+                    @foreach (var command in Model.Commands)
+                    {
+                        <td>
+                            <a Condition="@command.IsEnabled(itemViewModel.Item)" asp-page="@command.Page" asp-all-route-data="@command.GetRoute(itemViewModel.Item)">@command.Text</a>
+                        </td>
+                    }
                 </tr>
             }
         </tbody>

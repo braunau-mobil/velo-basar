@@ -68,21 +68,25 @@
 <div class="card my-3">
     <h5 class="card-header">@Localizer["Artikel"]</h5>
     <div class="card-body p-0">
-        <partial name="/Pages/Products/_TableWithControls.cshtml" model="@new ListViewModel<Product>(Model.Basar, Model.Products)" />
+        @if (Model.Products.Any())
+        {
+            <partial name="/Pages/Products/_TableWithControls.cshtml" model="@new ListViewModel<Product>(Model.Basar, Model.Products)" />
+        }
     </div>
 </div>
 
 <div class="card my-3">
     <h5 class="card-header">@Localizer["Annahmen"]</h5>
     <div class="card-body p-0">
-        <table class="table table-striped m-0">
+        <table Condition="@Model.AcceptanceStatistics.Count > 0" class="table table-striped m-0">
             <thead>
                 <tr>
-                    <th scope="col">@Html.DisplayNameFor(model => model.AcceptanceStatistics[0].Transaction.Number)</th>
-                    <th scope="col">@Html.DisplayNameFor(model => model.AcceptanceStatistics[0].Transaction.TimeStamp)</th>
-                    <th scope="col">@Html.DisplayNameFor(model => model.AcceptanceStatistics[0].ProductCount)</th>
-                    <th scope="col">@Html.DisplayNameFor(model => model.AcceptanceStatistics[0].Amount)</th>
-                    <th scope="col"></th>
+                    <th style="width: auto;" scope="col">@Html.DisplayNameFor(model => model.AcceptanceStatistics[0].Transaction.Number)</th>
+                    <th style="width: 80%;" scope="col">@Html.DisplayNameFor(model => model.AcceptanceStatistics[0].Transaction.TimeStamp)</th>
+                    <th style="width: 10%;" scope="col">@Html.DisplayNameFor(model => model.AcceptanceStatistics[0].ProductCount)</th>
+                    <th style="width: 10%;" scope="col">@Html.DisplayNameFor(model => model.AcceptanceStatistics[0].Amount)</th>
+                    <th style="width: auto;" scope="col"></th>
+                    <th style="width: auto;" scope="col" Condition="@Model.AcceptanceStatistics[0].Transaction.DocumentId != null"></th>
                 </tr>
             </thead>
             <tbody>
@@ -95,11 +99,9 @@
                         <td>@Html.DisplayFor(modelItem => item.Amount)</td>
                         <td>
                             <a asp-page="/Acceptances/Details" asp-all-route-data="@Model.GetItemRoute(item.Transaction)" target="_blank">@Localizer["Details"]</a>
-                            @if (item.Transaction.DocumentId != null)
-                            {
-                                @:|
-                                <a asp-page="/ShowFile" asp-all-route-data="@Model.GetItemRoute(item)" target="_blank">@Localizer["Beleg"]</a>
-                            }
+                        </td>
+                        <td>
+                            <a Condition="@item.Transaction.DocumentId != null" asp-page="/ShowFile" asp-all-route-data="@Model.GetItemRoute(item)" target="_blank">@Localizer["Beleg"]</a>
                         </td>
                     </tr>
                 }
@@ -111,14 +113,14 @@
 <div class="card my-3">
     <h5 class="card-header">@Localizer["Abrechnungen"]</h5>
     <div class="card-body p-0">
-        <table class="table table-striped m-0">
+        <table Condition="@Model.SettlementStatistics.Count > 0" class="table table-striped m-0">
             <thead>
                 <tr>
-                    <th scope="col">@Html.DisplayNameFor(model => model.SettlementStatistics[0].Transaction.Number)</th>
-                    <th scope="col">@Html.DisplayNameFor(model => model.SettlementStatistics[0].Transaction.TimeStamp)</th>
-                    <th scope="col">@Html.DisplayNameFor(model => model.SettlementStatistics[0].ProductCount)</th>
-                    <th scope="col">@Html.DisplayNameFor(model => model.SettlementStatistics[0].Amount)</th>
-                    <th scope="col"></th>
+                    <th style="width: auto;" scope="col">@Html.DisplayNameFor(model => model.SettlementStatistics[0].Transaction.Number)</th>
+                    <th style="width: 80%;" scope="col">@Html.DisplayNameFor(model => model.SettlementStatistics[0].Transaction.TimeStamp)</th>
+                    <th style="width: 10%;" scope="col">@Html.DisplayNameFor(model => model.SettlementStatistics[0].ProductCount)</th>
+                    <th style="width: 10%;" scope="col">@Html.DisplayNameFor(model => model.SettlementStatistics[0].Amount)</th>
+                    <th style="width: auto;" scope="col"></th>
                 </tr>
             </thead>
             <tbody>

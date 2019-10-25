@@ -3,32 +3,14 @@
 <table class="table table-striped m-0">
     <thead>
         <tr>
-            <th scope="col">@Html.DisplayNameFor(model => model.List[0].Item.Id)</th>
-            <th scope="col">@Html.DisplayNameFor(model => model.List[0].Item.Brand)</th>
-            <th scope="col">@Html.DisplayNameFor(model => model.List[0].Item.Type)</th>
-            <th scope="col">@Html.DisplayNameFor(model => model.List[0].Item.Color)</th>
-            <th scope="col">@Html.DisplayNameFor(model => model.List[0].Item.FrameNumber)</th>
-            <th scope="col">@Html.DisplayNameFor(model => model.List[0].Item.Description)</th>
-            <th scope="col">@Html.DisplayNameFor(model => model.List[0].Item.TireSize)</th>
-            <th scope="col">@Html.DisplayNameFor(model => model.List[0].Item.Price)</th>
-            <th scope="col">@Localizer["Status"]</th>
+            <partial name="/Pages/Products/_PropertiesTableHeader.cshtml" model="@Model.List[0].Item" />
         </tr>
     </thead>
     <tbody>
         @foreach (var itemViewModel in Model.List)
         {
             <tr>
-                <th scope="row">@Html.DisplayFor(modelItem => itemViewModel.Item.Id)</th>
-                <td>@Html.DisplayFor(modelItem => itemViewModel.Item.Brand.Name)</td>
-                <td>@Html.DisplayFor(modelItem => itemViewModel.Item.Type.Name)</td>
-                <td>@Html.DisplayFor(modelItem => itemViewModel.Item.Color)</td>
-                <td>@Html.DisplayFor(modelItem => itemViewModel.Item.FrameNumber)</td>
-                <td>@Html.DisplayFor(modelItem => itemViewModel.Item.Description)</td>
-                <td>@Html.DisplayFor(modelItem => itemViewModel.Item.TireSize)</td>
-                <td>@Html.DisplayFor(modelItem => itemViewModel.Item.Price)</td>
-                <td>
-                    <partial name="/Pages/Products/_StatusBadge.cshtml" model="@itemViewModel.Item" />
-                </td>
+                <partial name="/Pages/Products/_PropertiesTableRow.cshtml" model="@itemViewModel.Item" />
             </tr>
         }
     </tbody>

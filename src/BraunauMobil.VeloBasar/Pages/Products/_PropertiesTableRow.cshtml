@@ -1,0 +1,12 @@
+﻿@model Product
+<th scope="row">@Html.DisplayFor(modelItem => modelItem.Id)</th>
+<td>@Html.DisplayFor(modelItem => modelItem.Brand.Name)</td>
+<td>@Html.DisplayFor(modelItem => modelItem.Type.Name)</td>
+<td>@Html.DisplayFor(modelItem => modelItem.Color)</td>
+<td>@Html.DisplayFor(modelItem => modelItem.FrameNumber)</td>
+<td>@Html.DisplayFor(modelItem => modelItem.Description)</td>
+<td>@Html.DisplayFor(modelItem => modelItem.TireSize)</td>
+<td>@Html.DisplayFor(modelItem => modelItem.Price)</td>
+<td>
+    <partial name="/Pages/Products/_StatusBadge.cshtml" model="@Model" />
+</td>

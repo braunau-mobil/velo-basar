@@ -3,42 +3,27 @@
 <table class="table table-striped m-0">
     <thead>
         <tr>
-            <th scope="col">@Html.DisplayNameFor(model => model.List[0].Item.Id)</th>
-            <th scope="col">@Html.DisplayNameFor(model => model.List[0].Item.Brand)</th>
-            <th scope="col">@Html.DisplayNameFor(model => model.List[0].Item.Type)</th>
-            <th scope="col">@Html.DisplayNameFor(model => model.List[0].Item.Color)</th>
-            <th scope="col">@Html.DisplayNameFor(model => model.List[0].Item.FrameNumber)</th>
-            <th scope="col">@Html.DisplayNameFor(model => model.List[0].Item.Description)</th>
-            <th scope="col">@Html.DisplayNameFor(model => model.List[0].Item.TireSize)</th>
-            <th scope="col">@Html.DisplayNameFor(model => model.List[0].Item.Price)</th>
-            <th scope="col">@Localizer["Status"]</th>
-            <th scope="col"></th>
+            <partial name="/Pages/Products/_PropertiesTableHeader.cshtml" model="@Model.List[0].Item" />
+            @for (var count = 0; count < Model.Commands.Length; count++)
+            {
+                <th style="width: auto;" scope="col"></th>
+            }
         </tr>
     </thead>
     <tbody>
         @foreach (var itemViewModel in Model.List)
         {
             <tr>
-                <th scope="row">@Html.DisplayFor(modelItem => itemViewModel.Item.Id)</th>
-                <td>@Html.DisplayFor(modelItem => itemViewModel.Item.Brand.Name)</td>
-                <td>@Html.DisplayFor(modelItem => itemViewModel.Item.Type.Name)</td>
-                <td>@Html.DisplayFor(modelItem => itemViewModel.Item.Color)</td>
-                <td>@Html.DisplayFor(modelItem => itemViewModel.Item.FrameNumber)</td>
-                <td>@Html.DisplayFor(modelItem => itemViewModel.Item.Description)</td>
-                <td>@Html.DisplayFor(modelItem => itemViewModel.Item.TireSize)</td>
-                <td>@Html.DisplayFor(modelItem => itemViewModel.Item.Price)</td>
-                <td>
-                    <partial name="/Pages/Products/_StatusBadge.cshtml" model="@itemViewModel.Item" />
-                </td>
-                <td>
-                    @foreach (var command in Model.Commands)
-                    {
-                        if (command.IsEnabled(itemViewModel.Item))
+                <partial name="/Pages/Products/_PropertiesTableRow.cshtml" model="@itemViewModel.Item" />
+                @foreach (var command in Model.Commands)
+                {
+                    <td>
+                        @if (command.IsEnabled(itemViewModel.Item))
                         {
                             <a asp-page="@command.Page" asp-all-route-data="@command.GetRoute(itemViewModel.Item)">@command.Text</a>
                         }
-                    }
-                </td>
+                    </td>
+                }
             </tr>
 
             <tr Condition="@itemViewModel.HasAlert" class="table-danger">
