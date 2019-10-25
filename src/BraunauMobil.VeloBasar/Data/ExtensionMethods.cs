@@ -11,6 +11,10 @@ namespace BraunauMobil.VeloBasar.Data
 {
     public static class ExtensionMethods
     {
+        public static IQueryable<Basar> DefaultOrder(this IQueryable<Basar> basars)
+        {
+            return basars.OrderBy(b => b.Date);
+        }
         public static IQueryable<Brand> DefaultOrder(this IQueryable<Brand> brands)
         {
             return brands.OrderBy(b => b.Name);
@@ -45,6 +49,19 @@ namespace BraunauMobil.VeloBasar.Data
             return await sellers.IncludeAll().FirstOrDefaultAsync(s => s.Id == id);
         }
 
+        public static IQueryable<Basar> GetEnabled(this IQueryable<Basar> basars)
+        {
+            return basars.Where(b => !b.IsLocked).DefaultOrder();
+        }
+
+        public static IQueryable<Basar> GetMany(this IQueryable<Basar> basars, string searchString = null)
+        {
+            if (string.IsNullOrEmpty(searchString))
+            {
+                return basars.DefaultOrder();
+            }
+            return basars.Where(Expressions.BasarSearch(searchString)).DefaultOrder();
+        }
         public static IQueryable<Brand> GetMany(this IQueryable<Brand> brands, string searchString = null)
         {
             if (string.IsNullOrEmpty(searchString))
@@ -105,6 +122,21 @@ namespace BraunauMobil.VeloBasar.Data
         public static IQueryable<Seller> GetMany(this IQueryable<Seller> sellers, string firstName, string lastName)
         {
             return sellers.Where(Expressions.SellerSearch(firstName, lastName)).IncludeAll().DefaultOrder();
+        }
+
+        public static async Task<Basar> GetNoTrackingAsync(this DbSet<Basar> basars, int id)
+        {
+            return await basars.AsNoTracking().FirstAsync(b => b.Id == id);
+        }
+
+        public static async Task<int?> GetUniqueEnabledAsync(this IQueryable<Basar> basars)
+        {
+            if (basars.Count(b => !b.IsLocked) == 1)
+            {
+                var basar = await basars.FirstAsync(b => !b.IsLocked);
+                return basar.Id;
+            }
+            return null;
         }
 
         public static IQueryable<Product> IncludeAll(this IQueryable<Product> products)

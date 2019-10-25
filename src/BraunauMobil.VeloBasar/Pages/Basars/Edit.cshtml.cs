@@ -1,75 +1,49 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BraunauMobil.VeloBasar.Data;
 using BraunauMobil.VeloBasar.Models;
 
 namespace BraunauMobil.VeloBasar.Pages.Basars
 {
-    public class EditModel : PageModel
+    public class EditModel : BasarPageModel
     {
-        private readonly BraunauMobil.VeloBasar.Data.VeloBasarContext _context;
+        private int _pageIndex;
 
-        public EditModel(BraunauMobil.VeloBasar.Data.VeloBasarContext context)
+        public EditModel(VeloBasarContext context) : base(context)
         {
-            _context = context;
         }
 
         [BindProperty]
-        public Basar Basar { get; set; }
+        public Basar BasarToEdit { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public async Task OnGetAsync(int basarToEditId, int pageIndex, int? basarId)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            await LoadBasarAsync(basarId);
+            _pageIndex = pageIndex;
 
-            Basar = await _context.Basar.FirstOrDefaultAsync(m => m.Id == id);
-
-            if (Basar == null)
-            {
-                return NotFound();
-            }
-            return Page();
+            BasarToEdit = await Context.Basar.GetAsync(basarToEditId);
         }
-
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(int pageIndex, int? basarId)
         {
+            await LoadBasarAsync(basarId);
+
             if (!ModelState.IsValid)
             {
                 return Page();
             }
 
-            _context.Attach(Basar).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!BasarExists(Basar.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return RedirectToPage("./Index");
+            Context.Attach(BasarToEdit).State = EntityState.Modified;
+            await Context.SaveChangesAsync();
+            return RedirectToPage("/Basars/List", new { pageIndex });
         }
 
-        private bool BasarExists(int id)
+        public override IDictionary<string, string> GetRoute()
         {
-            return _context.Basar.Any(e => e.Id == id);
+            var route = base.GetRoute();
+            route.Add("pageIndex", _pageIndex.ToString());
+            return route;
         }
     }
 }

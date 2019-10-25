@@ -2,53 +2,51 @@
 @model CreateModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Neuen Basar erstellen";
 }
 
-<h2>Create</h2>
+<form method="post">
+    <div class="card my-3">
+        <div class="card-header d-flex justify-content-between align-items-md-center">
+            <div class="mr-auto"><h5>@ViewData["Title"]</h5></div>
+            <div class="d-flex justify-content-end">
+                <input type="submit" value="@Localizer["Speichern"]" class="btn btn-primary mx-1" asp-all-route-data="@Model.GetRoute()" asp-route-target="/Basars/List" />
+                <a asp-all-route-data="@Model.GetRoute()" asp-page="/Basars/List" class="btn btn-secondary mx-1">@Localizer["Abbrechen"]</a>
+            </div>
+        </div>
 
-<h4>Basar</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Basar.Date" class="control-label"></label>
-                <input asp-for="Basar.Date" class="form-control" />
-                <span asp-validation-for="Basar.Date" class="text-danger"></span>
+        <div class="card-body">
+            <div class="column">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="BasarToCreate.Date" class="control-label"></label>
+                    <input asp-for="BasarToCreate.Date" class="form-control" />
+                    <span asp-validation-for="BasarToCreate.Date" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="BasarToCreate.Name" class="control-label"></label>
+                    <input asp-for="BasarToCreate.Name" class="form-control" />
+                    <span asp-validation-for="BasarToCreate.Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="BasarToCreate.ProductCommission" class="control-label"></label>
+                    <input asp-for="BasarToCreate.ProductCommission" class="form-control" />
+                    <span asp-validation-for="BasarToCreate.ProductCommission" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="BasarToCreate.ProductDiscount" class="control-label"></label>
+                    <input asp-for="BasarToCreate.ProductDiscount" class="form-control" />
+                    <span asp-validation-for="BasarToCreate.ProductDiscount" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="BasarToCreate.SellerDiscount" class="control-label"></label>
+                    <input asp-for="BasarToCreate.SellerDiscount" class="form-control" />
+                    <span asp-validation-for="BasarToCreate.SellerDiscount" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-default" />
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Basar.Name" class="control-label"></label>
-                <input asp-for="Basar.Name" class="form-control" />
-                <span asp-validation-for="Basar.Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Basar.ProductCommission" class="control-label"></label>
-                <input asp-for="Basar.ProductCommission" class="form-control" />
-                <span asp-validation-for="Basar.ProductCommission" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Basar.ProductDiscount" class="control-label"></label>
-                <input asp-for="Basar.ProductDiscount" class="form-control" />
-                <span asp-validation-for="Basar.ProductDiscount" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Basar.SellerDiscount" class="control-label"></label>
-                <input asp-for="Basar.SellerDiscount" class="form-control" />
-                <span asp-validation-for="Basar.SellerDiscount" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-default" />
-            </div>
-        </form>
+        </div>
     </div>
-</div>
-
-<div>
-    <a asp-page="Index">Back to List</a>
-</div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+</form>

@@ -70,6 +70,10 @@ namespace BraunauMobil.VeloBasar.Data
 
             return await CreateTransactionAsync(basar, TransactionType.Cancellation, products.ToArray());
         }
+        public  async Task<bool> CanDeleteBasarAsync(Basar basar)
+        {
+            return !await Transactions.AnyAsync(t => t.BasarId == basar.Id);
+        }
         public async Task<bool> CanDeleteBrandAsync(Brand item)
         {
             return !await Product.AnyAsync(p => p.BrandId == item.Id);
@@ -89,16 +93,8 @@ namespace BraunauMobil.VeloBasar.Data
             await SaveChangesAsync();
             return brand;
         }
-        public async Task<Basar> CreateNewBasarAsync(DateTime date, string name, decimal productCommission, decimal productDiscount, decimal sellerDiscount)
+        public async Task<Basar> CreateBasarAsync(Basar basar)
         {
-            var basar = new Basar
-            {
-                Date = date,
-                Name = name,
-                ProductCommission = productCommission,
-                ProductDiscount = productDiscount,
-                SellerDiscount = sellerDiscount
-            };
             await Basar.AddAsync(basar);
             await SaveChangesAsync();
 
@@ -109,11 +105,42 @@ namespace BraunauMobil.VeloBasar.Data
 
             return basar;
         }
+        public async Task<Basar> CreateNewBasarAsync(DateTime date, string name, decimal productCommission, decimal productDiscount, decimal sellerDiscount)
+        {
+            var basar = new Basar
+            {
+                Date = date,
+                Name = name,
+                ProductCommission = productCommission,
+                ProductDiscount = productDiscount,
+                SellerDiscount = sellerDiscount
+            };
+            return await CreateBasarAsync(basar);
+        }
         public async Task<ProductType> CreateProductType(ProductType productType)
         {
             await ProductTypes.AddAsync(productType);
             await SaveChangesAsync();
             return productType;
+        }
+        public async Task DeleteBasarAsync(int basarId)
+        {
+            var basar = await Basar.GetAsync(basarId);
+            if (basar != null && !await CanDeleteBasarAsync(basar))
+            {
+                throw new InvalidOperationException(_localizer["Basar mit ID={0} kann nicht gelöscht werden.", basar.Id]);
+            }
+
+            foreach (var enumValue in Enum.GetValues(typeof(TransactionType)))
+            {
+                var transactionType = (TransactionType)enumValue;
+                var number = await Number.FirstAsync(n => n.BasarId == basar.Id && n.Type == transactionType);
+                Number.Remove(number);
+            }
+
+            Basar.Remove(basar);
+            await SaveChangesAsync();
+            
         }
         public async Task DeleteBrand(int brandId)
         {

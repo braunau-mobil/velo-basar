@@ -6,6 +6,14 @@ namespace BraunauMobil.VeloBasar.Data
 {
     public static class Expressions
     {
+        public static Expression<Func<Basar, bool>> BasarSearch(string searchString)
+        {
+            if (int.TryParse(searchString, out int id))
+            {
+                return b => b.Id == id;
+            }
+            return b => b.Name.Contains(searchString, StringComparison.InvariantCultureIgnoreCase);
+        }
         public static Expression<Func<Brand, bool>> BrandSearch(string searchString)
         {
             if (int.TryParse(searchString, out int id))

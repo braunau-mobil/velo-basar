@@ -1,0 +1,63 @@
+﻿@page
+@model ListModel
+
+@{
+    ViewData["Title"] = Localizer["Basare"];
+}
+
+<div class="card my-3">
+    <div class="card-header d-flex justify-content-between align-items-md-center">
+        <div><h5 class="mx-2">@ViewData["Title"]</h5></div>
+        <partial name="/Pages/Shared/_Search.cshtml" model="@Model" />
+        <div><a class="ml-auto btn btn-primary" asp-page="/Basars/Create" asp-all-route-data="@Model.GetRoute()">@Localizer["Neuer Basar"]</a></div>
+    </div>
+
+    <div class="card-body p-0">
+        <table class="table table-striped m-0">
+            <thead>
+                <tr>
+                    <th style="width: auto;" scope="col">@Html.DisplayNameFor(model => model.Basars.List[0].Item.Id)</th>
+                    <th style="width: 50%;" scope="col">@Html.DisplayNameFor(model => model.Basars.List[0].Item.Date)</th>
+                    <th style="width: 50%;" scope="col">@Html.DisplayNameFor(model => model.Basars.List[0].Item.Name)</th>
+                    <th style="width: auto;" scope="col">@Html.DisplayNameFor(model => model.Basars.List[0].Item.IsLocked)</th>
+                    <th style="width: auto;" scope="col"></th>
+                    <th style="width: auto;" scope="col"></th>
+                    <th style="width: auto;" scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var itemViewModel in Model.Basars.List)
+                {
+                <tr>
+                    <th scope="row">@Html.DisplayFor(modelItem => itemViewModel.Item.Id)</th>
+                    <td>@Html.DisplayFor(modelItem => itemViewModel.Item.Date)</td>
+                    <td>@Html.DisplayFor(modelItem => itemViewModel.Item.Name)</td>
+                    <td>
+                        <a asp-page="/Basars/Edit" asp-all-route-data="@Model.GetEditRoute(itemViewModel.Item)">@Localizer["Bearbeiten"]</a>
+                    </td>
+                    <td>
+                        @if (await Model.CanDeleteAsync(itemViewModel.Item))
+                        {
+                            <a asp-page="/Basars/Delete" asp-all-route-data="@Model.GetDeleteRoute(itemViewModel.Item)">@Localizer["Löschen"]</a>
+                        }
+                        else
+                        {
+                            var text = "Deaktivieren";
+                            @if (itemViewModel.Item.IsLocked)
+                            {
+                                text = "Aktivieren";
+                            }
+                            <a asp-page="/Basars/SetStatus" asp-all-route-data="@Model.GetSetStatusRoute(itemViewModel.Item, !itemViewModel.Item.IsLocked)">@Localizer[text]</a>
+                        }
+                    </td>
+                    <td>
+                        <a asp-page="/Index" asp-route-basarId="@itemViewModel.Item.Id">@Localizer["Auswählen"]</a>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<partial name="/Pages/Shared/_Pagination.cshtml" model="@Model.Basars" />

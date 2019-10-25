@@ -2,12 +2,13 @@
 using Microsoft.AspNetCore.Mvc;
 using BraunauMobil.VeloBasar.Models;
 using System;
+using BraunauMobil.VeloBasar.Data;
 
 namespace BraunauMobil.VeloBasar.Pages.Basars
 {
     public class CreateModel : BasarPageModel
     {
-        public CreateModel(BraunauMobil.VeloBasar.Data.VeloBasarContext context) : base(context)
+        public CreateModel(VeloBasarContext context) : base(context)
         {
             Basar = new Basar
             {
@@ -15,22 +16,25 @@ namespace BraunauMobil.VeloBasar.Pages.Basars
             };
         }
 
-        public IActionResult OnGet()
-        {
-            return Page();
-        }
+        [BindProperty]
+        public Basar BasarToCreate { get; set; }
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task OnGetAsync(int? basarId)
         {
+            await LoadBasarAsync(basarId);
+        }
+        public async Task<IActionResult> OnPostAsync(int? basarId)
+        {
+            await LoadBasarAsync(basarId);
+
             if (!ModelState.IsValid)
             {
                 return Page();
             }
 
-            Context.Basar.Add(Basar);
-            await Context.SaveChangesAsync();
+            await Context.CreateBasarAsync(BasarToCreate);
 
-            return RedirectToPage("/Index", new { basarId = Basar.Id });
+            return RedirectToPage("/Basars/List", new { basarId = Basar.Id });
         }
     }
 }

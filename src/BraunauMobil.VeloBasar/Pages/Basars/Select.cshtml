@@ -1,0 +1,39 @@
+﻿@page
+@model SelectModel
+
+@{
+    ViewData["Title"] = Localizer["Basar auswählen"];
+}
+
+<div class="card my-3">
+    <div class="card-header d-flex justify-content-between align-items-md-center">
+        <div><h5 class="mx-2">@ViewData["Title"]</h5></div>
+    </div>
+
+    <div class="card-body p-0">
+        <table class="table table-striped m-0">
+            <thead>
+                <tr>
+                    <th style="width: auto;" scope="col">@Html.DisplayNameFor(model => model.Basars[0].Id)</th>
+                    <th style="width: 50%;" scope="col">@Html.DisplayNameFor(model => model.Basars[0].Date)</th>
+                    <th style="width: 50%;" scope="col">@Html.DisplayNameFor(model => model.Basars[0].Name)</th>
+                    <th style="width: auto;" scope="col">@Html.DisplayNameFor(model => model.Basars[0].IsLocked)</th>
+                    <th style="width: auto;" scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Basars)
+                {
+                <tr>
+                    <th scope="row">@Html.DisplayFor(modelItem => item.Id)</th>
+                    <td>@Html.DisplayFor(modelItem => item.Date)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                    <td>
+                        <a asp-page="/Index" asp-route-basarId="@item.Id">@Localizer["Auswählen"]</a>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

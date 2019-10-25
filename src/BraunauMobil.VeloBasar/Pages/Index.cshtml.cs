@@ -1,13 +1,18 @@
 ﻿using BraunauMobil.VeloBasar.Data;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace BraunauMobil.VeloBasar.Pages
 {
     public class IndexModel : BasarPageModel
     {
-        public IndexModel(VeloBasarContext context) : base(context)
+        private readonly SignInManager<IdentityUser> _signInManager;
+
+        public IndexModel(VeloBasarContext context, SignInManager<IdentityUser> signInManager) : base(context)
         {
+            _signInManager = signInManager;
         }
 
         public async Task<IActionResult> OnGetAsync(int? basarId)
@@ -18,23 +23,39 @@ namespace BraunauMobil.VeloBasar.Pages
                 return RedirectToPage("/Setup/Index");
             }
 
-            if (basarId == null)
+            if (basarId != null)
             {
-                var basarIdFromCookieString = Request.Cookies["basarId"];
-                if (int.TryParse(basarIdFromCookieString, out int basarIdFromCookie))
-                {
-                    basarId = basarIdFromCookie;
-                }
-                else
-                {
-                    return RedirectToPage("/Basars/SelectOrCreate");
-                }
+                return await RedirectToBasar(basarId.Value);
             }
 
+            basarId = Request.Cookies.GetBasarId();
+            if (basarId != null && await Context.Basar.ExistsAsync(basarId.Value))
+            {
+                return await RedirectToBasar(basarId.Value);
+            }
+
+            basarId = await Context.Basar.GetUniqueEnabledAsync();
+            if (basarId != null)
+            {
+                return await RedirectToBasar(basarId.Value);
+            }
+
+            if (Context.Basar.Any())
+            {
+                return RedirectToPage("/Basars/Select");
+            }
+
+            if (_signInManager.IsSignedIn(User))
+            {
+                return RedirectToPage("/Basars/Create");
+            }
+
+            return RedirectToPage("/Setup/Login");
+        }
+        private async Task<IActionResult> RedirectToBasar(int basarId)
+        {
             await LoadBasarAsync(basarId);
-
-            Response.Cookies.Append("basarId", basarId.ToString());
-
+            Response.Cookies.SetBasarId(basarId);
             return Page();
         }
     }

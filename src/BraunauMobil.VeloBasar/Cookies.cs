@@ -14,15 +14,6 @@ namespace BraunauMobil.VeloBasar
 
     public static class Cookies
     {
-        private static readonly Cookie _cart = new Cookie
-        {
-            Key = "cart",
-            CookieOptions = new CookieOptions
-            {
-                IsEssential = true,
-                MaxAge = TimeSpan.FromDays(2)
-            }
-        };
         private static readonly Cookie _acceptanceProducts = new Cookie
         {
             Key = "acceptanceProducts",
@@ -32,6 +23,57 @@ namespace BraunauMobil.VeloBasar
                 MaxAge = TimeSpan.FromDays(2)
             }
         };
+        private static readonly Cookie _basarId = new Cookie
+        {
+            Key = "basarId",
+            CookieOptions = new CookieOptions
+            {
+                IsEssential = false,
+                MaxAge = TimeSpan.FromDays(2)
+            }
+        };
+        private static readonly Cookie _cart = new Cookie
+        {
+            Key = "cart",
+            CookieOptions = new CookieOptions
+            {
+                IsEssential = true,
+                MaxAge = TimeSpan.FromDays(2)
+            }
+        };
+        
+        public static void ClearAcceptanceProducts(this IResponseCookies cookies)
+        {
+            cookies.Delete(_acceptanceProducts.Key, _acceptanceProducts.CookieOptions);
+        }
+        public static IList<Product> GetAcceptanceProducts(this IRequestCookieCollection cookies)
+        {
+            var json = cookies[_acceptanceProducts.Key];
+            if (json == null)
+            {
+                return new List<Product>();
+            }
+            return JsonConvert.DeserializeObject<List<Product>>(json);
+        }
+        public static void SetAcceptanceProducts(this IResponseCookies cookies, IList<Product> products)
+        {
+            var json = JsonConvert.SerializeObject(products);
+            cookies.Append(_acceptanceProducts.Key, json);
+        }
+
+        public static int? GetBasarId(this IRequestCookieCollection cookies)
+        {
+            var id = cookies[_basarId.Key];
+            if (int.TryParse(id, out int basarId))
+            {
+                return basarId;
+            }
+            return null;
+        }
+        public static void SetBasarId(this IResponseCookies cookies, int basarId)
+        {
+            cookies.Append(_basarId.Key, $"{basarId}");
+        }
 
         public static void ClearCart(this IResponseCookies cookies)
         {
@@ -50,25 +92,6 @@ namespace BraunauMobil.VeloBasar
         {
             var json = JsonConvert.SerializeObject(cart);
             cookies.Append(_cart.Key, json, _cart.CookieOptions);
-        }
-
-        public static void ClearAcceptanceProducts(this IResponseCookies cookies)
-        {
-            cookies.Delete(_acceptanceProducts.Key, _acceptanceProducts.CookieOptions);
-        }
-        public static IList<Product> GetAcceptanceProducts(this IRequestCookieCollection cookies)
-        {
-            var json = cookies[_acceptanceProducts.Key];
-            if (json == null)
-            {
-                return new List<Product>();
-            }
-            return JsonConvert.DeserializeObject<List<Product>>(json);
-        }
-        public static void SetAcceptanceProducts(this IResponseCookies cookies, IList<Product> products)
-        {
-            var json = JsonConvert.SerializeObject(products);
-            cookies.Append(_acceptanceProducts.Key, json);
         }
     }
 }

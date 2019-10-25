@@ -1,6 +1,5 @@
 ﻿using BraunauMobil.VeloBasar.Data;
 using BraunauMobil.VeloBasar.Models;
-using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Collections.Generic;
@@ -31,12 +30,9 @@ namespace BraunauMobil.VeloBasar
 
         protected async Task LoadBasarAsync(int? basarId)
         {
-#if DEBUG
-            basarId = 1;
-#endif
             if (basarId != null)
             {
-                Basar = await Context.Basar.GetAsync(basarId.Value);
+                Basar = await Context.Basar.GetNoTrackingAsync(basarId.Value);
             }
         }
 
