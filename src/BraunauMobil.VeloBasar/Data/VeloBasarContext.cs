@@ -83,6 +83,12 @@ namespace BraunauMobil.VeloBasar.Data
             var products = Product.GetMany(productIds);
             return await DoTransactionAsync(basar, TransactionType.Sale, null, await products.ToArrayAsync());
         }
+        public async Task<Brand> CreateBrand(Brand brand)
+        {
+            await Brand.AddAsync(brand);
+            await SaveChangesAsync();
+            return brand;
+        }
         public async Task<Basar> CreateNewBasarAsync(DateTime date, string name, decimal productCommission, decimal productDiscount, decimal sellerDiscount)
         {
             var basar = new Basar
@@ -102,6 +108,12 @@ namespace BraunauMobil.VeloBasar.Data
             }
 
             return basar;
+        }
+        public async Task<ProductType> CreateProductType(ProductType productType)
+        {
+            await ProductTypes.AddAsync(productType);
+            await SaveChangesAsync();
+            return productType;
         }
         public async Task DeleteBrand(int brandId)
         {

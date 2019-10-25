@@ -1,0 +1,33 @@
+﻿@page
+@model CreateModel
+@{
+    ViewData["Title"] = Localizer["Marke hinzufügen"];
+}
+
+<form method="post">
+    <div class="card my-3">
+        <div class="card-header d-flex justify-content-between align-items-md-center">
+            <div class="mr-auto"><h5>@ViewData["Title"]</h5></div>
+            <div class="d-flex justify-content-end">
+                <input type="submit" value="@Localizer["Speichern"]" class="btn btn-primary mx-1" asp-all-route-data="@Model.GetRoute()" asp-route-target="/Brands/List" />
+                <a asp-all-route-data="@Model.GetRoute()" asp-page="/Brands/List" class="btn btn-secondary mx-1">@Localizer["Abbrechen"]</a>
+            </div>
+        </div>
+
+        <div class="card-body">
+            <div class="column">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Brand.Name" class="control-label"></label>
+                    <input asp-for="Brand.Name" class="form-control" />
+                    <span asp-validation-for="Brand.Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Brand.Status" class="control-label"></label>
+                    <select asp-for="Brand.Status" asp-items="@Html.GetEnumSelectList<ModelStatus>()" class="form-control"></select>
+                    <span asp-validation-for="Brand.Status" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
