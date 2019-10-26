@@ -72,7 +72,7 @@ namespace BraunauMobil.VeloBasar.Data
                 await _context.Brand.AddAsync(new Brand
                 {
                     Name = brandName,
-                    Status = ModelStatus.Enabled
+                    Status = ModelState.Enabled
                 });
             }
             await _context.SaveChangesAsync();
@@ -86,7 +86,7 @@ namespace BraunauMobil.VeloBasar.Data
                 await _context.ProductTypes.AddAsync(new ProductType
                 {
                     Name = productTypeName,
-                    Status = ModelStatus.Enabled
+                    Status = ModelState.Enabled
                 });
             }
             await _context.SaveChangesAsync();

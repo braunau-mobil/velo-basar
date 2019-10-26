@@ -12,7 +12,7 @@ namespace BraunauMobil.VeloBasar.Pages.Brands
         {
         }
 
-        public async Task<IActionResult> OnGetAsync(int brandId, ModelStatus status, int pageIndex, int? basarId)
+        public async Task<IActionResult> OnGetAsync(int brandId, ModelState status, int pageIndex, int? basarId)
         {
             if (await Context.Brand.ExistsAsync(brandId))
             {

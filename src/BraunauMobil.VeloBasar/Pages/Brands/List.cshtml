@@ -41,10 +41,10 @@
                             else
                             {
                                 var text = "Deaktivieren";
-                                var statusToSet = ModelStatus.Disabled;
-                                @if (itemViewModel.Item.Status == ModelStatus.Disabled)
+                                var statusToSet = ModelState.Disabled;
+                                @if (itemViewModel.Item.Status == ModelState.Disabled)
                                 {
-                                    statusToSet = ModelStatus.Enabled;
+                                    statusToSet = ModelState.Enabled;
                                     text = "Aktivieren";
                                 }
                                 <a asp-page="/Brands/SetStatus" asp-all-route-data="@Model.GetItemRoute(itemViewModel.Item, statusToSet)">@Localizer[text]</a>

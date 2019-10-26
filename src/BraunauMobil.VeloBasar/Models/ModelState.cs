@@ -2,7 +2,7 @@
 
 namespace BraunauMobil.VeloBasar.Models
 {
-    public enum ModelStatus
+    public enum ModelState
     {
         [Display(Name = "Aktiviert")]
         Enabled,

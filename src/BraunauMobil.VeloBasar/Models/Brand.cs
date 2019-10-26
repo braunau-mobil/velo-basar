@@ -11,6 +11,6 @@ namespace BraunauMobil.VeloBasar.Models
         [Display(Name = "Name")]
         public string Name { get; set; }
         [Display(Name = "Status")]
-        public ModelStatus Status { get; set; }
+        public ModelState Status { get; set; }
     }
 }
