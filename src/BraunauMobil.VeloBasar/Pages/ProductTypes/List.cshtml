@@ -41,13 +41,13 @@
                             else
                             {
                                 var text = "Deaktivieren";
-                                var statusToSet = ModelState.Disabled;
-                                @if (itemViewModel.Item.Status == ModelState.Disabled)
+                                var stateToSet = ObjectState.Disabled;
+                                @if (itemViewModel.Item.State == ObjectState.Disabled)
                                 {
-                                    statusToSet = ModelState.Enabled;
+                                    stateToSet = ObjectState.Enabled;
                                     text = "Aktivieren";
                                 }
-                                <a asp-page="/ProductTypes/SetStatus" asp-all-route-data="@Model.GetItemRoute(itemViewModel.Item, statusToSet)">@Localizer[text]</a>
+                                <a asp-page="/ProductTypes/SetState" asp-all-route-data="@Model.GetItemRoute(itemViewModel.Item, stateToSet)">@Localizer[text]</a>
                             }
                         </td>
                     </tr>

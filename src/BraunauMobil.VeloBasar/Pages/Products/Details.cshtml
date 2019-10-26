@@ -22,7 +22,7 @@
     <div class="card-header d-flex justify-content-between align-items-md-center">
         <div><h5>@ViewData["Title"] #@Model.Product.Id</h5></div>
 
-        <partial name="/Pages/Products/_StatusBadge.cshtml" model="@Model.Product" />
+        <partial name="/Pages/Products/_StateBadge.cshtml" model="@Model.Product" />
 
         <div class="d-flex justify-content-end">
             @if (SignInManager.IsSignedIn(User) && Model.Product.IsAllowed(TransactionType.Release))

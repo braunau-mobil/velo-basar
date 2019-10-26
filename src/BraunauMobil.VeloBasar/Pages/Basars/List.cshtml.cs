@@ -52,18 +52,18 @@ namespace BraunauMobil.VeloBasar.Pages.Basars
         {
             return GetItemRoute("basarToEditId", item);
         }
-        public IDictionary<string, string> GetSetStatusRoute(Basar item, bool? statusToSet = null)
+        public IDictionary<string, string> GetSetStateRoute(Basar item, bool? stateToSet = null)
         {
-            return GetItemRoute("basarToSetStatusId", item, statusToSet);
+            return GetItemRoute("basarToSetStateId", item, stateToSet);
         }
-        public IDictionary<string, string> GetItemRoute(string itemIdKey, Basar item, bool? statusToSet = null)
+        public IDictionary<string, string> GetItemRoute(string itemIdKey, Basar item, bool? stateToSet = null)
         {
             var route = GetRoute();
             route.Add(itemIdKey, item.Id.ToString());
             route.Add("pageIndex", Basars.PageIndex.ToString());
-            if (statusToSet != null)
+            if (stateToSet != null)
             {
-                route.Add("status", statusToSet.ToString());
+                route.Add("state", stateToSet.ToString());
             }
             return route;
         }

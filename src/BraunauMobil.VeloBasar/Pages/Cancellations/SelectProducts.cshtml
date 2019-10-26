@@ -52,7 +52,7 @@
                         <td>@Html.DisplayFor(modelItem => modelItem.Products.List[index].Item.TireSize)</td>
                         <td>@Html.DisplayFor(modelItem => modelItem.Products.List[index].Item.Price)</td>
                         <td>
-                            <partial name="/Pages/Products/_StatusBadge.cshtml" model="@Model.Products.List[index].Item" />
+                            <partial name="/Pages/Products/_StateBadge.cshtml" model="@Model.Products.List[index].Item" />
                         </td>
                     </tr>
                     }

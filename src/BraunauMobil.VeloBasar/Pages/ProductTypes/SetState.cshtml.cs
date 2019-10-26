@@ -6,18 +6,18 @@ using BraunauMobil.VeloBasar.Models;
 
 namespace BraunauMobil.VeloBasar.Pages.ProductTypes
 {
-    public class SetStatusModel : BasarPageModel
+    public class SetStateModel : BasarPageModel
     {
-        public SetStatusModel(VeloBasarContext context)  : base(context)
+        public SetStateModel(VeloBasarContext context)  : base(context)
         {
         }
 
-        public async Task<IActionResult> OnGetAsync(int productTypeId, ModelState status, int pageIndex, int? basarId)
+        public async Task<IActionResult> OnGetAsync(int productTypeId, ObjectState state, int pageIndex, int? basarId)
         {
             if (await Context.ProductTypes.ExistsAsync(productTypeId))
             {
                 var productType = await Context.ProductTypes.GetAsync(productTypeId);
-                productType.Status = status;
+                productType.State = state;
                 Context.Attach(productType).State = EntityState.Modified;
                 await Context.SaveChangesAsync();
             }

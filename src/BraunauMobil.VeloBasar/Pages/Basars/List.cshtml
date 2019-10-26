@@ -47,7 +47,7 @@
                             {
                                 text = "Aktivieren";
                             }
-                            <a asp-page="/Basars/SetStatus" asp-all-route-data="@Model.GetSetStatusRoute(itemViewModel.Item, !itemViewModel.Item.IsLocked)">@Localizer[text]</a>
+                            <a asp-page="/Basars/SetState" asp-all-route-data="@Model.GetSetStateRoute(itemViewModel.Item, !itemViewModel.Item.IsLocked)">@Localizer[text]</a>
                         }
                     </td>
                     <td>

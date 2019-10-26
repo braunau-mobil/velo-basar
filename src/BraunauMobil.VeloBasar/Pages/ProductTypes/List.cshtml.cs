@@ -45,14 +45,14 @@ namespace BraunauMobil.VeloBasar.Pages.ProductTypes
             return Page();
         }
 
-        public IDictionary<string, string> GetItemRoute(ProductType ProductType, ModelState? statusToSet = null)
+        public IDictionary<string, string> GetItemRoute(ProductType ProductType, ObjectState? stateToSet = null)
         {
             var route = GetRoute();
             route.Add("ProductTypeId", ProductType.Id.ToString());
             route.Add("pageIndex", ProductTypes.PageIndex.ToString());
-            if (statusToSet != null)
+            if (stateToSet != null)
             {
-                route.Add("status", statusToSet.ToString());
+                route.Add("state", stateToSet.ToString());
             }
             return route;
         }
