@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BraunauMobil.VeloBasar.Data;
@@ -7,19 +6,21 @@ using BraunauMobil.VeloBasar.Models;
 using BraunauMobil.VeloBasar.Resources;
 using BraunauMobil.VeloBasar.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.Localization;
 
 namespace BraunauMobil.VeloBasar.Pages.Acceptances
 {
     public class EnterProductsModel : BasarPageModel
     {
+        private readonly IHtmlGenerator _htmlGenerator;
         private readonly IStringLocalizer<SharedResource> _localizer;
         private int _sellerId;
 
-        public EnterProductsModel(VeloBasarContext context, IStringLocalizer<SharedResource> localizer) : base(context)
+        public EnterProductsModel(VeloBasarContext context, IStringLocalizer<SharedResource> localizer, IHtmlGenerator htmlGenerator) : base(context)
         {
+            _htmlGenerator = htmlGenerator;
             _localizer = localizer;
         }
 

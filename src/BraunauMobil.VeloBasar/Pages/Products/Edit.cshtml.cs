@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BraunauMobil.VeloBasar.Data;
 using BraunauMobil.VeloBasar.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace BraunauMobil.VeloBasar.Pages.Products
 {
@@ -18,6 +19,8 @@ namespace BraunauMobil.VeloBasar.Pages.Products
         public async Task<IActionResult> OnGetAsync(int basarId, int productId)
         {
             await LoadBasarAsync(basarId);
+            ViewData["Brands"] = new SelectList(Context.Brand, "Id", "Name");
+            ViewData["ProductTypes"] = new SelectList(Context.ProductTypes, "Id", "Name");
 
             Product = await Context.Product.FirstOrDefaultAsync(p => p.Id == productId);
 
@@ -31,12 +34,15 @@ namespace BraunauMobil.VeloBasar.Pages.Products
 
         public async Task<IActionResult> OnPostAsync(int basarId, string target)
         {
+            await LoadBasarAsync(basarId);
+            ViewData["Brands"] = new SelectList(Context.Brand, "Id", "Name");
+            ViewData["ProductTypes"] = new SelectList(Context.ProductTypes, "Id", "Name");
+
             if (!ModelState.IsValid)
             {
                 return Page();
             }
 
-            await LoadBasarAsync(basarId);
             Context.Attach(Product).State = EntityState.Modified;
 
             try

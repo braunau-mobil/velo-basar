@@ -14,9 +14,8 @@
         <form method="post">
             <div class="d-flex form-actions no-color align-items-md-center">
                 <div class="mx-2">@Localizer["Artikel ID:"]</div>
-                <input asp-for="ProductId" />
+                <input asp-for="ProductId" velo-validation-for="ProductId" />
                 <input type="submit" value="@Localizer["Hinzufügen"]" class="btn btn-primary mx-2" asp-all-route-data="@Model.GetRoute()" />
-                <span asp-validation-for="ProductId" class="text-danger"></span>
             </div>
         </form>
 

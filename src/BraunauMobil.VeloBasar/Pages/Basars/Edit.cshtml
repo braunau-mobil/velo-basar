@@ -17,32 +17,26 @@
 
         <div class="card-body">
             <div class="column">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input type="hidden" asp-for="BasarToEdit.Id" />
                 <div class="form-group">
                     <label asp-for="BasarToEdit.Date" class="control-label"></label>
-                    <input asp-for="BasarToEdit.Date" class="form-control" />
-                    <span asp-validation-for="BasarToEdit.Date" class="text-danger"></span>
+                    <input asp-for="BasarToEdit.Date" class="form-control" velo-validation-for="BasarToEdit.Date" />
                 </div>
                 <div class="form-group">
                     <label asp-for="BasarToEdit.Name" class="control-label"></label>
-                    <input asp-for="BasarToEdit.Name" class="form-control" />
-                    <span asp-validation-for="BasarToEdit.Name" class="text-danger"></span>
+                    <input asp-for="BasarToEdit.Name" class="form-control" velo-validation-for="BasarToEdit.Name" />
                 </div>
                 <div class="form-group">
                     <label asp-for="BasarToEdit.ProductCommission" class="control-label"></label>
-                    <input asp-for="BasarToEdit.ProductCommission" class="form-control" />
-                    <span asp-validation-for="BasarToEdit.ProductCommission" class="text-danger"></span>
+                    <input asp-for="BasarToEdit.ProductCommission" class="form-control" velo-validation-for="BasarToEdit.ProductCommission" />
                 </div>
                 <div class="form-group">
                     <label asp-for="BasarToEdit.ProductDiscount" class="control-label"></label>
-                    <input asp-for="BasarToEdit.ProductDiscount" class="form-control" />
-                    <span asp-validation-for="BasarToEdit.ProductDiscount" class="text-danger"></span>
+                    <input asp-for="BasarToEdit.ProductDiscount" class="form-control" velo-validation-for="BasarToEdit.ProductDiscount" />
                 </div>
                 <div class="form-group">
                     <label asp-for="BasarToEdit.SellerDiscount" class="control-label"></label>
-                    <input asp-for="BasarToEdit.SellerDiscount" class="form-control" />
-                    <span asp-validation-for="BasarToEdit.SellerDiscount" class="text-danger"></span>
+                    <input asp-for="BasarToEdit.SellerDiscount" class="form-control" velo-validation-for="BasarToEdit.SellerDiscount" />
                 </div>
                 <div class="form-group">
                     <input type="submit" value="Create" class="btn btn-default" />

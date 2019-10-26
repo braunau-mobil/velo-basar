@@ -1,5 +1,5 @@
 ﻿@page
-@model BraunauMobil.VeloBasar.Pages.Acceptances.EnterProductsModel
+@model EnterProductsModel
 @{
     ViewData["Title"] = Localizer["Annahme - Artikel eingeben"];
 }
@@ -34,31 +34,24 @@
                     <tr>
                         <td>
                             <select asp-for="NewProduct.TypeId" class="form-control" asp-items="ViewBag.ProductTypes"></select>
-                            <span asp-validation-for="NewProduct.TypeId" class="text-danger"></span>
                         </td>
                         <td>
                             <select asp-for="NewProduct.BrandId" class="form-control" asp-items="ViewBag.Brands"></select>
-                            <span asp-validation-for="NewProduct.BrandId" class="text-danger"></span>
                         </td>
                         <td>
-                            <input asp-for="NewProduct.Color" class="form-control" />
-                            <span asp-validation-for="NewProduct.Color" class="text-danger"></span>
+                            <input asp-for="NewProduct.Color" class="form-control" velo-validation-for="NewProduct.Color" />
                         </td>
                         <td>
-                            <input asp-for="NewProduct.Description" class="form-control" />
-                            <span asp-validation-for="NewProduct.Description" class="text-danger"></span>
+                            <input asp-for="NewProduct.Description" class="form-control" velo-validation-for="NewProduct.Description" />
                         </td>
                         <td>
-                            <input asp-for="NewProduct.FrameNumber" class="form-control" />
-                            <span asp-validation-for="NewProduct.FrameNumber" class="text-danger"></span>
+                            <input asp-for="NewProduct.FrameNumber" class="form-control" velo-validation-for="NewProduct.FrameNumber" />
                         </td>
                         <td>
-                            <input asp-for="NewProduct.TireSize" class="form-control" />
-                            <span asp-validation-for="NewProduct.TireSize" class="text-danger"></span>
+                            <input asp-for="NewProduct.TireSize" class="form-control" velo-validation-for="NewProduct.TireSize" />
                         </td>
                         <td>
-                            <input asp-for="NewProduct.Price" class="form-control" />
-                            <span asp-validation-for="NewProduct.Price" class="text-danger"></span>
+                            <input asp-for="NewProduct.Price" class="form-control" velo-validation-for="NewProduct.Price" />
                         </td>
                         <th>
                             @if (Model.AreWeInEditMode)
@@ -95,19 +88,13 @@
                 </tbody>
             </table>
         </div>
-
-        @*<div Condition="@Model.ErrorText != null" class="card-footer">
-            <div class="alert alert-danger" role="alert">
-                @Model.ErrorText
-            </div>
-        </div>*@
     </div>
 </form>
 
 
-@*@section Scripts {
+@section Scripts {
     <script type="text/javascript">
         $("#ProductId").val("");
         $("#ProductId").focus();
     </script>
-}*@
+}

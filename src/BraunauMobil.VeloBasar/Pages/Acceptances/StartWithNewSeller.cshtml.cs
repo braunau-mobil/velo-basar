@@ -14,6 +14,7 @@ namespace BraunauMobil.VeloBasar.Pages.Acceptances
     public class StartWithNewSeller : BasarPageModel
     {
         private readonly IStringLocalizer<SharedResource> _localizer;
+        private bool _isValidationEnabled;
 
         public StartWithNewSeller(VeloBasarContext context, IStringLocalizer<SharedResource> localizer) : base(context)
         {
@@ -24,8 +25,6 @@ namespace BraunauMobil.VeloBasar.Pages.Acceptances
         [BindProperty]
         public Seller Seller { get; set; }
         public ListViewModel<Seller> Sellers { get; set; }
-        [BindProperty]
-        public bool IsValidationEnabled { get; set; }
         [BindProperty]
         public bool AreWeInEditMode { get; set; }
         public bool HasSellers { get => Sellers != null; }
@@ -41,7 +40,7 @@ namespace BraunauMobil.VeloBasar.Pages.Acceptances
                 {
                     return NotFound();
                 }
-                IsValidationEnabled = true;
+                _isValidationEnabled = true;
                 AreWeInEditMode = true;
             }
 
@@ -79,13 +78,13 @@ namespace BraunauMobil.VeloBasar.Pages.Acceptances
 
             if (string.IsNullOrEmpty(Seller.FirstName) || string.IsNullOrEmpty(Seller.LastName))
             {
-                IsValidationEnabled = true;
+                _isValidationEnabled = true;
                 return Page();
             }
 
             if (!ModelState.IsValid)
             {
-                IsValidationEnabled = true;
+                _isValidationEnabled = true;
                 return Page();
             }
 
@@ -121,6 +120,10 @@ namespace BraunauMobil.VeloBasar.Pages.Acceptances
             var route = GetRoute();
             route.Add("search", true.ToString());
             return route;
+        }
+        public bool IsValidationEnabled()
+        {
+            return _isValidationEnabled;
         }
 
         private async Task Load(int basarId)

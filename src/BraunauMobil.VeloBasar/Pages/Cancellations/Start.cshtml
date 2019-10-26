@@ -18,8 +18,7 @@
             <div class="column">
                 <div class="form-group">
                     <label asp-for="SaleNumber" class="control-label"></label>
-                    <input asp-for="SaleNumber" class="form-control" />
-                    <span asp-validation-for="SaleNumber" class="text-danger"></span>
+                    <input asp-for="SaleNumber" class="form-control" velo-validation-for="SaleNumber" />
                     <span Condition="Model.ErrorMessage != null" class="text-danger">@Model.ErrorMessage</span>
                 </div>
             </div>

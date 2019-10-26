@@ -17,63 +17,48 @@
 
         <div class="card-body">
             <div class="column">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input type="hidden" asp-for="Seller.Id" />
                 <div class="form-group">
                     <label asp-for="Seller.FirstName" class="control-label"></label>
-                    <input asp-for="Seller.FirstName" class="form-control" />
-                    <span asp-validation-for="Seller.FirstName" class="text-danger"></span>
+                    <input asp-for="Seller.FirstName" class="form-control" velo-validation-for="Seller.FirstName" />
                 </div>
                 <div class="form-group">
                     <label asp-for="Seller.LastName" class="control-label"></label>
-                    <input asp-for="Seller.LastName" class="form-control" />
-                    <span asp-validation-for="Seller.LastName" class="text-danger"></span>
+                    <input asp-for="Seller.LastName" class="form-control" velo-validation-for="Seller.LastName" />
                 </div>
                 <div class="form-group">
                     <label asp-for="Seller.Street" class="control-label"></label>
-                    <input asp-for="Seller.Street" class="form-control" />
-                    <span asp-validation-for="Seller.Street" class="text-danger"></span>
+                    <input asp-for="Seller.Street" class="form-control" velo-validation-for="Seller.Street" />
                 </div>
                 <div class="form-group">
                     <label asp-for="Seller.City" class="control-label"></label>
-                    <input asp-for="Seller.City" class="form-control" />
-                    <span asp-validation-for="Seller.City" class="text-danger"></span>
+                    <input asp-for="Seller.City" class="form-control" velo-validation-for="Seller.City" />
                 </div>
                 <div class="form-group">
                     <label asp-for="Seller.ZIP" class="control-label"></label>
-                    <input asp-for="Seller.ZIP" class="form-control" />
-                    <span asp-validation-for="Seller.ZIP" class="text-danger"></span>
+                    <input asp-for="Seller.ZIP" class="form-control" velo-validation-for="Seller.ZIP" />
                 </div>
                 <div class="form-group">
                     <label asp-for="Seller.CountryId" class="control-label"></label>
                     <select asp-for="Seller.CountryId" class="form-control" asp-items="ViewBag.Countries"></select>
-                    <span asp-validation-for="Seller.CountryId" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="Seller.IBAN" class="control-label"></label>
-                    <input asp-for="Seller.IBAN" class="form-control" />
-                    <span asp-validation-for="Seller.IBAN" class="text-danger"></span>
+                    <input asp-for="Seller.IBAN" class="form-control" velo-validation-for="Seller.IBAN" />
                 </div>
                 <div class="form-group">
                     <label asp-for="Seller.BIC" class="control-label"></label>
-                    <input asp-for="Seller.BIC" class="form-control" />
-                    <span asp-validation-for="Seller.BIC" class="text-danger"></span>
+                    <input asp-for="Seller.BIC" class="form-control" velo-validation-for="Seller.BIC" />
                 </div>
                 <div class="form-group">
                     <label asp-for="Seller.BankAccountHolder" class="control-label"></label>
-                    <input asp-for="Seller.BankAccountHolder" class="form-control" />
-                    <span asp-validation-for="Seller.BankAccountHolder" class="text-danger"></span>
+                    <input asp-for="Seller.BankAccountHolder" class="form-control" velo-validation-for="Seller.BankAccountHolder" />
                 </div>
                 <div class="form-group">
                     <label asp-for="Seller.Token" class="control-label"></label>
-                    <input asp-for="Seller.Token" class="form-control" />
-                    <span asp-validation-for="Seller.Token" class="text-danger"></span>
+                    <input asp-for="Seller.Token" class="form-control" velo-validation-for="Seller.Token" />
                 </div>
             </div>
         </div>
     </div>
 </form>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
