@@ -70,7 +70,7 @@ namespace BraunauMobil.VeloBasar.Data
             }
             return brands.Where(Expressions.BrandSearch(searchString)).DefaultOrder();
         }
-        public static IQueryable<Product> GetMany(this IQueryable<Product> products, string searchString = null, StorageState? storageState = null, ValueStatus? valueState = null)
+        public static IQueryable<Product> GetMany(this IQueryable<Product> products, string searchString = null, StorageState? storageState = null, ValueState? valueState = null)
         {
             var result = products;
             if (!string.IsNullOrEmpty(searchString))
@@ -192,9 +192,9 @@ namespace BraunauMobil.VeloBasar.Data
             return products.Where(p => p.StorageState != state);
         }
 
-        public static IQueryable<Product> WhereValueState(this IQueryable<Product> products, ValueStatus valueState)
+        public static IQueryable<Product> WhereValueState(this IQueryable<Product> products, ValueState valueState)
         {
-            return products.Where(p => p.ValueStatus == valueState);
+            return products.Where(p => p.ValueState == valueState);
         }
     }
 }

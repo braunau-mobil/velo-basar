@@ -24,9 +24,9 @@ namespace BraunauMobil.VeloBasar.Pages.Products
         public string MyPath => "/Products/List";
         public PaginatedListViewModel<Product> Products { get; set; }
         public StorageState? StorageStateFilter { get; set; }
-        public ValueStatus? ValueStatusFilter { get; set; }
+        public ValueState? ValueStateFilter { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int basarId, string currentFilter, string searchString, int? pageIndex, StorageState? storageState, ValueStatus? valueState)
+        public async Task<IActionResult> OnGetAsync(int basarId, string currentFilter, string searchString, int? pageIndex, StorageState? storageState, ValueState? valueState)
         {
             await LoadBasarAsync(basarId);
             ViewData["StorageStates"] = GetStorageStates();
@@ -34,7 +34,7 @@ namespace BraunauMobil.VeloBasar.Pages.Products
             
             StorageStateFilter = storageState;
             CurrentFilter = searchString;
-            ValueStatusFilter = valueState;
+            ValueStateFilter = valueState;
 
             if (searchString != null)
             {
@@ -101,9 +101,9 @@ namespace BraunauMobil.VeloBasar.Pages.Products
         {
             return new SelectList(new[]
             {
-                new Tuple<ValueStatus?, string>(null, "Alle"),
-                new Tuple<ValueStatus?, string>(ValueStatus.Settled, "Abgerechnet"),
-                new Tuple<ValueStatus?, string>(ValueStatus.NotSettled, "Nicht Abgerechnet")
+                new Tuple<ValueState?, string>(null, "Alle"),
+                new Tuple<ValueState?, string>(ValueState.Settled, "Abgerechnet"),
+                new Tuple<ValueState?, string>(ValueState.NotSettled, "Nicht Abgerechnet")
             }, "Item1", "Item2");
         }
     }

@@ -2,7 +2,7 @@
 
 namespace BraunauMobil.VeloBasar.Models
 {
-    public enum ValueStatus
+    public enum ValueState
     {
         [Display(Name = "Nicht abgerechnet")]
         NotSettled,

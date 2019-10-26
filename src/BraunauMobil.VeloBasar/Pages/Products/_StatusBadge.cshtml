@@ -7,23 +7,23 @@
     var text = "";
     var icon = "";
 
-    if (Model.StorageState == StorageState.Available && Model.ValueStatus == ValueStatus.NotSettled)
+    if (Model.StorageState == StorageState.Available && Model.ValueState == ValueState.NotSettled)
     {
         text = Localizer["Verfügbar"];
         css = "badge-success";
     }
-    else if (Model.StorageState == Models.StorageState.Sold && Model.ValueStatus == ValueStatus.NotSettled)
+    else if (Model.StorageState == Models.StorageState.Sold && Model.ValueState == ValueState.NotSettled)
     {
         text = Localizer["Verkauft"];
         css = "badge-warning";
         icon = "$";
     }
-    else if (Model.StorageState == StorageState.Available && Model.ValueStatus == ValueStatus.Settled)
+    else if (Model.StorageState == StorageState.Available && Model.ValueState == ValueState.Settled)
     {
         text = Localizer["Abgeholt"];
         css = "badge-secondary";
     }
-    else if (Model.StorageState == StorageState.Sold && Model.ValueStatus == ValueStatus.Settled)
+    else if (Model.StorageState == StorageState.Sold && Model.ValueState == ValueState.Settled)
     {
         text = Localizer["Abgerechnet"];
         css = "badge-secondary";

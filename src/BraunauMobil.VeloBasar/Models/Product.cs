@@ -43,14 +43,14 @@ namespace BraunauMobil.VeloBasar.Models
         public StorageState StorageState { get; set; }
 
         [Display(Name = "Wertstatus")]
-        public ValueStatus ValueStatus { get; set; }
+        public ValueState ValueState { get; set; }
 
         [Display(Name = "Etikett")]
         public int? Label { get; set; }
 
         public bool IsAllowed(TransactionType transactionType)
         {
-            if (ValueStatus == ValueStatus.Settled)
+            if (ValueState == ValueState.Settled)
             {
                 return false;
             }
@@ -58,7 +58,7 @@ namespace BraunauMobil.VeloBasar.Models
             switch (transactionType)
             {
                 case TransactionType.Acceptance: return false;
-                case TransactionType.Cancellation: return StorageState == StorageState.Sold && ValueStatus != ValueStatus.Settled;
+                case TransactionType.Cancellation: return StorageState == StorageState.Sold && ValueState != ValueState.Settled;
                 case TransactionType.Lock: return StorageState == StorageState.Available || StorageState == StorageState.Sold;
                 case TransactionType.MarkAsGone: return StorageState == StorageState.Available;
                 case TransactionType.Release: return StorageState == StorageState.Locked || StorageState == StorageState.Gone;
@@ -73,7 +73,7 @@ namespace BraunauMobil.VeloBasar.Models
             switch (transactionType)
             {
                 case TransactionType.Acceptance:
-                    ValueStatus = ValueStatus.NotSettled;
+                    ValueState = ValueState.NotSettled;
                     StorageState = StorageState.Available;
                     return;
                 case TransactionType.Cancellation:
@@ -92,7 +92,7 @@ namespace BraunauMobil.VeloBasar.Models
                     StorageState = StorageState.Sold;
                     return;
                 case TransactionType.Settlement:
-                    ValueStatus = ValueStatus.Settled;
+                    ValueState = ValueState.Settled;
                     return;
             }
 

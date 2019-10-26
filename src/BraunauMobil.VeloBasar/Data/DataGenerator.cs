@@ -143,7 +143,7 @@ namespace BraunauMobil.VeloBasar.Data
                 FrameNumber = NextFrameNumber(),
                 Price = NextPrice(),
                 StorageState = StorageState.Available,
-                ValueStatus = ValueStatus.NotSettled,
+                ValueState = ValueState.NotSettled,
                 TireSize = NextTireSize(),
                 Type = NextProductType()
             };

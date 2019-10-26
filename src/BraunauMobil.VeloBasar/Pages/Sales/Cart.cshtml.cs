@@ -108,7 +108,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
             {
                 return _localizer["Es konnte kein Artikel mit der ID {0} gefunden werden.", productId];
             }
-            else if (product.ValueStatus == ValueStatus.Settled)
+            else if (product.ValueState == ValueState.Settled)
             {
                 return _localizer["Der Artikel wurde bereits abgerechnet."];
             }

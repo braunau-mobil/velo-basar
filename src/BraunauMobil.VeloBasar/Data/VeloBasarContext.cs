@@ -195,7 +195,7 @@ namespace BraunauMobil.VeloBasar.Data
                 AceptedProductCount = products.Length,
                 SettlementAmout = soldProducts.Sum(p => p.Price),
                 NotSoldProductCount = products.WhereStorageStateIsNot(StorageState.Sold).Count(),
-                PickedUpProductCount = products.Where(p => p.StorageState == StorageState.Gone && p.ValueStatus == ValueStatus.Settled).Count(),
+                PickedUpProductCount = products.Where(p => p.StorageState == StorageState.Gone && p.ValueState == ValueState.Settled).Count(),
                 SoldProductCount = soldProducts.Length
             };
         }
@@ -401,7 +401,7 @@ namespace BraunauMobil.VeloBasar.Data
                     StorageState = StorageState.Available,
                     TireSize = product.TireSize,
                     TypeId = product.TypeId,
-                    ValueStatus = ValueStatus.NotSettled
+                    ValueState = ValueState.NotSettled
                 };
                 newProducts.Add(newProduct);
             }
