@@ -14,7 +14,7 @@ namespace BraunauMobil.VeloBasar.Pages.Brands
         [BindProperty]
         public Brand Brand { get; set; }
 
-        public async Task OnGetTask(int? basarId)
+        public async Task OnGetAsync(int? basarId)
         {
             await LoadBasarAsync(basarId);
         }
