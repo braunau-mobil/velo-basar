@@ -70,7 +70,7 @@ namespace BraunauMobil.VeloBasar.Data
             }
             return brands.Where(Expressions.BrandSearch(searchString)).DefaultOrder();
         }
-        public static IQueryable<Product> GetMany(this IQueryable<Product> products, string searchString = null, StorageStatus? storageState = null, ValueStatus? valueState = null)
+        public static IQueryable<Product> GetMany(this IQueryable<Product> products, string searchString = null, StorageState? storageState = null, ValueStatus? valueState = null)
         {
             var result = products;
             if (!string.IsNullOrEmpty(searchString))
@@ -179,17 +179,17 @@ namespace BraunauMobil.VeloBasar.Data
             return models.OrderBy(p => p.Id);
         }
 
-        public static IQueryable<Product> WhereStorageState(this IQueryable<Product> products, StorageStatus state)
+        public static IQueryable<Product> WhereStorageState(this IQueryable<Product> products, StorageState state)
         {
-            return products.Where(p => p.StorageStatus == state);
+            return products.Where(p => p.StorageState == state);
         }
-        public static IEnumerable<Product> WhereStorageState(this IEnumerable<Product> products, StorageStatus state)
+        public static IEnumerable<Product> WhereStorageState(this IEnumerable<Product> products, StorageState state)
         {
-            return products.Where(p => p.StorageStatus == state);
+            return products.Where(p => p.StorageState == state);
         }
-        public static IEnumerable<Product> WhereStorageStateIsNot(this IEnumerable<Product> products, StorageStatus state)
+        public static IEnumerable<Product> WhereStorageStateIsNot(this IEnumerable<Product> products, StorageState state)
         {
-            return products.Where(p => p.StorageStatus != state);
+            return products.Where(p => p.StorageState != state);
         }
 
         public static IQueryable<Product> WhereValueState(this IQueryable<Product> products, ValueStatus valueState)

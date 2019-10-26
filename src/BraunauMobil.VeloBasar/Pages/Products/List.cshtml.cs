@@ -23,16 +23,16 @@ namespace BraunauMobil.VeloBasar.Pages.Products
         public string CurrentFilter { get; set; }
         public string MyPath => "/Products/List";
         public PaginatedListViewModel<Product> Products { get; set; }
-        public StorageStatus? StorageStatusFilter { get; set; }
+        public StorageState? StorageStateFilter { get; set; }
         public ValueStatus? ValueStatusFilter { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int basarId, string currentFilter, string searchString, int? pageIndex, StorageStatus? storageStatus, ValueStatus? valueState)
+        public async Task<IActionResult> OnGetAsync(int basarId, string currentFilter, string searchString, int? pageIndex, StorageState? storageState, ValueStatus? valueState)
         {
             await LoadBasarAsync(basarId);
             ViewData["StorageStates"] = GetStorageStates();
             ViewData["ValueStates"] = GetValueStates();
             
-            StorageStatusFilter = storageStatus;
+            StorageStateFilter = storageState;
             CurrentFilter = searchString;
             ValueStatusFilter = valueState;
 
@@ -55,7 +55,7 @@ namespace BraunauMobil.VeloBasar.Pages.Products
                 }
             }
 
-            var productIq = Context.Product.GetMany(searchString, storageStatus, valueState);
+            var productIq = Context.Product.GetMany(searchString, storageState, valueState);
 
             var pageSize = 11;
             Products = await PaginatedListViewModel<Product>.CreateAsync(Basar, productIq, pageIndex ?? 1, pageSize, Request.Path, GetRoute, new[]
@@ -90,11 +90,11 @@ namespace BraunauMobil.VeloBasar.Pages.Products
         {
             return new SelectList(new[]
             {
-                new Tuple<StorageStatus?, string>(null, "Alle"),
-                new Tuple<StorageStatus?, string>(StorageStatus.Available, "Verfügbar"),
-                new Tuple<StorageStatus?, string>(StorageStatus.Sold, "Verkauft"),
-                new Tuple<StorageStatus?, string>(StorageStatus.Gone, "Verscwunden"),
-                new Tuple<StorageStatus?, string>(StorageStatus.Locked, "Gesperrt")
+                new Tuple<StorageState?, string>(null, "Alle"),
+                new Tuple<StorageState?, string>(StorageState.Available, "Verfügbar"),
+                new Tuple<StorageState?, string>(StorageState.Sold, "Verkauft"),
+                new Tuple<StorageState?, string>(StorageState.Gone, "Verscwunden"),
+                new Tuple<StorageState?, string>(StorageState.Locked, "Gesperrt")
             }, "Item1", "Item2");
         }
         private SelectList GetValueStates()

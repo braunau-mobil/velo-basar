@@ -40,7 +40,7 @@ namespace BraunauMobil.VeloBasar.Models
         public decimal Price { get; set; }
 
         [Display(Name = "Lagerstatus")]
-        public StorageStatus StorageStatus { get; set; }
+        public StorageState StorageState { get; set; }
 
         [Display(Name = "Wertstatus")]
         public ValueStatus ValueStatus { get; set; }
@@ -58,12 +58,12 @@ namespace BraunauMobil.VeloBasar.Models
             switch (transactionType)
             {
                 case TransactionType.Acceptance: return false;
-                case TransactionType.Cancellation: return StorageStatus == StorageStatus.Sold && ValueStatus != ValueStatus.Settled;
-                case TransactionType.Lock: return StorageStatus == StorageStatus.Available || StorageStatus == StorageStatus.Sold;
-                case TransactionType.MarkAsGone: return StorageStatus == StorageStatus.Available;
-                case TransactionType.Release: return StorageStatus == StorageStatus.Locked || StorageStatus == StorageStatus.Gone;
-                case TransactionType.Sale: return StorageStatus == StorageStatus.Available;
-                case TransactionType.Settlement: return StorageStatus == StorageStatus.Available || StorageStatus == StorageStatus.Sold;
+                case TransactionType.Cancellation: return StorageState == StorageState.Sold && ValueStatus != ValueStatus.Settled;
+                case TransactionType.Lock: return StorageState == StorageState.Available || StorageState == StorageState.Sold;
+                case TransactionType.MarkAsGone: return StorageState == StorageState.Available;
+                case TransactionType.Release: return StorageState == StorageState.Locked || StorageState == StorageState.Gone;
+                case TransactionType.Sale: return StorageState == StorageState.Available;
+                case TransactionType.Settlement: return StorageState == StorageState.Available || StorageState == StorageState.Sold;
             }
 
             throw new InvalidOperationException($"Invalid transationType: {transactionType}");
@@ -74,22 +74,22 @@ namespace BraunauMobil.VeloBasar.Models
             {
                 case TransactionType.Acceptance:
                     ValueStatus = ValueStatus.NotSettled;
-                    StorageStatus = StorageStatus.Available;
+                    StorageState = StorageState.Available;
                     return;
                 case TransactionType.Cancellation:
-                    StorageStatus = StorageStatus.Available;
+                    StorageState = StorageState.Available;
                     return;
                 case TransactionType.Lock:
-                    StorageStatus = StorageStatus.Locked;
+                    StorageState = StorageState.Locked;
                     return;
                 case TransactionType.MarkAsGone:
-                    StorageStatus = StorageStatus.Gone;
+                    StorageState = StorageState.Gone;
                     return;
                 case TransactionType.Release:
-                    StorageStatus = StorageStatus.Available;
+                    StorageState = StorageState.Available;
                     return;
                 case TransactionType.Sale:
-                    StorageStatus = StorageStatus.Sold;
+                    StorageState = StorageState.Sold;
                     return;
                 case TransactionType.Settlement:
                     ValueStatus = ValueStatus.Settled;
@@ -110,11 +110,11 @@ namespace BraunauMobil.VeloBasar.Models
         }
         public bool IsGone()
         {
-            return StorageStatus == StorageStatus.Gone;
+            return StorageState == StorageState.Gone;
         }
         public bool IsLocked()
         {
-            return StorageStatus == StorageStatus.Locked;
+            return StorageState == StorageState.Locked;
         }
     }
 }

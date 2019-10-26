@@ -112,17 +112,17 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
             {
                 return _localizer["Der Artikel wurde bereits abgerechnet."];
             }
-            else if (product.StorageStatus == StorageStatus.Gone)
+            else if (product.StorageState == StorageState.Gone)
             {
                 //  @todo Letzte TX anzeigen!
                 return _localizer["Der Artikel wurde als verschwunden markiert. Anmerkungen: @todo"];
             }
-            else if (product.StorageStatus == StorageStatus.Locked)
+            else if (product.StorageState == StorageState.Locked)
             {
                 //  @todo Letzte TX anzeigen!
                 return _localizer["Der Artikel wurde gesperrt. Anmerkungen: @todo"];
             }
-            else if (product.StorageStatus == StorageStatus.Sold)
+            else if (product.StorageState == StorageState.Sold)
             {
                 var saleNumber = await Context.GetTransactionNumberForProductAsync(Basar, TransactionType.Sale, product.Id);
 

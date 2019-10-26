@@ -142,7 +142,7 @@ namespace BraunauMobil.VeloBasar.Data
                 Description = $"Beschreibung für Produkt",
                 FrameNumber = NextFrameNumber(),
                 Price = NextPrice(),
-                StorageStatus = StorageStatus.Available,
+                StorageState = StorageState.Available,
                 ValueStatus = ValueStatus.NotSettled,
                 TireSize = NextTireSize(),
                 Type = NextProductType()

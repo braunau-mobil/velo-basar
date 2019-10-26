@@ -2,7 +2,7 @@
 
 namespace BraunauMobil.VeloBasar.Models
 {
-    public enum StorageStatus
+    public enum StorageState
     {
         [Display(Name = "Verfügbar")]
         Available,

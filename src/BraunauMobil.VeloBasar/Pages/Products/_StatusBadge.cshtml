@@ -7,34 +7,34 @@
     var text = "";
     var icon = "";
 
-    if (Model.StorageStatus == StorageStatus.Available && Model.ValueStatus == ValueStatus.NotSettled)
+    if (Model.StorageState == StorageState.Available && Model.ValueStatus == ValueStatus.NotSettled)
     {
         text = Localizer["Verfügbar"];
         css = "badge-success";
     }
-    else if (Model.StorageStatus == Models.StorageStatus.Sold && Model.ValueStatus == ValueStatus.NotSettled)
+    else if (Model.StorageState == Models.StorageState.Sold && Model.ValueStatus == ValueStatus.NotSettled)
     {
         text = Localizer["Verkauft"];
         css = "badge-warning";
         icon = "$";
     }
-    else if (Model.StorageStatus == StorageStatus.Available && Model.ValueStatus == ValueStatus.Settled)
+    else if (Model.StorageState == StorageState.Available && Model.ValueStatus == ValueStatus.Settled)
     {
         text = Localizer["Abgeholt"];
         css = "badge-secondary";
     }
-    else if (Model.StorageStatus == StorageStatus.Sold && Model.ValueStatus == ValueStatus.Settled)
+    else if (Model.StorageState == StorageState.Sold && Model.ValueStatus == ValueStatus.Settled)
     {
         text = Localizer["Abgerechnet"];
         css = "badge-secondary";
         icon = "$";
     }
-    else if (Model.StorageStatus == StorageStatus.Locked)
+    else if (Model.StorageState == StorageState.Locked)
     {
         text = Localizer["Gesperrt"];
         css = "badge-danger";
     }
-    else if (Model.StorageStatus == StorageStatus.Gone)
+    else if (Model.StorageState == StorageState.Gone)
     {
         text = Localizer["Verschwunden"];
         css = "badge-danger";

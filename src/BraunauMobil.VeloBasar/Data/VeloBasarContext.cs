@@ -189,13 +189,13 @@ namespace BraunauMobil.VeloBasar.Data
         public async Task<SellerStatistics> GetSellerStatisticsAsync(Basar basar, int sellerId)
         {
             var products = await GetProductsForSeller(basar, sellerId).ToArrayAsync();
-            var soldProducts = products.WhereStorageState(StorageStatus.Sold).ToArray();
+            var soldProducts = products.WhereStorageState(StorageState.Sold).ToArray();
             return new SellerStatistics
             {
                 AceptedProductCount = products.Length,
                 SettlementAmout = soldProducts.Sum(p => p.Price),
-                NotSoldProductCount = products.WhereStorageStateIsNot(StorageStatus.Sold).Count(),
-                PickedUpProductCount = products.Where(p => p.StorageStatus == StorageStatus.Gone && p.ValueStatus == ValueStatus.Settled).Count(),
+                NotSoldProductCount = products.WhereStorageStateIsNot(StorageState.Sold).Count(),
+                PickedUpProductCount = products.Where(p => p.StorageState == StorageState.Gone && p.ValueStatus == ValueStatus.Settled).Count(),
                 SoldProductCount = soldProducts.Length
             };
         }
@@ -398,7 +398,7 @@ namespace BraunauMobil.VeloBasar.Data
                     FrameNumber = product.FrameNumber,
                     Label = product.Label,
                     Price = product.Price,
-                    StorageStatus = StorageStatus.Available,
+                    StorageState = StorageState.Available,
                     TireSize = product.TireSize,
                     TypeId = product.TypeId,
                     ValueStatus = ValueStatus.NotSettled
