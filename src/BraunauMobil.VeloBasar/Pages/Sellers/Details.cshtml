@@ -14,7 +14,7 @@
             {
                 <a asp-page="/Settlements/CreateAndPrint" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@Model.Seller.Id" target="_blank" class="btn btn-primary mx-1">@Localizer["Abrechnen"]</a>
             }
-            <a asp-page="/Sellers/CreateAndPrintLabels" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@Model.Seller.Id" target="_blank" class="btn btn-primary mx-1">@Localizer["Etiketten drucken"]</a>
+            <a asp-page="/Labels/CreateAndPrintForSeller" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@Model.Seller.Id" target="_blank" class="btn btn-primary mx-1">@Localizer["Etiketten drucken"]</a>
             <a asp-page="/Sellers/Edit" asp-all-route-data="@Model.GetSellerRoute()" class="btn btn-secondary mx-1">@Localizer["Bearbeiten"]</a>
         </div>
 

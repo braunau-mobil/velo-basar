@@ -42,6 +42,9 @@
                                 <a class="nav-link" asp-page="/Acceptances/StartWithNewSeller" asp-all-route-data="@Model.GetRoute()">@Localizer["Neue Annahme"]</a>
                             </li>
                             <li class="nav-item">
+                                <a class="nav-link" asp-page="/Labels/SelectAcceptance" asp-all-route-data="@Model.GetRoute()">@Localizer["Etiketten Drucken"]</a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link" asp-page="/Sellers/List" asp-all-route-data="@Model.GetRoute()">@Localizer["Verkäufer"]</a>
                             </li>
                             <li class="nav-item">

@@ -119,7 +119,7 @@ namespace BraunauMobil.VeloBasar.Data
                 acceptancePerCustomerCount--;
             }
 
-            await _context.GenerateMissingLabelsAsync(basar, seller.Id);
+            await _context.CreateLabelsForSellerAsync(basar, seller.Id);
         }
 
         private async Task CreateAcceptanceAsync(Basar basar, Seller seller)

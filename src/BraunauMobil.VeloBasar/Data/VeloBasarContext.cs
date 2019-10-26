@@ -105,6 +105,16 @@ namespace BraunauMobil.VeloBasar.Data
 
             return basar;
         }
+        public async Task<FileStore> CreateLabelsForAcceptanceAsync(Basar basar, int acceptanceNumber)
+        {
+            var acceptance = await Transactions.GetAsync(basar, TransactionType.Acceptance, acceptanceNumber);
+            return await CreateLabelsAndCombineToOnePdfAsync(basar, acceptance.Products.Select(pt => pt.Product));
+        }
+        public async Task<FileStore> CreateLabelsForSellerAsync(Basar basar, int sellerId)
+        {
+            var products = await GetProductsForSeller(basar, sellerId).Where(p => p.Label != null).ToListAsync();
+            return await CreateLabelsAndCombineToOnePdfAsync(basar, products);
+        }
         public async Task<Basar> CreateNewBasarAsync(DateTime date, string name, decimal productCommission, decimal productDiscount, decimal sellerDiscount)
         {
             var basar = new Basar
@@ -171,33 +181,6 @@ namespace BraunauMobil.VeloBasar.Data
             await SaveChangesAsync();
 
             return await CreateTransactionAsync(basar, transactionType, null, notes, products);
-        }
-        public async Task GenerateMissingLabelsAsync(Basar basar, int sellerId)
-        {
-            var products = await GetProductsForSeller(basar, sellerId).Where(p => p.Label == null).ToListAsync();
-            foreach (var product in products)
-            {
-                await GenerateLabel(basar, product);
-            }
-
-            await SaveChangesAsync();
-        }
-        public async Task<FileStore> GetAllLabelsAsyncAsCombinedPdf(Basar basar, int sellerId)
-        {
-            var products = await GetProductsForSeller(basar, sellerId).Where(p => p.Label != null).ToListAsync();
-            var files = new List<byte[]>();
-            foreach (var product in products)
-            {
-                var file = await FileStore.GetAsync(product.Label.Value);
-                files.Add(file.Data);
-            }
-
-            var result = new FileStore
-            {
-                Data = _pdfCreator.Combine(files),
-                ContentType = PdfContentType
-            };
-            return result;
         }
         public IQueryable<Product> GetProductsForSeller(Basar basar, int sellerId)
         {
@@ -335,7 +318,22 @@ namespace BraunauMobil.VeloBasar.Data
 
             return tx;
         }
-        private async Task GenerateLabel(Basar basar, Product product)
+        private async Task<FileStore> CreateLabelsAndCombineToOnePdfAsync(Basar basar, IEnumerable<Product> products)
+        {
+            var files = new List<byte[]>();
+            foreach (var product in products)
+            {
+                var file = await CreateLabelAsync(basar, product);
+                files.Add(file.Data);
+            }
+
+            return new FileStore
+            {
+                Data = _pdfCreator.Combine(files),
+                ContentType = PdfContentType
+            };
+        }
+        private async Task<FileStore> CreateLabelAsync(Basar basar, Product product)
         {
             var fileStore = new FileStore
             {
@@ -346,6 +344,10 @@ namespace BraunauMobil.VeloBasar.Data
             await SaveChangesAsync();
 
             product.Label = fileStore.Id;
+
+            await SaveChangesAsync();
+
+            return fileStore;
         }
         private async Task<FileStore> GenerateTransactionDocumentAsync(ProductsTransaction transaction)
         {
@@ -419,3 +421,4 @@ namespace BraunauMobil.VeloBasar.Data
         }
     }
 }
+
