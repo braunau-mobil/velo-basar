@@ -327,6 +327,11 @@ namespace BraunauMobil.VeloBasar.Data
                 files.Add(file.Data);
             }
 
+            if (files.Count <= 0)
+            {
+                return null;
+            }
+
             return new FileStore
             {
                 Data = _pdfCreator.Combine(files),
