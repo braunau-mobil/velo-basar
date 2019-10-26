@@ -70,14 +70,25 @@ namespace BraunauMobil.VeloBasar.Data
             }
             return brands.Where(Expressions.BrandSearch(searchString)).DefaultOrder();
         }
-        public static IQueryable<Product> GetMany(this IQueryable<Product> products, string searchString = null)
+        public static IQueryable<Product> GetMany(this IQueryable<Product> products, string searchString = null, StorageStatus? storageState = null, ValueStatus? valueState = null)
         {
-            if (string.IsNullOrEmpty(searchString))
+            var result = products;
+            if (!string.IsNullOrEmpty(searchString))
             {
-                return products.IncludeAll().DefaultOrder();
+                result = result.Where(Expressions.ProductSearch(searchString));
             }
 
-            return products.Where(Expressions.ProductSearch(searchString)).IncludeAll().DefaultOrder();
+            if (storageState != null)
+            {
+                result = result.WhereStorageState(storageState.Value);
+            }
+
+            if (valueState != null)
+            {
+                result = result.WhereValueState(valueState.Value);
+            }
+
+            return result.IncludeAll().DefaultOrder();
         }
         public static IQueryable<Product> GetMany(this IQueryable<Product> products, IList<int> ids)
         {
@@ -168,6 +179,10 @@ namespace BraunauMobil.VeloBasar.Data
             return models.OrderBy(p => p.Id);
         }
 
+        public static IQueryable<Product> WhereStorageState(this IQueryable<Product> products, StorageStatus state)
+        {
+            return products.Where(p => p.StorageStatus == state);
+        }
         public static IEnumerable<Product> WhereStorageState(this IEnumerable<Product> products, StorageStatus state)
         {
             return products.Where(p => p.StorageStatus == state);
@@ -175,6 +190,11 @@ namespace BraunauMobil.VeloBasar.Data
         public static IEnumerable<Product> WhereStorageStateIsNot(this IEnumerable<Product> products, StorageStatus state)
         {
             return products.Where(p => p.StorageStatus != state);
+        }
+
+        public static IQueryable<Product> WhereValueState(this IQueryable<Product> products, ValueStatus valueState)
+        {
+            return products.Where(p => p.ValueStatus == valueState);
         }
     }
 }

@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using BraunauMobil.VeloBasar.ViewModels;
 using Microsoft.Extensions.Localization;
 using BraunauMobil.VeloBasar.Resources;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 
 namespace BraunauMobil.VeloBasar.Pages.Products
 {
@@ -19,16 +21,21 @@ namespace BraunauMobil.VeloBasar.Pages.Products
         }
 
         public string CurrentFilter { get; set; }
-
-        public PaginatedListViewModel<Product> Products { get; set; }
-
         public string MyPath => "/Products/List";
+        public PaginatedListViewModel<Product> Products { get; set; }
+        public StorageStatus? StorageStatusFilter { get; set; }
+        public ValueStatus? ValueStatusFilter { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int basarId, string currentFilter, string searchString, int? pageIndex)
+        public async Task<IActionResult> OnGetAsync(int basarId, string currentFilter, string searchString, int? pageIndex, StorageStatus? storageStatus, ValueStatus? valueState)
         {
             await LoadBasarAsync(basarId);
-
+            ViewData["StorageStates"] = GetStorageStates();
+            ViewData["ValueStates"] = GetValueStates();
+            
+            StorageStatusFilter = storageStatus;
             CurrentFilter = searchString;
+            ValueStatusFilter = valueState;
+
             if (searchString != null)
             {
                 pageIndex = 1;
@@ -48,7 +55,7 @@ namespace BraunauMobil.VeloBasar.Pages.Products
                 }
             }
 
-            var productIq = Context.Product.GetMany(searchString);
+            var productIq = Context.Product.GetMany(searchString, storageStatus, valueState);
 
             var pageSize = 11;
             Products = await PaginatedListViewModel<Product>.CreateAsync(Basar, productIq, pageIndex ?? 1, pageSize, Request.Path, GetRoute, new[]
@@ -78,6 +85,26 @@ namespace BraunauMobil.VeloBasar.Pages.Products
             var route = GetRoute();
             route.Add("fileId", product.Label.Value.ToString());
             return route;
+        }
+        private SelectList GetStorageStates()
+        {
+            return new SelectList(new[]
+            {
+                new Tuple<StorageStatus?, string>(null, "Alle"),
+                new Tuple<StorageStatus?, string>(StorageStatus.Available, "Verfügbar"),
+                new Tuple<StorageStatus?, string>(StorageStatus.Sold, "Verkauft"),
+                new Tuple<StorageStatus?, string>(StorageStatus.Gone, "Verscwunden"),
+                new Tuple<StorageStatus?, string>(StorageStatus.Locked, "Gesperrt")
+            }, "Item1", "Item2");
+        }
+        private SelectList GetValueStates()
+        {
+            return new SelectList(new[]
+            {
+                new Tuple<ValueStatus?, string>(null, "Alle"),
+                new Tuple<ValueStatus?, string>(ValueStatus.Settled, "Abgerechnet"),
+                new Tuple<ValueStatus?, string>(ValueStatus.NotSettled, "Nicht Abgerechnet")
+            }, "Item1", "Item2");
         }
     }
 }
