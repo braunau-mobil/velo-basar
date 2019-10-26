@@ -28,7 +28,7 @@ namespace BraunauMobil.VeloBasar
             Key = "basarId",
             CookieOptions = new CookieOptions
             {
-                IsEssential = false,
+                IsEssential = true,
                 MaxAge = TimeSpan.FromDays(2)
             }
         };
