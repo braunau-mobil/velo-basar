@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 
 namespace BraunauMobil.VeloBasar.Data
 {
-    public static class Expressions
+    public static class SearchExpressions
     {
         public static Expression<Func<Basar, bool>> BasarSearch(string searchString)
         {

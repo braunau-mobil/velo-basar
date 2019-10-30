@@ -1,5 +1,5 @@
 ﻿@page
-@model StartWithNewSeller
+@model StartWithNewSellerModel
 
 @{
     ViewData["Title"] = Localizer["Annahme - Verkäufer eingeben"];
@@ -30,7 +30,7 @@
             </div>
 
             <div class="form-group">
-                <input asp-all-route-data="@Model.GetSearchRoute()" type="submit" value="@Localizer["Suchen"]" class="btn btn-primary" />
+                <input velo-parameter="@Model.GetSearchParameter()" type="submit" value="@Localizer["Suchen"]" class="btn btn-primary" />
             </div>
 
             <div condition="Model.HasSellers">
@@ -66,7 +66,7 @@
                 <input asp-for="Seller.BankAccountHolder" class="form-control" velo-validation-for="Seller.BankAccountHolder" velo-validation-condition="Model.IsValidationEnabled" />
             </div>
             <div class="form-group">
-                <input type="submit" value="@Localizer["Weiter"]" class="btn btn-primary" asp-all-route-data="@Model.GetNextRoute()" />
+                <input type="submit" value="@Localizer["Weiter"]" class="btn btn-primary" velo-parameter="@Model.GetNextParameter()" />
             </div>
         </form>
     </div>

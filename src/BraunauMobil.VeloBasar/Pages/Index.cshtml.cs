@@ -1,61 +1,34 @@
-﻿using BraunauMobil.VeloBasar.Data;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using System;
 
 namespace BraunauMobil.VeloBasar.Pages
 {
-    public class IndexModel : BasarPageModel
+    public class IndexModel : PageModel
     {
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly IVeloContext _context;
 
-        public IndexModel(VeloBasarContext context, SignInManager<IdentityUser> signInManager) : base(context)
+        public IndexModel(IVeloContext context)
         {
-            _signInManager = signInManager;
+            _context = context;
         }
 
-        public async Task<IActionResult> OnGetAsync(int? basarId)
+        public IActionResult OnGet()
         {
             //  check if we need initial setup
-            if (!Context.IsInitialized())
+            if (!_context.Db.IsInitialized())
             {
-                return RedirectToPage("/Setup/Index");
+                return this.RedirectToPage<Setup.IndexModel>();
             }
 
-            if (basarId != null)
+            if (_context.Basar == null)
             {
-                return await RedirectToBasar(basarId.Value);
+                if (_context.IsDebug)
+                {
+                    return this.RedirectToPage<Setup.DangerZoneModel>();
+                }
+                throw new NotImplementedException("What should we do in this case??");
             }
-
-            basarId = Request.Cookies.GetBasarId();
-            if (basarId != null && await Context.Basar.ExistsAsync(basarId.Value))
-            {
-                return await RedirectToBasar(basarId.Value);
-            }
-
-            basarId = await Context.Basar.GetUniqueEnabledAsync();
-            if (basarId != null)
-            {
-                return await RedirectToBasar(basarId.Value);
-            }
-
-            if (Context.Basar.Any())
-            {
-                return RedirectToPage("/Basars/Select");
-            }
-
-            if (_signInManager.IsSignedIn(User))
-            {
-                return RedirectToPage("/Basars/Create");
-            }
-
-            return RedirectToPage("/Setup/Login");
-        }
-        private async Task<IActionResult> RedirectToBasar(int basarId)
-        {
-            await LoadBasarAsync(basarId);
-            Response.Cookies.SetBasarId(basarId);
             return Page();
         }
     }

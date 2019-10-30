@@ -31,12 +31,12 @@
                             @Html.DisplayFor(modelItem => itemViewModel.Item.Name)
                         </td>
                         <td>
-                            <a asp-page="/Brands/Edit" asp-all-route-data="@Model.GetItemRoute(itemViewModel.Item)">@Localizer["Bearbeiten"]</a>
+                            <a velo-page="@Model.GetEditPage(itemViewModel.Item)">@Localizer["Bearbeiten"]</a>
                         </td>
                         <td>
                             @if (await Model.CanDeleteAsync(itemViewModel.Item))
                             {
-                                <a asp-page="/Brands/Delete" asp-all-route-data="@Model.GetItemRoute(itemViewModel.Item)">@Localizer["Löschen"]</a>
+                                <a velo-page="@Model.GetDeletePage(itemViewModel.Item)">@Localizer["Löschen"]</a>
                             }
                             else
                             {
@@ -47,7 +47,7 @@
                                     stateToSet = ObjectState.Enabled;
                                     text = "Aktivieren";
                                 }
-                                <a asp-page="/Brands/SetState" asp-all-route-data="@Model.GetItemRoute(itemViewModel.Item, stateToSet)">@Localizer[text]</a>
+                                <a velo-page="@Model.GetSetStatePage(itemViewModel.Item, stateToSet)">@Localizer[text]</a>
                             }
                         </td>
                     </tr>

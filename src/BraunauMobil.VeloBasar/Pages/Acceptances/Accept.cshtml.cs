@@ -1,24 +1,29 @@
 ﻿using System.Threading.Tasks;
-using BraunauMobil.VeloBasar.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace BraunauMobil.VeloBasar.Pages.Acceptances
 {
-    public class AcceptModel : BasarPageModel
+    public class AcceptParameter
     {
-        public AcceptModel(VeloBasarContext context) : base(context)
+        public int SellerId { get; set; }
+    }
+    public class AcceptModel : PageModel
+    {
+        private readonly IVeloContext _context;
+
+        public AcceptModel(IVeloContext context)
         {
+            _context = context;
         }
 
-        public async Task<IActionResult> OnGetAsync(int basarId, int sellerId)
+        public async Task<IActionResult> OnGetAsync(AcceptParameter parameter)
         {
-            await LoadBasarAsync(basarId);
-
             var products = Request.Cookies.GetAcceptanceProducts();
-            var acceptance = await Context.AcceptProductsAsync(Basar, sellerId, products);
+            var acceptance = await _context.Db.AcceptProductsAsync(_context.Basar, parameter.SellerId, products);
 
             Response.Cookies.ClearAcceptanceProducts();
-            return RedirectToPage("/Acceptances/Details", new { basarId, acceptanceId = acceptance.Id, showSuccess = true, openDocument = true });
+            return this.RedirectToPage<DetailsModel>(new DetailsParameter { AcceptanceId = acceptance.Id, OpenDocument = true, ShowSuccess = true });
         }
     }
 }

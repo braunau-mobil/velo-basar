@@ -2,74 +2,63 @@
 using Microsoft.EntityFrameworkCore;
 using BraunauMobil.VeloBasar.Models;
 using BraunauMobil.VeloBasar.Data;
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using BraunauMobil.VeloBasar.ViewModels;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace BraunauMobil.VeloBasar.Pages.Basars
 {
-    [Authorize]
-    public class ListModel : BasarPageModel, ISearchable
+    public class ListParameter
     {
-        public ListModel(VeloBasarContext context) : base(context)
+        public string CurrentFilter { get; set; }
+        public string SearchString { get; set; }
+        public int? PageIndex { get; set; }
+    }
+    [Authorize]
+    public class ListModel : PageModel, ISearchable
+    {
+        private readonly IVeloContext _context;
+
+        public ListModel(IVeloContext context)
         {
+            _context = context;
         }
 
         public string CurrentFilter { get; set; }
-
         public PaginatedListViewModel<Basar> Basars { get;set; }
 
-        public string MyPath => "/Basars/List";
-
-        public async Task<IActionResult> OnGetAsync(string currentFilter, string searchString, int? pageIndex, int? basarId)
+        public async Task<IActionResult> OnGetAsync(ListParameter parameter)
         {
-            await LoadBasarAsync(basarId);
-
-            CurrentFilter = searchString;
-            if (searchString != null)
+            CurrentFilter = parameter.SearchString;
+            if (parameter.SearchString != null)
             {
-                pageIndex = 1;
+                parameter.PageIndex = 1;
             }
             else
             {
-                searchString = currentFilter;
+                parameter.SearchString = parameter.CurrentFilter;
             }
 
-            CurrentFilter = searchString;
+            CurrentFilter = parameter.SearchString;
 
-            var brandIq = Context.Basar.GetMany(searchString);
+            var brandIq = _context.Db.Basar.GetMany(parameter.SearchString);
             var pageSize = 10;
-            Basars = await PaginatedListViewModel<Basar>.CreateAsync(Basar, brandIq.AsNoTracking(), pageIndex ?? 1, pageSize, Request.Path, GetRoute);
+            Basars = await PaginatedListViewModel<Basar>.CreateAsync(_context.Basar, brandIq.AsNoTracking(), parameter.PageIndex ?? 1, pageSize, GetPaginationPage);
 
             return Page();
         }
-        public IDictionary<string, string> GetDeleteRoute(Basar item)
+        public VeloPage GetCreatePage() => this.GetPage<CreateModel>();
+        public VeloPage GetDeletePage(Basar item) => this.GetPage<DeleteModel>(new DeleteParameter { BasarToDeleteId = item.Id, PageIndex = Basars.PageIndex });
+        public VeloPage GetEditPage(Basar item) => this.GetPage<EditModel>(new EditParameter { BasarToEditId = item.Id, PageIndex = Basars.PageIndex });
+        public VeloPage GetSearchPage() => this.GetPage<ListModel>();
+        public VeloPage GetPaginationPage(int pageIndex) => this.GetPage<ListModel>(new ListParameter { PageIndex = pageIndex });
+        public VeloPage GetSetStatePage(Basar item, bool stateToSet)
         {
-            return GetItemRoute("basarToDeleteId", item);
+            //  asp-page="/Basars/SetState" asp-all-route-data="@Model.GetSetStateRoute(itemViewModel.Item, !itemViewModel.Item.IsLocked)"
+            throw new System.NotImplementedException();
         }
-        public IDictionary<string, string> GetEditRoute(Basar item)
-        {
-            return GetItemRoute("basarToEditId", item);
-        }
-        public IDictionary<string, string> GetSetStateRoute(Basar item, bool? stateToSet = null)
-        {
-            return GetItemRoute("basarToSetStateId", item, stateToSet);
-        }
-        public IDictionary<string, string> GetItemRoute(string itemIdKey, Basar item, bool? stateToSet = null)
-        {
-            var route = GetRoute();
-            route.Add(itemIdKey, item.Id.ToString());
-            route.Add("pageIndex", Basars.PageIndex.ToString());
-            if (stateToSet != null)
-            {
-                route.Add("state", stateToSet.ToString());
-            }
-            return route;
-        }
-        public async Task<bool> CanDeleteAsync(Basar item)
-        {
-            return await Context.CanDeleteBasarAsync(item);
-        }
+
+        public async Task<bool> CanDeleteAsync(Basar item) => await _context.Db.CanDeleteBasarAsync(item);
     }
 }

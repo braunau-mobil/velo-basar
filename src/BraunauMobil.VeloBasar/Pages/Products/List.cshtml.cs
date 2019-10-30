@@ -1,91 +1,82 @@
 ﻿using System.Threading.Tasks;
 using BraunauMobil.VeloBasar.Models;
 using BraunauMobil.VeloBasar.Data;
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using BraunauMobil.VeloBasar.ViewModels;
-using Microsoft.Extensions.Localization;
-using BraunauMobil.VeloBasar.Resources;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace BraunauMobil.VeloBasar.Pages.Products
 {
-    public class ListModel : BasarPageModel, ISearchable
+    public class ListParameter
     {
-        private readonly IStringLocalizer<SharedResource> _localizer;
+        public string CurrentFilter { get; set; }
+        public string SearchString { get; set; }
+        public int? PageIndex { get; set; }
+        public StorageState StorageState { get; set; }
+        public ValueState ValueState { get; set; }
+    }
+    public class ListModel : PageModel, ISearchable
+    {
+        private readonly IVeloContext _context;
 
-        public ListModel(VeloBasarContext context, IStringLocalizer<SharedResource> localizer) : base(context)
+        public ListModel(IVeloContext context)
         {
-            _localizer = localizer;
+            _context = context;
         }
 
         public string CurrentFilter { get; set; }
-        public string MyPath => "/Products/List";
         public PaginatedListViewModel<Product> Products { get; set; }
         public StorageState? StorageStateFilter { get; set; }
         public ValueState? ValueStateFilter { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int basarId, string currentFilter, string searchString, int? pageIndex, StorageState? storageState, ValueState? valueState)
+        public async Task<IActionResult> OnGetAsync(ListParameter parameter)
         {
-            await LoadBasarAsync(basarId);
             ViewData["StorageStates"] = GetStorageStates();
             ViewData["ValueStates"] = GetValueStates();
             
-            StorageStateFilter = storageState;
-            CurrentFilter = searchString;
-            ValueStateFilter = valueState;
+            StorageStateFilter = parameter.StorageState;
+            CurrentFilter = parameter.SearchString;
+            ValueStateFilter = parameter.ValueState;
 
-            if (searchString != null)
+            if (parameter.SearchString != null)
             {
-                pageIndex = 1;
+                parameter.PageIndex = 1;
             }
             else
             {
-                searchString = currentFilter;
+                parameter.SearchString = parameter.CurrentFilter;
             }
 
-            CurrentFilter = searchString;
+            CurrentFilter = parameter.SearchString;
 
-            if (int.TryParse(searchString, out int id))
+            if (int.TryParse(parameter.SearchString, out int id))
             {
-                if (await Context.Product.ExistsAsync(id))
+                if (await _context.Db.Product.ExistsAsync(id))
                 {
-                    return RedirectToPage("/Products/Details", new { basarId, productId = id });
+                    return this.RedirectToPage<DetailsModel>(new DetailsParameter { ProductId = id });
                 }
             }
 
-            var productIq = Context.Product.GetMany(searchString, storageState, valueState);
+            var productIq = _context.Db.Product.GetMany(parameter.SearchString, parameter.StorageState, parameter.ValueState);
 
             var pageSize = 11;
-            Products = await PaginatedListViewModel<Product>.CreateAsync(Basar, productIq, pageIndex ?? 1, pageSize, Request.Path, GetRoute, new[]
+            Products = await PaginatedListViewModel<Product>.CreateAsync(_context.Basar, productIq, parameter.PageIndex ?? 1, pageSize, GetPaginationPage, new[]
             {
-                new ListCommand<Product>(GetItemDetailsRoute)
+                new ListCommand<Product>(item => this.GetPage<DetailsModel>(new DetailsParameter { ProductId = item.Id }))
                 {
-                    Text = _localizer["Details"],
-                    Page = "/Products/Details"
+                    Text = _context.Localizer["Details"]
                 },
-                new ListCommand<Product>(item => item.Label != null, GetItemDocumentRoute)
+                new ListCommand<Product>(item => item.Label != null, item => this.GetPage<ShowFileModel>(new ShowFileParameter { FileId = item.Label.Value }))
                 {
-                    Text = _localizer["Etikett"],
-                    Page = "/ShowFile"
+                    Text = _context.Localizer["Etikett"]
                 }
             });
             return Page();
         }
-
-        public IDictionary<string, string> GetItemDetailsRoute(Product product)
-        {
-            var route = GetRoute();
-            route.Add("productId", product.Id.ToString());
-            return route;
-        }
-        public IDictionary<string, string> GetItemDocumentRoute(Product product)
-        {
-            var route = GetRoute();
-            route.Add("fileId", product.Label.Value.ToString());
-            return route;
-        }
+        public VeloPage GetPaginationPage(int pageIndex) => this.GetPage<ListModel>(new ListParameter { PageIndex = pageIndex });
+        public VeloPage GetSearchPage() => this.GetPage<ListModel>();
         private SelectList GetStorageStates()
         {
             return new SelectList(new[]

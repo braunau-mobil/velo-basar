@@ -1,28 +1,17 @@
 ﻿using System.Threading.Tasks;
-using BraunauMobil.VeloBasar.Data;
-using BraunauMobil.VeloBasar.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace BraunauMobil.VeloBasar.Pages.Labels
 {
-    public class SelectAcceptanceModel : BasarPageModel
+    public class SelectAcceptanceModel : PageModel
     {
-        public SelectAcceptanceModel(VeloBasarContext context) : base(context)
-        {
-        }
-
         [BindProperty]
         public int AcceptanceNumber { get; set; }
 
-        public async Task OnGetAsync(int basarId)
+        public async Task<IActionResult> OnPostAsync()
         {
-            await LoadBasarAsync(basarId);
-        }
-        public async Task<IActionResult> OnPostAsync(int basarId)
-        {
-            await LoadBasarAsync(basarId);
-
-            return RedirectToPage("/Labels/CreateAndPrintForAcceptance", new { basarId, acceptanceNumber = AcceptanceNumber });
+            return this.RedirectToPage<CreateAndPrintForAcceptanceModel>(new CreateAndPrintForAcceptanceParameter { AcceptanceNumber = AcceptanceNumber });
         }
     }
 }

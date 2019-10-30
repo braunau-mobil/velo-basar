@@ -3,14 +3,18 @@ using Microsoft.AspNetCore.Mvc;
 using BraunauMobil.VeloBasar.Models;
 using System;
 using BraunauMobil.VeloBasar.Data;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace BraunauMobil.VeloBasar.Pages.Basars
 {
-    public class CreateModel : BasarPageModel
+    public class CreateModel : PageModel
     {
-        public CreateModel(VeloBasarContext context) : base(context)
+        private readonly VeloBasarContext _context;
+
+        public CreateModel(VeloBasarContext context)
         {
-            Basar = new Basar
+            _context = context;
+            BasarToCreate = new Basar
             {
                 Date = DateTime.Now
             };
@@ -19,22 +23,16 @@ namespace BraunauMobil.VeloBasar.Pages.Basars
         [BindProperty]
         public Basar BasarToCreate { get; set; }
 
-        public async Task OnGetAsync(int? basarId)
+        public async Task<IActionResult> OnPostAsync()
         {
-            await LoadBasarAsync(basarId);
-        }
-        public async Task<IActionResult> OnPostAsync(int? basarId)
-        {
-            await LoadBasarAsync(basarId);
-
             if (!ModelState.IsValid)
             {
                 return Page();
             }
 
-            await Context.CreateBasarAsync(BasarToCreate);
+            await _context.CreateBasarAsync(BasarToCreate);
 
-            return RedirectToPage("/Basars/List", new { basarId = Basar.Id });
+            return this.RedirectToPage<ListModel>();
         }
     }
 }

@@ -5,7 +5,8 @@ namespace BraunauMobil.VeloBasar.Models
     public class Settings : IModel
     {
         public int Id { get; set; }
-
         public bool IsInitialized { get; set; }
+        public int? ActiveBasarId { get; set; }
+        public Basar ActiveBasar { get; set; }
     }
 }

@@ -9,7 +9,7 @@
     <div class="card-header d-flex justify-content-between align-items-md-center">
         <div><h5 class="mx-2">@ViewData["Title"]</h5></div>
         <partial name="/Pages/Shared/_Search.cshtml" model="@Model" />
-        <div><a class="ml-auto btn btn-primary" asp-page="/Basars/Create" asp-all-route-data="@Model.GetRoute()">@Localizer["Neuer Basar"]</a></div>
+        <div><a class="ml-auto btn btn-primary" velo-page="@Model.GetCreatePage()">@Localizer["Neuer Basar"]</a></div>
     </div>
 
     <div class="card-body p-0">
@@ -33,12 +33,12 @@
                     <td>@Html.DisplayFor(modelItem => itemViewModel.Item.Date)</td>
                     <td>@Html.DisplayFor(modelItem => itemViewModel.Item.Name)</td>
                     <td>
-                        <a asp-page="/Basars/Edit" asp-all-route-data="@Model.GetEditRoute(itemViewModel.Item)">@Localizer["Bearbeiten"]</a>
+                        <a velo-page="@Model.GetEditPage(itemViewModel.Item)">@Localizer["Bearbeiten"]</a>
                     </td>
                     <td>
                         @if (await Model.CanDeleteAsync(itemViewModel.Item))
                         {
-                            <a asp-page="/Basars/Delete" asp-all-route-data="@Model.GetDeleteRoute(itemViewModel.Item)">@Localizer["Löschen"]</a>
+                            <a velo-page="@Model.GetDeletePage(itemViewModel.Item)">@Localizer["Löschen"]</a>
                         }
                         else
                         {
@@ -47,7 +47,7 @@
                             {
                                 text = "Aktivieren";
                             }
-                            <a asp-page="/Basars/SetState" asp-all-route-data="@Model.GetSetStateRoute(itemViewModel.Item, !itemViewModel.Item.IsLocked)">@Localizer[text]</a>
+                            <a velo-page="@Model.GetSetStatePage(itemViewModel.Item, !itemViewModel.Item.IsLocked)">@Localizer[text]</a>
                         }
                     </td>
                     <td>

@@ -2,24 +2,29 @@
 using Microsoft.AspNetCore.Mvc;
 using BraunauMobil.VeloBasar.Data;
 using BraunauMobil.VeloBasar.Models;
-using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace BraunauMobil.VeloBasar.Pages.Products
 {
-    public class DetailsModel : BasarPageModel
+    public class DetailsParameter
     {
-        public DetailsModel(VeloBasarContext context) : base(context)
+        public int ProductId { get; set; }
+    }
+    public class DetailsModel : PageModel
+    {
+        private readonly VeloBasarContext _context;
+
+        public DetailsModel(VeloBasarContext context)
         {
+            _context = context;
         }
 
         [BindProperty]
         public Product Product { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int basarId, int productId)
+        public async Task<IActionResult> OnGetAsync(DetailsParameter parameter)
         {
-            await LoadBasarAsync(basarId);
-
-            Product = await Context.Product.GetAsync(productId);
+            Product = await _context.Product.GetAsync(parameter.ProductId);
 
             if (Product == null)
             {
@@ -28,19 +33,8 @@ namespace BraunauMobil.VeloBasar.Pages.Products
 
             return Page();
         }
-
-        public override IDictionary<string, string> GetRoute()
-        {
-            var route = base.GetRoute();
-            route.Add("productId", Product.Id.ToString());
-            return route;
-        }
-        public IDictionary<string, string> GetRoute(TransactionType transactionType)
-        {
-            var route = base.GetRoute();
-            route.Add("productId", Product.Id.ToString());
-            route.Add(nameof(transactionType), transactionType.ToString());
-            return route;
-        }
+        public VeloPage GetEditPage() => this.GetPage<EditModel>(new EditParameter { ProductId = Product.Id });
+        public VeloPage GetPage(TransactionType transactionType) => this.GetPage<Transactions.CreateSingleModel>(new Transactions.CreateSingleParameter { ProductId = Product.Id, TransactionType = transactionType });
+        public VeloPage GetShowFilePage() => this.GetPage<ShowFileModel>(new ShowFileParameter { FileId = Product.Label.Value });
     }
 }

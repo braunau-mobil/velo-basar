@@ -24,7 +24,7 @@
             <partial name="/Pages/Products/_StateBadge.cshtml" model="@Model.Product" />
 
             <div class="d-flex justify-content-end">
-                <input type="submit" value="@Localizer["OK"]" class="btn btn-primary mx-1" asp-all-route-data="@Model.GetPostRoute()" />
+                <input type="submit" value="@Localizer["OK"]" class="btn btn-primary mx-1" velo-parameter="@Model.GetPostParameter()" />
                 <a href="@Request.Headers["Referer"]" class="btn btn-secondary mx-1">@Localizer["Abbrechen"]</a>
             </div>
         </div>

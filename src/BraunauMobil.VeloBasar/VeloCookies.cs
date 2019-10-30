@@ -12,7 +12,7 @@ namespace BraunauMobil.VeloBasar
         public CookieOptions CookieOptions { get; set; }
     }
 
-    public static class Cookies
+    public static class VeloCookies
     {
         private static readonly Cookie _acceptanceProducts = new Cookie
         {

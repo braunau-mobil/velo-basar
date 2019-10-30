@@ -1,17 +1,12 @@
-﻿using System.Threading.Tasks;
-using BraunauMobil.VeloBasar.Data;
+﻿using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace BraunauMobil.VeloBasar.Pages.Basars
 {
-    public class DetailsModel : BasarPageModel
+    public class DetailsParameter
     {
-        public DetailsModel(VeloBasarContext context) : base(context)
-        {
-        }
-
-        public async Task OnGetAsync(int? basarId)
-        {
-            await LoadBasarAsync(basarId);
-        }
+        public int BasarToShowId { get; set; }
+    }
+    public class DetailsModel : PageModel
+    {
     }
 }

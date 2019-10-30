@@ -2,15 +2,18 @@
 using BraunauMobil.VeloBasar.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace BraunauMobil.VeloBasar.Pages.Setup
 {
-    public class IndexModel : BasarPageModel
+    public class IndexModel : PageModel
     {
+        private readonly VeloBasarContext _context;
         private readonly UserManager<IdentityUser> _userManager;
 
-        public IndexModel(VeloBasarContext context, UserManager<IdentityUser> userManager) : base(context)
+        public IndexModel(VeloBasarContext context, UserManager<IdentityUser> userManager)
         {
+            _context = context;
             _userManager = userManager;
             Config = new InitializationConfiguration();
         }
@@ -24,9 +27,9 @@ namespace BraunauMobil.VeloBasar.Pages.Setup
 
         public async Task<IActionResult> OnPostAsync()
         {
-            await Context.InitializeDatabase(_userManager, Config);
+            await _context.InitializeDatabase(_userManager, Config);
 
-            return RedirectToPage("/Index");
+            return this.RedirectToPage<IndexModel>();
         }
     }
 }

@@ -42,7 +42,9 @@ namespace BraunauMobil.VeloBasar.Data
         {
             get
             {
-                return SettingsSet.First();
+                return SettingsSet
+                    .Include(s => s.ActiveBasar)
+                    .First();
             }
         }
 

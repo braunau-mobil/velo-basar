@@ -4,25 +4,33 @@ using Microsoft.EntityFrameworkCore;
 using BraunauMobil.VeloBasar.Data;
 using BraunauMobil.VeloBasar.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace BraunauMobil.VeloBasar.Pages.Products
 {
-    public class EditModel : BasarPageModel
+    public class EditParameter
     {
-        public EditModel(VeloBasarContext context) : base(context)
+        public int ProductId { get; set; }
+        public string Target { get; set; }
+    }
+    public class EditModel : PageModel
+    {
+        private readonly VeloBasarContext _context;
+
+        public EditModel(VeloBasarContext context)
         {
+            _context = context;
         }
 
         [BindProperty]
         public Product Product { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int basarId, int productId)
+        public async Task<IActionResult> OnGetAsync(EditParameter parameter)
         {
-            await LoadBasarAsync(basarId);
-            ViewData["Brands"] = new SelectList(Context.Brand, "Id", "Name");
-            ViewData["ProductTypes"] = new SelectList(Context.ProductTypes, "Id", "Name");
+            ViewData["Brands"] = new SelectList(_context.Brand, "Id", "Name");
+            ViewData["ProductTypes"] = new SelectList(_context.ProductTypes, "Id", "Name");
 
-            Product = await Context.Product.FirstOrDefaultAsync(p => p.Id == productId);
+            Product = await _context.Product.FirstOrDefaultAsync(p => p.Id == parameter.ProductId);
 
             if (Product == null)
             {
@@ -31,27 +39,25 @@ namespace BraunauMobil.VeloBasar.Pages.Products
 
             return Page();
         }
-
-        public async Task<IActionResult> OnPostAsync(int basarId, string target)
+        public async Task<IActionResult> OnPostAsync(EditParameter parameter)
         {
-            await LoadBasarAsync(basarId);
-            ViewData["Brands"] = new SelectList(Context.Brand, "Id", "Name");
-            ViewData["ProductTypes"] = new SelectList(Context.ProductTypes, "Id", "Name");
+            ViewData["Brands"] = new SelectList(_context.Brand, "Id", "Name");
+            ViewData["ProductTypes"] = new SelectList(_context.ProductTypes, "Id", "Name");
 
             if (!ModelState.IsValid)
             {
                 return Page();
             }
 
-            Context.Attach(Product).State = EntityState.Modified;
+            _context.Attach(Product).State = EntityState.Modified;
 
             try
             {
-                await Context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!await Context.Product.ExistsAsync(Product.Id))
+                if (!await _context.Product.ExistsAsync(Product.Id))
                 {
                     return NotFound();
                 }
@@ -61,7 +67,7 @@ namespace BraunauMobil.VeloBasar.Pages.Products
                 }
             }
 
-            return Redirect(target);
+            return Redirect(parameter.Target);
         }
     }
 }

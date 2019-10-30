@@ -6,57 +6,52 @@ using BraunauMobil.VeloBasar.Models;
 using BraunauMobil.VeloBasar.Resources;
 using BraunauMobil.VeloBasar.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Localization;
 
 namespace BraunauMobil.VeloBasar.Pages.Cancellations
 {
-    public class SelectProductsModel : BasarPageModel
+    public class SelectProductsParameter
     {
-        private readonly IStringLocalizer<SharedResource> _localizer;
-        private int _saleId;
+        public int SaleId { get; set; }
+    }
+    public class SelectProductsModel : PageModel
+    {
+        private readonly IVeloContext _context;
 
-        public SelectProductsModel(VeloBasarContext context, IStringLocalizer<SharedResource> localizer) : base(context)
+        public SelectProductsModel(IVeloContext context)
         {
-            _localizer = localizer;
+            _context = context;
         }
 
         [BindProperty]
         public ListViewModel<Product> Products { get; set; }
         public string ErrorMessage { get; set; }
+        public SelectProductsParameter Parameter { get; set; }
 
-        public async Task OnGetAsync(int basarId, int saleId)
+        public async Task OnGetAsync(SelectProductsParameter parameter)
         {
-            await LoadBasarAsync(basarId);
-            _saleId = saleId;
+            Parameter = parameter;
 
-            var sale = await Context.Transactions.GetAsync(saleId);
-            Products = new ListViewModel<Product>(Basar, sale.Products.GetProducts());
+            var sale = await _context.Db.Transactions.GetAsync(parameter.SaleId);
+            Products = new ListViewModel<Product>(_context.Basar, sale.Products.GetProducts());
         }
-
-        public async Task<IActionResult> OnPostAsync(int basarId, int saleId)
+        public async Task<IActionResult> OnPostAsync(SelectProductsParameter parameter)
         {
-            await LoadBasarAsync(basarId);
+            Parameter = parameter;
 
             if (Products.List.All(vm => !vm.IsSelected))
             {
-                ErrorMessage = _localizer["Bitte ein Produkt zum Stornieren auswählen."];
+                ErrorMessage = _context.Localizer["Bitte ein Produkt zum Stornieren auswählen."];
                 return Page();
             }
 
-            var cancellation = await Context.CancelProductsAsync(Basar, saleId, Products.List.Where(vm => vm.IsSelected).Select(vm => vm.Item).ToArray());
-            if (await Context.Transactions.ExistsAsync(saleId))
+            var cancellation = await _context.Db.CancelProductsAsync(_context.Basar, parameter.SaleId, Products.List.Where(vm => vm.IsSelected).Select(vm => vm.Item).ToArray());
+            if (await _context.Db.Transactions.ExistsAsync(parameter.SaleId))
             {
-                return RedirectToPage("/Cancellations/Done", new { basarId, cancellationId = cancellation.Id, saleId });
+                return this.RedirectToPage<DoneModel>(new DoneParameter { CancellationId = cancellation.Id, SaleId = parameter.SaleId });
             }
-            return RedirectToPage("/Cancellations/Done", new { basarId, cancellationId = cancellation.Id });
-
-        }
-
-        public override IDictionary<string, string> GetRoute()
-        {
-            var route = base.GetRoute();
-            route.Add("saleId", _saleId.ToString());
-            return route;
+            return this.RedirectToPage<DoneModel>(new DoneParameter { CancellationId = cancellation.Id });
         }
     }
 }

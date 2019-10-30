@@ -1,18 +1,14 @@
-﻿using BraunauMobil.VeloBasar.Data;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace BraunauMobil.VeloBasar.Pages.Sales
 {
-    public class ClearCartModel : BasarPageModel
+    public class ClearCartModel : PageModel
     {
-        public ClearCartModel(VeloBasarContext context) : base(context)
-        {
-        }
-
-        public IActionResult OnGet(int basarId)
+        public IActionResult OnGet()
         {
             Response.Cookies.ClearCart();
-            return RedirectToPage("/Sales/Cart", new { basarId });
+            return this.RedirectToPage<CartModel>();
         }
     }
 }

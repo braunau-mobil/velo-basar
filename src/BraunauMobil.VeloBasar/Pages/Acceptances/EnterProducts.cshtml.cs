@@ -3,46 +3,50 @@ using System.Linq;
 using System.Threading.Tasks;
 using BraunauMobil.VeloBasar.Data;
 using BraunauMobil.VeloBasar.Models;
-using BraunauMobil.VeloBasar.Resources;
 using BraunauMobil.VeloBasar.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using Microsoft.Extensions.Localization;
 
 namespace BraunauMobil.VeloBasar.Pages.Acceptances
 {
-    public class EnterProductsModel : BasarPageModel
+    public class EnterProductsParameter
     {
-        private readonly IHtmlGenerator _htmlGenerator;
-        private readonly IStringLocalizer<SharedResource> _localizer;
-        private int _sellerId;
+        public int SellerId { get; set; }
+        public int? ProductId { get; set; }
+        public bool? Delete { get; set; }
+    }
 
-        public EnterProductsModel(VeloBasarContext context, IStringLocalizer<SharedResource> localizer, IHtmlGenerator htmlGenerator) : base(context)
+    public class EnterProductsModel : PageModel
+    {
+        private readonly IVeloContext _context;
+        private EnterProductsParameter _parameter;
+
+        public EnterProductsModel(IVeloContext context)
         {
-            _htmlGenerator = htmlGenerator;
-            _localizer = localizer;
+            _context = context;
         }
 
         public bool AreWeInEditMode { get; set; }
         [BindProperty]
         public Product NewProduct { get; set; }
+        public EnterProductsParameter Parameter { get; set; }
         public ListViewModel<Product> Products { get; set; }
 
-        public async Task OnGetAsync(int basarId, int sellerId, int? productId, bool? delete)
+        public void OnGet(EnterProductsParameter parameter)
         {
-            await LoadBasarAsync(basarId);
-            _sellerId = sellerId;
-            ViewData["Brands"] = new SelectList(Context.Brand, "Id", "Name");
-            ViewData["ProductTypes"] = new SelectList(Context.ProductTypes, "Id", "Name");
+            _parameter = parameter;
+
+            ViewData["Brands"] = new SelectList(_context.Db.Brand, "Id", "Name");
+            ViewData["ProductTypes"] = new SelectList(_context.Db.ProductTypes, "Id", "Name");
 
             var products = Request.Cookies.GetAcceptanceProducts();
             
-            if (productId != null)
+            if (parameter.ProductId != null)
             {
-                if (delete == true)
+                if (parameter.Delete == true)
                 {
-                    products.RemoveAt(productId.Value);
+                    products.RemoveAt(parameter.ProductId.Value);
                     for (var index = 0; index < products.Count; index++)
                     {
                         products[index].Id = index;
@@ -50,7 +54,7 @@ namespace BraunauMobil.VeloBasar.Pages.Acceptances
                 }
                 else
                 {
-                    NewProduct = products[productId.Value];
+                    NewProduct = products[parameter.ProductId.Value];
                     AreWeInEditMode = true;
                 }
             }
@@ -59,20 +63,20 @@ namespace BraunauMobil.VeloBasar.Pages.Acceptances
 
             Products = CreateViewModels(products);
         }
-        public async Task<IActionResult> OnPostAsync(int basarId, int sellerId, int? productId)
+        public async Task<IActionResult> OnPostAsync(EnterProductsParameter parameter)
         {
-            await LoadBasarAsync(basarId);
-            _sellerId = sellerId;
-            ViewData["Brands"] = new SelectList(Context.Brand, "Id", "Name");
-            ViewData["ProductTypes"] = new SelectList(Context.ProductTypes, "Id", "Name");
+            _parameter = parameter;
+
+            ViewData["Brands"] = new SelectList(_context.Db.Brand, "Id", "Name");
+            ViewData["ProductTypes"] = new SelectList(_context.Db.ProductTypes, "Id", "Name");
 
             var products = Request.Cookies.GetAcceptanceProducts();
             
             if (ModelState.IsValid)
             {
-                NewProduct.Brand = await Context.Brand.GetAsync(NewProduct.BrandId);
-                NewProduct.Type = await Context.ProductTypes.GetAsync(NewProduct.TypeId);
-                if (productId != null)
+                NewProduct.Brand = await _context.Db.Brand.GetAsync(NewProduct.BrandId);
+                NewProduct.Type = await _context.Db.ProductTypes.GetAsync(NewProduct.TypeId);
+                if (parameter.ProductId != null)
                 {
                     products[NewProduct.Id] = NewProduct;
                 }
@@ -91,62 +95,24 @@ namespace BraunauMobil.VeloBasar.Pages.Acceptances
 
             return Page();
         }
-        public IDictionary<string, string> GetAcceptRoute()
-        {
-            var route = GetRoute();
-            route.Add("sellerId", _sellerId.ToString());
-            return route;
-        }
-        public IDictionary<string, string> GetAddRoute()
-        {
-            var route = GetRoute();
-            route.Add("sellerId", _sellerId.ToString());
-            return route;
-        }
-        public IDictionary<string, string> GetCancelRoute()
-        {
-            var route = GetRoute();
-            route.Add("sellerId", _sellerId.ToString());
-            return route;
-        }
-        public IDictionary<string, string> GetUpdateRoute()
-        {
-            var route = GetRoute();
-            route.Add("sellerId", _sellerId.ToString());
-            route.Add("productId", NewProduct.Id.ToString());
-            return route;
-        }
+        public VeloPage GetAcceptPage() => this.GetPage<AcceptModel>(new AcceptParameter { SellerId = _parameter.SellerId });
+        public object GetAddParameter() => new EnterProductsParameter { SellerId = _parameter.SellerId };
+        public VeloPage GetCancelPage() => this.GetPage<Sellers.DetailsModel>(new Sellers.DetailsParameter { SellerId = _parameter.SellerId });
+        public object GetUpdateParameter() => new EnterProductsParameter { ProductId = NewProduct.Id, SellerId = _parameter.SellerId };
 
         private ListViewModel<Product> CreateViewModels(IList<Product> products)
         {
-            return new ListViewModel<Product>(Basar, products, new[]
+            return new ListViewModel<Product>(_context.Basar, products, new[]
             {
-                new ListCommand<Product>(GetEditItemRoute)
+                new ListCommand<Product>(product => this.GetPage<EnterProductsModel>(new EnterProductsParameter { ProductId = product.Id, SellerId = _parameter.SellerId }))
                 {
-                    Page = Request.Path,
-                    Text = _localizer["Editieren"]
+                    Text = _context.Localizer["Editieren"]
                 },
-                new ListCommand<Product>(GetDeleteItemRoute)
+                new ListCommand<Product>(product => this.GetPage<EnterProductsModel>(new EnterProductsParameter { Delete = true, ProductId = product.Id, SellerId = _parameter.SellerId }))
                 {
-                    Page = Request.Path,
-                    Text = _localizer["Löschen"]
+                    Text = _context.Localizer["Löschen"]
                 }
             });
-        }
-        private IDictionary<string, string> GetDeleteItemRoute(Product product)
-        {
-            var route = GetRoute();
-            route.Add("sellerId", _sellerId.ToString());
-            route.Add("productId", product.Id.ToString());
-            route.Add("delete", true.ToString());
-            return route;
-        }
-        private IDictionary<string, string> GetEditItemRoute(Product product)
-        {
-            var route = GetRoute();
-            route.Add("sellerId", _sellerId.ToString());
-            route.Add("productId", product.Id.ToString());
-            return route;
         }
     }
 }

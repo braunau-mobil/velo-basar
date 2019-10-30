@@ -1,20 +1,25 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using BraunauMobil.VeloBasar.Data;
 using BraunauMobil.VeloBasar.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace BraunauMobil.VeloBasar.Pages.Transactions
 {
-    public class CreateSingleModel : BasarPageModel
+    public class CreateSingleParameter
     {
-        private readonly SignInManager<IdentityUser> _signInManager;
+        public int ProductId { get; set; }
+        public TransactionType TransactionType { get; set; }
+    }
+    public class CreateSingleModel : PageModel
+    {
+        private readonly IVeloContext _context;
 
-        public CreateSingleModel(VeloBasarContext context, SignInManager<IdentityUser> signInManager) : base(context)
+        public CreateSingleModel(IVeloContext context)
         {
-            _signInManager = signInManager;
+            _context = context;
         }
 
         [BindProperty]
@@ -24,35 +29,26 @@ namespace BraunauMobil.VeloBasar.Pages.Transactions
         public TransactionType TransactionType { get; set; }
         public SignInManager<IdentityUser> SignInManager { get; }
 
-        public async Task<IActionResult> OnGetAsync(int basarId, int productId, TransactionType transactionType)
+        public async Task<IActionResult> OnGetAsync(CreateSingleParameter parameter)
         {
-            if (transactionType == TransactionType.Release && !_signInManager.IsSignedIn(User))
+            if (parameter.TransactionType == TransactionType.Release && !_context.SignInManager.IsSignedIn(User))
             {
                 return Forbid();
             }
 
-            await LoadBasarAsync(basarId);
-            TransactionType = transactionType;
+            TransactionType = parameter.TransactionType;
 
-            Product = await Context.Product.GetAsync(productId);
+            Product = await _context.Db.Product.GetAsync(parameter.ProductId);
 
             return Page();
         }
-        public async Task<IActionResult> OnPostAsync(int basarId, int productId, TransactionType transactionType)
+        public async Task<IActionResult> OnPostAsync(CreateSingleParameter parameter)
         {
-            await LoadBasarAsync(basarId);
+            Product = await _context.Db.Product.GetAsync(parameter.ProductId);
+            await _context.Db.DoTransactionAsync(_context.Basar, parameter.TransactionType, Notes, Product);
 
-            Product = await Context.Product.GetAsync(productId);
-            await Context.DoTransactionAsync(Basar, transactionType, Notes, Product);
-
-            return RedirectToPage("/Products/Details", new { basarId, productId });
+            return this.RedirectToPage<Products.DetailsModel>(new Products.DetailsParameter { ProductId = parameter.ProductId });
         }
-        public IDictionary<string, string> GetPostRoute()
-        {
-            var route = GetRoute();
-            route.Add("productId", Product.Id.ToString());
-            route.Add("transactionType", TransactionType.ToString());
-            return route;
-        }
+        public object GetPostParameter() => new CreateSingleParameter { ProductId = Product.Id, TransactionType = TransactionType };
     }
 }

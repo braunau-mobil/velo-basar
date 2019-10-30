@@ -23,11 +23,19 @@ namespace BraunauMobil.VeloBasar.Data
         public static IQueryable<ProductType> DefaultOrder(this IQueryable<ProductType> productTypes) => productTypes.OrderById();
         public static IQueryable<Seller> DefaultOrder(this IQueryable<Seller> sellers) => sellers.OrderById();
 
+        public static bool Exists<T>(this IQueryable<T> models, int id) where T : IModel
+        {
+            return models.Any(p => p.Id == id);
+        }
         public static async Task<bool> ExistsAsync<T>(this IQueryable<T> models, int id) where T : IModel
         {
             return await models.AnyAsync(p => p.Id == id);
         }
 
+        public static T Get<T>(this DbSet<T> models, int id) where T : class, IModel
+        {
+            return models.Find(id);
+        }
         public static async Task<T> GetAsync<T>(this DbSet<T> models, int id) where  T : class, IModel
         {
             return await models.FindAsync(id);
@@ -60,7 +68,7 @@ namespace BraunauMobil.VeloBasar.Data
             {
                 return basars.DefaultOrder();
             }
-            return basars.Where(Expressions.BasarSearch(searchString)).DefaultOrder();
+            return basars.Where(SearchExpressions.BasarSearch(searchString)).DefaultOrder();
         }
         public static IQueryable<Brand> GetMany(this IQueryable<Brand> brands, string searchString = null)
         {
@@ -68,14 +76,14 @@ namespace BraunauMobil.VeloBasar.Data
             {
                 return brands.DefaultOrder();
             }
-            return brands.Where(Expressions.BrandSearch(searchString)).DefaultOrder();
+            return brands.Where(SearchExpressions.BrandSearch(searchString)).DefaultOrder();
         }
         public static IQueryable<Product> GetMany(this IQueryable<Product> products, string searchString = null, StorageState? storageState = null, ValueState? valueState = null)
         {
             var result = products;
             if (!string.IsNullOrEmpty(searchString))
             {
-                result = result.Where(Expressions.ProductSearch(searchString));
+                result = result.Where(SearchExpressions.ProductSearch(searchString));
             }
 
             if (storageState != null)
@@ -96,7 +104,7 @@ namespace BraunauMobil.VeloBasar.Data
         }
         public static IQueryable<ProductsTransaction> GetMany(this IQueryable<ProductsTransaction> transactions, TransactionType transactionType, Basar basar, string searchString)
         {
-            return  transactions.GetMany(transactionType, basar, Expressions.TransactionSearch(searchString));
+            return  transactions.GetMany(transactionType, basar, SearchExpressions.TransactionSearch(searchString));
         }
         public static IQueryable<ProductsTransaction> GetMany(this IQueryable<ProductsTransaction> transactions, TransactionType transactionType, Basar basar, int sellerId)
         {
@@ -119,7 +127,7 @@ namespace BraunauMobil.VeloBasar.Data
             {
                 return productTypes.DefaultOrder();
             }
-            return productTypes.Where(Expressions.ProductTypeSearch(searchString)).DefaultOrder();
+            return productTypes.Where(SearchExpressions.ProductTypeSearch(searchString)).DefaultOrder();
         }
         public static IQueryable<Seller> GetMany(this IQueryable<Seller> sellers, string searchString = null)
         {
@@ -128,11 +136,11 @@ namespace BraunauMobil.VeloBasar.Data
                 return sellers.IncludeAll().DefaultOrder();
             }
 
-            return sellers.Where(Expressions.SellerSearch(searchString)).IncludeAll().DefaultOrder();
+            return sellers.Where(SearchExpressions.SellerSearch(searchString)).IncludeAll().DefaultOrder();
         }
         public static IQueryable<Seller> GetMany(this IQueryable<Seller> sellers, string firstName, string lastName)
         {
-            return sellers.Where(Expressions.SellerSearch(firstName, lastName)).IncludeAll().DefaultOrder();
+            return sellers.Where(SearchExpressions.SellerSearch(firstName, lastName)).IncludeAll().DefaultOrder();
         }
 
         public static async Task<Basar> GetNoTrackingAsync(this DbSet<Basar> basars, int id)

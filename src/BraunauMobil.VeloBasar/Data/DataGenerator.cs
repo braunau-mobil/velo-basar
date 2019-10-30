@@ -45,7 +45,12 @@ namespace BraunauMobil.VeloBasar.Data
 
             for (var basarNumber = 1; basarNumber <= _config.BasarCount; basarNumber++)
             {
-                await CreateBasarAsync(_config.FirstBasarDate.AddYears(basarNumber - 1), $"{basarNumber}. Fahrradbasar");
+                var basar = await CreateBasarAsync(_config.FirstBasarDate.AddYears(basarNumber - 1), $"{basarNumber}. Fahrradbasar");
+                if (_context.Settings.ActiveBasar == null)
+                {
+                    _context.Settings.ActiveBasar = basar;
+                     await _context.SaveChangesAsync();
+                }
             }
         }
 
@@ -93,7 +98,7 @@ namespace BraunauMobil.VeloBasar.Data
             _productTypes = await _context.ProductTypes.ToArrayAsync();
         }
 
-        private async Task CreateBasarAsync(DateTime date, string name)
+        private async Task<Basar> CreateBasarAsync(DateTime date, string name)
         {
             var basar = await _context.CreateNewBasarAsync(date, name, 0.9m, 0.0m, 0.0m);
 
@@ -102,6 +107,8 @@ namespace BraunauMobil.VeloBasar.Data
             {
                 await CreateSellerWithAcceptancesAsync(basar, sellerNumber);
             }
+
+            return basar;
         }
 
         private async Task CreateSellerWithAcceptancesAsync(Basar basar, int sellerNumber)

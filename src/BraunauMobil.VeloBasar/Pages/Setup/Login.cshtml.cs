@@ -1,20 +1,19 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
-using BraunauMobil.VeloBasar.Data;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 
 namespace BraunauMobil.VeloBasar.Pages.Setup
 {
-    public class LoginModel : BasarPageModel
+    public class LoginModel : PageModel
     {
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
 
-        public LoginModel(VeloBasarContext context, SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger) : base(context)
+        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger)
         {
             _signInManager = signInManager;
             _logger = logger;
@@ -22,28 +21,22 @@ namespace BraunauMobil.VeloBasar.Pages.Setup
 
         [TempData]
         public string ErrorMessage { get; set; }
-
-
         [BindProperty]
         [Required]
         [EmailAddress]
         [Display(Name = "E-Mail Adresse")]
         public string Email { get; set; }
-
         [BindProperty]
         [Required]
         [DataType(DataType.Password)]
         [Display(Name = "Passwort")]
         public string Password { get; set; }
-
         [BindProperty]
         [Display(Name = "Eingeloggt bleiben?")]
         public bool RememberMe { get; set; }
 
-        public async Task OnGetAsync(int basarId)
+        public async Task OnGetAsync()
         {
-            await LoadBasarAsync(basarId);
-
             if (!string.IsNullOrEmpty(ErrorMessage))
             {
                 ModelState.AddModelError(string.Empty, ErrorMessage);
@@ -52,7 +45,6 @@ namespace BraunauMobil.VeloBasar.Pages.Setup
             // Clear the existing external cookie to ensure a clean login process
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
         }
-
         public async Task<IActionResult> OnPostAsync()
         {
             if (ModelState.IsValid)
@@ -63,7 +55,7 @@ namespace BraunauMobil.VeloBasar.Pages.Setup
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
-                    return RedirectToPage("/Index");
+                    return this.RedirectToPage<IndexModel>();
                 }
                 else
                 {

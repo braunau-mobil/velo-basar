@@ -1,27 +1,34 @@
 ﻿using System.Threading.Tasks;
+using BraunauMobil.VeloBasar.AuthoringTagHelpers.TagHelpers;
 using BraunauMobil.VeloBasar.Data;
 using BraunauMobil.VeloBasar.Models;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace BraunauMobil.VeloBasar.Pages.Acceptances
 {
-    public class DetailsModel : BasarPageModel
+    public class DetailsParameter
     {
-        public DetailsModel(VeloBasarContext context) : base(context)
+        public int AcceptanceId { get; set; }
+        public bool? ShowSuccess { get; set; }
+        public bool? OpenDocument { get; set; }
+    }
+    public class DetailsModel : PageModel
+    {
+        private readonly VeloBasarContext _context;
+
+        public DetailsModel(VeloBasarContext context)
         {
+            _context = context;
         }
 
         public ProductsTransaction Acceptance { get; set; }
-        public bool ShowSuccess { get; set; }
-        public bool OpenDocument { get; set; }
+        public DetailsParameter Parameter { get; private set; }
 
-        public async Task OnGetAsync(int basarId, int acceptanceId, bool? showSuccess = null, bool? openDocument = null)
+        public async Task OnGetAsync(DetailsParameter parameter)
         {
-            await LoadBasarAsync(basarId);
-
-            ShowSuccess = showSuccess ?? false;
-            OpenDocument = openDocument ?? false;
-
-            Acceptance = await Context.Transactions.GetAsync(acceptanceId);
+            Parameter = parameter;
+            Acceptance = await _context.Transactions.GetAsync(parameter.AcceptanceId);
         }
+        public VeloPage GetSellerDetailsPage() => this.GetPage<Sellers.DetailsModel>(new Sellers.DetailsParameter { SellerId = Acceptance.SellerId.Value });
     }
 }

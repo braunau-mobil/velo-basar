@@ -1,49 +1,48 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BraunauMobil.VeloBasar.Data;
 using BraunauMobil.VeloBasar.Models;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace BraunauMobil.VeloBasar.Pages.Basars
 {
-    public class EditModel : BasarPageModel
+    public class EditParameter
     {
-        private int _pageIndex;
+        public int BasarToEditId { get; set; }
+        public int PageIndex { get; set; }
+    }
+    public class EditModel : PageModel
+    {
+        private readonly VeloBasarContext _context;
+        private EditParameter _parameter;
 
-        public EditModel(VeloBasarContext context) : base(context)
+        public EditModel(VeloBasarContext context)
         {
+            _context = context;
         }
 
         [BindProperty]
         public Basar BasarToEdit { get; set; }
 
-        public async Task OnGetAsync(int basarToEditId, int pageIndex, int? basarId)
+        public async Task OnGetAsync(EditParameter parameter)
         {
-            await LoadBasarAsync(basarId);
-            _pageIndex = pageIndex;
-
-            BasarToEdit = await Context.Basar.GetAsync(basarToEditId);
+            _parameter = parameter;
+            BasarToEdit = await _context.Basar.GetAsync(parameter.BasarToEditId);
         }
-        public async Task<IActionResult> OnPostAsync(int pageIndex, int? basarId)
+        public async Task<IActionResult> OnPostAsync(EditParameter parameter)
         {
-            await LoadBasarAsync(basarId);
+            _parameter = parameter;
 
             if (!ModelState.IsValid)
             {
                 return Page();
             }
 
-            Context.Attach(BasarToEdit).State = EntityState.Modified;
-            await Context.SaveChangesAsync();
-            return RedirectToPage("/Basars/List", new { pageIndex });
+            _context.Attach(BasarToEdit).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+            return this.RedirectToPage<ListModel>(new ListParameter { PageIndex = parameter.PageIndex });
         }
-
-        public override IDictionary<string, string> GetRoute()
-        {
-            var route = base.GetRoute();
-            route.Add("pageIndex", _pageIndex.ToString());
-            return route;
-        }
+        public VeloPage GetListPage() => this.GetPage<ListModel>(new ListParameter { PageIndex = _parameter.PageIndex });
     }
 }

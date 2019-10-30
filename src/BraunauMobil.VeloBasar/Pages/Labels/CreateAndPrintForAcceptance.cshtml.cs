@@ -1,19 +1,25 @@
 ﻿using System.Threading.Tasks;
-using BraunauMobil.VeloBasar.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace BraunauMobil.VeloBasar.Pages.Labels
 {
-    public class CreateAndPrintForAcceptanceModel : BasarPageModel
+    public class CreateAndPrintForAcceptanceParameter
     {
-        public CreateAndPrintForAcceptanceModel(VeloBasarContext context) : base(context)
+        public int AcceptanceNumber { get; set; }
+    }
+    public class CreateAndPrintForAcceptanceModel : PageModel
+    {
+        private readonly IVeloContext _context;
+
+        public CreateAndPrintForAcceptanceModel(IVeloContext context)
         {
+            _context = context;
         }
 
-        public async Task<IActionResult> OnGetAsync(int basarId, int acceptanceNumber)
+        public async Task<IActionResult> OnGetAsync(CreateAndPrintForAcceptanceParameter parameter)
         {
-            await LoadBasarAsync(basarId);
-            var pdf = await Context.CreateLabelsForAcceptanceAsync(Basar, acceptanceNumber);
+            var pdf = await _context.Db.CreateLabelsForAcceptanceAsync(_context.Basar, parameter.AcceptanceNumber);
             return File(pdf.Data, pdf.ContentType);
         }
     }

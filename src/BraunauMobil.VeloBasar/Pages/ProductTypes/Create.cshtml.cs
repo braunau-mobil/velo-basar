@@ -2,33 +2,31 @@
 using BraunauMobil.VeloBasar.Data;
 using BraunauMobil.VeloBasar.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace BraunauMobil.VeloBasar.Pages.ProductTypes
 {
-    public class CreateModel : BasarPageModel
+    public class CreateModel : PageModel
     {
-        public CreateModel(VeloBasarContext context) : base(context)
+        private readonly VeloBasarContext _context;
+
+        public CreateModel(VeloBasarContext context)
         {
+            _context = context;
         }
 
         [BindProperty]
         public ProductType ProductType { get; set; }
 
-        public async Task OnGetAsync(int? basarId)
+        public async Task<IActionResult> OnPostAsync()
         {
-            await LoadBasarAsync(basarId);
-        }
-        public async Task<IActionResult> OnPostAsync(int? basarId)
-        {
-            await LoadBasarAsync(basarId);
-
             if (!ModelState.IsValid)
             {
                 return Page();
             }
 
-            await Context.CreateProductType(ProductType);
-            return RedirectToPage("/ProductTypes/List", GetRoute());
+            await _context.CreateProductType(ProductType);
+            return this.RedirectToPage<ListModel>();
         }
     }
 }

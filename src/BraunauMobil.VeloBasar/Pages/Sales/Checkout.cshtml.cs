@@ -1,29 +1,30 @@
 ﻿using System.Threading.Tasks;
-using BraunauMobil.VeloBasar.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace BraunauMobil.VeloBasar.Pages.Sales
 {
-    public class CheckoutModel : BasarPageModel
+    public class CheckoutModel : PageModel
     {
-        public CheckoutModel(VeloBasarContext context) : base(context)
+        private readonly IVeloContext _context;
+
+        public CheckoutModel(IVeloContext context)
         {
+            _context = context;
         }
 
-        public async Task<IActionResult> OnGetAsync(int basarId)
+        public async Task<IActionResult> OnGetAsync()
         {
-            await LoadBasarAsync(basarId);
-
             var productIds = Request.Cookies.GetCart();
-            var sale = await Context.CheckoutProductsAsync(Basar, productIds);
+            var sale = await _context.Db.CheckoutProductsAsync(_context.Basar, productIds);
             
             if (sale == null)
             {
-                return RedirectToPage("/Sales/Cart", new { basarId, showError = true });
+                return this.RedirectToPage<CartModel>(new CartParameter { ShowError = true });
             }
             
             Response.Cookies.ClearCart();
-            return RedirectToPage("/Sales/Details", new { basarId, saleId = sale.Id, showSuccess = true, openDocument = true});
+            return this.RedirectToPage<DetailsModel>(new DetailsParameter { SaleId = sale.Id, ShowSuccess = true, OpenDocument = true });
         }
     }
 }

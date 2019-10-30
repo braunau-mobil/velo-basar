@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace BraunauMobil.VeloBasar
+﻿namespace BraunauMobil.VeloBasar
 {
     public interface IPaginatable
     {
@@ -8,8 +6,7 @@ namespace BraunauMobil.VeloBasar
         int TotalPages { get; }
         bool HasPreviousPage { get; }
         bool HasNextPage { get;  }
-        string PaginationPagePath { get; }
 
-        IDictionary<string, string> GetPaginationRoute();
+        VeloPage GetPaginationPage(int pageIndex);
     }
 }

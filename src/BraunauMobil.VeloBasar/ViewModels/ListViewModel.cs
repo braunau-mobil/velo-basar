@@ -9,7 +9,7 @@ namespace BraunauMobil.VeloBasar.ViewModels
     public class ListCommand<T>
     {
         private readonly Func<T, bool> _isEnabled;
-        private readonly Func<T, IDictionary<string, string>> _getRoute;
+        private readonly Func<T, VeloPage> _getPage;
 
         public ListCommand() : this(null, null)
         {
@@ -17,20 +17,19 @@ namespace BraunauMobil.VeloBasar.ViewModels
         public ListCommand(Func<T, bool> isEnabled) : this(isEnabled, null)
         {
         }
-        public ListCommand(Func<T, IDictionary<string, string>> getRoute) : this(null, getRoute)
+        public ListCommand(Func<T, VeloPage> getPage) : this(null, getPage)
         {
         }
-        public ListCommand(Func<T, bool> isEnabled, Func<T, IDictionary<string, string>> getRoute)
+        public ListCommand(Func<T, bool> isEnabled, Func<T, VeloPage> getPage)
         {
             _isEnabled = isEnabled ?? (x => true);
-            _getRoute = getRoute ?? (x => new Dictionary<string, string>());
+            _getPage = getPage;
         }
 
         public string Text { get; set; }
-        public string Page { get; set; }
 
         public bool IsEnabled(T item) => _isEnabled(item);
-        public IDictionary<string, string> GetRoute(T item) => _getRoute(item);
+        public VeloPage GetPage(T item) => _getPage(item);
     }
 
     public class ListViewModel<T> : BasarViewModel

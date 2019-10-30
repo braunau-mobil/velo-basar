@@ -1,26 +1,35 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using BraunauMobil.VeloBasar.Data;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace BraunauMobil.VeloBasar.Pages.Basars
 {
-    public class DeleteModel : BasarPageModel
+    public class DeleteParameter
     {
-        public DeleteModel(VeloBasarContext context)  : base(context)
+        public int BasarToDeleteId { get; set; }
+        public int PageIndex { get; set; }
+    }
+    public class DeleteModel : PageModel
+    {
+        private readonly VeloBasarContext _context;
+
+        public DeleteModel(VeloBasarContext context)
         {
+            _context = context;
         }
 
-        public async Task<IActionResult> OnGetAsync(int basarToDeleteId, int pageIndex, int? basarId)
+        public async Task<IActionResult> OnGetAsync(DeleteParameter parameter)
         {
-            if (await Context.Basar.ExistsAsync(basarToDeleteId))
+            if (await _context.Basar.ExistsAsync(parameter.BasarToDeleteId))
             {
-                await Context.DeleteBasarAsync(basarToDeleteId);
+                await _context.DeleteBasarAsync(parameter.BasarToDeleteId);
             }
             else
             {
                 return NotFound();
             }
-            return RedirectToPage("/Basars/List", new { pageIndex, basarId });
+            return this.RedirectToPage<ListModel>(new ListParameter { PageIndex = parameter.PageIndex });
         }
     }
 }

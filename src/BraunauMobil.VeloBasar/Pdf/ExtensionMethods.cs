@@ -1,6 +1,6 @@
 ﻿namespace BraunauMobil.VeloBasar.Pdf
 {
-    public static class Extensions
+    public static class ExtensionMethods
     {
         /// <summary>
         /// Converts milimeters into iText 7 units.

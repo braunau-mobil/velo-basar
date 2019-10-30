@@ -4,24 +4,26 @@ using BraunauMobil.VeloBasar.Data;
 using BraunauMobil.VeloBasar.Models;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using Microsoft.Extensions.Localization;
-using BraunauMobil.VeloBasar.Resources;
 using BraunauMobil.VeloBasar.ViewModels;
 using Newtonsoft.Json;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace BraunauMobil.VeloBasar.Pages.Sales
 {
-    public class CartModel : BasarPageModel
+    public class CartParameter
     {
-        private readonly IStringLocalizer<SharedResource> _localizer;
-        private readonly IHtmlHelper<CartModel> _htmlHelper;
+        public bool? ShowError { get; set; }
+        public int? ProductId { get; set; }
+        public bool? Delete { get; set; }
+    }
+    public class CartModel : PageModel
+    {
+        private readonly IVeloContext _context;
 
-        public CartModel(VeloBasarContext context, IStringLocalizer<SharedResource> localizer, IHtmlHelper<CartModel> htmlHelper) : base(context)
+        public CartModel(IVeloContext context)
         {
-            _localizer = localizer;
-            _htmlHelper = htmlHelper;
+            _context = context;
         }
 
         public string ErrorText { get; set; }
@@ -33,53 +35,41 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
         [Display(Name = "Artikel Id")]
         public int ProductId { get; set; }
 
-        public async Task OnGetAsync(int basarId, bool? showError = null, int? productId = null, bool? delete = null)
+        public async Task OnGetAsync(CartParameter parameter)
         {
-            await LoadBasarAsync(basarId);
-
             var productIds = Request.Cookies.GetCart();
-            if (productId != null && delete != null && delete == true)
+            if (parameter.ProductId != null && parameter.Delete != null && parameter.Delete == true)
             {
-                productIds.Remove(productId.Value);
+                productIds.Remove(parameter.ProductId.Value);
                 Response.Cookies.SetCart(productIds);
             }
 
-            if (showError != null)
+            if (parameter.ShowError != null)
             {
-                ErrorText = _localizer["Ein oder mehrere Artikel konnten nicht verkauft werden."];
+                ErrorText = _context.Localizer["Ein oder mehrere Artikel konnten nicht verkauft werden."];
             }
 
             await LoadProducts(productIds);
         }
-        public async Task<IActionResult> OnPostAsync(int basarId, int productId)
+        public async Task OnPostAsync(CartParameter parameter)
         {
-            await LoadBasarAsync(basarId);
-
             var cart = Request.Cookies.GetCart();
-            var product = await Context.Product.GetAsync(productId);
+            var product = await _context.Db.Product.GetAsync(parameter.ProductId.Value);
             if (product != null && product.IsAllowed(TransactionType.Sale))
             {
-                cart.Add(productId);
+                cart.Add(parameter.ProductId.Value);
                 Response.Cookies.SetCart(cart);
             }
 
-            ErrorText = await GetProductErrorAsync(product, productId);
+            ErrorText = await GetProductErrorAsync(product, parameter.ProductId.Value);
 
             await LoadProducts(cart);
-
-            return Page();
         }
-        public IDictionary<string, string> GetDeleteItemRoute(Product product)
-        {
-            var route = GetRoute();
-            route.Add("productId", product.Id.ToString());
-            route.Add("delete", true.ToString());
-            return route;
-        }
+        
         private async Task LoadProducts(IList<int> productIds)
         {
             var viewModels = new List<ItemViewModel<Product>>();
-            foreach (var product in await Context.Product.GetMany(productIds).ToArrayAsync())
+            foreach (var product in await _context.Db.Product.GetMany(productIds).ToArrayAsync())
             {
                 var viewModel = new ItemViewModel<Product>
                 {
@@ -93,12 +83,11 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
                 viewModels.Add(viewModel);
             }
 
-            Products = new ListViewModel<Product>(Basar, viewModels, new[]
+            Products = new ListViewModel<Product>(_context.Basar, viewModels, new[]
             {
-                new ListCommand<Product>(GetDeleteItemRoute)
+                new ListCommand<Product>(product => this.GetPage<CartModel>(new CartParameter { Delete = true, ProductId = product.Id }))
                 {
-                    Page = Request.Path,
-                    Text = _localizer["Löschen"]
+                    Text = _context.Localizer["Löschen"]
                 }
             });
         }
@@ -106,28 +95,28 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
         {
             if (product == null)
             {
-                return _localizer["Es konnte kein Artikel mit der ID {0} gefunden werden.", productId];
+                return _context.Localizer["Es konnte kein Artikel mit der ID {0} gefunden werden.", productId];
             }
             else if (product.ValueState == ValueState.Settled)
             {
-                return _localizer["Der Artikel wurde bereits abgerechnet."];
+                return _context.Localizer["Der Artikel wurde bereits abgerechnet."];
             }
             else if (product.StorageState == StorageState.Gone)
             {
                 //  @todo Letzte TX anzeigen!
-                return _localizer["Der Artikel wurde als verschwunden markiert. Anmerkungen: @todo"];
+                return _context.Localizer["Der Artikel wurde als verschwunden markiert. Anmerkungen: @todo"];
             }
             else if (product.StorageState == StorageState.Locked)
             {
                 //  @todo Letzte TX anzeigen!
-                return _localizer["Der Artikel wurde gesperrt. Anmerkungen: @todo"];
+                return _context.Localizer["Der Artikel wurde gesperrt. Anmerkungen: @todo"];
             }
             else if (product.StorageState == StorageState.Sold)
             {
-                var saleNumber = await Context.GetTransactionNumberForProductAsync(Basar, TransactionType.Sale, product.Id);
+                var saleNumber = await _context.Db.GetTransactionNumberForProductAsync(_context.Basar, TransactionType.Sale, product.Id);
 
                 //  @todo generate link to sale details with blank target
-                return _localizer["Der Artikel wurde bereits verkauft. Siehe Verkauf #{0}", saleNumber];
+                return _context.Localizer["Der Artikel wurde bereits verkauft. Siehe Verkauf #{0}", saleNumber];
             }
             return null;
         }

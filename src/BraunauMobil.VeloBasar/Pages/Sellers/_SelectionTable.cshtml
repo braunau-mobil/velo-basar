@@ -31,7 +31,7 @@
                     @foreach (var command in Model.Commands)
                     {
                         <td>
-                            <a Condition="@command.IsEnabled(itemViewModel.Item)" asp-page="@command.Page" asp-all-route-data="@command.GetRoute(itemViewModel.Item)">@command.Text</a>
+                            <a Condition="@command.IsEnabled(itemViewModel.Item)" velo-page="@command.GetPage(itemViewModel.Item)">@command.Text</a>
                         </td>
                     }
                 </tr>

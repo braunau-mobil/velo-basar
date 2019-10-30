@@ -1,21 +1,28 @@
 ﻿using System.Threading.Tasks;
 using BraunauMobil.VeloBasar.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace BraunauMobil.VeloBasar.Pages.Settlements
 {
-    public class CreateAndPrintModel : BasarPageModel
+    public class CreateAndPrintParameter
     {
-        public CreateAndPrintModel(VeloBasarContext context) : base(context)
+        public int SellerId { get; set; }
+    }
+    public class CreateAndPrintModel : PageModel
+    {
+        private readonly IVeloContext _context;
+
+
+        public CreateAndPrintModel(IVeloContext context)
         {
+            _context = context;
         }
 
-        public async Task<IActionResult> OnGetAsync(int basarId, int sellerId)
+        public async Task<IActionResult> OnGetAsync(CreateAndPrintParameter parameter)
         {
-            await LoadBasarAsync(basarId);
-
-            var settlement = await Context.SettleSellerAsync(Basar, sellerId);
-            var file = await Context.FileStore.GetAsync(settlement.DocumentId.Value);
+            var settlement = await _context.Db.SettleSellerAsync(_context.Basar, parameter.SellerId);
+            var file = await _context.Db.FileStore.GetAsync(settlement.DocumentId.Value);
 
             return File( file.Data, file.ContentType);
         }

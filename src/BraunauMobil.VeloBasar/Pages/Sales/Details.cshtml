@@ -9,7 +9,7 @@
     <div class="card-header d-flex justify-content-between align-items-md-center">
         <div class="mr-auto"><h5>@ViewData["Title"]</h5></div>
         <div><h5>@Model.Sale.TimeStamp</h5></div>
-        <a asp-page="/ShowFile" asp-all-route-data="@Model.GetRoute()" asp-route-fileId="@Model.Sale.DocumentId" target="_blank" class="btn btn-primary mx-1 ml-auto">@Localizer["Beleg"]</a>
+        <a velo-page="@Model.GetShowFilePage()" target="_blank" class="btn btn-primary mx-1 ml-auto">@Localizer["Beleg"]</a>
     </div>
 </div>
 
@@ -17,7 +17,7 @@
     <h5 class="card-header">@Localizer["Artikel"]</h5>
 
     <div class="card-body p-0">
-        <partial name="/Pages/Products/_Table.cshtml" model="@Model.Sale.Products.CreateListViewModel(Model.Basar)" />
+        <partial name="/Pages/Products/_Table.cshtml" model="@Model.Sale.Products.CreateListViewModel(VeloContext.Basar)" />
     </div>
 </div>
 
@@ -29,7 +29,8 @@
 @if (Model.OpenDocument)
 {
     <script type="text/javascript">
-        window.open("/ShowFile?basarId=@Model.Basar.Id.ToString()&fileId=@Model.Sale.DocumentId.ToString()", "_blank");
+        //  @@todo evil hack from hell
+        window.open("/ShowFile?basarId=@VeloContext.Basar.Id.ToString()&fileId=@Model.Sale.DocumentId.ToString()", "_blank");
     </script>
 }
 }

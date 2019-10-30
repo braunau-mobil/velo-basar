@@ -8,28 +8,17 @@
     <nav aria-label="...">
         <ul class="pagination flex-wrap">
             <li class="page-item @prevDisabled">
-                <a class="page-link @prevDisabled"
-                   asp-page="@Model.PaginationPagePath"
-                   asp-all-route-data="@Model.GetPaginationRoute()"
-                   asp-route-pageIndex="@(Model.PageIndex - 1)">
-                    @Localizer["<<<"]
-                </a>
+                <a class="page-link @prevDisabled" velo-page="@Model.GetPaginationPage(Model.PageIndex - 1)">@Localizer["<<<"]</a>
             </li>
             @for (var pageNumber = 1; pageNumber <= Model.TotalPages; pageNumber++)
             {
                 var isActive = pageNumber == Model.PageIndex ? "active" : "";
                 <li class="page-item @isActive" aria-current="page">
-                    <a class="page-link" asp-page="@Model.PaginationPagePath"
-                       asp-all-route-data="@Model.GetPaginationRoute()"
-                       asp-route-pageIndex="@pageNumber">@pageNumber</a>
+                    <a class="page-link" velo-page="@Model.GetPaginationPage(pageNumber)">@pageNumber</a>
                 </li>
             }
             <li class="page-item @nextDisabled">
-                <a class="page-link" asp-page="@Model.PaginationPagePath"
-                   asp-all-route-data="@Model.GetPaginationRoute()"
-                   asp-route-pageIndex="@(Model.PageIndex + 1)">
-                    @Localizer[">>>"]
-                </a>
+                <a class="page-link" velo-page="@Model.GetPaginationPage(Model.PageIndex + 1)">@Localizer[">>>"]</a>
             </li>
         </ul>
     </nav>

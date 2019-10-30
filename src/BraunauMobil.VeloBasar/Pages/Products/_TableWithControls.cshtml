@@ -20,7 +20,7 @@
                     <td>
                         @if (command.IsEnabled(itemViewModel.Item))
                         {
-                            <a asp-page="@command.Page" asp-all-route-data="@command.GetRoute(itemViewModel.Item)">@command.Text</a>
+                            <a velo-page="@command.GetPage(itemViewModel.Item)">@command.Text</a>
                         }
                     </td>
                 }

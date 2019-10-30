@@ -9,9 +9,12 @@ namespace BraunauMobil.VeloBasar.ViewModels
 {
     public class PaginatedListViewModel<T> : ListViewModel<T>, IPaginatable
     {
+        private readonly Func<int, VeloPage> _getPaginationPage;
+
         public PaginatedListViewModel() { }
-        public PaginatedListViewModel(Basar basar, IList<T> items, ListCommand<T>[] commands) : base(basar, items, commands)
+        public PaginatedListViewModel(Basar basar, IList<T> items, ListCommand<T>[] commands, Func<int, VeloPage> getPaginationPage) : base(basar, items, commands)
         {
+            _getPaginationPage = getPaginationPage;
         }
 
         public bool HasPreviousPage
@@ -24,15 +27,10 @@ namespace BraunauMobil.VeloBasar.ViewModels
         }
         public int PageIndex { get; private set; }
         public int TotalPages { get; private set; }
-        public string PaginationPagePath { get; set; }
-        public Func<IDictionary<string, string>> GetPaginationPageRouteFunc { get; set; }
 
-        public IDictionary<string, string> GetPaginationRoute()
-        {
-            return GetPaginationPageRouteFunc();
-        }
+        public VeloPage GetPaginationPage(int pageIndex) => _getPaginationPage(pageIndex);
 
-        public static async Task<PaginatedListViewModel<T>> CreateAsync(Basar basar, IQueryable<T> source, int pageIndex, int pageSize, string listPagePath, Func<IDictionary<string, string>> getListPageRoute, ListCommand<T>[] commands = null)
+        public static async Task<PaginatedListViewModel<T>> CreateAsync(Basar basar, IQueryable<T> source, int pageIndex, int pageSize, Func<int, VeloPage> getPaginationPage, ListCommand<T>[] commands = null)
         {
             if (pageIndex == 0)
             {
@@ -45,19 +43,15 @@ namespace BraunauMobil.VeloBasar.ViewModels
             var skipCount = Math.Max(pageIndex - 1, 0) * pageSize;
             var items = await source.Skip(skipCount).Take(pageSize).ToListAsync();
 
-            return new PaginatedListViewModel<T>(basar, items, commands)
+            return new PaginatedListViewModel<T>(basar, items, commands, getPaginationPage)
             {
                 PageIndex = pageIndex,
-                TotalPages = totalPages,
-                PaginationPagePath = listPagePath,
-                GetPaginationPageRouteFunc = getListPageRoute
+                TotalPages = totalPages
             };
         }
         private static int CalcTotalPages(int count, int pageSize)
         {
             return (int)Math.Ceiling(count / (double)pageSize);
         }
-
-
     }
 }

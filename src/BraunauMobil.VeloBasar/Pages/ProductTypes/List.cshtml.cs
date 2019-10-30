@@ -2,63 +2,54 @@
 using Microsoft.EntityFrameworkCore;
 using BraunauMobil.VeloBasar.Models;
 using BraunauMobil.VeloBasar.Data;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using BraunauMobil.VeloBasar.ViewModels;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace BraunauMobil.VeloBasar.Pages.ProductTypes
 {
-    [Authorize]
-    public class ListModel : BasarPageModel, ISearchable
+    public class ListParameter
     {
-        public ListModel(VeloBasarContext context) : base(context)
+        public string CurrentFilter { get; set; }
+        public string SearchString { get; set; }
+        public int? PageIndex { get; set; }
+    }
+    [Authorize]
+    public class ListModel : PageModel, ISearchable
+    {
+        private readonly IVeloContext _context;
+
+        public ListModel(IVeloContext context)
         {
+            _context = context;
         }
 
         public string CurrentFilter { get; set; }
-
         public PaginatedListViewModel<ProductType> ProductTypes { get;set; }
 
-        public string MyPath => "/ProductTypes/List";
-
-        public async Task<IActionResult> OnGetAsync(string currentFilter, string searchString, int? pageIndex, int? basarId)
+        public async Task OnGetAsync(ListParameter parameter)
         {
-            await LoadBasarAsync(basarId);
-
-            CurrentFilter = searchString;
-            if (searchString != null)
+            CurrentFilter = parameter.SearchString;
+            if (parameter.SearchString != null)
             {
-                pageIndex = 1;
+                parameter.PageIndex = 1;
             }
             else
             {
-                searchString = currentFilter;
+                parameter.SearchString = parameter.CurrentFilter;
             }
 
-            CurrentFilter = searchString;
+            CurrentFilter = parameter.SearchString;
 
-            var ProductTypeIq = Context.ProductTypes.GetMany(searchString);
+            var ProductTypeIq = _context.Db.ProductTypes.GetMany(parameter.SearchString);
             var pageSize = 10;
-            ProductTypes = await PaginatedListViewModel<ProductType>.CreateAsync(Basar, ProductTypeIq.AsNoTracking(), pageIndex ?? 1, pageSize, Request.Path, GetRoute);
-
-            return Page();
+            ProductTypes = await PaginatedListViewModel<ProductType>.CreateAsync(_context.Basar, ProductTypeIq.AsNoTracking(), parameter.PageIndex ?? 1, pageSize, GetPaginationPage);
         }
-
-        public IDictionary<string, string> GetItemRoute(ProductType ProductType, ObjectState? stateToSet = null)
-        {
-            var route = GetRoute();
-            route.Add("ProductTypeId", ProductType.Id.ToString());
-            route.Add("pageIndex", ProductTypes.PageIndex.ToString());
-            if (stateToSet != null)
-            {
-                route.Add("state", stateToSet.ToString());
-            }
-            return route;
-        }
-        public async Task<bool> CanDeleteAsync(ProductType item)
-        {
-            return await Context.CanDeleteProductTypeAsync(item);
-        }
+        public VeloPage GetDeletePage(ProductType item) => this.GetPage<DeleteModel>(new DeleteParameter { PageIndex = ProductTypes.PageIndex, ProductTypeId = item.Id });
+        public VeloPage GetEditPage(ProductType item) => this.GetPage<EditModel>(new EditParameter { PageIndex = ProductTypes.PageIndex, ProductTypeId = item.Id });
+        public VeloPage GetPaginationPage(int pageIndex) => this.GetPage<ListModel>(new ListParameter { PageIndex = pageIndex });
+        public VeloPage GetSearchPage() => this.GetPage<ListModel>();
+        public VeloPage GetSetStatePage(ProductType item, ObjectState stateToSet) => this.GetPage<SetStateModel>(new SetStateParameter { PageIndex = ProductTypes.PageIndex, ProductTypeId = item.Id, State = stateToSet });
+        public async Task<bool> CanDeleteAsync(ProductType item) => await _context.Db.CanDeleteProductTypeAsync(item);
     }
 }

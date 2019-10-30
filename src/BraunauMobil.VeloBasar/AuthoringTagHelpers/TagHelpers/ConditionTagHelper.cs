@@ -5,11 +5,11 @@ namespace BraunauMobil.VeloBasar.AuthoringTagHelpers.TagHelpers
     [HtmlTargetElement(Attributes = nameof(Condition))]
     public class ConditionTagHelper : TagHelper
     {
-        public bool Condition { get; set; }
+        public bool? Condition { get; set; }
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            if (!Condition)
+            if (Condition == false)
             {
                 output.SuppressOutput();
             }

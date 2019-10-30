@@ -27,21 +27,21 @@
         <div class="d-flex justify-content-end">
             @if (SignInManager.IsSignedIn(User) && Model.Product.IsAllowed(TransactionType.Release))
             {
-                <a class="btn btn-danger mx-1" asp-page="/Transactions/CreateSingle" asp-all-route-data="@Model.GetRoute(TransactionType.Release)">@Localizer["Entsperren"]</a>
+                <a class="btn btn-danger mx-1" velo-page="@Model.GetPage(TransactionType.Release)">@Localizer["Entsperren"]</a>
             }
             @if (Model.Product.IsAllowed(TransactionType.Lock))
             {
-                <a class="btn btn-danger mx-1" asp-page="/Transactions/CreateSingle" asp-all-route-data="@Model.GetRoute(TransactionType.Lock)">@Localizer["Sperren"]</a>
+                <a class="btn btn-danger mx-1" velo-page="@Model.GetPage(TransactionType.Lock)">@Localizer["Sperren"]</a>
             }
             @if (Model.Product.IsAllowed(TransactionType.MarkAsGone))
             {
-                <a class="btn btn-warning mx-1" asp-page="/Transactions/CreateSingle" asp-all-route-data="@Model.GetRoute(TransactionType.MarkAsGone)">@Localizer["Verschwunden"]</a>
+                <a class="btn btn-warning mx-1" velo-page="@Model.GetPage(TransactionType.MarkAsGone)">@Localizer["Verschwunden"]</a>
             }
             @if (Model.Product.Label != null)
             {
-                <a class="btn btn-primary mx-1" asp-page="/ShowFile" asp-all-route-data="@Model.GetRoute()" asp-route-fileId="@Model.Product.Label" target="_blank">@Localizer["Etikett"]</a>
+                <a class="btn btn-primary mx-1" velo-page="@Model.GetShowFilePage()" target="_blank">@Localizer["Etikett"]</a>
             }
-            <a asp-page="/Products/Edit" asp-all-route-data="@Model.GetRoute()" class="btn btn-secondary mx-1">@Localizer["Bearbeiten"]</a>
+            <a velo-page="@Model.GetEditPage()" class="btn btn-secondary mx-1">@Localizer["Bearbeiten"]</a>
         </div>
     </div>
 

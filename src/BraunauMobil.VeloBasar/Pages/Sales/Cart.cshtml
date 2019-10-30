@@ -15,13 +15,13 @@
             <div class="d-flex form-actions no-color align-items-md-center">
                 <div class="mx-2">@Localizer["Artikel ID:"]</div>
                 <input asp-for="ProductId" velo-validation-for="ProductId" />
-                <input type="submit" value="@Localizer["Hinzufügen"]" class="btn btn-primary mx-2" asp-all-route-data="@Model.GetRoute()" />
+                <input type="submit" value="@Localizer["Hinzufügen"]" class="btn btn-primary mx-2" />
             </div>
         </form>
 
         <div>
-            <a asp-page="/Sales/ClearCart" asp-all-route-data="@Model.GetRoute()" class="ml-auto btn btn-secondary">@Localizer["Warenkob leeren"]</a>
-            <a asp-page="/Sales/Checkout" asp-all-route-data="@Model.GetRoute()" class="ml-auto btn btn-primary">@Localizer["Weiter"]</a>
+            <a velo-page="(this.GetPage<ClearCartModel>())" class="ml-auto btn btn-secondary">@Localizer["Warenkob leeren"]</a>
+            <a velo-page="(this.GetPage<CheckoutModel>())" class="ml-auto btn btn-primary">@Localizer["Weiter"]</a>
         </div>
     </div>
 

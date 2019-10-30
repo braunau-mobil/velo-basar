@@ -4,21 +4,24 @@ using BraunauMobil.VeloBasar.Data;
 using BraunauMobil.VeloBasar.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 using BraunauMobil.VeloBasar.ViewModels;
-using Microsoft.Extensions.Localization;
-using BraunauMobil.VeloBasar.Resources;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace BraunauMobil.VeloBasar.Pages.Acceptances
 {
-    public class StartWithNewSeller : BasarPageModel
+    public class StartWithNewSellerParameter
     {
-        private readonly IStringLocalizer<SharedResource> _localizer;
+        public int? SellerId { get; set; }
+        public bool? Search { get; set; } 
+    }
+    public class StartWithNewSellerModel : PageModel
+    {
+        private readonly IVeloContext _context;
         private bool _isValidationEnabled;
 
-        public StartWithNewSeller(VeloBasarContext context, IStringLocalizer<SharedResource> localizer) : base(context)
+        public StartWithNewSellerModel(IVeloContext context)
         {
-            _localizer = localizer;
+            _context = context;
         }
 
         public string ErrorText { get; set; }
@@ -29,13 +32,13 @@ namespace BraunauMobil.VeloBasar.Pages.Acceptances
         public bool AreWeInEditMode { get; set; }
         public bool HasSellers { get => Sellers != null; }
 
-        public async Task<IActionResult> OnGetAsync(int basarId, int? sellerId)
+        public async Task<IActionResult> OnGetAsync(StartWithNewSellerParameter parameter)
         {
-            await Load(basarId);
+            ViewData["Countries"] = new SelectList(_context.Db.Country, "Id", "Name");
 
-            if (sellerId != null)
+            if (parameter.SellerId != null)
             {
-                Seller = await Context.Seller.GetAsync(sellerId.Value);
+                Seller = await _context.Db.Seller.GetAsync(parameter.SellerId.Value);
                 if (Seller == null)
                 {
                     return NotFound();
@@ -43,37 +46,34 @@ namespace BraunauMobil.VeloBasar.Pages.Acceptances
                 _isValidationEnabled = true;
                 AreWeInEditMode = true;
             }
-
             return Page();
         }
-        public async Task<IActionResult> OnPostAsync(int basarId, bool? search, int? sellerId)
+        public async Task<IActionResult> OnPostAsync(StartWithNewSellerParameter parameter)
         {
-            await Load(basarId);
+            ViewData["Countries"] = new SelectList(_context.Db.Country, "Id", "Name");
 
-            if (search == true)
+            if (parameter.Search == true)
             {
                 if (string.IsNullOrEmpty(Seller.FirstName) && string.IsNullOrEmpty(Seller.LastName))
                 {
-                    ErrorText = _localizer["Bitte Vor und/oder Nachnamen eingeben für die Suche"];
+                    ErrorText = _context.Localizer["Bitte Vor und/oder Nachnamen eingeben für die Suche"];
                     return Page();
                 }
 
-                var sellers = await Context.Seller.GetMany(Seller.FirstName, Seller.LastName).ToListAsync();
+                var sellers = await _context.Db.Seller.GetMany(Seller.FirstName, Seller.LastName).ToListAsync();
                 if (sellers.Count > 0)
                 {
-                    Sellers = new ListViewModel<Seller>(Basar, sellers, new[]{
-                        new ListCommand<Seller>(GetItemRoute)
+                    Sellers = new ListViewModel<Seller>(_context.Basar, sellers, new[]{
+                        new ListCommand<Seller>(seller => this.GetPage<StartWithNewSellerModel>(new StartWithNewSellerParameter { SellerId = seller.Id }))
                         {
-                            Page = Request.Path,
-                            Text = _localizer["Übernehmen"]
+                            Text = _context.Localizer["Übernehmen"]
                         }
                     });
                 }
                 else
                 {
-                    ErrorText = _localizer["Es konnte kein Verkäufer gefunden werden."];
+                    ErrorText = _context.Localizer["Es konnte kein Verkäufer gefunden werden."];
                 }
-                return Page();
             }
 
             if (string.IsNullOrEmpty(Seller.FirstName) || string.IsNullOrEmpty(Seller.LastName))
@@ -88,48 +88,30 @@ namespace BraunauMobil.VeloBasar.Pages.Acceptances
                 return Page();
             }
 
-            if (sellerId != null)
+            if (parameter.SellerId != null)
             {
-                Context.Attach(Seller).State = EntityState.Modified;
+                _context.Db.Attach(Seller).State = EntityState.Modified;
             }
             else
             {
-                Context.Seller.Add(Seller);
+                _context.Db.Seller.Add(Seller);
             }
 
-            await Context.SaveChangesAsync();
-            return RedirectToPage("/Acceptances/EnterProducts", new { basarId = Basar.Id, sellerId = Seller.Id });
+            await _context.Db.SaveChangesAsync();
+            return this.RedirectToPage<EnterProductsModel>(new EnterProductsParameter { SellerId = Seller.Id });
         }
-        public IDictionary<string, string> GetItemRoute(Seller seller)
+        public object GetNextParameter()
         {
-            var route = GetRoute();
-            route.Add("sellerId", seller.Id.ToString());
-            return route;
-        }
-        public IDictionary<string, string> GetNextRoute()
-        {
-            var route = GetRoute();
             if (AreWeInEditMode)
             {
-                route.Add("sellerId", Seller.Id.ToString());
+                return new StartWithNewSellerParameter { SellerId = Seller.Id };
             }
-            return route;
+            return new object();
         }
-        public IDictionary<string, string> GetSearchRoute()
-        {
-            var route = GetRoute();
-            route.Add("search", true.ToString());
-            return route;
-        }
+        public object GetSearchParameter() => new StartWithNewSellerParameter { Search = true };
         public bool IsValidationEnabled()
         {
             return _isValidationEnabled;
-        }
-
-        private async Task Load(int basarId)
-        {
-            await LoadBasarAsync(basarId);
-            ViewData["Countries"] = new SelectList(Context.Country, "Id", "Name");
         }
     }
 }

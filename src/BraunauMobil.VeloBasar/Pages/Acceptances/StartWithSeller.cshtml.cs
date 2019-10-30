@@ -1,18 +1,19 @@
-﻿using BraunauMobil.VeloBasar.Data;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace BraunauMobil.VeloBasar.Pages.Acceptances
 {
-    public class StartWithSeller : BasarPageModel
+    public class StartWithSellerParameter
     {
-        public StartWithSeller(VeloBasarContext context) : base(context)
-        {
-        }
-
-        public IActionResult OnGet(int basarId, int sellerId)
+        public int SellerId { get; set; }
+    }
+    public class StartWithSellerModel : PageModel
+    {
+        public async Task<IActionResult> OnGetAsync(StartWithSellerParameter parameter)
         {
             Response.Cookies.ClearAcceptanceProducts();
-            return RedirectToPage("/Acceptances/EnterProducts", new { basarId, sellerId });
+            return this.RedirectToPage<EnterProductsModel>(new EnterProductsParameter { SellerId = parameter.SellerId });
         }
     }
 }

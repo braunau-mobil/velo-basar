@@ -14,26 +14,26 @@
 
     <div class="card-body">
         <partial name="/Pages/Sellers/_SmallDetails.cshtml" model="@Model.Acceptance.Seller" />
-        <a asp-page="/Sellers/Details" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@Model.Acceptance.Seller.Id">@Localizer["Details"]</a>
+        <a velo-page="@Model.GetSellerDetailsPage()">@Localizer["Details"]</a>
     </div>
 </div>
 
 <div class="card my-3">
     <h5 class="card-header">@Localizer["Artikel"]</h5>
     <div class="card-body p-0">
-        <partial name="/Pages/Products/_Table.cshtml" model="Model.Acceptance.Products.CreateListViewModel(Model.Basar)" />
+        <partial name="/Pages/Products/_Table.cshtml" model="Model.Acceptance.Products.CreateListViewModel(VeloContext.Basar)" />
     </div>
 </div>
 
-<div Condition="@Model.ShowSuccess" class="alert alert-success" role="alert">
+<div Condition="@Model.Parameter.ShowSuccess" class="alert alert-success" role="alert">
     @Localizer["Annahme erfolgreich!"]
 </div>
 
 @section Scripts {
-    @if (Model.OpenDocument)
+    @if (Model.Parameter.OpenDocument == true)
     {
         <script type="text/javascript">
-        window.open("/ShowFile?basarId=@Model.Basar.Id.ToString()&fileId=@Model.Acceptance.DocumentId.ToString()", "_blank");
+        window.open("/ShowFile?basarId=@VeloContext.Basar.Id.ToString()&fileId=@Model.Acceptance.DocumentId.ToString()", "_blank");
         </script>
     }
 }

@@ -11,7 +11,7 @@
     </div>
 
     <div class="card-body p-0">
-        <partial name="/Pages/Products/_Table.cshtml" model="Model.Cancellation.Products.CreateListViewModel(Model.Basar)" />
+        <partial name="/Pages/Products/_Table.cshtml" model="Model.Cancellation.Products.CreateListViewModel(VeloContext.Basar)" />
     </div>
 
     <div class="card-footer">
@@ -27,13 +27,13 @@
     <div class="card-header d-flex justify-content-between align-items-md-center">
         <div class="mr-auto"><h5>@Localizer["Aktualisierter Verkauf"]</h5></div>
         <div class="d-flex justify-content-end">
-            <a asp-page="/ShowFile" asp-all-route-data="Model.GetSaleDocumentRoute()" class="btn btn-primary" target="_blank">@Localizer["Rechnugsbeleg"]</a>
+            <a velo-page="(this.GetPage<ShowFileModel>(new ShowFileParameter { FileId = Model.Cancellation.DocumentId.Value }))" class="btn btn-primary" target="_blank">@Localizer["Rechnugsbeleg"]</a>
         </div>
     </div>
 
     <div class="card-body">
         <div class="column">
-            <partial name="/Pages/Products/_Table.cshtml" model="Model.Sale.Products.CreateListViewModel(Model.Basar)" />
+            <partial name="/Pages/Products/_Table.cshtml" model="Model.Sale.Products.CreateListViewModel(VeloContext.Basar)" />
         </div>
     </div>
 </div>

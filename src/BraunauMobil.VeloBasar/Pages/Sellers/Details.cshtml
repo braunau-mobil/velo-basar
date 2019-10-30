@@ -9,13 +9,13 @@
     <div class="card-header d-flex justify-content-between align-items-md-center">
         <div class="mr-auto"><h5>#@Model.Seller.Id @Html.DisplayFor(model => model.Seller.FirstName) @Html.DisplayFor(model => model.Seller.LastName)</h5></div>
         <div class="d-flex justify-content-end">
-            <a asp-page="/Acceptances/StartWithSeller" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@Model.Seller.Id" class="btn btn-primary mx-1">@Localizer["Artikel annehmen"]</a>
+            <a velo-page="@Model.GetStartAcceptancePage()" class="btn btn-primary mx-1">@Localizer["Artikel annehmen"]</a>
             @if (Model.Products.IsAllowed(TransactionType.Settlement))
             {
-                <a asp-page="/Settlements/CreateAndPrint" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@Model.Seller.Id" target="_blank" class="btn btn-primary mx-1">@Localizer["Abrechnen"]</a>
+                <a velo-age="@Model.GetCreateSettlementPage()" target="_blank" class="btn btn-primary mx-1">@Localizer["Abrechnen"]</a>
             }
-            <a asp-page="/Labels/CreateAndPrintForSeller" asp-all-route-data="@Model.GetRoute()" asp-route-sellerId="@Model.Seller.Id" target="_blank" class="btn btn-primary mx-1">@Localizer["Etiketten drucken"]</a>
-            <a asp-page="/Sellers/Edit" asp-all-route-data="@Model.GetSellerRoute()" class="btn btn-secondary mx-1">@Localizer["Bearbeiten"]</a>
+            <a velo-page="@Model.GetCreateLabelsPage()" target="_blank" class="btn btn-primary mx-1">@Localizer["Etiketten drucken"]</a>
+            <a velo-page="@Model.GetEditPage()" class="btn btn-secondary mx-1">@Localizer["Bearbeiten"]</a>
         </div>
 
     </div>
@@ -70,7 +70,7 @@
     <div class="card-body p-0">
         @if (Model.Products.Any())
         {
-            <partial name="/Pages/Products/_TableWithControls.cshtml" model="@new ListViewModel<Product>(Model.Basar, Model.Products)" />
+            <partial name="/Pages/Products/_TableWithControls.cshtml" model="@new ListViewModel<Product>(VeloContext.Basar, Model.Products)" />
         }
     </div>
 </div>
@@ -98,10 +98,10 @@
                         <td>@Html.DisplayFor(modelItem => item.ProductCount)</td>
                         <td>@Html.DisplayFor(modelItem => item.Amount)</td>
                         <td>
-                            <a asp-page="/Acceptances/Details" asp-all-route-data="@Model.GetItemRoute(item.Transaction)" target="_blank">@Localizer["Details"]</a>
+                            <a velo-page="@Model.GetAcceptanceDetailsPage(item)" target="_blank">@Localizer["Details"]</a>
                         </td>
                         <td>
-                            <a Condition="@item.Transaction.DocumentId != null" asp-page="/ShowFile" asp-all-route-data="@Model.GetItemRoute(item)" target="_blank">@Localizer["Beleg"]</a>
+                            <a Condition="@item.Transaction.DocumentId != null" velo-page="@Model.GetDocumentPage(item.Transaction)" target="_blank">@Localizer["Beleg"]</a>
                         </td>
                     </tr>
                 }
@@ -132,7 +132,7 @@
                         <td>@Html.DisplayFor(modelItem => item.ProductCount)</td>
                         <td>@Html.DisplayFor(modelItem => item.Amount)</td>
                         <td>
-                            <a asp-page="/ShowFile" asp-all-route-data="@Model.GetItemRoute(item)" target="_blank">@Localizer["Beleg"]</a>
+                            <a velo-page="@Model.GetDocumentPage(item.Transaction)" target="_blank">@Localizer["Beleg"]</a>
                         </td>
                     </tr>
                 }

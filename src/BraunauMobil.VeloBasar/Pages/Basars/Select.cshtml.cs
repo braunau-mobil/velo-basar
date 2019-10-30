@@ -3,22 +3,25 @@ using Microsoft.EntityFrameworkCore;
 using BraunauMobil.VeloBasar.Models;
 using BraunauMobil.VeloBasar.Data;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace BraunauMobil.VeloBasar.Pages.Basars
 {
-    public class SelectModel : BasarPageModel
+    //  @todo Schön machen
+    public class SelectModel : PageModel
     {
-        public SelectModel(VeloBasarContext context) : base(context)
+        private readonly VeloBasarContext _context;
+
+        public SelectModel(VeloBasarContext context)
         {
+            _context = context;
         }
 
         public IList<Basar> Basars { get; set; }
 
-        public async Task OnGetAsync(int? basarId)
+        public async Task OnGetAsync()
         {
-            await LoadBasarAsync(basarId);
-
-            Basars = await Context.Basar.GetEnabled().ToListAsync();
+            Basars = await _context.Basar.GetEnabled().ToListAsync();
         }
     }
 }

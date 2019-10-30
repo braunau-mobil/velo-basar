@@ -5,17 +5,16 @@
     ViewData["Title"] = Localizer["Artikel"];
 }
 
-<form asp-page="@Model.MyPath" method="get">
+<form velo-page="@Model.GetSearchPage()" method="get">
     <div class="card my-3">
         <div class="card-header d-flex justify-content-between align-items-md-center">
             <div><h5 class="mx-2">@Localizer["Artikel"]</h5></div>
 
             <div class="d-flex form-actions no-color align-items-md-center">
                 <div class="mx-2">Suchen:</div>
-                <input type="hidden" name="basarId" value="@Model.Basar.Id" />
                 <input class="mx-2" type="text" name="searchString" value="@Model.CurrentFilter" />
                 <input type="submit" value="@Localizer["Suchen"]" class="btn btn-secondary mx-2" /> |
-                <a class="mx-2" asp-page="@Model.MyPath" asp-route-basarId="@Model.Basar.Id">@Localizer["Zurücksetzen"]</a>
+                <a class="mx-2" velo-page="@Model.GetSearchPage()">@Localizer["Zurücksetzen"]</a>
             </div>
 
             <div class="d-flex justify-content-end">

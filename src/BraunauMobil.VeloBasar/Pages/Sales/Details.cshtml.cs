@@ -1,28 +1,36 @@
 ﻿using System.Threading.Tasks;
 using BraunauMobil.VeloBasar.Data;
 using BraunauMobil.VeloBasar.Models;
-using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace BraunauMobil.VeloBasar.Pages.Sales
 {
-    public class DetailsModel : BasarPageModel
+    public class DetailsParameter
     {
-        public DetailsModel(VeloBasarContext context) : base(context)
+        public int SaleId { get; set; }
+        public bool? ShowSuccess { get; set; }
+        public bool? OpenDocument { get; set; }
+    }
+    public class DetailsModel : PageModel
+    {
+        private readonly VeloBasarContext _context;
+
+        public DetailsModel(VeloBasarContext context)
         {
+            _context = context;
         }
 
         public ProductsTransaction Sale { get; set; }
         public bool ShowSuccess { get; set; }
         public bool OpenDocument { get; set; }
 
-        public async Task OnGetAsync(int basarId, int saleId, bool? showSuccess = null,  bool? openDocument = null)
+        public async Task OnGetAsync(DetailsParameter parameter)
         {
-            await LoadBasarAsync(basarId);
+            ShowSuccess = parameter.ShowSuccess ?? false;
+            OpenDocument = parameter.OpenDocument ?? false;
 
-            ShowSuccess = showSuccess ?? false;
-            OpenDocument = openDocument ?? false;
-
-            Sale = await Context.Transactions.GetAsync(saleId);
+            Sale = await _context.Transactions.GetAsync(parameter.SaleId);
         }
+        public VeloPage GetShowFilePage() => this.GetPage<ShowFileModel>(new ShowFileParameter { FileId = Sale.DocumentId.Value });
     }
 }
