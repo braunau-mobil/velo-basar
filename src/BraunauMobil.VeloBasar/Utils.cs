@@ -7,18 +7,17 @@ namespace BraunauMobil.VeloBasar
     {
         public static string GetPageForModel<TPageModel>()
         {
-            //  @todo evil hack from hell!!
             var type = typeof(TPageModel);
-            var page = type.Namespace;
-            page = page.Replace("BraunauMobil.VeloBasar.Pages.", "");
-            page = page.Replace(".", "/");
-            page += "/";
-            page += type.Name.Replace("Model", "");
-
-            return "/" + page;
+            var path = type.Namespace.Replace("BraunauMobil.VeloBasar.Pages", "").TrimStart('.').Replace('.', '/');
+            var page = type.Name.Replace("Model", "");
+            
+            if (string.IsNullOrEmpty(path))
+            {
+                return $"/{page}";
+            }
+            
+            return $"/{path}/{page}";
         }
-
-
         public static IDictionary<string, string> ConvertToRoute(object value)
         {
             var routeValueDictionary = new RouteValueDictionary(value);
