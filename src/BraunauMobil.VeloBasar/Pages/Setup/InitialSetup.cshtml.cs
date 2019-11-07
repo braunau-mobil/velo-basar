@@ -6,12 +6,12 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace BraunauMobil.VeloBasar.Pages.Setup
 {
-    public class IndexModel : PageModel
+    public class InitialSetupModel : PageModel
     {
         private readonly VeloBasarContext _context;
         private readonly UserManager<IdentityUser> _userManager;
 
-        public IndexModel(VeloBasarContext context, UserManager<IdentityUser> userManager)
+        public InitialSetupModel(VeloBasarContext context, UserManager<IdentityUser> userManager)
         {
             _context = context;
             _userManager = userManager;
