@@ -10,6 +10,7 @@ namespace BraunauMobil.VeloBasar.Models
         public int Id { get; set; }
 
         [Display(Name = "Datum")]
+        [DisplayFormat(DataFormatString = "{0:dd.MMMM.yyyy}")]
         public DateTime Date { get; set; }
 
         [Display(Name = "Gesperrt")]
