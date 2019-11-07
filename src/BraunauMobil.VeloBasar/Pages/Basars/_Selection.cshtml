@@ -1,0 +1,25 @@
+﻿@{
+    if (VeloContext.SignInManager.IsSignedIn(User))
+    {
+        ViewData["Basars"] = new SelectList(VeloContext.Db.Basar, "Id", "Name");
+        <form>
+            <select id="basarId" class="form-control" asp-for="@VeloContext.Basar.Id" asp-items="ViewBag.Basars" onchange="onChange()"></select>
+            <script type="text/javascript">
+                function onChange() {
+                    var url = "@(Utils.GetPageForModel<SetActiveBasarModel>())?BasarId=" + $('#basarId').val();
+                    window.location = url;
+                }
+            </script>
+        </form>
+    }
+    else if (VeloContext.Basar != null)
+    {
+        @VeloContext.Basar.Name
+    }
+    else
+    {
+        <div class="alert alert-danger" role="alert">
+            Kein Basar aktiv
+        </div>
+    }
+}
