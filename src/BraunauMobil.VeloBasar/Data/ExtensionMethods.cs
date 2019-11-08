@@ -32,17 +32,29 @@ namespace BraunauMobil.VeloBasar.Data
             return await models.AnyAsync(p => p.Id == id);
         }
 
-        public static T Get<T>(this DbSet<T> models, int id) where T : class, IModel
+        public static Basar Get(this IQueryable<Basar> basars, int id)
         {
-            return models.Find(id);
+            return basars.FirstOrDefault(p => p.Id == id);
         }
-        public static async Task<T> GetAsync<T>(this DbSet<T> models, int id) where  T : class, IModel
+        public static async Task<Basar> GetAsync(this IQueryable<Basar> basars, int id)
         {
-            return await models.FindAsync(id);
+            return await basars.FirstOrDefaultAsync(p => p.Id == id);
+        }
+        public static async Task<Brand> GetAsync(this IQueryable<Brand> brand, int id)
+        {
+            return await brand.FirstOrDefaultAsync(p => p.Id == id);
+        }
+        public static async Task<FileStore> GetAsync(this IQueryable<FileStore> fileStore, int id)
+        {
+            return await fileStore.FirstOrDefaultAsync(p => p.Id == id);
         }
         public static async Task<Product> GetAsync(this IQueryable<Product> products, int id)
         {
             return await products.IncludeAll().FirstOrDefaultAsync(p => p.Id == id);
+        }
+        public static async Task<ProductType> GetAsync(this IQueryable<ProductType> productTypes, int id)
+        {
+            return await productTypes.FirstOrDefaultAsync(p => p.Id == id);
         }
         public static async Task<ProductsTransaction> GetAsync(this IQueryable<ProductsTransaction> transactions, int id)
         {
@@ -169,6 +181,7 @@ namespace BraunauMobil.VeloBasar.Data
             return transactions
                 .Include(t => t.Basar)
                 .Include(t => t.Seller)
+                    .ThenInclude(s => s.Country)
                 .Include(t => t.Products)
                     .ThenInclude(pt => pt.Product)
                         .ThenInclude(p => p.Brand)
