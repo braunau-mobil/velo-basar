@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
@@ -8,10 +9,12 @@ namespace BraunauMobil.VeloBasar.AuthoringTagHelpers.TagHelpers
     [HtmlTargetElement(Attributes = "velo-parameter")]
     public class VeloParameterTagHelper : TagHelper
     {
+        private readonly IUrlHelperFactory _urlHelperFactory;
         private readonly IHtmlGenerator _htmlGenerator;
 
-        public VeloParameterTagHelper(IHtmlGenerator htmlGenerator)
+        public VeloParameterTagHelper(IHtmlGenerator htmlGenerator, IUrlHelperFactory urlHelperFactory)
         {
+            _urlHelperFactory = urlHelperFactory;
             _htmlGenerator = htmlGenerator;
         }
 
@@ -23,12 +26,26 @@ namespace BraunauMobil.VeloBasar.AuthoringTagHelpers.TagHelpers
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            var anchorTagHelper = new AnchorTagHelper(_htmlGenerator)
+            var tagHelper = CreateTagHelper(context.TagName);
+            tagHelper.Process(context, output);
+        }
+        private TagHelper CreateTagHelper(string tagName)
+        {
+            if (tagName == "input" || tagName == "button")
+            {
+                return new FormActionTagHelper(_urlHelperFactory)
+                {
+                    RouteValues = Utils.ConvertToRoute(Parameter),
+                    ViewContext = this.ViewContext
+                };
+            }
+
+            return new AnchorTagHelper(_htmlGenerator)
             {
                 RouteValues = Utils.ConvertToRoute(Parameter),
-                ViewContext = ViewContext
+                ViewContext = this.ViewContext
             };
-            anchorTagHelper.Process(context, output);
         }
+
     }
 }
