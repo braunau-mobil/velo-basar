@@ -19,8 +19,6 @@
                     <th style="width: auto;" scope="col">@Html.DisplayNameFor(model => model.Basars.List[0].Item.Id)</th>
                     <th style="width: 50%;" scope="col">@Html.DisplayNameFor(model => model.Basars.List[0].Item.Date)</th>
                     <th style="width: 50%;" scope="col">@Html.DisplayNameFor(model => model.Basars.List[0].Item.Name)</th>
-                    <th style="width: auto;" scope="col">@Html.DisplayNameFor(model => model.Basars.List[0].Item.IsLocked)</th>
-                    <th style="width: auto;" scope="col"></th>
                     <th style="width: auto;" scope="col"></th>
                     <th style="width: auto;" scope="col"></th>
                 </tr>
@@ -40,18 +38,6 @@
                         {
                             <a velo-page="@Model.GetDeletePage(itemViewModel.Item)">@Localizer["Löschen"]</a>
                         }
-                        else
-                        {
-                            var text = "Deaktivieren";
-                            @if (itemViewModel.Item.IsLocked)
-                            {
-                                text = "Aktivieren";
-                            }
-                            <a velo-page="@Model.GetSetStatePage(itemViewModel.Item, !itemViewModel.Item.IsLocked)">@Localizer[text]</a>
-                        }
-                    </td>
-                    <td>
-                        <a asp-page="/Index" asp-route-basarId="@itemViewModel.Item.Id">@Localizer["Auswählen"]</a>
                     </td>
                 </tr>
                 }

@@ -73,11 +73,6 @@ namespace BraunauMobil.VeloBasar.Data
             return await sellers.IncludeAll().FirstOrDefaultAsync(s => s.Id == id);
         }
 
-        public static IQueryable<Basar> GetEnabled(this IQueryable<Basar> basars)
-        {
-            return basars.Where(b => !b.IsLocked).DefaultOrder();
-        }
-
         public static IQueryable<Basar> GetMany(this IQueryable<Basar> basars, string searchString = null)
         {
             if (string.IsNullOrEmpty(searchString))
@@ -162,16 +157,6 @@ namespace BraunauMobil.VeloBasar.Data
         public static async Task<Basar> GetNoTrackingAsync(this DbSet<Basar> basars, int id)
         {
             return await basars.AsNoTracking().FirstAsync(b => b.Id == id);
-        }
-
-        public static async Task<int?> GetUniqueEnabledAsync(this IQueryable<Basar> basars)
-        {
-            if (basars.Count(b => !b.IsLocked) == 1)
-            {
-                var basar = await basars.FirstAsync(b => !b.IsLocked);
-                return basar.Id;
-            }
-            return null;
         }
 
         public static IQueryable<Product> IncludeAll(this IQueryable<Product> products)
