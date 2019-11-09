@@ -184,6 +184,10 @@ namespace BraunauMobil.VeloBasar.Data
 
             return await CreateTransactionAsync(basar, transactionType, null, notes, products);
         }
+        public IQueryable<Product> GetProductsForBasar(Basar basar)
+        {
+            return Transactions.GetMany(TransactionType.Acceptance, basar).SelectMany(a => a.Products).Select(pa => pa.Product).IncludeAll();
+        }
         public IQueryable<Product> GetProductsForSeller(Basar basar, int sellerId)
         {
             return Transactions.GetMany(TransactionType.Acceptance, basar, sellerId).SelectMany(a => a.Products).Select(pa => pa.Product).IncludeAll();
