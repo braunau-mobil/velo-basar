@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Routing;
 using System;
 
 namespace BraunauMobil.VeloBasar
@@ -35,6 +36,11 @@ namespace BraunauMobil.VeloBasar
         public static VeloPage GetPage<TPageModel>(this IRazorPage page, object parameter = null)
         {
             return new VeloPage { Page = Utils.GetPageForModel<TPageModel>(), Parameter = parameter };
+        }
+
+        public static string GetPath(this LinkGenerator linkGenerator, VeloPage page)
+        {
+            return linkGenerator.GetPathByPage(page.Page, values: page.Parameter);
         }
     }
 }

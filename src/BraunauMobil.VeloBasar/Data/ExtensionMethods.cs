@@ -31,6 +31,10 @@ namespace BraunauMobil.VeloBasar.Data
         {
             return await models.AnyAsync(p => p.Id == id);
         }
+        public static async Task<bool> ExistsAsync(this IQueryable<ProductsTransaction> transactions, Basar basar, TransactionType type, int number)
+        {
+            return await transactions.AnyAsync(t => t.BasarId == basar.Id && t.Type == type && t.Number == number);
+        }
 
         public static Basar Get(this IQueryable<Basar> basars, int id)
         {

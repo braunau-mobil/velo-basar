@@ -4,17 +4,38 @@
     ViewData["Title"] = Localizer["Etiketten Drucken"];
 }
 
-<form method="post" target="_blank">
+<form method="post">
     <div class="card my-3">
         <div class="card-header d-flex justify-content-between align-items-md-center">
             <div><h5 class="mx-2">@Localizer["Annahme Nummer"]</h5></div>
 
-            <input class="mx-2" asp-for="@Model.AcceptanceNumber" />
+            <input id="AcceptanceNumber" class="mx-2" asp-for="@Model.AcceptanceNumber" />
 
             <div><input class="mx-2 btn btn-primary" type="submit" value="@Localizer["Ok"]" /></div>
         </div>
 
         <div class="card-body p-0">
+            <div Condition="@Model.NumberNotFound" class="alert alert-success" role="alert">
+                @Localizer["Es konnte keine Annahme mit der Nummer {0} gefunden werden.", Model.AcceptanceNumber]
+            </div>
         </div>
     </div>
 </form>
+
+@section Scripts
+{
+    @if (Model.OpenPdf)
+    {
+        <script type="text/javascript">
+            window.open("@Model.GetOpenPdfPage()");
+        </script>
+    }
+    else
+    {
+        <script type="text/javascript">
+            $("#AcceptanceNumber").val("");
+            $("#AcceptanceNumber").focus();
+        </script>
+    }
+}
+
