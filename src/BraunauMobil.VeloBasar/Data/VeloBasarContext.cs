@@ -184,6 +184,41 @@ namespace BraunauMobil.VeloBasar.Data
 
             return await CreateTransactionAsync(basar, transactionType, null, notes, products);
         }
+        public async Task<BasarStatistic> GetBasarStatisticAsnyc(int basarId)
+        {
+            var basar = await Basar.GetAsync(basarId);
+            var products = await GetProductsForBasar(basar).ToArrayAsync();
+
+            //  @todo kinda hack, find better place to create the stats....
+            return new BasarStatistic
+            {
+                Basar = basar,
+                Sales = new PieChartData
+                {
+                    BackgroundColors = new[]
+                    {
+                        "'rgb(40, 167, 69)'",
+                        "'rgb(255, 193, 7)'",
+                        "'rgb(220, 53, 69)'",
+                        "'rgb(220, 53, 69)'"
+                    },
+                    DataPoints = new[]
+                    {
+                        products.Count(x => x.StorageState == StorageState.Available),
+                        products.Count(x => x.StorageState == StorageState.Sold),
+                        products.Count(x => x.StorageState == StorageState.Gone),
+                        products.Count(x => x.StorageState == StorageState.Locked)
+                    },
+                    Labels = new[]
+                    {
+                        _localizer["Verfügbar"].Value,
+                        _localizer["Verkauft"].Value,
+                        _localizer["Verschwunden"].Value,
+                        _localizer["Gesperrt"].Value,
+                    }
+                }                
+            };
+        }
         public IQueryable<Product> GetProductsForBasar(Basar basar)
         {
             return Transactions.GetMany(TransactionType.Acceptance, basar).SelectMany(a => a.Products).Select(pa => pa.Product).IncludeAll();

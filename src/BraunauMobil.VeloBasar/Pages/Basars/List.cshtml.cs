@@ -50,6 +50,7 @@ namespace BraunauMobil.VeloBasar.Pages.Basars
         }
         public VeloPage GetCreatePage() => this.GetPage<CreateModel>();
         public VeloPage GetDeletePage(Basar item) => this.GetPage<DeleteModel>(new DeleteParameter { BasarToDeleteId = item.Id, PageIndex = Basars.PageIndex });
+        public VeloPage GetDetailsPage(Basar item) => this.GetPage<DetailsModel>(new DetailsParameter { BasarId = item.Id });
         public VeloPage GetEditPage(Basar item) => this.GetPage<EditModel>(new EditParameter { BasarToEditId = item.Id, PageIndex = Basars.PageIndex });
         public VeloPage GetSearchPage() => this.GetPage<ListModel>();
         public VeloPage GetPaginationPage(int pageIndex) => this.GetPage<ListModel>(new ListParameter { PageIndex = pageIndex });

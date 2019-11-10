@@ -29,7 +29,7 @@ namespace BraunauMobil.VeloBasar.Pages
                 }
                 throw new NotImplementedException("What should we do in this case??");
             }
-            return Page();
+            return this.RedirectToPage<Basars.DetailsModel>(new Basars.DetailsParameter { BasarId = _context.Basar.Id });
         }
     }
 }

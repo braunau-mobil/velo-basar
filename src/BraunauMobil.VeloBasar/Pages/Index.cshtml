@@ -1,16 +1,2 @@
 ﻿@page
 @model IndexModel
-@{
-    ViewData["Title"] = "Velo Basar";
-}
-
-@if (VeloContext.Basar != null)
-{
-    <h1 class="display-4">Willkommen beim @VeloContext.Basar.Name am @Html.DisplayFor(model => VeloContext.Basar.Date)!</h1>
-}
-else
-{
-    <div class="alert alert-danger m-4" role="alert">
-        Es konnte kein Aktiver Basar gefunden werden.
-    </div>
-}
