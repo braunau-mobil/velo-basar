@@ -54,14 +54,25 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
         public async Task OnPostAsync(CartParameter parameter)
         {
             var cart = Request.Cookies.GetCart();
-            var product = await _context.Db.Product.GetAsync(parameter.ProductId.Value);
-            if (product != null && product.IsAllowed(TransactionType.Sale))
-            {
-                cart.Add(parameter.ProductId.Value);
-                Response.Cookies.SetCart(cart);
-            }
 
-            ErrorText = await GetProductErrorAsync(product, parameter.ProductId.Value);
+            if (parameter.ProductId == null)
+            {
+                ErrorText = _context.Localizer["Bitte eine Product ID eingeben."];
+            }
+            else
+            {
+                var product = await _context.Db.Product.GetAsync(parameter.ProductId.Value);
+                if (product != null)
+                {
+                    ErrorText = await GetProductErrorAsync(product, parameter.ProductId.Value);
+                    if (product.IsAllowed(TransactionType.Sale))
+                    {
+                        cart.Add(parameter.ProductId.Value);
+                    }
+                }
+            }
+            
+            Response.Cookies.SetCart(cart);
 
             await LoadProducts(cart);
         }
