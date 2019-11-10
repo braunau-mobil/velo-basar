@@ -101,6 +101,7 @@ namespace BraunauMobil.VeloBasar.Data
         private async Task<Basar> CreateBasarAsync(DateTime date, string name)
         {
             var basar = await _context.CreateNewBasarAsync(date, name, 0.9m, 0.0m, 0.0m);
+            await _context.SaveChangesAsync();
 
             var sellerCount = _rand.Next(_config.MinSellers, _config.MaxSellers);
             for (var sellerNumber = 1; sellerNumber <= sellerCount; sellerNumber++)
@@ -133,16 +134,16 @@ namespace BraunauMobil.VeloBasar.Data
         {
             var productCount = NextProductCount();
             var products = new List<Product>();
-            for (var productNumber = 1; productNumber <= productCount; productNumber++)
+            for (var count = 0; count < productCount; count++)
             {
-                products.Add(await CreateProductAsync());
+                products.Add(CreateProduct());
             }
             await _context.AcceptProductsAsync(basar, seller.Id, products);
         }
 
-        private async Task<Product> CreateProductAsync()
+        private Product CreateProduct()
         {
-            var product = new Product
+            return new Product
             {
                 Brand = NextBrand(),
                 Color = NextColor(),
@@ -154,10 +155,6 @@ namespace BraunauMobil.VeloBasar.Data
                 TireSize = NextTireSize(),
                 Type = NextProductType()
             };
-            await _context.Product.AddAsync(product);
-            await _context.SaveChangesAsync();
-
-            return product;
         }
 
         private void SetSellerName(Seller seller)
