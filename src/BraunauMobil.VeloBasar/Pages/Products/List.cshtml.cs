@@ -14,8 +14,8 @@ namespace BraunauMobil.VeloBasar.Pages.Products
         public string CurrentFilter { get; set; }
         public string SearchString { get; set; }
         public int? PageIndex { get; set; }
-        public StorageState StorageState { get; set; }
-        public ValueState ValueState { get; set; }
+        public StorageState? StorageState { get; set; }
+        public ValueState? ValueState { get; set; }
     }
     public class ListModel : PageModel, ISearchable
     {
@@ -84,7 +84,7 @@ namespace BraunauMobil.VeloBasar.Pages.Products
                 new Tuple<StorageState?, string>(null, "Alle"),
                 new Tuple<StorageState?, string>(StorageState.Available, "Verfügbar"),
                 new Tuple<StorageState?, string>(StorageState.Sold, "Verkauft"),
-                new Tuple<StorageState?, string>(StorageState.Gone, "Verscwunden"),
+                new Tuple<StorageState?, string>(StorageState.Gone, "Verschwunden"),
                 new Tuple<StorageState?, string>(StorageState.Locked, "Gesperrt")
             }, "Item1", "Item2");
         }
