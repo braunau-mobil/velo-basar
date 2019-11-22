@@ -5,12 +5,12 @@ namespace BraunauMobil.VeloBasar.Models
     public enum StorageState
     {
         [Display(Name = "Verfügbar")]
-        Available,
+        Available = 0,
         [Display(Name = "Verkauft")]
-        Sold,
+        Sold = 10,
         [Display(Name = "Verschwunden")]
-        Gone,
+        Gone = 20,
         [Display(Name = "Gesperrt")]
-        Locked
+        Locked = 30
     }
 }

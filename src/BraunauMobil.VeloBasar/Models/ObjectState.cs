@@ -5,8 +5,8 @@ namespace BraunauMobil.VeloBasar.Models
     public enum ObjectState
     {
         [Display(Name = "Aktiviert")]
-        Enabled,
+        Enabled = 0,
         [Display(Name = "Deaktiviert")]
-        Disabled
+        Disabled = 10
     }
 }

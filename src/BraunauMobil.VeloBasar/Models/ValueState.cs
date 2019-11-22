@@ -5,8 +5,8 @@ namespace BraunauMobil.VeloBasar.Models
     public enum ValueState
     {
         [Display(Name = "Nicht abgerechnet")]
-        NotSettled,
+        NotSettled = 0,
         [Display(Name = "Abgerechnet")]
-        Settled
+        Settled = 10
     }
 }
