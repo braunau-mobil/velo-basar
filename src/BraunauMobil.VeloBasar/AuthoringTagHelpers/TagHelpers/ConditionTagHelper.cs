@@ -9,7 +9,7 @@ namespace BraunauMobil.VeloBasar.AuthoringTagHelpers.TagHelpers
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            if (Condition == false)
+            if (Condition == false || Condition == null)
             {
                 output.SuppressOutput();
             }
