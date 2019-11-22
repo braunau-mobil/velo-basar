@@ -17,12 +17,18 @@
     <h5 class="card-header">@Localizer["Artikel"]</h5>
 
     <div class="card-body p-0">
-        <partial name="/Pages/Products/_Table.cshtml" model="@Model.Sale.Products.CreateListViewModel(VeloContext.Basar)" />
+        @if (Model.Sale.Products.Count > 0)
+        {
+            <partial name="/Pages/Products/_Table.cshtml" model="@Model.Sale.Products.CreateListViewModel(VeloContext.Basar)" />
+        }
     </div>
 </div>
 
 <div Condition="@Model.ShowSuccess" class="alert alert-success" role="alert">
     @Localizer["Verkauf erfolgreich!"]
+</div>
+<div Condition="@Model.Sale.Products.Count <= 0" class="alert alert-warning" role="alert">
+    @Localizer["Es wurden alle Artikel des Verkaufs storniert."]
 </div>
 
 @section Scripts {

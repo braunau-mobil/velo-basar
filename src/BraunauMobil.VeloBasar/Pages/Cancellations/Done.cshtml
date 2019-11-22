@@ -31,10 +31,15 @@
         </div>
     </div>
 
-    <div class="card-body">
-        <div class="column">
+    <div class="card-body p-0">
+        @if (Model.Sale.Products.Count > 0)
+        {
             <partial name="/Pages/Products/_Table.cshtml" model="Model.Sale.Products.CreateListViewModel(VeloContext.Basar)" />
-        </div>
+        }
     </div>
+</div>
+
+<div Condition="@Model.Sale.Products.Count <= 0" class="alert alert-warning" role="alert">
+    @Localizer["Es wurden alle Artikel des Verkaufs storniert."]
 </div>
 
