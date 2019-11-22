@@ -18,10 +18,17 @@
             <div class="column">
                 <div class="form-group">
                     <label asp-for="SaleNumber" class="control-label"></label>
-                    <input asp-for="SaleNumber" class="form-control" velo-validation-for="SaleNumber" />
+                    <input id="SaleNumber" asp-for="SaleNumber" class="form-control" velo-validation-for="SaleNumber" />
                     <span Condition="Model.ErrorMessage != null" class="text-danger">@Model.ErrorMessage</span>
                 </div>
             </div>
         </div>
     </div>
 </form>
+
+@section Scripts {
+    <script type="text/javascript">
+        $("#SaleNumber").val("");
+        $("#SaleNumber").focus();
+    </script>
+}
