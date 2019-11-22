@@ -7,6 +7,7 @@ using BraunauMobil.VeloBasar.Resources;
 using BraunauMobil.VeloBasar.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
 namespace BraunauMobil.VeloBasar.Pages.Cancellations
@@ -46,7 +47,9 @@ namespace BraunauMobil.VeloBasar.Pages.Cancellations
                 return Page();
             }
 
-            var cancellation = await _context.Db.CancelProductsAsync(_context.Basar, parameter.SaleId, Products.List.Where(vm => vm.IsSelected).Select(vm => vm.Item).ToArray());
+            var selectedProductIds = Products.List.Where(x => x.IsSelected).Select(x => x.Item.Id).ToList();
+            var selectedProducts =  await _context.Db.Product.GetMany(selectedProductIds).ToArrayAsync();
+            var cancellation = await _context.Db.CancelProductsAsync(_context.Basar, parameter.SaleId, selectedProducts);
             if (await _context.Db.Transactions.ExistsAsync(parameter.SaleId))
             {
                 return this.RedirectToPage<DoneModel>(new DoneParameter { CancellationId = cancellation.Id, SaleId = parameter.SaleId });
