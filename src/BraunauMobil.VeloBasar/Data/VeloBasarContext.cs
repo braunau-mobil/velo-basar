@@ -306,11 +306,13 @@ namespace BraunauMobil.VeloBasar.Data
         }
         public async Task<ProductsTransaction> SettleSellerAsync(Basar basar, int sellerId)
         {
-            var products = await GetProductsForSeller(basar, sellerId).Where(p => p.IsAllowed(TransactionType.Settlement)).ToListAsync();
+            var sellersProducts = await GetProductsForSeller(basar, sellerId).ToListAsync();
+
+            var products = sellersProducts.Where(p => p.IsAllowed(TransactionType.Settlement));
             products.SetState(TransactionType.Settlement);
 
             return await CreateTransactionAsync(basar, TransactionType.Settlement, sellerId, products.ToArray());
-        }
+        } 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
