@@ -12,7 +12,7 @@
             <a velo-page="@Model.GetStartAcceptancePage()" class="btn btn-primary mx-1">@Localizer["Artikel annehmen"]</a>
             @if (Model.Products.IsAllowed(TransactionType.Settlement))
             {
-                <a velo-age="@Model.GetCreateSettlementPage()" target="_blank" class="btn btn-primary mx-1">@Localizer["Abrechnen"]</a>
+                <a velo-page="@Model.GetCreateSettlementPage()" target="_blank" class="btn btn-primary mx-1">@Localizer["Abrechnen"]</a>
             }
             <a velo-page="@Model.GetCreateLabelsPage()" target="_blank" class="btn btn-primary mx-1">@Localizer["Etiketten drucken"]</a>
             <a velo-page="@Model.GetEditPage()" class="btn btn-secondary mx-1">@Localizer["Bearbeiten"]</a>
