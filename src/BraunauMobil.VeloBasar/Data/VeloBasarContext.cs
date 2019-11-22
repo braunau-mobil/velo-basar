@@ -297,7 +297,6 @@ namespace BraunauMobil.VeloBasar.Data
                 command.Parameters.AddWithValue("@BasarId", basar.Id);
                 command.Parameters.AddWithValue("@Type", (int)transactionType);
 
-                var x = command.ExecuteScalar();
                 number = (int)command.ExecuteScalar();
             }
 
