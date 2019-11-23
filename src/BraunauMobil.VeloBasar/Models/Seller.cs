@@ -1,5 +1,9 @@
 ﻿using BraunauMobil.VeloBasar.Models.Interfaces;
+using BraunauMobil.VeloBasar.Resources;
+using Microsoft.Extensions.Localization;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.Contracts;
+using System.Text;
 
 namespace BraunauMobil.VeloBasar.Models
 {
@@ -44,5 +48,20 @@ namespace BraunauMobil.VeloBasar.Models
         public string BankAccountHolder { get; set; }
 
         public string Token { get; set; }
+
+        public string GetAddressText()
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine($"{FirstName} {LastName}");
+            sb.AppendLine(Street);
+            sb.AppendLine($"{ZIP} {City}");
+            return sb.ToString();
+        }
+        public string GetIdText(IStringLocalizer<SharedResource> localizer)
+        {
+            Contract.Requires(localizer != null);
+
+            return localizer["Verk.-ID: {0}", Id];
+        }
     }
 }

@@ -17,8 +17,9 @@
             <thead>
                 <tr>
                     <th style="width: auto;" scope="col">@Html.DisplayNameFor(model => model.Basars.List[0].Item.Id)</th>
-                    <th style="width: 50%;" scope="col">@Html.DisplayNameFor(model => model.Basars.List[0].Item.Date)</th>
-                    <th style="width: 50%;" scope="col">@Html.DisplayNameFor(model => model.Basars.List[0].Item.Name)</th>
+                    <th style="width: 20%;" scope="col">@Html.DisplayNameFor(model => model.Basars.List[0].Item.Date)</th>
+                    <th style="width: 40%;" scope="col">@Html.DisplayNameFor(model => model.Basars.List[0].Item.Name)</th>
+                    <th style="width: 40%;" scope="col">@Html.DisplayNameFor(model => model.Basars.List[0].Item.Location)</th>
                     <th style="width: auto;" scope="col"></th>
                     <th style="width: auto;" scope="col"></th>
                     <th style="width: auto;" scope="col"></th>
@@ -31,6 +32,7 @@
                     <th scope="row">@Html.DisplayFor(modelItem => itemViewModel.Item.Id)</th>
                     <td>@Html.DisplayFor(modelItem => itemViewModel.Item.Date)</td>
                     <td>@Html.DisplayFor(modelItem => itemViewModel.Item.Name)</td>
+                    <td>@Html.DisplayFor(modelItem => itemViewModel.Item.Location)</td>
                     <td>
                         <a velo-page="@Model.GetDetailsPage(itemViewModel.Item)">@Localizer["Details"]</a>
                     </td>

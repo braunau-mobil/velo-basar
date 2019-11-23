@@ -49,7 +49,8 @@ namespace BraunauMobil.VeloBasar.Pages.Cancellations
 
             var selectedProductIds = Products.List.Where(x => x.IsSelected).Select(x => x.Item.Id).ToList();
             var selectedProducts =  await _context.Db.Product.GetMany(selectedProductIds).ToArrayAsync();
-            var cancellation = await _context.Db.CancelProductsAsync(_context.Basar, parameter.SaleId, selectedProducts);
+            var printSettings = await _context.Db.GetPrintSettingsAsync();
+            var cancellation = await _context.Db.CancelProductsAsync(_context.Basar, parameter.SaleId, printSettings, selectedProducts);
             if (await _context.Db.Transactions.ExistsAsync(parameter.SaleId))
             {
                 return this.RedirectToPage<DoneModel>(new DoneParameter { CancellationId = cancellation.Id, SaleId = parameter.SaleId });

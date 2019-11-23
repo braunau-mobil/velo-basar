@@ -20,7 +20,8 @@ namespace BraunauMobil.VeloBasar.Pages.Acceptances
         public async Task<IActionResult> OnGetAsync(AcceptParameter parameter)
         {
             var products = Request.Cookies.GetAcceptanceProducts();
-            var acceptance = await _context.Db.AcceptProductsAsync(_context.Basar, parameter.SellerId, products);
+            var printSettings = await _context.Db.GetPrintSettingsAsync();
+            var acceptance = await _context.Db.AcceptProductsAsync(_context.Basar, parameter.SellerId, printSettings, products);
 
             Response.Cookies.ClearAcceptanceProducts();
             return this.RedirectToPage<DetailsModel>(new DetailsParameter { AcceptanceId = acceptance.Id, OpenDocument = true, ShowSuccess = true });

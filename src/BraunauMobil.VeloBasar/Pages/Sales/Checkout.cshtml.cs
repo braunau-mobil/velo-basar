@@ -16,7 +16,8 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
         public async Task<IActionResult> OnGetAsync()
         {
             var productIds = Request.Cookies.GetCart();
-            var sale = await _context.Db.CheckoutProductsAsync(_context.Basar, productIds);
+            var printSettings = await _context.Db.GetPrintSettingsAsync();
+            var sale = await _context.Db.CheckoutProductsAsync(_context.Basar, printSettings, productIds);
             
             if (sale == null)
             {

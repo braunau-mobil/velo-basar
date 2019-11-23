@@ -47,7 +47,8 @@ namespace BraunauMobil.VeloBasar.Pages.Transactions
         public async Task<IActionResult> OnPostAsync(CreateSingleParameter parameter)
         {
             Product = await _context.Db.Product.GetAsync(parameter.ProductId);
-            await _context.Db.DoTransactionAsync(_context.Basar, parameter.TransactionType, Notes, Product);
+            var printSettings = await _context.Db.GetPrintSettingsAsync();
+            await _context.Db.DoTransactionAsync(_context.Basar, parameter.TransactionType, Notes, printSettings, Product);
 
             return this.RedirectToPage<Products.DetailsModel>(new Products.DetailsParameter { ProductId = parameter.ProductId });
         }

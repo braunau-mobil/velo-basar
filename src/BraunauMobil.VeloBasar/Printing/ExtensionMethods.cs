@@ -1,4 +1,4 @@
-﻿namespace BraunauMobil.VeloBasar.Pdf
+﻿namespace BraunauMobil.VeloBasar.Printing
 {
     public static class ExtensionMethods
     {

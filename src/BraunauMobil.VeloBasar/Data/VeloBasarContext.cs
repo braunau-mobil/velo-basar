@@ -6,7 +6,7 @@ using System;
 using Npgsql;
 using System.Collections.Generic;
 using System.Linq;
-using BraunauMobil.VeloBasar.Pdf;
+using BraunauMobil.VeloBasar.Printing;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Localization;
 using BraunauMobil.VeloBasar.Resources;
@@ -18,7 +18,7 @@ namespace BraunauMobil.VeloBasar.Data
         private const string NextNumberSql = "update \"Number\" set \"Value\"=\"Value\" + 1 where \"BasarId\" = @BasarId and \"Type\" = @Type;select \"Value\" from \"Number\"  where \"BasarId\" = @BasarId and \"Type\" = @Type";
         private const string PdfContentType = "application/pdf";
 
-        private readonly PdfCreator _pdfCreator = new PdfCreator();
+        private readonly PdfCreator _pdfCreator;
 
         private readonly IStringLocalizer<SharedResource> _localizer;
 
@@ -26,6 +26,7 @@ namespace BraunauMobil.VeloBasar.Data
             : base(options)
         {
             _localizer = localizer;
+            _pdfCreator = new PdfCreator(_localizer);
         }
 
         public DbSet<Basar> Basar { get; set; }
@@ -48,16 +49,16 @@ namespace BraunauMobil.VeloBasar.Data
             }
         }
 
-        public async Task<ProductsTransaction> AcceptProductsAsync(Basar basar, int sellerId, IList<Product> products)
+        public async Task<ProductsTransaction> AcceptProductsAsync(Basar basar, int sellerId, PrintSettings printSettings, IList<Product> products)
         {
             var productsInserted = await InsertProductsAsync(products);
 
-            var tx = await CreateTransactionAsync(basar, TransactionType.Acceptance, sellerId, productsInserted.ToArray());
-            await GenerateTransactionDocumentAsync(tx);
+            var tx = await CreateTransactionAsync(basar, TransactionType.Acceptance, sellerId, printSettings, productsInserted.ToArray());
+            await GenerateTransactionDocumentAsync(tx, printSettings);
 
             return tx;
         }
-        public async Task<ProductsTransaction> CancelProductsAsync(Basar basar, int saleId, IList<Product> products)
+        public async Task<ProductsTransaction> CancelProductsAsync(Basar basar, int saleId, PrintSettings printSettings, IList<Product> products)
         {
             if (!products.IsAllowed(TransactionType.Cancellation))
             {
@@ -70,7 +71,7 @@ namespace BraunauMobil.VeloBasar.Data
             var sale = await Transactions.GetAsync(saleId);
             await RemoveProductsFromTransactionAsync(sale, products);
 
-            return await CreateTransactionAsync(basar, TransactionType.Cancellation, products.ToArray());
+            return await CreateTransactionAsync(basar, TransactionType.Cancellation, printSettings , products.ToArray());
         }
         public  async Task<bool> CanDeleteBasarAsync(Basar basar)
         {
@@ -84,10 +85,10 @@ namespace BraunauMobil.VeloBasar.Data
         {
             return !await Product.AnyAsync(p => p.TypeId == item.Id);
         }
-        public async Task<ProductsTransaction> CheckoutProductsAsync(Basar basar, IList<int> productIds)
+        public async Task<ProductsTransaction> CheckoutProductsAsync(Basar basar, PrintSettings printSettings, IList<int> productIds)
         {
             var products = Product.GetMany(productIds);
-            return await DoTransactionAsync(basar, TransactionType.Sale, null, await products.ToArrayAsync());
+            return await DoTransactionAsync(basar, TransactionType.Sale, null, printSettings, await products.ToArrayAsync());
         }
         public async Task<Brand> CreateBrand(Brand brand)
         {
@@ -117,11 +118,12 @@ namespace BraunauMobil.VeloBasar.Data
             var products = await GetProductsForSeller(basar, sellerId).Where(p => p.Label != null).ToListAsync();
             return await CreateLabelsAndCombineToOnePdfAsync(basar, products);
         }
-        public async Task<Basar> CreateNewBasarAsync(DateTime date, string name, decimal productCommission, decimal productDiscount, decimal sellerDiscount)
+        public async Task<Basar> CreateNewBasarAsync(DateTime date, string name, string location, decimal productCommission, decimal productDiscount, decimal sellerDiscount)
         {
             var basar = new Basar
             {
                 Date = date,
+                Location = location,
                 Name = name,
                 ProductCommission = productCommission,
                 ProductDiscount = productDiscount,
@@ -172,7 +174,7 @@ namespace BraunauMobil.VeloBasar.Data
                 await SaveChangesAsync();
             }
         }
-        public async Task<ProductsTransaction> DoTransactionAsync(Basar basar, TransactionType transactionType, string notes, params Product[] products)
+        public async Task<ProductsTransaction> DoTransactionAsync(Basar basar, TransactionType transactionType, string notes, PrintSettings printSettings, params Product[] products)
         {
             if (!products.IsAllowed(transactionType))
             {
@@ -182,7 +184,7 @@ namespace BraunauMobil.VeloBasar.Data
             products.SetState(transactionType);
             await SaveChangesAsync();
 
-            return await CreateTransactionAsync(basar, transactionType, null, notes, products);
+            return await CreateTransactionAsync(basar, transactionType, null, notes, printSettings, products);
         }
         public async Task<BasarStatistic> GetBasarStatisticAsnyc(int basarId)
         {
@@ -218,6 +220,10 @@ namespace BraunauMobil.VeloBasar.Data
                     }
                 }                
             };
+        }
+        public async Task<PrintSettings> GetPrintSettingsAsync()
+        {
+            throw new NotImplementedException();
         }
         public IQueryable<Product> GetProductsForBasar(Basar basar)
         {
@@ -304,14 +310,14 @@ namespace BraunauMobil.VeloBasar.Data
 
             return number;
         }
-        public async Task<ProductsTransaction> SettleSellerAsync(Basar basar, int sellerId)
+        public async Task<ProductsTransaction> SettleSellerAsync(Basar basar, int sellerId, PrintSettings printSettings)
         {
             var sellersProducts = await GetProductsForSeller(basar, sellerId).ToListAsync();
 
             var products = sellersProducts.Where(p => p.IsAllowed(TransactionType.Settlement));
             products.SetState(TransactionType.Settlement);
 
-            return await CreateTransactionAsync(basar, TransactionType.Settlement, sellerId, products.ToArray());
+            return await CreateTransactionAsync(basar, TransactionType.Settlement, sellerId, printSettings, products.ToArray());
         } 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -333,15 +339,15 @@ namespace BraunauMobil.VeloBasar.Data
             await Number.AddAsync(number);
             await SaveChangesAsync();
         }
-        private async Task<ProductsTransaction> CreateTransactionAsync(Basar basar, TransactionType transactionType, params Product[] products)
+        private async Task<ProductsTransaction> CreateTransactionAsync(Basar basar, TransactionType transactionType, PrintSettings printSettings, params Product[] products)
         {
-            return await CreateTransactionAsync(basar, transactionType, null, null, products);
+            return await CreateTransactionAsync(basar, transactionType, null, null, printSettings, products);
         }
-        private async Task<ProductsTransaction> CreateTransactionAsync(Basar basar, TransactionType transactionType, int? sellerId, params Product[] products)
+        private async Task<ProductsTransaction> CreateTransactionAsync(Basar basar, TransactionType transactionType, int? sellerId, PrintSettings printSettings, params Product[] products)
         {
-            return await CreateTransactionAsync(basar, transactionType, sellerId, null, products);
+            return await CreateTransactionAsync(basar, transactionType, sellerId, null, printSettings, products);
         }
-        private async Task<ProductsTransaction> CreateTransactionAsync(Basar basar, TransactionType transactionType, int? sellerId, string notes, params Product[] products)
+        private async Task<ProductsTransaction> CreateTransactionAsync(Basar basar, TransactionType transactionType, int? sellerId, string notes, PrintSettings printSettings, params Product[] products)
         {
             var tx = new ProductsTransaction
             {
@@ -356,7 +362,7 @@ namespace BraunauMobil.VeloBasar.Data
             await Transactions.AddAsync(tx);
             await SaveChangesAsync();
 
-            await GenerateTransactionDocumentAsync(tx);
+            await GenerateTransactionDocumentAsync(tx, printSettings);
 
             return tx;
         }
@@ -396,7 +402,7 @@ namespace BraunauMobil.VeloBasar.Data
 
             return fileStore;
         }
-        private async Task<FileStore> GenerateTransactionDocumentAsync(ProductsTransaction transaction)
+        private async Task<FileStore> GenerateTransactionDocumentAsync(ProductsTransaction transaction, PrintSettings printSettings)
         {
             FileStore fileStore;
             if (transaction.DocumentId == null)
@@ -417,7 +423,7 @@ namespace BraunauMobil.VeloBasar.Data
 
             if (transaction.Type == TransactionType.Acceptance)
             {
-                fileStore.Data = _pdfCreator.CreateAcceptance(transaction);
+                fileStore.Data = _pdfCreator.CreateAcceptance(transaction, printSettings);
             }
             else if (transaction.Type == TransactionType.Sale)
             {
