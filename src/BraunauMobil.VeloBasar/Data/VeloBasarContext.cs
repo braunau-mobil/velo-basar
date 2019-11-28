@@ -3,7 +3,6 @@ using BraunauMobil.VeloBasar.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using System.Threading.Tasks;
 using System;
-using Npgsql;
 using System.Collections.Generic;
 using System.Linq;
 using BraunauMobil.VeloBasar.Printing;
@@ -15,7 +14,6 @@ namespace BraunauMobil.VeloBasar.Data
 {
     public class VeloBasarContext : IdentityDbContext
     {
-        private const string NextNumberSql = "update \"Number\" set \"Value\"=\"Value\" + 1 where \"BasarId\" = @BasarId and \"Type\" = @Type;select \"Value\" from \"Number\"  where \"BasarId\" = @BasarId and \"Type\" = @Type";
         private const string PdfContentType = "application/pdf";
 
         private readonly PdfCreator _pdfCreator;
@@ -289,26 +287,20 @@ namespace BraunauMobil.VeloBasar.Data
                 return false;
             }
         }
-        public int NextNumber(Basar basar, TransactionType transactionType)
+        public async Task<int> NextNumberAsync(Basar basar, TransactionType transactionType)
         {
-            var number = -1;
-
-            //  @todo i was ned wieso, aber wann i de drecks Connection in using pack, dann krachts da gewaltig
-            var connection = Database.GetDbConnection() as NpgsqlConnection;
-            connection.Open();
-
-            using (var command = connection.CreateCommand())
+            int result = -1;
+            using (var transaction = await Database.BeginTransactionAsync())
             {
-                command.CommandText = NextNumberSql;
-                command.Parameters.AddWithValue("@BasarId", basar.Id);
-                command.Parameters.AddWithValue("@Type", (int)transactionType);
+                var number = await Number.FirstAsync(n => n.BasarId == basar.Id && n.Type == transactionType);
+                number.Value++;
+                await SaveChangesAsync();
+                result = number.Value;
 
-                number = (int)command.ExecuteScalar();
+                transaction.Commit();
             }
 
-            connection.Close();
-
-            return number;
+            return result;
         }
         public async Task<ProductsTransaction> SettleSellerAsync(Basar basar, int sellerId, PrintSettings printSettings)
         {
@@ -352,7 +344,7 @@ namespace BraunauMobil.VeloBasar.Data
             var tx = new ProductsTransaction
             {
                 BasarId = basar.Id,
-                Number = NextNumber(basar, transactionType),
+                Number = await NextNumberAsync(basar, transactionType),
                 TimeStamp = DateTime.Now,
                 Notes = notes,
                 Type = transactionType,
