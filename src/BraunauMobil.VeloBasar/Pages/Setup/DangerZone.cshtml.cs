@@ -21,6 +21,7 @@ namespace BraunauMobil.VeloBasar.Pages.Setup
         [BindProperty]
         public DataGeneratorConfiguration Config { get; set; }
 
+#if DEBUG
         public async Task<IActionResult> OnPostAsync()
         {
             var generator = new DataGenerator(_context, _userManager, Config);
@@ -28,5 +29,6 @@ namespace BraunauMobil.VeloBasar.Pages.Setup
 
             return this.RedirectToPage<IndexModel>();
         }
+#endif
     }
 }
