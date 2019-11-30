@@ -33,7 +33,7 @@ namespace BraunauMobil.VeloBasar.Pages
                 {
                     return this.RedirectToPage<DevTools.DangerZoneModel>();
                 }
-                throw new NotImplementedException("What should we do in this case??");
+                return this.RedirectToPage<Setup.LoginModel>();
             }
             return this.RedirectToPage<Basars.DetailsModel>(new Basars.DetailsParameter());
         }
