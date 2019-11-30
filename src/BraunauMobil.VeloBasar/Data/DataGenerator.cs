@@ -39,6 +39,7 @@ namespace BraunauMobil.VeloBasar.Data
             await _context.Database.EnsureCreatedAsync();
 
             await _context.InitializeDatabase(_userManager, _config);
+            var settings = _context.GetVeloSettings();
 
             await CreateCountriesAsync();
             await CreateBrandsAsync();
@@ -47,10 +48,10 @@ namespace BraunauMobil.VeloBasar.Data
             for (var basarNumber = 1; basarNumber <= _config.BasarCount; basarNumber++)
             {
                 var basar = await CreateBasarAsync(_config.FirstBasarDate.AddYears(basarNumber - 1), $"{basarNumber}. Fahrradbasar");
-                if (_context.Settings.ActiveBasar == null)
+                if (settings.ActiveBasarId == null)
                 {
-                    _context.Settings.ActiveBasar = basar;
-                     await _context.SaveChangesAsync();
+                    settings.ActiveBasarId = basar.Id;
+                    await _context.SetBasarSettingsAsync(settings);
                 }
             }
         }

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Localization;
+using System.Threading.Tasks;
 
 namespace BraunauMobil.VeloBasar
 {
@@ -26,11 +27,14 @@ namespace BraunauMobil.VeloBasar
         }
 
         public Basar Basar { get; private set; }
+        public VeloSettings Settings { get; private set; }
         public IConfiguration Configuration { get; private set; }
         public VeloBasarContext Db { get; private set; }
         public IStringLocalizer<SharedResource> Localizer { get; private set; }
         public SignInManager<IdentityUser> SignInManager { get; private set; }
         public UserManager<IdentityUser> UserManager { get; private set; }
+
+        public async Task SaveSettingsAsync() => await Db.SetBasarSettingsAsync(Settings);
 
         private void LoadBasar()
         {
@@ -44,14 +48,16 @@ namespace BraunauMobil.VeloBasar
                 var basarId = _httpContextAccessor.HttpContext.Request.Cookies.GetBasarId();
                 if(basarId.HasValue && Db.Basar.Exists(basarId.Value))
                 {
-                    Basar = Db.Basar.Get(basarId.Value);
+                    Basar = Db.Basar.GetAsNonTracking(basarId.Value);
                     return;
                 }
             }
 
-            if (Db.Settings.ActiveBasar != null)
+            Settings = Db.GetVeloSettings();
+            
+            if (Settings.ActiveBasarId != null)
             {
-                Basar = Db.Settings.ActiveBasar;
+                Basar = Db.Basar.GetAsNonTracking(Settings.ActiveBasarId.Value);
             }
         }
     }

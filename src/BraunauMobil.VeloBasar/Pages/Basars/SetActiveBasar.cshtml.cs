@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using BraunauMobil.VeloBasar.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -9,9 +8,9 @@ namespace BraunauMobil.VeloBasar.Pages.Basars
     [Authorize]
     public class SetActiveBasarModel : PageModel
     {
-        private readonly VeloBasarContext _context;
+        private readonly IVeloContext _context;
 
-        public SetActiveBasarModel(VeloBasarContext context)
+        public SetActiveBasarModel(IVeloContext context)
         {
             _context = context;
         }
@@ -19,7 +18,7 @@ namespace BraunauMobil.VeloBasar.Pages.Basars
         public async Task<IActionResult> OnGetAsync(int basarId)
         {
             _context.Settings.ActiveBasarId = basarId;
-            await _context.SaveChangesAsync();
+            await _context.SaveSettingsAsync();
             return Redirect(Request.Headers["Referer"].ToString());
         }
     }

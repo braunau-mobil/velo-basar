@@ -6,7 +6,7 @@
             <select id="basarId" class="form-control" asp-for="@VeloContext.Basar.Id" asp-items="ViewBag.Basars" onchange="onChange()"></select>
             <script type="text/javascript">
                 function onChange() {
-                    var url = "@(Utils.GetPageForModel<SetActiveBasarModel>())?BasarId=" + $('#basarId').val();
+                    var url = "@(Utils.GetPageForModel<SetBasarInCookiesModel>())?BasarId=" + $('#basarId').val();
                     window.location = url;
                 }
             </script>

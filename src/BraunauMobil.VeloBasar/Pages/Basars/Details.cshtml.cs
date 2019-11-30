@@ -1,18 +1,19 @@
 ﻿using BraunauMobil.VeloBasar.Data;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Diagnostics.Contracts;
 using System.Threading.Tasks;
 
 namespace BraunauMobil.VeloBasar.Pages.Basars
 {
     public class DetailsParameter
     {
-        public int BasarId { get; set; }
+        public int? BasarId { get; set; }
     }
     public class DetailsModel : PageModel
     {
-        private readonly VeloBasarContext _context;
+        private readonly IVeloContext _context;
 
-        public DetailsModel(VeloBasarContext context)
+        public DetailsModel(IVeloContext context)
         {
             _context = context;
         }
@@ -21,7 +22,18 @@ namespace BraunauMobil.VeloBasar.Pages.Basars
 
         public async Task OnGetAsync(DetailsParameter parameter)
         {
-            BasarStatistic = await _context.GetBasarStatisticAsnyc(parameter.BasarId);
+            Contract.Requires(parameter != null);
+
+            int basarId;
+            if (parameter.BasarId == null)
+            {
+                basarId = _context.Basar.Id;
+            }
+            else
+            {
+                basarId = parameter.BasarId.Value;
+            }
+            BasarStatistic = await _context.Db.GetBasarStatisticAsnyc(basarId);
         }
     }
 }

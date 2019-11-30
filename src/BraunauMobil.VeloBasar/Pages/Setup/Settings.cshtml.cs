@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
-using BraunauMobil.VeloBasar.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -9,9 +8,9 @@ namespace BraunauMobil.VeloBasar.Pages.Setup
 {
     public class SettingsModel : PageModel
     {
-        private readonly VeloBasarContext _context;
+        private readonly IVeloContext _context;
 
-        public SettingsModel(VeloBasarContext context)
+        public SettingsModel(IVeloContext context)
         {
             _context = context;
         }
@@ -22,14 +21,14 @@ namespace BraunauMobil.VeloBasar.Pages.Setup
 
         public void OnGet()
         {
-            ViewData["Basars"] = new SelectList(_context.Basar, "Id", "Name");
-            ActiveBasarId = _context.Settings.ActiveBasar.Id;
+            ViewData["Basars"] = new SelectList(_context.Db.Basar, "Id", "Name");
+            ActiveBasarId = _context.Settings.ActiveBasarId.Value;
         }
         public async Task OnPostAsync()
         {
-            ViewData["Basars"] = new SelectList(_context.Basar, "Id", "Name");
+            ViewData["Basars"] = new SelectList(_context.Db.Basar, "Id", "Name");
             _context.Settings.ActiveBasarId = ActiveBasarId;
-            await _context.SaveChangesAsync();
+            await _context.Db.SaveChangesAsync();
         }
     }
 }

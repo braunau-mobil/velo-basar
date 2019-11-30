@@ -3,7 +3,6 @@ using BraunauMobil.VeloBasar.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using System.Threading.Tasks;
 using System;
-using Npgsql;
 using System.Collections.Generic;
 using System.Linq;
 using BraunauMobil.VeloBasar.Printing;
@@ -17,8 +16,11 @@ namespace BraunauMobil.VeloBasar.Data
 {
     public class VeloBasarContext : IdentityDbContext
     {
-        private const string NextNumberSql = "update \"Number\" set \"Value\"=\"Value\" + 1 where \"BasarId\" = @BasarId and \"Type\" = @Type;select \"Value\" from \"Number\"  where \"BasarId\" = @BasarId and \"Type\" = @Type";
         private const string PdfContentType = "application/pdf";
+        private const string VeloSettingsContentType = "application/VeloSettings";
+        private const string PrintSettingsContentType = "application/PrintSettings";
+        private const int VeloSettingsId = 1;
+        private const int PrintSettingsId = 2;
 
         private readonly PdfCreator _pdfCreator;
 
@@ -38,18 +40,8 @@ namespace BraunauMobil.VeloBasar.Data
         public DbSet<Number> Number { get; set; }
         public DbSet<Product> Product { get; set; }
         public DbSet<Seller> Seller { get; set; }
-        public DbSet<Settings> SettingsSet { get; set; }
         public DbSet<ProductsTransaction> Transactions { get; set; }
         public DbSet<ProductType> ProductTypes { get; set; }
-        public Settings Settings
-        {
-            get
-            {
-                return SettingsSet
-                    .Include(s => s.ActiveBasar)
-                    .First();
-            }
-        }
 
         public async Task<ProductsTransaction> AcceptProductsAsync(Basar basar, int sellerId, PrintSettings printSettings, IList<Product> products)
         {
@@ -223,10 +215,7 @@ namespace BraunauMobil.VeloBasar.Data
                 }                
             };
         }
-        public async Task<PrintSettings> GetPrintSettingsAsync()
-        {
-            throw new NotImplementedException();
-        }
+        public async Task<PrintSettings> GetPrintSettingsAsync() => await GetSettingsAsync<PrintSettings>(PrintSettingsId);
         public IQueryable<Product> GetProductsForBasar(Basar basar)
         {
             return Transactions.GetMany(TransactionType.Acceptance, basar).SelectMany(a => a.Products).Select(pa => pa.Product).IncludeAll();
@@ -248,6 +237,7 @@ namespace BraunauMobil.VeloBasar.Data
                 SoldProductCount = soldProducts.Length
             };
         }
+        public VeloSettings GetVeloSettings() => GetSettings<VeloSettings>(VeloSettingsId);
         public async Task<int> GetTransactionNumberForProductAsync(Basar basar, TransactionType type, int productId)
         {
             var transaction = await Transactions.AsNoTracking().Include(t => t.Products).Where(t => t.Type == type && t.BasarId == basar.Id).FirstOrDefaultAsync(t => t.Products.Any(pt => pt.ProductId == productId));
@@ -264,6 +254,9 @@ namespace BraunauMobil.VeloBasar.Data
         }
         public async Task InitializeDatabase(UserManager<IdentityUser> userManager, InitializationConfiguration config)
         {
+            Contract.Requires(userManager != null);
+            Contract.Requires(config != null);
+
             await Database.EnsureCreatedAsync();
 
             var adminUser = new IdentityUser
@@ -273,18 +266,20 @@ namespace BraunauMobil.VeloBasar.Data
             };
             await userManager.CreateAsync(adminUser, "root");
 
-            var settings = new Settings
+            var settings = new VeloSettings
             {
                 IsInitialized = true
             };
-            await SettingsSet.AddAsync(settings);
-            await SaveChangesAsync();
+            await SetBasarSettingsAsync(settings);
         }
+
+        [SuppressMessage("Design", "CA1031:Do not catch general exception types")]
         public bool IsInitialized()
         {
             try
             {
-                return Settings.IsInitialized;
+                GetVeloSettings();
+                return true;
             }
             catch
             {
@@ -314,7 +309,9 @@ namespace BraunauMobil.VeloBasar.Data
             products.SetState(TransactionType.Settlement);
 
             return await CreateTransactionAsync(basar, TransactionType.Settlement, sellerId, printSettings, products.ToArray());
-        } 
+        }
+        public async Task SetPrintSettingsAsync(PrintSettings settings) => await SetSettingsAsync(settings, PrintSettingsId, PrintSettingsContentType);
+        public async Task SetBasarSettingsAsync(VeloSettings settings) => await SetSettingsAsync(settings, VeloSettingsId, VeloSettingsContentType);
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -434,6 +431,16 @@ namespace BraunauMobil.VeloBasar.Data
 
             return fileStore;
         }
+        private T GetSettings<T>(int id) where T : class
+        {
+            var fileStore = FileStore.AsNoTracking().First(f => f.Id == id);
+            return JsonUtils.DeserializeFromJson<T>(fileStore.Data);
+        }
+        private async Task<T> GetSettingsAsync<T>(int id) where T : class
+        {
+            var fileStore = await FileStore.AsNoTracking().FirstAsync(f => f.Id == id);
+            return JsonUtils.DeserializeFromJson<T>(fileStore.Data);
+        }
         private async Task<IList<Product>> InsertProductsAsync(IList<Product> products)
         {
             var newProducts = new List<Product>();
@@ -480,6 +487,30 @@ namespace BraunauMobil.VeloBasar.Data
                 transaction.Products.Remove(transaction.Products.First(s => s.ProductId == product.Id));
             }
             await SaveChangesAsync();
+        }
+        private async Task SetSettingsAsync<T>(T instance, int id, string contentType) where T : class
+        {
+            FileStore settingsFileStore;
+            if (await FileStore.ExistsAsync(VeloSettingsId))
+            {
+                settingsFileStore = await FileStore.GetAsync(VeloSettingsId);
+                settingsFileStore.Data = instance.SerializeAsJson();
+            }
+            else
+            {
+                settingsFileStore = new FileStore
+                {
+                    ContentType = contentType,
+                    Data = instance.SerializeAsJson()
+                };
+                await FileStore.AddAsync(settingsFileStore);
+            }
+            await SaveChangesAsync();
+
+            if (settingsFileStore.Id != id)
+            {
+                throw new InvalidOperationException($"{typeof(T).Name} did't got the right ID.");
+            }
         }
     }
 }
