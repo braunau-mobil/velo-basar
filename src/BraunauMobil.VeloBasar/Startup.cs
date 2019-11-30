@@ -9,6 +9,7 @@ using BraunauMobil.VeloBasar.Data;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Globalization;
+using Serilog;
 
 namespace BraunauMobil.VeloBasar
 {
@@ -24,6 +25,8 @@ namespace BraunauMobil.VeloBasar
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            Log.Information("Configure services");
+
             services.AddScoped<IVeloContext, DefaultVeloContext>();
             services.AddHttpContextAccessor();
 
@@ -35,6 +38,7 @@ namespace BraunauMobil.VeloBasar
             });
 
 
+            Log.Information("Configure database context");
             services.AddDbContext<VeloBasarContext>(options =>
             {
                 if (Configuration.UseSqlServer())
@@ -77,11 +81,15 @@ namespace BraunauMobil.VeloBasar
                     options.ResourcesPath = "Resources";
                 })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            Log.Information("Configure services done");
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            Log.Information("Configure");
+
             var cultureInfo = CultureInfo.GetCultureInfo("de-AT");
             CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
             CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
@@ -103,6 +111,8 @@ namespace BraunauMobil.VeloBasar
             app.UseAuthentication();
 
             app.UseMvc();
+
+            Log.Information("Configure done");
         }
     }
 }
