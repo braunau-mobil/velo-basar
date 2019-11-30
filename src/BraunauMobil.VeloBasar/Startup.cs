@@ -35,8 +35,18 @@ namespace BraunauMobil.VeloBasar
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+
             services.AddDbContext<VeloBasarContext>(options =>
-                    options.UseNpgsql(Configuration.GetConnectionString("VeloBasarContext")));
+            {
+                if (Configuration.UseSqlServer())
+                {
+                    options.UseSqlServer(Configuration.GetConnectionString("VeloBasarContextSqlServer"));
+                }
+                else
+                {
+                    options.UseNpgsql(Configuration.GetConnectionString("VeloBasarContextPostgresql"));
+                }
+            });
 
             services.AddDefaultIdentity<IdentityUser>()
                 .AddEntityFrameworkStores<VeloBasarContext>();

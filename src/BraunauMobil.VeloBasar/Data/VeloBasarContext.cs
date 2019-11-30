@@ -10,6 +10,8 @@ using BraunauMobil.VeloBasar.Printing;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Localization;
 using BraunauMobil.VeloBasar.Resources;
+using System.Diagnostics.Contracts;
+using System.Diagnostics.CodeAnalysis;
 
 namespace BraunauMobil.VeloBasar.Data
 {
@@ -289,26 +291,20 @@ namespace BraunauMobil.VeloBasar.Data
                 return false;
             }
         }
+
+        [SuppressMessage("Security", "CA2100:Review SQL queries for security vulnerabilities")]
         public int NextNumber(Basar basar, TransactionType transactionType)
         {
-            var number = -1;
+            Contract.Requires(basar != null);
 
-            //  @todo i was ned wieso, aber wann i de drecks Connection in using pack, dann krachts da gewaltig
-            var connection = Database.GetDbConnection() as NpgsqlConnection;
-            connection.Open();
-
-            using (var command = connection.CreateCommand())
+            var type = (int)transactionType;
+            using (var command = Database.GetDbConnection().CreateCommand())
             {
-                command.CommandText = NextNumberSql;
-                command.Parameters.AddWithValue("@BasarId", basar.Id);
-                command.Parameters.AddWithValue("@Type", (int)transactionType);
-
-                number = (int)command.ExecuteScalar();
+                command.CommandText = $"update \"Number\" set \"Value\"=\"Value\" + 1 where \"BasarId\" = {basar.Id} and \"Type\" = {type};select \"Value\" from \"Number\"  where \"BasarId\" = {basar.Id} and \"Type\" = {type}";
+                Database.OpenConnection();
+                var result = command.ExecuteScalar();
+                return (int)result;
             }
-
-            connection.Close();
-
-            return number;
         }
         public async Task<ProductsTransaction> SettleSellerAsync(Basar basar, int sellerId, PrintSettings printSettings)
         {
