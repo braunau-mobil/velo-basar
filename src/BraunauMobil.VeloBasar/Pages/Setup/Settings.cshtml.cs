@@ -22,7 +22,10 @@ namespace BraunauMobil.VeloBasar.Pages.Setup
         public void OnGet()
         {
             ViewData["Basars"] = new SelectList(_context.Db.Basar, "Id", "Name");
-            ActiveBasarId = _context.Settings.ActiveBasarId.Value;
+            if (_context.Settings.ActiveBasarId.HasValue)
+            {
+                ActiveBasarId = _context.Settings.ActiveBasarId.Value;
+            }
         }
         public async Task OnPostAsync()
         {
