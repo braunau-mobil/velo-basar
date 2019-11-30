@@ -8,7 +8,6 @@ using Microsoft.EntityFrameworkCore;
 using BraunauMobil.VeloBasar.Data;
 using Microsoft.AspNetCore.Identity;
 using System;
-using BraunauMobil.VeloBasar.Resources;
 using System.Globalization;
 
 namespace BraunauMobil.VeloBasar

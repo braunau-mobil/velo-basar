@@ -14,7 +14,7 @@
 
   <ItemGroup>
     <PackageReference Include="itext7" Version="7.1.7" />
-    <PackageReference Include="Microsoft.AspNetCore.App">
+    <PackageReference Include="Microsoft.AspNetCore.All">
       <PrivateAssets Condition="'%(PackageReference.Version)' == ''">all</PrivateAssets>
       <Publish Condition="'%(PackageReference.Version)' == ''">true</Publish>
     </PackageReference>
