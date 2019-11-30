@@ -2,16 +2,16 @@
 using Microsoft.AspNetCore.Mvc;
 using BraunauMobil.VeloBasar.Models;
 using System;
-using BraunauMobil.VeloBasar.Data;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Linq;
 
 namespace BraunauMobil.VeloBasar.Pages.Basars
 {
     public class CreateModel : PageModel
     {
-        private readonly VeloBasarContext _context;
+        private readonly IVeloContext _context;
 
-        public CreateModel(VeloBasarContext context)
+        public CreateModel(IVeloContext context)
         {
             _context = context;
             BasarToCreate = new Basar
@@ -30,7 +30,12 @@ namespace BraunauMobil.VeloBasar.Pages.Basars
                 return Page();
             }
 
-            await _context.CreateBasarAsync(BasarToCreate);
+            var basar = await _context.Db.CreateBasarAsync(BasarToCreate);
+            if (_context.Db.Basar.Count() == 1)
+            {
+                _context.Settings.ActiveBasarId = basar.Id;
+                await _context.SaveSettingsAsync();
+            }
 
             return this.RedirectToPage<ListModel>();
         }
