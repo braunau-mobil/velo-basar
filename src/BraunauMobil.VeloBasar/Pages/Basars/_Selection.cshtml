@@ -1,16 +1,25 @@
 ﻿@{
     if (VeloContext.SignInManager.IsSignedIn(User))
     {
-        ViewData["Basars"] = new SelectList(VeloContext.Db.Basar, "Id", "Name");
-        <form>
-            <select id="basarId" class="form-control" asp-for="@VeloContext.Basar.Id" asp-items="ViewBag.Basars" onchange="onChange()"></select>
-            <script type="text/javascript">
-                function onChange() {
-                    var url = "@(Utils.GetPageForModel<SetBasarInCookiesModel>())?BasarId=" + $('#basarId').val();
-                    window.location = url;
-                }
-            </script>
-        </form>
+        if (VeloContext.Db.HasBasars())
+        {
+            ViewData["Basars"] = new SelectList(VeloContext.Db.Basar, "Id", "Name");
+            <form>
+                <select id="basarId" class="form-control" asp-for="@VeloContext.Basar.Id" asp-items="ViewBag.Basars" onchange="onChange()"></select>
+                <script type="text/javascript">
+                    function onChange() {
+                        var url = "@(Utils.GetPageForModel<SetBasarInCookiesModel>())?BasarId=" + $('#basarId').val();
+                        window.location = url;
+                    }
+                </script>
+            </form>
+        }
+        else
+        {
+            <div class="alert alert-danger" role="alert">
+                Keine Basare verfügbar
+            </div>
+        }
     }
     else if (VeloContext.Basar != null)
     {

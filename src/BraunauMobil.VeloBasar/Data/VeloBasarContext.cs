@@ -238,6 +238,14 @@ namespace BraunauMobil.VeloBasar.Data
             };
         }
         public VeloSettings GetVeloSettings() => GetSettings<VeloSettings>(VeloSettingsId);
+        public bool HasBasars()
+        {
+            if (IsInitialized())
+            {
+                return Basar.Any();
+            }
+            return false;
+        }
         public async Task<int> GetTransactionNumberForProductAsync(Basar basar, TransactionType type, int productId)
         {
             var transaction = await Transactions.AsNoTracking().Include(t => t.Products).Where(t => t.Type == type && t.BasarId == basar.Id).FirstOrDefaultAsync(t => t.Products.Any(pt => pt.ProductId == productId));
