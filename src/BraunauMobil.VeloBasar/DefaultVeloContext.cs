@@ -43,6 +43,8 @@ namespace BraunauMobil.VeloBasar
                 return;
             }
 
+            Settings = Db.GetVeloSettings();
+
             if (SignInManager.IsSignedIn(_httpContextAccessor.HttpContext.User))
             {
                 var basarId = _httpContextAccessor.HttpContext.Request.Cookies.GetBasarId();
@@ -52,8 +54,6 @@ namespace BraunauMobil.VeloBasar
                     return;
                 }
             }
-
-            Settings = Db.GetVeloSettings();
             
             if (Settings.ActiveBasarId != null)
             {
