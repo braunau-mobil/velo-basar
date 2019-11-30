@@ -3,3 +3,4 @@
 *.log
 *.user
 .vs
+launchSettings.json

@@ -3,6 +3,7 @@ using BraunauMobil.VeloBasar.Models;
 using BraunauMobil.VeloBasar.Resources;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Localization;
 
 namespace BraunauMobil.VeloBasar
@@ -11,10 +12,11 @@ namespace BraunauMobil.VeloBasar
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public DefaultVeloContext(VeloBasarContext dbContext, IStringLocalizer<SharedResource> localizer, SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager, IHttpContextAccessor httpContextAccessor)
+        public DefaultVeloContext(VeloBasarContext dbContext, IStringLocalizer<SharedResource> localizer, SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager, IHttpContextAccessor httpContextAccessor, IConfiguration configuration)
         {
             _httpContextAccessor = httpContextAccessor;
 
+            Configuration = configuration;
             Db = dbContext;
             Localizer = localizer;
             SignInManager = signInManager;
@@ -24,18 +26,11 @@ namespace BraunauMobil.VeloBasar
         }
 
         public Basar Basar { get; private set; }
+        public IConfiguration Configuration { get; private set; }
         public VeloBasarContext Db { get; private set; }
         public IStringLocalizer<SharedResource> Localizer { get; private set; }
         public SignInManager<IdentityUser> SignInManager { get; private set; }
         public UserManager<IdentityUser> UserManager { get; private set; }
-        public bool IsDebug
-        {
-#if DEBUG
-            get => true;
-#else
-            get => false;
-#endif
-        }
 
         private void LoadBasar()
         {

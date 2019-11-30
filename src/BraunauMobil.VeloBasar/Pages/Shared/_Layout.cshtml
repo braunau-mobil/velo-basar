@@ -83,15 +83,15 @@
                         }
                     </ul>
 
-                    @if (VeloContext.IsDebug)
+                    @if (VeloContext.Configuration.DevToolsEnabled())
                     {
                         <h6 class="d-flex justify-content-between align-items-center mx-3 mt-4">Dev</h6>
                         <ul class="nav flex-column mb-2">
                             <li class="nav-item">
-                                <a class="nav-link" velo-page="@(this.GetPage<Setup.DangerZoneModel>())">Danger Zone!</a>
+                                <a class="nav-link" velo-page="@(this.GetPage<DevTools.DangerZoneModel>())">Danger Zone!</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" velo-page="@(this.GetPage<Setup.NextNumberTestModel>())">Next Number Test</a>
+                                <a class="nav-link" velo-page="@(this.GetPage<DevTools.NextNumberTestModel>())">Next Number Test</a>
                             </li>
                         </ul>
                     }

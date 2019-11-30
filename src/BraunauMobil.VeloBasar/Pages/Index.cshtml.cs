@@ -29,9 +29,9 @@ namespace BraunauMobil.VeloBasar.Pages
             if (_context.Basar == null)
             {
                 _logger.Information("No basar found");
-                if (_context.IsDebug)
+                if (_context.Configuration.DevToolsEnabled())
                 {
-                    return this.RedirectToPage<Setup.DangerZoneModel>();
+                    return this.RedirectToPage<DevTools.DangerZoneModel>();
                 }
                 throw new NotImplementedException("What should we do in this case??");
             }

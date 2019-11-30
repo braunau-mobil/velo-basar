@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using BraunauMobil.VeloBasar.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace BraunauMobil.VeloBasar.Pages.Setup
+namespace BraunauMobil.VeloBasar.Pages.DevTools
 {
     public class NextNumberTestModel : PageModel
     {
@@ -18,9 +19,13 @@ namespace BraunauMobil.VeloBasar.Pages.Setup
 
         public TimeSpan Elapsed { get; private set; }
         public List<int> Numbers { get; } = new List<int>();
-#if DEBUG
-        public async Task OnGetAsync()
+        public IActionResult OnGet()
         {
+            if (!_context.Configuration.DevToolsEnabled())
+            {
+                return Unauthorized();
+            }
+
             var basar = new Basar
             {
                 Id = 1
@@ -34,7 +39,8 @@ namespace BraunauMobil.VeloBasar.Pages.Setup
             }
 
             Elapsed = stopwatch.Elapsed;
+
+            return Page();
         }
-#endif
     }
 }

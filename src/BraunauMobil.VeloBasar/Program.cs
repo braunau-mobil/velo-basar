@@ -4,6 +4,7 @@ using System;
 using Microsoft.AspNetCore;
 using Serilog;
 using Serilog.Events;
+using Microsoft.Extensions.Configuration;
 
 namespace BraunauMobil.VeloBasar
 {
@@ -43,6 +44,10 @@ namespace BraunauMobil.VeloBasar
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration((hostingContext, config) =>
+                {
+                    config.AddCommandLine(args);
+                })
                 .UseStartup<Startup>()
                 .UseSerilog();
     }

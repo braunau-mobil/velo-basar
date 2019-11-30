@@ -4,14 +4,14 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace BraunauMobil.VeloBasar.Pages.Setup
+namespace BraunauMobil.VeloBasar.Pages.DevTools
 {
     public class DangerZoneModel : PageModel
     {
-        private readonly VeloBasarContext _context;
+        private readonly IVeloContext _context;
         private readonly UserManager<IdentityUser> _userManager;
 
-        public DangerZoneModel(VeloBasarContext context, UserManager<IdentityUser> userManager)
+        public DangerZoneModel(IVeloContext context, UserManager<IdentityUser> userManager)
         {
             _context = context;
             _userManager = userManager;
@@ -21,14 +21,24 @@ namespace BraunauMobil.VeloBasar.Pages.Setup
         [BindProperty]
         public DataGeneratorConfiguration Config { get; set; }
 
-#if DEBUG
+        public IActionResult OnGet()
+        {
+            if (!_context.Configuration.DevToolsEnabled())
+            {
+                return Unauthorized();
+            }
+            return Page();
+        }
         public async Task<IActionResult> OnPostAsync()
         {
-            var generator = new DataGenerator(_context, _userManager, Config);
+            if (!_context.Configuration.DevToolsEnabled())
+            {
+                return Unauthorized();
+            }
+            var generator = new DataGenerator(_context.Db, _userManager, Config);
             await generator.GenerateAsync();
 
             return this.RedirectToPage<IndexModel>();
         }
-#endif
     }
 }
