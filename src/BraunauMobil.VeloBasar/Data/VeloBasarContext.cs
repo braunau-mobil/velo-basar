@@ -279,6 +279,8 @@ namespace BraunauMobil.VeloBasar.Data
                 IsInitialized = true
             };
             await SetBasarSettingsAsync(settings);
+            
+            await SetPrintSettingsAsync(new PrintSettings());
 
             await Country.AddAsync(new Country
             {
@@ -511,9 +513,9 @@ namespace BraunauMobil.VeloBasar.Data
         private async Task SetSettingsAsync<T>(T instance, int id, string contentType) where T : class
         {
             FileStore settingsFileStore;
-            if (await FileStore.ExistsAsync(VeloSettingsId))
+            if (await FileStore.ExistsAsync(id))
             {
-                settingsFileStore = await FileStore.GetAsync(VeloSettingsId);
+                settingsFileStore = await FileStore.GetAsync(id);
                 settingsFileStore.Data = instance.SerializeAsJson();
             }
             else
