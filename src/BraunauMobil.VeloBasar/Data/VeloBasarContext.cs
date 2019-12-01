@@ -279,6 +279,18 @@ namespace BraunauMobil.VeloBasar.Data
                 IsInitialized = true
             };
             await SetBasarSettingsAsync(settings);
+
+            await Country.AddAsync(new Country
+            {
+                Iso3166Alpha3Code = "AUT",
+                Name = "Österreich"
+            });
+            await Country.AddAsync(new Country
+            {
+                Iso3166Alpha3Code = "GER",
+                Name = "Deutschland"
+            });
+            await SaveChangesAsync();
         }
 
         [SuppressMessage("Design", "CA1031:Do not catch general exception types")]
