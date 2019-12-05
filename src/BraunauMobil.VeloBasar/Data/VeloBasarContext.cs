@@ -482,13 +482,13 @@ namespace BraunauMobil.VeloBasar.Data
                     ValueState = ValueState.NotSettled
                 };
 
-                if (product.Brand != null)
+                if (product.Brand == null)
                 {
                     newProduct.Brand = product.Brand;
                     newProduct.BrandId = product.BrandId;
                 }
 
-                if (product.Type != null)
+                if (product.Type == null)
                 {
                     newProduct.Type = product.Type;
                     newProduct.TypeId = product.TypeId;
