@@ -140,7 +140,7 @@ namespace BraunauMobil.VeloBasar.Data
             {
                 products.Add(CreateProduct());
             }
-            await _context.AcceptProductsAsync(basar, seller.Id, new PrintSettings(), products);
+            await _context.AcceptProductsAsync(basar, seller, new PrintSettings(), products);
         }
 
         private Product CreateProduct()

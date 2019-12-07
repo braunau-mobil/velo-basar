@@ -50,14 +50,14 @@ namespace BraunauMobil.VeloBasar
                 var basarId = _httpContextAccessor.HttpContext.Request.Cookies.GetBasarId();
                 if(basarId.HasValue && Db.Basar.Exists(basarId.Value))
                 {
-                    Basar = Db.Basar.GetAsNonTracking(basarId.Value);
+                    Basar = Db.Basar.Get(basarId.Value);
                     return;
                 }
             }
             
             if (Settings.ActiveBasarId != null)
             {
-                Basar = Db.Basar.GetAsNonTracking(Settings.ActiveBasarId.Value);
+                Basar = Db.Basar.Get(Settings.ActiveBasarId.Value);
             }
         }
     }

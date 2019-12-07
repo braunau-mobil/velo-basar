@@ -85,7 +85,7 @@ namespace BraunauMobil.VeloBasar.Tests.Data.VeloBasarContextTests
                    var products = JsonConvert.DeserializeObject<List<Product>>(json);
                    await ctx.ReloadRelationsAsync(products);
 
-                   var acceptance = await ctx.AcceptProductsAsync(basar, seller.Id, new PrintSettings(), products);
+                   var acceptance = await ctx.AcceptProductsAsync(basar, seller, new PrintSettings(), products);
                    Assert.IsNotNull(acceptance);
                    Assert.AreEqual(1, acceptance.Id);
                }

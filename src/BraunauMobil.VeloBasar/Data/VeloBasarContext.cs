@@ -52,13 +52,13 @@ namespace BraunauMobil.VeloBasar.Data
         public DbSet<ProductsTransaction> Transactions { get; set; }
         public DbSet<ProductType> ProductTypes { get; set; }
 
-        public async Task<ProductsTransaction> AcceptProductsAsync(Basar basar, int sellerId, PrintSettings printSettings, IList<Product> products)
+        public async Task<ProductsTransaction> AcceptProductsAsync(Basar basar, Seller seller, PrintSettings printSettings, IList<Product> products)
         {
             Contract.Requires(products != null);
 
             var productsInserted = await InsertProductsAsync(products);
 
-            var tx = await CreateTransactionAsync(basar, TransactionType.Acceptance, sellerId, printSettings, productsInserted.ToArray());
+            var tx = await CreateTransactionAsync(basar, TransactionType.Acceptance, seller, printSettings, productsInserted.ToArray());
             await GenerateTransactionDocumentAsync(tx, printSettings);
 
             return tx;
@@ -328,14 +328,14 @@ namespace BraunauMobil.VeloBasar.Data
                 await ReloadRelationsAsync(product);
             }
         }
-        public async Task<ProductsTransaction> SettleSellerAsync(Basar basar, int sellerId, PrintSettings printSettings)
+        public async Task<ProductsTransaction> SettleSellerAsync(Basar basar, Seller seller, PrintSettings printSettings)
         {
-            var sellersProducts = await GetProductsForSeller(basar, sellerId).ToListAsync();
+            var sellersProducts = await GetProductsForSeller(basar, seller.Id).ToListAsync();
 
             var products = sellersProducts.Where(p => p.IsAllowed(TransactionType.Settlement));
             products.SetState(TransactionType.Settlement);
 
-            return await CreateTransactionAsync(basar, TransactionType.Settlement, sellerId, printSettings, products.ToArray());
+            return await CreateTransactionAsync(basar, TransactionType.Settlement, seller, printSettings, products.ToArray());
         }
         public async Task SetPrintSettingsAsync(PrintSettings settings) => await SetSettingsAsync(settings, PrintSettingsId, PrintSettingsContentType);
         public async Task SetBasarSettingsAsync(VeloSettings settings) => await SetSettingsAsync(settings, VeloSettingsId, VeloSettingsContentType);
@@ -365,20 +365,20 @@ namespace BraunauMobil.VeloBasar.Data
         {
             return await CreateTransactionAsync(basar, transactionType, null, null, printSettings, products);
         }
-        private async Task<ProductsTransaction> CreateTransactionAsync(Basar basar, TransactionType transactionType, int? sellerId, PrintSettings printSettings, params Product[] products)
+        private async Task<ProductsTransaction> CreateTransactionAsync(Basar basar, TransactionType transactionType, Seller seller, PrintSettings printSettings, params Product[] products)
         {
-            return await CreateTransactionAsync(basar, transactionType, sellerId, null, printSettings, products);
+            return await CreateTransactionAsync(basar, transactionType, seller, null, printSettings, products);
         }
-        private async Task<ProductsTransaction> CreateTransactionAsync(Basar basar, TransactionType transactionType, int? sellerId, string notes, PrintSettings printSettings, params Product[] products)
+        private async Task<ProductsTransaction> CreateTransactionAsync(Basar basar, TransactionType transactionType, Seller seller, string notes, PrintSettings printSettings, params Product[] products)
         {
             var tx = new ProductsTransaction
             {
-                BasarId = basar.Id,
+                Basar = basar,
                 Number = _numberPool.NextNumber(basar, transactionType),
                 TimeStamp = DateTime.Now,
                 Notes = notes,
                 Type = transactionType,
-                SellerId = sellerId
+                Seller = seller
             };
             tx.Products = products.Select(p => new ProductToTransaction { Product = p, Transaction = tx }).ToList();
             await Transactions.AddAsync(tx);

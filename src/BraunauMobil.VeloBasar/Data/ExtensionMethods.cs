@@ -36,9 +36,9 @@ namespace BraunauMobil.VeloBasar.Data
             return await transactions.AnyAsync(t => t.BasarId == basar.Id && t.Type == type && t.Number == number);
         }
 
-        public static Basar GetAsNonTracking(this IQueryable<Basar> basars, int id)
+        public static Basar Get(this IQueryable<Basar> basars, int id)
         {
-            return basars.AsNoTracking().FirstOrDefault(p => p.Id == id);
+            return basars.FirstOrDefault(p => p.Id == id);
         }
         public static async Task<Basar> GetAsync(this IQueryable<Basar> basars, int id)
         {
