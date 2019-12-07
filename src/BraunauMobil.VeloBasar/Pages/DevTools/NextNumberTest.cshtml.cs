@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using BraunauMobil.VeloBasar.Data;
 using BraunauMobil.VeloBasar.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -35,7 +36,8 @@ namespace BraunauMobil.VeloBasar.Pages.DevTools
 
             for (var count = 0; count < 1000; count++)
             {
-                Numbers.Add(_context.Db.NextNumber(basar, TransactionType.Lock));
+                throw new NotImplementedException();
+                //Numbers.Add(_context.Db.NextNumber(basar, TransactionType.Lock));
             }
 
             Elapsed = stopwatch.Elapsed;

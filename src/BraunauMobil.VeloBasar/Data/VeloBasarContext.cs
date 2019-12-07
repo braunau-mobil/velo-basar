@@ -25,12 +25,21 @@ namespace BraunauMobil.VeloBasar.Data
         private readonly PdfCreator _pdfCreator;
 
         private readonly IStringLocalizer<SharedResource> _localizer;
+        private readonly INumberPool _numberPool;
 
         public VeloBasarContext (DbContextOptions<VeloBasarContext> options, IStringLocalizer<SharedResource> localizer)
             : base(options)
         {
+                _localizer = localizer;
+                _pdfCreator = new PdfCreator(_localizer);
+                _numberPool = new PsqlNumberPool(Database);
+        }
+        public VeloBasarContext(DbContextOptions<VeloBasarContext> options, IStringLocalizer<SharedResource> localizer, INumberPool numberPool)
+            : base(options)
+        {
             _localizer = localizer;
             _pdfCreator = new PdfCreator(_localizer);
+            _numberPool = numberPool;
         }
 
         public DbSet<Basar> Basar { get; set; }
@@ -45,6 +54,8 @@ namespace BraunauMobil.VeloBasar.Data
 
         public async Task<ProductsTransaction> AcceptProductsAsync(Basar basar, int sellerId, PrintSettings printSettings, IList<Product> products)
         {
+            Contract.Requires(products != null);
+
             var productsInserted = await InsertProductsAsync(products);
 
             var tx = await CreateTransactionAsync(basar, TransactionType.Acceptance, sellerId, printSettings, productsInserted.ToArray());
@@ -308,19 +319,13 @@ namespace BraunauMobil.VeloBasar.Data
                 return false;
             }
         }
-
-        [SuppressMessage("Security", "CA2100:Review SQL queries for security vulnerabilities")]
-        public int NextNumber(Basar basar, TransactionType transactionType)
+        public async Task ReloadRelationsAsync(IList<Product> products)
         {
-            Contract.Requires(basar != null);
+            Contract.Requires(products != null);
 
-            var type = (int)transactionType;
-            using (var command = Database.GetDbConnection().CreateCommand())
+            foreach (var product in products)
             {
-                command.CommandText = $"update \"Number\" set \"Value\"=\"Value\" + 1 where \"BasarId\" = {basar.Id} and \"Type\" = {type};select \"Value\" from \"Number\"  where \"BasarId\" = {basar.Id} and \"Type\" = {type}";
-                Database.OpenConnection();
-                var result = command.ExecuteScalar();
-                return (int)result;
+                await ReloadRelationsAsync(product);
             }
         }
         public async Task<ProductsTransaction> SettleSellerAsync(Basar basar, int sellerId, PrintSettings printSettings)
@@ -337,6 +342,8 @@ namespace BraunauMobil.VeloBasar.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            Contract.Requires(modelBuilder != null);
+
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<ProductToTransaction>().HasKey(ap => new { ap.ProductId, ap.TransactionId });
@@ -367,7 +374,7 @@ namespace BraunauMobil.VeloBasar.Data
             var tx = new ProductsTransaction
             {
                 BasarId = basar.Id,
-                Number = NextNumber(basar, transactionType),
+                Number = _numberPool.NextNumber(basar, transactionType),
                 TimeStamp = DateTime.Now,
                 Notes = notes,
                 Type = transactionType,
@@ -463,14 +470,16 @@ namespace BraunauMobil.VeloBasar.Data
             var fileStore = await FileStore.AsNoTracking().FirstAsync(f => f.Id == id);
             return JsonUtils.DeserializeFromJson<T>(fileStore.Data);
         }
-        private async Task<IList<Product>> InsertProductsAsync(IList<Product> products)
+        public async Task<IList<Product>> InsertProductsAsync(IList<Product> products)
         {
+            Contract.Requires(products != null);
+
             var newProducts = new List<Product>();
             foreach (var product in products)
             {
                 var newProduct = new Product
                 {
-                    BrandId = product.BrandId,
+                    Brand = product.Brand,
                     Color = product.Color,
                     Description = product.Description,
                     FrameNumber = product.FrameNumber,
@@ -478,22 +487,9 @@ namespace BraunauMobil.VeloBasar.Data
                     Price = product.Price,
                     StorageState = StorageState.Available,
                     TireSize = product.TireSize,
-                    TypeId = product.TypeId,
+                    Type = product.Type,
                     ValueState = ValueState.NotSettled
                 };
-
-                if (product.Brand == null)
-                {
-                    newProduct.Brand = product.Brand;
-                    newProduct.BrandId = product.BrandId;
-                }
-
-                if (product.Type == null)
-                {
-                    newProduct.Type = product.Type;
-                    newProduct.TypeId = product.TypeId;
-                }
-
                 newProducts.Add(newProduct);
             }
 
@@ -501,6 +497,15 @@ namespace BraunauMobil.VeloBasar.Data
             await SaveChangesAsync();
 
             return newProducts;
+        }
+        private async Task ReloadRelationsAsync(Product product)
+        {
+            Contract.Requires(product != null);
+
+            product.Brand = await Brand.GetAsync(product.Brand.Id);
+            product.BrandId = product.Brand.Id;
+            product.Type = await ProductTypes.GetAsync(product.Type.Id);
+            product.TypeId = product.Type.Id;
         }
         private async Task RemoveProductsFromTransactionAsync(ProductsTransaction transaction, IList<Product> productsToRemove)
         {
