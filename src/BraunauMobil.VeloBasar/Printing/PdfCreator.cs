@@ -212,7 +212,7 @@ namespace BraunauMobil.VeloBasar.Printing
                 }
                 doc.Add(productsTable);
 
-                var signature = GetSignatureText(acceptance, settings);
+                var signature = GetSignatureText(acceptance, settings.Acceptance);
                 signature.SetFontSize(_regularFontSize);
                 signature.SetPaddingTop(20);
                 doc.Add(signature);
@@ -306,12 +306,12 @@ namespace BraunauMobil.VeloBasar.Printing
             }
             return bytes;
         }
-        private Paragraph GetSignatureText(ProductsTransaction transaction, PrintSettings settings)
+        private Paragraph GetSignatureText(ProductsTransaction transaction, AcceptancePrintSettings settings)
         {
             Contract.Requires(transaction != null);
             Contract.Requires(settings != null);
 
-            var signature = new Text(settings.Transactions[transaction.Type].GetSignatureText(transaction, _localizer));
+            var signature = new Text(settings.GetSignatureText(transaction, _localizer));
             signature.SetBold();
             var locationAndDate = new Text(_localizer["{0} am {1} Uhr", transaction.Basar.Location, transaction.TimeStamp]);
 

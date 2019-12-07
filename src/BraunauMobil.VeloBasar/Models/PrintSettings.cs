@@ -1,6 +1,5 @@
 ﻿using BraunauMobil.VeloBasar.Resources;
 using Microsoft.Extensions.Localization;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.Contracts;
 using System.Globalization;
@@ -27,16 +26,22 @@ namespace BraunauMobil.VeloBasar.Models
         public int Bottom { get; set; }
     }
 
-    public class TransactionPrintSettings
+    public abstract class TransactionPrintSettingsBase
     {
         [Display(Name = "Titel")]
         public string TitleFormat { get; set; }
-        [Display(Name = "Unterschrift")]
-        public string SignatureFormat { get; set; }
         [Display(Name = "Untertitel")]
         public string SubTitle { get; set; }
+        public abstract TransactionType TransactionType { get; }
+    }
+
+    public class AcceptancePrintSettings : TransactionPrintSettingsBase
+    {
+        [Display(Name = "Unterschrift")]
+        public string SignatureFormat { get; set; }
         [Display(Name = "Token")]
         public string TokenFormat { get; set; }
+        public override TransactionType TransactionType => TransactionType.Acceptance;
 
         public string GetSignatureText(ProductsTransaction transaction, IStringLocalizer<SharedResource> localizer)
         {
@@ -53,26 +58,42 @@ namespace BraunauMobil.VeloBasar.Models
         }
     }
 
+    public class SalePrintSettings : TransactionPrintSettingsBase
+    {
+        public SalePrintSettings()
+        {
+            Banner = new ImageData();
+        }
+
+        [Display(Name = "Banner")]
+        public ImageData Banner { get; set; }
+
+        public override TransactionType TransactionType => TransactionType.Sale;
+    }
+
     public class PrintSettings
     {
         public PrintSettings()
         {
-            Acceptance = new TransactionPrintSettings
+            Acceptance = new AcceptancePrintSettings
             {
                 TitleFormat = "Annahmebeleg: Braunau mobil - {0}",
                 SignatureFormat = "Für Braunau mobil: {0}",
                 SubTitle = "Folgende Ihrer Artikel haben wir in unseren Verkauf aufgenommen:",
                 TokenFormat = "Ihr Token für den Online-Login: {0}"
             };
+            Sale = new SalePrintSettings
+            {
+                TitleFormat = "Verkaufsbeleg: Braunau mobil - {0}",
+                SubTitle = "Folgende Artikel haben wir an Sie verkauft:"
+            };
             PageMargins = new Margins(20, 10, 20, 10);
-
-            Transactions.Add(TransactionType.Acceptance, Acceptance);
         }
 
-        public IDictionary<TransactionType, TransactionPrintSettings> Transactions { get; private set; } = new Dictionary<TransactionType, TransactionPrintSettings>();
-
         [Display(Name = "Annahme")]
-        public TransactionPrintSettings Acceptance { get; set; }
+        public AcceptancePrintSettings Acceptance { get; set; }
+        [Display(Name = "Verkauf")]
+        public SalePrintSettings Sale { get; set; }
         [Display(Name = "Seitenränder")]
         public Margins PageMargins { get; set; }
     }
