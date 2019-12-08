@@ -11,5 +11,7 @@ namespace BraunauMobil.VeloBasar.Models
         public bool GenerateCountries { get; set; }
         [Display(Name = "Beispiel Marken generieren")]
         public bool GenerateBrands { get; set; }
+        [Display(Name = "Beispiel Produkt Typen generieren")]
+        public bool GenerateProductTypes { get; set; }
     }
 }
