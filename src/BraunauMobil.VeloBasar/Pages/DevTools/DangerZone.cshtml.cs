@@ -15,7 +15,11 @@ namespace BraunauMobil.VeloBasar.Pages.DevTools
         {
             _context = context;
             _generatorContext = generatorContext;
-            Config = new DataGeneratorConfiguration();
+            Config = new DataGeneratorConfiguration
+            {
+                GenerateBrands = true,
+                GenerateCountries = true
+            };
         }
 
         [BindProperty]

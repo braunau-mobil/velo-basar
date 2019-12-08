@@ -9,5 +9,7 @@ namespace BraunauMobil.VeloBasar.Models
         public string AdminUserEMail { get; set; }
         [Display(Name = "Beispiel Länder generieren")]
         public bool GenerateCountries { get; set; }
+        [Display(Name = "Beispiel Marken generieren")]
+        public bool GenerateBrands { get; set; }
     }
 }
