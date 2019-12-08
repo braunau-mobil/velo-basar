@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace BraunauMobil.VeloBasar.Data
+namespace BraunauMobil.VeloBasar.Models
 {
     public class InitializationConfiguration
     {

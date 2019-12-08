@@ -20,14 +20,14 @@ using Microsoft.Extensions.Localization;
 
 namespace BraunauMobil.VeloBasar.Printing
 {
-    public class PdfCreator
+    public class PdfPrintService : IPrintService
     {
         private const int _bigFontSize = 14;
         private const int _mediumFontSize = 12;
         private const int _regularFontSize = 10;
         private readonly IStringLocalizer<SharedResource> _localizer;
 
-        public PdfCreator(IStringLocalizer<SharedResource> localizer)
+        public PdfPrintService(IStringLocalizer<SharedResource> localizer)
         {
             _localizer = localizer;
         }

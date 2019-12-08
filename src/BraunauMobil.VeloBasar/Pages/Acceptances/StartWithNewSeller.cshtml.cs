@@ -1,11 +1,11 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using BraunauMobil.VeloBasar.Data;
 using BraunauMobil.VeloBasar.Models;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BraunauMobil.VeloBasar.ViewModels;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using BraunauMobil.VeloBasar.Logic;
+using System.Diagnostics.Contracts;
 
 namespace BraunauMobil.VeloBasar.Pages.Acceptances
 {
@@ -17,11 +17,15 @@ namespace BraunauMobil.VeloBasar.Pages.Acceptances
     public class StartWithNewSellerModel : PageModel
     {
         private readonly IVeloContext _context;
+        private readonly ISellerContext _sellerContext;
+        private readonly ICountryContext _countryContext;
         private bool _isValidationEnabled;
 
-        public StartWithNewSellerModel(IVeloContext context)
+        public StartWithNewSellerModel(IVeloContext context, ISellerContext sellerContext, ICountryContext countryContext)
         {
             _context = context;
+            _sellerContext = sellerContext;
+            _countryContext = countryContext;
         }
 
         public string ErrorText { get; set; }
@@ -34,11 +38,13 @@ namespace BraunauMobil.VeloBasar.Pages.Acceptances
 
         public async Task<IActionResult> OnGetAsync(StartWithNewSellerParameter parameter)
         {
-            ViewData["Countries"] = new SelectList(_context.Db.Country, "Id", "Name");
+            Contract.Requires(parameter != null);
+
+            ViewData["Countries"] = _countryContext.GetSelectList();
 
             if (parameter.SellerId != null)
             {
-                Seller = await _context.Db.Seller.GetAsync(parameter.SellerId.Value);
+                Seller = await _sellerContext.GetAsync(parameter.SellerId.Value);
                 if (Seller == null)
                 {
                     return NotFound();
@@ -50,7 +56,7 @@ namespace BraunauMobil.VeloBasar.Pages.Acceptances
         }
         public async Task<IActionResult> OnPostAsync(StartWithNewSellerParameter parameter)
         {
-            ViewData["Countries"] = new SelectList(_context.Db.Country, "Id", "Name");
+            ViewData["Countries"] = _countryContext.GetSelectList();
 
             if (parameter.Search == true)
             {
@@ -60,7 +66,7 @@ namespace BraunauMobil.VeloBasar.Pages.Acceptances
                     return Page();
                 }
 
-                var sellers = await _context.Db.Seller.GetMany(Seller.FirstName, Seller.LastName).ToListAsync();
+                var sellers = await _sellerContext.GetMany(Seller.FirstName, Seller.LastName).ToListAsync();
                 if (sellers.Count > 0)
                 {
                     Sellers = new ListViewModel<Seller>(_context.Basar, sellers, new[]{
@@ -90,14 +96,13 @@ namespace BraunauMobil.VeloBasar.Pages.Acceptances
 
             if (parameter.SellerId != null)
             {
-                _context.Db.Attach(Seller).State = EntityState.Modified;
+                await _sellerContext.UpdateAsync(Seller);
             }
             else
             {
-                _context.Db.Seller.Add(Seller);
+                await _sellerContext.CreateAsync(Seller);
             }
 
-            await _context.Db.SaveChangesAsync();
             return this.RedirectToPage<EnterProductsModel>(new EnterProductsParameter { SellerId = Seller.Id });
         }
         public object GetNextParameter()
@@ -108,6 +113,7 @@ namespace BraunauMobil.VeloBasar.Pages.Acceptances
             }
             return new object();
         }
+        //  @todo was ist den das bitte?!?!?!?!?
         public object GetSearchParameter() => new StartWithNewSellerParameter { Search = true };
         public bool IsValidationEnabled()
         {

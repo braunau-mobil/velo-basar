@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Identity;
 using System;
 using System.Globalization;
 using Serilog;
+using BraunauMobil.VeloBasar.Logic;
+using BraunauMobil.VeloBasar.Printing;
 
 namespace BraunauMobil.VeloBasar
 {
@@ -27,7 +29,7 @@ namespace BraunauMobil.VeloBasar
         {
             Log.Information("Configure services");
 
-            services.AddScoped<IVeloContext, DefaultVeloContext>();
+            RegisterSercies(services);
             services.AddHttpContextAccessor();
 
             services.Configure<CookiePolicyOptions>(options =>
@@ -39,7 +41,7 @@ namespace BraunauMobil.VeloBasar
 
 
             Log.Information("Configure database context");
-            services.AddDbContext<VeloBasarContext>(options =>
+            services.AddDbContext<VeloRepository>(options =>
             {
                 if (Configuration.UseSqlServer())
                 {
@@ -52,7 +54,7 @@ namespace BraunauMobil.VeloBasar
             });
 
             services.AddDefaultIdentity<IdentityUser>()
-                .AddEntityFrameworkStores<VeloBasarContext>();
+                .AddEntityFrameworkStores<VeloRepository>();
 
             services.Configure<IdentityOptions>(options =>
             {
@@ -83,6 +85,26 @@ namespace BraunauMobil.VeloBasar
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             Log.Information("Configure services done");
+        }
+
+        private static void RegisterSercies(IServiceCollection services)
+        {
+            services.AddScoped<IBasarContext, BasarContext>();
+            services.AddScoped<IBrandContext, BrandContext>();
+            services.AddScoped<ICountryContext, CountryContext>();
+            services.AddScoped<IDataGeneratorContext, DataGeneratorContext>();
+            services.AddScoped<IFileStoreContext, FileStoreContext>();
+            services.AddScoped<INumberContext, NumberContext>();
+            services.AddScoped<IProductContext, ProductContext>();
+            services.AddScoped<IProductTypeContext, ProductTypeContext>();
+            services.AddScoped<ISellerContext, SellerContext>();
+            services.AddScoped<ISettingsContext, SettingsContext>();
+            services.AddScoped<ISetupContext, SetupContext>();
+            services.AddScoped<IStatisticContext, StatisticContext>();
+            services.AddScoped<ITransactionContext, TransactionContext>();
+
+            services.AddScoped<IPrintService, PdfPrintService>();
+            services.AddScoped<IVeloContext, DefaultVeloContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

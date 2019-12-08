@@ -62,9 +62,6 @@ namespace BraunauMobil.VeloBasar
         {
             return pageModel.RedirectToPage(Utils.GetPageForModel<TPageModel>(), parameter);
         }
-        public static T TakeRandom<T>(this T[] array, Random rand)
-        {
-            return array[rand.Next(0, array.Length - 1)];
-        }
+
     }
 }

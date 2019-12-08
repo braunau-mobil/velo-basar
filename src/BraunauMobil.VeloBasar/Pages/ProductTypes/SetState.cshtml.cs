@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using BraunauMobil.VeloBasar.Data;
-using Microsoft.EntityFrameworkCore;
 using BraunauMobil.VeloBasar.Models;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using BraunauMobil.VeloBasar.Logic;
+using System.Diagnostics.Contracts;
 
 namespace BraunauMobil.VeloBasar.Pages.ProductTypes
 {
@@ -15,21 +15,20 @@ namespace BraunauMobil.VeloBasar.Pages.ProductTypes
     }
     public class SetStateModel : PageModel
     {
-        private readonly VeloBasarContext _context;
+        private readonly IProductTypeContext _context;
 
-        public SetStateModel(VeloBasarContext context)
+        public SetStateModel(IProductTypeContext context)
         {
             _context = context;
         }
 
         public async Task<IActionResult> OnGetAsync(SetStateParameter parameter)
         {
-            if (await _context.ProductTypes.ExistsAsync(parameter.ProductTypeId))
+            Contract.Requires(parameter != null);
+
+            if (await _context.ExistsAsync(parameter.ProductTypeId))
             {
-                var productType = await _context.ProductTypes.GetAsync(parameter.ProductTypeId);
-                productType.State = parameter.State;
-                _context.Attach(productType).State = EntityState.Modified;
-                await _context.SaveChangesAsync();
+                await _context.SetStateAsync(parameter.ProductTypeId, parameter.State);
             }
             else
             {

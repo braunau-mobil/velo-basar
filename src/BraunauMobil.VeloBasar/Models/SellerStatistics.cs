@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace BraunauMobil.VeloBasar.Data
+namespace BraunauMobil.VeloBasar.Models
 {
     [Display(Name = "Verkäufer Statistik")]
     public class SellerStatistics

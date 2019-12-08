@@ -1,37 +1,43 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using BraunauMobil.VeloBasar.Logic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace BraunauMobil.VeloBasar.Pages.Setup
 {
     public class SettingsModel : PageModel
     {
-        private readonly IVeloContext _context;
+        private readonly ISettingsContext _settingsContext;
+        private readonly IBasarContext _basarContext;
 
-        public SettingsModel(IVeloContext context)
+        public SettingsModel(ISettingsContext settingsContext, IBasarContext basarContext)
         {
-            _context = context;
+            _settingsContext = settingsContext;
+            _basarContext = basarContext;
         }
 
         [BindProperty]
         [Display(Name = "Aktiver Basar")]
         public int ActiveBasarId { get; set; }
 
-        public void OnGet()
+        public async Task OnGetAsync()
         {
-            ViewData["Basars"] = new SelectList(_context.Db.Basar, "Id", "Name");
-            if (_context.Settings.ActiveBasarId.HasValue)
+            ViewData["Basars"] = _basarContext.GetSelectList();
+
+            var settings = await _settingsContext.GetSettingsAsync();
+            if (settings.ActiveBasarId.HasValue)
             {
-                ActiveBasarId = _context.Settings.ActiveBasarId.Value;
+                ActiveBasarId = settings.ActiveBasarId.Value;
             }
         }
         public async Task OnPostAsync()
         {
-            ViewData["Basars"] = new SelectList(_context.Db.Basar, "Id", "Name");
-            _context.Settings.ActiveBasarId = ActiveBasarId;
-            await _context.Db.SaveChangesAsync();
+            ViewData["Basars"] = _basarContext.GetSelectList();
+
+            var settings = await _settingsContext.GetSettingsAsync();
+            settings.ActiveBasarId = ActiveBasarId;
+            await _settingsContext.UpdateAsync(settings);
         }
     }
 }

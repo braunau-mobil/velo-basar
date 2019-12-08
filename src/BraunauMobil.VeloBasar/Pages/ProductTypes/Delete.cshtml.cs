@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using BraunauMobil.VeloBasar.Data;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using BraunauMobil.VeloBasar.Logic;
 
 namespace BraunauMobil.VeloBasar.Pages.ProductTypes
 {
@@ -12,18 +12,18 @@ namespace BraunauMobil.VeloBasar.Pages.ProductTypes
     }
     public class DeleteModel : PageModel
     {
-        private readonly VeloBasarContext _context;
+        private IProductTypeContext _service;
         
-        public DeleteModel(VeloBasarContext context)
+        public DeleteModel(IProductTypeContext service)
         {
-            _context = context;
+            _service = service;
         }
 
         public async Task<IActionResult> OnGetAsync(DeleteParameter parameter)
         {
-            if (await _context.ProductTypes.ExistsAsync(parameter.ProductTypeId))
+            if (await _service.ExistsAsync(parameter.ProductTypeId))
             {
-                await _context.DeleteProductType(parameter.ProductTypeId);
+                await _service.DeleteAsync(parameter.ProductTypeId);
             }
             else
             {

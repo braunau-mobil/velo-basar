@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using BraunauMobil.VeloBasar.Data;
-using Microsoft.EntityFrameworkCore;
 using BraunauMobil.VeloBasar.Models;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using BraunauMobil.VeloBasar.Logic;
+using System.Diagnostics.Contracts;
 
 namespace BraunauMobil.VeloBasar.Pages.Brands
 {
@@ -15,21 +15,22 @@ namespace BraunauMobil.VeloBasar.Pages.Brands
     }
     public class SetStateModel : PageModel
     {
-        private readonly VeloBasarContext _context;
+        private readonly IBrandContext _context;
 
-        public SetStateModel(VeloBasarContext context)
+        public SetStateModel(IBrandContext context)
         {
             _context = context;
         }
 
         public async Task<IActionResult> OnGetAsync(SetStateParameter parameter)
         {
-            if (await _context.Brand.ExistsAsync(parameter.BrandId))
+            Contract.Requires(parameter != null);
+
+            if (await _context.ExistsAsync(parameter.BrandId))
             {
-                var brand = await _context.Brand.GetAsync(parameter.BrandId);
+                var brand = await _context.GetAsync(parameter.BrandId);
                 brand.State = parameter.State;
-                _context.Attach(brand).State = EntityState.Modified;
-                await _context.SaveChangesAsync();
+                await _context.UpdateAsync(brand);
             }
             else
             {

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Threading.Tasks;
 using BraunauMobil.VeloBasar.Data;
 using BraunauMobil.VeloBasar.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -12,10 +11,12 @@ namespace BraunauMobil.VeloBasar.Pages.DevTools
     public class NextNumberTestModel : PageModel
     {
         private readonly IVeloContext _context;
+        private readonly INumberContext _numberContext;
 
-        public NextNumberTestModel(IVeloContext context)
+        public NextNumberTestModel(IVeloContext context, INumberContext numberContext)
         {
             _context = context;
+            _numberContext = numberContext;
         }
 
         public TimeSpan Elapsed { get; private set; }
@@ -36,8 +37,7 @@ namespace BraunauMobil.VeloBasar.Pages.DevTools
 
             for (var count = 0; count < 1000; count++)
             {
-                throw new NotImplementedException();
-                //Numbers.Add(_context.Db.NextNumber(basar, TransactionType.Lock));
+                _numberContext.NextNumber(basar, TransactionType.Lock);
             }
 
             Elapsed = stopwatch.Elapsed;

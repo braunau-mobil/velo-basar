@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using BraunauMobil.VeloBasar.Data;
 using BraunauMobil.VeloBasar.Models;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using BraunauMobil.VeloBasar.Logic;
+using System.Diagnostics.Contracts;
 
 namespace BraunauMobil.VeloBasar.Pages.Basars
 {
@@ -14,10 +14,10 @@ namespace BraunauMobil.VeloBasar.Pages.Basars
     }
     public class EditModel : PageModel
     {
-        private readonly VeloBasarContext _context;
+        private readonly IBasarContext _context;
         private EditParameter _parameter;
 
-        public EditModel(VeloBasarContext context)
+        public EditModel(IBasarContext context)
         {
             _context = context;
         }
@@ -27,11 +27,15 @@ namespace BraunauMobil.VeloBasar.Pages.Basars
 
         public async Task OnGetAsync(EditParameter parameter)
         {
+            Contract.Requires(parameter != null);
+
             _parameter = parameter;
-            BasarToEdit = await _context.Basar.GetAsync(parameter.BasarToEditId);
+            BasarToEdit = await _context.GetAsync(parameter.BasarToEditId);
         }
         public async Task<IActionResult> OnPostAsync(EditParameter parameter)
         {
+            Contract.Requires(parameter != null);
+
             _parameter = parameter;
 
             if (!ModelState.IsValid)
@@ -39,8 +43,7 @@ namespace BraunauMobil.VeloBasar.Pages.Basars
                 return Page();
             }
 
-            _context.Attach(BasarToEdit).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
+            await _context.UpdateAsync(BasarToEdit);
             return this.RedirectToPage<ListModel>(new ListParameter { PageIndex = parameter.PageIndex });
         }
         public VeloPage GetListPage() => this.GetPage<ListModel>(new ListParameter { PageIndex = _parameter.PageIndex });

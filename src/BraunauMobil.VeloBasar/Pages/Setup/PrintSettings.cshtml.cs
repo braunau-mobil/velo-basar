@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using BraunauMobil.VeloBasar.Logic;
 using BraunauMobil.VeloBasar.Models;
 using BraunauMobil.VeloBasar.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -8,9 +9,9 @@ namespace BraunauMobil.VeloBasar.Pages.Setup
 {
     public class PrintSettingsModel : PageModel
     {
-        private readonly IVeloContext _context;
+        private readonly ISettingsContext _context;
 
-        public PrintSettingsModel(IVeloContext context)
+        public PrintSettingsModel(ISettingsContext context)
         {
             _context = context;
         }
@@ -24,7 +25,7 @@ namespace BraunauMobil.VeloBasar.Pages.Setup
 
         public async Task OnGet()
         {
-            var printSettings = await _context.Db.GetPrintSettingsAsync();
+            var printSettings = await _context.GetPrintSettingsAsync();
             Acceptance = printSettings.Acceptance;
             Sale = new SalePrintSettingsViewModel { Settings = printSettings.Sale };
             PageMargins = printSettings.PageMargins;
@@ -33,12 +34,12 @@ namespace BraunauMobil.VeloBasar.Pages.Setup
         {
             await Sale.UploadBannerAsync();
 
-            var printSettings = await _context.Db.GetPrintSettingsAsync();
+            var printSettings = await _context.GetPrintSettingsAsync();
             printSettings.Acceptance = Acceptance;
             printSettings.Sale = Sale.Settings;
             printSettings.PageMargins = PageMargins;
 
-            await _context.Db.SetPrintSettingsAsync(printSettings);
+            await _context.UpdateAsync(printSettings);
         }
     }
 }

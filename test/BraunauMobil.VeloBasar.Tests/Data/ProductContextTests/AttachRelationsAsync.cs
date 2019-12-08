@@ -1,15 +1,16 @@
-﻿using BraunauMobil.VeloBasar.Data;
+﻿using BraunauMobil.VeloBasar.Logic;
 using BraunauMobil.VeloBasar.Models;
+using BraunauMobil.VeloBasar.Printing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace BraunauMobil.VeloBasar.Tests.Data.VeloBasarContextTests
+namespace BraunauMobil.VeloBasar.Tests.Data.ProductContextTests
 {
     [TestClass]
-    public class ReloadRelationsAsync : TestWithSqliteDb
+    public class AttachRelationsAsync : TestWithSqliteDb
     {
         [TestMethod]
         public async Task CreateProductSerializeToJsonAndAccept()
@@ -17,7 +18,7 @@ namespace BraunauMobil.VeloBasar.Tests.Data.VeloBasarContextTests
             var json = "";
 
             await RunOn(
-                async ctx =>
+                async db =>
                 {
                     var basar = new Basar
                     {
@@ -25,13 +26,13 @@ namespace BraunauMobil.VeloBasar.Tests.Data.VeloBasarContextTests
                         Name = "Ship Basar",
                         Location = "Depp Space Nine"
                     };
-                    ctx.Basar.Add(basar);
+                    db.Basars.Add(basar);
                     var country = new Country
                     {
                         Name = "Federation",
                         Iso3166Alpha3Code = "FED"
                     };
-                    ctx.Country.Add(country);
+                    db.Countries.Add(country);
                     var seller = new Seller
                     {
                         FirstName = "Quark",
@@ -41,21 +42,21 @@ namespace BraunauMobil.VeloBasar.Tests.Data.VeloBasarContextTests
                         ZIP = "",
                         Country = country
                     };
-                    ctx.Seller.Add(seller);
+                    db.Sellers.Add(seller);
                     var brand = new Brand
                     {
                         Name = "Brand_1",
                         State = ObjectState.Enabled
                     };
-                    ctx.Brand.Add(brand);
+                    db.Brands.Add(brand);
                     var productType = new ProductType
                     {
                         Name = "ProductType_1",
                         State = ObjectState.Enabled
                     };
-                    ctx.ProductTypes.Add(productType);
+                    db.ProductTypes.Add(productType);
 
-                    ctx.SaveChanges();
+                    await db.SaveChangesAsync();
 
                     var product = new Product
                     {
@@ -77,15 +78,24 @@ namespace BraunauMobil.VeloBasar.Tests.Data.VeloBasarContextTests
             );
 
             await RunOn(
-               async ctx =>
+               async db =>
                {
-                   var basar = await ctx.Basar.GetAsync(1);
-                   var seller = await ctx.Seller.GetAsync(1);
+                   var fileStoreContext = new FileStoreContext(db);
+                   var productContext = new ProductContext(db);
+                   var settingsContext = new SettingsContext(db, fileStoreContext);
+                   await settingsContext.UpdateAsync(new VeloSettings());
+                   await settingsContext.UpdateAsync(new PrintSettings());
+                   var sellerContext = new SellerContext(db);
+                   var transactionContext = new TransactionContext(db, this, new PdfPrintService(TestUtils.CreateLocalizer()), productContext, settingsContext, fileStoreContext, sellerContext); 
+                   var basarContext = new BasarContext(db, TestUtils.CreateLocalizer(), this, settingsContext);
+
+                   var basar = await basarContext.GetAsync(1);
 
                    var products = JsonConvert.DeserializeObject<List<Product>>(json);
-                   await ctx.ReloadRelationsAsync(products);
 
-                   var acceptance = await ctx.AcceptProductsAsync(basar, seller, new PrintSettings(), products);
+                   productContext.AttachRelations(products);
+                   var acceptance = await transactionContext.AcceptProductsAsync(basar, 1, products);
+
                    Assert.IsNotNull(acceptance);
                    Assert.AreEqual(1, acceptance.Id);
                }

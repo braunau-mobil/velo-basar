@@ -1,10 +1,10 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using BraunauMobil.VeloBasar.Data;
 using BraunauMobil.VeloBasar.Models;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using BraunauMobil.VeloBasar.Logic;
+using System.Diagnostics.Contracts;
 
 namespace BraunauMobil.VeloBasar.Pages.Sellers
 {
@@ -15,11 +15,13 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
     }
     public class EditModel : PageModel
     {
-        private readonly VeloBasarContext _context;
+        private readonly ISellerContext _sellerContext;
+        private readonly ICountryContext _countryContext;
 
-        public EditModel(VeloBasarContext context)
+        public EditModel(ISellerContext sellerContext, ICountryContext countryContext)
         {
-            _context = context;
+            _sellerContext = sellerContext;
+            _countryContext = countryContext;
         }
 
         [BindProperty]
@@ -27,9 +29,11 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
 
         public async Task<IActionResult> OnGetAsync(EditParameter parameter)
         {
-            ViewData["Countries"] = new SelectList(_context.Country, "Id", "Name");
+            Contract.Requires(parameter != null);
 
-            Seller = await _context.Seller.FirstOrDefaultAsync(m => m.Id == parameter.SellerId);
+            ViewData["Countries"] = _countryContext.GetSelectList();
+
+            Seller = await _sellerContext.GetAsync(parameter.SellerId);
 
             if (Seller == null)
             {
@@ -40,30 +44,14 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
         }
         public async Task<IActionResult> OnPostAsync(EditParameter parameter)
         {
+            Contract.Requires(parameter != null);
 
             if (!ModelState.IsValid)
             {
                 return Page();
             }
 
-            _context.Attach(Seller).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!await _context.Seller.ExistsAsync(Seller.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
+            await _sellerContext.UpdateAsync(Seller);
             return Redirect(parameter.Target);
         }
     }

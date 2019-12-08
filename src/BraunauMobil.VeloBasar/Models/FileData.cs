@@ -2,7 +2,7 @@
 
 namespace BraunauMobil.VeloBasar.Models
 {
-    public class FileStore : IModel
+    public class FileData : IModel
     {
         public int Id { get; set; }
 

@@ -20,7 +20,7 @@ namespace BraunauMobil.VeloBasar.Pages
             _logger.Information("OnGet");
 
             //  check if we need initial setup
-            if (!_context.Db.IsInitialized())
+            if (!_context.IsInitialized())
             {
                 _logger.Information("DB not initialized");
                 return this.RedirectToPage<Setup.InitialSetupModel>();

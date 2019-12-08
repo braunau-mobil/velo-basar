@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Threading.Tasks;
-using BraunauMobil.VeloBasar.Data;
+using BraunauMobil.VeloBasar.Logic;
 using BraunauMobil.VeloBasar.Models;
 using BraunauMobil.VeloBasar.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace BraunauMobil.VeloBasar.Pages.Acceptances
 {
@@ -20,11 +20,15 @@ namespace BraunauMobil.VeloBasar.Pages.Acceptances
     public class EnterProductsModel : PageModel
     {
         private readonly IVeloContext _context;
+        private readonly IBrandContext _brandContext;
+        private readonly IProductTypeContext _productTypeContext;
         private EnterProductsParameter _parameter;
 
-        public EnterProductsModel(IVeloContext context)
+        public EnterProductsModel(IVeloContext context, IBrandContext brandContext, IProductTypeContext productTypeContext)
         {
             _context = context;
+            _brandContext = brandContext;
+            _productTypeContext = productTypeContext;
         }
 
         public bool AreWeInEditMode { get; set; }
@@ -35,13 +39,13 @@ namespace BraunauMobil.VeloBasar.Pages.Acceptances
 
         public void OnGet(EnterProductsParameter parameter)
         {
-            _parameter = parameter;
+            Contract.Requires(parameter != null);
 
-            ViewData["Brands"] = new SelectList(_context.Db.Brand, "Id", "Name");
-            ViewData["ProductTypes"] = new SelectList(_context.Db.ProductTypes, "Id", "Name");
+            _parameter = parameter;
+            CreateSelectLists();
 
             var products = Request.Cookies.GetAcceptanceProducts();
-            
+
             if (parameter.ProductId != null)
             {
                 if (parameter.Delete == true)
@@ -65,17 +69,18 @@ namespace BraunauMobil.VeloBasar.Pages.Acceptances
         }
         public async Task<IActionResult> OnPostAsync(EnterProductsParameter parameter)
         {
+            Contract.Requires(parameter != null);
+
             _parameter = parameter;
 
-            ViewData["Brands"] = new SelectList(_context.Db.Brand, "Id", "Name");
-            ViewData["ProductTypes"] = new SelectList(_context.Db.ProductTypes, "Id", "Name");
+            CreateSelectLists();
 
             var products = Request.Cookies.GetAcceptanceProducts();
             
             if (ModelState.IsValid)
             {
-                NewProduct.Brand = await _context.Db.Brand.GetAsync(NewProduct.BrandId);
-                NewProduct.Type = await _context.Db.ProductTypes.GetAsync(NewProduct.TypeId);
+                NewProduct.Brand = await _brandContext.GetAsync(NewProduct.BrandId);
+                NewProduct.Type = await _productTypeContext.GetAsync(NewProduct.TypeId);
                 if (parameter.ProductId != null)
                 {
                     products[NewProduct.Id] = NewProduct;
@@ -100,9 +105,14 @@ namespace BraunauMobil.VeloBasar.Pages.Acceptances
         public VeloPage GetCancelPage() => this.GetPage<Sellers.DetailsModel>(new Sellers.DetailsParameter { SellerId = _parameter.SellerId });
         public object GetUpdateParameter() => new EnterProductsParameter { ProductId = NewProduct.Id, SellerId = _parameter.SellerId };
 
+        private void CreateSelectLists()
+        {
+            ViewData["Brands"] = _brandContext.GetSelectList();
+            ViewData["ProductTypes"] = _productTypeContext.GetSelectList();
+        }
         private ListViewModel<Product> CreateViewModels(IList<Product> products)
         {
-            return new ListViewModel<Product>(_context.Basar, products, new[]
+            return new ListViewModel<Product>(_context.Basar, products.ToArray(), new[]
             {
                 new ListCommand<Product>(product => this.GetPage<EnterProductsModel>(new EnterProductsParameter { ProductId = product.Id, SellerId = _parameter.SellerId }))
                 {

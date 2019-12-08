@@ -1,19 +1,21 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using BraunauMobil.VeloBasar.Data;
 using System.ComponentModel.DataAnnotations;
 using BraunauMobil.VeloBasar.Models;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using BraunauMobil.VeloBasar.Logic;
 
 namespace BraunauMobil.VeloBasar.Pages.Cancellations
 {
     public class StartModel : PageModel
     {
         private readonly IVeloContext _context;
+        private readonly ITransactionContext _transactionContext;
 
-        public StartModel(IVeloContext context)
+        public StartModel(IVeloContext context, ITransactionContext transactionContext)
         {
             _context = context;
+            _transactionContext = transactionContext;
         }
 
         [Required]
@@ -29,7 +31,7 @@ namespace BraunauMobil.VeloBasar.Pages.Cancellations
                 return Page();
             }
 
-            var sale = await _context.Db.Transactions.GetAsync(_context.Basar, TransactionType.Sale, SaleNumber);
+            var sale = await _transactionContext.GetAsync(_context.Basar, TransactionType.Sale, SaleNumber);
             if (sale == null)
             {
                 ErrorMessage = _context.Localizer["Es konnte kein Verkauf mit der Nummer {0} gefunden werden", SaleNumber];

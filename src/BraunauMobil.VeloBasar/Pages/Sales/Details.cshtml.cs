@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using BraunauMobil.VeloBasar.Data;
+using BraunauMobil.VeloBasar.Logic;
 using BraunauMobil.VeloBasar.Models;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -13,11 +13,11 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
     }
     public class DetailsModel : PageModel
     {
-        private readonly VeloBasarContext _context;
+        private readonly ITransactionContext _transactionContext;
 
-        public DetailsModel(VeloBasarContext context)
+        public DetailsModel(ITransactionContext transactionContext)
         {
-            _context = context;
+            _transactionContext = transactionContext;
         }
 
         public ProductsTransaction Sale { get; set; }
@@ -29,7 +29,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
             ShowSuccess = parameter.ShowSuccess ?? false;
             OpenDocument = parameter.OpenDocument ?? false;
 
-            Sale = await _context.Transactions.GetAsync(parameter.SaleId);
+            Sale = await _transactionContext.GetAsync(parameter.SaleId);
         }
         public VeloPage GetShowFilePage() => this.GetPage<ShowFileModel>(new ShowFileParameter { FileId = Sale.DocumentId.Value });
     }

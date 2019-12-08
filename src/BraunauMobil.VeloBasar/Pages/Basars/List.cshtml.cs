@@ -1,11 +1,12 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using BraunauMobil.VeloBasar.Models;
-using BraunauMobil.VeloBasar.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using BraunauMobil.VeloBasar.ViewModels;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using BraunauMobil.VeloBasar.Logic;
+using System.Diagnostics.Contracts;
 
 namespace BraunauMobil.VeloBasar.Pages.Basars
 {
@@ -19,10 +20,12 @@ namespace BraunauMobil.VeloBasar.Pages.Basars
     public class ListModel : PageModel, ISearchable
     {
         private readonly IVeloContext _context;
+        private readonly IBasarContext _basarContext;
 
-        public ListModel(IVeloContext context)
+        public ListModel(IVeloContext context, IBasarContext basarContext)
         {
             _context = context;
+            _basarContext = basarContext;
         }
 
         public string CurrentFilter { get; set; }
@@ -30,6 +33,8 @@ namespace BraunauMobil.VeloBasar.Pages.Basars
 
         public async Task<IActionResult> OnGetAsync(ListParameter parameter)
         {
+            Contract.Requires(parameter != null);
+
             CurrentFilter = parameter.SearchString;
             if (parameter.SearchString != null)
             {
@@ -42,16 +47,24 @@ namespace BraunauMobil.VeloBasar.Pages.Basars
 
             CurrentFilter = parameter.SearchString;
 
-            var brandIq = _context.Db.Basar.GetMany(parameter.SearchString);
+            var basarIq = _basarContext.GetMany(parameter.SearchString);
             var pageSize = 10;
-            Basars = await PaginatedListViewModel<Basar>.CreateAsync(_context.Basar, brandIq.AsNoTracking(), parameter.PageIndex ?? 1, pageSize, GetPaginationPage);
+            Basars = await PaginatedListViewModel<Basar>.CreateAsync(_context.Basar, basarIq.AsNoTracking(), parameter.PageIndex ?? 1, pageSize, GetPaginationPage);
 
             return Page();
         }
         public VeloPage GetCreatePage() => this.GetPage<CreateModel>();
         public VeloPage GetDeletePage(Basar item) => this.GetPage<DeleteModel>(new DeleteParameter { BasarToDeleteId = item.Id, PageIndex = Basars.PageIndex });
-        public VeloPage GetDetailsPage(Basar item) => this.GetPage<DetailsModel>(new DetailsParameter { BasarId = item.Id });
-        public VeloPage GetEditPage(Basar item) => this.GetPage<EditModel>(new EditParameter { BasarToEditId = item.Id, PageIndex = Basars.PageIndex });
+        public VeloPage GetDetailsPage(Basar item)
+        {
+            Contract.Requires(item != null);
+            return this.GetPage<DetailsModel>(new DetailsParameter { BasarId = item.Id });
+        }
+        public VeloPage GetEditPage(Basar item)
+        {
+            Contract.Requires(item != null);
+            return this.GetPage<EditModel>(new EditParameter { BasarToEditId = item.Id, PageIndex = Basars.PageIndex });
+        }
         public VeloPage GetSearchPage() => this.GetPage<ListModel>();
         public VeloPage GetPaginationPage(int pageIndex) => this.GetPage<ListModel>(new ListParameter { PageIndex = pageIndex });
         public VeloPage GetSetStatePage(Basar item, bool stateToSet)
@@ -60,6 +73,6 @@ namespace BraunauMobil.VeloBasar.Pages.Basars
             throw new System.NotImplementedException();
         }
 
-        public async Task<bool> CanDeleteAsync(Basar item) => await _context.Db.CanDeleteBasarAsync(item);
+        public async Task<bool> CanDeleteAsync(Basar item) => await _basarContext.CanDeleteAsync(item);
     }
 }

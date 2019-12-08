@@ -1,9 +1,10 @@
-﻿@{
+﻿@inject Logic.IBasarContext basarContext
+@{
     if (VeloContext.SignInManager.IsSignedIn(User))
     {
-        if (VeloContext.Db.HasBasars())
+        if (basarContext.HasBasars())
         {
-            ViewData["Basars"] = new SelectList(VeloContext.Db.Basar, "Id", "Name");
+            ViewData["Basars"] = basarContext.GetSelectList();
             <form>
                 <select id="basarId" class="form-control" asp-for="@VeloContext.Basar.Id" asp-items="ViewBag.Basars" onchange="onChange()"></select>
                 <script type="text/javascript">

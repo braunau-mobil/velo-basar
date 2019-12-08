@@ -1,8 +1,9 @@
 ﻿using System.Threading.Tasks;
-using BraunauMobil.VeloBasar.Data;
 using BraunauMobil.VeloBasar.Models;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using BraunauMobil.VeloBasar.Logic;
+using System.Diagnostics.Contracts;
 
 namespace BraunauMobil.VeloBasar.Pages.Cancellations
 {
@@ -13,9 +14,9 @@ namespace BraunauMobil.VeloBasar.Pages.Cancellations
     }
     public class DoneModel : PageModel
     {
-        private readonly VeloBasarContext _context;
+        private readonly ITransactionContext _context;
 
-        public DoneModel(VeloBasarContext context)
+        public DoneModel(ITransactionContext context)
         {
             _context = context;
         }
@@ -28,10 +29,12 @@ namespace BraunauMobil.VeloBasar.Pages.Cancellations
 
         public async Task OnGetAsync(DoneParameter parameter)
         {
-            Cancellation = await _context.Transactions.GetAsync(parameter.CancellationId);
+            Contract.Requires(parameter != null);
+
+            Cancellation = await _context.GetAsync(parameter.CancellationId);
             if (parameter.SaleId != null)
             {
-                Sale = await _context.Transactions.GetAsync(parameter.SaleId.Value);
+                Sale = await _context.GetAsync(parameter.SaleId.Value);
             }
         }
     }

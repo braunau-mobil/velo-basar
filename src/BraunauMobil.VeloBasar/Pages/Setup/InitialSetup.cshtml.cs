@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
-using BraunauMobil.VeloBasar.Data;
-using Microsoft.AspNetCore.Identity;
+using BraunauMobil.VeloBasar.Logic;
+using BraunauMobil.VeloBasar.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -8,13 +8,11 @@ namespace BraunauMobil.VeloBasar.Pages.Setup
 {
     public class InitialSetupModel : PageModel
     {
-        private readonly VeloBasarContext _context;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly ISetupContext _context;
 
-        public InitialSetupModel(VeloBasarContext context, UserManager<IdentityUser> userManager)
+        public InitialSetupModel(ISetupContext context)
         {
             _context = context;
-            _userManager = userManager;
             Config = new InitializationConfiguration();
         }
 
@@ -27,7 +25,7 @@ namespace BraunauMobil.VeloBasar.Pages.Setup
 
         public async Task<IActionResult> OnPostAsync()
         {
-            await _context.InitializeDatabase(_userManager, Config);
+            await _context.InitializeDatabaseAsync(Config);
 
             return this.RedirectToPage<IndexModel>();
         }

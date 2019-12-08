@@ -1,13 +1,14 @@
-﻿using BraunauMobil.VeloBasar.Models;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+﻿using BraunauMobil.VeloBasar.Data;
+using BraunauMobil.VeloBasar.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
+using System.Linq;
 using System.Threading.Tasks;
 
-namespace BraunauMobil.VeloBasar.Data
+namespace BraunauMobil.VeloBasar.Logic
 {
-    public class DataGenerator
+    public class DataGeneratorContext : IDataGeneratorContext
     {
         private const string _basarLocation = "Braunau";
         private static readonly string[] _brandNames = new[] { "Additive", "Agresti", "Airstreeem", "Akkurad", "Alutech Cycles", "AnthroTech", "AT Zweirad", "Atlanta", "Ave Hyprid Bikes", "Bavaria", "Bellini", "Bergamont", "Bernds", "Bikespace", "Bionicon", "BLACK LABEL", "Boomer", "Böttcher", "Brenner Cycles", "Brothers Bikes", "Bulls", "C 14", "Campus", "Canyon Bicycles", "Carver", "Ccr", "Centurion", "Checker Pig", "Cheetah", "Cinelli Bikes", "Cito", "Cobra", "Cocoon", "Contoura", "Conway", "Corona", "Corratec", "Cresta", "Cube", "Cucuma", "Cyclecraft", "Cyclewolf", "Cyclomanix", "Dalliegerad", "Dancelli", "Definder Cycle Manufaktur", "Diamant", "Dragonfly", "Draisin", "Drössiger", "Druxs", "Düll", "Duo Bike", "Dürkopp", "Dynamics", "Easy Rider", "Egon Rahe", "Electrolyte", "Elfa", "Elom", "EMANON", "Endorfin", "Enik", "Epple", "Express", "Faggin", "Falke", "Falkenjagd", "Falter", "Fatmodul", "Fischer", "Fixie Inc.", "Fleiner", "Flitz Bike", "Flux", "Focus", "Frank Bikes", "Frischauf", "Frosch Rad", "Fxx Cycles", "Gaastra", "Garage 271", "Geier", "German A", "Germans Cycles", "Ghost", "Gigant", "Gmp", "Gobax", "Gold-Rad", "Göricke", "Grace", "Gudereit", "Guylaine", "Haibike", "Hammonia", "Handybike", "Hase Bikes", "Hawk", "Hercules", "Herkelmann", "Hot Chili", "HP Velotechnik", "Hrinkow", "Idworx", "Inchuan", "Indienrad", "Jaguar", "Jakel", "Jan Ullrich Bikes", "Juchem", "Jungherz", "Kalkhoff", "Kania", "Katarga", "Kemper", "Kenhill", "Kettler", "KHEbikes", "Koch Bikes", "Kokua", "Kondor", "Kotter", "Krabo", "Kreidler", "KTM", "Lakes", "Langenberg", "Last", "Leafcycles", "Lehmkuhl", "Leiba", "Liing", "Liteville", "Mars", "Marschall", "Maxcycles", "Maxx", "Mercedes-Benz", "Merida Bikes", "Miele", "MIFA", "Mini", "Mondello", "Morrison", "Möve", "Muli Cycles", "Müsing", "Nakita", "NANSCO", "Nhola", "Nicolai", "Nishiki", "Nöll", "Nordwind", "Norwid", "Nox", "NSU", "Olympus", "Onooka Industries|Onooka", "Opel", "Opus", "Orange Mountain Bikes", "Pakka", "Panther", "Passat", "Patria WKC", "Pearl", "Pedalpower", "Pedersen", "Pegasus", "Pepper", "Peter Green", "Peugeot", "Phänomen", "Pichlerrad", "Poison", "Porsche", "Presto", "Proceed", "Propain Bikes", "Prophete", "Puch", "PUKY", "Pulcro", "Quantec", "Quitmann", "Quix", "Rabbit", "Rabeneick", "Radius", "Radnabel", "Radon Bikes", "Reichmann Engineering", "Rennstahl", "Retovelo", "Reuber Bike", "Rheinfels", "Richi", "Riese und Müller", "Rink", "Rixe", "Roberts", "Rocket Bikes", "Roots", "Rose", "Rose Bikes", "Rotor", "Rotwild", "Rowona", "Ruff Cycles", "Ruhrwerk", "Saliko", "Schauff", "Schindelhauer", "Seidel & Naumann", "Simplon", "Sinovelo", "Smart", "Snake Bikes", "Snake Rides", "Soil", "Solid", "Staiger", "Steinbock", "Steppenwolf", "Stevens", "Stevens Bikes", "Stoewer", "Storck", "Subtil Bikes", "Superior", "Technium", "Texo", "Thorax Fahrzeugentwicklung", "Torpedo", "Tout Terrain", "Toxy", "Trenga De", "Trento", "Trimobil", "Tripendo", "Troytec", "Turnier", "Univega", "Urban E", "Utopia", "VAF Fahrradmanufaktur", "Vaterland", "Velfon", "Velo de Ville", "Veloform Media", "Velomobiles", "Velotraum", "Victoria", "Vital Bike", "Voitl", "Volt", "Voss Spezialrad", "Votec", "Votum", "VSF", "VW Volkswagen", "Walter", "Wanderer", "Wiesmann", "Wildsau", "Winora", "woom", "Work Bikes", "Wulfhorst", "X 4U", "Xyrion", "YT Industries", "Zonenschein", "Zweydingers" };
@@ -19,31 +20,39 @@ namespace BraunauMobil.VeloBasar.Data
         private static readonly string[] _streets = new string[] { "Abraham-a-Sancta-Clara-Gasse", "Akademiestraße", "Albertinaplatz", "Alte Walfischgasse", "Am Gestade", "Am Hof", "An der Hülben", "Annagasse", "Auerspergstraße", "Augustinerbastei", "Augustinerstraße", "Auwinkel", "Babenbergerstraße", "Ballgasse", "Ballhausplatz", "Bankgasse", "Barbaragasse", "Bartensteingasse", "Bauernmarkt", "Beethovenplatz", "Bellariastraße", "Biberstraße", "Blumenstockgasse", "Bognergasse", "Brandstätte", "Bruno-Kreisky-Gasse", "Bräunerstraße", "Burgring", "Bäckerstraße", "Börsegasse", "Börseplatz", "Bösendorferstraße", "Canovagasse", "Christinengasse", "Churhausgasse", "Cobdengasse", "Coburgbastei", "Concordiaplatz", "Desider-Friedmann-Platz", "Deutschmeisterplatz", "Doblhoffgasse", "Domgasse", "Dominikanerbastei", "Donnergasse", "Dorotheergasse", "Dr.-Ignaz-Seipel-Platz", "Dr.-Karl-Lueger-Platz", "Dr.-Karl-Renner-Ring", "Drachengasse", "Drahtgasse", "Dumbastraße", "Ebendorferstraße", "Elisabethstraße", "Ertlgasse", "Eschenbachgasse", "Essiggasse", "Fahnengasse", "Falkestraße", "Felderstraße", "Fichtegasse", "Fischerstiege", "Fischhof", "Fleischmarkt", "Franz-Josefs-Kai", "Franziskanerplatz", "Freda-Meissner-Blau-Promenade", "Freisingergasse", "Freyung", "Friedrich-Schmidt-Platz", "Friedrichstraße", "Fritz-Wotruba-Promenade", "Färbergasse", "Führichgasse", "Fütterergasse", "Gartenbaupromenade", "Gauermanngasse", "Georg-Coch-Platz", "Getreidemarkt", "Gluckgasse", "Goethegasse", "Goldschmiedgasse", "Gonzagagasse", "Gottfried-von-Einem-Platz", "Graben", "Grashofgasse", "Griechengasse", "Grillparzerstraße", "Grünangergasse", "Gölsdorfgasse", "Göttweihergasse", "Haarhof", "Habsburgergasse", "Hafnersteig", "Hansenstraße", "Hanuschgasse", "Hegelgasse", "Heidenschuss", "Heinrichsgasse", "Heldenplatz", "Helferstorferstraße", "Helmut-Zilk-Platz", "Herbert-von-Karajan-Platz", "Herrengasse", "Heßgasse", "Himmelpfortgasse", "Hohenstaufengasse", "Hoher Markt", "In der Burg", "Irisgasse", "Jakobergasse", "Jasomirgottstraße", "Jerusalemstiege", "Jesuitengasse", "Johannesgasse", "Jordangasse", "Josef-Meinrad-Platz", "Josefsplatz", "Judengasse", "Judenplatz", "Julius-Raab-Platz", "Jungferngasse", "Kantgasse", "Karlsplatz", "Kleeblattgasse", "Kohlmarkt", "Kramergasse", "Krugerstraße", "Kumpfgasse", "Kupferschmiedgasse", "Kurrentgasse", "Kärntner Durchgang", "Kärntner Ring", "Kärntner Straße", "Köllnerhofgasse", "Körblergasse", "Kühfußgasse", "Landesgerichtsstraße", "Landhausgasse", "Landskrongasse", "Laurenzerberg", "Ledererhof", "Leopold-Figl-Gasse", "Leopold-Gratz-Platz", "Lichtenfelsgasse", "Lichtensteg", "Liebenberggasse", "Liebiggasse", "Liliengasse", "Lobkowitzplatz", "Lothringerstraße", "Lugeck", "Löwelstraße", "Mahlerstraße", "Makartgasse", "Marc-Aurel-Straße", "Marco-d’Aviano-Gasse", "Maria-Theresien-Platz", "Maria-Theresien-Straße", "Marienstiege", "Max-Weiler-Platz", "Maysedergasse", "Metastasiogasse", "Michaelerplatz", "Milchgasse", "Minoritenplatz", "Morzinplatz", "Museumsplatz", "Museumstraße", "Musikvereinsplatz", "Mölker Bastei", "Mölker Steig", "Naglergasse", "Neubadgasse", "Neuer Markt", "Neutorgasse", "Nibelungengasse", "Nikolaigasse", "Operngasse", "Opernring", "Oppolzergasse", "Oskar-Kokoschka-Platz", "Parisergasse", "Parkring", "Passauer Platz", "Pestalozzigasse", "Petersplatz", "Petrarcagasse", "Philharmonikerstraße", "Plankengasse", "Postgasse", "Predigergasse", "Rabensteig", "Rathausplatz", "Rathausstraße", "Rauhensteingasse", "Rechte Wienzeile", "Reichsratsstraße", "Reischachstraße", "Reitschulgasse", "Renngasse", "Riemergasse", "Robert-Stolz-Platz", "Rockhgasse", "Rosenbursenstraße", "Rosengasse", "Rotenturmstraße", "Rotgasse", "Rudolfsplatz", "Ruprechtsplatz", "Ruprechtsstiege", "Salvatorgasse", "Salzgasse", "Salzgries", "Salztorgasse", "Schallautzerstraße", "Schauflergasse", "Schellinggasse", "Schenkenstraße", "Schillerplatz", "Schmerlingplatz", "Schottenbastei", "Schottengasse", "Schottenring", "Schottentor", "Schreyvogelgasse", "Schubertring", "Schulerstraße", "Schulhof", "Schultergasse", "Schwarzenbergplatz", "Schwarzenbergstraße", "Schwedenplatz", "Schwertgasse", "Schönlaterngasse", "Seilergasse", "Seilerstätte", "Seitenstettengasse", "Seitzergasse", "Singerstraße", "Sonnenfelsgasse", "Spiegelgasse", "Stadiongasse", "Stallburggasse", "Steindlgasse", "Stephansplatz", "Sterngasse", "Steyrerhof", "Stock-im-Eisen-Platz", "Stoß im Himmel", "Strauchgasse", "Strobelgasse", "Stubenbastei", "Stubenring", "Tegetthoffstraße", "Teinfaltstraße", "Theodor-Herzl-Platz", "Theodor-Herzl-Stiege", "Tiefer Graben", "Trattnerhof", "Tuchlauben", "Tuchlaubenhof", "Universitätsring", "Universitätsstraße", "Uraniastraße", "Volksgartenstraße", "Vorlaufstraße", "Walfischgasse", "Wallnerstraße", "Weihburggasse", "Weiskirchnerstraße", "Werdertorgasse", "Wiesingerstraße", "Wildpretmarkt", "Windhaaggasse", "Wipplingerstraße", "Wolfengasse", "Wolfgang-Schmitz-Promenade", "Wollzeile", "Wächtergasse", "Zedlitzgasse", "Zelinkagasse" };
 
         private readonly Random _rand = new Random();
-        private readonly VeloBasarContext _context;
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly DataGeneratorConfiguration _config;
-        private Brand[] _brands;
-        private Country[] _countries;
-        private ProductType[] _productTypes;
+        private readonly VeloRepository _db;
+        private readonly ISettingsContext _settingsContext;
+        private readonly ITransactionContext _transactionContext;
+        private readonly ISetupContext _setupContext;
+        private readonly IBasarContext _basarContext;
+        private DataGeneratorConfiguration _config;
 
-        public DataGenerator(VeloBasarContext context, UserManager<IdentityUser> userManager , DataGeneratorConfiguration config)
+        public DataGeneratorContext(VeloRepository db, ISettingsContext settingsContext, ITransactionContext transactionContext, ISetupContext setupContext, IBasarContext basarContext)
         {
-            _context = context;
-            _userManager = userManager;
-            _config = config;
+            _db = db;
+            _transactionContext = transactionContext;
+            _settingsContext = settingsContext;
+            _setupContext = setupContext;
+            _basarContext = basarContext;
         }
 
-        public async Task GenerateAsync()
+        public async Task GenerateAsync(DataGeneratorConfiguration config)
         {
-            await _context.Database.EnsureDeletedAsync();
-            await _context.Database.EnsureCreatedAsync();
+            Contract.Requires(config != null);
 
-            await _context.InitializeDatabase(_userManager, _config);
-            var settings = _context.GetVeloSettings();
+            _config = config;
 
-            await CreateCountriesAsync();
+            await _db.Database.EnsureDeletedAsync();
+            await _db.Database.EnsureCreatedAsync();
+
+            await _setupContext.InitializeDatabaseAsync(config);
+
             await CreateBrandsAsync();
             await CreateProductTypesAsync();
+
+            await _db.SaveChangesAsync();
+
+            var settings = await _settingsContext.GetSettingsAsync();
 
             for (var basarNumber = 1; basarNumber <= _config.BasarCount; basarNumber++)
             {
@@ -51,59 +60,46 @@ namespace BraunauMobil.VeloBasar.Data
                 if (settings.ActiveBasarId == null)
                 {
                     settings.ActiveBasarId = basar.Id;
-                    await _context.SetBasarSettingsAsync(settings);
                 }
             }
-        }
 
-        private async Task CreateCountriesAsync()
-        {
-            await _context.Country.AddAsync(new Country
-            {
-                Iso3166Alpha3Code = "AUT",
-                Name = "Österreich"
-            });
-            await _context.Country.AddAsync(new Country
-            {
-                Iso3166Alpha3Code = "GER",
-                Name = "Deutschland"
-            });
-            await _context.SaveChangesAsync();
-            _countries = await _context.Country.ToArrayAsync();
+            await _settingsContext.UpdateAsync(settings);
         }
 
         private async Task CreateBrandsAsync()
         {
             foreach (var brandName in _brandNames)
             {
-                await _context.Brand.AddAsync(new Brand
+                await _db.Brands.AddAsync(new Brand
                 {
                     Name = brandName,
                     State = ObjectState.Enabled
                 });
             }
-            await _context.SaveChangesAsync();
-            _brands = await _context.Brand.ToArrayAsync();
         }
-
         private async Task CreateProductTypesAsync()
         {
             foreach (var productTypeName in _productTypeNames)
             {
-                await _context.ProductTypes.AddAsync(new ProductType
+                await _db.ProductTypes.AddAsync(new ProductType
                 {
                     Name = productTypeName,
                     State = ObjectState.Enabled
                 });
             }
-            await _context.SaveChangesAsync();
-            _productTypes = await _context.ProductTypes.ToArrayAsync();
         }
-
         private async Task<Basar> CreateBasarAsync(DateTime date, string name)
         {
-            var basar = await _context.CreateNewBasarAsync(date, name, _basarLocation, 0.9m, 0.0m, 0.0m);
-            await _context.SaveChangesAsync();
+            var basar = new Basar
+            {
+                Date = date,
+                Name = name,
+                Location = _basarLocation,
+                ProductCommission = 0.9m,
+                ProductDiscount = 0.0m,
+                SellerDiscount = 0,
+            };
+            await _basarContext.CreateAsync(basar);
 
             var sellerCount = _rand.Next(_config.MinSellers, _config.MaxSellers);
             for (var sellerNumber = 1; sellerNumber <= sellerCount; sellerNumber++)
@@ -113,14 +109,19 @@ namespace BraunauMobil.VeloBasar.Data
 
             return basar;
         }
-
         private async Task CreateSellerWithAcceptancesAsync(Basar basar, int sellerNumber)
         {
-            var seller = new Seller();
-            SetSellerName(seller);
-            SetSellerLocation(seller);
-            await _context.Seller.AddAsync(seller);
-            await _context.SaveChangesAsync();
+            var seller = new Seller
+            {
+                FirstName = TakeRandom(_firstNames),
+                LastName = TakeRandom(_firstNames),
+                Country = TakeRandom(_db.Countries),
+                City = TakeRandom(_cities),
+                Street = $"{TakeRandom(_streets)} {_rand.Next(1, 50)}",
+                ZIP = $"{_rand.Next(1, 9)}{_rand.Next(1, 9)}{_rand.Next(1, 9)}{_rand.Next(1, 9)}",
+            };
+            await _db.Sellers.AddAsync(seller);
+            await _db.SaveChangesAsync();
 
             var acceptancePerCustomerCount = _rand.Next(_config.MinAcceptancesPerSeller, _config.MaxAcceptancesPerSeller);
             while (acceptancePerCustomerCount > 0)
@@ -129,9 +130,8 @@ namespace BraunauMobil.VeloBasar.Data
                 acceptancePerCustomerCount--;
             }
 
-            await _context.CreateLabelsForSellerAsync(basar, seller.Id);
+            await _transactionContext.CreateLabelsForSellerAsync(basar, seller.Id);
         }
-
         private async Task CreateAcceptanceAsync(Basar basar, Seller seller)
         {
             var productCount = NextProductCount();
@@ -140,72 +140,36 @@ namespace BraunauMobil.VeloBasar.Data
             {
                 products.Add(CreateProduct());
             }
-            await _context.AcceptProductsAsync(basar, seller, new PrintSettings(), products);
+            await _transactionContext.AcceptProductsAsync(basar, seller.Id, products);
         }
-
         private Product CreateProduct()
         {
             return new Product
             {
-                Brand = NextBrand(),
-                Color = NextColor(),
+                Brand = TakeRandom(_db.Brands),
+                Color = TakeRandom(_colors),
                 Description = $"Beschreibung für Produkt",
-                FrameNumber = NextFrameNumber(),
+                FrameNumber = Guid.NewGuid().ToString(),
                 Price = NextPrice(),
                 StorageState = StorageState.Available,
                 ValueState = ValueState.NotSettled,
-                TireSize = NextTireSize(),
-                Type = NextProductType()
+                TireSize = TakeRandom(_tireSizes),
+                Type = TakeRandom(_db.ProductTypes)
             };
-        }
-
-        private void SetSellerName(Seller seller)
-        {
-            seller.FirstName = _firstNames.TakeRandom(_rand);
-            seller.LastName = _firstNames.TakeRandom(_rand);
-        }
-
-        private void SetSellerLocation(Seller seller)
-        {
-            seller.Country = _countries.TakeRandom(_rand);
-            seller.City = _cities.TakeRandom(_rand);
-            seller.Street = $"{_streets.TakeRandom(_rand)} {_rand.Next(1, 50)}";
-            seller.ZIP = $"{_rand.Next(1,9)}{_rand.Next(1, 9)}{_rand.Next(1, 9)}{_rand.Next(1, 9)}";
         }
         private int NextProductCount()
         {
             //  wir wollen keine annahmen mit 0 produkten
             return Math.Max((int)_rand.NextGaussian(_config.MeanProductsPerSeller, _config.StdDevProductsPerSeller), 1);
         }
-
-        private Brand NextBrand()
-        {
-            return _brands.TakeRandom(_rand);
-        }
-
-        private string NextColor()
-        {
-            return _colors.TakeRandom(_rand);
-        }
-
-        private string NextFrameNumber()
-        {
-            return Guid.NewGuid().ToString();
-        }
-
         private decimal NextPrice()
         {
             return Math.Round((decimal)_rand.NextGaussian((double)_config.MeanPrice, (double)_config.StdDevPrice), 2);
         }
-
-        private string NextTireSize()
+        private T TakeRandom<T>(T[] array)
         {
-            return _tireSizes.TakeRandom(_rand);
+            return array[_rand.Next(0, array.Length - 1)];
         }
-
-        private ProductType NextProductType()
-        {
-            return _productTypes.TakeRandom(_rand);
-        }
+        private T TakeRandom<T>(IQueryable<T> iq) => TakeRandom(iq.ToArray());
     }
 }

@@ -92,7 +92,7 @@ namespace BraunauMobil.VeloBasar.Tests.Printing.PdfCreatorTests
             var factory = new ResourceManagerStringLocalizerFactory(Options.Create(new LocalizationOptions()), NullLoggerFactory.Instance);
             var localizer = new StringLocalizer<SharedResource>(factory);
 
-            var creator = new PdfCreator(localizer);
+            var creator = new PdfPrintService(localizer);
             var doc = creator.CreateAcceptance(acceptance, new PrintSettings());
             Assert.IsNotNull(doc);
         }

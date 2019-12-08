@@ -1,8 +1,9 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using BraunauMobil.VeloBasar.Data;
 using BraunauMobil.VeloBasar.Models;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using BraunauMobil.VeloBasar.Logic;
+using System.Diagnostics.Contracts;
 
 namespace BraunauMobil.VeloBasar.Pages.Products
 {
@@ -12,9 +13,9 @@ namespace BraunauMobil.VeloBasar.Pages.Products
     }
     public class DetailsModel : PageModel
     {
-        private readonly VeloBasarContext _context;
+        private readonly IProductContext _context;
 
-        public DetailsModel(VeloBasarContext context)
+        public DetailsModel(IProductContext context)
         {
             _context = context;
         }
@@ -24,7 +25,9 @@ namespace BraunauMobil.VeloBasar.Pages.Products
 
         public async Task<IActionResult> OnGetAsync(DetailsParameter parameter)
         {
-            Product = await _context.Product.GetAsync(parameter.ProductId);
+            Contract.Requires(parameter != null);
+
+            Product = await _context.GetAsync(parameter.ProductId);
 
             if (Product == null)
             {

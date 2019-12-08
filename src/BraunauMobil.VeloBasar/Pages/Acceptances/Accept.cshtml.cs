@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.Contracts;
 using System.Threading.Tasks;
-using BraunauMobil.VeloBasar.Data;
+using BraunauMobil.VeloBasar.Logic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -13,10 +13,15 @@ namespace BraunauMobil.VeloBasar.Pages.Acceptances
     public class AcceptModel : PageModel
     {
         private readonly IVeloContext _context;
+        private readonly ITransactionContext _transactionContext;
+        private readonly IProductContext _productContext;
 
-        public AcceptModel(IVeloContext context)
+
+        public AcceptModel(IVeloContext veloContext, ITransactionContext transactionContext, IProductContext productContext)
         {
-            _context = context;
+            _context = veloContext;
+            _transactionContext = transactionContext;
+            _productContext = productContext;
         }
 
         public async Task<IActionResult> OnGetAsync(AcceptParameter parameter)
@@ -24,10 +29,8 @@ namespace BraunauMobil.VeloBasar.Pages.Acceptances
             Contract.Requires(parameter != null);
 
             var products = Request.Cookies.GetAcceptanceProducts();
-            await _context.Db.ReloadRelationsAsync(products);
-            var printSettings = await _context.Db.GetPrintSettingsAsync();
-            var seller = await _context.Db.Seller.GetAsync(parameter.SellerId);
-            var acceptance = await _context.Db.AcceptProductsAsync(_context.Basar, seller, printSettings, products);
+            _productContext.AttachRelations(products);
+            var acceptance = await _transactionContext.AcceptProductsAsync(_context.Basar, parameter.SellerId, products);
 
             Response.Cookies.ClearAcceptanceProducts();
             return this.RedirectToPage<DetailsModel>(new DetailsParameter { AcceptanceId = acceptance.Id, OpenDocument = true, ShowSuccess = true });

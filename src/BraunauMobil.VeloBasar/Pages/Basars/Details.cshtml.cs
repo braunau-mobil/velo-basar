@@ -1,4 +1,5 @@
-﻿using BraunauMobil.VeloBasar.Data;
+﻿using BraunauMobil.VeloBasar.Logic;
+using BraunauMobil.VeloBasar.Models;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Diagnostics.Contracts;
 using System.Threading.Tasks;
@@ -12,10 +13,12 @@ namespace BraunauMobil.VeloBasar.Pages.Basars
     public class DetailsModel : PageModel
     {
         private readonly IVeloContext _context;
+        private readonly IStatisticContext _statisticContext;
 
-        public DetailsModel(IVeloContext context)
+        public DetailsModel(IVeloContext context, IStatisticContext statisticContext)
         {
             _context = context;
+            _statisticContext = statisticContext;
         }
 
         public BasarStatistic BasarStatistic { get; set; }
@@ -33,7 +36,7 @@ namespace BraunauMobil.VeloBasar.Pages.Basars
             {
                 basarId = parameter.BasarId.Value;
             }
-            BasarStatistic = await _context.Db.GetBasarStatisticAsnyc(basarId);
+            BasarStatistic = await _statisticContext.GetBasarStatisticAsnyc(basarId);
         }
     }
 }

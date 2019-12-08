@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BraunauMobil.VeloBasar.Data
+namespace BraunauMobil.VeloBasar.Models
 {
     public class DataGeneratorConfiguration : InitializationConfiguration
     {

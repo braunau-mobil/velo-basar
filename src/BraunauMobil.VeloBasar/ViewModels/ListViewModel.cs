@@ -36,19 +36,19 @@ namespace BraunauMobil.VeloBasar.ViewModels
     {
         public ListViewModel() : base(null)
         {
-            Commands = new ListCommand<T>[0];
+            Commands = Array.Empty<ListCommand<T>>();
         }
-        public ListViewModel(Basar basar, IList<T> items, ListCommand<T>[] commands = null) : this(basar, items.Select(i => new ItemViewModel<T> { Item = i }).ToList() , commands)
+        public ListViewModel(Basar basar, IReadOnlyList<T> items, ListCommand<T>[] commands = null) : this(basar, items.Select(i => new ItemViewModel<T> { Item = i }).ToList() , commands)
         {
         }
-        public ListViewModel(Basar basar, IList<ItemViewModel<T>> items, ListCommand<T>[] commands = null) : base(basar)
+        public ListViewModel(Basar basar, IReadOnlyList<ItemViewModel<T>> items, ListCommand<T>[] commands = null) : base(basar)
         {
             List = items;
-            Commands = commands ?? new ListCommand<T>[0];
+            Commands = commands ?? Array.Empty<ListCommand<T>>();
         }
 
         public ListCommand<T>[] Commands { get; set; }
         [BindProperty]
-        public IList<ItemViewModel<T>> List { get; set; }
+        public IReadOnlyList<ItemViewModel<T>> List { get; set; }
     }
 }

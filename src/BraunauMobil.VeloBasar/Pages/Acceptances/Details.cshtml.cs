@@ -1,6 +1,6 @@
-﻿using System.Threading.Tasks;
-using BraunauMobil.VeloBasar.AuthoringTagHelpers.TagHelpers;
-using BraunauMobil.VeloBasar.Data;
+﻿using System.Diagnostics.Contracts;
+using System.Threading.Tasks;
+using BraunauMobil.VeloBasar.Logic;
 using BraunauMobil.VeloBasar.Models;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -14,9 +14,9 @@ namespace BraunauMobil.VeloBasar.Pages.Acceptances
     }
     public class DetailsModel : PageModel
     {
-        private readonly VeloBasarContext _context;
+        private readonly ITransactionContext _context;
 
-        public DetailsModel(VeloBasarContext context)
+        public DetailsModel(ITransactionContext context)
         {
             _context = context;
         }
@@ -26,8 +26,10 @@ namespace BraunauMobil.VeloBasar.Pages.Acceptances
 
         public async Task OnGetAsync(DetailsParameter parameter)
         {
+            Contract.Requires(parameter != null);
+
             Parameter = parameter;
-            Acceptance = await _context.Transactions.GetAsync(parameter.AcceptanceId);
+            Acceptance = await _context.GetAsync(parameter.AcceptanceId);
         }
         public VeloPage GetSellerDetailsPage() => this.GetPage<Sellers.DetailsModel>(new Sellers.DetailsParameter { SellerId = Acceptance.SellerId.Value });
     }

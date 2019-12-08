@@ -1,9 +1,8 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using BraunauMobil.VeloBasar.Data;
 using BraunauMobil.VeloBasar.Models;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using BraunauMobil.VeloBasar.Logic;
 
 namespace BraunauMobil.VeloBasar.Pages.Brands
 {
@@ -14,10 +13,10 @@ namespace BraunauMobil.VeloBasar.Pages.Brands
     }
     public class EditModel : PageModel
     {
-        private readonly VeloBasarContext _context;
+        private readonly IBrandContext _context;
         private int _pageIndex;
 
-        public EditModel(VeloBasarContext context)
+        public EditModel(IBrandContext context)
         {
             _context = context;
         }
@@ -27,7 +26,7 @@ namespace BraunauMobil.VeloBasar.Pages.Brands
 
         public async Task<IActionResult> OnGetAsync(EditParameter parameter)
         {
-            Brand = await _context.Brand.GetAsync(parameter.BrandId);
+            Brand = await _context.GetAsync(parameter.BrandId);
             _pageIndex = parameter.PageIndex;
 
             if (Brand == null)
@@ -44,8 +43,7 @@ namespace BraunauMobil.VeloBasar.Pages.Brands
                 return Page();
             }
 
-            _context.Attach(Brand).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
+            await _context.UpdateAsync(Brand);
             return this.RedirectToPage<ListModel>(new ListParameter { PageIndex = _pageIndex });
         }
         public VeloPage GetListPage() => this.GetPage<ListModel>(new ListParameter { PageIndex = _pageIndex });

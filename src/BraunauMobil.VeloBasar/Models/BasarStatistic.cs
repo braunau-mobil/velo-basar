@@ -1,6 +1,6 @@
 ﻿using BraunauMobil.VeloBasar.Models;
 
-namespace BraunauMobil.VeloBasar.Data
+namespace BraunauMobil.VeloBasar.Models
 {
     public class PieChartData
     {

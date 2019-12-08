@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.Contracts;
 using System.Threading.Tasks;
 using BraunauMobil.VeloBasar.Data;
+using BraunauMobil.VeloBasar.Logic;
 using BraunauMobil.VeloBasar.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -18,10 +20,14 @@ namespace BraunauMobil.VeloBasar.Pages.Transactions
     public class CreateSingleModel : PageModel
     {
         private readonly IVeloContext _context;
+        private readonly ITransactionContext _transactionContext;
+        private readonly IProductContext _productContext;
 
-        public CreateSingleModel(IVeloContext context)
+        public CreateSingleModel(IVeloContext context, ITransactionContext transactionContext, IProductContext productContext)
         {
             _context = context;
+            _transactionContext = transactionContext;
+            _productContext = productContext;
         }
 
         [BindProperty]
@@ -33,6 +39,8 @@ namespace BraunauMobil.VeloBasar.Pages.Transactions
 
         public async Task<IActionResult> OnGetAsync(CreateSingleParameter parameter)
         {
+            Contract.Requires(parameter != null);
+
             if (parameter.TransactionType == TransactionType.Release && !_context.SignInManager.IsSignedIn(User))
             {
                 return Forbid();
@@ -40,15 +48,15 @@ namespace BraunauMobil.VeloBasar.Pages.Transactions
 
             TransactionType = parameter.TransactionType;
 
-            Product = await _context.Db.Product.GetAsync(parameter.ProductId);
+            Product = await _productContext.GetAsync(parameter.ProductId);
 
             return Page();
         }
         public async Task<IActionResult> OnPostAsync(CreateSingleParameter parameter)
         {
-            Product = await _context.Db.Product.GetAsync(parameter.ProductId);
-            var printSettings = await _context.Db.GetPrintSettingsAsync();
-            await _context.Db.DoTransactionAsync(_context.Basar, parameter.TransactionType, Notes, printSettings, Product);
+            Contract.Requires(parameter != null);
+
+            await _transactionContext.DoTransactionAsync(_context.Basar, parameter.TransactionType, Notes, parameter.ProductId);
 
             return this.RedirectToPage<Products.DetailsModel>(new Products.DetailsParameter { ProductId = parameter.ProductId });
         }

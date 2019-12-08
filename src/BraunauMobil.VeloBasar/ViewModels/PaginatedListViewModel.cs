@@ -12,7 +12,7 @@ namespace BraunauMobil.VeloBasar.ViewModels
         private readonly Func<int, VeloPage> _getPaginationPage;
 
         public PaginatedListViewModel() { }
-        public PaginatedListViewModel(Basar basar, IList<T> items, ListCommand<T>[] commands, Func<int, VeloPage> getPaginationPage) : base(basar, items, commands)
+        public PaginatedListViewModel(Basar basar, IReadOnlyList<T> items, ListCommand<T>[] commands, Func<int, VeloPage> getPaginationPage) : base(basar, items, commands)
         {
             _getPaginationPage = getPaginationPage;
         }

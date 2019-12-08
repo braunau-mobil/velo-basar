@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using BraunauMobil.VeloBasar.Data;
+using BraunauMobil.VeloBasar.Logic;
 using BraunauMobil.VeloBasar.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -8,9 +8,9 @@ namespace BraunauMobil.VeloBasar.Pages.Brands
 {
     public class CreateModel : PageModel
     {
-        private readonly VeloBasarContext _context;
+        private readonly IBrandContext _context;
 
-        public CreateModel(VeloBasarContext context)
+        public CreateModel(IBrandContext context)
         {
             _context = context;
         }
@@ -25,7 +25,7 @@ namespace BraunauMobil.VeloBasar.Pages.Brands
                 return Page();
             }
 
-            await _context.CreateBrand(Brand);
+            await _context.CreateAsync(Brand);
             return this.RedirectToPage<ListModel>();
         }
     }

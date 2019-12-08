@@ -6,6 +6,7 @@ using BraunauMobil.VeloBasar.ViewModels;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using BraunauMobil.VeloBasar.Logic;
 
 namespace BraunauMobil.VeloBasar.Pages.Products
 {
@@ -20,10 +21,12 @@ namespace BraunauMobil.VeloBasar.Pages.Products
     public class ListModel : PageModel, ISearchable
     {
         private readonly IVeloContext _context;
+        private readonly IProductContext _productContext;
 
-        public ListModel(IVeloContext context)
+        public ListModel(IVeloContext context, IProductContext productContext)
         {
             _context = context;
+            _productContext = productContext;
         }
 
         public string CurrentFilter { get; set; }
@@ -53,13 +56,13 @@ namespace BraunauMobil.VeloBasar.Pages.Products
 
             if (int.TryParse(parameter.SearchString, out int id))
             {
-                if (await _context.Db.Product.ExistsAsync(id))
+                if (await _productContext.ExistsAsync(id))
                 {
                     return this.RedirectToPage<DetailsModel>(new DetailsParameter { ProductId = id });
                 }
             }
 
-            var productIq = _context.Db.GetProductsForBasar(_context.Basar).GetMany(parameter.SearchString, parameter.StorageState, parameter.ValueState);
+            var productIq = _productContext.GetProductsForBasar(_context.Basar, parameter.SearchString, parameter.StorageState, parameter.ValueState);
 
             var pageSize = 11;
             Products = await PaginatedListViewModel<Product>.CreateAsync(_context.Basar, productIq, parameter.PageIndex ?? 1, pageSize, GetPaginationPage, new[]

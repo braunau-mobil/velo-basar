@@ -1,10 +1,10 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using BraunauMobil.VeloBasar.Models;
-using System.Linq;
-using BraunauMobil.VeloBasar.Data;
 using BraunauMobil.VeloBasar.ViewModels;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using BraunauMobil.VeloBasar.Logic;
+using System.Diagnostics.Contracts;
 
 namespace BraunauMobil.VeloBasar.Pages.Sales
 {
@@ -16,13 +16,15 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
     }
     public class ListModel : PageModel, ISearchable
     {
-        private readonly IVeloContext _context;
         private const int PageSize = 20;
+        
+        private readonly IVeloContext _context;
+        private readonly ITransactionContext _transactionContext;
 
-
-        public ListModel(IVeloContext context)
+        public ListModel(IVeloContext context, ITransactionContext transactionContext)
         {
             _context = context;
+            _transactionContext = transactionContext;
         }
 
         public string CurrentFilter { get; set; }
@@ -30,6 +32,8 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
 
         public async Task OnGetAsync(ListParameter parameter)
         {
+            Contract.Requires(parameter != null);
+
             CurrentFilter = parameter.SearchString;
             if (parameter.SearchString != null)
             {
@@ -42,24 +46,14 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
 
             CurrentFilter = parameter.SearchString;
 
-            IQueryable<ProductsTransaction> salesIq;
-
-            if (int.TryParse(parameter.SearchString, out int id))
-            {
-                salesIq = _context.Db.Transactions.Where(t => t.Id == id);
-            }
-            else if (!string.IsNullOrEmpty(parameter.SearchString))
-            {
-                salesIq = _context.Db.Transactions.GetMany(TransactionType.Sale, _context.Basar, parameter.SearchString);
-            }
-            else
-            {
-                salesIq = _context.Db.Transactions.GetMany(TransactionType.Sale, _context.Basar);
-            }
-
+            var salesIq = _transactionContext.GetMany(_context.Basar, TransactionType.Sale, parameter.SearchString);
             Sales = await PaginatedListViewModel<ProductsTransaction>.CreateAsync(_context.Basar, salesIq.AsNoTracking(), parameter.PageIndex ?? 1, PageSize, GetPaginationPage);
         }
-        public VeloPage GetDetailsPage(ProductsTransaction item) => this.GetPage<DetailsModel>(new DetailsParameter { SaleId = item.Id });
+        public VeloPage GetDetailsPage(ProductsTransaction item)
+        {
+            Contract.Requires(item != null);
+            return this.GetPage<DetailsModel>(new DetailsParameter { SaleId = item.Id });
+        }
         public VeloPage GetPaginationPage(int pageIndex) => this.GetPage<ListModel>(new ListParameter { PageIndex = pageIndex });
         public VeloPage GetSearchPage() => this.GetPage<ListModel>();
     }

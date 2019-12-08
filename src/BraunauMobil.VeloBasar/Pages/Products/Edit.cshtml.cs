@@ -1,10 +1,8 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using BraunauMobil.VeloBasar.Data;
 using BraunauMobil.VeloBasar.Models;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using BraunauMobil.VeloBasar.Logic;
 
 namespace BraunauMobil.VeloBasar.Pages.Products
 {
@@ -15,11 +13,15 @@ namespace BraunauMobil.VeloBasar.Pages.Products
     }
     public class EditModel : PageModel
     {
-        private readonly VeloBasarContext _context;
+        private readonly IProductContext _productContext;
+        private readonly IBrandContext _brandContext;
+        private readonly IProductTypeContext _productTypeContext;
 
-        public EditModel(VeloBasarContext context)
+        public EditModel(IProductContext productContext , IBrandContext brandContext, IProductTypeContext productTypeContext)
         {
-            _context = context;
+            _productContext = productContext;
+            _brandContext = brandContext;
+            _productTypeContext = productTypeContext;
         }
 
         [BindProperty]
@@ -27,10 +29,9 @@ namespace BraunauMobil.VeloBasar.Pages.Products
 
         public async Task<IActionResult> OnGetAsync(EditParameter parameter)
         {
-            ViewData["Brands"] = new SelectList(_context.Brand, "Id", "Name");
-            ViewData["ProductTypes"] = new SelectList(_context.ProductTypes, "Id", "Name");
+            UpdateSelectionLists();
 
-            Product = await _context.Product.FirstOrDefaultAsync(p => p.Id == parameter.ProductId);
+            Product = await _productContext.GetAsync(parameter.ProductId);
 
             if (Product == null)
             {
@@ -41,33 +42,22 @@ namespace BraunauMobil.VeloBasar.Pages.Products
         }
         public async Task<IActionResult> OnPostAsync(EditParameter parameter)
         {
-            ViewData["Brands"] = new SelectList(_context.Brand, "Id", "Name");
-            ViewData["ProductTypes"] = new SelectList(_context.ProductTypes, "Id", "Name");
+            UpdateSelectionLists();
 
             if (!ModelState.IsValid)
             {
                 return Page();
             }
 
-            _context.Attach(Product).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!await _context.Product.ExistsAsync(Product.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            await _productContext.UpdateAsync(Product);
 
             return Redirect(parameter.Target);
+        }
+
+        private void UpdateSelectionLists()
+        {
+            ViewData["Brands"] = _brandContext.GetSelectList();
+            ViewData["ProductTypes"] = _productTypeContext.GetSelectList();
         }
     }
 }

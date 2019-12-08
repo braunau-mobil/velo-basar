@@ -5,9 +5,9 @@ namespace BraunauMobil.VeloBasar.Models
 {
     public static class ExtensionMethods
     {
-        public static IList<Product> GetProducts(this IEnumerable<ProductToTransaction> productToTransactions)
+        public static IReadOnlyList<Product> GetProducts(this IEnumerable<ProductToTransaction> productToTransactions)
         {
-            return productToTransactions.Select(pt => pt.Product).ToList();
+            return productToTransactions.Select(pt => pt.Product).ToArray();
         }
         public static bool IsAllowed(this IEnumerable<Product> products, TransactionType transactionType)
         {

@@ -1,14 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Threading.Tasks;
-using BraunauMobil.VeloBasar.Data;
+using BraunauMobil.VeloBasar.Logic;
 using BraunauMobil.VeloBasar.Models;
-using BraunauMobil.VeloBasar.Resources;
 using BraunauMobil.VeloBasar.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Localization;
 
 namespace BraunauMobil.VeloBasar.Pages.Cancellations
 {
@@ -19,10 +16,12 @@ namespace BraunauMobil.VeloBasar.Pages.Cancellations
     public class SelectProductsModel : PageModel
     {
         private readonly IVeloContext _context;
+        private readonly ITransactionContext _transactionContext;
 
-        public SelectProductsModel(IVeloContext context)
+        public SelectProductsModel(IVeloContext context, ITransactionContext transactionContext)
         {
             _context = context;
+            _transactionContext = transactionContext;
         }
 
         [BindProperty]
@@ -34,11 +33,13 @@ namespace BraunauMobil.VeloBasar.Pages.Cancellations
         {
             Parameter = parameter;
 
-            var sale = await _context.Db.Transactions.GetAsync(parameter.SaleId);
+            var sale = await _transactionContext.GetAsync(parameter.SaleId);
             Products = new ListViewModel<Product>(_context.Basar, sale.Products.GetProducts());
         }
         public async Task<IActionResult> OnPostAsync(SelectProductsParameter parameter)
         {
+            Contract.Requires(parameter != null);
+
             Parameter = parameter;
 
             if (Products.List.All(vm => !vm.IsSelected))
@@ -48,10 +49,8 @@ namespace BraunauMobil.VeloBasar.Pages.Cancellations
             }
 
             var selectedProductIds = Products.List.Where(x => x.IsSelected).Select(x => x.Item.Id).ToList();
-            var selectedProducts =  await _context.Db.Product.GetMany(selectedProductIds).ToArrayAsync();
-            var printSettings = await _context.Db.GetPrintSettingsAsync();
-            var cancellation = await _context.Db.CancelProductsAsync(_context.Basar, parameter.SaleId, printSettings, selectedProducts);
-            if (await _context.Db.Transactions.ExistsAsync(parameter.SaleId))
+            var cancellation = await _transactionContext.CancelProductsAsync(_context.Basar, parameter.SaleId, selectedProductIds);
+            if (await _transactionContext.ExistsAsync(parameter.SaleId))
             {
                 return this.RedirectToPage<DoneModel>(new DoneParameter { CancellationId = cancellation.Id, SaleId = parameter.SaleId });
             }

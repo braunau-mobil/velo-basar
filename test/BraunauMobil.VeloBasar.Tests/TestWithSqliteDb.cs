@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace BraunauMobil.VeloBasar.Tests
 {
-    public class TestWithSqliteDb : IDisposable, INumberPool
+    public class TestWithSqliteDb : IDisposable, INumberContext
     {
         private SqliteConnection _connection;
 
@@ -41,22 +41,22 @@ namespace BraunauMobil.VeloBasar.Tests
         {
             _connection?.Close();
         }
-        protected async Task RunOn(Func<VeloBasarContext, Task> runTest)
+        protected async Task RunOn(Func<VeloRepository, Task> runTest)
         {
             Contract.Requires(runTest != null);
 
-            var options = new DbContextOptionsBuilder<VeloBasarContext>()
+            var options = new DbContextOptionsBuilder<VeloRepository>()
                     .UseSqlite(_connection)
                     .Options;
 
             // Create the schema in the database
-            using (var context = new VeloBasarContext(options, TestUtils.CreateLocalizer(), this))
+            using (var context = new VeloRepository(options))
             {
                 context.Database.EnsureCreated();
             }
 
             // Use a clean instance of the context to run the test
-            using (var context = new VeloBasarContext(options, TestUtils.CreateLocalizer(), this))
+            using (var context = new VeloRepository(options))
             {
                 await runTest(context);
             }
@@ -65,6 +65,11 @@ namespace BraunauMobil.VeloBasar.Tests
         public int NextNumber(Basar basar, TransactionType transactionType)
         {
             return 1;
+        }
+
+        public async Task CreateNewNumberAsync(Basar basar, TransactionType type)
+        {
+            //  @todo
         }
     }
 }

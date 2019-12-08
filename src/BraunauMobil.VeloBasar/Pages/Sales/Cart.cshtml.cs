@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using BraunauMobil.VeloBasar.Data;
 using BraunauMobil.VeloBasar.Models;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -8,6 +7,8 @@ using BraunauMobil.VeloBasar.ViewModels;
 using Newtonsoft.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using BraunauMobil.VeloBasar.Logic;
+using System.Diagnostics.Contracts;
 
 namespace BraunauMobil.VeloBasar.Pages.Sales
 {
@@ -20,10 +21,14 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
     public class CartModel : PageModel
     {
         private readonly IVeloContext _context;
+        private readonly IProductContext _productContext;
+        private readonly ITransactionContext _transactionContext;
 
-        public CartModel(IVeloContext context)
+        public CartModel(IVeloContext context, IProductContext productContext, ITransactionContext transactionContext)
         {
             _context = context;
+            _productContext = productContext;
+            _transactionContext = transactionContext;
         }
 
         public string ErrorText { get; set; }
@@ -37,6 +42,8 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
 
         public async Task OnGetAsync(CartParameter parameter)
         {
+            Contract.Requires(parameter != null);
+
             var productIds = Request.Cookies.GetCart();
             if (parameter.ProductId != null && parameter.Delete != null && parameter.Delete == true)
             {
@@ -53,6 +60,8 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
         }
         public async Task OnPostAsync(CartParameter parameter)
         {
+            Contract.Requires(parameter != null);
+
             var cart = Request.Cookies.GetCart();
 
             if (parameter.ProductId == null)
@@ -61,7 +70,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
             }
             else
             {
-                var product = await _context.Db.Product.GetAsync(parameter.ProductId.Value);
+                var product = await _productContext.GetAsync(parameter.ProductId.Value);
                 if (product != null)
                 {
                     ErrorText = await GetProductErrorAsync(product, parameter.ProductId.Value);
@@ -80,7 +89,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
         private async Task LoadProducts(IList<int> productIds)
         {
             var viewModels = new List<ItemViewModel<Product>>();
-            foreach (var product in await _context.Db.Product.GetMany(productIds).ToArrayAsync())
+            foreach (var product in await _productContext.GetMany(productIds).ToArrayAsync())
             {
                 var viewModel = new ItemViewModel<Product>
                 {
@@ -124,7 +133,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
             }
             else if (product.StorageState == StorageState.Sold)
             {
-                var saleNumber = await _context.Db.GetTransactionNumberForProductAsync(_context.Basar, TransactionType.Sale, product.Id);
+                var saleNumber = await _transactionContext.GetTransactionNumberForProductAsync(_context.Basar, TransactionType.Sale, product.Id);
 
                 //  @todo generate link to sale details with blank target
                 return _context.Localizer["Der Artikel wurde bereits verkauft. Siehe Verkauf #{0}", saleNumber];

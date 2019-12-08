@@ -1,5 +1,6 @@
-﻿using System.Threading.Tasks;
-using BraunauMobil.VeloBasar.Data;
+﻿using System.Diagnostics.Contracts;
+using System.Threading.Tasks;
+using BraunauMobil.VeloBasar.Logic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -12,16 +13,18 @@ namespace BraunauMobil.VeloBasar.Pages
 
     public class ShowFileModel : PageModel
     {
-        private readonly VeloBasarContext _context;
+        private readonly IFileStoreContext _context;
 
-        public ShowFileModel(VeloBasarContext context)
+        public ShowFileModel(IFileStoreContext context)
         {
             _context = context;
         }
 
         public async Task<IActionResult> OnGetAsync(ShowFileParameter parameter)
         {
-            var file = await _context.FileStore.GetAsync(parameter.FileId);
+            Contract.Requires(parameter != null);
+
+            var file = await _context.GetAsync(parameter.FileId);
             if (file == null)
             {
                 return NotFound();

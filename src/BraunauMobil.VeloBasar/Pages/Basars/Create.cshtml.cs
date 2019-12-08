@@ -3,17 +3,17 @@ using Microsoft.AspNetCore.Mvc;
 using BraunauMobil.VeloBasar.Models;
 using System;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Linq;
+using BraunauMobil.VeloBasar.Logic;
 
 namespace BraunauMobil.VeloBasar.Pages.Basars
 {
     public class CreateModel : PageModel
     {
-        private readonly IVeloContext _context;
+        private readonly IBasarContext _basarContext;
 
-        public CreateModel(IVeloContext context)
+        public CreateModel(IBasarContext basarContext)
         {
-            _context = context;
+            _basarContext = basarContext;
             BasarToCreate = new Basar
             {
                 Date = DateTime.Now
@@ -30,13 +30,7 @@ namespace BraunauMobil.VeloBasar.Pages.Basars
                 return Page();
             }
 
-            var basar = await _context.Db.CreateBasarAsync(BasarToCreate);
-            if (_context.Db.Basar.Count() == 1)
-            {
-                _context.Settings.ActiveBasarId = basar.Id;
-                await _context.SaveSettingsAsync();
-            }
-
+            await _basarContext.CreateAsync(BasarToCreate);
             return this.RedirectToPage<ListModel>();
         }
     }

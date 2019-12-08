@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
-using BraunauMobil.VeloBasar.Data;
-using Microsoft.AspNetCore.Identity;
+using BraunauMobil.VeloBasar.Logic;
+using BraunauMobil.VeloBasar.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -9,12 +9,12 @@ namespace BraunauMobil.VeloBasar.Pages.DevTools
     public class DangerZoneModel : PageModel
     {
         private readonly IVeloContext _context;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly IDataGeneratorContext _generatorContext;
 
-        public DangerZoneModel(IVeloContext context, UserManager<IdentityUser> userManager)
+        public DangerZoneModel(IVeloContext context, IDataGeneratorContext generatorContext)
         {
             _context = context;
-            _userManager = userManager;
+            _generatorContext = generatorContext;
             Config = new DataGeneratorConfiguration();
         }
 
@@ -35,8 +35,7 @@ namespace BraunauMobil.VeloBasar.Pages.DevTools
             {
                 return Unauthorized();
             }
-            var generator = new DataGenerator(_context.Db, _userManager, Config);
-            await generator.GenerateAsync();
+            await _generatorContext.GenerateAsync(Config);
 
             return this.RedirectToPage<IndexModel>();
         }

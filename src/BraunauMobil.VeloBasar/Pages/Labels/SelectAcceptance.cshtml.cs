@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using BraunauMobil.VeloBasar.Data;
+using BraunauMobil.VeloBasar.Logic;
 using BraunauMobil.VeloBasar.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -17,11 +17,13 @@ namespace BraunauMobil.VeloBasar.Pages.Labels
     {
         private readonly LinkGenerator _linkGenerator;
         private readonly IVeloContext _context;
+        private readonly ITransactionContext _transactionContext;
 
-        public SelectAcceptanceModel(IVeloContext context, LinkGenerator linkGenerator)
+        public SelectAcceptanceModel(IVeloContext context, LinkGenerator linkGenerator, ITransactionContext transactionContext)
         {
             _context = context;
             _linkGenerator = linkGenerator;
+            _transactionContext = transactionContext;
         }
 
         [BindProperty]
@@ -40,7 +42,7 @@ namespace BraunauMobil.VeloBasar.Pages.Labels
 
             if (parameter.OpenPdf)
             {
-                var pdf = await _context.Db.CreateLabelsForAcceptanceAsync(_context.Basar, parameter.AcceptanceNumber.Value);
+                var pdf = await _transactionContext.CreateLabelsForAcceptanceAsync(_context.Basar, parameter.AcceptanceNumber.Value);
                 return File(pdf.Data, pdf.ContentType);
             }
 
@@ -49,7 +51,7 @@ namespace BraunauMobil.VeloBasar.Pages.Labels
         }
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!await _context.Db.Transactions.ExistsAsync(_context.Basar, TransactionType.Acceptance, AcceptanceNumber))
+            if (!await _transactionContext.ExistsAsync(_context.Basar, TransactionType.Acceptance, AcceptanceNumber))
             {
                 NumberNotFound = true;
                 return Page();
