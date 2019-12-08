@@ -7,5 +7,7 @@ namespace BraunauMobil.VeloBasar.Models
         [Required]
         [Display(Name = "Admin E-Mail")]
         public string AdminUserEMail { get; set; }
+        [Display(Name = "Beispiel Länder generieren")]
+        public bool GenerateCountries { get; set; }
     }
 }

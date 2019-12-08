@@ -42,16 +42,19 @@ namespace BraunauMobil.VeloBasar.Logic
 
             await _settingsContext.UpdateAsync(new PrintSettings());
 
-            await _countryContext.CreateAsync(new Country
+            if (config.GenerateCountries)
             {
-                Iso3166Alpha3Code = "AUT",
-                Name = "Österreich"
-            });
-            await _countryContext.CreateAsync(new Country
-            {
-                Iso3166Alpha3Code = "GER",
-                Name = "Deutschland"
-            });
+                await _countryContext.CreateAsync(new Country
+                {
+                    Iso3166Alpha3Code = "AUT",
+                    Name = "Österreich"
+                });
+                await _countryContext.CreateAsync(new Country
+                {
+                    Iso3166Alpha3Code = "GER",
+                    Name = "Deutschland"
+                });
+            }
             await _db.SaveChangesAsync();
         }
     }
