@@ -92,7 +92,7 @@ namespace BraunauMobil.VeloBasar.Logic
                 Street = $"{TakeRandom(_streets)} {_rand.Next(1, 50)}",
                 ZIP = $"{_rand.Next(1, 9)}{_rand.Next(1, 9)}{_rand.Next(1, 9)}{_rand.Next(1, 9)}",
             };
-            await _db.Sellers.AddAsync(seller);
+            _db.Sellers.Add(seller);
             await _db.SaveChangesAsync();
 
             var acceptancePerCustomerCount = _rand.Next(_config.MinAcceptancesPerSeller, _config.MaxAcceptancesPerSeller);

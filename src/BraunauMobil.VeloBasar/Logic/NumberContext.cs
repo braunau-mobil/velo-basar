@@ -38,7 +38,7 @@ namespace BraunauMobil.VeloBasar.Data
                 Value = 0,
                 Type = type
             };
-            await _db.Numbers.AddAsync(number);
+            _db.Numbers.Add(number);
             await _db.SaveChangesAsync();
         }
     }

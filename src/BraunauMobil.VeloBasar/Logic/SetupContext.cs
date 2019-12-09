@@ -75,7 +75,7 @@ namespace BraunauMobil.VeloBasar.Logic
         {
             foreach (var brandName in _brandNames)
             {
-                await _db.Brands.AddAsync(new Brand
+                _db.Brands.Add(new Brand
                 {
                     Name = brandName,
                     State = ObjectState.Enabled
@@ -86,7 +86,7 @@ namespace BraunauMobil.VeloBasar.Logic
         {
             foreach (var productTypeName in _productTypeNames)
             {
-                await _db.ProductTypes.AddAsync(new ProductType
+                _db.ProductTypes.Add(new ProductType
                 {
                     Name = productTypeName,
                     State = ObjectState.Enabled
