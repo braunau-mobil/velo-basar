@@ -1,10 +1,11 @@
-﻿using BraunauMobil.VeloBasar.Models;
+﻿using BraunauMobil.VeloBasar.Data;
+using BraunauMobil.VeloBasar.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.Threading.Tasks;
 
-namespace BraunauMobil.VeloBasar.Data
+namespace BraunauMobil.VeloBasar.Logic
 {
     public class NumberContext : INumberContext
     {

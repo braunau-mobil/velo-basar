@@ -1,7 +1,7 @@
 ﻿using BraunauMobil.VeloBasar.Models;
 using System.Threading.Tasks;
 
-namespace BraunauMobil.VeloBasar.Data
+namespace BraunauMobil.VeloBasar.Logic
 {
     public interface INumberContext
     {
