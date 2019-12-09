@@ -37,7 +37,7 @@ namespace BraunauMobil.VeloBasar.Pages.DevTools
 
             for (var count = 0; count < 1000; count++)
             {
-                _numberContext.NextNumber(basar, TransactionType.Lock);
+                Numbers.Add(_numberContext.NextNumber(basar, TransactionType.Lock));
             }
 
             Elapsed = stopwatch.Elapsed;
