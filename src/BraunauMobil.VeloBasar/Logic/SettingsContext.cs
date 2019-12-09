@@ -44,7 +44,7 @@ namespace BraunauMobil.VeloBasar.Logic
                     ContentType = contentType,
                     Data = instance.SerializeAsJson()
                 };
-                await _db.Files.AddAsync(settingsFileStore);
+                _db.Files.Add(settingsFileStore);
             }
             await _db.SaveChangesAsync();
 

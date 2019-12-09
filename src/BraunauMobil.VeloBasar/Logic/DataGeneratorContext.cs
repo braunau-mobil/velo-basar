@@ -1,5 +1,6 @@
 ﻿using BraunauMobil.VeloBasar.Data;
 using BraunauMobil.VeloBasar.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
@@ -39,6 +40,12 @@ namespace BraunauMobil.VeloBasar.Logic
             Contract.Requires(config != null);
 
             _config = config;
+
+            //  Detach everything because otherwise this could lead to problems when creating new data
+            foreach (var entry in _db.ChangeTracker.Entries().ToArray())
+            {
+                entry.State = EntityState.Detached;
+            }
 
             await _db.Database.EnsureDeletedAsync();
             await _db.Database.EnsureCreatedAsync();
@@ -92,7 +99,7 @@ namespace BraunauMobil.VeloBasar.Logic
                 Street = $"{TakeRandom(_streets)} {_rand.Next(1, 50)}",
                 ZIP = $"{_rand.Next(1, 9)}{_rand.Next(1, 9)}{_rand.Next(1, 9)}{_rand.Next(1, 9)}",
             };
-            await _db.Sellers.AddAsync(seller);
+            _db.Sellers.Add(seller);
             await _db.SaveChangesAsync();
 
             var acceptancePerCustomerCount = _rand.Next(_config.MinAcceptancesPerSeller, _config.MaxAcceptancesPerSeller);

@@ -16,7 +16,7 @@ namespace BraunauMobil.VeloBasar.Logic
 
         public async Task CreateAsync(Country country)
         {
-            await _db.Countries.AddAsync(country);
+            _db.Countries.Add(country);
             await _db.SaveChangesAsync();
         }
         public SelectList GetSelectList() => new SelectList(_db.Countries, "Id", "Name");

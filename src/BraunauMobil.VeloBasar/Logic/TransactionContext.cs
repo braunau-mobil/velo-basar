@@ -161,7 +161,7 @@ namespace BraunauMobil.VeloBasar.Logic
                 Seller = seller
             };
             tx.Products = products.Select(p => new ProductToTransaction { Product = p, Transaction = tx }).ToList();
-            await _db.Transactions.AddAsync(tx);
+            _db.Transactions.Add(tx);
             await _db.SaveChangesAsync();
 
             await GenerateTransactionDocumentAsync(tx, printSettings);
@@ -195,7 +195,7 @@ namespace BraunauMobil.VeloBasar.Logic
                 ContentType = PdfContentType,
                 Data = _printService.CreateLabel(basar, product)
             };
-            await _db.Files.AddAsync(fileStore);
+            _db.Files.Add(fileStore);
             await _db.SaveChangesAsync();
 
             product.Label = fileStore.Id;
@@ -228,7 +228,7 @@ namespace BraunauMobil.VeloBasar.Logic
                 {
                     ContentType = PdfContentType
                 };
-                await _db.Files.AddAsync(fileStore);
+                _db.Files.Add(fileStore);
                 await _db.SaveChangesAsync();
 
                 transaction.DocumentId = fileStore.Id;
@@ -279,7 +279,7 @@ namespace BraunauMobil.VeloBasar.Logic
                 newProducts.Add(newProduct);
             }
 
-            await _db.Products.AddRangeAsync(newProducts);
+            _db.Products.AddRange(newProducts);
             await _db.SaveChangesAsync();
 
             return newProducts;

@@ -1,4 +1,5 @@
 ﻿using BraunauMobil.VeloBasar.Data;
+using BraunauMobil.VeloBasar.Logic;
 using BraunauMobil.VeloBasar.Models;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
@@ -11,7 +12,7 @@ namespace BraunauMobil.VeloBasar.Tests
 {
     public class TestWithSqliteDb : IDisposable, INumberContext
     {
-        private SqliteConnection _connection;
+        protected SqliteConnection _connection;
 
         public void Dispose()
         {

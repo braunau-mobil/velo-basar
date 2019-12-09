@@ -18,7 +18,8 @@ namespace BraunauMobil.VeloBasar.Pages.DevTools
             Config = new DataGeneratorConfiguration
             {
                 GenerateBrands = true,
-                GenerateCountries = true
+                GenerateCountries = true,
+                GenerateProductTypes = true
             };
         }
 

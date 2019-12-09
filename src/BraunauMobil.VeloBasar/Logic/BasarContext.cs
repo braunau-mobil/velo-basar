@@ -32,7 +32,7 @@ namespace BraunauMobil.VeloBasar.Logic
         {
             Contract.Requires(toCreate != null);
 
-            await _db.Basars.AddAsync(toCreate);
+            _db.Basars.Add(toCreate);
 
             foreach (var enumValue in Enum.GetValues(typeof(TransactionType)))
             {
