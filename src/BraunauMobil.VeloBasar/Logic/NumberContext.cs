@@ -1,6 +1,7 @@
 ﻿using BraunauMobil.VeloBasar.Data;
 using BraunauMobil.VeloBasar.Models;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.Threading.Tasks;
@@ -28,7 +29,15 @@ namespace BraunauMobil.VeloBasar.Logic
                 _db.Database.OpenConnection();
                 var result = command.ExecuteScalar();
                 _db.Database.CloseConnection();
-                return (int)result;
+                if (result is int intResult)
+                {
+                    return intResult;
+                }
+                if (result is long longReusult)
+                {
+                    return (int)longReusult;
+                }
+                throw new NotSupportedException($"The type {result.GetType()} is not supported. ");
             }
         }
         public async Task CreateNewNumberAsync(Basar basar, TransactionType type)
