@@ -11,7 +11,7 @@ namespace BraunauMobil.VeloBasar.Models
     {
         public int Id { get; set; }
         [Display(Name = "Datum")]
-        [DisplayFormat(DataFormatString = "{0:dd.MMMM.yyyy}")]
+        [DisplayFormat(DataFormatString = "{0:dd.MMMM.yyyy}", ApplyFormatInEditMode = true)]
         public DateTime Date { get; set; }
         [Display(Name = "Ort")]
         public string Location { get; set; }
