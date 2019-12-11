@@ -1,7 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System.IO;
+using System.Threading.Tasks;
 using BraunauMobil.VeloBasar.Logic;
 using BraunauMobil.VeloBasar.Models;
-using BraunauMobil.VeloBasar.ViewModels;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -17,29 +18,50 @@ namespace BraunauMobil.VeloBasar.Pages.Setup
         }
 
         [BindProperty]
+        public PrintSettings PrintSettings { get; set; }
+        [BindProperty]
         public AcceptancePrintSettings Acceptance { get; set; }
         [BindProperty]
-        public SalePrintSettingsViewModel Sale { get; set; }
+        public SalePrintSettings Sale { get; set; }
         [BindProperty]
         public Margins PageMargins { get; set; }
+        [BindProperty]
+        public IFormFile BannerUpload { get; set; }
 
         public async Task OnGet()
         {
-            var printSettings = await _context.GetPrintSettingsAsync();
-            Acceptance = printSettings.Acceptance;
-            Sale = new SalePrintSettingsViewModel { Settings = printSettings.Sale };
-            PageMargins = printSettings.PageMargins;
+            PrintSettings = await _context.GetPrintSettingsAsync();
+            Acceptance = PrintSettings.Acceptance;
+            Sale = PrintSettings.Sale;
+            PageMargins = PrintSettings.PageMargins;
         }
         public async Task OnPostAsync()
         {
-            await Sale.UploadBannerAsync();
+            await UploadBannerAsync();
+            PrintSettings.Acceptance = Acceptance;
+            PrintSettings.Sale = Sale;
+            PrintSettings.PageMargins = PageMargins;
 
-            var printSettings = await _context.GetPrintSettingsAsync();
-            printSettings.Acceptance = Acceptance;
-            printSettings.Sale = Sale.Settings;
-            printSettings.PageMargins = PageMargins;
+            await _context.UpdateAsync(PrintSettings);
+        }
 
-            await _context.UpdateAsync(printSettings);
+        public async Task UploadBannerAsync()
+        {
+            if (BannerUpload == null)
+            {
+                var currentPrintSettings = await _context.GetPrintSettingsAsync();
+                PrintSettings.Banner = currentPrintSettings.Banner;
+                return;
+            }
+            using (var memoryStream = new MemoryStream())
+            {
+                await BannerUpload.CopyToAsync(memoryStream);
+                PrintSettings.Banner = new ImageData
+                {
+                    Bytes = memoryStream.ToArray(),
+                    ImageType = BannerUpload.ContentType
+                };
+            }
         }
     }
 }

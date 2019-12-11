@@ -61,13 +61,10 @@ namespace BraunauMobil.VeloBasar.Models
 
     public class SalePrintSettings : TransactionPrintSettingsBase
     {
-        public SalePrintSettings()
-        {
-            Banner = new ImageData();
-        }
-
-        [Display(Name = "Banner")]
-        public ImageData Banner { get; set; }
+        [Display(Name = "Dankestext")]
+        public string FooterText { get; set; }
+        [Display(Name ="Hinweistext")]
+        public string HintText { get; set; }
 
         public override TransactionType TransactionType => TransactionType.Sale;
     }
@@ -86,9 +83,14 @@ namespace BraunauMobil.VeloBasar.Models
             Sale = new SalePrintSettings
             {
                 TitleFormat = "Verkaufsbeleg: Braunau mobil - {0}",
-                SubTitle = "Folgende Artikel haben wir an Sie verkauft:"
+                SubTitle = "Folgende Artikel haben wir an Sie verkauft:",
+                FooterText = "Vielen Dank für Ihren Einkauf!",
+                HintText = "Bitte beachten Sie, dass der Verkauf im Namen des beim Artikel angeführten Eigentümers geschieht. Bei privaten Verkäufern ist jegliches Umtausch - und Gewährleistungsrecht ausgeschlossen."
             };
             PageMargins = new Margins(20, 10, 20, 10);
+            BannerSubtitle = "Braunau mobil, Hans-Sachs Straße 33, 5280 Braunau";
+            Website = "www.braunaumobil.at";
+            Banner = new ImageData();
         }
 
         [Display(Name = "Annahme")]
@@ -97,5 +99,12 @@ namespace BraunauMobil.VeloBasar.Models
         public SalePrintSettings Sale { get; set; }
         [Display(Name = "Seitenränder")]
         public Margins PageMargins { get; set; }
+        [Display(Name = "Banner")]
+        public ImageData Banner { get; set; }
+
+        [Display(Name = "Bannertext")]
+        public string BannerSubtitle { get; set; }
+        [Display(Name = "Website")]
+        public string Website { get; set; }
     }
 }

@@ -244,7 +244,7 @@ namespace BraunauMobil.VeloBasar.Logic
             }
             else if (transaction.Type == TransactionType.Sale)
             {
-                fileStore.Data = _printService.CreateSale(transaction);
+                fileStore.Data = _printService.CreateSale(transaction, printSettings);
             }
             else if (transaction.Type == TransactionType.Settlement)
             {

@@ -15,10 +15,26 @@
             </div>
 
             <div class="card-body">
+                <div class="form-group">
+                    <label asp-for="PrintSettings.Banner" class="control-label"></label>
+                    <br />
+                    <partial name="/Pages/Shared/_ImageData.cshtml" model="@Model.PrintSettings.Banner" />
+                    <br />
+                    <input type="file" asp-for="BannerUpload" accept=".jpeg,.jpg,.png,.gif, image/png,jpeg,gif">
+                    <input type="submit" value="@Localizer["Hochladen"]" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="PrintSettings.BannerSubtitle" class="control-label"></label>
+                    <input asp-for="PrintSettings.BannerSubtitle" class="form-control" velo-validation-for="PrintSettings.BannerSubtitle" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="PrintSettings.Website" class="control-label"></label>
+                    <input asp-for="PrintSettings.Website" class="form-control" velo-validation-for="PrintSettings.Website" />
+                </div>
             </div>
         </div>
 
-        <partial name="/Pages/Setup/_MarginsEdit.cshtml" model="Model.PageMargins" />
+        <partial name="/Pages/Setup/_MarginsEdit.cshtml" model="Model.PrintSettings.PageMargins" />
 
         <div class="card my-3">
             <div class="card-header d-flex justify-content-between align-items-md-center">
@@ -52,7 +68,7 @@
 
         <div class="card my-3">
             <div class="card-header d-flex justify-content-between align-items-md-center">
-                <div class="mr-auto"><h5>@Html.DisplayFor(x => Model.Sale.Settings.TransactionType)</h5></div>
+                <div class="mr-auto"><h5>@Html.DisplayFor(x => Model.Sale.TransactionType)</h5></div>
                 <div class="d-flex justify-content-end">
                     @*@todo<a class="btn btn-secondary" velo-page="@(this.GetPage<Setup.CreatePreviewDocumentModel>(new CreatePreviewDocumentParameter(Model)))">@Localizer["Vorschau"]</a>*@
                 </div>
@@ -61,20 +77,20 @@
             <div class="card-body">
                 <div class="column">
                     <div class="form-group">
-                        <label asp-for="Sale.Settings.TitleFormat" class="control-label"></label>
-                        <input asp-for="Sale.Settings.TitleFormat" class="form-control" velo-validation-for="Sale.Settings.TitleFormat" />
+                        <label asp-for="Sale.TitleFormat" class="control-label"></label>
+                        <input asp-for="Sale.TitleFormat" class="form-control" velo-validation-for="Sale.TitleFormat" />
                     </div>
                     <div class="form-group">
-                        <label asp-for="Sale.Settings.SubTitle" class="control-label"></label>
-                        <input asp-for="Sale.Settings.SubTitle" class="form-control" velo-validation-for="Sale.Settings.SubTitle" />
+                        <label asp-for="Sale.SubTitle" class="control-label"></label>
+                        <input asp-for="Sale.SubTitle" class="form-control" velo-validation-for="Sale.SubTitle" />
                     </div>
                     <div class="form-group">
-                        <label asp-for="Sale.Settings.Banner" class="control-label"></label>
-                        <br />
-                        <partial name="/Pages/Shared/_ImageData.cshtml" model="@Model.Sale.Settings.Banner" />
-                        <br />
-                        <input type="file" asp-for="Sale.BannerUpload" accept=".jpeg,.jpg,.png,.gif, image/png,jpeg,gif">
-                        <input type="submit" value="@Localizer["Hochladen"]" />
+                        <label asp-for="Sale.FooterText" class="control-label"></label>
+                        <input asp-for="Sale.FooterText" class="form-control" velo-validation-for="Sale.FooterText" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Sale.HintText" class="control-label"></label>
+                        <input asp-for="Sale.HintText" class="form-control" velo-validation-for="Sale.HintText" />
                     </div>
                 </div>
             </div>

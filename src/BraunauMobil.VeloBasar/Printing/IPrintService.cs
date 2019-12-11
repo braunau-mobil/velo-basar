@@ -8,7 +8,7 @@ namespace BraunauMobil.VeloBasar.Printing
         byte[] Combine(IEnumerable<byte[]> pdfs);
         byte[] CreateAcceptance(ProductsTransaction acceptance, PrintSettings settings);
         byte[] CreateLabel(Basar basar, Product product);
-        byte[] CreateSale(ProductsTransaction sale);
+        byte[] CreateSale(ProductsTransaction sale, PrintSettings settings);
         byte[] CreateSettlement(ProductsTransaction settlement);
     }
 }
