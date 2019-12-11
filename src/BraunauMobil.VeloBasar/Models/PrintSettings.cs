@@ -8,6 +8,7 @@ namespace BraunauMobil.VeloBasar.Models
 {
     public class Margins
     {
+        public Margins() { }
         public Margins(int left, int top, int right, int bottom)
         {
             Left = left;
