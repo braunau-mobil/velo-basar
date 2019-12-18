@@ -219,6 +219,18 @@ namespace BraunauMobil.VeloBasar.Logic
         {
             return GetMany(transactionType, basar, TransactionSearch(searchString));
         }
+        private async Task<IDictionary<Product, Seller>> GetProductToSellerMapAsync(ProductsTransaction transaction)
+        {
+            var productIds = transaction.Products.Select(x => x.ProductId).ToArray();
+            var result = new Dictionary<Product, Seller>();
+            foreach (var product in transaction.Products)
+            {
+                var acceptances = await _db.Transactions.GetMany(TransactionType.Acceptance, transaction.Basar, tx => tx.Products.Any(pt => pt.ProductId == product.ProductId)).ToArrayAsync();
+                var seller = acceptances.First().Seller;
+                result.Add(product.Product, seller);
+            }
+            return result;
+        }
         private async Task<FileData> GenerateTransactionDocumentAsync(ProductsTransaction transaction, PrintSettings printSettings)
         {
             FileData fileStore;
@@ -244,7 +256,7 @@ namespace BraunauMobil.VeloBasar.Logic
             }
             else if (transaction.Type == TransactionType.Sale)
             {
-                fileStore.Data = _printService.CreateSale(transaction, printSettings);
+                fileStore.Data = _printService.CreateSale(transaction, await GetProductToSellerMapAsync(transaction), printSettings);
             }
             else if (transaction.Type == TransactionType.Settlement)
             {

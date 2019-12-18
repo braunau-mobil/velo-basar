@@ -8,7 +8,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 
-namespace BraunauMobil.VeloBasar.Tests.Printing.PdfCreatorTests
+namespace BraunauMobil.VeloBasar.Tests.Printing.PdfPrintServiceTests
 {
     [TestClass]
     public class Acceptance

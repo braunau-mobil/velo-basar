@@ -49,13 +49,17 @@ namespace BraunauMobil.VeloBasar.Models
 
         public string Token { get; set; }
 
-        public string GetAddressText()
+        public string GetBigAddressText()
         {
             var sb = new StringBuilder();
             sb.AppendLine($"{FirstName} {LastName}");
             sb.AppendLine(Street);
             sb.AppendLine($"{ZIP} {City}");
             return sb.ToString();
+        }
+        public string GetSmallAddressText()
+        {
+            return $"{FirstName} {LastName}, {Street}, {ZIP} {City}";
         }
         public string GetIdText(IStringLocalizer<SharedResource> localizer)
         {

@@ -66,11 +66,11 @@ namespace BraunauMobil.VeloBasar.Printing
 
             return CreateTransactionPdf(settings, (pdfDoc, doc) =>
             {
-                AddHeader(doc, acceptance.Seller.GetAddressText(), acceptance.Basar.GetLocationAndDateText(), acceptance.Seller.GetIdText(_localizer));
+                AddHeader(doc, acceptance.Seller.GetBigAddressText(), acceptance.Basar.GetLocationAndDateText(), acceptance.Seller.GetIdText(_localizer));
 
                 AddTitle(doc, string.Format(CultureInfo.CurrentCulture, settings.Acceptance.TitleFormat, acceptance.Basar.Name), settings.Acceptance.SubTitle);
 
-                AddProductTable(doc, acceptance, false);
+                AddProductTable(doc, acceptance);
 
                 var signature = GetSignatureText(acceptance, settings.Acceptance);
                 signature.SetFontSize(_regularFontSize);
@@ -106,21 +106,23 @@ namespace BraunauMobil.VeloBasar.Printing
             });
         }
 
-        public byte[] CreateSale(ProductsTransaction sale, PrintSettings settings)
+        public byte[] CreateSale(ProductsTransaction sale, IDictionary<Product, Seller> productToSellerMap, PrintSettings settings)
         {
             return CreateTransactionPdf(settings, (pdfDoc, doc) =>
             {
-                var bannerData = ImageDataFactory.Create(settings.Banner.Bytes);
-                var banner = new Image(bannerData);
-                doc.Add(new Image(bannerData));
-
+                if (settings.Banner.Bytes != null)
+                {
+                    var bannerData = ImageDataFactory.Create(settings.Banner.Bytes);
+                    var banner = new Image(bannerData);
+                    doc.Add(new Image(bannerData));
+                }
                 AddBannerSubtitle(doc, settings.BannerSubtitle, settings.Website);
 
                 AddHeader(doc, null, sale.Basar.GetLocationAndDateText(), null);
 
                 AddTitle(doc, string.Format(CultureInfo.CurrentCulture, settings.Sale.TitleFormat, sale.Basar.Name), settings.Sale.SubTitle);
 
-                AddProductTable(doc, sale, true);
+                AddProductTable(doc, sale, productToSellerMap, settings.Sale.SellerInfoText);
 
                 var hintText = GetRegularTet(settings.Sale.HintText)
                     .SetMarginTop(20)
@@ -217,7 +219,7 @@ namespace BraunauMobil.VeloBasar.Printing
             headerTable.AddCell(addressCell).AddCell(locationAndDateCell).AddCell(sellerIdCell);
             doc.Add(headerTable);
         }
-        private void AddProductTable(Document doc, ProductsTransaction transaction, bool displaySellerInfo)
+        private void AddProductTable(Document doc, ProductsTransaction transaction, IDictionary<Product, Seller> productToSellerMap = null, string sellerInfoText = null)
         {
             var productsTable = new Table(4)
                 .UseAllAvailableWidth()
@@ -287,9 +289,9 @@ namespace BraunauMobil.VeloBasar.Printing
                     .SetBorderRight(null)
                     .Add(productInfo);
 
-                if (displaySellerInfo)
+                if (productToSellerMap != null && productToSellerMap.TryGetValue(product, out var seller))
                 {
-                    var sellerInfo = GetSmallText("@TODO");
+                    var sellerInfo = GetSmallText($"* {seller.GetSmallAddressText()}");
                     productInfoCell.Add(sellerInfo);
                 }
 
@@ -311,6 +313,14 @@ namespace BraunauMobil.VeloBasar.Printing
                 priceCell.Add(price);
 
                 productsTable.AddCell(idCell).AddCell(productInfoCell).AddCell(sizeCell).AddCell(priceCell);
+            }
+
+            if (sellerInfoText != null)
+            {
+                var sellerInfoCell = new Cell()
+                    .SetBorder(null)
+                    .Add(GetSmallText(sellerInfoText));
+                productsTable.AddCell(sellerInfoCell);
             }
             doc.Add(productsTable);
         }

@@ -65,6 +65,8 @@ namespace BraunauMobil.VeloBasar.Models
         public string FooterText { get; set; }
         [Display(Name ="Hinweistext")]
         public string HintText { get; set; }
+        [Display(Name = "Verkäufer Fußnotentext")]
+        public string SellerInfoText { get; set; }
 
         public override TransactionType TransactionType => TransactionType.Sale;
     }
@@ -85,7 +87,8 @@ namespace BraunauMobil.VeloBasar.Models
                 TitleFormat = "Verkaufsbeleg: Braunau mobil - {0}",
                 SubTitle = "Folgende Artikel haben wir an Sie verkauft:",
                 FooterText = "Vielen Dank für Ihren Einkauf!",
-                HintText = "Bitte beachten Sie, dass der Verkauf im Namen des beim Artikel angeführten Eigentümers geschieht. Bei privaten Verkäufern ist jegliches Umtausch - und Gewährleistungsrecht ausgeschlossen."
+                HintText = "Bitte beachten Sie, dass der Verkauf im Namen des beim Artikel angeführten Eigentümers geschieht. Bei privaten Verkäufern ist jegliches Umtausch - und Gewährleistungsrecht ausgeschlossen.",
+                SellerInfoText = "*Kontaktdaten des Verkäufers"
             };
             PageMargins = new Margins(20, 10, 20, 10);
             BannerSubtitle = "Braunau mobil, Hans-Sachs Straße 33, 5280 Braunau";
