@@ -1,9 +1,6 @@
 ﻿using BraunauMobil.VeloBasar.Models.Base;
-using BraunauMobil.VeloBasar.Resources;
-using Microsoft.Extensions.Localization;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.Contracts;
 using System.Globalization;
 using System.Linq;
 
