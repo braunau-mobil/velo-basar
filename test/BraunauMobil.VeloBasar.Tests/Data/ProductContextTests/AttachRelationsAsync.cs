@@ -1,18 +1,17 @@
 ﻿using BraunauMobil.VeloBasar.Logic;
 using BraunauMobil.VeloBasar.Models;
 using BraunauMobil.VeloBasar.Printing;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace BraunauMobil.VeloBasar.Tests.Data.ProductContextTests
 {
-    [TestClass]
     public class AttachRelationsAsync : TestWithSqliteDb
     {
-        [TestMethod]
+        [Fact]
         public async Task CreateProductSerializeToJsonAndAccept()
         {
             var json = "";
@@ -96,8 +95,8 @@ namespace BraunauMobil.VeloBasar.Tests.Data.ProductContextTests
                    productContext.AttachRelations(products);
                    var acceptance = await transactionContext.AcceptProductsAsync(basar, 1, products);
 
-                   Assert.IsNotNull(acceptance);
-                   Assert.AreEqual(1, acceptance.Id);
+                   Assert.NotNull(acceptance);
+                   Assert.Equal(1, acceptance.Id);
                }
            );
         }

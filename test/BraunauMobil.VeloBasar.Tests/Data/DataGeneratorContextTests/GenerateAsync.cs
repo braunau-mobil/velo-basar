@@ -5,23 +5,22 @@ using BraunauMobil.VeloBasar.Printing;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace BraunauMobil.VeloBasar.Tests.Data.DataGeneratorContextTests
 {
-    [TestClass]
     public class GenerateAsync : TestWithSqliteDb
     {
-        [TestMethod]
+        [Fact]
         public async Task GenerateManyBasars()
         {
             // Create a new service provider to create a new in-memory database.
             var services = new ServiceCollection();
             services.AddDbContext<VeloRepository>(options =>
                  {
-                     options.UseSqlite(_connection);
+                     options.UseSqlite(Connection);
                  });
             services.AddDefaultIdentity<IdentityUser>()
                 .AddEntityFrameworkStores<VeloRepository>();

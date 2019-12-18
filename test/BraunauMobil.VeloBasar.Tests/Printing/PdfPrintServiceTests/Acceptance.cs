@@ -4,16 +4,15 @@ using BraunauMobil.VeloBasar.Resources;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using Xunit;
 
 namespace BraunauMobil.VeloBasar.Tests.Printing.PdfPrintServiceTests
 {
-    [TestClass]
     public class Acceptance
     {
-        [TestMethod]
+        [Fact]
         public void OneProduct()
         {
             var acceptance = new ProductsTransaction()
@@ -94,7 +93,7 @@ namespace BraunauMobil.VeloBasar.Tests.Printing.PdfPrintServiceTests
 
             var creator = new PdfPrintService(localizer);
             var doc = creator.CreateAcceptance(acceptance, new PrintSettings());
-            Assert.IsNotNull(doc);
+            Assert.NotNull(doc);
         }
     }
 }

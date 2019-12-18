@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.28917.182
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BraunauMobil.VeloBasar", "src\BraunauMobil.VeloBasar\BraunauMobil.VeloBasar.csproj", "{E1EB21C9-38E2-42F5-BE92-2ECA0E1E6FFB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BraunauMobil.VeloBasar.Tests", "test\BraunauMobil.VeloBasar.Tests\BraunauMobil.VeloBasar.Tests.csproj", "{FDEA241C-152F-46F1-9FEA-1EE6ADEBB4E7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BraunauMobil.VeloBasar.Tests", "test\BraunauMobil.VeloBasar.Tests\BraunauMobil.VeloBasar.Tests.csproj", "{88141CEE-1788-4AD6-96E6-2F30FFDF2843}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{E1EB21C9-38E2-42F5-BE92-2ECA0E1E6FFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E1EB21C9-38E2-42F5-BE92-2ECA0E1E6FFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E1EB21C9-38E2-42F5-BE92-2ECA0E1E6FFB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FDEA241C-152F-46F1-9FEA-1EE6ADEBB4E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FDEA241C-152F-46F1-9FEA-1EE6ADEBB4E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FDEA241C-152F-46F1-9FEA-1EE6ADEBB4E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FDEA241C-152F-46F1-9FEA-1EE6ADEBB4E7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88141CEE-1788-4AD6-96E6-2F30FFDF2843}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88141CEE-1788-4AD6-96E6-2F30FFDF2843}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88141CEE-1788-4AD6-96E6-2F30FFDF2843}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88141CEE-1788-4AD6-96E6-2F30FFDF2843}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
