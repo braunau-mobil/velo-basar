@@ -1,4 +1,5 @@
 ﻿using BraunauMobil.VeloBasar.Models;
+using System;
 using Xunit;
 
 namespace BraunauMobil.VeloBasar.Tests.Models.SellerTests
@@ -9,7 +10,7 @@ namespace BraunauMobil.VeloBasar.Tests.Models.SellerTests
         public void AllEmpty()
         {
             var seller = new Seller();
-            Assert.Equal(" \r\n\r\n \r\n",  seller.GetBigAddressText());
+            Assert.Equal($" {Environment.NewLine}{Environment.NewLine} {Environment.NewLine}",  seller.GetBigAddressText());
         }
         [Fact]
         public void AllSet()
@@ -26,7 +27,7 @@ namespace BraunauMobil.VeloBasar.Tests.Models.SellerTests
                 Street = "Rebengasse",
                 ZIP = "1234"
             };
-            Assert.Equal("Ione Bierfrau\r\nRebengasse\r\n1234 Hopfenhausen\r\n", seller.GetBigAddressText());
+            Assert.Equal($"Ione Bierfrau{Environment.NewLine}Rebengasse{Environment.NewLine}1234 Hopfenhausen{Environment.NewLine}", seller.GetBigAddressText());
         }
     }
 }

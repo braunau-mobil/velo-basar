@@ -4,7 +4,7 @@ using Xunit;
 
 namespace BraunauMobil.VeloBasar.Tests.Models.ProductsTransactionTests
 {
-    public class GetSumText
+    public class GetSumText : TestBase
     {
         [Fact]
         public void TwoProducts()
@@ -29,7 +29,7 @@ namespace BraunauMobil.VeloBasar.Tests.Models.ProductsTransactionTests
                     }
                 }
             };
-            Assert.Equal("189,67 €", transaction.GetSumText());
+            Assert.Equal("¤189.67", transaction.GetSumText());
         }
     }
 }
