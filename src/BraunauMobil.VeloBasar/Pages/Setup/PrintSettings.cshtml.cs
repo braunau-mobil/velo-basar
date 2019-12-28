@@ -63,5 +63,7 @@ namespace BraunauMobil.VeloBasar.Pages.Setup
                 };
             }
         }
+        public VeloPage GetAcceptancePreviewPage() => this.GetPage<Acceptances.PreviewModel>();
+        public VeloPage GetSalePreviewPage() => this.GetPage<Sales.PreviewModel>();
     }
 }

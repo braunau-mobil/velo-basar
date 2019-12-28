@@ -40,7 +40,7 @@
             <div class="card-header d-flex justify-content-between align-items-md-center">
                 <div class="mr-auto"><h5>@Html.DisplayFor(x => Model.Acceptance.TransactionType)</h5></div>
                 <div class="d-flex justify-content-end">
-                    @*@todo<a class="btn btn-secondary" velo-page="@(this.GetPage<Setup.CreatePreviewDocumentModel>(new CreatePreviewDocumentParameter(Model)))">@Localizer["Vorschau"]</a>*@
+                    <a class="btn btn-secondary" target="_blank" velo-page="@Model.GetAcceptancePreviewPage()">@Localizer["Vorschau"]</a>
                 </div>
             </div>
 
@@ -70,7 +70,7 @@
             <div class="card-header d-flex justify-content-between align-items-md-center">
                 <div class="mr-auto"><h5>@Html.DisplayFor(x => Model.Sale.TransactionType)</h5></div>
                 <div class="d-flex justify-content-end">
-                    @*@todo<a class="btn btn-secondary" velo-page="@(this.GetPage<Setup.CreatePreviewDocumentModel>(new CreatePreviewDocumentParameter(Model)))">@Localizer["Vorschau"]</a>*@
+                    <a class="btn btn-secondary" target="_blank" velo-page="@Model.GetSalePreviewPage()">@Localizer["Vorschau"]</a>
                 </div>
             </div>
 
