@@ -22,40 +22,34 @@ namespace BraunauMobil.VeloBasar.Pages.Labels
         public async Task<IActionResult> OnGetAsync()
         {
             var settings = await _settingsContext.GetPrintSettingsAsync();
-            var bytes = _printService.CreateLabel(SampleBasar(), SampleProduct(), settings);
+            var bytes = _printService.CreateLabel(SampleBasar, SampleProduct, settings);
             return File(bytes, "application/pdf");
         }
 
-        private Basar SampleBasar()
+        private static Basar SampleBasar => new Basar
         {
-            return new Basar
-            {
-                Date = new DateTime(2063, 04, 05),
-                Id = 1,
-                Name = "Fahrradbasar",
-                Location = "Hopfenhausen",
-                ProductCommission = 0.1m
-            };
-        }
-        private Product SampleProduct()
+            Date = new DateTime(2063, 04, 05),
+            Id = 1,
+            Name = "Fahrradbasar",
+            Location = "Hopfenhausen",
+            ProductCommission = 0.1m
+        };
+        private static Product SampleProduct => new Product
         {
-            return new Product
+            Brand = new Brand
             {
-                Brand = new Brand
-                {
-                    Name = "Marke"
-                },
-                Color = "Grün Blau Rot",
-                Description = "Gepäcksträger, Licht, Korb",
-                FrameNumber = "123-456-789",
-                Id = 223,
-                Price = 123.23m,
-                TireSize = "38\"",
-                Type = new ProductType
-                {
-                    Name = "Lastenrad"
-                }
-            };
-        }
+                Name = "Marke"
+            },
+            Color = "Grün Blau Rot",
+            Description = "Gepäcksträger, Licht, Korb",
+            FrameNumber = "123-456-789",
+            Id = 223,
+            Price = 123.23m,
+            TireSize = "38\"",
+            Type = new ProductType
+            {
+                Name = "Lastenrad"
+            }
+        };
     }
 }
