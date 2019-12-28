@@ -19,6 +19,7 @@ using iText.Layout.Borders;
 using iText.Layout.Element;
 using iText.Layout.Properties;
 using Microsoft.Extensions.Localization;
+using iColor = iText.Kernel.Colors.Color;
 
 namespace BraunauMobil.VeloBasar.Printing
 {
@@ -29,14 +30,14 @@ namespace BraunauMobil.VeloBasar.Printing
         private const int _smallFontSize = 8;
         private const int _regularFontSize = 10;
         private readonly IStringLocalizer<SharedResource> _localizer;
-        private readonly Color _orange;
-        private readonly Color _green;
+        private readonly iColor _orange;
+        private readonly iColor _green;
 
         public PdfPrintService(IStringLocalizer<SharedResource> localizer)
         {
             _localizer = localizer;
-            _orange = Color.MakeColor(ColorConstants.GREEN.GetColorSpace(), new float[] { 1f, 0.5f, 0f });
-            _green = Color.MakeColor(ColorConstants.GREEN.GetColorSpace(), new float[] { 0f, 0.5f, 0f });
+            _orange = iColor.MakeColor(ColorConstants.GREEN.GetColorSpace(), new float[] { 1f, 0.5f, 0f });
+            _green = iColor.MakeColor(ColorConstants.GREEN.GetColorSpace(), new float[] { 0f, 0.5f, 0f });
         }
 
         public byte[] Combine(IEnumerable<byte[]> pdfs)

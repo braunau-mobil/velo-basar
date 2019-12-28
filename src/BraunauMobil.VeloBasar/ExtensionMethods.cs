@@ -18,14 +18,16 @@ namespace BraunauMobil.VeloBasar
             Contract.Requires(values != null);
 
             var sb = new StringBuilder();
+            sb.Append("[");
             foreach (var val in values)
             {
-                if (sb.Length != 0)
+                if (sb.Length != 1)
                 {
                     sb.Append(',');
                 }
                 sb.Append(itemToString(val));
             }
+            sb.Append("]");
             return sb.ToString();
         }
         public static VeloPage GetPage<TPageModel>(this PageModel page, object parameter = null)

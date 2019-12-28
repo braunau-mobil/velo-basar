@@ -5,52 +5,69 @@
     ViewData["Title"] = "Basar Details";
 }
 
-<div class="card my-3">
-    <div class="card-header d-flex justify-content-between align-items-md-center">
-        <div class="mr-auto"><h5>@Model.BasarStatistic.Basar.Name</h5></div>
-        <div><h5>@Html.DisplayFor(model => Model.BasarStatistic.Basar.Location), @Html.DisplayFor(model => Model.BasarStatistic.Basar.Date)</h5></div>
+<div class="card-deck m-3">
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-md-center">
+            <div class="mr-auto"><h5>@Localizer["{0} Annahmen", Model.BasarStatistic.AcceptedProductsCount]</h5></div>
+        </div>
+        <div class="card-body">
+            <canvas id="AcceptedProductsCountChartArea"></canvas>
+        </div>
     </div>
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-md-center">
+            <div class="mr-auto"><h5>@Localizer["{0:C} Angenommen", Model.BasarStatistic.AcceptedProductsAmount]</h5></div>
+        </div>
+        <div class="card-body">
+            <canvas id="AcceptedProductsValueChartArea"></canvas>
+        </div>
+    </div>
+</div>
 
-    <div class="card-body p-0">
-        <canvas id="chart-area"></canvas>
+<div class="card-deck m-3">
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-md-center">
+            <div class="mr-auto"><h5>@Localizer["{0} Verkäufe", Model.BasarStatistic.SoldProductsCount]</h5></div>
+        </div>
+        <div class="card-body">
+            <canvas id="SoldProductsCountChartArea"></canvas>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-md-center">
+            <div class="mr-auto"><h5>@Localizer["{0:C} Verkauft", Model.BasarStatistic.SoldProductsAmount]</h5></div>
+        </div>
+        <div class="card-body">
+            <canvas id="SoldProductsValueChartArea"></canvas>
+        </div>
+    </div>
+</div>
+
+<div class="card-deck m-3">
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-md-center">
+            <div class="mr-auto"><h5>@Localizer["Preisverteilung"]</h5></div>
+        </div>
+        <div class="card-body">
+            <canvas id="PriceDistributionChartArea"></canvas>
+        </div>
     </div>
 </div>
 
 @section Scripts {
     <script src="~/js/Chart.min.js" asp-append-version="true"></script>
     <script>
-        window.chartColors = {
-	        red: 'rgb(255, 99, 132)',
-	        orange: 'rgb(255, 159, 64)',
-	        yellow: 'rgb(255, 205, 86)',
-	        green: 'rgb(75, 192, 192)',
-	        blue: 'rgb(54, 162, 235)',
-	        purple: 'rgb(153, 102, 255)',
-	        grey: 'rgb(201, 203, 207)'
-        };
-
-        var randomScalingFactor = function() {
-			return Math.round(Math.random() * 100);
-		};
-
-        var config = {
-            type: 'pie',
-            data: {
-                datasets: [{
-                    data: [ @Html.JsLiteral(Model.BasarStatistic.Sales.DataPoints) ],
-                    backgroundColor: [ @Html.JsCode(Model.BasarStatistic.Sales.BackgroundColors) ],
-                    label: 'Verkäufe'
-                }],
-                labels: [ @Html.JsLiteral(Model.BasarStatistic.Sales.Labels) ]
-            },
-            options: {
-                responsive: true
-            }
-        };
+        function renderData(id, config) {
+            var ctx = document.getElementById(id).getContext('2d');
+            window.myPie = new Chart(ctx, config);
+        }
 
         window.onload = function () {
-            var ctx = document.getElementById('chart-area').getContext('2d');
-            window.myPie = new Chart(ctx, config);
+            renderData('AcceptedProductsCountChartArea', @Html.Raw(JsonUtils.GetDonutConfig(Model.BasarStatistic.AcceptedProductsByCount)));
+            renderData('AcceptedProductsValueChartArea', @Html.Raw(JsonUtils.GetDonutConfig(Model.BasarStatistic.AcceptedProductsByAmount)));
+            renderData('SoldProductsCountChartArea', @Html.Raw(JsonUtils.GetDonutConfig(Model.BasarStatistic.SoldProductsByCount)));
+            renderData('SoldProductsValueChartArea', @Html.Raw(JsonUtils.GetDonutConfig(Model.BasarStatistic.SoldProductsByAmount)));
+            renderData('PriceDistributionChartArea', @Html.Raw(JsonUtils.GetLineConfig(Model.BasarStatistic.PriceDistribution)));
         };
     </script>
 }
