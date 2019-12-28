@@ -55,7 +55,7 @@ namespace BraunauMobil.VeloBasar
                 var basarId = _httpContextAccessor.HttpContext.Request.Cookies.GetBasarId();
                 if(basarId.HasValue && _basarContext.Exists(basarId.Value))
                 {
-                    Basar = _basarContext.Get(basarId.Value);
+                    Basar = _basarContext.GetSingle(basarId.Value);
                     return;
                 }
             }
@@ -63,7 +63,7 @@ namespace BraunauMobil.VeloBasar
             var settings = _settingsContext.GetSettings();
             if (settings.ActiveBasarId != null)
             {
-                Basar = _basarContext.Get(settings.ActiveBasarId.Value);
+                Basar = _basarContext.GetSingle(settings.ActiveBasarId.Value);
             }
         }
     }

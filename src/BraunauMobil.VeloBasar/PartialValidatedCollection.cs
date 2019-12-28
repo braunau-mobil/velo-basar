@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace BraunauMobil.VeloBasar
 {
-    public class PartialValidatedList<T> : List<T>, IValidatableObject
+    public class PartialValidatedCollection<T> : List<T>, IValidatableObject
     {
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {

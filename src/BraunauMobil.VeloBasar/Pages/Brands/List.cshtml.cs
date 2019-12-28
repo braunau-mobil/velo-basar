@@ -48,7 +48,7 @@ namespace BraunauMobil.VeloBasar.Pages.Brands
 
             var brandIq = _brandContext.GetMany(parameter.SearchString);
             var pageSize = 10;
-            Brands = await PaginatedListViewModel<Brand>.CreateAsync(_context.Basar, brandIq.AsNoTracking(), parameter.PageIndex ?? 1, pageSize, GetPaginationPage);
+            Brands = await PaginationHelper.CreateAsync(_context.Basar, brandIq.AsNoTracking(), parameter.PageIndex ?? 1, pageSize, GetPaginationPage);
         }
         public VeloPage GetDeletePage(Brand item)
         {

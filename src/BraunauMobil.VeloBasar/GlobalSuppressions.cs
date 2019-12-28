@@ -6,3 +6,5 @@
 using System.Diagnostics.CodeAnalysis;
 
 [assembly: SuppressMessage("Performance", "CA1819:Properties should not return arrays")]
+//  @todo This should not be supressed globally, try to configure it with the .editorconfig file (this didnt' work for me at 2019-12-28)
+[assembly: SuppressMessage("Globalization", "CA1303:Do not pass literals as localized parameters", Justification = "<Pending>")]

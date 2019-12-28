@@ -60,18 +60,18 @@ namespace BraunauMobil.VeloBasar.Logic
 
             if (config.GenerateBrands)
             {
-                await GenerateBrandsAsync();
+                GenerateBrands();
             }
 
             if (config.GenerateProductTypes)
             {
-                await GenerateProductTypesAsync();
+                GenerateProductTypes();
             }
 
             await _db.SaveChangesAsync();
         }
 
-        private async Task GenerateBrandsAsync()
+        private void GenerateBrands()
         {
             foreach (var brandName in _brandNames)
             {
@@ -82,7 +82,7 @@ namespace BraunauMobil.VeloBasar.Logic
                 });
             }
         }
-        private async Task GenerateProductTypesAsync()
+        private void GenerateProductTypes()
         {
             foreach (var productTypeName in _productTypeNames)
             {

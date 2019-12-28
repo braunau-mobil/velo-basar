@@ -47,7 +47,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
             CurrentFilter = parameter.SearchString;
 
             var salesIq = _transactionContext.GetMany(_context.Basar, TransactionType.Sale, parameter.SearchString);
-            Sales = await PaginatedListViewModel<ProductsTransaction>.CreateAsync(_context.Basar, salesIq.AsNoTracking(), parameter.PageIndex ?? 1, PageSize, GetPaginationPage);
+            Sales = await PaginationHelper.CreateAsync(_context.Basar, salesIq.AsNoTracking(), parameter.PageIndex ?? 1, PageSize, GetPaginationPage);
         }
         public VeloPage GetDetailsPage(ProductsTransaction item)
         {

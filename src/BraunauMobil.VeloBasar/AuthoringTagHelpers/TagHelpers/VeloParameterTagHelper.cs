@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using System.Diagnostics.Contracts;
 
 namespace BraunauMobil.VeloBasar.AuthoringTagHelpers.TagHelpers
 {
@@ -26,6 +27,8 @@ namespace BraunauMobil.VeloBasar.AuthoringTagHelpers.TagHelpers
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
+            Contract.Requires(context != null);
+            
             var tagHelper = CreateTagHelper(context.TagName);
             tagHelper.Process(context, output);
         }
@@ -35,14 +38,14 @@ namespace BraunauMobil.VeloBasar.AuthoringTagHelpers.TagHelpers
             {
                 return new FormActionTagHelper(_urlHelperFactory)
                 {
-                    RouteValues = Utils.ConvertToRoute(Parameter),
+                    RouteValues = RoutingHelper.ConvertToRoute(Parameter),
                     ViewContext = this.ViewContext
                 };
             }
 
             return new AnchorTagHelper(_htmlGenerator)
             {
-                RouteValues = Utils.ConvertToRoute(Parameter),
+                RouteValues = RoutingHelper.ConvertToRoute(Parameter),
                 ViewContext = this.ViewContext
             };
         }

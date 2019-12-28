@@ -28,7 +28,7 @@ namespace BraunauMobil.VeloBasar.Pages.Acceptances
             return File(bytes, "application/pdf");
         }
 
-        private ProductsTransaction SampleAcceptance()
+        private static ProductsTransaction SampleAcceptance()
         {
             return new ProductsTransaction()
             {

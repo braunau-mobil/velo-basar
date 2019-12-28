@@ -81,12 +81,12 @@ namespace BraunauMobil.VeloBasar.Logic
             var sellerCount = _rand.Next(_config.MinSellers, _config.MaxSellers);
             for (var sellerNumber = 1; sellerNumber <= sellerCount; sellerNumber++)
             {
-                await CreateSellerWithAcceptancesAsync(basar, sellerNumber);
+                await CreateSellerWithAcceptancesAsync(basar);
             }
 
             return basar;
         }
-        private async Task CreateSellerWithAcceptancesAsync(Basar basar, int sellerNumber)
+        private async Task CreateSellerWithAcceptancesAsync(Basar basar)
         {
             var seller = new Seller
             {

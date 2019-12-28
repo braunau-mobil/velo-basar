@@ -26,7 +26,7 @@ namespace BraunauMobil.VeloBasar.AuthoringTagHelpers.TagHelpers
             var anchorTagHelper = new AnchorTagHelper(_htmlGenerator)
             {
                 Page = Page.Page,
-                RouteValues = Utils.ConvertToRoute(Page.Parameter),
+                RouteValues = RoutingHelper.ConvertToRoute(Page.Parameter),
                 ViewContext = ViewContext
             };
             anchorTagHelper.Process(context, output);

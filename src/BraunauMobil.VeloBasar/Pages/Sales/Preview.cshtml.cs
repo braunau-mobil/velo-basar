@@ -28,7 +28,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
             return File(bytes, "application/pdf");
         }
 
-        private ProductsTransaction SamepleSale()
+        private static ProductsTransaction SamepleSale()
         {
             return new ProductsTransaction()
             {
@@ -84,7 +84,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
                 }
             };
         }
-        private IDictionary<Product, Seller> SampleProductToSellerMap(ProductsTransaction transaction)
+        private static IDictionary<Product, Seller> SampleProductToSellerMap(ProductsTransaction transaction)
         {
             var seller = new Seller
             {

@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Routing;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace BraunauMobil.VeloBasar
 {
-    public static class Utils
+    public static class RoutingHelper
     {
+        [SuppressMessage("Globalization", "CA1307:Specify StringComparison")]
         public static string GetPageForModel<TPageModel>()
         {
             var type = typeof(TPageModel);

@@ -41,6 +41,8 @@ namespace BraunauMobil.VeloBasar.Printing
 
         public byte[] Combine(IEnumerable<byte[]> pdfs)
         {
+            Contract.Requires(pdfs != null);
+
             byte[] bytes;
             using (var combinedStream = new MemoryStream())
             {
@@ -181,7 +183,7 @@ namespace BraunauMobil.VeloBasar.Printing
             });
         }
 
-        private byte[] CreatePdf(Action<PdfDocument, Document> decorate)
+        private static byte[] CreatePdf(Action<PdfDocument, Document> decorate)
         {
             byte[] bytes;
             using (var memoryStream = new MemoryStream())

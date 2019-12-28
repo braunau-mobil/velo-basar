@@ -49,12 +49,16 @@ namespace BraunauMobil.VeloBasar.Pages.Basars
 
             var basarIq = _basarContext.GetMany(parameter.SearchString);
             var pageSize = 10;
-            Basars = await PaginatedListViewModel<Basar>.CreateAsync(_context.Basar, basarIq.AsNoTracking(), parameter.PageIndex ?? 1, pageSize, GetPaginationPage);
+            Basars = await PaginationHelper.CreateAsync(_context.Basar, basarIq.AsNoTracking(), parameter.PageIndex ?? 1, pageSize, GetPaginationPage);
 
             return Page();
         }
         public VeloPage GetCreatePage() => this.GetPage<CreateModel>();
-        public VeloPage GetDeletePage(Basar item) => this.GetPage<DeleteModel>(new DeleteParameter { BasarToDeleteId = item.Id, PageIndex = Basars.PageIndex });
+        public VeloPage GetDeletePage(Basar item)
+        {
+            Contract.Requires(item != null);
+            return this.GetPage<DeleteModel>(new DeleteParameter { BasarToDeleteId = item.Id, PageIndex = Basars.PageIndex });
+        }
         public VeloPage GetDetailsPage(Basar item)
         {
             Contract.Requires(item != null);

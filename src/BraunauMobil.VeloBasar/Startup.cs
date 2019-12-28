@@ -12,6 +12,7 @@ using System.Globalization;
 using Serilog;
 using BraunauMobil.VeloBasar.Logic;
 using BraunauMobil.VeloBasar.Printing;
+using System.Diagnostics.CodeAnalysis;
 
 namespace BraunauMobil.VeloBasar
 {
@@ -107,7 +108,9 @@ namespace BraunauMobil.VeloBasar
             services.AddScoped<IVeloContext, DefaultVeloContext>();
         }
 
+
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        [SuppressMessage("Performance", "CA1822:Mark members as static")]
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             Log.Information("Configure");

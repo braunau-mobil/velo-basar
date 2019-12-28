@@ -30,7 +30,7 @@
             </div>
 
             <div class="form-group">
-                <input velo-parameter="@Model.GetSearchParameter()" type="submit" value="@Localizer["Suchen"]" class="btn btn-primary" />
+                <input velo-parameter="@new StartWithNewSellerParameter { Search = true }" type="submit" value="@Localizer["Suchen"]" class="btn btn-primary" />
             </div>
 
             <div condition="Model.HasSellers">

@@ -1,12 +1,12 @@
 ﻿using System.Threading.Tasks;
 using BraunauMobil.VeloBasar.Models;
-using BraunauMobil.VeloBasar.Data;
 using Microsoft.AspNetCore.Mvc;
 using BraunauMobil.VeloBasar.ViewModels;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using BraunauMobil.VeloBasar.Logic;
+using System.Diagnostics.Contracts;
 
 namespace BraunauMobil.VeloBasar.Pages.Products
 {
@@ -36,6 +36,8 @@ namespace BraunauMobil.VeloBasar.Pages.Products
 
         public async Task<IActionResult> OnGetAsync(ListParameter parameter)
         {
+            Contract.Requires(parameter != null);
+
             ViewData["StorageStates"] = GetStorageStates();
             ViewData["ValueStates"] = GetValueStates();
             
@@ -65,7 +67,7 @@ namespace BraunauMobil.VeloBasar.Pages.Products
             var productIq = _productContext.GetProductsForBasar(_context.Basar, parameter.SearchString, parameter.StorageState, parameter.ValueState);
 
             var pageSize = 11;
-            Products = await PaginatedListViewModel<Product>.CreateAsync(_context.Basar, productIq, parameter.PageIndex ?? 1, pageSize, GetPaginationPage, new[]
+            Products = await PaginationHelper.CreateAsync(_context.Basar, productIq, parameter.PageIndex ?? 1, pageSize, GetPaginationPage, new[]
             {
                 new ListCommand<Product>(item => this.GetPage<DetailsModel>(new DetailsParameter { ProductId = item.Id }))
                 {
@@ -84,20 +86,20 @@ namespace BraunauMobil.VeloBasar.Pages.Products
         {
             return new SelectList(new[]
             {
-                new Tuple<StorageState?, string>(null, "Alle"),
-                new Tuple<StorageState?, string>(StorageState.Available, "Verfügbar"),
-                new Tuple<StorageState?, string>(StorageState.Sold, "Verkauft"),
-                new Tuple<StorageState?, string>(StorageState.Gone, "Verschwunden"),
-                new Tuple<StorageState?, string>(StorageState.Locked, "Gesperrt")
+                new Tuple<StorageState?, string>(null, _context.Localizer["Alle"]),
+                new Tuple<StorageState?, string>(StorageState.Available, _context.Localizer["Verfügbar"]),
+                new Tuple<StorageState?, string>(StorageState.Sold, _context.Localizer["Verkauft"]),
+                new Tuple<StorageState?, string>(StorageState.Gone, _context.Localizer["Verschwunden"]),
+                new Tuple<StorageState?, string>(StorageState.Locked, _context.Localizer["Gesperrt"])
             }, "Item1", "Item2");
         }
         private SelectList GetValueStates()
         {
             return new SelectList(new[]
             {
-                new Tuple<ValueState?, string>(null, "Alle"),
-                new Tuple<ValueState?, string>(ValueState.Settled, "Abgerechnet"),
-                new Tuple<ValueState?, string>(ValueState.NotSettled, "Nicht Abgerechnet")
+                new Tuple<ValueState?, string>(null, _context.Localizer["Alle"]),
+                new Tuple<ValueState?, string>(ValueState.Settled, _context.Localizer["Abgerechnet"]),
+                new Tuple<ValueState?, string>(ValueState.NotSettled, _context.Localizer["Nicht Abgerechnet"])
             }, "Item1", "Item2");
         }
     }

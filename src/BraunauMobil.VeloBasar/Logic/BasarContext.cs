@@ -69,7 +69,7 @@ namespace BraunauMobil.VeloBasar.Logic
         public async Task<bool> ExistsAsync(int id) => await _db.Basars.ExistsAsync(id);
         public bool Exists(int id) => _db.Basars.Any(b => b.Id == id);
         public async Task<Basar> GetAsync(int id) => await _db.Basars.FirstOrDefaultAsync(p => p.Id == id);
-        public Basar Get(int id) => _db.Basars.FirstOrDefault(p => p.Id == id);
+        public Basar GetSingle(int id) => _db.Basars.FirstOrDefault(p => p.Id == id);
         public IQueryable<Basar> GetMany(string searchString)
         {
             if (string.IsNullOrEmpty(searchString))

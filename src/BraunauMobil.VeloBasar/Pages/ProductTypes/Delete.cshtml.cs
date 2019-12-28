@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using BraunauMobil.VeloBasar.Logic;
+using System.Diagnostics.Contracts;
 
 namespace BraunauMobil.VeloBasar.Pages.ProductTypes
 {
@@ -21,6 +22,8 @@ namespace BraunauMobil.VeloBasar.Pages.ProductTypes
 
         public async Task<IActionResult> OnGetAsync(DeleteParameter parameter)
         {
+            Contract.Requires(parameter != null);
+
             if (await _service.ExistsAsync(parameter.ProductTypeId))
             {
                 await _service.DeleteAsync(parameter.ProductTypeId);

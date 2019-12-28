@@ -1,6 +1,5 @@
 ﻿using BraunauMobil.VeloBasar.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -14,7 +13,7 @@ namespace BraunauMobil.VeloBasar.Logic
         Task<bool> ExistsAsync(int id);
         bool Exists(int id);
         Task<Basar> GetAsync(int id);
-        Basar Get(int id);
+        Basar GetSingle(int id);
         IQueryable<Basar> GetMany(string searchString = null);
         SelectList GetSelectList();
         bool HasBasars();

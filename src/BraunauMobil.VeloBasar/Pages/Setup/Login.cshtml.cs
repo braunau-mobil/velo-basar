@@ -45,6 +45,7 @@ namespace BraunauMobil.VeloBasar.Pages.Setup
             // Clear the existing external cookie to ensure a clean login process
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
         }
+
         public async Task<IActionResult> OnPostAsync()
         {
             if (ModelState.IsValid)

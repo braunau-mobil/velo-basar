@@ -27,7 +27,7 @@ namespace BraunauMobil.VeloBasar.Pages.Settlements
             return File(bytes, "application/pdf");
         }
 
-        private ProductsTransaction SampleSettlement()
+        private static ProductsTransaction SampleSettlement()
         {
             var tx = new ProductsTransaction()
             {

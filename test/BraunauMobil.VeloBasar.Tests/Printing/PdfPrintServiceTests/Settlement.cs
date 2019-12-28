@@ -10,7 +10,7 @@ using Xunit;
 
 namespace BraunauMobil.VeloBasar.Tests.Printing.PdfPrintServiceTests
 {
-    public class Settlement
+    public sealed class Settlement
     {
         [Fact]
         public static void TwoProdcuts()

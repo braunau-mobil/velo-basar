@@ -56,6 +56,8 @@ namespace BraunauMobil.VeloBasar.Pages.Acceptances
         }
         public async Task<IActionResult> OnPostAsync(StartWithNewSellerParameter parameter)
         {
+            Contract.Requires(parameter != null);
+
             ViewData["Countries"] = _countryContext.GetSelectList();
 
             if (parameter.Search == true)
@@ -113,8 +115,6 @@ namespace BraunauMobil.VeloBasar.Pages.Acceptances
             }
             return new object();
         }
-        //  @todo was ist den das bitte?!?!?!?!?
-        public object GetSearchParameter() => new StartWithNewSellerParameter { Search = true };
         public bool IsValidationEnabled()
         {
             return _isValidationEnabled;

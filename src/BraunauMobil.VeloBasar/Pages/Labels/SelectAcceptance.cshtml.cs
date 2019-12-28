@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Diagnostics.Contracts;
+using System.Threading.Tasks;
 using BraunauMobil.VeloBasar.Logic;
 using BraunauMobil.VeloBasar.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -33,6 +34,8 @@ namespace BraunauMobil.VeloBasar.Pages.Labels
 
         public async Task<IActionResult> OnGetAsync(SelectAcceptanceParameter parameter)
         {
+            Contract.Requires(parameter != null);
+
             if (parameter.AcceptanceNumber == null)
             {
                 return Page();

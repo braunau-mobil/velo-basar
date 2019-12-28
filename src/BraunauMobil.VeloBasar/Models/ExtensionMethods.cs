@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 
 namespace BraunauMobil.VeloBasar.Models
@@ -19,6 +20,8 @@ namespace BraunauMobil.VeloBasar.Models
         }
         public static void SetState(this IEnumerable<Product> products, TransactionType transactionType)
         {
+            Contract.Requires(products != null);
+
             foreach (var product in products)
             {
                 product.SetState(transactionType);

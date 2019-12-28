@@ -31,6 +31,8 @@ namespace BraunauMobil.VeloBasar.Pages.Cancellations
 
         public async Task OnGetAsync(SelectProductsParameter parameter)
         {
+            Contract.Requires(parameter != null);
+
             Parameter = parameter;
 
             var sale = await _transactionContext.GetAsync(parameter.SaleId);

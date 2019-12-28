@@ -65,7 +65,7 @@ namespace BraunauMobil.VeloBasar.Tests
 
         public async Task CreateNewNumberAsync(Basar basar, TransactionType type)
         {
-            //  @todo
+            await Task.Run(() => { });
         }
     }
 }

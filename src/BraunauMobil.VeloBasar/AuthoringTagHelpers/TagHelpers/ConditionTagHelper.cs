@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Razor.TagHelpers;
+using System.Diagnostics.Contracts;
 
 namespace BraunauMobil.VeloBasar.AuthoringTagHelpers.TagHelpers
 {
@@ -9,6 +10,8 @@ namespace BraunauMobil.VeloBasar.AuthoringTagHelpers.TagHelpers
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
+            Contract.Requires(output != null);
+
             if (Condition == false || Condition == null)
             {
                 output.SuppressOutput();
