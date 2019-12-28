@@ -9,6 +9,6 @@ namespace BraunauMobil.VeloBasar.Printing
         byte[] CreateAcceptance(ProductsTransaction acceptance, PrintSettings settings);
         byte[] CreateLabel(Basar basar, Product product);
         byte[] CreateSale(ProductsTransaction sale, IDictionary<Product, Seller> productToSellerMap, PrintSettings settings);
-        byte[] CreateSettlement(ProductsTransaction settlement);
+        byte[] CreateSettlement(ProductsTransaction settlement, PrintSettings settings);
     }
 }

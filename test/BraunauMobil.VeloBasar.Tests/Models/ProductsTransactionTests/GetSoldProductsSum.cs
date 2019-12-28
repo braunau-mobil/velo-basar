@@ -4,12 +4,12 @@ using Xunit;
 
 namespace BraunauMobil.VeloBasar.Tests.Models.ProductsTransactionTests
 {
-    public class GetSumText : TestBase
+    public class GetSoldProductsSum
     {
         [Fact]
-        public void TwoProducts()
+        public void Test()
         {
-            var transaction = new ProductsTransaction
+            var tx = new ProductsTransaction
             {
                 Products = new List<ProductToTransaction>
                 {
@@ -17,19 +17,29 @@ namespace BraunauMobil.VeloBasar.Tests.Models.ProductsTransactionTests
                     {
                         Product = new Product
                         {
-                            Price = 123.12m
+                            Price = 123.12m,
+                            StorageState = StorageState.Sold
                         }
                     },
                     new ProductToTransaction
                     {
                         Product = new Product
                         {
-                            Price = 66.55m
+                            Price = 99.99m,
+                            StorageState = StorageState.Sold
+                        }
+                    },
+                    new ProductToTransaction
+                    {
+                        Product = new Product
+                        {
+                            Price = 100.0m,
+                            StorageState = StorageState.Available
                         }
                     }
                 }
             };
-            Assert.Equal("¤189.67", transaction.GetSumText());
+            Assert.Equal(223.11m, tx.GetSoldProductsSum());
         }
     }
 }

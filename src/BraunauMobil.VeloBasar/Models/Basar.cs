@@ -20,12 +20,6 @@ namespace BraunauMobil.VeloBasar.Models
         [DataType(DataType.Currency)]
         [Display(Name = "Artikel Provision")]
         public decimal ProductCommission { get; set; }
-        [DataType(DataType.Currency)]
-        [Display(Name = "Artikel Rabatt")]
-        public decimal ProductDiscount { get; set; }
-        [DataType(DataType.Currency)]
-        [Display(Name = "Verkäufer Rabatt")]
-        public decimal SellerDiscount { get; set; }
 
         public string GetDateText()
         {

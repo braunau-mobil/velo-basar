@@ -4,7 +4,6 @@ using Microsoft.Extensions.Localization;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.Contracts;
-using System.Globalization;
 using System.Text;
 
 namespace BraunauMobil.VeloBasar.Models
@@ -118,20 +117,6 @@ namespace BraunauMobil.VeloBasar.Models
         public bool IsLocked()
         {
             return StorageState == StorageState.Locked;
-        }
-        public decimal AdjustPrice(TransactionType transactionType, Basar basar)
-        {
-            if (transactionType == TransactionType.Acceptance)
-            {
-                return Price;
-            }
-            throw new NotImplementedException();
-        }
-        public string GetPriceText(ProductsTransaction transaction)
-        {
-            Contract.Requires(transaction != null);
-
-            return string.Format(CultureInfo.CurrentCulture, "{0:C}", AdjustPrice(transaction.Type, transaction.Basar));
         }
         public string GetInfoText(IStringLocalizer<SharedResource> localizer)
         {

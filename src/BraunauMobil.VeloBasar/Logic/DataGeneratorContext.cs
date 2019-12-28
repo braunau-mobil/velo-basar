@@ -75,8 +75,6 @@ namespace BraunauMobil.VeloBasar.Logic
                 Name = name,
                 Location = _basarLocation,
                 ProductCommission = 0.9m,
-                ProductDiscount = 0.0m,
-                SellerDiscount = 0,
             };
             await _basarContext.CreateAsync(basar);
 

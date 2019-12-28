@@ -37,9 +37,7 @@ namespace BraunauMobil.VeloBasar.Pages.Acceptances
                     Date = new DateTime(2063, 04, 05),
                     Location = "Hopfenhause",
                     Name = "Testbasar",
-                    ProductCommission = 0.1m,
-                    ProductDiscount = 0.0m,
-                    SellerDiscount = 0.0m
+                    ProductCommission = 0.1m
                 },
                 Notes = "Bla Bla Bla Anmerkung...",
                 Number = 55,

@@ -1,7 +1,7 @@
 ﻿using BraunauMobil.VeloBasar.Models.Base;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Globalization;
 using System.Linq;
 
 namespace BraunauMobil.VeloBasar.Models
@@ -16,14 +16,17 @@ namespace BraunauMobil.VeloBasar.Models
         [Display(Name = "Artikel")]
         public ICollection<ProductToTransaction> Products { get; set; }
 
-        public decimal GetSum()
+        public decimal GetSoldProductsSum()
         {
-            return Products.Sum(pt => pt.Product.AdjustPrice(Type, Basar));
+            return Products.GetProducts().Where(p => p.StorageState == StorageState.Sold).SumPrice();
         }
-        public string GetSumText()
+        public decimal GetSoldCommissionSum()
         {
-            var sum = GetSum();
-            return string.Format(CultureInfo.CurrentCulture, "{0:C}", sum);
+            return GetSoldProductsSum() * Basar.ProductCommission;
+        }
+        public decimal GetSoldTotal()
+        {
+            return GetSoldProductsSum() - GetSoldCommissionSum();
         }
     }
 }

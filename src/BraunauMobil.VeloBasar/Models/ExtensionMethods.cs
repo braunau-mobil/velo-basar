@@ -24,5 +24,10 @@ namespace BraunauMobil.VeloBasar.Models
                 product.SetState(transactionType);
             }
         }
+
+        public static decimal SumPrice(this IEnumerable<Product> products)
+        {
+            return products.Sum(p => p.Price);
+        }
     }
 }

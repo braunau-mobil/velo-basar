@@ -55,8 +55,8 @@
                         <input asp-for="Acceptance.SubTitle" class="form-control" velo-validation-for="Acceptance.SubTitle" />
                     </div>
                     <div class="form-group">
-                        <label asp-for="Acceptance.SignatureFormat" class="control-label"></label>
-                        <input asp-for="Acceptance.SignatureFormat" class="form-control" velo-validation-for="Acceptance.SignatureFormat" />
+                        <label asp-for="Acceptance.SignatureText" class="control-label"></label>
+                        <input asp-for="Acceptance.SignatureText" class="form-control" velo-validation-for="Acceptance.SignatureText" />
                     </div>
                     <div class="form-group">
                         <label asp-for="Acceptance.TokenFormat" class="control-label"></label>
@@ -95,6 +95,40 @@
                     <div class="form-group">
                         <label asp-for="Sale.SellerInfoText" class="control-label"></label>
                         <input asp-for="Sale.SellerInfoText" class="form-control" velo-validation-for="Sale.SellerInfoText" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card my-3">
+            <div class="card-header d-flex justify-content-between align-items-md-center">
+                <div class="mr-auto"><h5>@Html.DisplayFor(x => Model.Settlement.TransactionType)</h5></div>
+                <div class="d-flex justify-content-end">
+                    <a class="btn btn-secondary" target="_blank" velo-page="@Model.GetSettlementPreviewPage()">@Localizer["Vorschau"]</a>
+                </div>
+            </div>
+
+            <div class="card-body">
+                <div class="column">
+                    <div class="form-group">
+                        <label asp-for="Settlement.TitleFormat" class="control-label"></label>
+                        <input asp-for="Settlement.TitleFormat" class="form-control" velo-validation-for="Settlement.TitleFormat" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Settlement.SoldTitle" class="control-label"></label>
+                        <input asp-for="Settlement.SoldTitle" class="form-control" velo-validation-for="Settlement.SoldTitle" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Settlement.NotSoldTitle" class="control-label"></label>
+                        <input asp-for="Settlement.NotSoldTitle" class="form-control" velo-validation-for="Settlement.NotSoldTitle" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Settlement.ConfirmationText" class="control-label"></label>
+                        <input asp-for="Settlement.ConfirmationText" class="form-control" velo-validation-for="Settlement.ConfirmationText" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Settlement.SignatureText" class="control-label"></label>
+                        <input asp-for="Settlement.SignatureText" class="form-control" velo-validation-for="Settlement.SignatureText" />
                     </div>
                 </div>
             </div>

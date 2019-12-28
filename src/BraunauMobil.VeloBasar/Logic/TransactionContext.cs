@@ -260,7 +260,7 @@ namespace BraunauMobil.VeloBasar.Logic
             }
             else if (transaction.Type == TransactionType.Settlement)
             {
-                fileStore.Data = _printService.CreateSettlement(transaction);
+                fileStore.Data = _printService.CreateSettlement(transaction, printSettings);
             }
 
             await _db.SaveChangesAsync();

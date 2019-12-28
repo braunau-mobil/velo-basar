@@ -7,7 +7,7 @@ using BraunauMobil.VeloBasar.Printing;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace BraunauMobil.VeloBasar.Pages.Sales
+namespace BraunauMobil.VeloBasar.Pages.Settlements
 {
     public class PreviewModel : PageModel
     {
@@ -23,19 +23,19 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
         public async Task<IActionResult> OnGetAsync()
         {
             var settings = await _settingsContext.GetPrintSettingsAsync();
-            var sale = SamepleSale();
-            var bytes = _printService.CreateSale(sale, SampleProductToSellerMap(sale), settings);
+            var bytes = _printService.CreateSettlement(SampleSettlement(), settings);
             return File(bytes, "application/pdf");
         }
 
-        private ProductsTransaction SamepleSale()
+        private ProductsTransaction SampleSettlement()
         {
-            return new ProductsTransaction()
+            var tx = new ProductsTransaction()
             {
+                Type = TransactionType.Settlement,
                 Basar = new Basar
                 {
                     Date = new DateTime(2063, 04, 05),
-                    Location = "Hopfenhause",
+                    Location = "Hopfenhausen",
                     Name = "Testbasar",
                     ProductCommission = 0.1m
                 },
@@ -47,6 +47,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
                     {
                         Product = new Product
                         {
+                            Id = 12,
                             Brand = new Brand
                             {
                                 Name = "KTM"
@@ -55,17 +56,19 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
                             Description = "Ganz tolles Rad, leider Fehlt der Sattel",
                             FrameNumber = "123498zdsfvh48",
                             Price = 12.45m,
-                            TireSize = "Sehgr groß",
+                            TireSize = "55\"",
                             Type = new ProductType
                             {
                                 Name = "City-Bike"
-                            }
+                            },
+                            StorageState = StorageState.Sold
                         }
                     },
                     new ProductToTransaction
                     {
                         Product = new Product
                         {
+                            Id = 22,
                             Brand = new Brand
                             {
                                 Name = "KTM"
@@ -73,42 +76,40 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
                             Color = "Rot mit grünen Streifen",
                             Description = "Ganz tolles Rad, leider Fehlt der Sattel",
                             FrameNumber = "123498zdsfvh48",
-                            Price = 12.45m,
-                            TireSize = "Sehgr groß0",
+                            Price = 99.21m,
+                            TireSize = "12\"",
                             Type = new ProductType
                             {
                                 Name = "City-Bike"
-                            }
-                        }
+                            },
+                            StorageState = StorageState.Available
+                        }                        
                     }
-                }
-            };
-        }
-        private IDictionary<Product, Seller> SampleProductToSellerMap(ProductsTransaction transaction)
-        {
-            var seller = new Seller
-            {
-                BankAccountHolder = "Bilbo Beutlin",
-                BIC = "ABC123456789",
-                City = "Hopfenhause",
-                Country = new Country
-                {
-                    Name = "Österreich",
-                    Iso3166Alpha3Code = "AUT"
                 },
-                FirstName = "Bilbo",
-                IBAN = "AT00123412341234",
-                LastName = "Beutlin",
-                Street = "Biergasse 12",
-                Token = "GHTGF4",
-                ZIP = "1234"
+                Seller = new Seller
+                {
+                    BankAccountHolder = "Bilbo Beutlin",
+                    BIC = "ABC123456789",
+                    City = "Hopfenhausen",
+                    Country = new Country
+                    {
+                        Name = "Österreich",
+                        Iso3166Alpha3Code = "AUT"
+                    },
+                    FirstName = "Bilbo",
+                    IBAN = "AT00123412341234",
+                    LastName = "Beutlin",
+                    Street = "Biergasse 12",
+                    Token = "GHTGF4",
+                    ZIP = "1234"
+                },
+                TimeStamp = new DateTime(2063, 04, 05, 15, 22, 11)
             };
-            var productToSellerMap = new Dictionary<Product, Seller>();
-            foreach (var product in transaction.Products)
+            foreach (var productToTransaction in tx.Products)
             {
-                productToSellerMap.Add(product.Product, seller);
+                productToTransaction.Transaction = tx;
             }
-            return productToSellerMap;
+            return tx;
         }
     }
 }

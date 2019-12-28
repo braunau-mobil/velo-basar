@@ -24,7 +24,7 @@ namespace BraunauMobil.VeloBasar.Pages.Cancellations
         public ProductsTransaction Cancellation { get; set; }
         [Display(Name = "Auszuzahlender Betrag")]
         [DataType(DataType.Currency)]
-        public decimal PayoutAmout { get => Cancellation.GetSum(); }
+        public decimal PayoutAmout { get => Cancellation.Products.GetProducts().SumPrice(); }
         public ProductsTransaction Sale { get; set; }
 
         public async Task OnGetAsync(DoneParameter parameter)
