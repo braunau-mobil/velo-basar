@@ -78,6 +78,11 @@ namespace BraunauMobil.VeloBasar.Models
         public override TransactionType TransactionType => TransactionType.Settlement;
     }
 
+    public class LabelPrintSettings
+    {
+        public string TitleFormat { get;  set; }
+    }
+
     public class PrintSettings
     {
         public PrintSettings()
@@ -105,6 +110,10 @@ namespace BraunauMobil.VeloBasar.Models
                 SoldTitle = "Folgende Ihrer Artikel haben wir für Sie verkauft:",
                 TitleFormat = "Abrechung: Braunau mobil - {0}"
             };
+            Label = new LabelPrintSettings
+            {
+                TitleFormat = "Braunau mobil - {0}"
+            };
             PageMargins = new Margins(20, 10, 20, 10);
             BannerSubtitle = "Braunau mobil, Hans-Sachs Straße 33, 5280 Braunau";
             Website = "www.braunaumobil.at";
@@ -117,6 +126,8 @@ namespace BraunauMobil.VeloBasar.Models
         public SalePrintSettings Sale { get; set; }
         [Display(Name = "Abrechnung")]
         public SettlementPrintSettings Settlement { get; set; }
+        [Display(Name = "Etiketten")]
+        public LabelPrintSettings Label { get; set; }
         [Display(Name = "Seitenränder")]
         public Margins PageMargins { get; set; }
         [Display(Name = "Banner")]

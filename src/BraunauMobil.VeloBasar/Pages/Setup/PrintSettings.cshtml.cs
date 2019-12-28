@@ -26,6 +26,8 @@ namespace BraunauMobil.VeloBasar.Pages.Setup
         [BindProperty]
         public SettlementPrintSettings Settlement { get; set; }
         [BindProperty]
+        public LabelPrintSettings Label { get; set; }
+        [BindProperty]
         public Margins PageMargins { get; set; }
         [BindProperty]
         public IFormFile BannerUpload { get; set; }
@@ -36,6 +38,7 @@ namespace BraunauMobil.VeloBasar.Pages.Setup
             Acceptance = PrintSettings.Acceptance;
             Sale = PrintSettings.Sale;
             Settlement = PrintSettings.Settlement;
+            Label = PrintSettings.Label;
             PageMargins = PrintSettings.PageMargins;
         }
         public async Task OnPostAsync()
@@ -44,6 +47,7 @@ namespace BraunauMobil.VeloBasar.Pages.Setup
             PrintSettings.Acceptance = Acceptance;
             PrintSettings.Sale = Sale;
             PrintSettings.Settlement = Settlement;
+            PrintSettings.Label = Label;
             PrintSettings.PageMargins = PageMargins;
 
             await _context.UpdateAsync(PrintSettings);
@@ -70,5 +74,6 @@ namespace BraunauMobil.VeloBasar.Pages.Setup
         public VeloPage GetAcceptancePreviewPage() => this.GetPage<Acceptances.PreviewModel>();
         public VeloPage GetSalePreviewPage() => this.GetPage<Sales.PreviewModel>();
         public VeloPage GetSettlementPreviewPage() => this.GetPage<Settlements.PreviewModel>();
+        public VeloPage GetLabelPreviewPage() => this.GetPage<Labels.PreviewModel>();
     }
 }

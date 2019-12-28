@@ -62,7 +62,6 @@ namespace BraunauMobil.VeloBasar.Printing
             }
             return bytes;
         }
-
         public byte[] CreateAcceptance(ProductsTransaction acceptance, PrintSettings settings)
         {
             Contract.Requires(acceptance != null);
@@ -83,29 +82,43 @@ namespace BraunauMobil.VeloBasar.Printing
                 doc.Add(GetRegularText(settings.Acceptance.GetTokenText(acceptance.Seller)));
             });
         }
-
-        public byte[] CreateLabel(Basar basar, Product product)
+        public byte[] CreateLabel(Basar basar, Product product, PrintSettings settings)
         {
             return CreatePdf((pdfDoc, doc) =>
             {
+                pdfDoc.AddNewPage(new PageSize(50f.ToUnit(), 79f.ToUnit()));
+
                 doc.SetMargins(0, 0, 0, 0);
                 doc.SetFontSize(7);
+                doc.SetFont(PdfFontFactory.CreateFont(StandardFonts.TIMES_ROMAN));
 
-                var page = pdfDoc.AddNewPage(new PageSize(50f.ToUnit(), 79f.ToUnit()));
+                doc.Add(new Paragraph(
+                    GetSmallText(string.Format(CultureInfo.CurrentCulture, settings.Label.TitleFormat, basar.Name)))
+                        .SetTextAlignment(TextAlignment.CENTER)
+                        .SetBorderBottom(new SolidBorder(2)));
 
-                doc.Add(new Paragraph($"Braunau mobil - {basar.Name}"));
-                doc.Add(new Paragraph(product.Brand.Name));
-                doc.Add(new Paragraph(product.Type.Name));
-                doc.Add(new Paragraph(product.Description));
-                doc.Add(new Paragraph($"Reifengröße: {product.TireSize}"));
-                doc.Add(new Paragraph(product.Price.ToString()));
+                var info = new Paragraph()
+                    .Add(GetSmallText($"{product.Brand.Name} - {product.Type.Name}").SetBold())
+                    .Add(Environment.NewLine)
+                    .Add(GetSmallText(product.Description))
+                    .Add(Environment.NewLine)
+                    .SetMargin(2);
+                doc.Add(info);
+
+                doc.Add(GetSpacer(100));
 
                 var barcode = new BarcodeEAN(pdfDoc);
                 barcode.SetCode($"{product.Id:0000000000000}");
-                doc.Add(new Image(barcode.CreateFormXObject(pdfDoc)));
+                doc.Add(new Image(barcode.CreateFormXObject(pdfDoc))
+                    .SetHorizontalAlignment(HorizontalAlignment.CENTER));
+
+                var price = GetBigText(string.Format(CultureInfo.CurrentCulture, "{0:C}", product.Price))
+                    .SetBold()
+                    .SetTextAlignment(TextAlignment.RIGHT)
+                    .SetBorderTop(new SolidBorder(1));
+                doc.Add(price);
             });
         }
-
         public byte[] CreateSale(ProductsTransaction sale, IDictionary<Product, Seller> productToSellerMap, PrintSettings settings)
         {
             return CreateTransactionPdf(settings, (pdfDoc, doc) =>
@@ -131,7 +144,6 @@ namespace BraunauMobil.VeloBasar.Printing
                 doc.Add(GetRegularText(settings.Sale.FooterText));
             });
         }
-
         public byte[] CreateSettlement(ProductsTransaction settlement, PrintSettings settings)
         {
             return CreateTransactionPdf(settings, (pdfDoc, doc) =>
@@ -320,7 +332,7 @@ namespace BraunauMobil.VeloBasar.Printing
                 if (productToSellerMap != null && productToSellerMap.TryGetValue(product, out var seller))
                 {
                     var sellerInfo = GetSmallText($"* {seller.GetSmallAddressText()}");
-                    productInfoCell.Add(sellerInfo);
+                    productInfoCell.Add(new Paragraph(sellerInfo));
                 }
 
                 var size = new Paragraph(product.TireSize);
@@ -347,7 +359,7 @@ namespace BraunauMobil.VeloBasar.Printing
             {
                 var sellerInfoCell = new Cell()
                     .SetBorder(null)
-                    .Add(GetSmallText(sellerInfoText));
+                    .Add(new Paragraph(GetSmallText(sellerInfoText)));
                 productsTable.AddCell(sellerInfoCell);
             }
             doc.Add(productsTable);
@@ -490,9 +502,9 @@ namespace BraunauMobil.VeloBasar.Printing
             return new Paragraph(text)
                 .SetFontSize(_regularFontSize);
         }
-        private static Paragraph GetSmallText(string text)
+        private static Text GetSmallText(string text)
         {
-            return new Paragraph(text)
+            return new Text(text)
                 .SetFontSize(_smallFontSize);
         }
         private static Paragraph GetSpacer(int verticalSize)

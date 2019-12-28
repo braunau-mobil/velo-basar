@@ -170,10 +170,12 @@ namespace BraunauMobil.VeloBasar.Logic
         }
         private async Task<FileData> CreateLabelsAndCombineToOnePdfAsync(Basar basar, IEnumerable<Product> products)
         {
+            var printSettings = await _settingsContext.GetPrintSettingsAsync();
+
             var files = new List<byte[]>();
             foreach (var product in products)
             {
-                var file = await CreateLabelAsync(basar, product);
+                var file = await CreateLabelAsync(basar, product, printSettings);
                 files.Add(file.Data);
             }
 
@@ -188,12 +190,12 @@ namespace BraunauMobil.VeloBasar.Logic
                 ContentType = PdfContentType
             };
         }
-        private async Task<FileData> CreateLabelAsync(Basar basar, Product product)
+        private async Task<FileData> CreateLabelAsync(Basar basar, Product product, PrintSettings printSettings)
         {
             var fileStore = new FileData
             {
                 ContentType = PdfContentType,
-                Data = _printService.CreateLabel(basar, product)
+                Data = _printService.CreateLabel(basar, product, printSettings)
             };
             _db.Files.Add(fileStore);
             await _db.SaveChangesAsync();
