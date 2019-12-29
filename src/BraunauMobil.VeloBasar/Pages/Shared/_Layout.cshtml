@@ -32,6 +32,9 @@
                     {
                         <ul class="nav flex-column nav-pills">
                             <li class="nav-item">
+                                <a class="nav-link" velo-page="@(this.GetPage<Basars.DetailsModel>(new Basars.DetailsParameter { BasarId = VeloContext.Basar.Id }))">@Localizer["Übersicht"]</a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link" velo-page="@(this.GetPage<Acceptances.StartWithNewSellerModel>())">@Localizer["Neue Annahme"]</a>
                             </li>
                             <li class="nav-item">

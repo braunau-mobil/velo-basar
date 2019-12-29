@@ -20,7 +20,7 @@ namespace BraunauMobil.VeloBasar
             var json = JsonConvert.SerializeObject(instance);
             return Encoding.UTF8.GetBytes(json);
         }
-        public static string GetDonutConfig(PieChartDataPoint[] points)
+        public static string GetDonutConfig(ChartDataPoint[] points)
         {
             var config = new
             {
@@ -32,7 +32,7 @@ namespace BraunauMobil.VeloBasar
                         new
                         {
                             data = points.Select(p => p.Value),
-                            backgroundColor = points.Select(p => $"rgb({p.Color.R}, {p.Color.G}, {p.Color.B})")
+                            backgroundColor = points.Select(p => ToChartJsColor(p.Color))
                         }
                     },
                     labels = points.Select(p => p.Label)
@@ -40,7 +40,7 @@ namespace BraunauMobil.VeloBasar
             };
             return JsonConvert.SerializeObject(config);
         }
-        public static string GetLineConfig(LineChartDataPoint[] points)
+        public static string GetLineConfig(ChartDataPoint[] points, string label)
         {
             var config = new
             {
@@ -52,13 +52,22 @@ namespace BraunauMobil.VeloBasar
                     {
                         new
                         {
+                            label = label,
                             fill = false,
-                            data = points.Select(p => p.Value)
+                            data = points.Select(p => p.Value),
+                            backgroundColor = ToChartJsColor(points.First().Color),
+                            borderColor = ToChartJsColor(points.First().Color)
                         }
                     }
                 }
             };
             return JsonConvert.SerializeObject(config);
+        }
+        public static string ToChartJsColor(Color c)
+        {
+            Contract.Requires(c != null);
+
+            return $"rgb({c.R}, {c.G}, {c.B})";
         }
     }
 }

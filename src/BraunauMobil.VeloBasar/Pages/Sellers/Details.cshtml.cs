@@ -45,8 +45,8 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
                 return NotFound();
             }
 
-            AcceptanceStatistics = await _statisticContext.GetTransactionStatistics(TransactionType.Acceptance, _context.Basar, parameter.SellerId);
-            SettlementStatistics = await _statisticContext.GetTransactionStatistics(TransactionType.Settlement, _context.Basar, parameter.SellerId);
+            AcceptanceStatistics = await _statisticContext.GetTransactionStatistics(_context.Basar, TransactionType.Acceptance, parameter.SellerId);
+            SettlementStatistics = await _statisticContext.GetTransactionStatistics(_context.Basar, TransactionType.Settlement, parameter.SellerId);
             Products = await _productContext.GetProductsForSeller(_context.Basar, parameter.SellerId).AsNoTracking().ToListAsync();
             Stats = await _statisticContext.GetSellerStatisticsAsync(_context.Basar, Seller.Id);
 

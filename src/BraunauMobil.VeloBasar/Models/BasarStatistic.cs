@@ -16,30 +16,26 @@
             };
         }
     }
-    public class PieChartDataPoint
+    public class ChartDataPoint
     {
         public decimal Value { get; set; }
         public string Label { get; set; }
         public Color Color { get; set; }
     }
-    public class LineChartDataPoint
-    {
-        public string Label { get; set; }
-        public decimal Value { get; set; }
-    }
     public class BasarStatistic
     {
-        public int AcceptedProductsCount { get; set; }
-        public decimal AcceptedProductsAmount { get; set; }
-        public int SoldProductsCount { get; set; }
-        public decimal SoldProductsAmount { get; set; }
-
         public Basar Basar { get; set; }
-        public PieChartDataPoint[] AcceptedProductsByCount { get; set; }
-        public PieChartDataPoint[] AcceptedProductsByAmount { get; set; }
-        public PieChartDataPoint[] SoldProductsByCount { get; set; }
-        public PieChartDataPoint[] SoldProductsByAmount { get; set; }
-
-        public LineChartDataPoint[] PriceDistribution { get; set; }
+        public int SellerCount { get; set; }
+        public int AcceptedProductsCount { get; set; }
+        public ChartDataPoint[] AcceptedProductsByCount { get; set; }
+        public decimal AcceptedProductsAmount { get; set; }
+        public ChartDataPoint[] AcceptedProductsByAmount { get; set; }
+        public int SoldProductsCount { get; set; }
+        public ChartDataPoint[] SoldProductsByCount { get; set; }
+        public decimal SoldProductsAmount { get; set; }
+        public ChartDataPoint[] SoldProductsByAmount { get; set; }
+        public int GoneProductsCount { get; set; }
+        public int LockedProductsCount { get; set; }
+        public ChartDataPoint[] PriceDistribution { get; set; }
     }
 }

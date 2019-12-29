@@ -106,9 +106,13 @@ namespace BraunauMobil.VeloBasar.Logic
         {
             return await _db.Transactions.IncludeAll().FirstOrDefaultAsync(t => t.BasarId == basar.Id && t.Type == type && t.Number == number);
         }
-        public IQueryable<ProductsTransaction> GetMany(TransactionType transactionType, Basar basar, int sellerId)
+        public IQueryable<ProductsTransaction> GetMany(Basar basar, TransactionType type)
         {
-            return GetMany(transactionType, basar, t => t.SellerId == sellerId);
+            return GetMany(basar, type, t => true);
+        }
+        public IQueryable<ProductsTransaction> GetMany(Basar basar, TransactionType type, int sellerId)
+        {
+            return GetMany(basar, type, t => t.SellerId == sellerId);
         }
         public IQueryable<ProductsTransaction> GetMany(Basar basar, TransactionType type, string searchString)
         {
@@ -206,9 +210,9 @@ namespace BraunauMobil.VeloBasar.Logic
 
             return fileStore;
         }
-        private IQueryable<ProductsTransaction> GetMany(TransactionType transactionType, Basar basar, Expression<Func<ProductsTransaction, bool>> additionalPredicate = null)
+        private IQueryable<ProductsTransaction> GetMany(Basar basar, TransactionType type, Expression<Func<ProductsTransaction, bool>> additionalPredicate = null)
         {
-            var result = _db.Transactions.Where(t => t.Type == transactionType && t.Basar.Id == basar.Id);
+            var result = _db.Transactions.Where(t => t.Type == type && t.Basar.Id == basar.Id);
 
             if (additionalPredicate != null)
             {
@@ -216,10 +220,6 @@ namespace BraunauMobil.VeloBasar.Logic
             }
 
             return IncludeAll(result);
-        }
-        private IQueryable<ProductsTransaction> GetMany(TransactionType transactionType, Basar basar, string searchString)
-        {
-            return GetMany(transactionType, basar, TransactionSearch(searchString));
         }
         private async Task<IDictionary<Product, Seller>> GetProductToSellerMapAsync(ProductsTransaction transaction)
         {

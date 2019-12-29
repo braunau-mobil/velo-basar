@@ -15,13 +15,15 @@ namespace BraunauMobil.VeloBasar.Logic
         private readonly IBasarContext _basarContext;
         private readonly IProductContext _productContext;
         private readonly ITransactionContext _transactionContext;
+        private readonly ISellerContext _sellerContext;
 
-        public StatisticContext(IStringLocalizer<SharedResource> localizer, ITransactionContext transactionContext, IBasarContext basarContext, IProductContext productContext)
+        public StatisticContext(IStringLocalizer<SharedResource> localizer, ITransactionContext transactionContext, IBasarContext basarContext, IProductContext productContext, ISellerContext sellerContext)
         {
             _localizer = localizer;
             _transactionContext = transactionContext;
             _basarContext = basarContext;
             _productContext = productContext;
+            _sellerContext = sellerContext;
         }
 
         public async Task<BasarStatistic> GetBasarStatisticAsnyc(int basarId)
@@ -29,18 +31,22 @@ namespace BraunauMobil.VeloBasar.Logic
             var basar = await _basarContext.GetAsync(basarId);
             var products = await _productContext.GetProductsForBasar(basar).ToArrayAsync();
             var soldProducts = products.Where(p => p.StorageState == StorageState.Sold).ToArray();
+            var sellerCount = await _transactionContext.GetMany(basar, TransactionType.Acceptance).GroupBy(t => t.SellerId).CountAsync();
 
             return new BasarStatistic
             {
                 Basar = basar,
+                SellerCount = sellerCount,
                 AcceptedProductsCount = products.Length,
-                AcceptedProductsAmount = products.SumPrice(),
-                SoldProductsCount = soldProducts.Length,
-                SoldProductsAmount = soldProducts.SumPrice(),
                 AcceptedProductsByCount = GroupByProductType(products, FromCount),
+                AcceptedProductsAmount = products.SumPrice(),
                 AcceptedProductsByAmount = GroupByProductType(products, FromAmount),
+                SoldProductsCount = soldProducts.Length,
                 SoldProductsByCount = GroupByProductType(soldProducts, FromCount),
+                SoldProductsAmount = soldProducts.SumPrice(),
                 SoldProductsByAmount = GroupByProductType(soldProducts, FromAmount),
+                GoneProductsCount = products.Count(p => p.StorageState == StorageState.Gone),
+                LockedProductsCount = products.Count(p => p.StorageState == StorageState.Locked),
                 PriceDistribution = GetPriceDistribution(products)
             };
         }
@@ -57,9 +63,9 @@ namespace BraunauMobil.VeloBasar.Logic
                 SoldProductCount = soldProducts.Length
             };
         }
-        public async Task<TransactionStatistic[]> GetTransactionStatistics(TransactionType transactionType, Basar basar, int sellerId)
+        public async Task<TransactionStatistic[]> GetTransactionStatistics(Basar basar, TransactionType type, int sellerId)
         {
-            return await _transactionContext.GetMany(transactionType, basar, sellerId).AsNoTracking().Select(a => new TransactionStatistic
+            return await _transactionContext.GetMany(basar, type, sellerId).AsNoTracking().Select(a => new TransactionStatistic
             {
                 Transaction = a,
                 ProductCount = a.Products.Count,
@@ -67,9 +73,9 @@ namespace BraunauMobil.VeloBasar.Logic
             }).ToArrayAsync();
         }
 
-        private PieChartDataPoint[] GroupByProductType(IEnumerable<Product> products, Func<IGrouping<ProductType, Product>, PieChartDataPoint> getPoint)
+        private ChartDataPoint[] GroupByProductType(IEnumerable<Product> products, Func<IGrouping<ProductType, Product>, ChartDataPoint> getPoint)
         {
-            var data = new List<PieChartDataPoint>();
+            var data = new List<ChartDataPoint>();
             var colors = new ColorDispenser();
             foreach (var group in products.GroupBy(p => p.Type))
             {
@@ -79,41 +85,44 @@ namespace BraunauMobil.VeloBasar.Logic
             }
             return data.ToArray();
         }
-        private static PieChartDataPoint FromCount(IGrouping<ProductType, Product> group)
+        private static ChartDataPoint FromCount(IGrouping<ProductType, Product> group)
         {
             var count = group.Count();
-            return new PieChartDataPoint
+            return new ChartDataPoint
             {
                 Label = $"{group.Key.Name}: {count}",
                 Value = count
             };
         }
-        private static PieChartDataPoint FromAmount(IGrouping<ProductType, Product> group)
+        private static ChartDataPoint FromAmount(IGrouping<ProductType, Product> group)
         {
             var sum = group.SumPrice();
-            return new PieChartDataPoint
+            return new ChartDataPoint
             {
                 Label = $"{group.Key.Name}: {sum:C}",
                 Value = sum
             };
         }
-        private static LineChartDataPoint[] GetPriceDistribution(IEnumerable<Product> products)
+        private static ChartDataPoint[] GetPriceDistribution(IEnumerable<Product> products)
         {
             var step = 10.0m;
             var maxPrice = products.Max(p => p.Price);
             var currentMin = 0.0m;
             var currentMax = step;
+            var colors = new ColorDispenser();
+            var color = colors.Next();
 
-            var data = new List<LineChartDataPoint>();
+            var data = new List<ChartDataPoint>();
             while (currentMax < maxPrice)
             {
                 var count = products.Count(p => p.Price >= currentMin && p.Price < currentMax);
                 if (count > 0)
                 {
-                    data.Add(new LineChartDataPoint
+                    data.Add(new ChartDataPoint
                     {
                         Label = $"{currentMax:C}",
-                        Value = count
+                        Value = count,
+                        Color = color
                     });
                 }
                 currentMin += step;
