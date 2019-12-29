@@ -30,7 +30,7 @@ namespace BraunauMobil.VeloBasar
         {
             Log.Information("Configure services");
 
-            RegisterSercies(services);
+            RegisterServices(services);
             services.AddHttpContextAccessor();
 
             services.Configure<CookiePolicyOptions>(options =>
@@ -87,7 +87,7 @@ namespace BraunauMobil.VeloBasar
             Log.Information("Configure services done");
         }
 
-        private static void RegisterSercies(IServiceCollection services)
+        public static void RegisterServices(IServiceCollection services)
         {
             services.AddScoped<IBasarContext, BasarContext>();
             services.AddScoped<IBrandContext, BrandContext>();

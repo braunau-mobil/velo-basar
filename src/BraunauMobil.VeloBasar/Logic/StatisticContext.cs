@@ -105,6 +105,11 @@ namespace BraunauMobil.VeloBasar.Logic
         }
         private static ChartDataPoint[] GetPriceDistribution(IEnumerable<Product> products)
         {
+            if (!products.Any())
+            {
+                return Array.Empty<ChartDataPoint>();
+            }
+
             var step = 10.0m;
             var maxPrice = products.Max(p => p.Price);
             var currentMin = 0.0m;
