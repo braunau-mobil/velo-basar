@@ -45,8 +45,8 @@ namespace BraunauMobil.VeloBasar.Logic
                 SoldProductsByCount = GroupByProductType(soldProducts, FromCount),
                 SoldProductsAmount = soldProducts.SumPrice(),
                 SoldProductsByAmount = GroupByProductType(soldProducts, FromAmount),
-                GoneProductsCount = products.Count(p => p.StorageState == StorageState.Gone),
-                LockedProductsCount = products.Count(p => p.StorageState == StorageState.Locked),
+                GoneProductsCount = products.Count(p => p.IsGone()),
+                LockedProductsCount = products.Count(p => p.IsLocked()),
                 PriceDistribution = GetPriceDistribution(products)
             };
         }
