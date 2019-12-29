@@ -1,0 +1,30 @@
+﻿@page
+@model CreateModel
+@{
+    ViewData["Title"] = Localizer["Land hinzufügen"];
+}
+
+<form method="post">
+    <div class="card my-3">
+        <div class="card-header d-flex justify-content-between align-items-md-center">
+            <div class="mr-auto"><h5>@ViewData["Title"]</h5></div>
+            <div class="d-flex justify-content-end">
+                <input type="submit" value="@Localizer["Speichern"]" class="btn btn-primary mx-1" velo-page="(this.GetPage<ListModel>())" />
+                <a velo-page="(this.GetPage<ListModel>())" class="btn btn-secondary mx-1">@Localizer["Abbrechen"]</a>
+            </div>
+        </div>
+
+        <div class="card-body">
+            <div class="column">
+                <div class="form-group">
+                    <label asp-for="Country.Name" class="control-label"></label>
+                    <input asp-for="Country.Name" class="form-control" velo-validation-for="Country.Name" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Country.Iso3166Alpha3Code" class="control-label"></label>
+                    <input asp-for="Country.Iso3166Alpha3Code" class="form-control" velo-validation-for="Country.Iso3166Alpha3Code" />
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
