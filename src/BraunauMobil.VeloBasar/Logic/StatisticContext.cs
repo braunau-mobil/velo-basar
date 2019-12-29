@@ -31,7 +31,7 @@ namespace BraunauMobil.VeloBasar.Logic
             var basar = await _basarContext.GetAsync(basarId);
             var products = await _productContext.GetProductsForBasar(basar).ToArrayAsync();
             var soldProducts = products.Where(p => p.StorageState == StorageState.Sold).ToArray();
-            var sellerCount = await _transactionContext.GetMany(basar, TransactionType.Acceptance).GroupBy(t => t.SellerId).CountAsync();
+            var sellerCount = await _transactionContext.GetMany(basar, TransactionType.Acceptance).Select(t => t.SellerId).Distinct().CountAsync();
 
             return new BasarStatistic
             {

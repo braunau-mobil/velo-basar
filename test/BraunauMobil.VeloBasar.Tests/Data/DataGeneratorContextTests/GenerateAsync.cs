@@ -19,12 +19,12 @@ namespace BraunauMobil.VeloBasar.Tests.Data.DataGeneratorContextTests
             // Create a new service provider to create a new in-memory database.
             var services = new ServiceCollection();
             services.AddDbContext<VeloRepository>(options =>
-                 {
-                     options.UseSqlite(Connection);
-                 });
-            services.AddDefaultIdentity<IdentityUser>()
+            {
+                options.UseSqlite(Connection);
+            });
+            services.AddIdentityCore<IdentityUser>()
                 .AddEntityFrameworkStores<VeloRepository>();
-            
+
             services.AddLocalization(options => 
                 options.ResourcesPath = "Resources"
             );

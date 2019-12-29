@@ -9,6 +9,5 @@ namespace BraunauMobil.VeloBasar.Tests
             CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
             CultureInfo.CurrentUICulture = CultureInfo.InvariantCulture;
         }
-
     }
 }

@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +12,7 @@ using Serilog;
 using BraunauMobil.VeloBasar.Logic;
 using BraunauMobil.VeloBasar.Printing;
 using System.Diagnostics.CodeAnalysis;
+using Microsoft.Extensions.Hosting;
 
 namespace BraunauMobil.VeloBasar
 {
@@ -78,12 +78,11 @@ namespace BraunauMobil.VeloBasar
             });
 
             services
-                .AddMvc()
+                .AddRazorPages()
                 .AddViewLocalization(options =>
                 {
                     options.ResourcesPath = "Resources";
-                })
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+                });
 
             Log.Information("Configure services done");
         }
@@ -111,7 +110,7 @@ namespace BraunauMobil.VeloBasar
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         [SuppressMessage("Performance", "CA1822:Mark members as static")]
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             Log.Information("Configure");
 
@@ -135,7 +134,12 @@ namespace BraunauMobil.VeloBasar
 
             app.UseAuthentication();
 
-            app.UseMvc();
+            app.UseRouting();
+            app.UseAuthorization();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapRazorPages();
+            });
 
             Log.Information("Configure done");
         }

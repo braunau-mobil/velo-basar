@@ -34,7 +34,7 @@ namespace BraunauMobil.VeloBasar.Logic
         public IQueryable<Product> GetProductsForBasar(Basar basar) => GetProductsForBasar(basar, null, null, null);
         public IQueryable<Product> GetProductsForBasar(Basar basar, string searchString, StorageState? storageState, ValueState? valueState)
         {
-            var iq = _db.Transactions.GetMany(TransactionType.Acceptance, basar).SelectMany(a => a.Products).Select(pa => pa.Product).IncludeAll();
+            var iq = _db.Transactions.IncludeAll().GetMany(TransactionType.Acceptance, basar).SelectMany(a => a.Products).Select(pa => pa.Product);
             
             if (!string.IsNullOrEmpty(searchString))
             {
@@ -51,11 +51,11 @@ namespace BraunauMobil.VeloBasar.Logic
                 iq = iq.Where(p => p.ValueState == valueState.Value);
             }
 
-            return iq.IncludeAll().DefaultOrder();
+            return iq.DefaultOrder();
         }
         public IQueryable<Product> GetProductsForSeller(Basar basar, int sellerId)
         {
-            return _db.Transactions.GetMany(TransactionType.Acceptance, basar, sellerId).SelectMany(a => a.Products).Select(pa => pa.Product).IncludeAll();
+            return _db.Transactions.IncludeAll().GetMany(TransactionType.Acceptance, basar, sellerId).SelectMany(a => a.Products).Select(pa => pa.Product);
         }
         public async Task UpdateAsync(Product product)
         {
