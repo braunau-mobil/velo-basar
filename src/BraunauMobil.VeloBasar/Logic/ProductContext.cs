@@ -71,12 +71,12 @@ namespace BraunauMobil.VeloBasar.Logic
 
         private static Expression<Func<Product, bool>> ProductSearch(string searchString)
         {
-            return p => p.Brand.Name.Contains(searchString, StringComparison.InvariantCultureIgnoreCase)
-                || p.Color.Contains(searchString, StringComparison.InvariantCultureIgnoreCase)
-                || p.Description.Contains(searchString, StringComparison.InvariantCultureIgnoreCase)
-                || p.FrameNumber.Contains(searchString, StringComparison.InvariantCultureIgnoreCase)
-                || p.TireSize.Contains(searchString, StringComparison.InvariantCultureIgnoreCase)
-                || p.Type.Name.Contains(searchString, StringComparison.InvariantCultureIgnoreCase);
+            return p => EF.Functions.Like(p.Brand.Name, $"%{searchString}%")
+                || EF.Functions.Like(p.Color, $"%{searchString}%")
+                || EF.Functions.Like(p.Description, $"%{searchString}%")
+                || EF.Functions.Like(p.FrameNumber, $"%{searchString}%")
+                || EF.Functions.Like(p.TireSize, $"%{searchString}%")
+                || EF.Functions.Like(p.Type.Name, $"%{searchString}%");
         }
     }
 }

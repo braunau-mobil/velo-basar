@@ -323,11 +323,11 @@ namespace BraunauMobil.VeloBasar.Logic
         private static Expression<Func<ProductsTransaction, bool>> TransactionSearch(string searchString)
         {
             return x => (x.Seller == null) ? true :
-                 x.Seller.FirstName.Contains(searchString, StringComparison.InvariantCultureIgnoreCase)
-              || x.Seller.LastName.Contains(searchString, StringComparison.InvariantCultureIgnoreCase)
-              || x.Seller.City.Contains(searchString, StringComparison.InvariantCultureIgnoreCase)
-              || x.Seller.Country.Name.Contains(searchString, StringComparison.InvariantCultureIgnoreCase)
-              || (x.Seller.BankAccountHolder != null && x.Seller.BankAccountHolder.Contains(searchString, StringComparison.InvariantCultureIgnoreCase));
+                 EF.Functions.Like(x.Seller.FirstName, $"%{searchString}%")
+              || EF.Functions.Like(x.Seller.LastName, $"%{searchString}%")
+              || EF.Functions.Like(x.Seller.City, $"%{searchString}%")
+              || EF.Functions.Like(x.Seller.Country.Name, $"%{searchString}%")
+              || (x.Seller.BankAccountHolder != null && EF.Functions.Like(x.Seller.BankAccountHolder, $"%{searchString}%"));
         }
     }
 }

@@ -45,25 +45,26 @@ namespace BraunauMobil.VeloBasar.Logic
 
         private static Expression<Func<Seller, bool>> SellerSearch(string searchString)
         {
-            return s => s.FirstName.Contains(searchString, StringComparison.InvariantCultureIgnoreCase)
-              || s.LastName.Contains(searchString, StringComparison.InvariantCultureIgnoreCase)
-              || s.City.Contains(searchString, StringComparison.InvariantCultureIgnoreCase)
-              || s.Country.Name.Contains(searchString, StringComparison.InvariantCultureIgnoreCase)
-              || (s.BankAccountHolder != null && s.BankAccountHolder.Contains(searchString, StringComparison.InvariantCultureIgnoreCase));
+            return s => EF.Functions.Like(s.FirstName, $"%{searchString}%")
+              || EF.Functions.Like(s.LastName, $"%{searchString}%")
+              || EF.Functions.Like(s.Street, $"%{searchString}%")
+              || EF.Functions.Like(s.City, $"%{searchString}%")
+              || EF.Functions.Like(s.Country.Name, $"%{searchString}%")
+              || (s.BankAccountHolder != null && EF.Functions.Like(s.BankAccountHolder, $"%{searchString}%"));
         }
         public static Expression<Func<Seller, bool>> SellerSearch(string firstName, string lastName)
         {
             if (!string.IsNullOrEmpty(firstName) && string.IsNullOrEmpty(lastName))
             {
-                return s => s.FirstName.StartsWith(firstName, StringComparison.InvariantCultureIgnoreCase);
+                return s => EF.Functions.Like(s.FirstName, $"{firstName}%");
             }
             else if (string.IsNullOrEmpty(firstName) && !string.IsNullOrEmpty(lastName))
             {
-                return s => s.LastName.StartsWith(lastName, StringComparison.InvariantCultureIgnoreCase);
+                return s => EF.Functions.Like(s.LastName, $"{lastName}%");
             }
 
-            return s => s.FirstName.StartsWith(firstName, StringComparison.InvariantCultureIgnoreCase)
-              && s.LastName.StartsWith(lastName, StringComparison.InvariantCultureIgnoreCase);
+            return s => EF.Functions.Like(s.FirstName, $"{firstName}%")
+              && EF.Functions.Like(s.LastName, $"{lastName}%");
         }
     }
 }

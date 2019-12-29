@@ -56,8 +56,8 @@ namespace BraunauMobil.VeloBasar.Logic
             {
                 return c => c.Id == id;
             }
-            return c => c.Name.Contains(searchString, StringComparison.InvariantCultureIgnoreCase)
-                || c.Iso3166Alpha3Code.Contains(searchString, StringComparison.InvariantCultureIgnoreCase);
+            return c => EF.Functions.Like(c.Name, $"%{searchString}%")
+                || EF.Functions.Like(c.Iso3166Alpha3Code, $"%{searchString}%");
         }
     }
 }
