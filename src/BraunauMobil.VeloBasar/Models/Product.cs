@@ -122,6 +122,11 @@ namespace BraunauMobil.VeloBasar.Models
         {
             Contract.Requires(localizer != null);
 
+            if(IsEmtpy())
+            {
+                return string.Empty;
+            }
+
             var sb = new StringBuilder();
             sb.Append(Brand.Name).Append(" - ").AppendLine(Type.Name);
             sb.Append(Description).AppendLine($" {FrameNumber} {Color}");
