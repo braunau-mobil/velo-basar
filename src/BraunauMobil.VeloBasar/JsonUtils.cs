@@ -42,6 +42,12 @@ namespace BraunauMobil.VeloBasar
         }
         public static string GetLineConfig(ChartDataPoint[] points, string label)
         {
+            var color = ToChartJsColor(new Color());
+            if (points.Any())
+            {
+                color = ToChartJsColor(points.FirstOrDefault().Color);
+            }
+
             var config = new
             {
                 type = "line",
@@ -52,11 +58,11 @@ namespace BraunauMobil.VeloBasar
                     {
                         new
                         {
-                            label = label,
+                            label,
                             fill = false,
                             data = points.Select(p => p.Value),
-                            backgroundColor = ToChartJsColor(points.First().Color),
-                            borderColor = ToChartJsColor(points.First().Color)
+                            backgroundColor = color,
+                            borderColor = color
                         }
                     }
                 }
