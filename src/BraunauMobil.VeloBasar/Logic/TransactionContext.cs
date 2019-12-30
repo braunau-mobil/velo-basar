@@ -78,7 +78,7 @@ namespace BraunauMobil.VeloBasar.Logic
         }
         public async Task<FileData> CreateLabelsForSellerAsync(Basar basar, int sellerId)
         {
-            var products = await _productContext.GetProductsForSeller(basar, sellerId).Where(p => p.Label != null).ToListAsync();
+            var products = await _productContext.GetProductsForSeller(basar, sellerId).ToListAsync();
             return await CreateLabelsAndCombineToOnePdfAsync(basar, products);
         }
         public async Task<ProductsTransaction> DoTransactionAsync(Basar basar, TransactionType transactionType, string notes, int productId)

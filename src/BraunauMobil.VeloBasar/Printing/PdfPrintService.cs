@@ -105,21 +105,32 @@ namespace BraunauMobil.VeloBasar.Printing
                     .Add(Environment.NewLine)
                     .Add(GetSmallText(product.Description))
                     .Add(Environment.NewLine)
+                    .Add(GetSmallText(product.Color))
+                    .Add(Environment.NewLine)
+                    .Add(GetSmallText(_localizer["Rahmennummer: {0}", product.FrameNumber]))
+                    .Add(Environment.NewLine)
+                    .Add(GetSmallText(_localizer["Reifengröße: {0}", product.TireSize]))
                     .SetMargin(2);
                 doc.Add(info);
 
-                doc.Add(GetSpacer(100));
-
+                
+                var barcodeAndPrice = new Paragraph()
+                    .SetTextAlignment(TextAlignment.CENTER);
                 var barcode = new BarcodeEAN(pdfDoc);
                 barcode.SetCode($"{product.Id:0000000000000}");
-                doc.Add(new Image(barcode.CreateFormXObject(pdfDoc))
-                    .SetHorizontalAlignment(HorizontalAlignment.CENTER));
-
                 var price = GetBigText(string.Format(CultureInfo.CurrentCulture, "{0:C}", product.Price))
                     .SetBold()
                     .SetTextAlignment(TextAlignment.RIGHT)
-                    .SetBorderTop(new SolidBorder(1));
-                doc.Add(price);
+                    .SetBorderTop(new SolidBorder(1))
+                    .SetWidth(50f.ToUnit());
+
+                barcodeAndPrice
+                    .Add(new Image(barcode.CreateFormXObject(pdfDoc)))
+                    .Add(new Text(Environment.NewLine))
+                    .Add(price)
+                    .SetFixedPosition(0f, 0f, 50f.ToUnit());
+
+                doc.Add(barcodeAndPrice);
             });
         }
         public byte[] CreateSale(ProductsTransaction sale, IDictionary<Product, Seller> productToSellerMap, PrintSettings settings)

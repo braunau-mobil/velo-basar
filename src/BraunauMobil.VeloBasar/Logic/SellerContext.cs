@@ -17,10 +17,11 @@ namespace BraunauMobil.VeloBasar.Logic
             _db = db;
         }
 
-        public async Task CreateAsync(Seller seller)
+        public async Task<Seller> CreateAsync(Seller seller)
         {
             _db.Sellers.Add(seller);
             await _db.SaveChangesAsync();
+            return seller;
         }
         public async Task<bool> ExistsAsync(int id) => await _db.Sellers.ExistsAsync(id);
         public async Task<Seller> GetAsync(int id) => await _db.Sellers.IncludeAll().FirstOrDefaultAsync(s => s.Id == id);
