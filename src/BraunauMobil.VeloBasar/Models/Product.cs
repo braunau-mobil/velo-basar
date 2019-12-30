@@ -41,6 +41,7 @@ namespace BraunauMobil.VeloBasar.Models
         [DataType(DataType.Currency)]
         [Display(Name = "Preis")]
         [Required(ErrorMessage = "Bitte einen Preis eingeben.")]
+        [Range(0.01, double.MaxValue, ErrorMessage = "Bitte einen Preis größer 0,01 eingeben.")]
         public decimal Price { get; set; }
 
         [Display(Name = "Lagerstatus")]
