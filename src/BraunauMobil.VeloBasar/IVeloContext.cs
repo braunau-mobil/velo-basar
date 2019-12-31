@@ -16,5 +16,6 @@ namespace BraunauMobil.VeloBasar
         UserManager<IdentityUser> UserManager { get; }
 
         bool IsInitialized();
+        bool DevToolsEnabled();
     }
 }

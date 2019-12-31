@@ -23,7 +23,7 @@ namespace BraunauMobil.VeloBasar.Pages.DevTools
         public List<int> Numbers { get; } = new List<int>();
         public IActionResult OnGet()
         {
-            if (!_context.Configuration.DevToolsEnabled())
+            if (!_context.DevToolsEnabled())
             {
                 return Unauthorized();
             }

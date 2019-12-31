@@ -2,9 +2,11 @@
 using BraunauMobil.VeloBasar.Logic;
 using BraunauMobil.VeloBasar.Models;
 using BraunauMobil.VeloBasar.Resources;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Localization;
 
 namespace BraunauMobil.VeloBasar
@@ -15,14 +17,16 @@ namespace BraunauMobil.VeloBasar
         private readonly IBasarContext _basarContext;
         private readonly ISettingsContext _settingsContext;
         private readonly VeloRepository _db;
+        private readonly IWebHostEnvironment _env;
 
-        public DefaultVeloContext(VeloRepository db, IStringLocalizer<SharedResource> localizer, SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager, IHttpContextAccessor httpContextAccessor, IConfiguration configuration, IBasarContext basarContext, ISettingsContext settingsContext)
+        public DefaultVeloContext(VeloRepository db, IStringLocalizer<SharedResource> localizer, SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager, IHttpContextAccessor httpContextAccessor, IConfiguration configuration, IBasarContext basarContext, ISettingsContext settingsContext, IWebHostEnvironment env)
         {
             _httpContextAccessor = httpContextAccessor;
 
             _db = db;
             _basarContext = basarContext;
             _settingsContext = settingsContext;
+            _env = env;
             Configuration = configuration;
             Localizer = localizer;
             SignInManager = signInManager;
@@ -39,6 +43,8 @@ namespace BraunauMobil.VeloBasar
         public UserManager<IdentityUser> UserManager { get; private set; }
 
         public bool IsInitialized() => _db.IsInitialized();
+        public bool DevToolsEnabled() => _env.IsDevelopment();
+
         private void Load()
         {
             if (!_db.IsInitialized())

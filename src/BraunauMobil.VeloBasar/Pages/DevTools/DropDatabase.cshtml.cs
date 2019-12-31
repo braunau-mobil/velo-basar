@@ -18,7 +18,7 @@ namespace BraunauMobil.VeloBasar.Pages.DevTools
 
         public IActionResult OnGet()
         {
-            if (!_context.Configuration.DevToolsEnabled())
+            if (!_context.DevToolsEnabled())
             {
                 return Unauthorized();
             }
@@ -26,7 +26,7 @@ namespace BraunauMobil.VeloBasar.Pages.DevTools
         }
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!_context.Configuration.DevToolsEnabled())
+            if (!_context.DevToolsEnabled())
             {
                 return Unauthorized();
             }
