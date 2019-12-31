@@ -12,22 +12,17 @@ namespace BraunauMobil.VeloBasar.Logic
 {
     public class ProductContext : IProductContext
     {
+        private readonly IBrandContext _brandContext;
+        private readonly IProductTypeContext _productTypeContext;
         private readonly VeloRepository _db;
 
-        public ProductContext(VeloRepository db)
+        public ProductContext(VeloRepository db, IBrandContext brandContext, IProductTypeContext productTypeContext)
         {
             _db = db;
+            _brandContext = brandContext;
+            _productTypeContext = productTypeContext;
         }
 
-        public void AttachRelations(IList<Product> products)
-        {
-            Contract.Requires(products != null);
-
-            foreach (var product in products)
-            {
-                AttachRelations(product);
-            }
-        }
         public async Task<bool> ExistsAsync(int id) => await _db.ProductTypes.ExistsAsync(id);
         public async Task<Product> GetAsync(int id) => await _db.Products.IncludeAll().FirstOrDefaultAsync(p => p.Id == id);
         public IQueryable<Product> GetMany(IList<int> ids) => _db.Products.Where(p => ids.Contains(p.Id)).IncludeAll().DefaultOrder();
@@ -57,16 +52,22 @@ namespace BraunauMobil.VeloBasar.Logic
         {
             return _db.Transactions.IncludeAll().GetMany(TransactionType.Acceptance, basar, sellerId).SelectMany(a => a.Products).Select(pa => pa.Product);
         }
+        public async Task ReloadRelationsAsync(IList<Product> products)
+        {
+            Contract.Requires(products != null);
+
+            foreach (var product in products)
+            {
+                product.Brand = await _brandContext.GetAsync(product.Brand.Id);
+                product.BrandId = product.Brand.Id;
+                product.Type = await _productTypeContext.GetAsync(product.Type.Id);
+                product.TypeId = product.Type.Id;
+            }
+        }
         public async Task UpdateAsync(Product product)
         {
             _db.Attach(product).State = EntityState.Modified;
             await _db.SaveChangesAsync();
-        }
-
-        private void AttachRelations(Product product)
-        {
-            _db.Attach(product.Brand);
-            _db.Attach(product.Type);
         }
 
         private static Expression<Func<Product, bool>> ProductSearch(string searchString)

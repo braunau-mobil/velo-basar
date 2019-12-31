@@ -29,7 +29,7 @@ namespace BraunauMobil.VeloBasar.Pages.Acceptances
             Contract.Requires(parameter != null);
 
             var products = Request.Cookies.GetAcceptanceProducts();
-            _productContext.AttachRelations(products);
+            await _productContext.ReloadRelationsAsync(products);
             var acceptance = await _transactionContext.AcceptProductsAsync(_context.Basar, parameter.SellerId, products);
 
             Response.Cookies.ClearAcceptanceProducts();

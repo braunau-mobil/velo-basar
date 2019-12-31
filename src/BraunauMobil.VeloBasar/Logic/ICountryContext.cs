@@ -7,7 +7,7 @@ namespace BraunauMobil.VeloBasar.Logic
 {
     public interface ICountryContext
     {
-        Task CreateAsync(Country country);
+        Task<Country> CreateAsync(Country country);
         Task<bool> CanDeleteAsync(Country item);
         Task DeleteAsync(int countryId);
         Task<bool> ExistsAsync(int countryId);

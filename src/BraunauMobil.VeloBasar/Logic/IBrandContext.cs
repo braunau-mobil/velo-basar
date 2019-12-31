@@ -8,7 +8,7 @@ namespace BraunauMobil.VeloBasar.Logic
     public interface IBrandContext
     {
         Task<bool> CanDeleteAsync(Brand item);
-        Task CreateAsync(Brand brand);
+        Task<Brand> CreateAsync(Brand brand);
         Task DeleteAsync(int id);
         Task<bool> ExistsAsync(int id);
         Task<Brand> GetAsync(int id);

@@ -19,10 +19,11 @@ namespace BraunauMobil.VeloBasar.Logic
         }
 
         public async Task<bool> CanDeleteAsync(Brand item) => !await _db.Products.AnyAsync(p => p.BrandId == item.Id);
-        public async Task CreateAsync(Brand brand)
+        public async Task<Brand> CreateAsync(Brand brand)
         {
             _db.Brands.Add(brand);
             await _db.SaveChangesAsync();
+            return brand;
         }
         public async Task DeleteAsync(int id)
         {
