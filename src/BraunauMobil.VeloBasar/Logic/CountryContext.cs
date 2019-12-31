@@ -51,11 +51,16 @@ namespace BraunauMobil.VeloBasar.Logic
             await _db.SaveChangesAsync();
         }
 
-        private static Expression<Func<Country, bool>> CountrySearch(string searchString)
+        private Expression<Func<Country, bool>> CountrySearch(string searchString)
         {
             if (int.TryParse(searchString, out int id))
             {
                 return c => c.Id == id;
+            }
+            if (_db.IsPostgreSQL())
+            {
+                return c => EF.Functions.ILike(c.Name, $"%{searchString}%")
+                || EF.Functions.ILike(c.Iso3166Alpha3Code, $"%{searchString}%");
             }
             return c => EF.Functions.Like(c.Name, $"%{searchString}%")
                 || EF.Functions.Like(c.Iso3166Alpha3Code, $"%{searchString}%");

@@ -1,6 +1,7 @@
 ﻿using BraunauMobil.VeloBasar.Data;
 using BraunauMobil.VeloBasar.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Linq;
 using System.Linq.Expressions;
@@ -44,8 +45,17 @@ namespace BraunauMobil.VeloBasar.Logic
             await _db.SaveChangesAsync();
         }
 
-        private static Expression<Func<Seller, bool>> SellerSearch(string searchString)
+        private Expression<Func<Seller, bool>> SellerSearch(string searchString)
         {
+            if (_db.IsPostgreSQL())
+            {
+                return s => EF.Functions.ILike(s.FirstName, $"%{searchString}%")
+                  || EF.Functions.ILike(s.LastName, $"%{searchString}%")
+                  || EF.Functions.ILike(s.Street, $"%{searchString}%")
+                  || EF.Functions.ILike(s.City, $"%{searchString}%")
+                  || EF.Functions.ILike(s.Country.Name, $"%{searchString}%")
+                  || (s.BankAccountHolder != null && EF.Functions.ILike(s.BankAccountHolder, $"%{searchString}%"));
+            }
             return s => EF.Functions.Like(s.FirstName, $"%{searchString}%")
               || EF.Functions.Like(s.LastName, $"%{searchString}%")
               || EF.Functions.Like(s.Street, $"%{searchString}%")
@@ -53,8 +63,22 @@ namespace BraunauMobil.VeloBasar.Logic
               || EF.Functions.Like(s.Country.Name, $"%{searchString}%")
               || (s.BankAccountHolder != null && EF.Functions.Like(s.BankAccountHolder, $"%{searchString}%"));
         }
-        public static Expression<Func<Seller, bool>> SellerSearch(string firstName, string lastName)
+        public Expression<Func<Seller, bool>> SellerSearch(string firstName, string lastName)
         {
+            if (_db.IsPostgreSQL())
+            {
+                if (!string.IsNullOrEmpty(firstName) && string.IsNullOrEmpty(lastName))
+                {
+                    return s => EF.Functions.ILike(s.FirstName, $"{firstName}%");
+                }
+                else if (string.IsNullOrEmpty(firstName) && !string.IsNullOrEmpty(lastName))
+                {
+                    return s => EF.Functions.ILike(s.LastName, $"{lastName}%");
+                }
+
+                return s => EF.Functions.ILike(s.FirstName, $"{firstName}%")
+                  && EF.Functions.ILike(s.LastName, $"{lastName}%");
+            }
             if (!string.IsNullOrEmpty(firstName) && string.IsNullOrEmpty(lastName))
             {
                 return s => EF.Functions.Like(s.FirstName, $"{firstName}%");

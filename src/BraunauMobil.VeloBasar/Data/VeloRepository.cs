@@ -28,6 +28,7 @@ namespace BraunauMobil.VeloBasar.Data
         {
             return Database.GetService<IRelationalDatabaseCreator>().Exists();
         }
+        public bool IsPostgreSQL() => Database.ProviderName == "Npgsql.EntityFrameworkCore.PostgreSQL";
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

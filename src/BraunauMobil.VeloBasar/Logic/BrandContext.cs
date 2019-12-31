@@ -52,11 +52,15 @@ namespace BraunauMobil.VeloBasar.Logic
             await _db.SaveChangesAsync();
         }
 
-        private static Expression<Func<Brand, bool>> BrandSearch(string searchString)
+        private Expression<Func<Brand, bool>> BrandSearch(string searchString)
         {
             if (int.TryParse(searchString, out int id))
             {
                 return b => b.Id == id;
+            }
+            if (_db.IsPostgreSQL())
+            {
+                return b => EF.Functions.ILike(b.Name, $"%{searchString}%");
             }
             return b => EF.Functions.Like(b.Name, $"%{searchString}%");
         }

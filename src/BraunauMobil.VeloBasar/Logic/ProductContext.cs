@@ -70,8 +70,17 @@ namespace BraunauMobil.VeloBasar.Logic
             await _db.SaveChangesAsync();
         }
 
-        private static Expression<Func<Product, bool>> ProductSearch(string searchString)
+        private Expression<Func<Product, bool>> ProductSearch(string searchString)
         {
+            if (_db.IsPostgreSQL())
+            {
+                return p => EF.Functions.ILike(p.Brand.Name, $"%{searchString}%")
+                || EF.Functions.ILike(p.Color, $"%{searchString}%")
+                || EF.Functions.ILike(p.Description, $"%{searchString}%")
+                || EF.Functions.ILike(p.FrameNumber, $"%{searchString}%")
+                || EF.Functions.ILike(p.TireSize, $"%{searchString}%")
+                || EF.Functions.ILike(p.Type.Name, $"%{searchString}%");
+            }
             return p => EF.Functions.Like(p.Brand.Name, $"%{searchString}%")
                 || EF.Functions.Like(p.Color, $"%{searchString}%")
                 || EF.Functions.Like(p.Description, $"%{searchString}%")

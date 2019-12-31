@@ -307,6 +307,24 @@ namespace BraunauMobil.VeloBasar.Logic
             await _db.SaveChangesAsync();
         }
 
+        private Expression<Func<ProductsTransaction, bool>> TransactionSearch(string searchString)
+        {
+            if (_db.IsPostgreSQL())
+            {
+                return x => (x.Seller == null) ? true :
+                     EF.Functions.ILike(x.Seller.FirstName, $"%{searchString}%")
+                  || EF.Functions.ILike(x.Seller.LastName, $"%{searchString}%")
+                  || EF.Functions.ILike(x.Seller.City, $"%{searchString}%")
+                  || EF.Functions.ILike(x.Seller.Country.Name, $"%{searchString}%")
+                  || (x.Seller.BankAccountHolder != null && EF.Functions.ILike(x.Seller.BankAccountHolder, $"%{searchString}%"));
+            }
+            return x => (x.Seller == null) ? true :
+                 EF.Functions.Like(x.Seller.FirstName, $"%{searchString}%")
+              || EF.Functions.Like(x.Seller.LastName, $"%{searchString}%")
+              || EF.Functions.Like(x.Seller.City, $"%{searchString}%")
+              || EF.Functions.Like(x.Seller.Country.Name, $"%{searchString}%")
+              || (x.Seller.BankAccountHolder != null && EF.Functions.Like(x.Seller.BankAccountHolder, $"%{searchString}%"));
+        }
         private static IQueryable<ProductsTransaction> IncludeAll(IQueryable<ProductsTransaction> transactions)
         {
             return transactions
@@ -319,15 +337,6 @@ namespace BraunauMobil.VeloBasar.Logic
                 .Include(t => t.Products)
                     .ThenInclude(pt => pt.Product)
                         .ThenInclude(p => p.Type);
-        }
-        private static Expression<Func<ProductsTransaction, bool>> TransactionSearch(string searchString)
-        {
-            return x => (x.Seller == null) ? true :
-                 EF.Functions.Like(x.Seller.FirstName, $"%{searchString}%")
-              || EF.Functions.Like(x.Seller.LastName, $"%{searchString}%")
-              || EF.Functions.Like(x.Seller.City, $"%{searchString}%")
-              || EF.Functions.Like(x.Seller.Country.Name, $"%{searchString}%")
-              || (x.Seller.BankAccountHolder != null && EF.Functions.Like(x.Seller.BankAccountHolder, $"%{searchString}%"));
         }
     }
 }
