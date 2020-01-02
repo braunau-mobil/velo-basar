@@ -135,14 +135,14 @@ namespace BraunauMobil.VeloBasar.Logic
         public async Task<ProductsTransaction> SettleSellerAsync(Basar basar, int sellerId)
         {
             var seller = await _sellerContext.GetAsync(sellerId);
-            var sellersProducts = await _productContext.GetProductsForSeller(basar, seller.Id).ToListAsync();
+            var sellersProducts = await _productContext.GetProductsForSeller(basar, seller.Id).ToArrayAsync();
 
-            var products = sellersProducts.Where(p => p.IsAllowed(TransactionType.Settlement));
-            products.SetState(TransactionType.Settlement);
+            var productsToSettle = sellersProducts.Where(p => p.IsAllowed(TransactionType.Settlement)).ToArray();
+            productsToSettle.SetState(TransactionType.Settlement);
 
             var printSettings = await _settingsContext.GetPrintSettingsAsync();
 
-            return await CreateTransactionAsync(basar, TransactionType.Settlement, seller, printSettings, products.ToArray());
+            return await CreateTransactionAsync(basar, TransactionType.Settlement, seller, printSettings, productsToSettle);
         }
 
         private async Task<ProductsTransaction> CreateTransactionAsync(Basar basar, TransactionType transactionType, PrintSettings printSettings, params Product[] products)

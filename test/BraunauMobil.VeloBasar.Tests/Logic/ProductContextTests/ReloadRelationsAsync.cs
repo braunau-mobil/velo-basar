@@ -1,7 +1,5 @@
 ﻿using AutoFixture;
-using BraunauMobil.VeloBasar.Logic;
 using BraunauMobil.VeloBasar.Models;
-using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -11,31 +9,18 @@ namespace BraunauMobil.VeloBasar.Tests.Data.ProductContextTests
 {
     public class ReloadRelationsAsync : TestWithServicesAndDb
     {
-        public ReloadRelationsAsync()
-        {
-            AddLocalization();
-            AddLogic();
-        }
-
         [Fact]
         public async Task CreateProductSerializeToJsonAndAccept()
         {
             var json = "";
             var fixture = new Fixture();
 
-            await RunWithServiesAndDb(
-                async serviceProvider =>
+            await RunOnInitializedDb(
+                async () =>
                 {
-                    var setupContext = serviceProvider.GetRequiredService<ISetupContext>();
-                    await setupContext.InitializeDatabaseAsync(new InitializationConfiguration());
+                    var basar = await BasarContext.CreateAsync(fixture.Build<Basar>().Without(b => b.Id).Create());
+                    var country = await CountryContext.CreateAsync(fixture.Create<Country>());
 
-                    var basarContext = serviceProvider.GetRequiredService<IBasarContext>();
-                    var basar = await basarContext.CreateAsync(fixture.Build<Basar>().Without(b => b.Id).Create());
-
-                    var countryContext = serviceProvider.GetRequiredService<ICountryContext>();
-                    var country = await countryContext.CreateAsync(fixture.Create<Country>());
-
-                    var sellerContext = serviceProvider.GetRequiredService<ISellerContext>();
                     var seller = new Seller
                     {
                         FirstName = "Quark",
@@ -45,13 +30,11 @@ namespace BraunauMobil.VeloBasar.Tests.Data.ProductContextTests
                         ZIP = "",
                         Country = country
                     };
-                    await sellerContext.CreateAsync(seller);
+                    await SellerContext.CreateAsync(seller);
 
-                    var brandContext = serviceProvider.GetRequiredService<IBrandContext>();
-                    var brand = await brandContext.CreateAsync(fixture.Create<Brand>());
+                    var brand = await BrandContext.CreateAsync(fixture.Create<Brand>());
 
-                    var productTypeContext = serviceProvider.GetRequiredService<IProductTypeContext>();
-                    var productType = await productTypeContext.CreateAsync(fixture.Create<
+                    var productType = await ProductTypeContext.CreateAsync(fixture.Create<
                         ProductType>());
 
                     var products = fixture.Build<Product>()
@@ -64,19 +47,15 @@ namespace BraunauMobil.VeloBasar.Tests.Data.ProductContextTests
                 }
             );
 
-            await RunWithServiesAndDb(
-               async serviceProvider =>
+            await RunOnInitializedDb(
+               async () =>
                {
-                   var transactionContext = serviceProvider.GetRequiredService<ITransactionContext>();
-                   var basarContext = serviceProvider.GetRequiredService<IBasarContext>();
-                   var productContext = serviceProvider.GetRequiredService<IProductContext>();
-                   
-                   var basar = await basarContext.GetAsync(1);
+                   var basar = await BasarContext.GetAsync(1);
 
                    var products = JsonConvert.DeserializeObject<List<Product>>(json);
 
-                   await productContext.ReloadRelationsAsync(products);
-                   var acceptance = await transactionContext.AcceptProductsAsync(basar, 1, products);
+                   await ProductContext.ReloadRelationsAsync(products);
+                   var acceptance = await TransactionContext.AcceptProductsAsync(basar, 1, products);
 
                    Assert.NotNull(acceptance);
                    Assert.Equal(1, acceptance.Id);

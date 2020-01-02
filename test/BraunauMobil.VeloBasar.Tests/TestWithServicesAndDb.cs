@@ -1,4 +1,7 @@
 ﻿using BraunauMobil.VeloBasar.Data;
+using BraunauMobil.VeloBasar.Logic;
+using BraunauMobil.VeloBasar.Models;
+using BraunauMobil.VeloBasar.Printing;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,21 +23,46 @@ namespace BraunauMobil.VeloBasar.Tests
             });
             _services.AddIdentityCore<IdentityUser>()
                 .AddEntityFrameworkStores<VeloRepository>();
-        }
-
-        protected void AddLogic()
-        {
-            Startup.RegisterServices(_services);
-        }
-        protected void AddLocalization()
-        {
             _services.AddLocalization(options =>
                 options.ResourcesPath = "Resources"
             );
+            Startup.RegisterServices(_services);
         }
-        protected async Task RunWithServiesAndDb(Func<ServiceProvider, Task> runTest)
+
+        protected IBasarContext BasarContext { get; private set; }
+        protected IBrandContext BrandContext { get; private set; }
+        protected ICountryContext CountryContext { get; private set; }
+        protected IDataGeneratorContext DataGeneratorContext { get; private set; }
+        protected IFileStoreContext FileStoreContext { get; private set; }
+        protected INumberContext NumberContext { get; private set; }
+        protected IProductContext ProductContext { get; private set; }
+        protected IProductTypeContext ProductTypeContext { get; private set; }
+        protected ISellerContext SellerContext { get; private set; }
+        protected ISettingsContext SettingsContext { get; private set; }
+        protected ISetupContext SetupContext { get; private set; }
+        protected IStatisticContext StatisticContext { get; private set; }
+        protected ITransactionContext TransactionContext { get; private set; }
+        protected IPrintService PrintService { get; private set; }
+
+        protected async Task RunOnInitializedDb(Func<Task> action)
         {
-            Contract.Requires(runTest != null);
+            Contract.Requires(action != null);
+            
+            using var serviceProvider = _services.BuildServiceProvider();
+            BasarContext = serviceProvider.GetRequiredService<IBasarContext>();
+            BrandContext = serviceProvider.GetRequiredService<IBrandContext>();
+            CountryContext = serviceProvider.GetRequiredService<ICountryContext>();
+            DataGeneratorContext = serviceProvider.GetRequiredService<IDataGeneratorContext>();
+            FileStoreContext = serviceProvider.GetRequiredService<IFileStoreContext>();
+            NumberContext = serviceProvider.GetRequiredService<INumberContext>();
+            ProductContext = serviceProvider.GetRequiredService<IProductContext>();
+            ProductTypeContext = serviceProvider.GetRequiredService<IProductTypeContext>();
+            SellerContext = serviceProvider.GetRequiredService<ISellerContext>();
+            SettingsContext = serviceProvider.GetRequiredService<ISettingsContext>();
+            SetupContext = serviceProvider.GetRequiredService<ISetupContext>();
+            StatisticContext = serviceProvider.GetRequiredService<IStatisticContext>();
+            TransactionContext = serviceProvider.GetRequiredService<ITransactionContext>();
+            PrintService = serviceProvider.GetRequiredService<IPrintService>();
 
             // Create the schema in the database
             var options = new DbContextOptionsBuilder<VeloRepository>()
@@ -42,15 +70,11 @@ namespace BraunauMobil.VeloBasar.Tests
                     .Options;
 
             // Create the schema in the database
-            using (var context = new VeloRepository(options))
-            {
-                context.Database.EnsureCreated();
-            }
+            using var context = new VeloRepository(options);
+            await context.Database.EnsureCreatedAsync();
+            await SetupContext.InitializeDatabaseAsync(new InitializationConfiguration());
 
-            using (var serviceProvicer = _services.BuildServiceProvider())
-            {
-                await runTest(serviceProvicer);
-            }
+            await action();
         }
     }
 }
