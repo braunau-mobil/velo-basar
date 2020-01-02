@@ -57,7 +57,7 @@ namespace BraunauMobil.VeloBasar.Logic
             return new SellerStatistics
             {
                 AceptedProductCount = products.Length,
-                SettlementAmout = soldProducts.Sum(p => p.Price),
+                SettlementAmout = soldProducts.Sum(p => p.GetCommissionedPrice(basar)),
                 NotSoldProductCount = products.Where(p => p.StorageState != StorageState.Sold).Count(),
                 PickedUpProductCount = products.Where(p => p.StorageState == StorageState.Gone && p.ValueState == ValueState.Settled).Count(),
                 SoldProductCount = soldProducts.Length

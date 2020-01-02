@@ -19,15 +19,15 @@ namespace BraunauMobil.VeloBasar.Models
 
         public decimal GetSoldProductsSum()
         {
-            return Products.GetProducts().Where(p => p.StorageState == StorageState.Sold).SumPrice();
+            return Products.GetSoldProducts().SumPrice();
         }
         public decimal GetSoldCommissionSum()
         {
-            return GetSoldProductsSum() * Basar.ProductCommission;
+            return Products.GetSoldProducts().Sum(p => p.GetCommisionAmount(Basar));
         }
         public decimal GetSoldTotal()
         {
-            return GetSoldProductsSum() - GetSoldCommissionSum();
+            return Products.GetSoldProducts().Sum(p => p.GetCommissionedPrice(Basar));
         }
     }
 }

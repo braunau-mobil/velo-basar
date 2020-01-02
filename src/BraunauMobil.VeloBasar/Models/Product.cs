@@ -133,5 +133,21 @@ namespace BraunauMobil.VeloBasar.Models
             sb.Append(Description).AppendLine($" {FrameNumber} {Color}");
             return sb.ToString();
         }
+        public decimal GetCommissionedPrice(Basar basar)
+        {
+            Contract.Requires(basar != null);
+
+            return Price - GetCommisionAmount(basar);
+        }
+        public decimal GetCommisionAmount(Basar basar)
+        {
+            Contract.Requires(basar != null);
+
+            if (basar.ProductCommission == 0.0m)
+            {
+                return 0;
+            }
+            return Price * basar.ProductCommission;
+        }
     }
 }

@@ -10,6 +10,10 @@ namespace BraunauMobil.VeloBasar.Models
         {
             return productToTransactions.Select(pt => pt.Product).ToArray();
         }
+        public static IReadOnlyList<Product> GetSoldProducts(this IEnumerable<ProductToTransaction> productToTransactions)
+        {
+            return productToTransactions.Select(pt => pt.Product).Where(p => p.StorageState == StorageState.Sold).ToArray();
+        }
         public static bool IsAllowed(this IEnumerable<Product> products, TransactionType transactionType)
         {
             return products.All(p => p.IsAllowed(transactionType));
