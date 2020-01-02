@@ -1,10 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.Contracts;
 using System.Threading.Tasks;
-using BraunauMobil.VeloBasar.Data;
 using BraunauMobil.VeloBasar.Logic;
 using BraunauMobil.VeloBasar.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -16,7 +14,6 @@ namespace BraunauMobil.VeloBasar.Pages.Transactions
         public int ProductId { get; set; }
         public TransactionType TransactionType { get; set; }
     }
-    [Authorize]
     public class CreateSingleModel : PageModel
     {
         private readonly IVeloContext _context;
