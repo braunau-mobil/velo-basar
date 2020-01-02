@@ -74,7 +74,7 @@ namespace BraunauMobil.VeloBasar.Printing
             {
                 AddHeader(doc, acceptance.Seller.GetBigAddressText(), acceptance.Basar.GetLocationAndDateText(), acceptance.Seller.GetIdText(_localizer));
 
-                AddTitle(doc, string.Format(CultureInfo.CurrentCulture, settings.Acceptance.TitleFormat, acceptance.Basar.Name));
+                AddTitle(doc, string.Format(CultureInfo.CurrentCulture, settings.Acceptance.TitleFormat, acceptance.Basar.Name, acceptance.Number));
                 AddSubtitle(doc, settings.Acceptance.SubTitle);
 
                 AddProductTable(doc, acceptance.Products.GetProducts(), _localizer["Preis"]);
@@ -147,7 +147,7 @@ namespace BraunauMobil.VeloBasar.Printing
 
                 AddHeader(doc, null, sale.Basar.GetLocationAndDateText(), null);
 
-                AddTitle(doc, string.Format(CultureInfo.CurrentCulture, settings.Sale.TitleFormat, sale.Basar.Name));
+                AddTitle(doc, string.Format(CultureInfo.CurrentCulture, settings.Sale.TitleFormat, sale.Basar.Name, sale.Number));
                 AddSubtitle(doc, settings.Sale.SubTitle);
 
                 AddProductTable(doc, sale.Products.GetProducts(), _localizer["Preis"], productToSellerMap, settings.Sale.SellerInfoText);
@@ -174,7 +174,7 @@ namespace BraunauMobil.VeloBasar.Printing
 
                 AddHeader(doc, settlement.Seller.GetBigAddressText(), settlement.Basar.GetLocationAndDateText(), settlement.Seller.GetIdText(_localizer));
 
-                AddTitle(doc, string.Format(CultureInfo.CurrentCulture, settings.Settlement.TitleFormat, settlement.Basar.Name));
+                AddTitle(doc, string.Format(CultureInfo.CurrentCulture, settings.Settlement.TitleFormat, settlement.Basar.Name, settlement.Number));
 
                 if (products.Any(p => p.StorageState == StorageState.Sold))
                 {
@@ -371,7 +371,7 @@ namespace BraunauMobil.VeloBasar.Printing
 
             if (sellerInfoText != null)
             {
-                var sellerInfoCell = new Cell()
+                var sellerInfoCell = new Cell(0, 2)
                     .SetBorder(null)
                     .Add(new Paragraph(GetSmallText(sellerInfoText)));
                 productsTable.AddCell(sellerInfoCell);
