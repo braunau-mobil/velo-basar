@@ -2,11 +2,23 @@
 using BraunauMobil.VeloBasar.Models;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using System.Linq;
 
 namespace BraunauMobil.VeloBasar.Tests
 {
     public static class FixtureExtensions
     {
+        public static ProductsTransaction CreateAcceptance(this Fixture fixture, IEnumerable<Product> products)
+        {
+            Contract.Requires(fixture != null);
+
+            var tx = fixture.Build<ProductsTransaction>()
+                .With(t => t.Products, products.Select(p => new ProductToTransaction() { Product = p, ProductId = p.Id }).ToArray())
+                .With(t => t.Type, TransactionType.Acceptance)
+                .Create();
+            UpdateProductRelations(tx);
+            return tx;
+        }
         public static IEnumerable<Product> CreateManyProducts(this Fixture fixture, int count, Brand brand, ProductType productType, decimal? price = null)
         {
             Contract.Requires(fixture != null);
@@ -34,6 +46,15 @@ namespace BraunauMobil.VeloBasar.Tests
                 .With(s => s.Country, country)
                 .With(s => s.CountryId, country.Id)
                 .Create();
+        }
+
+        private static void UpdateProductRelations(ProductsTransaction tx)
+        {
+            foreach (var product in tx.Products)
+            {
+                product.Transaction = tx;
+                product.TransactionId = tx.Id;
+            }
         }
     }
 }

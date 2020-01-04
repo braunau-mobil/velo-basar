@@ -1,4 +1,5 @@
-﻿using BraunauMobil.VeloBasar.Models;
+﻿using AutoFixture;
+using BraunauMobil.VeloBasar.Models;
 using BraunauMobil.VeloBasar.Printing;
 using BraunauMobil.VeloBasar.Resources;
 using Microsoft.Extensions.Localization;
@@ -86,6 +87,24 @@ namespace BraunauMobil.VeloBasar.Tests.Printing.PdfPrintServiceTests
                 }
             };
             
+            var factory = new ResourceManagerStringLocalizerFactory(Options.Create(new LocalizationOptions()), NullLoggerFactory.Instance);
+            var localizer = new StringLocalizer<SharedResource>(factory);
+
+            var creator = new PdfPrintService(localizer);
+            var doc = creator.CreateAcceptance(acceptance, new PrintSettings());
+            Assert.NotNull(doc);
+        }
+        [Fact]
+        public void TireSizeNotSet()
+        {
+            var fixture = new Fixture();
+
+            var products = fixture.Build<Product>()
+                .With(p => p.Price, 123m)
+                .Without(p => p.TireSize)
+                .CreateMany(2);
+            var acceptance = fixture.CreateAcceptance(products);
+
             var factory = new ResourceManagerStringLocalizerFactory(Options.Create(new LocalizationOptions()), NullLoggerFactory.Instance);
             var localizer = new StringLocalizer<SharedResource>(factory);
 

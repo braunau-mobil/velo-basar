@@ -349,7 +349,7 @@ namespace BraunauMobil.VeloBasar.Printing
                     productInfoCell.Add(new Paragraph(sellerInfo));
                 }
 
-                var size = new Paragraph(product.TireSize);
+                var size = new Paragraph(product.TireSize ?? "");
                 var sizeCell = new Cell()
                     .SetBorderLeft(null)
                     .SetBorderRight(null)
