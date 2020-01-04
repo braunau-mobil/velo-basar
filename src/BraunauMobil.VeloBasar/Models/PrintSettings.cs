@@ -89,14 +89,14 @@ namespace BraunauMobil.VeloBasar.Models
         {
             Acceptance = new AcceptancePrintSettings
             {
-                TitleFormat = "Annahmebeleg #{1}: Braunau mobil - {0}",
+                TitleFormat = "Braunau mobil - {0} : Annahmebeleg #{1}",
                 SignatureText = "Für Braunau mobil: {0}",
                 SubTitle = "Folgende Ihrer Artikel haben wir in unseren Verkauf aufgenommen:",
                 TokenFormat = "Ihr Token für den Online-Login: {0}"
             };
             Sale = new SalePrintSettings
             {
-                TitleFormat = "Verkaufsbeleg #{1}: Braunau mobil - {0}",
+                TitleFormat = "Braunau mobil - {0} : Verkaufsbeleg #{1}",
                 SubTitle = "Folgende Artikel haben wir an Sie verkauft:",
                 FooterText = "Vielen Dank für Ihren Einkauf!",
                 HintText = "Bitte beachten Sie, dass der Verkauf im Namen des beim Artikel angeführten Eigentümers geschieht. Bei privaten Verkäufern ist jegliches Umtausch - und Gewährleistungsrecht ausgeschlossen.",
@@ -108,7 +108,7 @@ namespace BraunauMobil.VeloBasar.Models
                 NotSoldTitle = "Folgende Ihrer Artikel konnten wir leider nicht verkaufen:",
                 SignatureText = "Unterschrift",
                 SoldTitle = "Folgende Ihrer Artikel haben wir für Sie verkauft:",
-                TitleFormat = "Abrechung #{1}: Braunau mobil - {0}"
+                TitleFormat = "Braunau mobil - {0} : Abrechung #{1}"
             };
             Label = new LabelPrintSettings
             {
