@@ -45,12 +45,15 @@ namespace BraunauMobil.VeloBasar.Pages.Cancellations
                 FooterValue = Cancellation.GetProductsSum(),
                 ShowSeller = false
             };
-            SaleProducts = new ProductsViewModel(Sale.Products)
+            if (Sale != null)
             {
-                ShowFooter = true,
-                FooterValue = Sale.GetProductsSum(),
-                ShowSeller = false
-            };
+                SaleProducts = new ProductsViewModel(Sale.Products)
+                {
+                    ShowFooter = true,
+                    FooterValue = Sale.GetProductsSum(),
+                    ShowSeller = false
+                };
+            }
         }
     }
 }

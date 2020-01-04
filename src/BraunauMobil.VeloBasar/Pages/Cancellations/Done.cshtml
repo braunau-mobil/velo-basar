@@ -39,7 +39,7 @@
     </div>
 </div>
 
-<div Condition="@Model.Sale.Products.Count <= 0" class="alert alert-warning" role="alert">
+<div Condition="@Model.Sale == null" class="alert alert-warning" role="alert">
     @Localizer["Es wurden alle Artikel des Verkaufs storniert."]
 </div>
 

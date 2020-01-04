@@ -304,6 +304,15 @@ namespace BraunauMobil.VeloBasar.Logic
             {
                 transaction.Products.Remove(transaction.Products.First(s => s.ProductId == product.Id));
             }
+            if (transaction.Products.Count() > 0)
+            {
+                var printSettings = await _settingsContext.GetPrintSettingsAsync();
+                await GenerateTransactionDocumentAsync(transaction, printSettings);
+            }
+            else
+            {
+                _db.Transactions.Remove(transaction);
+            }
             await _db.SaveChangesAsync();
         }
 
