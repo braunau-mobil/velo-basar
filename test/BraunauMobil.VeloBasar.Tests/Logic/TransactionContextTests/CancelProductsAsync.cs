@@ -64,6 +64,9 @@ namespace BraunauMobil.VeloBasar.Tests.Logic.TransactionContextTests
                 Assert.Equal(ValueState.NotSettled, updatedProducts[0].ValueState);
                 Assert.Equal(StorageState.Available, updatedProducts[1].StorageState);
                 Assert.Equal(ValueState.NotSettled, updatedProducts[1].ValueState);
+
+                var document = await FileStoreContext.GetAsync(sale.DocumentId.Value);
+                Assert.Null(document);
             });
         }
     }

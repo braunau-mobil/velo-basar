@@ -210,6 +210,15 @@ namespace BraunauMobil.VeloBasar.Logic
 
             return fileStore;
         }
+        private async Task DeleteAsync(ProductsTransaction transaction)
+        {
+            if (transaction.DocumentId != null)
+            {
+                _fileContext.DeleteAsync(transaction.DocumentId.Value);
+            }
+            _db.Transactions.Remove(transaction);
+            await _db.SaveChangesAsync();
+        }
         private IQueryable<ProductsTransaction> GetMany(Basar basar, TransactionType type, Expression<Func<ProductsTransaction, bool>> additionalPredicate = null)
         {
             var result = _db.Transactions.Where(t => t.Type == type && t.Basar.Id == basar.Id);
@@ -308,14 +317,13 @@ namespace BraunauMobil.VeloBasar.Logic
             {
                 var printSettings = await _settingsContext.GetPrintSettingsAsync();
                 await GenerateTransactionDocumentAsync(transaction, printSettings);
+                await _db.SaveChangesAsync();
             }
             else
             {
-                _db.Transactions.Remove(transaction);
+                await DeleteAsync(transaction);
             }
-            await _db.SaveChangesAsync();
         }
-
         private Expression<Func<ProductsTransaction, bool>> TransactionSearch(string searchString)
         {
             if (_db.IsPostgreSQL())

@@ -15,6 +15,15 @@ namespace BraunauMobil.VeloBasar.Logic
         }
 
         public Task<bool> ExistsAsync(int id) => _db.Files.ExistsAsync(id);
+        public async Task DeleteAsync(int id)
+        {
+            var file = await GetAsync(id);
+            if (file != null)
+            {
+                _db.Files.Remove(file);
+                await _db.SaveChangesAsync();
+            }
+        }
         public async Task<FileData> GetAsync(int id)
         {
             return await _db.Files.FirstOrDefaultAsync(p => p.Id == id);
