@@ -36,6 +36,7 @@ namespace BraunauMobil.VeloBasar
         }
 
         public Basar Basar { get; private set; }
+        public string Version { get => typeof(DefaultVeloContext).Assembly.GetName().Version.ToString(); }
         public VeloSettings Settings { get; private set; }
         public IConfiguration Configuration { get; private set; }
         public IStringLocalizer<SharedResource> Localizer { get; private set; }

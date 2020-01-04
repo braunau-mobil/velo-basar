@@ -9,6 +9,7 @@ namespace BraunauMobil.VeloBasar
     public interface IVeloContext
     {
         Basar Basar { get; }
+        string Version { get; }
 
         IConfiguration Configuration { get; }
         IStringLocalizer<SharedResource> Localizer { get; }
