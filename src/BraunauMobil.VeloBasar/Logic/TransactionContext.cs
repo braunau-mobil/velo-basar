@@ -214,7 +214,7 @@ namespace BraunauMobil.VeloBasar.Logic
         {
             if (transaction.DocumentId != null)
             {
-                _fileContext.DeleteAsync(transaction.DocumentId.Value);
+                await _fileContext.DeleteAsync(transaction.DocumentId.Value);
             }
             _db.Transactions.Remove(transaction);
             await _db.SaveChangesAsync();
