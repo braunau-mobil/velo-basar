@@ -21,7 +21,7 @@ namespace BraunauMobil.VeloBasar.Tests.Logic.StatisticContextTests
 
                 var productType = await ProductTypeContext.CreateAsync(fixture.Create<ProductType>());
                 var brand = await BrandContext.CreateAsync(fixture.Create<Brand>());
-                var products = fixture.CreateManyProducts(5, brand, productType, 100.0m).ToList();
+                var products = fixture.BuildProduct(brand, productType, 100.0m).CreateMany(5).ToList();
                 var acceptance = await TransactionContext.AcceptProductsAsync(basar, seller.Id, products);
 
                 await TransactionContext.CheckoutProductsAsync(basar, acceptance.Products.Select(p => p.ProductId).ToArray());

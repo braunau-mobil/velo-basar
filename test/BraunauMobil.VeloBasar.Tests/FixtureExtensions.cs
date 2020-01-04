@@ -1,4 +1,5 @@
 ﻿using AutoFixture;
+using AutoFixture.Dsl;
 using BraunauMobil.VeloBasar.Models;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
@@ -8,18 +9,7 @@ namespace BraunauMobil.VeloBasar.Tests
 {
     public static class FixtureExtensions
     {
-        public static ProductsTransaction CreateAcceptance(this Fixture fixture, IEnumerable<Product> products)
-        {
-            Contract.Requires(fixture != null);
-
-            var tx = fixture.Build<ProductsTransaction>()
-                .With(t => t.Products, products.Select(p => new ProductToTransaction() { Product = p, ProductId = p.Id }).ToArray())
-                .With(t => t.Type, TransactionType.Acceptance)
-                .Create();
-            UpdateProductRelations(tx);
-            return tx;
-        }
-        public static IEnumerable<Product> CreateManyProducts(this Fixture fixture, int count, Brand brand, ProductType productType, decimal? price = null)
+        public static IPostprocessComposer<Product> BuildProduct(this Fixture fixture, Brand brand, ProductType productType, decimal? price = null)
         {
             Contract.Requires(fixture != null);
             Contract.Requires(brand != null);
@@ -35,7 +25,19 @@ namespace BraunauMobil.VeloBasar.Tests
             {
                 builder = builder.With(p => p.Price, price.Value);
             }
-            return builder.CreateMany(count);
+            return builder;
+        }
+
+        public static ProductsTransaction CreateAcceptance(this Fixture fixture, IEnumerable<Product> products)
+        {
+            Contract.Requires(fixture != null);
+
+            var tx = fixture.Build<ProductsTransaction>()
+                .With(t => t.Products, products.Select(p => new ProductToTransaction() { Product = p, ProductId = p.Id }).ToArray())
+                .With(t => t.Type, TransactionType.Acceptance)
+                .Create();
+            UpdateProductRelations(tx);
+            return tx;
         }
         public static Seller CreateSeller(this Fixture fixture, Country country)
         {

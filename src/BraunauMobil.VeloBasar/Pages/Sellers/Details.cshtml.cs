@@ -1,11 +1,12 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using BraunauMobil.VeloBasar.Models;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using BraunauMobil.VeloBasar.Logic;
 using System.Diagnostics.Contracts;
+using BraunauMobil.VeloBasar.ViewModels;
+using System.Linq;
 
 namespace BraunauMobil.VeloBasar.Pages.Sellers
 {
@@ -33,7 +34,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
         public bool CanSettle { get; set; }
         public Seller Seller { get; set; }
         public SellerStatistics Stats { get; set; }
-        public IReadOnlyList<Product> Products { get; set; }
+        public ProductsViewModel Products { get; set; }
 
         public async Task<IActionResult> OnGetAsync(DetailsParameter parameter)
         {
@@ -47,8 +48,9 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
 
             AcceptanceStatistics = await _statisticContext.GetTransactionStatistics(_context.Basar, TransactionType.Acceptance, parameter.SellerId);
             SettlementStatistics = await _statisticContext.GetTransactionStatistics(_context.Basar, TransactionType.Settlement, parameter.SellerId);
-            Products = await _productContext.GetProductsForSeller(_context.Basar, parameter.SellerId).AsNoTracking().ToListAsync();
+            Products = await ProductsViewModel.CreateAsync(_productContext.GetProductsForSeller(_context.Basar, parameter.SellerId));
             Stats = await _statisticContext.GetSellerStatisticsAsync(_context.Basar, Seller.Id);
+            CanSettle = Products.ViewModels.Select(vm => vm.Product).IsAllowed(TransactionType.Settlement);
 
             return Page();
         }

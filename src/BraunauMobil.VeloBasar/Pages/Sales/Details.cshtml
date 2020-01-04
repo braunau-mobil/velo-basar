@@ -19,7 +19,7 @@
     <div class="card-body p-0">
         @if (Model.Sale.Products.Count > 0)
         {
-            <partial name="/Pages/Products/_Table.cshtml" model="@Model.Sale.Products.CreateListViewModel(VeloContext.Basar)" />
+            <partial name="/Pages/Products/_ProductsView.cshtml" model="@Model.Products" />
         }
     </div>
 </div>

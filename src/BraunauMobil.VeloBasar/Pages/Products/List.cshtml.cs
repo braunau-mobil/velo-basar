@@ -30,7 +30,7 @@ namespace BraunauMobil.VeloBasar.Pages.Products
         }
 
         public string CurrentFilter { get; set; }
-        public PaginatedListViewModel<Product> Products { get; set; }
+        public ProductsViewModel Products { get; set; }
         public StorageState? StorageStateFilter { get; set; }
         public ValueState? ValueStateFilter { get; set; }
 
@@ -67,17 +67,24 @@ namespace BraunauMobil.VeloBasar.Pages.Products
             var productIq = _productContext.GetProductsForBasar(_context.Basar, parameter.SearchString, parameter.StorageState, parameter.ValueState);
 
             var pageSize = 11;
-            Products = await PaginationHelper.CreateAsync(_context.Basar, productIq, parameter.PageIndex ?? 1, pageSize, GetPaginationPage, new[]
+            Products = await ProductsViewModel.CreateAsync(productIq, parameter.PageIndex ?? 1, pageSize, GetPaginationPage,
+            async vm =>
             {
-                new ListCommand<Product>(item => this.GetPage<DetailsModel>(new DetailsParameter { ProductId = item.Id }))
+                var seller = await _productContext.GetSellerAsync(_context.Basar, vm.Product);
+                vm.SellerId = seller.Id;
+            },
+            new[]
+            {
+                new ListCommand<ProductViewModel>(vm => this.GetPage<DetailsModel>(new DetailsParameter { ProductId = vm.Product.Id }))
                 {
                     Text = _context.Localizer["Details"]
                 },
-                new ListCommand<Product>(item => item.Label != null, item => this.GetPage<ShowFileModel>(new ShowFileParameter { FileId = item.Label.Value }))
+                new ListCommand<ProductViewModel>(vm => vm.Product.Label != null, vm => this.GetPage<ShowFileModel>(new ShowFileParameter { FileId = vm.Product.Label.Value }))
                 {
                     Text = _context.Localizer["Etikett"]
                 }
             });
+            Products.ShowSeller = true;
             return Page();
         }
         public VeloPage GetPaginationPage(int pageIndex) => this.GetPage<ListModel>(new ListParameter { PageIndex = pageIndex });

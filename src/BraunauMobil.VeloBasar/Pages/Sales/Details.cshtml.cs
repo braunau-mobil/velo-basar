@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using BraunauMobil.VeloBasar.Logic;
 using BraunauMobil.VeloBasar.Models;
+using BraunauMobil.VeloBasar.ViewModels;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace BraunauMobil.VeloBasar.Pages.Sales
@@ -24,6 +25,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
         public ProductsTransaction Sale { get; set; }
         public bool ShowSuccess { get; set; }
         public bool OpenDocument { get; set; }
+        public ProductsViewModel Products { get; private set; }
 
         public async Task OnGetAsync(DetailsParameter parameter)
         {
@@ -33,6 +35,12 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
             OpenDocument = parameter.OpenDocument ?? false;
 
             Sale = await _transactionContext.GetAsync(parameter.SaleId);
+            Products = new ProductsViewModel(Sale.Products)
+            {
+                ShowFooter = true,
+                FooterValue = Sale.GetProductsSum(),
+                ShowSeller = false
+            };
         }
         public VeloPage GetShowFilePage() => this.GetPage<ShowFileModel>(new ShowFileParameter { FileId = Sale.DocumentId.Value });
     }

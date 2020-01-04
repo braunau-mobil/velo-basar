@@ -10,7 +10,7 @@
         <div class="mr-auto"><h5>#@Model.Seller.Id @Html.DisplayFor(model => model.Seller.FirstName) @Html.DisplayFor(model => model.Seller.LastName)</h5></div>
         <div class="d-flex justify-content-end">
             <a velo-page="@Model.GetStartAcceptancePage()" class="btn btn-primary mx-1">@Localizer["Artikel annehmen"]</a>
-            @if (Model.Products.IsAllowed(TransactionType.Settlement))
+            @if (Model.CanSettle)
             {
                 <a velo-page="@Model.GetCreateSettlementPage()" target="_blank" class="btn btn-primary mx-1">@Localizer["Abrechnen"]</a>
             }
@@ -68,9 +68,9 @@
 <div class="card my-3">
     <h5 class="card-header">@Localizer["Artikel"]</h5>
     <div class="card-body p-0">
-        @if (Model.Products.Any())
+        @if (Model.Products.NotEmpty)
         {
-            <partial name="/Pages/Products/_TableWithControls.cshtml" model="@new ListViewModel<Product>(VeloContext.Basar, Model.Products)" />
+            <partial name="/Pages/Products/_ProductsView.cshtml" model="Model.Products" />
         }
     </div>
 </div>

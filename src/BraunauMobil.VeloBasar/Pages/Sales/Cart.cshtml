@@ -26,9 +26,9 @@
     </div>
 
     <div class="card-body p-0">
-        @if (Model.Products.List.Any())
+        @if (Model.Products.NotEmpty)
         {
-            <partial  name="/Pages/Products/_TableWithControls.cshtml" model="@Model.Products" />
+            <partial name="/Pages/Products/_ProductsView.cshtml" model="@Model.Products" />
         }
     </div>
 </div>

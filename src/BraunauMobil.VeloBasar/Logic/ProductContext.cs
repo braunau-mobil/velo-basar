@@ -52,6 +52,12 @@ namespace BraunauMobil.VeloBasar.Logic
         {
             return _db.Transactions.IncludeAll().GetMany(TransactionType.Acceptance, basar, sellerId).SelectMany(a => a.Products).Select(pa => pa.Product);
         }
+        public async Task<Seller> GetSellerAsync(Basar basar, Product product)
+        {
+            var txs = await _db.Transactions.GetMany(TransactionType.Acceptance, basar).ToArrayAsync();
+            var tx = txs.First(tx => tx.Products.Any(pt => pt.ProductId == product.Id));
+            return tx.Seller;
+        }
         public async Task ReloadRelationsAsync(IList<Product> products)
         {
             Contract.Requires(products != null);

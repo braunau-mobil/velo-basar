@@ -33,7 +33,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
 
         public string ErrorText { get; set; }
 
-        public ListViewModel<Product> Products { get; set; }
+        public ProductsViewModel Products { get; set; }
 
         [BindProperty]
         [Required]
@@ -88,24 +88,18 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
         
         private async Task LoadProducts(IList<int> productIds)
         {
-            var viewModels = new List<ItemViewModel<Product>>();
-            foreach (var product in await _productContext.GetMany(productIds).ToArrayAsync())
+            Products = await ProductsViewModel.CreateAsync(_productContext.GetMany(productIds),
+            async vm =>
             {
-                var viewModel = new ItemViewModel<Product>
+                if (!vm.Product.IsAllowed(TransactionType.Sale))
                 {
-                    Item = product
-                };
-                if (!product.IsAllowed(TransactionType.Sale))
-                {
-                    viewModel.HasAlert = true;
-                    viewModel.Alert = await GetProductErrorAsync(product, product.Id);
+                    vm.HasAlert = true;
+                    vm.Alert = await GetProductErrorAsync(vm.Product, vm.Product.Id);
                 }
-                viewModels.Add(viewModel);
-            }
-
-            Products = new ListViewModel<Product>(_context.Basar, viewModels, new[]
+            },
+            new[]
             {
-                new ListCommand<Product>(product => this.GetPage<CartModel>(new CartParameter { Delete = true, ProductId = product.Id }))
+                new ListCommand<ProductViewModel>(vm => this.GetPage<CartModel>(new CartParameter { Delete = true, ProductId = vm.Product.Id }))
                 {
                     Text = _context.Localizer["Löschen"]
                 }
