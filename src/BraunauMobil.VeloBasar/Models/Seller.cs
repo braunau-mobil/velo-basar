@@ -39,6 +39,7 @@ namespace BraunauMobil.VeloBasar.Models
         public Country Country { get; set; }
 
         [Display(Name = "IBAN")]
+        [Iban]
         public string IBAN { get; set; }
 
         [Display(Name = "BIC")]
