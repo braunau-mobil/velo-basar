@@ -29,7 +29,7 @@ namespace BraunauMobil.VeloBasar.Logic
         public IQueryable<Product> GetProductsForBasar(Basar basar) => GetProductsForBasar(basar, null, null, null);
         public IQueryable<Product> GetProductsForBasar(Basar basar, string searchString, StorageState? storageState, ValueState? valueState)
         {
-            var iq = _db.Transactions.IncludeAll().GetMany(TransactionType.Acceptance, basar).SelectMany(a => a.Products).Select(pa => pa.Product);
+            var iq = _db.Products.Where(p => p.BasarId == basar.Id);
             
             if (!string.IsNullOrEmpty(searchString))
             {
@@ -50,13 +50,37 @@ namespace BraunauMobil.VeloBasar.Logic
         }
         public IQueryable<Product> GetProductsForSeller(Basar basar, int sellerId)
         {
-            return _db.Transactions.IncludeAll().GetMany(TransactionType.Acceptance, basar, sellerId).SelectMany(a => a.Products).Select(pa => pa.Product);
+            return _db.Products.IncludeAll().Where(p => p.BasarId == basar.Id && p.SellerId == sellerId);
         }
-        public async Task<Seller> GetSellerAsync(Basar basar, Product product)
+        public async Task<IList<Product>> InsertProductsAsync(Basar basar, Seller seller, IList<Product> products)
         {
-            var txs = await _db.Transactions.GetMany(TransactionType.Acceptance, basar).ToArrayAsync();
-            var tx = txs.First(t => t.Products.Any(pt => pt.ProductId == product.Id));
-            return tx.Seller;
+            Contract.Requires(products != null);
+
+            var newProducts = new List<Product>();
+            foreach (var product in products)
+            {
+                var newProduct = new Product
+                {
+                    Basar = basar,
+                    Brand = product.Brand,
+                    Color = product.Color,
+                    Description = product.Description,
+                    FrameNumber = product.FrameNumber,
+                    Label = product.Label,
+                    Price = product.Price,
+                    Seller = seller,
+                    StorageState = StorageState.Available,
+                    TireSize = product.TireSize,
+                    Type = product.Type,
+                    ValueState = ValueState.NotSettled
+                };
+                newProducts.Add(newProduct);
+            }
+
+            _db.Products.AddRange(newProducts);
+            await _db.SaveChangesAsync();
+
+            return newProducts;
         }
         public async Task ReloadRelationsAsync(IList<Product> products)
         {

@@ -1,15 +1,15 @@
-﻿using AutoFixture;
-using BraunauMobil.VeloBasar.Models;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
+using AutoFixture;
+using BraunauMobil.VeloBasar.Models;
 using Xunit;
 
 namespace BraunauMobil.VeloBasar.Tests.Logic.ProductContextTests
 {
-    public class GetSellerAsync : TestWithServicesAndDb
+    public class InsertProductsAsync : TestWithServicesAndDb
     {
         [Fact]
-        public async Task Exists()
+        public async Task One()
         {
             await RunOnInitializedDb(async () =>
             {
@@ -21,10 +21,13 @@ namespace BraunauMobil.VeloBasar.Tests.Logic.ProductContextTests
                 var brand = await BrandContext.CreateAsync(fixture.Create<Brand>());
                 var productType = await ProductTypeContext.CreateAsync(fixture.Create<ProductType>());
 
-                var acceptance = await TransactionContext.AcceptProductsAsync(basar, seller.Id, fixture.BuildProduct(brand, productType).CreateMany(1).ToList());
+                var products = fixture.BuildProduct(brand, productType, 666).CreateMany(1).ToList();
 
-                var retrievedSeller = await ProductContext.GetSellerAsync(basar, acceptance.Products.First().Product);
-                Assert.Equal(seller.Id, retrievedSeller.Id);
+                var insertedProducts = await ProductContext.InsertProductsAsync(basar, seller, products);
+
+                var first = insertedProducts[0];
+                Assert.Equal(basar.Id, first.BasarId);
+                Assert.Equal(seller.Id, first.SellerId);
             });
         }
     }

@@ -51,7 +51,7 @@ namespace BraunauMobil.VeloBasar.ViewModels
             }
             return productsViewModel;
         }
-        public static async Task<ProductsViewModel> CreateAsync(IQueryable<Product>  productsIq, int pageIndex, int pageSize, Func<int, VeloPage> getPaginationPage, Func<ProductViewModel, Task> decorateAsync, IReadOnlyCollection<ListCommand<ProductViewModel>> commands)
+        public static async Task<ProductsViewModel> CreateAsync(IQueryable<Product> productsIq, int pageIndex, int pageSize, Func<int, VeloPage> getPaginationPage, IReadOnlyCollection<ListCommand<ProductViewModel>> commands)
         {
             if (pageIndex == 0)
             {
@@ -64,12 +64,7 @@ namespace BraunauMobil.VeloBasar.ViewModels
             var skipCount = Math.Max(pageIndex - 1, 0) * pageSize;
             var items = await productsIq.Skip(skipCount).Take(pageSize).AsNoTracking().ToArrayAsync();
 
-            var productsViewModel = new ProductsViewModel(items, commands, getPaginationPage, pageIndex, totalPages);
-            foreach (var vm in productsViewModel.ViewModels)
-            {
-                await decorateAsync(vm);
-            }
-            return productsViewModel;
+            return new ProductsViewModel(items, commands, getPaginationPage, pageIndex, totalPages);
         }
         private static int CalcTotalPages(int count, int pageSize)
         {

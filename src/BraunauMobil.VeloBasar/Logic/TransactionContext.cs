@@ -40,7 +40,7 @@ namespace BraunauMobil.VeloBasar.Logic
             
             var seller = await _sellerContext.GetAsync(sellerId);
             var printSettings = await _settingsContext.GetPrintSettingsAsync();
-            var productsInserted = await InsertProductsAsync(products);
+            var productsInserted = await _productContext.InsertProductsAsync(basar, seller, products);
 
             var tx = await CreateTransactionAsync(basar, TransactionType.Acceptance, seller, printSettings, productsInserted.ToArray());
             await GenerateTransactionDocumentAsync(tx, printSettings);
@@ -279,34 +279,6 @@ namespace BraunauMobil.VeloBasar.Logic
             return fileStore;
         }
         private IQueryable<ProductsTransaction> IncludeAll() => IncludeAll(_db.Transactions);
-        private async Task<IList<Product>> InsertProductsAsync(IList<Product> products)
-        {
-            Contract.Requires(products != null);
-
-            var newProducts = new List<Product>();
-            foreach (var product in products)
-            {
-                var newProduct = new Product
-                {
-                    Brand = product.Brand,
-                    Color = product.Color,
-                    Description = product.Description,
-                    FrameNumber = product.FrameNumber,
-                    Label = product.Label,
-                    Price = product.Price,
-                    StorageState = StorageState.Available,
-                    TireSize = product.TireSize,
-                    Type = product.Type,
-                    ValueState = ValueState.NotSettled
-                };
-                newProducts.Add(newProduct);
-            }
-
-            _db.Products.AddRange(newProducts);
-            await _db.SaveChangesAsync();
-
-            return newProducts;
-        }
         private async Task RemoveProductsFromTransactionAsync(ProductsTransaction transaction, IList<Product> productsToRemove)
         {
             foreach (var product in productsToRemove)

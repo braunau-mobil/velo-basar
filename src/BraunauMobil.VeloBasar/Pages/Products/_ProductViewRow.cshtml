@@ -7,7 +7,7 @@
 <td>@Html.DisplayFor(vm => vm.Product.Description)</td>
 <td>@Html.DisplayFor(vm => vm.Product.TireSize)</td>
 <td Condition="Model.ShowSeller">
-    <a velo-page="Model.GetSellerPage()" target="_blank">@Html.DisplayFor(vm => vm.SellerId)</a>
+    <a velo-page="Model.GetSellerPage()" target="_blank">@Html.DisplayFor(vm => vm.Product.SellerId)</a>
 </td>
 <td>@Html.DisplayFor(vm => vm.Product.Price)</td>
 <td>

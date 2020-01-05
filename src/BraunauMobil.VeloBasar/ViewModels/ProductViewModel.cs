@@ -16,8 +16,6 @@ namespace BraunauMobil.VeloBasar.ViewModels
         public string Alert { get; set; }
         public bool HasAlert { get; set; }
         public bool ShowSeller { get => _parent.ShowSeller; }
-        [Display(Name = "Verkäufer")]
-        public int SellerId { get; set; }
         public Product Product { get; }
 
         public VeloPage GetSellerPage()
@@ -25,7 +23,7 @@ namespace BraunauMobil.VeloBasar.ViewModels
             return new VeloPage
             {
                 Page = RoutingHelper.GetPageForModel<Pages.Sellers.DetailsModel>(),
-                Parameter = new Pages.Sellers.DetailsParameter { SellerId = SellerId }
+                Parameter = new Pages.Sellers.DetailsParameter { SellerId = Product.SellerId }
             };
         }
     }

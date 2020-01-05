@@ -68,11 +68,6 @@ namespace BraunauMobil.VeloBasar.Pages.Products
 
             var pageSize = 11;
             Products = await ProductsViewModel.CreateAsync(productIq, parameter.PageIndex ?? 1, pageSize, GetPaginationPage,
-            async vm =>
-            {
-                var seller = await _productContext.GetSellerAsync(_context.Basar, vm.Product);
-                vm.SellerId = seller.Id;
-            },
             new[]
             {
                 new ListCommand<ProductViewModel>(vm => this.GetPage<DetailsModel>(new DetailsParameter { ProductId = vm.Product.Id }))

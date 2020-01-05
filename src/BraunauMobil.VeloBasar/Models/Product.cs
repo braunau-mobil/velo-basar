@@ -1,4 +1,5 @@
-﻿using BraunauMobil.VeloBasar.Models.Interfaces;
+﻿using BraunauMobil.VeloBasar.Models.Base;
+using BraunauMobil.VeloBasar.Models.Interfaces;
 using BraunauMobil.VeloBasar.Resources;
 using Microsoft.Extensions.Localization;
 using System;
@@ -9,7 +10,7 @@ using System.Text;
 namespace BraunauMobil.VeloBasar.Models
 {
     [Display(Name = "Artikel")]
-    public class Product : IModel
+    public class Product : BasarModel, IModel
     {
         public int Id { get; set; }
 
@@ -52,6 +53,10 @@ namespace BraunauMobil.VeloBasar.Models
 
         [Display(Name = "Etikett")]
         public int? Label { get; set; }
+
+        public int SellerId { get; set; }
+        [Display(Name = "Verkäufer")]
+        public Seller Seller { get; set; }
 
         public bool IsAllowed(TransactionType transactionType)
         {

@@ -1,5 +1,4 @@
-﻿using BraunauMobil.VeloBasar.Data;
-using BraunauMobil.VeloBasar.Models;
+﻿using BraunauMobil.VeloBasar.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
@@ -11,7 +10,9 @@ namespace BraunauMobil.VeloBasar.Data
         public static IQueryable<Product> IncludeAll(this IQueryable<Product> products)
         {
             return products
+                .Include(p => p.Basar)
                 .Include(p => p.Brand)
+                .Include(p => p.Seller)
                 .Include(p => p.Type);
         }
     }

@@ -13,7 +13,7 @@ namespace BraunauMobil.VeloBasar.Logic
         IQueryable<Product> GetProductsForBasar(Basar basar);
         IQueryable<Product> GetProductsForBasar(Basar basar, string searchString, StorageState? storageState, ValueState? valueState);
         IQueryable<Product> GetProductsForSeller(Basar basar, int sellerId);
-        Task<Seller> GetSellerAsync(Basar basar, Product product);
+        Task<IList<Product>> InsertProductsAsync(Basar basar, Seller seller, IList<Product> products);
         Task ReloadRelationsAsync(IList<Product> products);
         Task UpdateAsync(Product product);
     }
