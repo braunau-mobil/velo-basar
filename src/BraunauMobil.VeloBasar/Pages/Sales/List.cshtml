@@ -5,40 +5,42 @@
     ViewData["Title"] = Localizer["Verkäufe"];
 }
 
-<div class="card my-3">
-    <div class="card-header d-flex justify-content-between align-items-md-center">
-        <div><h5 class="mx-2">@Localizer["Verkäufe"]</h5></div>
-        <partial name="/Pages/Shared/_Search.cshtml" model="@Model" />
-    </div>
+<form velo-page="@Model.GetSearchPage()" method="get">
+    <div class="card my-3">
+        <div class="card-header d-flex justify-content-between align-items-md-center">
+            <div><h5 class="mx-2">@Localizer["Verkäufe"]</h5></div>
+            <partial name="/Pages/Shared/_Search.cshtml" model="@Model" />
+        </div>
 
-    <div class="card-body p-0">
+        <div class="card-body p-0">
 
-        <table class="table">
-            <thead>
-                <tr>
-                    <th style="width: auto;">@Html.DisplayNameFor(model => model.Sales.List[0].Item.Number)</th>
-                    <th style="width: 100%;">@Html.DisplayNameFor(model => model.Sales.List[0].Item.TimeStamp)</th>
-                    <th style="width: auto;"></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var itemViewModel in Model.Sales.List)
-                {
+            <table class="table">
+                <thead>
                     <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => itemViewModel.Item.Number)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => itemViewModel.Item.TimeStamp)
-                        </td>
-                        <td>
-                            <a velo-page="@Model.GetDetailsPage(itemViewModel.Item)">@Localizer["Details"]</a>
-                        </td>
+                        <th style="width: auto;">@Html.DisplayNameFor(model => model.Sales.List[0].Item.Number)</th>
+                        <th style="width: 100%;">@Html.DisplayNameFor(model => model.Sales.List[0].Item.TimeStamp)</th>
+                        <th style="width: auto;"></th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach (var itemViewModel in Model.Sales.List)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => itemViewModel.Item.Number)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => itemViewModel.Item.TimeStamp)
+                            </td>
+                            <td>
+                                <a velo-page="@Model.GetDetailsPage(itemViewModel.Item)">@Localizer["Details"]</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
-</div>
+</form>
 
 <partial name="/Pages/Shared/_Pagination.cshtml" model="@Model.Sales" />

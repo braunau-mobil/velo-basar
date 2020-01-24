@@ -10,12 +10,7 @@
         <div class="card-header d-flex justify-content-between align-items-md-center">
             <div><h5 class="mx-2">@Localizer["Verkäufer"]</h5></div>
             
-            <div class="d-flex form-actions no-color align-items-md-center">
-                <div class="mx-2">Suchen:</div>
-                <input class="mx-2" type="text" name="searchString" value="@Model.CurrentFilter" />
-                <input type="submit" value="@Localizer["Suchen"]" class="btn btn-secondary mx-2" /> |
-                <a class="mx-2" velo-page="@Model.GetSearchPage()">@Localizer["Zurücksetzen"]</a>
-            </div>
+            <partial name="/Pages/Shared/_Search.cshtml" model="@Model" />
 
             <div class="d-flex justify-content-end">
                 <select class="mx-2 custom-select" asp-for="@Model.ValueStateFilter" asp-items="ViewBag.ValueStates" onchange="this.form.submit()" name="valueState"></select>

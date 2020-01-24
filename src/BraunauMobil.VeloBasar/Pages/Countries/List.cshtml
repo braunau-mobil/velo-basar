@@ -5,51 +5,52 @@
     ViewData["Title"] = Localizer["Länder"];
 }
 
-<div class="card my-3">
-    <div class="card-header d-flex justify-content-between align-items-md-center">
-        <div><h5 class="mx-2">@ViewData["Title"]</h5></div>
-        <partial name="/Pages/Shared/_Search.cshtml" model="@Model" />
-        <div><a class="ml-auto btn btn-primary" asp-page="/Countries/Create">@Localizer["Neues Land"]</a></div>
-    </div>
+<form velo-page="@Model.GetSearchPage()" method="get">
+    <div class="card my-3">
+        <div class="card-header d-flex justify-content-between align-items-md-center">
+            <div><h5 class="mx-2">@ViewData["Title"]</h5></div>
+            <partial name="/Pages/Shared/_Search.cshtml" model="@Model" />
+            <div><a class="ml-auto btn btn-primary" asp-page="/Countries/Create">@Localizer["Neues Land"]</a></div>
+        </div>
 
-    <div class="card-body p-0">
-        <table class="table table-striped m-0">
-            <thead>
-                <tr>
-                    <th style="width: auto;" scope="col">@Html.DisplayNameFor(model => model.Countries.List[0].Item.Id)</th>
-                    <th style="width: 50%;" scope="col">@Html.DisplayNameFor(model => model.Countries.List[0].Item.Name)</th>
-                    <th style="width: 50%;" scope="col">@Html.DisplayNameFor(model => model.Countries.List[0].Item.Iso3166Alpha3Code)</th>
-                    <th style="width: auto;" scope="col"></th>
-                    <th style="width: auto;" scope="col"></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var itemViewModel in Model.Countries.List)
-                {
+        <div class="card-body p-0">
+            <table class="table table-striped m-0">
+                <thead>
                     <tr>
-                        <th scope="row">@Html.DisplayFor(modelItem => itemViewModel.Item.Id)</th>
-                        <td>
-                            @Html.DisplayFor(modelItem => itemViewModel.Item.Name)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => itemViewModel.Item.Iso3166Alpha3Code)
-                        </td>
-                        <td>
-                            <a velo-page="@Model.GetEditPage(itemViewModel.Item)">@Localizer["Bearbeiten"]</a>
-                        </td>
-                        <td>
-                            @if (await Model.CanDeleteAsync(itemViewModel.Item))
-                            {
-                                <a velo-page="@Model.GetDeletePage(itemViewModel.Item)">@Localizer["Löschen"]</a>
-                            }
-                        </td>
+                        <th style="width: auto;" scope="col">@Html.DisplayNameFor(model => model.Countries.List[0].Item.Id)</th>
+                        <th style="width: 50%;" scope="col">@Html.DisplayNameFor(model => model.Countries.List[0].Item.Name)</th>
+                        <th style="width: 50%;" scope="col">@Html.DisplayNameFor(model => model.Countries.List[0].Item.Iso3166Alpha3Code)</th>
+                        <th style="width: auto;" scope="col"></th>
+                        <th style="width: auto;" scope="col"></th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach (var itemViewModel in Model.Countries.List)
+                    {
+                        <tr>
+                            <th scope="row">@Html.DisplayFor(modelItem => itemViewModel.Item.Id)</th>
+                            <td>
+                                @Html.DisplayFor(modelItem => itemViewModel.Item.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => itemViewModel.Item.Iso3166Alpha3Code)
+                            </td>
+                            <td>
+                                <a velo-page="@Model.GetEditPage(itemViewModel.Item)">@Localizer["Bearbeiten"]</a>
+                            </td>
+                            <td>
+                                @if (await Model.CanDeleteAsync(itemViewModel.Item))
+                                {
+                                    <a velo-page="@Model.GetDeletePage(itemViewModel.Item)">@Localizer["Löschen"]</a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
 
+        </div>
     </div>
-</div>
-
+</form>
 
 <partial name="/Pages/Shared/_Pagination.cshtml" model="@Model.Countries" />
