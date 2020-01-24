@@ -29,7 +29,7 @@ namespace BraunauMobil.VeloBasar.Logic
         public IQueryable<Product> GetProductsForBasar(Basar basar) => GetProductsForBasar(basar, null, null, null);
         public IQueryable<Product> GetProductsForBasar(Basar basar, string searchString, StorageState? storageState, ValueState? valueState)
         {
-            var iq = _db.Products.Where(p => p.BasarId == basar.Id);
+            var iq = _db.Products.IncludeAll().Where(p => p.BasarId == basar.Id);
             
             if (!string.IsNullOrEmpty(searchString))
             {
