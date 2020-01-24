@@ -115,19 +115,21 @@ namespace BraunauMobil.VeloBasar.Logic
             var products = new List<Product>();
             for (var count = 0; count < productCount; count++)
             {
-                products.Add(CreateProduct());
+                products.Add(CreateProduct(basar, seller));
             }
             await _transactionContext.AcceptProductsAsync(basar, seller.Id, products);
         }
-        private Product CreateProduct()
+        private Product CreateProduct(Basar basar, Seller seller)
         {
             return new Product
             {
+                Basar = basar,
                 Brand = TakeRandom(_db.Brands),
                 Color = TakeRandom(_colors),
                 Description = $"Beschreibung für Produkt",
                 FrameNumber = Guid.NewGuid().ToString(),
                 Price = NextPrice(),
+                Seller = seller,
                 StorageState = StorageState.Available,
                 ValueState = ValueState.NotSettled,
                 TireSize = TakeRandom(_tireSizes),
