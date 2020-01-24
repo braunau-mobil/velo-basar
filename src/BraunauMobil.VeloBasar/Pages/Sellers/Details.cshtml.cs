@@ -31,7 +31,6 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
 
         public IReadOnlyList<TransactionStatistic> AcceptanceStatistics { get; set; }
         public IReadOnlyList<TransactionStatistic> SettlementStatistics { get; set; }
-        public bool CanSettle { get; set; }
         public Seller Seller { get; set; }
         public SellerStatistics Stats { get; set; }
         public ProductsViewModel Products { get; set; }
@@ -50,7 +49,6 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
             SettlementStatistics = await _statisticContext.GetTransactionStatistics(_context.Basar, TransactionType.Settlement, parameter.SellerId);
             Products = await ProductsViewModel.CreateAsync(_productContext.GetProductsForSeller(_context.Basar, parameter.SellerId));
             Stats = await _statisticContext.GetSellerStatisticsAsync(_context.Basar, Seller.Id);
-            CanSettle = Products.ViewModels.Select(vm => vm.Product).IsAllowed(TransactionType.Settlement);
 
             return Page();
         }

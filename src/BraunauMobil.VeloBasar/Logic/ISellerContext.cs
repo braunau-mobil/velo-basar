@@ -9,8 +9,9 @@ namespace BraunauMobil.VeloBasar.Logic
         Task<Seller> CreateAsync(Seller toCreate);
         Task<bool> ExistsAsync(int id);
         Task<Seller> GetAsync(int id);
-        IQueryable<Seller> GetMany(string searchString);
+        IQueryable<Seller> GetMany(string searchString, ValueState? valueState);
         IQueryable<Seller> GetMany(string firstName, string lastName);
+        Task SetValueStateAsync(int sellerId, ValueState valueState);
         Task UpdateAsync(Seller seller);
     }
 }

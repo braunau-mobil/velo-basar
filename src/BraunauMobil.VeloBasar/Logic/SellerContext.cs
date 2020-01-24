@@ -1,7 +1,6 @@
 ﻿using BraunauMobil.VeloBasar.Data;
 using BraunauMobil.VeloBasar.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using System;
 using System.Linq;
 using System.Linq.Expressions;
@@ -26,14 +25,21 @@ namespace BraunauMobil.VeloBasar.Logic
         }
         public async Task<bool> ExistsAsync(int id) => await _db.Sellers.ExistsAsync(id);
         public async Task<Seller> GetAsync(int id) => await _db.Sellers.IncludeAll().FirstOrDefaultAsync(s => s.Id == id);
-        public IQueryable<Seller> GetMany(string searchString)
+        public IQueryable<Seller> GetMany(string searchString, ValueState? valueState)
         {
-            if (string.IsNullOrEmpty(searchString))
+            var iq = _db.Sellers.IncludeAll();
+
+            if (!string.IsNullOrEmpty(searchString))
             {
-                return _db.Sellers.IncludeAll().OrderById();
+                iq = _db.Sellers.Where(SellerSearch(searchString));
             }
 
-            return _db.Sellers.Where(SellerSearch(searchString)).IncludeAll().OrderById();
+            if (valueState != null)
+            {
+                iq = iq.Where(s => s.ValueState == valueState.Value);
+            }
+
+            return iq.OrderById();
         }
         public IQueryable<Seller> GetMany(string firstName, string lastName)
         {
@@ -90,6 +96,12 @@ namespace BraunauMobil.VeloBasar.Logic
 
             return s => EF.Functions.Like(s.FirstName, $"{firstName}%")
               && EF.Functions.Like(s.LastName, $"{lastName}%");
+        }
+        public async Task SetValueStateAsync(int sellerId, ValueState valueState)
+        {
+            var seller = await GetAsync(sellerId);
+            seller.ValueState = valueState;
+            await UpdateAsync(seller);
         }
     }
 }

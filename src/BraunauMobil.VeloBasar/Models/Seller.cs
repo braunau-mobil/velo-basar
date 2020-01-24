@@ -50,6 +50,9 @@ namespace BraunauMobil.VeloBasar.Models
 
         public string Token { get; set; }
 
+        [Display(Name = "Abrechnungsstatus")]
+        public ValueState ValueState { get; set; }
+
         public string GetBigAddressText()
         {
             var sb = new StringBuilder();

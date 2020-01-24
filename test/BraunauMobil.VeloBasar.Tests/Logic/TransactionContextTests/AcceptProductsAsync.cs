@@ -1,15 +1,16 @@
 ﻿using AutoFixture;
 using BraunauMobil.VeloBasar.Models;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
 namespace BraunauMobil.VeloBasar.Tests.Logic.TransactionContextTests
 {
-    public class SettleSellerAsync : TestWithServicesAndDb
+    public class AcceptProductsAsync : TestWithServicesAndDb
     {
         [Fact]
-        public async Task OneSoldOneNotSold()
+        public async Task TwoProducts()
         {
             await RunOnInitializedDb(async () =>
             {
@@ -23,13 +24,11 @@ namespace BraunauMobil.VeloBasar.Tests.Logic.TransactionContextTests
 
                 var acceptance = await TransactionContext.AcceptProductsAsync(basar, seller.Id, fixture.BuildProduct(brand, productType).CreateMany(2).ToList());
 
-                await TransactionContext.CheckoutProductsAsync(basar, acceptance.Products.Take(1).Select(pt => pt.ProductId).ToList());
-
-                var settlement = await TransactionContext.SettleSellerAsync(basar, seller.Id);
-                Assert.Equal(2, settlement.Products.Count);
+                var products = await ProductContext.GetProductsForSeller(basar, seller.Id).ToArrayAsync();
+                Assert.Equal(2, products.Length);
 
                 seller = await SellerContext.GetAsync(seller.Id);
-                Assert.Equal(ValueState.Settled, seller.ValueState);
+                Assert.Equal(ValueState.NotSettled, seller.ValueState);
             });
         }
     }

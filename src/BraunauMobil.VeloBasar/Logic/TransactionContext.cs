@@ -45,6 +45,7 @@ namespace BraunauMobil.VeloBasar.Logic
             var tx = await CreateTransactionAsync(basar, TransactionType.Acceptance, seller, printSettings, productsInserted.ToArray());
             await GenerateTransactionDocumentAsync(tx, printSettings);
 
+            await _sellerContext.SetValueStateAsync(sellerId, ValueState.NotSettled);
             return tx;
         }
         public async Task<ProductsTransaction> CancelProductsAsync(Basar basar, int saleId, IList<int> productIds)
@@ -142,7 +143,11 @@ namespace BraunauMobil.VeloBasar.Logic
 
             var printSettings = await _settingsContext.GetPrintSettingsAsync();
 
-            return await CreateTransactionAsync(basar, TransactionType.Settlement, seller, printSettings, productsToSettle);
+            var tx = await CreateTransactionAsync(basar, TransactionType.Settlement, seller, printSettings, productsToSettle);
+
+            await _sellerContext.SetValueStateAsync(sellerId, ValueState.Settled);
+
+            return tx;
         }
 
         private async Task<ProductsTransaction> CreateTransactionAsync(Basar basar, TransactionType transactionType, PrintSettings printSettings, params Product[] products)
