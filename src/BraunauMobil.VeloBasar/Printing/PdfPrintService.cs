@@ -92,7 +92,7 @@ namespace BraunauMobil.VeloBasar.Printing
                 pdfDoc.AddNewPage(new PageSize(45f.ToUnit(), 79f.ToUnit()));
                 //doc.SetTextRenderingMode(3);
 
-                doc.SetMargins(3, 3, 3, 3);
+                doc.SetMargins(5, 5, 5, 5);
                 doc.SetFontSize(10);
                 doc.SetFont(PdfFontFactory.CreateFont(StandardFonts.TIMES_ROMAN));
 
