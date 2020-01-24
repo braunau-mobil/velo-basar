@@ -90,7 +90,7 @@ namespace BraunauMobil.VeloBasar.Models
             Acceptance = new AcceptancePrintSettings
             {
                 TitleFormat = "Braunau mobil - {0} : Annahmebeleg #{1}",
-                SignatureText = "Für Braunau mobil: {0}",
+                SignatureText = "Für Braunau mobil:",
                 SubTitle = "Folgende Ihrer Artikel haben wir in unseren Verkauf aufgenommen:",
                 TokenFormat = "Ihr Token für den Online-Login: {0}"
             };
@@ -114,7 +114,7 @@ namespace BraunauMobil.VeloBasar.Models
             {
                 TitleFormat = "Braunau mobil - {0}"
             };
-            PageMargins = new Margins(20, 10, 20, 10);
+            PageMargins = new Margins(20, 20, 20, 20);
             BannerSubtitle = "Braunau mobil, Hans-Sachs Straße 33, 5280 Braunau";
             Website = "www.braunaumobil.at";
             Banner = new ImageData();

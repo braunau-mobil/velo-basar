@@ -89,10 +89,11 @@ namespace BraunauMobil.VeloBasar.Printing
         {
             return CreatePdf((pdfDoc, doc) =>
             {
-                pdfDoc.AddNewPage(new PageSize(50f.ToUnit(), 79f.ToUnit()));
+                pdfDoc.AddNewPage(new PageSize(45f.ToUnit(), 79f.ToUnit()));
+                //doc.SetTextRenderingMode(3);
 
-                doc.SetMargins(0, 0, 0, 0);
-                doc.SetFontSize(7);
+                doc.SetMargins(3, 3, 3, 3);
+                doc.SetFontSize(10);
                 doc.SetFont(PdfFontFactory.CreateFont(StandardFonts.TIMES_ROMAN));
 
                 doc.Add(new Paragraph(
@@ -121,14 +122,14 @@ namespace BraunauMobil.VeloBasar.Printing
                 var price = GetBigText(string.Format(CultureInfo.CurrentCulture, "{0:C}", product.Price))
                     .SetBold()
                     .SetTextAlignment(TextAlignment.RIGHT)
-                    .SetBorderTop(new SolidBorder(1))
-                    .SetWidth(50f.ToUnit());
+                    .SetBorderTop(new SolidBorder(2))
+                    .SetWidth(45f.ToUnit());
 
                 barcodeAndPrice
                     .Add(new Image(barcode.CreateFormXObject(pdfDoc)))
                     .Add(new Text(Environment.NewLine))
                     .Add(price)
-                    .SetFixedPosition(0f, 0f, 50f.ToUnit());
+                    .SetFixedPosition(0f, 0f, 45f.ToUnit());
 
                 doc.Add(barcodeAndPrice);
             });
@@ -215,6 +216,7 @@ namespace BraunauMobil.VeloBasar.Printing
         {
             return CreatePdf((pdfDoc, doc) =>
             {
+                pdfDoc.SetDefaultPageSize(pageSize: PageSize.A5);
                 doc.SetFont(PdfFontFactory.CreateFont(StandardFonts.TIMES_ROMAN));
                 doc.SetMargins(settings.PageMargins.Top, settings.PageMargins.Right, settings.PageMargins.Bottom, settings.PageMargins.Left);
                 pdfDoc.AddEventHandler(PdfDocumentEvent.END_PAGE, new PageFooterHandler(doc, _localizer));
