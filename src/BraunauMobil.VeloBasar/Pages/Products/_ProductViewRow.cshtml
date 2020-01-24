@@ -9,7 +9,7 @@
 <td Condition="Model.ShowSeller">
     <a velo-page="Model.GetSellerPage()" target="_blank">@Html.DisplayFor(vm => vm.Product.SellerId)</a>
 </td>
-<td>@Html.DisplayFor(vm => vm.Product.Price)</td>
+<td align="right">@Html.DisplayFor(vm => vm.Product.Price)</td>
 <td>
     <partial name="/Pages/Products/_StateBadge.cshtml" model="@Model.Product" />
 </td>

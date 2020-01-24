@@ -63,8 +63,16 @@
 
             <dt class="col-1"><label asp-for="@Model.Product.Price"></label></dt>
             <dd class="col-11">@Model.Product.Price</dd>
-
-            @@todo hier schöne TX Liste anzeigen!!!
         </dl>
+    </div>
+</div>
+
+<div class="card my-3 @cardStyle">
+    <h5 class="card-header">@Localizer["Transaktionen"]</h5>
+    <div class="card-body p-0">
+        @if (Model.Transactions.NotEmpty)
+        {
+            <partial name="/Pages/Transactions/_TransactionsView.cshtml" model="@Model.Transactions" />
+        }
     </div>
 </div>

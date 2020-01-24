@@ -4,6 +4,7 @@ using BraunauMobil.VeloBasar.Models;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using BraunauMobil.VeloBasar.Logic;
 using System.Diagnostics.Contracts;
+using BraunauMobil.VeloBasar.ViewModels;
 
 namespace BraunauMobil.VeloBasar.Pages.Products
 {
@@ -13,26 +14,37 @@ namespace BraunauMobil.VeloBasar.Pages.Products
     }
     public class DetailsModel : PageModel
     {
-        private readonly IProductContext _context;
+        private readonly IVeloContext _context;
+        private readonly IProductContext _productContext;
+        private readonly ITransactionContext _transactionContext;
 
-        public DetailsModel(IProductContext context)
+        public DetailsModel(IVeloContext context, IProductContext productContext, ITransactionContext transactionContext)
         {
             _context = context;
+            _productContext = productContext;
+            _transactionContext = transactionContext;
         }
 
         [BindProperty]
         public Product Product { get; set; }
 
+        public TransactionsViewModel Transactions { get; set; }
+
         public async Task<IActionResult> OnGetAsync(DetailsParameter parameter)
         {
             Contract.Requires(parameter != null);
 
-            Product = await _context.GetAsync(parameter.ProductId);
+            Product = await _productContext.GetAsync(parameter.ProductId);
 
             if (Product == null)
             {
                 return NotFound();
             }
+
+            Transactions = await TransactionsViewModel.CreateAsync(_transactionContext.GetFromProduct(_context.Basar, Product.Id));
+            Transactions.ShowType = true;
+            Transactions.ShowDocumentLink = true;
+            Transactions.ShowNotes = true;
 
             return Page();
         }

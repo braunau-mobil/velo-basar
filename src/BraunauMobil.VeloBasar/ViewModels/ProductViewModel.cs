@@ -1,5 +1,4 @@
 ﻿using BraunauMobil.VeloBasar.Models;
-using System.ComponentModel.DataAnnotations;
 
 namespace BraunauMobil.VeloBasar.ViewModels
 {

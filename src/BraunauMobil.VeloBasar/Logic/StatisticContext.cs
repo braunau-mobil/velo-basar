@@ -63,15 +63,6 @@ namespace BraunauMobil.VeloBasar.Logic
                 SoldProductCount = soldProducts.Length
             };
         }
-        public async Task<TransactionStatistic[]> GetTransactionStatistics(Basar basar, TransactionType type, int sellerId)
-        {
-            return await _transactionContext.GetMany(basar, type, sellerId).AsNoTracking().Select(a => new TransactionStatistic
-            {
-                Transaction = a,
-                ProductCount = a.Products.Count,
-                Amount = a.Products.Sum(p => p.Product.Price)
-            }).ToArrayAsync();
-        }
 
         private ChartDataPoint[] GroupByProductType(IEnumerable<Product> products, Func<IGrouping<ProductType, Product>, ChartDataPoint> getPoint)
         {

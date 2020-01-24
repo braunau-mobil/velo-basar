@@ -85,8 +85,7 @@ namespace BraunauMobil.VeloBasar.Logic
         public async Task<ProductsTransaction> DoTransactionAsync(Basar basar, TransactionType transactionType, string notes, int productId)
         {
             var product = await _productContext.GetAsync(productId);
-            var printSettings = await _settingsContext.GetPrintSettingsAsync();
-            return await DoTransactionAsync(basar, transactionType, notes, printSettings, product);
+            return await DoTransactionAsync(basar, transactionType, notes, null, product);
         }
         public async Task<ProductsTransaction> DoTransactionAsync(Basar basar, TransactionType transactionType, string notes, PrintSettings printSettings, params Product[] products)
         {
@@ -102,6 +101,10 @@ namespace BraunauMobil.VeloBasar.Logic
         }
         public async Task<bool> ExistsAsync(int id) => await _db.Transactions.ExistsAsync(id);
         public async Task<bool> ExistsAsync(Basar basar, TransactionType type, int number) => await _db.Transactions.AnyAsync(t => t.BasarId == basar.Id && t.Type == type && t.Number == number);
+        public IQueryable<ProductsTransaction> GetFromProduct(Basar basar, int productId)
+        {
+            return _db.Transactions.IncludeAll().Where(t => t.Products.Any(pt => pt.ProductId == productId)).OrderBy(t => t.TimeStamp);
+        }
         public async Task<ProductsTransaction> GetAsync(int id) => await IncludeAll().FirstOrDefaultAsync(t => t.Id == id);
         public async Task<ProductsTransaction> GetAsync(Basar basar, TransactionType type, int number)
         {
@@ -173,7 +176,10 @@ namespace BraunauMobil.VeloBasar.Logic
             _db.Transactions.Add(tx);
             await _db.SaveChangesAsync();
 
-            await GenerateTransactionDocumentAsync(tx, printSettings);
+            if (printSettings != null)
+            {
+                await GenerateTransactionDocumentAsync(tx, printSettings);
+            }
 
             return tx;
         }

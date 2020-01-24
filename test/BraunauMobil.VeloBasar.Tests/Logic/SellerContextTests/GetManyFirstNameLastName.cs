@@ -22,7 +22,7 @@ namespace BraunauMobil.VeloBasar.Tests.Logic.SellerContextTests
                 var seller = await SellerContext.CreateAsync(fixture.Build<Seller>()
                     .With(s => s.FirstName, "Test").Create());
 
-                var sellers = await SellerContext.GetMany("test", null).ToArrayAsync();
+                var sellers = await SellerContext.GetMany("test", "").ToArrayAsync();
                 Assert.Single(sellers);
             });
         }
