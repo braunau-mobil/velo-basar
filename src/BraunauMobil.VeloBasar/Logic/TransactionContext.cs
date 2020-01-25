@@ -135,11 +135,6 @@ namespace BraunauMobil.VeloBasar.Logic
 
             return _db.Transactions.GetMany(type, basar);
         }
-        public async Task<int> GetTransactionNumberForProductAsync(Basar basar, TransactionType type, int productId)
-        {
-            var transaction = await _db.Transactions.AsNoTracking().Include(t => t.Products).Where(t => t.Type == type && t.BasarId == basar.Id).FirstOrDefaultAsync(t => t.Products.Any(pt => pt.ProductId == productId));
-            return transaction.Number;
-        }
         public async Task<ProductsTransaction> SettleSellerAsync(Basar basar, int sellerId)
         {
             var seller = await _sellerContext.GetAsync(sellerId);

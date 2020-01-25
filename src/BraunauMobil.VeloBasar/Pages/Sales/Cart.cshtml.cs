@@ -32,13 +32,12 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
         }
 
         public string ErrorText { get; set; }
-
         public ProductsViewModel Products { get; set; }
-
         [BindProperty]
         [Required]
         [Display(Name = "Artikel Id")]
         public int ProductId { get; set; }
+        public int? SaleId { get; set; }
 
         public async Task OnGetAsync(CartParameter parameter)
         {
@@ -85,6 +84,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
 
             await LoadProducts(cart);
         }
+        public VeloPage GetSalesDetailsPage() => this.GetPage<DetailsModel>(new DetailsParameter { SaleId = SaleId.Value });
         
         private async Task LoadProducts(IList<int> productIds)
         {
@@ -127,10 +127,9 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
             }
             else if (product.StorageState == StorageState.Sold)
             {
-                var saleNumber = await _transactionContext.GetTransactionNumberForProductAsync(_context.Basar, TransactionType.Sale, product.Id);
-
-                //  @todo generate link to sale details with blank target
-                return _context.Localizer["Der Artikel wurde bereits verkauft. Siehe Verkauf #{0}", saleNumber];
+                var sale = await _transactionContext.GetLatestAsync(_context.Basar, product.Id);
+                SaleId = sale.Id;
+                return _context.Localizer["Der Artikel wurde bereits verkauft. Siehe Verkauf #{0}", sale.Number];
             }
             return null;
         }

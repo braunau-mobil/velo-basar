@@ -35,6 +35,10 @@
 
 <div Condition="@Model.ErrorText != null" class="alert alert-danger" role="alert">
     @Model.ErrorText
+    @if (Model.SaleId != null)
+    {
+        <a velo-page="Model.GetSalesDetailsPage()" target="_blank">Details</a>
+    }
 </div>
 
 
