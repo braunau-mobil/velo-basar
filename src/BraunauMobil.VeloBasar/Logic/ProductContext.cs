@@ -23,7 +23,7 @@ namespace BraunauMobil.VeloBasar.Logic
             _productTypeContext = productTypeContext;
         }
 
-        public async Task<bool> ExistsAsync(int id) => await _db.ProductTypes.ExistsAsync(id);
+        public async Task<bool> ExistsAsync(int id) => await _db.Products.ExistsAsync(id);
         public async Task<Product> GetAsync(int id) => await _db.Products.IncludeAll().FirstOrDefaultAsync(p => p.Id == id);
         public IQueryable<Product> GetMany(IList<int> ids) => _db.Products.Where(p => ids.Contains(p.Id)).IncludeAll().DefaultOrder();
         public IQueryable<Product> GetProductsForBasar(Basar basar) => GetProductsForBasar(basar, null, null, null);
