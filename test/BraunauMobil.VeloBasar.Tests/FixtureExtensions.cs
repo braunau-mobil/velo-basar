@@ -9,6 +9,14 @@ namespace BraunauMobil.VeloBasar.Tests
 {
     public static class FixtureExtensions
     {
+        public static IPostprocessComposer<Product> BuildProduct(this Fixture fixture, decimal price)
+        {
+            Contract.Requires(fixture != null);
+
+            return fixture.Build<Product>()
+                .With(p => p.Price, price)
+                .Without(p => p.Id);
+        }
         public static IPostprocessComposer<Product> BuildProduct(this Fixture fixture, Brand brand, ProductType productType, decimal? price = null)
         {
             Contract.Requires(fixture != null);

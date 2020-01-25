@@ -184,10 +184,10 @@ namespace BraunauMobil.VeloBasar.Printing
                 }                
                 
                 AddSubtitle(doc, settings.Settlement.SoldTitle);
-                AddProductTable(doc, products.Where(p => p.StorageState == StorageState.Sold), _localizer["Verkaufspreis"]);
+                AddProductTable(doc, products.GetProductsToPayout(), _localizer["Verkaufspreis"]);
 
                 AddSubtitle(doc, settings.Settlement.NotSoldTitle);
-                AddProductTable(doc, products.Where(p => p.StorageState == StorageState.Available), _localizer["Preis"]);
+                AddProductTable(doc, products.GetProductsToPickup(), _localizer["Preis"]);
 
                 doc.Add(GetSpacer(20));
                 doc.Add(GetRegularText(settings.Settlement.ConfirmationText));

@@ -73,7 +73,7 @@ namespace BraunauMobil.VeloBasar.Models
                 case TransactionType.MarkAsGone: return StorageState == StorageState.Available;
                 case TransactionType.Release: return StorageState == StorageState.Locked || StorageState == StorageState.Gone;
                 case TransactionType.Sale: return StorageState == StorageState.Available;
-                case TransactionType.Settlement: return StorageState == StorageState.Available || StorageState == StorageState.Sold;
+                case TransactionType.Settlement: return true;
             }
 
             throw new InvalidOperationException($"Invalid transationType: {transactionType}");

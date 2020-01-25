@@ -11,9 +11,12 @@ namespace BraunauMobil.VeloBasar.Tests.Models.ProductTests
         [InlineData(StorageState.Available, TransactionType.Sale)]
         [InlineData(StorageState.Available, TransactionType.Settlement)]
         [InlineData(StorageState.Gone, TransactionType.Release)]
+        [InlineData(StorageState.Gone, TransactionType.Settlement)]
         [InlineData(StorageState.Locked, TransactionType.Release)]
+        [InlineData(StorageState.Locked, TransactionType.Settlement)]
         [InlineData(StorageState.Sold, TransactionType.Cancellation)]
         [InlineData(StorageState.Sold, TransactionType.Lock)]
+        [InlineData(StorageState.Sold, TransactionType.Settlement)]
         public void NotSettledAllow(StorageState storageState, TransactionType transactionType)
         {
             var product = new Product
@@ -32,13 +35,11 @@ namespace BraunauMobil.VeloBasar.Tests.Models.ProductTests
         [InlineData(StorageState.Gone, TransactionType.Lock)]
         [InlineData(StorageState.Gone, TransactionType.MarkAsGone)]
         [InlineData(StorageState.Gone, TransactionType.Sale)]
-        [InlineData(StorageState.Gone, TransactionType.Settlement)]
         [InlineData(StorageState.Locked, TransactionType.Acceptance)]
         [InlineData(StorageState.Locked, TransactionType.Cancellation)]
         [InlineData(StorageState.Locked, TransactionType.Lock)]
         [InlineData(StorageState.Locked, TransactionType.MarkAsGone)]
         [InlineData(StorageState.Locked, TransactionType.Sale)]
-        [InlineData(StorageState.Locked, TransactionType.Settlement)]
         [InlineData(StorageState.Sold, TransactionType.Acceptance)]
         [InlineData(StorageState.Sold, TransactionType.MarkAsGone)]
         [InlineData(StorageState.Sold, TransactionType.Release)]
