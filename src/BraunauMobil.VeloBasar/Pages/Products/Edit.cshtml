@@ -18,6 +18,8 @@
         <div class="card-body">
             <div class="column">
                 <input type="hidden" asp-for="Product.Id" />
+                <input type="hidden" asp-for="Product.BasarId" />
+                <input type="hidden" asp-for="Product.SellerId" />
                 <div class="form-group">
                     <label asp-for="Product.Type" class="control-label"></label>
                     <select asp-for="Product.TypeId" class="form-control" asp-items="ViewBag.ProductTypes"></select>
