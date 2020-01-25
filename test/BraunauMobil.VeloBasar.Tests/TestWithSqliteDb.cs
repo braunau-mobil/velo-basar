@@ -48,7 +48,7 @@ namespace BraunauMobil.VeloBasar.Tests
             // Create the schema in the database
             using (var context = new VeloRepository(options))
             {
-                context.Database.EnsureCreated();
+                await context.Database.MigrateAsync();
             }
 
             // Use a clean instance of the context to run the test
