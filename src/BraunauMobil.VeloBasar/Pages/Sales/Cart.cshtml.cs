@@ -117,13 +117,13 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
             }
             else if (product.StorageState == StorageState.Gone)
             {
-                //  @todo Letzte TX anzeigen!
-                return _context.Localizer["Der Artikel wurde als verschwunden markiert. Anmerkungen: @todo"];
+                var transaction = await _transactionContext.GetLatestAsync(_context.Basar, product.Id);
+                return _context.Localizer["Der Artikel wurde als verschwunden markiert. Anmerkungen: {0}", transaction.Notes];
             }
             else if (product.StorageState == StorageState.Locked)
             {
-                //  @todo Letzte TX anzeigen!
-                return _context.Localizer["Der Artikel wurde gesperrt. Anmerkungen: @todo"];
+                var transaction = await _transactionContext.GetLatestAsync(_context.Basar, product.Id);
+                return _context.Localizer["Der Artikel wurde gesperrt. Anmerkungen: {0}", transaction.Notes];
             }
             else if (product.StorageState == StorageState.Sold)
             {

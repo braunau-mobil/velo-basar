@@ -19,6 +19,7 @@ namespace BraunauMobil.VeloBasar.Logic
         Task<ProductsTransaction> GetAsync(int id);
         Task<ProductsTransaction> GetAsync(Basar basar, TransactionType type, int number);
         IQueryable<ProductsTransaction> GetFromProduct(Basar basar, int productId);
+        Task<ProductsTransaction> GetLatestAsync(Basar basar, int productId);
         IQueryable<ProductsTransaction> GetMany(Basar basar, TransactionType type);
         IQueryable<ProductsTransaction> GetMany(Basar basar, TransactionType type , int sellerId);
         IQueryable<ProductsTransaction> GetMany(Basar basar, TransactionType type, string searchString);

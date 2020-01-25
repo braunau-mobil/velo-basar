@@ -105,6 +105,10 @@ namespace BraunauMobil.VeloBasar.Logic
         {
             return _db.Transactions.IncludeAll().Where(t => t.Products.Any(pt => pt.ProductId == productId)).OrderBy(t => t.TimeStamp);
         }
+        public async Task<ProductsTransaction> GetLatestAsync(Basar basar, int productId)
+        {
+            return await GetFromProduct(basar, productId).OrderByDescending(t => t.TimeStamp).FirstAsync();
+        }
         public async Task<ProductsTransaction> GetAsync(int id) => await IncludeAll().FirstOrDefaultAsync(t => t.Id == id);
         public async Task<ProductsTransaction> GetAsync(Basar basar, TransactionType type, int number)
         {
