@@ -254,6 +254,11 @@ namespace BraunauMobil.VeloBasar.Logic
         }
         private async Task<FileData> GenerateTransactionDocumentAsync(ProductsTransaction transaction, PrintSettings printSettings)
         {
+            if (transaction.Type == TransactionType.Cancellation || transaction.Type == TransactionType.Lock || transaction.Type == TransactionType.MarkAsGone || transaction.Type == TransactionType.Release)
+            {
+                return null;
+            }
+
             FileData fileStore;
             if (transaction.DocumentId == null)
             {
