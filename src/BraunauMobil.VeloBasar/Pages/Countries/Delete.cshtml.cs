@@ -32,7 +32,7 @@ namespace BraunauMobil.VeloBasar.Pages.Countries
             {
                 return NotFound();
             }
-            return this.RedirectToPage<ListModel>(new ListParameter { PageIndex = parameter.PageIndex });
+            return this.RedirectToPage<ListModel>(new SearchAndPaginationParameter { PageIndex = parameter.PageIndex });
         }
     }
 }

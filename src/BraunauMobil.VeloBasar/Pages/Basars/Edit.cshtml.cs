@@ -44,8 +44,8 @@ namespace BraunauMobil.VeloBasar.Pages.Basars
             }
 
             await _context.UpdateAsync(BasarToEdit);
-            return this.RedirectToPage<ListModel>(new ListParameter { PageIndex = parameter.PageIndex });
+            return this.RedirectToPage<ListModel>(new SearchAndPaginationParameter { PageIndex = parameter.PageIndex });
         }
-        public VeloPage GetListPage() => this.GetPage<ListModel>(new ListParameter { PageIndex = _parameter.PageIndex });
+        public VeloPage GetListPage() => this.GetPage<ListModel>(new SearchAndPaginationParameter { PageIndex = _parameter.PageIndex });
     }
 }

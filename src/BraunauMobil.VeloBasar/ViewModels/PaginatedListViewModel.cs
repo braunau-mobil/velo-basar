@@ -6,14 +6,15 @@ namespace BraunauMobil.VeloBasar.ViewModels
 {
     public class PaginatedListViewModel<T> : ListViewModel<T>, IPaginatable
     {
-        private readonly Func<int, VeloPage> _getPaginationPage;
+        private readonly Func<int, int?, VeloPage> _getPaginationPage;
 
         public PaginatedListViewModel() { }
-        public PaginatedListViewModel(Basar basar, IReadOnlyList<T> items, ListCommand<T>[] commands, Func<int, VeloPage> getPaginationPage, int pageIndex, int totalPages) : base(basar, items, commands)
+        public PaginatedListViewModel(Basar basar, IReadOnlyList<T> items, ListCommand<T>[] commands, Func<int, int?, VeloPage> getPaginationPage, int pageIndex, int pageSize, int totalPages) : base(basar, items, commands)
         {
             _getPaginationPage = getPaginationPage;
             PageIndex = pageIndex;
             TotalPages = totalPages;
+            PageSize = pageSize;
         }
 
         public bool HasPreviousPage
@@ -25,8 +26,9 @@ namespace BraunauMobil.VeloBasar.ViewModels
             get => PageIndex < TotalPages;
         }
         public int PageIndex { get; }
+        public int PageSize { get; }
         public int TotalPages { get; }
 
-        public VeloPage GetPaginationPage(int pageIndex) => _getPaginationPage(pageIndex);
+        public VeloPage GetPaginationPage(int pageIndex, int? pageSize = null) => _getPaginationPage(pageIndex, pageSize);
     }
 }

@@ -49,8 +49,8 @@ namespace BraunauMobil.VeloBasar.Pages.ProductTypes
             }
 
             await _context.UpdateAsync(ProductType);
-            return this.RedirectToPage<ListModel>(new ListParameter { PageIndex = parameter.PageIndex });
+            return this.RedirectToPage<ListModel>(new SearchAndPaginationParameter { PageIndex = parameter.PageIndex });
         }
-        public VeloPage GetListPage() => this.GetPage<ListModel>(new ListParameter { PageIndex = _pageIndex });
+        public VeloPage GetListPage() => this.GetPage<ListModel>(new SearchAndPaginationParameter { PageIndex = _pageIndex });
     }
 }

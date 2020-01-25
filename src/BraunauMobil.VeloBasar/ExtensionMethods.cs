@@ -38,6 +38,21 @@ namespace BraunauMobil.VeloBasar
         {
             return new VeloPage { Page = RoutingHelper.GetPageForModel<TPageModel>(), Parameter = parameter };
         }
+        public static VeloPage GetPage<TPageModel>(this ISearchable searchable, int pageIndex, int? pageSize)
+        {
+            Contract.Requires(searchable != null);
+
+            return new VeloPage
+            {
+                Page = RoutingHelper.GetPageForModel<TPageModel>(),
+                Parameter = new SearchAndPaginationParameter
+                {
+                    PageIndex = pageIndex,
+                    PageSize = pageSize,
+                    SearchString = searchable.SearchString
+                }
+            };
+        }
         public static string GetPath(this LinkGenerator linkGenerator, VeloPage page)
         {
             Contract.Requires(page != null);

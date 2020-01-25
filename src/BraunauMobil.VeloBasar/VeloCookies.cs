@@ -42,7 +42,16 @@ namespace BraunauMobil.VeloBasar
                 MaxAge = TimeSpan.FromDays(2)
             }
         };
-        
+        private static readonly Cookie _pageSize = new Cookie
+        {
+            Key = "pageSize",
+            CookieOptions = new CookieOptions
+            {
+                IsEssential = false,
+                MaxAge = TimeSpan.FromDays(2)
+            }
+        };
+
         public static void ClearAcceptanceProducts(this IResponseCookies cookies)
         {
             Contract.Requires(cookies != null);
@@ -109,6 +118,26 @@ namespace BraunauMobil.VeloBasar
 
             var json = JsonConvert.SerializeObject(cart);
             cookies.Append(_cart.Key, json, _cart.CookieOptions);
+        }
+
+        public static int GetPageSize(this IRequestCookieCollection cookies, string key)
+        {
+            Contract.Requires(cookies != null);
+
+            var fullKey = $"{key}.{_pageSize.Key}";
+            var id = cookies[fullKey];
+            if (int.TryParse(id, out int pageSize))
+            {
+                return pageSize;
+            }
+            return 5;
+        }
+        public static void SetPageSize(this IResponseCookies cookies, string key, int pageSize)
+        {
+            Contract.Requires(cookies != null);
+
+            var fullKey = $"{key}.{_pageSize.Key}";
+            cookies.Append(fullKey, $"{pageSize}");
         }
     }
 }

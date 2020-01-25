@@ -10,12 +10,6 @@ using System.Diagnostics.Contracts;
 
 namespace BraunauMobil.VeloBasar.Pages.Basars
 {
-    public class ListParameter
-    {
-        public string CurrentFilter { get; set; }
-        public string SearchString { get; set; }
-        public int? PageIndex { get; set; }
-    }
     [Authorize]
     public class ListModel : PageModel, ISearchable
     {
@@ -28,28 +22,17 @@ namespace BraunauMobil.VeloBasar.Pages.Basars
             _basarContext = basarContext;
         }
 
-        public string CurrentFilter { get; set; }
-        public PaginatedListViewModel<Basar> Basars { get;set; }
+        public string SearchString { get; set; }
+        public PaginatedListViewModel<Basar> Basars { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(ListParameter parameter)
+        public async Task<IActionResult> OnGetAsync(SearchAndPaginationParameter parameter)
         {
             Contract.Requires(parameter != null);
 
-            CurrentFilter = parameter.SearchString;
-            if (parameter.SearchString != null)
-            {
-                parameter.PageIndex = 1;
-            }
-            else
-            {
-                parameter.SearchString = parameter.CurrentFilter;
-            }
-
-            CurrentFilter = parameter.SearchString;
+            SearchString = parameter.SearchString;
 
             var basarIq = _basarContext.GetMany(parameter.SearchString);
-            var pageSize = 10;
-            Basars = await PaginationHelper.CreateAsync(_context.Basar, basarIq.AsNoTracking(), parameter.PageIndex ?? 1, pageSize, GetPaginationPage);
+            Basars = await PaginationHelper.CreateAsync(_context.Basar, basarIq.AsNoTracking(), parameter.GetPageIndex(), parameter.GetPageSize(this), GetPaginationPage);
 
             return Page();
         }
@@ -69,13 +52,8 @@ namespace BraunauMobil.VeloBasar.Pages.Basars
             Contract.Requires(item != null);
             return this.GetPage<EditModel>(new EditParameter { BasarToEditId = item.Id, PageIndex = Basars.PageIndex });
         }
-        public VeloPage GetSearchPage() => this.GetPage<ListModel>();
-        public VeloPage GetPaginationPage(int pageIndex) => this.GetPage<ListModel>(new ListParameter { PageIndex = pageIndex });
-        public VeloPage GetSetStatePage(Basar item, bool stateToSet)
-        {
-            //  asp-page="/Basars/SetState" asp-all-route-data="@Model.GetSetStateRoute(itemViewModel.Item, !itemViewModel.Item.IsLocked)"
-            throw new System.NotImplementedException();
-        }
+        public VeloPage GetSearchPage() => this.GetPage<ListModel>(Basars.PageIndex, null);
+        public VeloPage GetPaginationPage(int pageIndex, int? pageSize = null) => this.GetPage<ListModel>(pageIndex, pageSize);
 
         public async Task<bool> CanDeleteAsync(Basar item) => await _basarContext.CanDeleteAsync(item);
     }

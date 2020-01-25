@@ -49,8 +49,8 @@ namespace BraunauMobil.VeloBasar.Pages.Countries
             }
 
             await _context.UpdateAsync(Country);
-            return this.RedirectToPage<ListModel>(new ListParameter { PageIndex = _pageIndex });
+            return this.RedirectToPage<ListModel>(new SearchAndPaginationParameter { PageIndex = _pageIndex });
         }
-        public VeloPage GetListPage() => this.GetPage<ListModel>(new ListParameter { PageIndex = _pageIndex });
+        public VeloPage GetListPage() => this.GetPage<ListModel>(new SearchAndPaginationParameter { PageIndex = _pageIndex });
     }
 }

@@ -10,11 +10,8 @@ using System.Diagnostics.Contracts;
 
 namespace BraunauMobil.VeloBasar.Pages.Products
 {
-    public class ListParameter
+    public class ListParameter : SearchAndPaginationParameter
     {
-        public string CurrentFilter { get; set; }
-        public string SearchString { get; set; }
-        public int? PageIndex { get; set; }
         public StorageState? StorageState { get; set; }
         public ValueState? ValueState { get; set; }
     }
@@ -29,7 +26,7 @@ namespace BraunauMobil.VeloBasar.Pages.Products
             _productContext = productContext;
         }
 
-        public string CurrentFilter { get; set; }
+        public string SearchString { get; set; }
         public ProductsViewModel Products { get; set; }
         public StorageState? StorageStateFilter { get; set; }
         public ValueState? ValueStateFilter { get; set; }
@@ -42,19 +39,8 @@ namespace BraunauMobil.VeloBasar.Pages.Products
             ViewData["ValueStates"] = GetValueStates();
             
             StorageStateFilter = parameter.StorageState;
-            CurrentFilter = parameter.SearchString;
+            SearchString = parameter.SearchString;
             ValueStateFilter = parameter.ValueState;
-
-            if (parameter.SearchString != null)
-            {
-                parameter.PageIndex = 1;
-            }
-            else
-            {
-                parameter.SearchString = parameter.CurrentFilter;
-            }
-
-            CurrentFilter = parameter.SearchString;
 
             if (int.TryParse(parameter.SearchString, out int id))
             {
@@ -64,10 +50,8 @@ namespace BraunauMobil.VeloBasar.Pages.Products
                 }
             }
 
-            var productIq = _productContext.GetProductsForBasar(_context.Basar, parameter.SearchString, parameter.StorageState, parameter.ValueState);
-
-            var pageSize = 11;
-            Products = await ProductsViewModel.CreateAsync(productIq, parameter.PageIndex ?? 1, pageSize, GetPaginationPage,
+            var productIq = _productContext.GetProductsForBasar(_context.Basar, SearchString, StorageStateFilter, ValueStateFilter);
+            Products = await ProductsViewModel.CreateAsync(productIq, parameter.GetPageIndex(), parameter.GetPageSize(this), GetPaginationPage,
             new[]
             {
                 new ListCommand<ProductViewModel>(vm => this.GetPage<DetailsModel>(new DetailsParameter { ProductId = vm.Product.Id }))
@@ -82,8 +66,9 @@ namespace BraunauMobil.VeloBasar.Pages.Products
             Products.ShowSeller = true;
             return Page();
         }
-        public VeloPage GetPaginationPage(int pageIndex) => this.GetPage<ListModel>(new ListParameter { PageIndex = pageIndex });
-        public VeloPage GetSearchPage() => this.GetPage<ListModel>();
+        public VeloPage GetPaginationPage(int pageIndex) => this.GetPage<ListModel>(GetParameter(pageIndex, null));
+        public VeloPage GetPaginationPage(int pageIndex, int? pageSize) => this.GetPage<ListModel>(GetParameter(pageIndex, pageSize));
+        public VeloPage GetSearchPage() => this.GetPage<ListModel>(GetParameter(Products.PageIndex, null));
         private SelectList GetStorageStates()
         {
             return new SelectList(new[]
@@ -103,6 +88,17 @@ namespace BraunauMobil.VeloBasar.Pages.Products
                 new Tuple<ValueState?, string>(ValueState.Settled, _context.Localizer["Abgerechnet"]),
                 new Tuple<ValueState?, string>(ValueState.NotSettled, _context.Localizer["Nicht Abgerechnet"])
             }, "Item1", "Item2");
+        }
+        private ListParameter GetParameter(int pageIndex, int? pageSize)
+        {
+            return new ListParameter
+            {
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                SearchString = SearchString,
+                StorageState = StorageStateFilter,
+                ValueState = ValueStateFilter
+            };
         }
     }
 }

@@ -55,7 +55,7 @@ namespace BraunauMobil.VeloBasar.Tests.Logic.TransactionContextTests
                 var acceptance = await TransactionContext.AcceptProductsAsync(basar, seller.Id, fixture.BuildProduct(brand, productType).CreateMany(2).ToList());
                 var sale = await TransactionContext.CheckoutProductsAsync(basar, acceptance.Products.Select(pt => pt.ProductId).ToList());
 
-                await TransactionContext.CancelProductsAsync(basar, sale.Id, new List<int> { 1, 2 });
+                var cancellation = await TransactionContext.CancelProductsAsync(basar, sale.Id, new List<int> { 1, 2 });
 
                 var updatedSale = await TransactionContext.GetAsync(sale.Id);
                 Assert.Null(updatedSale);

@@ -9,12 +9,6 @@ using System.Diagnostics.Contracts;
 
 namespace BraunauMobil.VeloBasar.Pages.Brands
 {
-    public class ListParameter
-    {
-        public string CurrentFilter { get; set; }
-        public string SearchString { get; set; }
-        public int? PageIndex { get; set; }
-    }
     [Authorize]
     public class ListModel : PageModel, ISearchable
     {
@@ -27,28 +21,17 @@ namespace BraunauMobil.VeloBasar.Pages.Brands
             _brandContext = brandContext;
         }
 
-        public string CurrentFilter { get; set; }
+        public string SearchString { get; set; }
         public PaginatedListViewModel<Brand> Brands { get; set; }
 
-        public async Task OnGetAsync(ListParameter parameter)
+        public async Task OnGetAsync(SearchAndPaginationParameter parameter)
         {
             Contract.Requires(parameter != null);
 
-            CurrentFilter = parameter.SearchString;
-            if (parameter.SearchString != null)
-            {
-                parameter.PageIndex = 1;
-            }
-            else
-            {
-                parameter.SearchString = parameter.CurrentFilter;
-            }
-
-            CurrentFilter = parameter.SearchString;
+            SearchString = parameter.SearchString;
 
             var brandIq = _brandContext.GetMany(parameter.SearchString);
-            var pageSize = 10;
-            Brands = await PaginationHelper.CreateAsync(_context.Basar, brandIq.AsNoTracking(), parameter.PageIndex ?? 1, pageSize, GetPaginationPage);
+            Brands = await PaginationHelper.CreateAsync(_context.Basar, brandIq.AsNoTracking(), parameter.GetPageIndex(), parameter.GetPageSize(this), GetPaginationPage);
         }
         public VeloPage GetDeletePage(Brand item)
         {
@@ -60,8 +43,8 @@ namespace BraunauMobil.VeloBasar.Pages.Brands
             Contract.Requires(item != null);
             return this.GetPage<EditModel>(new EditParameter { BrandId = item.Id, PageIndex = Brands.PageIndex });
         }
-        public VeloPage GetPaginationPage(int pageIndex) => this.GetPage<ListModel>(new ListParameter { PageIndex = pageIndex });
-        public VeloPage GetSearchPage() => this.GetPage<ListModel>();
+        public VeloPage GetPaginationPage(int pageIndex, int? pageSize) => this.GetPage<ListModel>(pageIndex, pageSize);
+        public VeloPage GetSearchPage() => this.GetPage<ListModel>(Brands.PageIndex, null);
         public VeloPage GetSetStatePage(Brand item, ObjectState stateToSet)
         {
             Contract.Requires(item != null);

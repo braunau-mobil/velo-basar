@@ -11,11 +11,8 @@ using System;
 
 namespace BraunauMobil.VeloBasar.Pages.Sellers
 {
-    public class ListParameter
+    public class ListParameter : SearchAndPaginationParameter
     {
-        public string CurrentFilter { get; set; }
-        public string SearchString { get; set; }
-        public int? PageIndex { get; set; }
         public ValueState? ValueState { get; set; }
     }
     public class ListModel : PageModel, ISearchable
@@ -29,7 +26,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
             _sellerContext = sellerContext;
         }
 
-        public string CurrentFilter { get; set; }
+        public string SearchString { get; set; }
         public PaginatedListViewModel<Seller> Sellers { get;set; }
         public ValueState? ValueStateFilter { get; set; }
 
@@ -39,18 +36,8 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
 
             ViewData["ValueStates"] = GetValueStates();
 
-            CurrentFilter = parameter.SearchString;
-            if (parameter.SearchString != null)
-            {
-                parameter.PageIndex = 1;
-            }
-            else
-            {
-                parameter.SearchString = parameter.CurrentFilter;
-            }
+            SearchString = parameter.SearchString;
             ValueStateFilter = parameter.ValueState;
-
-            CurrentFilter = parameter.SearchString;
 
             if (int.TryParse(parameter.SearchString, out int id))
             {
@@ -61,9 +48,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
             }
 
             var sellerIq = _sellerContext.GetMany(parameter.SearchString, parameter.ValueState);
-
-            var pageSize = 20;
-            Sellers = await PaginationHelper.CreateAsync(_context.Basar, sellerIq.AsNoTracking(), parameter.PageIndex ?? 1, pageSize, GetPaginationPage);
+            Sellers = await PaginationHelper.CreateAsync(_context.Basar, sellerIq.AsNoTracking(), parameter.GetPageIndex(), parameter.GetPageSize(this), GetPaginationPage);
 
             return Page();
         }
@@ -77,8 +62,8 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
             Contract.Requires(seller != null);
             return this.GetPage<DetailsModel>(new DetailsParameter { SellerId = seller.Id });
         }
-        public VeloPage GetPaginationPage(int pageIndex) => this.GetPage<ListModel>(new ListParameter { PageIndex = pageIndex });
-        public VeloPage GetSearchPage() => this.GetPage<ListModel>();
+        public VeloPage GetPaginationPage(int pageIndex, int? pageSize) => this.GetPage<ListModel>(GetParameter(pageIndex, pageSize));
+        public VeloPage GetSearchPage() => this.GetPage<ListModel>(GetParameter(Sellers.PageIndex, null));
         private SelectList GetValueStates()
         {
             return new SelectList(new[]
@@ -87,6 +72,16 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
                     new Tuple<ValueState?, string>(ValueState.Settled, _context.Localizer["Abgerechnet"]),
                     new Tuple<ValueState?, string>(ValueState.NotSettled, _context.Localizer["Nicht Abgerechnet"])
                 }, "Item1", "Item2");
+        }
+        private ListParameter GetParameter(int pageIndex, int? pageSize)
+        {
+            return new ListParameter
+            {
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                SearchString = SearchString,
+                ValueState = ValueStateFilter
+            };
         }
     }
 }

@@ -9,16 +9,17 @@ namespace BraunauMobil.VeloBasar.ViewModels
 {
     public class TransactionsViewModel : IPaginatable
     {
-        private readonly Func<int, VeloPage> _getPaginationPage;
+        private readonly Func<int, int?, VeloPage> _getPaginationPage;
 
-        private TransactionsViewModel(IReadOnlyCollection<ProductsTransaction> transactions, IReadOnlyCollection<ListCommand<TransactionViewModel>> commands) : this(transactions, commands, null, 0, 0) { }
-        private TransactionsViewModel(IReadOnlyCollection<ProductsTransaction> transactions, IReadOnlyCollection<ListCommand<TransactionViewModel>> commands, Func<int, VeloPage> getPaginationPage, int pageIndex, int totalPages)
+        private TransactionsViewModel(IReadOnlyCollection<ProductsTransaction> transactions, IReadOnlyCollection<ListCommand<TransactionViewModel>> commands) : this(transactions, commands, null, 0, int.MaxValue, 0) { }
+        private TransactionsViewModel(IReadOnlyCollection<ProductsTransaction> transactions, IReadOnlyCollection<ListCommand<TransactionViewModel>> commands, Func<int, int?, VeloPage> getPaginationPage, int pageIndex, int pageSize, int totalPages)
         {
             ViewModels = transactions.Select(p => new TransactionViewModel(this, p)).ToArray();
             Commands = commands ?? Array.Empty<ListCommand<TransactionViewModel>>();
             _getPaginationPage = getPaginationPage;
             PageIndex = pageIndex;
             TotalPages = totalPages;
+            PageSize = pageSize;
         }
 
         public bool ShowDocumentLink { get; set; }
@@ -29,11 +30,12 @@ namespace BraunauMobil.VeloBasar.ViewModels
         public IReadOnlyCollection<ListCommand<TransactionViewModel>> Commands { get; }
 
         public int PageIndex { get; }
+        public int PageSize { get; }
         public int TotalPages { get; }
         public bool HasPreviousPage { get => PageIndex > 1; }
         public bool HasNextPage { get => PageIndex < TotalPages; }
 
-        public VeloPage GetPaginationPage(int pageIndex) => _getPaginationPage(pageIndex);
+        public VeloPage GetPaginationPage(int pageIndex, int? pageSize) => _getPaginationPage(pageIndex, pageSize);
 
         public static async Task<TransactionsViewModel> CreateAsync(IQueryable<ProductsTransaction> transactionsIq) => await CreateAsync(transactionsIq, null, null);
         public static async Task<TransactionsViewModel> CreateAsync(IQueryable<ProductsTransaction> transactionsIq, Func<TransactionViewModel, Task> decorateAsync, IReadOnlyCollection<ListCommand<TransactionViewModel>> commands)
@@ -50,20 +52,24 @@ namespace BraunauMobil.VeloBasar.ViewModels
             }
             return transactionsViewModel;
         }
-        public static async Task<TransactionsViewModel> CreateAsync(IQueryable<ProductsTransaction> transactionsIq, int pageIndex, int pageSize, Func<int, VeloPage> getPaginationPage, IReadOnlyCollection<ListCommand<TransactionViewModel>> commands)
+        public static async Task<TransactionsViewModel> CreateAsync(IQueryable<ProductsTransaction> transactionsIq, int pageIndex, int pageSize, Func<int, int?, VeloPage> getPaginationPage, IReadOnlyCollection<ListCommand<TransactionViewModel>> commands)
         {
             if (pageIndex == 0)
             {
                 pageIndex = 1;
             }
 
+            if (pageSize == int.MaxValue)
+            {
+                return new TransactionsViewModel(await transactionsIq.AsNoTracking().ToArrayAsync(), commands, getPaginationPage, pageIndex, pageSize, 1);
+            }
             var count = await transactionsIq.CountAsync();
             var totalPages = CalcTotalPages(count, pageSize);
             pageIndex = Math.Min(pageIndex, totalPages);
             var skipCount = Math.Max(pageIndex - 1, 0) * pageSize;
             var items = await transactionsIq.Skip(skipCount).Take(pageSize).AsNoTracking().ToArrayAsync();
 
-            return new TransactionsViewModel(items, commands, getPaginationPage, pageIndex, totalPages);
+            return new TransactionsViewModel(items, commands, getPaginationPage, pageIndex, pageSize, totalPages);
         }
         private static int CalcTotalPages(int count, int pageSize)
         {

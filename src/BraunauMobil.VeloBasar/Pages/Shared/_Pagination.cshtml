@@ -3,9 +3,34 @@
     var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
     var nextDisabled = !Model.HasNextPage ? "disabled" : "";
 }
+<div class="row">
+    <nav>
+        <ul class="pagination">
+            @{
+                var pageSizes = new[] { 5, 10, 15, int.MaxValue };
+                foreach (var pageSize in pageSizes)
+                {
+                    var isActive = Model.PageSize == pageSize ? "active" : "";
+                    <li class="page-item @isActive">
+                        <a class="page-link" velo-page="@Model.GetPaginationPage(Model.PageIndex, pageSize)">
+                            @if (pageSize == int.MaxValue)
+                            {
+                                @Localizer["Alle"]
+                            }
+                            else
+                            {
+                                @pageSize
+                            }
+                        </a>
+                    </li>
+                }
+            }
+        </ul>
+    </nav>
+
 @if (Model.TotalPages > 1)
 {
-    <nav aria-label="...">
+    <nav class="mx-4">
         <ul class="pagination flex-wrap">
             <li class="page-item @prevDisabled">
                 <a class="page-link @prevDisabled" velo-page="@Model.GetPaginationPage(Model.PageIndex - 1)">@Localizer["<<<"]</a>
@@ -22,5 +47,5 @@
             </li>
         </ul>
     </nav>
-
 }
+</div>

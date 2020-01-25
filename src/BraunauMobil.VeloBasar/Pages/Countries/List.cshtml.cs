@@ -9,12 +9,6 @@ using System.Diagnostics.Contracts;
 
 namespace BraunauMobil.VeloBasar.Pages.Countries
 {
-    public class ListParameter
-    {
-        public string CurrentFilter { get; set; }
-        public string SearchString { get; set; }
-        public int? PageIndex { get; set; }
-    }
     [Authorize]
     public class ListModel : PageModel, ISearchable
     {
@@ -27,28 +21,17 @@ namespace BraunauMobil.VeloBasar.Pages.Countries
             _CountryContext = CountryContext;
         }
 
-        public string CurrentFilter { get; set; }
+        public string SearchString { get; set; }
         public PaginatedListViewModel<Country> Countries { get; set; }
 
-        public async Task OnGetAsync(ListParameter parameter)
+        public async Task OnGetAsync(SearchAndPaginationParameter parameter)
         {
             Contract.Requires(parameter != null);
 
-            CurrentFilter = parameter.SearchString;
-            if (parameter.SearchString != null)
-            {
-                parameter.PageIndex = 1;
-            }
-            else
-            {
-                parameter.SearchString = parameter.CurrentFilter;
-            }
-
-            CurrentFilter = parameter.SearchString;
+            SearchString = parameter.SearchString;
 
             var CountryIq = _CountryContext.GetMany(parameter.SearchString);
-            var pageSize = 10;
-            Countries = await PaginationHelper.CreateAsync(_context.Basar, CountryIq.AsNoTracking(), parameter.PageIndex ?? 1, pageSize, GetPaginationPage);
+            Countries = await PaginationHelper.CreateAsync(_context.Basar, CountryIq.AsNoTracking(), parameter.GetPageIndex(), parameter.GetPageSize(this), GetPaginationPage);
         }
         public VeloPage GetDeletePage(Country item)
         {
@@ -60,8 +43,8 @@ namespace BraunauMobil.VeloBasar.Pages.Countries
             Contract.Requires(item != null);
             return this.GetPage<EditModel>(new EditParameter { CountryId = item.Id, PageIndex = Countries.PageIndex });
         }
-        public VeloPage GetPaginationPage(int pageIndex) => this.GetPage<ListModel>(new ListParameter { PageIndex = pageIndex });
-        public VeloPage GetSearchPage() => this.GetPage<ListModel>();
+        public VeloPage GetPaginationPage(int pageIndex, int? pageSize) => this.GetPage<ListModel>(pageIndex, pageSize);
+        public VeloPage GetSearchPage() => this.GetPage<ListModel>(Countries.PageIndex, null);
         public async Task<bool> CanDeleteAsync(Country item) => await _CountryContext.CanDeleteAsync(item);
     }
 }

@@ -9,12 +9,6 @@ using System.Diagnostics.Contracts;
 
 namespace BraunauMobil.VeloBasar.Pages.ProductTypes
 {
-    public class ListParameter
-    {
-        public string CurrentFilter { get; set; }
-        public string SearchString { get; set; }
-        public int? PageIndex { get; set; }
-    }
     [Authorize]
     public class ListModel : PageModel, ISearchable
     {
@@ -27,28 +21,17 @@ namespace BraunauMobil.VeloBasar.Pages.ProductTypes
             _productTypeContext = productTypeContext;
         }
 
-        public string CurrentFilter { get; set; }
+        public string SearchString { get; set; }
         public PaginatedListViewModel<ProductType> ProductTypes { get;set; }
 
-        public async Task OnGetAsync(ListParameter parameter)
+        public async Task OnGetAsync(SearchAndPaginationParameter parameter)
         {
             Contract.Requires(parameter != null);
 
-            CurrentFilter = parameter.SearchString;
-            if (parameter.SearchString != null)
-            {
-                parameter.PageIndex = 1;
-            }
-            else
-            {
-                parameter.SearchString = parameter.CurrentFilter;
-            }
-
-            CurrentFilter = parameter.SearchString;
+            SearchString = parameter.SearchString;
 
             var ProductTypeIq = _productTypeContext.GetMany(parameter.SearchString);
-            var pageSize = 10;
-            ProductTypes = await PaginationHelper.CreateAsync(_context.Basar, ProductTypeIq.AsNoTracking(), parameter.PageIndex ?? 1, pageSize, GetPaginationPage);
+            ProductTypes = await PaginationHelper.CreateAsync(_context.Basar, ProductTypeIq.AsNoTracking(), parameter.GetPageIndex(), parameter.GetPageSize(this), GetPaginationPage);
         }
         public VeloPage GetDeletePage(ProductType item)
         {
@@ -60,8 +43,8 @@ namespace BraunauMobil.VeloBasar.Pages.ProductTypes
             Contract.Requires(item != null);
             return this.GetPage<EditModel>(new EditParameter { PageIndex = ProductTypes.PageIndex, ProductTypeId = item.Id });
         }
-        public VeloPage GetPaginationPage(int pageIndex) => this.GetPage<ListModel>(new ListParameter { PageIndex = pageIndex });
-        public VeloPage GetSearchPage() => this.GetPage<ListModel>();
+        public VeloPage GetPaginationPage(int pageIndex, int? pageSize) => this.GetPage<ListModel>(pageIndex, pageSize);
+        public VeloPage GetSearchPage() => this.GetPage<ListModel>(ProductTypes.PageIndex, null);
         public VeloPage GetSetStatePage(ProductType item, ObjectState stateToSet)
         {
             Contract.Requires(item != null);

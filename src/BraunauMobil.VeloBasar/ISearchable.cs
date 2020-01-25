@@ -1,11 +1,8 @@
-﻿using System;
-
-namespace BraunauMobil.VeloBasar
+﻿namespace BraunauMobil.VeloBasar
 {
     public interface ISearchable
     {
-        string CurrentFilter { get; }
-        
+        string SearchString { get; }
         VeloPage GetSearchPage();
     }
 }
