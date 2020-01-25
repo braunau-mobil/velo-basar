@@ -28,7 +28,7 @@ namespace BraunauMobil.VeloBasar.Logic
         {
             Contract.Requires(config != null);
 
-            await _db.Database.EnsureCreatedAsync();
+            await _db.Database.MigrateAsync();
 
             var adminUser = new IdentityUser
             {

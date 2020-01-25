@@ -48,7 +48,7 @@ namespace BraunauMobil.VeloBasar.Logic
             }
 
             await _db.Database.EnsureDeletedAsync();
-            await _db.Database.EnsureCreatedAsync();
+            await _db.Database.MigrateAsync();
 
             await _setupContext.InitializeDatabaseAsync(config);
 
