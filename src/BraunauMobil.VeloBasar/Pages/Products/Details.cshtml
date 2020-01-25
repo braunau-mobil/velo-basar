@@ -46,24 +46,7 @@
     </div>
 
     <div class="card-body">
-        <dl class="row m-0">
-            <dt class="col-1"><label asp-for="@Model.Product.Type"></label></dt>
-            <dd class="col-11">@Model.Product.Type.Name</dd>
-
-            <dt class="col-1"><label asp-for="@Model.Product.Brand"></label></dt>
-            <dd class="col-11">@Model.Product.Brand.Name</dd>
-
-            <dt class="col-1"><label asp-for="@Model.Product.Description"></label></dt>
-            <dd class="col-11">
-                <p>@Model.Product.Description</p>
-            </dd>
-
-            <dt class="col-1"><label asp-for="@Model.Product.Color"></label></dt>
-            <dd class="col-11">@Model.Product.Color</dd>
-
-            <dt class="col-1"><label asp-for="@Model.Product.Price"></label></dt>
-            <dd class="col-11">@Model.Product.Price</dd>
-        </dl>
+        <partial name="/Pages/Products/_Properties.cshtml" model="@Model.Product" />
     </div>
 </div>
 
