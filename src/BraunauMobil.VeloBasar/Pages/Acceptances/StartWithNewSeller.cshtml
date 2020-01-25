@@ -1,5 +1,6 @@
 ﻿@page
 @model StartWithNewSellerModel
+@using Newtonsoft.Json;
 
 @{
     ViewData["Title"] = Localizer["Annahme - Verkäufer eingeben"];
@@ -38,20 +39,20 @@
             </div>
 
             <div class="form-group">
-                <label asp-for="Seller.Street" class="control-label"></label>
-                <input asp-for="Seller.Street" class="form-control" velo-validation-for="Seller.Street" velo-validation-condition="Model.IsValidationEnabled" />
+                <label asp-for="Seller.Country" class="control-label"></label>
+                <select asp-for="Seller.CountryId" class="form-control" asp-items="ViewBag.Countries"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Seller.ZIP" class="control-label"></label>
+                <input asp-for="Seller.ZIP" class="form-control" velo-validation-for="Seller.ZIP" velo-validation-condition="Model.IsValidationEnabled" onchange="handleZipChanged()" />
             </div>
             <div class="form-group">
                 <label asp-for="Seller.City" class="control-label"></label>
                 <input asp-for="Seller.City" class="form-control" velo-validation-for="Seller.City" velo-validation-condition="Model.IsValidationEnabled" />
             </div>
             <div class="form-group">
-                <label asp-for="Seller.ZIP" class="control-label"></label>
-                <input asp-for="Seller.ZIP" class="form-control" velo-validation-for="Seller.ZIP" velo-validation-condition="Model.IsValidationEnabled" />
-            </div>
-            <div class="form-group">
-                <label asp-for="Seller.Country" class="control-label"></label>
-                <select asp-for="Seller.CountryId" class="form-control" asp-items="ViewBag.Countries"></select>
+                <label asp-for="Seller.Street" class="control-label"></label>
+                <input asp-for="Seller.Street" class="form-control" velo-validation-for="Seller.Street" velo-validation-condition="Model.IsValidationEnabled" />
             </div>
             <div class="form-group">
                 <label asp-for="Seller.IBAN" class="control-label"></label>
@@ -71,3 +72,18 @@
         </form>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        function handleZipChanged() {
+            var zip = $('#Seller_ZIP').val();
+            var countryId = $('#Seller_CountryId').val();
+            $('#Seller_City').val(getCity(countryId, zip));
+        }
+        function getCity(countryId, zip) {
+            var map = @Html.Raw(JsonConvert.SerializeObject(Model.GetZipMap()));
+            return map[countryId][zip];
+            return 
+        }
+    </script>
+}

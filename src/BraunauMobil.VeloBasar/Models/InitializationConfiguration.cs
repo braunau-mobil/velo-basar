@@ -13,5 +13,7 @@ namespace BraunauMobil.VeloBasar.Models
         public bool GenerateBrands { get; set; }
         [Display(Name = "Beispiel Produkt Typen generieren")]
         public bool GenerateProductTypes { get; set; }
+        [Display(Name = "Postleitzahlen laden")]
+        public bool GenerateZipMap { get; set; }
     }
 }

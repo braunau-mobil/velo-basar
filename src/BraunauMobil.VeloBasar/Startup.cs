@@ -102,6 +102,7 @@ namespace BraunauMobil.VeloBasar
             services.AddScoped<ISetupContext, SetupContext>();
             services.AddScoped<IStatisticContext, StatisticContext>();
             services.AddScoped<ITransactionContext, TransactionContext>();
+            services.AddScoped<IZipMapContext, ZipMapContext>();
 
             services.AddScoped<IPrintService, PdfPrintService>();
             services.AddScoped<IVeloContext, DefaultVeloContext>();

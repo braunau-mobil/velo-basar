@@ -19,7 +19,8 @@ namespace BraunauMobil.VeloBasar.Pages.DevTools
             {
                 GenerateBrands = true,
                 GenerateCountries = true,
-                GenerateProductTypes = true
+                GenerateProductTypes = true,
+                GenerateZipMap = true
             };
         }
 

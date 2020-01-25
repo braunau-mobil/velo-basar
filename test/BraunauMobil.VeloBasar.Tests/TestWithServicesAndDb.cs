@@ -43,8 +43,13 @@ namespace BraunauMobil.VeloBasar.Tests
         protected IStatisticContext StatisticContext { get; private set; }
         protected ITransactionContext TransactionContext { get; private set; }
         protected IPrintService PrintService { get; private set; }
+        protected IZipMapContext ZipMapContext { get; private set; }
 
         protected async Task RunOnInitializedDb(Func<Task> action)
+        {
+            await RunOnInitializedDb(async db => await action());
+        }
+        protected async Task RunOnInitializedDb(Func<VeloRepository, Task> action)
         {
             Contract.Requires(action != null);
             
@@ -63,6 +68,7 @@ namespace BraunauMobil.VeloBasar.Tests
             StatisticContext = serviceProvider.GetRequiredService<IStatisticContext>();
             TransactionContext = serviceProvider.GetRequiredService<ITransactionContext>();
             PrintService = serviceProvider.GetRequiredService<IPrintService>();
+            ZipMapContext = serviceProvider.GetRequiredService<IZipMapContext>();
 
             // Create the schema in the database
             var options = new DbContextOptionsBuilder<VeloRepository>()
@@ -74,7 +80,7 @@ namespace BraunauMobil.VeloBasar.Tests
             await context.Database.EnsureCreatedAsync();
             await SetupContext.InitializeDatabaseAsync(new InitializationConfiguration());
 
-            await action();
+            await action(context);
         }
     }
 }

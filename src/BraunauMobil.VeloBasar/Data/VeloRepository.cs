@@ -23,6 +23,7 @@ namespace BraunauMobil.VeloBasar.Data
         public DbSet<Seller> Sellers { get; set; }
         public DbSet<ProductsTransaction> Transactions { get; set; }
         public DbSet<ProductType> ProductTypes { get; set; }
+        public DbSet<ZipMap> ZipMap { get; set; }
 
         public bool IsInitialized()
         {
@@ -38,6 +39,7 @@ namespace BraunauMobil.VeloBasar.Data
 
             modelBuilder.Entity<ProductToTransaction>().HasKey(ap => new { ap.ProductId, ap.TransactionId });
             modelBuilder.Entity<Number>().HasKey(n => new { n.BasarId, n.Type });
+            modelBuilder.Entity<ZipMap>().HasKey(z => new { z.Zip, z.CountryId });
         }
     }
 }

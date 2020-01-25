@@ -1,6 +1,7 @@
 ﻿using BraunauMobil.VeloBasar.Data;
 using BraunauMobil.VeloBasar.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics.Contracts;
 using System.Threading.Tasks;
 
@@ -66,6 +67,11 @@ namespace BraunauMobil.VeloBasar.Logic
             if (config.GenerateProductTypes)
             {
                 GenerateProductTypes();
+            }
+
+            if (config.GenerateZipMap)
+            {
+                _db.ZipMap.AddRange(new ZipCollection(await _db.Countries.ToListAsync())); ;
             }
 
             await _db.SaveChangesAsync();

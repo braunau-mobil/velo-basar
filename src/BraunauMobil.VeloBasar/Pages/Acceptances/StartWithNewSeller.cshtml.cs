@@ -6,6 +6,7 @@ using BraunauMobil.VeloBasar.ViewModels;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using BraunauMobil.VeloBasar.Logic;
 using System.Diagnostics.Contracts;
+using System.Collections.Generic;
 
 namespace BraunauMobil.VeloBasar.Pages.Acceptances
 {
@@ -19,13 +20,15 @@ namespace BraunauMobil.VeloBasar.Pages.Acceptances
         private readonly IVeloContext _context;
         private readonly ISellerContext _sellerContext;
         private readonly ICountryContext _countryContext;
+        private readonly IZipMapContext _zipMapContext;
         private bool _isValidationEnabled;
 
-        public StartWithNewSellerModel(IVeloContext context, ISellerContext sellerContext, ICountryContext countryContext)
+        public StartWithNewSellerModel(IVeloContext context, ISellerContext sellerContext, ICountryContext countryContext, IZipMapContext zipMapContext)
         {
             _context = context;
             _sellerContext = sellerContext;
             _countryContext = countryContext;
+            _zipMapContext = zipMapContext;
         }
 
         public string ErrorText { get; set; }
@@ -119,5 +122,6 @@ namespace BraunauMobil.VeloBasar.Pages.Acceptances
         {
             return _isValidationEnabled;
         }
+        public IDictionary<int, IDictionary<string, string>> GetZipMap() => _zipMapContext.GetMap();
     }
 }
