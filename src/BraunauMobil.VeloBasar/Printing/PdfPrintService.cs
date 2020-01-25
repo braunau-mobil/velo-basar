@@ -104,14 +104,28 @@ namespace BraunauMobil.VeloBasar.Printing
                 var info = new Paragraph()
                     .Add(GetSmallText($"{product.Brand.Name} - {product.Type.Name}").SetBold())
                     .Add(Environment.NewLine)
-                    .Add(GetSmallText(product.Description))
-                    .Add(Environment.NewLine)
-                    .Add(GetSmallText(product.Color))
-                    .Add(Environment.NewLine)
-                    .Add(GetSmallText(_localizer["Rahmennummer: {0}", product.FrameNumber]))
-                    .Add(Environment.NewLine)
-                    .Add(GetSmallText(_localizer["Reifengröße: {0}", product.TireSize]))
-                    .SetMargin(2);
+                    .Add(GetSmallText(product.Description));
+
+                if (product.Color != null)
+                {
+                    info.Add(Environment.NewLine)
+                        .Add(GetSmallText(product.Color));
+                }
+
+                if (product.FrameNumber != null)
+                {
+                    info.Add(Environment.NewLine)
+                        .Add(GetSmallText(_localizer["Rahmennummer: {0}", product.FrameNumber]));
+                }
+
+                if (product.TireSize != null)
+                {
+                    info.Add(Environment.NewLine)
+                        .Add(GetSmallText(_localizer["Reifengröße: {0}", product.TireSize]));
+
+                }
+
+                info.SetMargin(2);
                 doc.Add(info);
 
                 
