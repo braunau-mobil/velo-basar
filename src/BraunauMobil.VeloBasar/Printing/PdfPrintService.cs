@@ -131,19 +131,19 @@ namespace BraunauMobil.VeloBasar.Printing
                 
                 var barcodeAndPrice = new Paragraph()
                     .SetTextAlignment(TextAlignment.CENTER);
-                var barcode = new BarcodeEAN(pdfDoc);
-                barcode.SetCode($"{product.Id:0000000000000}");
+                var barcode = new Barcode128(pdfDoc);
+                barcode.SetCode($"{product.Id}");
                 var price = GetBigText(string.Format(CultureInfo.CurrentCulture, "{0:C}", product.Price))
                     .SetBold()
                     .SetTextAlignment(TextAlignment.RIGHT)
                     .SetBorderTop(new SolidBorder(2))
-                    .SetWidth(45f.ToUnit());
+                    .SetWidth(40f.ToUnit());
 
                 barcodeAndPrice
                     .Add(new Image(barcode.CreateFormXObject(pdfDoc)))
                     .Add(new Text(Environment.NewLine))
                     .Add(price)
-                    .SetFixedPosition(0f, 0f, 45f.ToUnit());
+                    .SetFixedPosition(5f, 5f, 40f.ToUnit());
 
                 doc.Add(barcodeAndPrice);
             });
