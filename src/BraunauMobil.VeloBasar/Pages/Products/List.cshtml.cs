@@ -57,10 +57,6 @@ namespace BraunauMobil.VeloBasar.Pages.Products
                 new ListCommand<ProductViewModel>(vm => this.GetPage<DetailsModel>(new DetailsParameter { ProductId = vm.Product.Id }))
                 {
                     Text = _context.Localizer["Details"]
-                },
-                new ListCommand<ProductViewModel>(vm => vm.Product.Label != null, vm => this.GetPage<ShowFileModel>(new ShowFileParameter { FileId = vm.Product.Label.Value }))
-                {
-                    Text = _context.Localizer["Etikett"]
                 }
             });
             Products.ShowSeller = true;
