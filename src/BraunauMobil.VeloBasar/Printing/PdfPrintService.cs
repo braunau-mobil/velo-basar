@@ -214,11 +214,19 @@ namespace BraunauMobil.VeloBasar.Printing
                     doc.Add(GetSpacer(20));
                 }
 
-                AddSubtitle(doc, settings.Settlement.SoldTitle);
-                AddProductTable(doc, products.GetProductsToPayout(), _localizer["Verkaufspreis"]);
+                var payoutProducts = products.GetProductsToPayout();
+                if (payoutProducts.Any())
+                {
+                    AddSubtitle(doc, settings.Settlement.SoldTitle);
+                    AddProductTable(doc, payoutProducts, _localizer["Verkaufspreis"]);
+                }
 
-                AddSubtitle(doc, settings.Settlement.NotSoldTitle);
-                AddProductTable(doc, products.GetProductsToPickup(), _localizer["Preis"]);
+                var pickupProducts = products.GetProductsToPickup();
+                if (pickupProducts.Any())
+                {
+                    AddSubtitle(doc, settings.Settlement.NotSoldTitle);
+                    AddProductTable(doc, pickupProducts, _localizer["Preis"]);
+                }
 
                 doc.Add(GetSpacer(20));
                 doc.Add(GetRegularText(settings.Settlement.ConfirmationText));
