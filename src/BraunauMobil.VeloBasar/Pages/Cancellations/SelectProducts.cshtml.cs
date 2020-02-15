@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using BraunauMobil.VeloBasar.Logic;
 using BraunauMobil.VeloBasar.Models;
 using BraunauMobil.VeloBasar.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -13,6 +14,7 @@ namespace BraunauMobil.VeloBasar.Pages.Cancellations
     {
         public int SaleId { get; set; }
     }
+    [Authorize]
     public class SelectProductsModel : PageModel
     {
         private readonly IVeloContext _context;

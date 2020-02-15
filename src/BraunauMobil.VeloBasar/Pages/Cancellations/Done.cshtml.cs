@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using BraunauMobil.VeloBasar.Logic;
 using System.Diagnostics.Contracts;
 using BraunauMobil.VeloBasar.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BraunauMobil.VeloBasar.Pages.Cancellations
 {
@@ -13,6 +14,7 @@ namespace BraunauMobil.VeloBasar.Pages.Cancellations
         public int CancellationId { get; set; }
         public int? SaleId { get; set; }
     }
+    [Authorize]
     public class DoneModel : PageModel
     {
         private readonly ITransactionContext _context;

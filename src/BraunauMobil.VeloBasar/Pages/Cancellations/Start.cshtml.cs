@@ -5,9 +5,11 @@ using BraunauMobil.VeloBasar.Models;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using BraunauMobil.VeloBasar.Logic;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BraunauMobil.VeloBasar.Pages.Cancellations
 {
+    [Authorize]
     public class StartModel : PageModel
     {
         private readonly IVeloContext _context;
