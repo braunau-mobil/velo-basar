@@ -44,7 +44,7 @@ namespace BraunauMobil.VeloBasar.Logic
             }
             return _db.ProductTypes.Where(ProductTypeSearch(searchString)).DefaultOrder();
         }
-        public SelectList GetSelectList() => new SelectList(_db.ProductTypes, "Id", "Name");
+        public SelectList GetSelectList() => new SelectList(_db.ProductTypes.DefaultOrder(), "Id", "Name");
         public async Task SetStateAsync(int id, ObjectState state)
         {
             var productType = await GetAsync(id);
