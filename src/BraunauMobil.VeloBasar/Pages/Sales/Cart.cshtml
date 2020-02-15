@@ -20,8 +20,8 @@
         </form>
 
         <div>
-            <a velo-page="(this.GetPage<ClearCartModel>())" class="ml-auto btn btn-secondary">@Localizer["Warenkorb leeren"]</a>
-            <a velo-page="(this.GetPage<CheckoutModel>())" class="ml-auto btn btn-primary">@Localizer["Weiter"]</a>
+            <a Condition="Model.Products.ViewModels.Count > 0" velo-page="(this.GetPage<ClearCartModel>())" class="ml-auto btn btn-secondary">@Localizer["Warenkorb leeren"]</a>
+            <a Condition="Model.Products.ViewModels.Count > 0" velo-page="(this.GetPage<CheckoutModel>())" class="ml-auto btn btn-primary">@Localizer["Weiter"]</a>
         </div>
     </div>
 

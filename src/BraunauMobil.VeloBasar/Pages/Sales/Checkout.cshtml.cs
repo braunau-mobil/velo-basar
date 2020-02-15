@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using BraunauMobil.VeloBasar.Logic;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -19,6 +20,11 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
         public async Task<IActionResult> OnGetAsync()
         {
             var productIds = Request.Cookies.GetCart();
+            if (productIds.Count <= 0)
+            {
+                return StatusCode(StatusCodes.Status405MethodNotAllowed);
+            }
+
             var sale = await _transactionContext.CheckoutProductsAsync(_context.Basar, productIds);
             
             if (sale == null)
