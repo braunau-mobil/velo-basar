@@ -45,7 +45,7 @@ namespace BraunauMobil.VeloBasar.Logic
             return _db.Brands.Where(BrandSearch(searchString)).DefaultOrder();
         }
 
-        public SelectList GetSelectList() => new SelectList(_db.Brands, "Id", "Name");
+        public SelectList GetSelectList() => new SelectList(_db.Brands.DefaultOrder(), "Id", "Name");
         public async Task UpdateAsync(Brand brand)
         {
             _db.Attach(brand).State = EntityState.Modified;
