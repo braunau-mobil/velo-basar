@@ -58,6 +58,10 @@ namespace BraunauMobil.VeloBasar.Models
         [Display(Name = "Verkäufer")]
         public Seller Seller { get; set; }
 
+        public bool CanEdit()
+        {
+            return StorageState == StorageState.Available && ValueState == ValueState.NotSettled;
+        }
         public bool IsAllowed(TransactionType transactionType)
         {
             if (ValueState == ValueState.Settled)

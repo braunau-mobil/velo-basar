@@ -41,7 +41,10 @@
             {
                 <a class="btn btn-primary mx-1" velo-page="@Model.GetShowFilePage()" target="_blank">@Localizer["Etikett"]</a>
             }
-            <a velo-page="@Model.GetEditPage()" class="btn btn-secondary mx-1">@Localizer["Bearbeiten"]</a>
+            @if (Model.Product.CanEdit())
+            {
+                <a velo-page="@Model.GetEditPage()" class="btn btn-secondary mx-1">@Localizer["Bearbeiten"]</a>
+            }
         </div>
     </div>
 
