@@ -20,7 +20,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
         }
 
         public string SearchString { get; set; }
-        public PaginatedListViewModel<ProductsTransaction> Sales { get; set; }
+        public TransactionsViewModel Sales { get; set; }
 
         public async Task OnGetAsync(SearchAndPaginationParameter parameter)
         {
@@ -29,7 +29,8 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
             SearchString = parameter.SearchString;
 
             var salesIq = _transactionContext.GetMany(_context.Basar, TransactionType.Sale, parameter.SearchString);
-            Sales = await PaginationHelper.CreateAsync(_context.Basar, salesIq.AsNoTracking(), parameter.GetPageIndex(), parameter.GetPageSize(this), GetPaginationPage);
+            Sales = await TransactionsViewModel.CreateAsync(salesIq.AsNoTracking(), parameter.GetPageIndex(), parameter.GetPageSize(this), GetPaginationPage, null);
+            Sales.ShowDocumentLink = true;
         }
         public VeloPage GetDetailsPage(ProductsTransaction item)
         {

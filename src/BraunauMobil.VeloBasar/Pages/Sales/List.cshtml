@@ -14,31 +14,7 @@
 
         <div class="card-body p-0">
 
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th style="width: auto;">@Html.DisplayNameFor(model => model.Sales.List[0].Item.Number)</th>
-                        <th style="width: 100%;">@Html.DisplayNameFor(model => model.Sales.List[0].Item.TimeStamp)</th>
-                        <th style="width: auto;"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var itemViewModel in Model.Sales.List)
-                    {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => itemViewModel.Item.Number)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => itemViewModel.Item.TimeStamp)
-                            </td>
-                            <td>
-                                <a velo-page="@Model.GetDetailsPage(itemViewModel.Item)">@Localizer["Details"]</a>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+            <partial name="/Pages/Transactions/_TransactionsView.cshtml" model="@Model.Sales" />
         </div>
     </div>
 </form>
