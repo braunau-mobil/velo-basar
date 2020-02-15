@@ -1,7 +1,7 @@
 ﻿@page
 @model EnterProductsModel
 @{
-    ViewData["Title"] = Localizer["Annahme - Artikel eingeben"];
+    ViewData["Title"] = Localizer["Annahme für Verkäufer ID: {0} - Artikel eingeben", Model.SellerId];
 }
 
 <form method="post">

@@ -36,6 +36,7 @@ namespace BraunauMobil.VeloBasar.Pages.Acceptances
         public Product NewProduct { get; set; }
         public EnterProductsParameter Parameter { get; set; }
         public ListViewModel<Product> Products { get; set; }
+        public int SellerId { get => _parameter.SellerId; }
 
         public void OnGet(EnterProductsParameter parameter)
         {
