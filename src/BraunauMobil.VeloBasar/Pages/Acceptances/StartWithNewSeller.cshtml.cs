@@ -85,6 +85,8 @@ namespace BraunauMobil.VeloBasar.Pages.Acceptances
                 {
                     ErrorText = _context.Localizer["Es konnte kein Verkäufer gefunden werden."];
                 }
+
+                return Page();
             }
 
             if (string.IsNullOrEmpty(Seller.FirstName) || string.IsNullOrEmpty(Seller.LastName))
