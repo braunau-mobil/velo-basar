@@ -84,7 +84,6 @@ namespace BraunauMobil.VeloBasar.Pages.Acceptances
                 Seller = new Seller
                 {
                     BankAccountHolder = "Bilbo Beutlin",
-                    BIC = "ABC123456789",
                     City = "Hopfenhause",
                     Country = new Country
                     {

@@ -38,12 +38,12 @@ namespace BraunauMobil.VeloBasar.Models
         [Display(Name = "Land")]
         public Country Country { get; set; }
 
+        [Display(Name = "Telefonnummer")]
+        public string PhoneNumber { get; set; }
+
         [Display(Name = "IBAN")]
         [Iban]
         public string IBAN { get; set; }
-
-        [Display(Name = "BIC")]
-        public string BIC { get; set; }
 
         [Display(Name = "Kontoinhaber")]
         public string BankAccountHolder { get; set; }

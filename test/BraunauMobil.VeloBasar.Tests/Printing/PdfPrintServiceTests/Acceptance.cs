@@ -72,7 +72,6 @@ namespace BraunauMobil.VeloBasar.Tests.Printing.PdfPrintServiceTests
                 Seller = new Seller
                 {
                     BankAccountHolder = "Bilbo Beutlin",
-                    BIC = "ABC123456789",
                     City = "Hopfenhause",
                     Country = new Country
                     {

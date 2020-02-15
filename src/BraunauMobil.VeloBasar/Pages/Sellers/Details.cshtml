@@ -29,10 +29,10 @@
                 </p>
                 <h5 class="card-title">@Localizer["Bankdaten"]</h5>
                 <p class="card-text">
+                    @Html.DisplayNameFor(model => model.Seller.PhoneNumber):
+                    @Html.DisplayFor(model => model.Seller.PhoneNumber)<br />
                     @Html.DisplayNameFor(model => model.Seller.IBAN):
                     @Html.DisplayFor(model => model.Seller.IBAN)<br />
-                    @Html.DisplayNameFor(model => model.Seller.BIC):
-                    @Html.DisplayFor(model => model.Seller.BIC)<br />
                     @Html.DisplayNameFor(model => model.Seller.BankAccountHolder):
                     @Html.DisplayFor(model => model.Seller.BankAccountHolder)<br />
                 </p>
