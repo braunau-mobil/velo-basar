@@ -10,7 +10,7 @@
             <div class="mr-auto"><h5>@ViewData["Title"]</h5></div>
             <div class="d-flex justify-content-end">
                 <a velo-page="@Model.GetCancelPage()" class="btn btn-secondary mx-1">@Localizer["Abbrechen"]</a>
-                <a Condition="@Model.Products.List.Count > 0" class="btn btn-primary mx-1" velo-page="@Model.GetAcceptPage()">@Localizer["Annahmebeleg drucken"]</a>
+                <a Condition="@Model.Products.List.Count > 0" class="btn btn-primary mx-1" velo-page="@Model.GetAcceptPage()">@Localizer["Annahmebeleg speichern"]</a>
             </div>
         </div>
 
