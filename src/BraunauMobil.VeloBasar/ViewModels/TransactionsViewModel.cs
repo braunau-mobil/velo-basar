@@ -11,11 +11,11 @@ namespace BraunauMobil.VeloBasar.ViewModels
     {
         private readonly Func<int, int?, VeloPage> _getPaginationPage;
 
-        private TransactionsViewModel(IReadOnlyCollection<ProductsTransaction> transactions, IReadOnlyCollection<ListCommand<TransactionViewModel>> commands) : this(transactions, commands, null, 0, int.MaxValue, 0) { }
-        private TransactionsViewModel(IReadOnlyCollection<ProductsTransaction> transactions, IReadOnlyCollection<ListCommand<TransactionViewModel>> commands, Func<int, int?, VeloPage> getPaginationPage, int pageIndex, int pageSize, int totalPages)
+        private TransactionsViewModel(IReadOnlyCollection<ProductsTransaction> transactions, IReadOnlyCollection<ListCommand<TransactionItemViewModel>> commands) : this(transactions, commands, null, 0, int.MaxValue, 0) { }
+        private TransactionsViewModel(IReadOnlyCollection<ProductsTransaction> transactions, IReadOnlyCollection<ListCommand<TransactionItemViewModel>> commands, Func<int, int?, VeloPage> getPaginationPage, int pageIndex, int pageSize, int totalPages)
         {
-            ViewModels = transactions.Select(p => new TransactionViewModel(this, p)).ToArray();
-            Commands = commands ?? Array.Empty<ListCommand<TransactionViewModel>>();
+            ViewModels = transactions.Select(p => new TransactionItemViewModel(this, p)).ToArray();
+            Commands = commands ?? Array.Empty<ListCommand<TransactionItemViewModel>>();
             _getPaginationPage = getPaginationPage;
             PageIndex = pageIndex;
             TotalPages = totalPages;
@@ -26,8 +26,8 @@ namespace BraunauMobil.VeloBasar.ViewModels
         public bool ShowNotes { get; set; }
         public bool ShowType { get; set; }
         public bool NotEmpty { get => ViewModels.Any(); }
-        public IReadOnlyList<TransactionViewModel> ViewModels { get; }
-        public IReadOnlyCollection<ListCommand<TransactionViewModel>> Commands { get; }
+        public IReadOnlyList<TransactionItemViewModel> ViewModels { get; }
+        public IReadOnlyCollection<ListCommand<TransactionItemViewModel>> Commands { get; }
 
         public int PageIndex { get; }
         public int PageSize { get; }
@@ -38,7 +38,7 @@ namespace BraunauMobil.VeloBasar.ViewModels
         public VeloPage GetPaginationPage(int pageIndex, int? pageSize) => _getPaginationPage(pageIndex, pageSize);
 
         public static async Task<TransactionsViewModel> CreateAsync(IQueryable<ProductsTransaction> transactionsIq) => await CreateAsync(transactionsIq, null, null);
-        public static async Task<TransactionsViewModel> CreateAsync(IQueryable<ProductsTransaction> transactionsIq, Func<TransactionViewModel, Task> decorateAsync, IReadOnlyCollection<ListCommand<TransactionViewModel>> commands)
+        public static async Task<TransactionsViewModel> CreateAsync(IQueryable<ProductsTransaction> transactionsIq, Func<TransactionItemViewModel, Task> decorateAsync, IReadOnlyCollection<ListCommand<TransactionItemViewModel>> commands)
         {
             var items = await transactionsIq.AsNoTracking().ToArrayAsync();
 
@@ -52,7 +52,7 @@ namespace BraunauMobil.VeloBasar.ViewModels
             }
             return transactionsViewModel;
         }
-        public static async Task<TransactionsViewModel> CreateAsync(IQueryable<ProductsTransaction> transactionsIq, int pageIndex, int pageSize, Func<int, int?, VeloPage> getPaginationPage, IReadOnlyCollection<ListCommand<TransactionViewModel>> commands)
+        public static async Task<TransactionsViewModel> CreateAsync(IQueryable<ProductsTransaction> transactionsIq, int pageIndex, int pageSize, Func<int, int?, VeloPage> getPaginationPage, IReadOnlyCollection<ListCommand<TransactionItemViewModel>> commands)
         {
             if (pageIndex == 0)
             {

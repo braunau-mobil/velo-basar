@@ -135,6 +135,23 @@ namespace BraunauMobil.VeloBasar.Logic
 
             return _db.Transactions.GetMany(type, basar);
         }
+        public async Task RevertAsync(ProductsTransaction transaction)
+        {
+            Contract.Requires(transaction != null);
+
+            if (transaction.Type == TransactionType.Settlement)
+            {
+                await _sellerContext.SetValueStateAsync(transaction.SellerId.Value, ValueState.NotSettled);
+
+                foreach (var product in transaction.Products.GetProducts())
+                {
+                    product.ValueState = ValueState.NotSettled;
+                    await _productContext.UpdateAsync(product);
+                }
+            }
+
+            await DeleteAsync(transaction);
+        }
         public async Task<ProductsTransaction> SettleSellerAsync(Basar basar, int sellerId)
         {
             var seller = await _sellerContext.GetAsync(sellerId);

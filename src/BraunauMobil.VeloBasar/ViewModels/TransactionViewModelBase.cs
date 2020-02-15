@@ -1,16 +1,16 @@
 ﻿using BraunauMobil.VeloBasar.Models;
 using BraunauMobil.VeloBasar.Pages;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.Contracts;
 
 namespace BraunauMobil.VeloBasar.ViewModels
 {
-    public class TransactionViewModel
+    public class TransactionViewModelBase
     {
-        private readonly TransactionsViewModel _parent;
-
-        public TransactionViewModel(TransactionsViewModel parentViewModel, ProductsTransaction transaction)
+        public TransactionViewModelBase(ProductsTransaction transaction)
         {
-            _parent = parentViewModel;
+            Contract.Requires(transaction != null);
+
             Transaction = transaction;
         }
 
@@ -19,9 +19,6 @@ namespace BraunauMobil.VeloBasar.ViewModels
         public decimal Amount { get => Transaction.GetProductsSum(); }
         [Display(Name = "Artikelanzahl")]
         public int ProductCount { get => Transaction.Products.Count; }
-        public bool ShowDocumentLink { get => _parent.ShowDocumentLink; }
-        public bool ShowNotes { get => _parent.ShowNotes; }
-        public bool ShowType { get => _parent.ShowType; }
         public ProductsTransaction Transaction { get; }
 
         public VeloPage GetDocumentPage()
@@ -30,6 +27,14 @@ namespace BraunauMobil.VeloBasar.ViewModels
             {
                 Page = RoutingHelper.GetPageForModel<ShowFileModel>(),
                 Parameter = new ShowFileParameter { FileId = Transaction.DocumentId.Value }
+            };
+        }
+        public VeloPage GetSellerDetailsPage()
+        {
+            return new VeloPage
+            {
+                Page = RoutingHelper.GetPageForModel<Pages.Sellers.DetailsModel>(),
+                Parameter = new Pages.Sellers.DetailsParameter { SellerId = Transaction.Seller.Id }
             };
         }
     }

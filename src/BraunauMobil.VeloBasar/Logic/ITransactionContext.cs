@@ -23,6 +23,7 @@ namespace BraunauMobil.VeloBasar.Logic
         IQueryable<ProductsTransaction> GetMany(Basar basar, TransactionType type);
         IQueryable<ProductsTransaction> GetMany(Basar basar, TransactionType type , int sellerId);
         IQueryable<ProductsTransaction> GetMany(Basar basar, TransactionType type, string searchString);
+        Task RevertAsync(ProductsTransaction transaction);
         Task<ProductsTransaction> SettleSellerAsync(Basar basar, int sellerId);
     }
 }

@@ -34,7 +34,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
         public VeloPage GetDetailsPage(ProductsTransaction item)
         {
             Contract.Requires(item != null);
-            return this.GetPage<DetailsModel>(new DetailsParameter { SaleId = item.Id });
+            return this.GetPage<Transactions.DetailsModel>(new Transactions.DetailsParameter { TransactionId = item.Id });
         }
         public VeloPage GetPaginationPage(int pageIndex, int? pageSize) => this.GetPage<ListModel>(pageIndex, pageSize);
         public VeloPage GetSearchPage() => this.GetPage<ListModel>(Sales.PageIndex, null);

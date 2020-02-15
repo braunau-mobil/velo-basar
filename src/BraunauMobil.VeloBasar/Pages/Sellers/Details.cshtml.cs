@@ -47,13 +47,23 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
 
             Acceptances = await TransactionsViewModel.CreateAsync(_transactionContext.GetMany(_context.Basar, TransactionType.Acceptance, parameter.SellerId), null, new[]
             {
-                new ListCommand<TransactionViewModel>(GetAcceptanceDetailsPage)
+                new ListCommand<TransactionItemViewModel>(GetTransactionDetailsPage)
                 {
                     Text  = _context.Localizer["Details"]
                 }
             });
             Acceptances.ShowDocumentLink = true;
-            Settlements = await TransactionsViewModel.CreateAsync(_transactionContext.GetMany(_context.Basar, TransactionType.Settlement, parameter.SellerId));
+            Settlements = await TransactionsViewModel.CreateAsync(_transactionContext.GetMany(_context.Basar, TransactionType.Settlement, parameter.SellerId), null, new[]
+            {
+                new ListCommand<TransactionItemViewModel>(GetTransactionDetailsPage)
+                {
+                    Text  = _context.Localizer["Details"]
+                },
+                new ListCommand<TransactionItemViewModel>(tx => _context.SignInManager.IsSignedIn(User), GetRevertSettlementPage)
+                {
+                    Text = _context.Localizer["Zurücksetzen"]
+                }
+            });
             Settlements.ShowDocumentLink = true;
             Products = await ProductsViewModel.CreateAsync(_productContext.GetProductsForSeller(_context.Basar, parameter.SellerId));
             Stats = await _statisticContext.GetSellerStatisticsAsync(_context.Basar, Seller.Id);
@@ -64,6 +74,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
         public VeloPage GetCreateSettlementPage() => this.GetPage<Settlements.CreateAndPrintModel>(new Settlements.CreateAndPrintParameter { SellerId = Seller.Id });
         public VeloPage GetEditPage() => this.GetPage<EditModel>(new EditParameter { SellerId = Seller.Id });
         public VeloPage GetStartAcceptancePage() => this.GetPage<Acceptances.StartWithSellerModel>(new Acceptances.StartWithSellerParameter { SellerId = Seller.Id });
-        private VeloPage GetAcceptanceDetailsPage(TransactionViewModel viewModel) => this.GetPage<Acceptances.DetailsModel>(new Acceptances.DetailsParameter { AcceptanceId = viewModel.Transaction.Id });
+        private VeloPage GetRevertSettlementPage(TransactionItemViewModel viewModel) => this.GetPage<Transactions.RevertModel>(new Transactions.RevertParameter { TransactionId = viewModel.Transaction.Id });
+        private VeloPage GetTransactionDetailsPage(TransactionItemViewModel viewModel) => this.GetPage<Transactions.DetailsModel>(new Transactions.DetailsParameter { TransactionId = viewModel.Transaction.Id });
     }
 }

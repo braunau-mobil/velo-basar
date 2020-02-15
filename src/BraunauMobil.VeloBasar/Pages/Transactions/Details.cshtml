@@ -1,0 +1,26 @@
+﻿@page
+@model DetailsModel
+
+@{
+    ViewData["Title"] = $"{Html.DisplayTextFor(m => m.TransactionViewModel.Transaction.Type)} #{Model.TransactionViewModel.Transaction.Number}";
+}
+
+<partial name="/Pages/Transactions/_DetailsView.cshtml" model="@Model.TransactionViewModel" />
+
+<div Condition="@Model.Parameter.ShowSuccess" class="alert alert-success" role="alert">
+    @Localizer["{0} erfolgreich!", Html.DisplayFor(m => m.TransactionViewModel.Transaction.Type)]
+</div>
+
+<div Condition="@Model.TransactionViewModel.Transaction.Products.Count <= 0 && Model.TransactionViewModel.Transaction.Type == TransactionType.Sale" class="alert alert-warning" role="alert">
+    @Localizer["Es wurden alle Artikel des Verkaufs storniert."]
+</div>
+
+@section Scripts {
+    @if (Model.Parameter.OpenDocument == true)
+    {
+        <script type="text/javascript">
+        // @@todo was ist denn das hier für ein hardcoded fuckup!???
+        window.open("/ShowFile?basarId=@VeloContext.Basar.Id.ToString()&fileId=@Model.TransactionViewModel.Transaction.DocumentId.ToString()", "_blank");
+        </script>
+    }
+}

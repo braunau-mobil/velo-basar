@@ -33,7 +33,7 @@ namespace BraunauMobil.VeloBasar.Pages.Acceptances
             var acceptance = await _transactionContext.AcceptProductsAsync(_context.Basar, parameter.SellerId, products);
 
             Response.Cookies.ClearAcceptanceProducts();
-            return this.RedirectToPage<DetailsModel>(new DetailsParameter { AcceptanceId = acceptance.Id, OpenDocument = true, ShowSuccess = true });
+            return this.RedirectToPage<Transactions.DetailsModel>(new Transactions.DetailsParameter { TransactionId = acceptance.Id, OpenDocument = true, ShowSuccess = true });
         }
     }
 }

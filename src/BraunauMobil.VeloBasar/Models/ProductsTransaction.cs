@@ -17,6 +17,10 @@ namespace BraunauMobil.VeloBasar.Models
         [SuppressMessage("Usage", "CA2227:Collection properties should be read only")]
         public ICollection<ProductToTransaction> Products { get; set; }
 
+        public bool CanRevert()
+        {
+            return Type == TransactionType.Settlement;
+        }
         public decimal GetProductsSum()
         {
             return Products.Select(pt => pt.Product).SumPrice();

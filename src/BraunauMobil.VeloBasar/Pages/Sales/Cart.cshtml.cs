@@ -84,7 +84,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
 
             await LoadProducts(cart);
         }
-        public VeloPage GetSalesDetailsPage() => this.GetPage<DetailsModel>(new DetailsParameter { SaleId = SaleId.Value });
+        public VeloPage GetSalesDetailsPage() => this.GetPage<Transactions.DetailsModel>(new Transactions.DetailsParameter { TransactionId = SaleId.Value });
         
         private async Task LoadProducts(IList<int> productIds)
         {
