@@ -48,7 +48,7 @@ namespace BraunauMobil.VeloBasar.Logic
             }
 
             await _db.Database.EnsureDeletedAsync();
-            await _db.Database.MigrateAsync();
+            await _db.Database.EnsureCreatedAsync();
 
             await _setupContext.InitializeDatabaseAsync(config);
 
@@ -106,8 +106,6 @@ namespace BraunauMobil.VeloBasar.Logic
                 await CreateAcceptanceAsync(basar, seller);
                 acceptancePerCustomerCount--;
             }
-
-            await _transactionContext.CreateLabelsForSellerAsync(basar, seller.Id);
         }
         private async Task CreateAcceptanceAsync(Basar basar, Seller seller)
         {

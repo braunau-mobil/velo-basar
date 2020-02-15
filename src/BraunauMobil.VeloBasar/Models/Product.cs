@@ -52,7 +52,7 @@ namespace BraunauMobil.VeloBasar.Models
         public ValueState ValueState { get; set; }
 
         [Display(Name = "Etikett")]
-        public int? Label { get; set; }
+        public int LabelId { get; set; }
 
         public int SellerId { get; set; }
         [Display(Name = "Verkäufer")]

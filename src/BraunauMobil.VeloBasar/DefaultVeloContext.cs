@@ -54,8 +54,6 @@ namespace BraunauMobil.VeloBasar
                 return;
             }
 
-            _db.Database.Migrate();
-
             LoadBasar();
         }
         private void LoadBasar()

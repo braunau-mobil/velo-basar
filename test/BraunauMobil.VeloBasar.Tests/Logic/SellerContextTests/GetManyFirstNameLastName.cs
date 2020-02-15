@@ -15,8 +15,6 @@ namespace BraunauMobil.VeloBasar.Tests.Logic.SellerContextTests
             {
                 var fixture = new Fixture();
 
-                await SetupContext.InitializeDatabaseAsync(new VeloBasar.Models.InitializationConfiguration());
-
                 var basar = await BasarContext.CreateAsync(fixture.Create<Basar>());
 
                 var seller = await SellerContext.CreateAsync(fixture.Build<Seller>()

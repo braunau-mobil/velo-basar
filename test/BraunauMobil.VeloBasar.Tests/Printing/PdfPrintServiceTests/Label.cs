@@ -15,16 +15,16 @@ namespace BraunauMobil.VeloBasar.Tests.Printing.PdfPrintServiceTests
         [Fact]
         public void OneProduct()
         {
-            var basar = new Basar
-            {
-                Date = new DateTime(2063, 04, 05),
-                Id = 1,
-                Name = "Fahrradbasar",
-                Location = "Hopfenhausen",
-                ProductCommission = 0.1m
-            };
             var product = new Product
             {
+                Basar = new Basar
+                {
+                    Date = new DateTime(2063, 04, 05),
+                    Id = 1,
+                    Name = "Fahrradbasar",
+                    Location = "Hopfenhausen",
+                    ProductCommission = 0.1m
+                },
                 Brand = new Brand
                 {
                     Name = "Marke"
@@ -45,7 +45,7 @@ namespace BraunauMobil.VeloBasar.Tests.Printing.PdfPrintServiceTests
             var localizer = new StringLocalizer<SharedResource>(factory);
 
             var creator = new PdfPrintService(localizer);
-            var doc = creator.CreateLabel(basar, product, new PrintSettings());
+            var doc = creator.CreateLabel(product, new PrintSettings());
             Assert.NotNull(doc);
         }
         [Fact]
@@ -57,6 +57,7 @@ namespace BraunauMobil.VeloBasar.Tests.Printing.PdfPrintServiceTests
             var productType = fixture.Create<ProductType>();
             var product = new Product
             {
+                Basar = basar,
                 Brand = brand,
                 BrandId = brand.Id,
                 Type = productType,
@@ -69,7 +70,7 @@ namespace BraunauMobil.VeloBasar.Tests.Printing.PdfPrintServiceTests
             var localizer = new StringLocalizer<SharedResource>(factory);
 
             var creator = new PdfPrintService(localizer);
-            var doc = creator.CreateLabel(basar, product, new PrintSettings());
+            var doc = creator.CreateLabel(product, new PrintSettings());
             Assert.NotNull(doc);
         }
     }

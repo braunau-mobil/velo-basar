@@ -13,6 +13,8 @@ using BraunauMobil.VeloBasar.Logic;
 using BraunauMobil.VeloBasar.Printing;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.Hosting;
+using System.Linq;
+using System.Diagnostics.Contracts;
 
 namespace BraunauMobil.VeloBasar
 {
@@ -111,8 +113,10 @@ namespace BraunauMobil.VeloBasar
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         [SuppressMessage("Performance", "CA1822:Mark members as static")]
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider)
         {
+            Contract.Requires(app != null);
+
             Log.Information("Configure");
 
             var cultureInfo = CultureInfo.GetCultureInfo("de-AT");
@@ -142,7 +146,44 @@ namespace BraunauMobil.VeloBasar
                 endpoints.MapRazorPages();
             });
 
+
+            MigrateDatabase(serviceProvider);
+            
             Log.Information("Configure done");
+        }
+
+        private static void MigrateDatabase(IServiceProvider serviceProvider)
+        {
+            Log.Information("Migrate database");
+
+            var db = serviceProvider.GetRequiredService<VeloRepository>();
+
+            if (!db.IsInitialized())
+            {
+                Log.Information("Database is not initialized, no need for migration");
+                return;
+            }
+
+            db.Database.Migrate();
+
+            EnsureProductLables(serviceProvider, db);
+        }
+
+        private static void EnsureProductLables(IServiceProvider serviceProvider, VeloRepository db)
+        {
+            Log.Information("Ensuring product labels");
+
+            var fileStoreContext = serviceProvider.GetRequiredService<IFileStoreContext>();
+            var settingsContext = serviceProvider.GetRequiredService<ISettingsContext>();
+            var printSettings = settingsContext.GetPrintSettingsAsync().Result;
+            foreach (var product in db.Products.Where(p => p.LabelId == 0).IncludeAll().ToArrayAsync().Result)
+            {
+                product.LabelId = fileStoreContext.CreateProductLabelAsync(product, printSettings).Result;
+                db.Attach(product).State = EntityState.Modified;
+
+                Log.Verbose("Created label for product id: {productId}", product.Id);
+            }
+            db.SaveChanges();
         }
     }
 }

@@ -1,19 +1,37 @@
 ﻿using BraunauMobil.VeloBasar.Data;
 using BraunauMobil.VeloBasar.Models;
+using BraunauMobil.VeloBasar.Printing;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Threading.Tasks;
 
 namespace BraunauMobil.VeloBasar.Logic
 {
     public class FileStoreContext : IFileStoreContext
     {
-        private readonly VeloRepository _db;
+        private const string PdfContentType = "application/pdf";
 
-        public FileStoreContext(VeloRepository db)
+        private readonly VeloRepository _db;
+        private readonly IPrintService _printService;
+
+        public FileStoreContext(VeloRepository db, IPrintService printService)
         {
             _db = db;
+            _printService = printService;
         }
+        public async Task<int> CreateProductLabelAsync(Product product, PrintSettings printSettings)
+        {
+            var fileData = new FileData
+            {
+                ContentType = PdfContentType,
+                Data = _printService.CreateLabel(product, printSettings)
+            };
+            _db.Files.Add(fileData);
+            await _db.SaveChangesAsync();
 
+            return fileData.Id;
+        }
         public Task<bool> ExistsAsync(int id) => _db.Files.ExistsAsync(id);
         public async Task DeleteAsync(int id)
         {
@@ -27,6 +45,44 @@ namespace BraunauMobil.VeloBasar.Logic
         public async Task<FileData> GetAsync(int id)
         {
             return await _db.Files.FirstOrDefaultAsync(p => p.Id == id);
+        }
+        public async Task<FileData> GetProductLabelsAndCombineToOnePdfAsync(IEnumerable<Product> products)
+        {
+            Contract.Requires(products != null);
+
+            var files = new List<byte[]>();
+            foreach (var product in products)
+            {
+                var file = await GetAsync(product.LabelId);
+                files.Add(file.Data);
+            }
+
+            if (files.Count <= 0)
+            {
+                return null;
+            }
+
+            return new FileData
+            {
+                Data = _printService.Combine(files),
+                ContentType = PdfContentType
+            };
+        }
+        public async Task UpdateProductLabelAsync(Product product, PrintSettings printSettings)
+        {
+            Contract.Requires(product != null);
+
+            var file = await GetAsync(product.LabelId);
+
+            file.Data = _printService.CreateLabel(product, printSettings);
+
+            await UpdateAsync(file);
+        }
+
+        private async Task UpdateAsync(FileData file)
+        {
+            _db.Attach(file).State = EntityState.Modified;
+            await _db.SaveChangesAsync();
         }
     }
 }

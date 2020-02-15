@@ -70,7 +70,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
 
             return Page();
         }
-        public VeloPage GetCreateLabelsPage() => this.GetPage<Labels.CreateAndPrintForSellerModel>(new Labels.CreateAndPrintForSellerParameter { SellerId = Seller.Id });
+        public VeloPage GetPrintLablesPage() => this.GetPage<Labels.PrintForSellerModel>(new Labels.PrintForSellerParameter { SellerId = Seller.Id });
         public VeloPage GetCreateSettlementPage() => this.GetPage<Settlements.CreateAndPrintModel>(new Settlements.CreateAndPrintParameter { SellerId = Seller.Id });
         public VeloPage GetEditPage() => this.GetPage<EditModel>(new EditParameter { SellerId = Seller.Id });
         public VeloPage GetStartAcceptancePage() => this.GetPage<Acceptances.StartWithSellerModel>(new Acceptances.StartWithSellerParameter { SellerId = Seller.Id });

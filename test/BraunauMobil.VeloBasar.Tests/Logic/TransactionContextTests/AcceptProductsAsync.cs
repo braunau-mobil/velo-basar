@@ -27,6 +27,13 @@ namespace BraunauMobil.VeloBasar.Tests.Logic.TransactionContextTests
                 var products = await ProductContext.GetProductsForSeller(basar, seller.Id).ToArrayAsync();
                 Assert.Equal(2, products.Length);
 
+                foreach (var product in products)
+                {
+                    Assert.NotEqual(0, product.LabelId);
+                    var label = await FileStoreContext.GetAsync(product.LabelId);
+                    Assert.NotNull(label);
+                }
+
                 seller = await SellerContext.GetAsync(seller.Id);
                 Assert.Equal(ValueState.NotSettled, seller.ValueState);
             });

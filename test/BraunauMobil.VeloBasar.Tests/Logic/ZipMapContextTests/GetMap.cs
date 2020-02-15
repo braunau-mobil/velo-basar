@@ -12,7 +12,6 @@ namespace BraunauMobil.VeloBasar.Tests.Logic.ZipMapContextTests
         {
             await RunOnInitializedDb(async db =>
             {
-                await SetupContext.InitializeDatabaseAsync(new InitializationConfiguration());
                 var fixture = new Fixture();
                 var autZips = fixture.Build<ZipMap>()
                     .With(zm => zm.CountryId, 1)

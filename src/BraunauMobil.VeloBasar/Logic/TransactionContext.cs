@@ -72,16 +72,6 @@ namespace BraunauMobil.VeloBasar.Logic
             var printSettings = await _settingsContext.GetPrintSettingsAsync();
             return await DoTransactionAsync(basar, TransactionType.Sale, null, printSettings, await products.ToArrayAsync());
         }
-        public async Task<FileData> CreateLabelsForAcceptanceAsync(Basar basar, int acceptanceNumber)
-        {
-            var acceptance = await GetAsync(basar, TransactionType.Acceptance, acceptanceNumber);
-            return await CreateLabelsAndCombineToOnePdfAsync(basar, acceptance.Products.Select(pt => pt.Product));
-        }
-        public async Task<FileData> CreateLabelsForSellerAsync(Basar basar, int sellerId)
-        {
-            var products = await _productContext.GetProductsForSeller(basar, sellerId).ToListAsync();
-            return await CreateLabelsAndCombineToOnePdfAsync(basar, products);
-        }
         public async Task<ProductsTransaction> DoTransactionAsync(Basar basar, TransactionType transactionType, string notes, int productId)
         {
             var product = await _productContext.GetAsync(productId);
@@ -198,44 +188,6 @@ namespace BraunauMobil.VeloBasar.Logic
             }
 
             return tx;
-        }
-        private async Task<FileData> CreateLabelsAndCombineToOnePdfAsync(Basar basar, IEnumerable<Product> products)
-        {
-            var printSettings = await _settingsContext.GetPrintSettingsAsync();
-
-            var files = new List<byte[]>();
-            foreach (var product in products)
-            {
-                var file = await CreateLabelAsync(basar, product, printSettings);
-                files.Add(file.Data);
-            }
-
-            if (files.Count <= 0)
-            {
-                return null;
-            }
-
-            return new FileData
-            {
-                Data = _printService.Combine(files),
-                ContentType = PdfContentType
-            };
-        }
-        private async Task<FileData> CreateLabelAsync(Basar basar, Product product, PrintSettings printSettings)
-        {
-            var fileStore = new FileData
-            {
-                ContentType = PdfContentType,
-                Data = _printService.CreateLabel(basar, product, printSettings)
-            };
-            _db.Files.Add(fileStore);
-            await _db.SaveChangesAsync();
-
-            product.Label = fileStore.Id;
-
-            await _db.SaveChangesAsync();
-
-            return fileStore;
         }
         private async Task DeleteAsync(ProductsTransaction transaction)
         {

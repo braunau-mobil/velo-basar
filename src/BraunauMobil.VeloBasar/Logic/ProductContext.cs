@@ -12,15 +12,21 @@ namespace BraunauMobil.VeloBasar.Logic
 {
     public class ProductContext : IProductContext
     {
+        private readonly IBasarContext _basarContext;
         private readonly IBrandContext _brandContext;
         private readonly IProductTypeContext _productTypeContext;
+        private readonly IFileStoreContext _fileStoreContext;
+        private readonly ISettingsContext _settingsContext;
         private readonly VeloRepository _db;
 
-        public ProductContext(VeloRepository db, IBrandContext brandContext, IProductTypeContext productTypeContext)
+        public ProductContext(VeloRepository db, IBasarContext basarContext, IBrandContext brandContext, IProductTypeContext productTypeContext, IFileStoreContext fileStoreContext, ISettingsContext settingsContext)
         {
             _db = db;
+            _basarContext = basarContext;
             _brandContext = brandContext;
             _productTypeContext = productTypeContext;
+            _fileStoreContext = fileStoreContext;
+            _settingsContext = settingsContext;
         }
 
         public async Task<bool> ExistsAsync(int id) => await _db.Products.ExistsAsync(id);
@@ -56,6 +62,8 @@ namespace BraunauMobil.VeloBasar.Logic
         {
             Contract.Requires(products != null);
 
+            var printSettings = await _settingsContext.GetPrintSettingsAsync();
+
             var newProducts = new List<Product>();
             foreach (var product in products)
             {
@@ -66,7 +74,6 @@ namespace BraunauMobil.VeloBasar.Logic
                     Color = product.Color,
                     Description = product.Description,
                     FrameNumber = product.FrameNumber,
-                    Label = product.Label,
                     Price = product.Price,
                     Seller = seller,
                     StorageState = StorageState.Available,
@@ -74,6 +81,7 @@ namespace BraunauMobil.VeloBasar.Logic
                     Type = product.Type,
                     ValueState = ValueState.NotSettled
                 };
+                newProduct.LabelId = await _fileStoreContext.CreateProductLabelAsync(newProduct, printSettings);
                 newProducts.Add(newProduct);
             }
 
@@ -88,18 +96,47 @@ namespace BraunauMobil.VeloBasar.Logic
 
             foreach (var product in products)
             {
-                product.Brand = await _brandContext.GetAsync(product.Brand.Id);
-                product.BrandId = product.Brand.Id;
-                product.Type = await _productTypeContext.GetAsync(product.Type.Id);
-                product.TypeId = product.Type.Id;
+                await ReloadRelationsAsync(product);
             }
         }
         public async Task UpdateAsync(Product product)
         {
+            Contract.Requires(product != null);
+
+            await LoadMissingRelationsAsync(product);
+
+            var printSettings = await _settingsContext.GetPrintSettingsAsync();
+            if (product.LabelId != 0)
+            {
+                await _fileStoreContext.UpdateProductLabelAsync(product, printSettings);
+            }
+            else
+            {
+                product.LabelId = await _fileStoreContext.CreateProductLabelAsync(product, printSettings);
+            }
+
             _db.Attach(product).State = EntityState.Modified;
             await _db.SaveChangesAsync();
         }
 
+        private async Task LoadMissingRelationsAsync(Product product)
+        {
+            if (product.Brand == null)
+            {
+                product.Brand = await _brandContext.GetAsync(product.BrandId);
+                product.BrandId = product.Brand.Id;
+            }
+            if (product.Basar == null)
+            {
+                product.Basar = await _basarContext.GetAsync(product.BasarId);
+                product.BasarId = product.Basar.Id;
+            }
+            if (product.Type == null)
+            {
+                product.Type = await _productTypeContext.GetAsync(product.TypeId);
+                product.TypeId = product.Type.Id;
+            }
+        }
         private Expression<Func<Product, bool>> ProductSearch(string searchString)
         {
             if (_db.IsPostgreSQL())
@@ -117,6 +154,15 @@ namespace BraunauMobil.VeloBasar.Logic
                 || EF.Functions.Like(p.FrameNumber, $"%{searchString}%")
                 || EF.Functions.Like(p.TireSize, $"%{searchString}%")
                 || EF.Functions.Like(p.Type.Name, $"%{searchString}%");
+        }
+        private async Task ReloadRelationsAsync(Product product)
+        {
+            product.Brand = await _brandContext.GetAsync(product.Brand.Id);
+            product.BrandId = product.Brand.Id;
+            product.Basar = await _basarContext.GetAsync(product.Basar.Id);
+            product.BasarId = product.Basar.Id;
+            product.Type = await _productTypeContext.GetAsync(product.Type.Id);
+            product.TypeId = product.Type.Id;
         }
     }
 }

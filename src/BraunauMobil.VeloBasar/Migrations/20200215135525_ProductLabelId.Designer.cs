@@ -3,15 +3,17 @@ using System;
 using BraunauMobil.VeloBasar.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace BraunauMobil.VeloBasar.Migrations
 {
     [DbContext(typeof(VeloRepository))]
-    partial class VeloRepositoryModelSnapshot : ModelSnapshot
+    [Migration("20200215135525_ProductLabelId")]
+    partial class ProductLabelId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

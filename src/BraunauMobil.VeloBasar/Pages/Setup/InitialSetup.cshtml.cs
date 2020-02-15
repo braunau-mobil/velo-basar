@@ -25,6 +25,7 @@ namespace BraunauMobil.VeloBasar.Pages.Setup
 
         public async Task<IActionResult> OnPostAsync()
         {
+            await _context.CreateDatabaseAsync();
             await _context.InitializeDatabaseAsync(Config);
 
             return this.RedirectToPage<IndexModel>();

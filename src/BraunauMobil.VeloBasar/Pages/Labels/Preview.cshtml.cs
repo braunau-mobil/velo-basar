@@ -22,20 +22,20 @@ namespace BraunauMobil.VeloBasar.Pages.Labels
         public async Task<IActionResult> OnGetAsync()
         {
             var settings = await _settingsContext.GetPrintSettingsAsync();
-            var bytes = _printService.CreateLabel(SampleBasar, SampleProduct, settings);
+            var bytes = _printService.CreateLabel(SampleProduct, settings);
             return File(bytes, "application/pdf");
         }
 
-        private static Basar SampleBasar => new Basar
-        {
-            Date = new DateTime(2063, 04, 05),
-            Id = 1,
-            Name = "Fahrradbasar",
-            Location = "Hopfenhausen",
-            ProductCommission = 0.1m
-        };
         private static Product SampleProduct => new Product
         {
+            Basar = new Basar
+            {
+                Date = new DateTime(2063, 04, 05),
+                Id = 1,
+                Name = "Fahrradbasar",
+                Location = "Hopfenhausen",
+                ProductCommission = 0.1m
+            },
             Brand = new Brand
             {
                 Name = "Marke"

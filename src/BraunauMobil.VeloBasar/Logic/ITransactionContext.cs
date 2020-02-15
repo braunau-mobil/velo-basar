@@ -10,8 +10,6 @@ namespace BraunauMobil.VeloBasar.Logic
         Task<ProductsTransaction> AcceptProductsAsync(Basar basar, int sellerId, IList<Product> products);
         Task<ProductsTransaction> CancelProductsAsync(Basar basar, int saleId, IList<int> productIds);
         Task<ProductsTransaction> CheckoutProductsAsync(Basar basar, IList<int> productIds);
-        Task<FileData> CreateLabelsForAcceptanceAsync(Basar basar, int acceptanceNumber);
-        Task<FileData> CreateLabelsForSellerAsync(Basar basar, int sellerId);
         Task<ProductsTransaction> DoTransactionAsync(Basar basar, TransactionType transactionType, string notes, int productId);
         Task<ProductsTransaction> DoTransactionAsync(Basar basar, TransactionType transactionType, string notes, PrintSettings printSettings, params Product[] products);
         Task<bool> ExistsAsync(int id);

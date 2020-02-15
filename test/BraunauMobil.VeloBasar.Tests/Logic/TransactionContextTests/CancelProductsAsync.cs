@@ -58,7 +58,7 @@ namespace BraunauMobil.VeloBasar.Tests.Logic.TransactionContextTests
                 var cancellation = await TransactionContext.CancelProductsAsync(basar, sale.Id, new List<int> { 1, 2 });
 
                 var updatedSale = await TransactionContext.GetAsync(sale.Id);
-                Assert.Equal(cancellation, updatedSale);
+                Assert.Equal(null, updatedSale);
                 var updatedProducts = await ProductContext.GetProductsForBasar(basar).ToArrayAsync();
                 Assert.Equal(StorageState.Available, updatedProducts[0].StorageState);
                 Assert.Equal(ValueState.NotSettled, updatedProducts[0].ValueState);

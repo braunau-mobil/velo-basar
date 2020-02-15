@@ -24,11 +24,14 @@ namespace BraunauMobil.VeloBasar.Logic
             _countryContext = countryContext;
         }
 
+        public async Task CreateDatabaseAsync()
+        {
+            await _db.Database.EnsureCreatedAsync();
+        }
+
         public async Task InitializeDatabaseAsync(InitializationConfiguration config)
         {
             Contract.Requires(config != null);
-
-            await _db.Database.MigrateAsync();
 
             var adminUser = new IdentityUser
             {

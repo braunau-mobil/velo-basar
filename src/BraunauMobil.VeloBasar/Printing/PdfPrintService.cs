@@ -85,7 +85,7 @@ namespace BraunauMobil.VeloBasar.Printing
                 doc.Add(GetRegularText(settings.Acceptance.GetTokenText(acceptance.Seller)));
             });
         }
-        public byte[] CreateLabel(Basar basar, Product product, PrintSettings settings)
+        public byte[] CreateLabel(Product product, PrintSettings settings)
         {
             return CreatePdf((pdfDoc, doc) =>
             {
@@ -97,7 +97,7 @@ namespace BraunauMobil.VeloBasar.Printing
                 doc.SetFont(PdfFontFactory.CreateFont(StandardFonts.TIMES_ROMAN));
 
                 doc.Add(new Paragraph(
-                    GetSmallText(string.Format(CultureInfo.CurrentCulture, settings.Label.TitleFormat, basar.Name)))
+                    GetSmallText(string.Format(CultureInfo.CurrentCulture, settings.Label.TitleFormat, product.Basar.Name)))
                         .SetTextAlignment(TextAlignment.CENTER)
                         .SetBorderBottom(new SolidBorder(2)));
 

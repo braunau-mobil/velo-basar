@@ -50,6 +50,6 @@ namespace BraunauMobil.VeloBasar.Pages.Products
         }
         public VeloPage GetEditPage() => this.GetPage<EditModel>(new EditParameter { ProductId = Product.Id });
         public VeloPage GetPage(TransactionType transactionType) => this.GetPage<Transactions.CreateSingleModel>(new Transactions.CreateSingleParameter { ProductId = Product.Id, TransactionType = transactionType });
-        public VeloPage GetShowFilePage() => this.GetPage<ShowFileModel>(new ShowFileParameter { FileId = Product.Label.Value });
+        public VeloPage GetShowFilePage() => this.GetPage<ShowFileModel>(new ShowFileParameter { FileId = Product.LabelId });
     }
 }

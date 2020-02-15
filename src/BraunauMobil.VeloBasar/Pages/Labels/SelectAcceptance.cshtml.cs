@@ -19,12 +19,14 @@ namespace BraunauMobil.VeloBasar.Pages.Labels
         private readonly LinkGenerator _linkGenerator;
         private readonly IVeloContext _context;
         private readonly ITransactionContext _transactionContext;
+        private readonly IFileStoreContext _fileStoreContext;
 
-        public SelectAcceptanceModel(IVeloContext context, LinkGenerator linkGenerator, ITransactionContext transactionContext)
+        public SelectAcceptanceModel(IVeloContext context, LinkGenerator linkGenerator, ITransactionContext transactionContext, IFileStoreContext fileStoreContext)
         {
             _context = context;
             _linkGenerator = linkGenerator;
             _transactionContext = transactionContext;
+            _fileStoreContext = fileStoreContext;
         }
 
         [BindProperty]
@@ -45,7 +47,8 @@ namespace BraunauMobil.VeloBasar.Pages.Labels
 
             if (parameter.OpenPdf)
             {
-                var pdf = await _transactionContext.CreateLabelsForAcceptanceAsync(_context.Basar, parameter.AcceptanceNumber.Value);
+                var acceptance = await _transactionContext.GetAsync(_context.Basar, TransactionType.Acceptance, AcceptanceNumber);
+                var pdf = await _fileStoreContext.GetProductLabelsAndCombineToOnePdfAsync(acceptance.Products.GetProducts());
                 return File(pdf.Data, pdf.ContentType);
             }
 
@@ -61,6 +64,6 @@ namespace BraunauMobil.VeloBasar.Pages.Labels
             }
             return this.RedirectToPage<SelectAcceptanceModel>(new SelectAcceptanceParameter { AcceptanceNumber = AcceptanceNumber });
         }
-        public string GetOpenPdfPage() => _linkGenerator.GetPath(this.GetPage<CreateAndPrintForAcceptanceModel>(new CreateAndPrintForAcceptanceParameter { AcceptanceNumber = AcceptanceNumber }));
+        public string GetOpenPdfPage() => _linkGenerator.GetPath(this.GetPage<PrintForAcceptanceModel>(new PrintForAcceptanceParameter { AcceptanceNumber = AcceptanceNumber }));
     }
 }
