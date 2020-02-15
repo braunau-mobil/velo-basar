@@ -24,12 +24,30 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
         {
             var settings = await _settingsContext.GetPrintSettingsAsync();
             var sale = SamepleSale();
-            var bytes = _printService.CreateSale(sale, SampleProductToSellerMap(sale), settings);
+            var bytes = _printService.CreateTransaction(sale, settings);
             return File(bytes, "application/pdf");
         }
 
         private static ProductsTransaction SamepleSale()
         {
+            var seller = new Seller
+            {
+                BankAccountHolder = "Bilbo Beutlin",
+                BIC = "ABC123456789",
+                City = "Hopfenhause",
+                Country = new Country
+                {
+                    Name = "Österreich",
+                    Iso3166Alpha3Code = "AUT"
+                },
+                FirstName = "Bilbo",
+                IBAN = "AT00123412341234",
+                LastName = "Beutlin",
+                Street = "Biergasse 12",
+                Token = "GHTGF4",
+                ZIP = "1234"
+            };
+
             return new ProductsTransaction()
             {
                 Basar = new Basar
@@ -56,6 +74,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
                             FrameNumber = "123498zdsfvh48",
                             Price = 12.45m,
                             TireSize = "Sehgr groß",
+                            Seller = seller,
                             Type = new ProductType
                             {
                                 Name = "City-Bike"
@@ -74,6 +93,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
                             Description = "Ganz tolles Rad, leider Fehlt der Sattel",
                             FrameNumber = "123498zdsfvh48",
                             Price = 12.45m,
+                            Seller = seller,
                             TireSize = "Sehgr groß0",
                             Type = new ProductType
                             {
@@ -83,32 +103,6 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
                     }
                 }
             };
-        }
-        private static IDictionary<Product, Seller> SampleProductToSellerMap(ProductsTransaction transaction)
-        {
-            var seller = new Seller
-            {
-                BankAccountHolder = "Bilbo Beutlin",
-                BIC = "ABC123456789",
-                City = "Hopfenhause",
-                Country = new Country
-                {
-                    Name = "Österreich",
-                    Iso3166Alpha3Code = "AUT"
-                },
-                FirstName = "Bilbo",
-                IBAN = "AT00123412341234",
-                LastName = "Beutlin",
-                Street = "Biergasse 12",
-                Token = "GHTGF4",
-                ZIP = "1234"
-            };
-            var productToSellerMap = new Dictionary<Product, Seller>();
-            foreach (var product in transaction.Products)
-            {
-                productToSellerMap.Add(product.Product, seller);
-            }
-            return productToSellerMap;
         }
     }
 }

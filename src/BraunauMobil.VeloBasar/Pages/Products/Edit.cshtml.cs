@@ -17,12 +17,14 @@ namespace BraunauMobil.VeloBasar.Pages.Products
         private readonly IProductContext _productContext;
         private readonly IBrandContext _brandContext;
         private readonly IProductTypeContext _productTypeContext;
+        private readonly ITransactionContext _transactionContext;
 
-        public EditModel(IProductContext productContext , IBrandContext brandContext, IProductTypeContext productTypeContext)
+        public EditModel(IProductContext productContext , IBrandContext brandContext, IProductTypeContext productTypeContext, ITransactionContext transactionContext)
         {
             _productContext = productContext;
             _brandContext = brandContext;
             _productTypeContext = productTypeContext;
+            _transactionContext = transactionContext;
         }
 
         [BindProperty]
@@ -54,7 +56,7 @@ namespace BraunauMobil.VeloBasar.Pages.Products
                 return Page();
             }
 
-            await _productContext.UpdateAsync(Product);
+            await _transactionContext.UpdateProductAsync(Product);
 
             return Redirect(parameter.Target);
         }

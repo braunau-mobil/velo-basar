@@ -79,6 +79,7 @@ namespace BraunauMobil.VeloBasar.Pages.Acceptances
             
             if (ModelState.IsValid)
             {
+                NewProduct.Basar = _context.Basar;
                 NewProduct.Brand = await _brandContext.GetAsync(NewProduct.BrandId);
                 NewProduct.Type = await _productTypeContext.GetAsync(NewProduct.TypeId);
                 if (parameter.ProductId != null)

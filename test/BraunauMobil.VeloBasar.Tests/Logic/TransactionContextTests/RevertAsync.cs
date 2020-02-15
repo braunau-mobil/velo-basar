@@ -27,6 +27,7 @@ namespace BraunauMobil.VeloBasar.Tests.Logic.TransactionContextTests
                 var sale = await TransactionContext.CheckoutProductsAsync(basar, acceptance.Products.Select(pt => pt.ProductId).ToList());
 
                 var settlement = await TransactionContext.SettleSellerAsync(basar, seller.Id);
+                var documentId = settlement.DocumentId.Value;
 
                 await TransactionContext.RevertAsync(settlement);
 
@@ -38,7 +39,7 @@ namespace BraunauMobil.VeloBasar.Tests.Logic.TransactionContextTests
                 var updatedSeller = await SellerContext.GetAsync(seller.Id);
                 Assert.Equal(ValueState.NotSettled, updatedSeller.ValueState);
 
-                var document = await FileStoreContext.GetAsync(settlement.DocumentId.Value);
+                var document = await FileStoreContext.GetAsync(documentId);
                 Assert.Null(document);
             });
         }

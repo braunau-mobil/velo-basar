@@ -38,6 +38,8 @@ namespace BraunauMobil.VeloBasar.Tests.Data.ProductContextTests
                         ProductType>());
 
                     var products = fixture.Build<Product>()
+                        .With(p => p.Basar, basar)
+                        .With(p => p.BasarId, basar.Id)
                         .With(p => p.Brand, brand)
                         .With(p => p.Type, productType)
                         .With(p => p.BrandId, brand.Id)

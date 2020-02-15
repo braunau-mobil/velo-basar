@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using BraunauMobil.VeloBasar.Logic;
 using BraunauMobil.VeloBasar.Models;
@@ -24,7 +23,7 @@ namespace BraunauMobil.VeloBasar.Pages.Acceptances
         public async Task<IActionResult> OnGetAsync()
         {
             var settings = await _settingsContext.GetPrintSettingsAsync();
-            var bytes = _printService.CreateAcceptance(SampleAcceptance(), settings);
+            var bytes = _printService.CreateTransaction(SampleAcceptance(), settings);
             return File(bytes, "application/pdf");
         }
 

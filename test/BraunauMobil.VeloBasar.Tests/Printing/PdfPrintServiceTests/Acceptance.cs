@@ -18,6 +18,7 @@ namespace BraunauMobil.VeloBasar.Tests.Printing.PdfPrintServiceTests
         {
             var acceptance = new ProductsTransaction()
             {
+                Type = TransactionType.Acceptance,
                 Basar = new Basar
                 {
                     Date = new DateTime(2063, 04, 05),
@@ -91,7 +92,7 @@ namespace BraunauMobil.VeloBasar.Tests.Printing.PdfPrintServiceTests
             var localizer = new StringLocalizer<SharedResource>(factory);
 
             var creator = new PdfPrintService(localizer);
-            var doc = creator.CreateAcceptance(acceptance, new PrintSettings());
+            var doc = creator.CreateTransaction(acceptance, new PrintSettings());
             Assert.NotNull(doc);
         }
         [Fact]
@@ -109,7 +110,7 @@ namespace BraunauMobil.VeloBasar.Tests.Printing.PdfPrintServiceTests
             var localizer = new StringLocalizer<SharedResource>(factory);
 
             var creator = new PdfPrintService(localizer);
-            var doc = creator.CreateAcceptance(acceptance, new PrintSettings());
+            var doc = creator.CreateTransaction(acceptance, new PrintSettings());
             Assert.NotNull(doc);
         }
     }

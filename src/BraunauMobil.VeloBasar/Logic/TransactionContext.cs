@@ -1,6 +1,5 @@
 ﻿using BraunauMobil.VeloBasar.Data;
 using BraunauMobil.VeloBasar.Models;
-using BraunauMobil.VeloBasar.Printing;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -13,21 +12,17 @@ namespace BraunauMobil.VeloBasar.Logic
 {
     public class TransactionContext : ITransactionContext
     {
-        private const string PdfContentType = "application/pdf";
-
         private readonly VeloRepository _db;
         private readonly INumberContext _numberContext;
-        private readonly IPrintService _printService;
         private readonly IProductContext _productContext;
         private readonly ISettingsContext _settingsContext;
         private readonly IFileStoreContext _fileContext;
         private readonly ISellerContext _sellerContext;
 
-        public TransactionContext(VeloRepository db, INumberContext numberContext, IPrintService printService, IProductContext productContext, ISettingsContext settingsContext, IFileStoreContext fileContext, ISellerContext sellerContext)
+        public TransactionContext(VeloRepository db, INumberContext numberContext, IProductContext productContext, ISettingsContext settingsContext, IFileStoreContext fileContext, ISellerContext sellerContext)
         {
             _db = db;
             _numberContext = numberContext;
-            _printService = printService;
             _productContext = productContext;
             _settingsContext = settingsContext;
             _fileContext = fileContext;
@@ -43,7 +38,6 @@ namespace BraunauMobil.VeloBasar.Logic
             var productsInserted = await _productContext.InsertProductsAsync(basar, seller, products);
 
             var tx = await CreateTransactionAsync(basar, TransactionType.Acceptance, seller, printSettings, productsInserted.ToArray());
-            await GenerateTransactionDocumentAsync(tx, printSettings);
 
             await _sellerContext.SetValueStateAsync(sellerId, ValueState.NotSettled);
             return tx;
@@ -158,6 +152,11 @@ namespace BraunauMobil.VeloBasar.Logic
 
             return tx;
         }
+        public async Task UpdateProductAsync(Product product)
+        {
+            await _productContext.UpdateAsync(product);
+            await UpdateTransactionDocumentsForProduct(product);
+        }
 
         private async Task<ProductsTransaction> CreateTransactionAsync(Basar basar, TransactionType transactionType, PrintSettings printSettings, params Product[] products)
         {
@@ -169,7 +168,7 @@ namespace BraunauMobil.VeloBasar.Logic
         }
         private async Task<ProductsTransaction> CreateTransactionAsync(Basar basar, TransactionType transactionType, Seller seller, string notes, PrintSettings printSettings, params Product[] products)
         {
-            var tx = new ProductsTransaction
+            var transaction = new ProductsTransaction
             {
                 Basar = basar,
                 Number = _numberContext.NextNumber(basar, transactionType),
@@ -178,16 +177,17 @@ namespace BraunauMobil.VeloBasar.Logic
                 Type = transactionType,
                 Seller = seller
             };
-            tx.Products = products.Select(p => new ProductToTransaction { Product = p, Transaction = tx }).ToList();
-            _db.Transactions.Add(tx);
-            await _db.SaveChangesAsync();
+            transaction.Products = products.Select(p => new ProductToTransaction { Product = p, Transaction = transaction }).ToList();
 
-            if (printSettings != null)
+            if (transaction.CanHasDocument())
             {
-                await GenerateTransactionDocumentAsync(tx, printSettings);
+                transaction.DocumentId = await _fileContext.CreateTransactionDocumentAsync(transaction, printSettings);
             }
 
-            return tx;
+            _db.Transactions.Add(transaction);
+            await _db.SaveChangesAsync();
+            
+            return transaction;
         }
         private async Task DeleteAsync(ProductsTransaction transaction)
         {
@@ -209,59 +209,6 @@ namespace BraunauMobil.VeloBasar.Logic
 
             return IncludeAll(result);
         }
-        private async Task<IDictionary<Product, Seller>> GetProductToSellerMapAsync(ProductsTransaction transaction)
-        {
-            var productIds = transaction.Products.Select(x => x.ProductId).ToArray();
-            var result = new Dictionary<Product, Seller>();
-            foreach (var product in transaction.Products)
-            {
-                var acceptances = await _db.Transactions.GetMany(TransactionType.Acceptance, transaction.Basar, tx => tx.Products.Any(pt => pt.ProductId == product.ProductId)).ToArrayAsync();
-                var seller = acceptances.First().Seller;
-                result.Add(product.Product, seller);
-            }
-            return result;
-        }
-        private async Task<FileData> GenerateTransactionDocumentAsync(ProductsTransaction transaction, PrintSettings printSettings)
-        {
-            if (transaction.Type == TransactionType.Cancellation || transaction.Type == TransactionType.Lock || transaction.Type == TransactionType.MarkAsGone || transaction.Type == TransactionType.Release)
-            {
-                return null;
-            }
-
-            FileData fileStore;
-            if (transaction.DocumentId == null)
-            {
-                fileStore = new FileData
-                {
-                    ContentType = PdfContentType
-                };
-                _db.Files.Add(fileStore);
-                await _db.SaveChangesAsync();
-
-                transaction.DocumentId = fileStore.Id;
-            }
-            else
-            {
-                fileStore = await _fileContext.GetAsync(transaction.DocumentId.Value);
-            }
-
-            if (transaction.Type == TransactionType.Acceptance)
-            {
-                fileStore.Data = _printService.CreateAcceptance(transaction, printSettings);
-            }
-            else if (transaction.Type == TransactionType.Sale)
-            {
-                fileStore.Data = _printService.CreateSale(transaction, await GetProductToSellerMapAsync(transaction), printSettings);
-            }
-            else if (transaction.Type == TransactionType.Settlement)
-            {
-                fileStore.Data = _printService.CreateSettlement(transaction, printSettings);
-            }
-
-            await _db.SaveChangesAsync();
-
-            return fileStore;
-        }
         private IQueryable<ProductsTransaction> IncludeAll() => IncludeAll(_db.Transactions);
         private async Task RemoveProductsFromTransactionAsync(ProductsTransaction transaction, IList<Product> productsToRemove)
         {
@@ -271,9 +218,10 @@ namespace BraunauMobil.VeloBasar.Logic
             }
             if (transaction.Products.Count() > 0)
             {
-                var printSettings = await _settingsContext.GetPrintSettingsAsync();
-                await GenerateTransactionDocumentAsync(transaction, printSettings);
                 await _db.SaveChangesAsync();
+                
+                var printSettings = await _settingsContext.GetPrintSettingsAsync();
+                await _fileContext.UpdateTransactionDocumentAsync(transaction, printSettings);
             }
             else
             {
@@ -298,6 +246,16 @@ namespace BraunauMobil.VeloBasar.Logic
               || EF.Functions.Like(x.Seller.Country.Name, $"%{searchString}%")
               || (x.Seller.BankAccountHolder != null && EF.Functions.Like(x.Seller.BankAccountHolder, $"%{searchString}%"));
         }
+        private async Task UpdateTransactionDocumentsForProduct(Product product)
+        {
+            var printSettings = await _settingsContext.GetPrintSettingsAsync();
+            var transactions = await GetFromProduct(product.Basar, product.Id).ToArrayAsync();
+            foreach (var transaction in  transactions.Where(t => t.CanHasDocument()))
+            {
+                await _fileContext.UpdateTransactionDocumentAsync(transaction, printSettings);
+            }
+        }
+
         private static IQueryable<ProductsTransaction> IncludeAll(IQueryable<ProductsTransaction> transactions)
         {
             return transactions

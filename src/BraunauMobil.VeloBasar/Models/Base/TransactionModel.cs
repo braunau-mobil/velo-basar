@@ -20,5 +20,12 @@ namespace BraunauMobil.VeloBasar.Models.Base
         public TransactionType Type { get; set; }
 
         public string Notes { get; set; }
+
+        public bool CanHasDocument()
+        {
+            return Type == TransactionType.Acceptance
+                || Type == TransactionType.Sale
+                || Type == TransactionType.Settlement;
+        }
     }
 }

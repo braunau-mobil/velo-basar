@@ -65,26 +65,25 @@ namespace BraunauMobil.VeloBasar.Printing
             }
             return bytes;
         }
-        public byte[] CreateAcceptance(ProductsTransaction acceptance, PrintSettings settings)
+        public byte[] CreateTransaction(ProductsTransaction transaction, PrintSettings settings)
         {
-            Contract.Requires(acceptance != null);
-            Contract.Requires(settings != null);
+            Contract.Requires(transaction != null);
 
-            return CreateTransactionPdf(settings, (pdfDoc, doc) =>
+            if (transaction.Type == TransactionType.Acceptance)
             {
-                AddHeader(doc, acceptance.Seller.GetBigAddressText(), acceptance.Basar.GetLocationAndDateText(), acceptance.Seller.GetIdText(_localizer));
+                return CreateAcceptance(transaction, settings);
+            }
+            else if (transaction.Type == TransactionType.Sale)
+            {
+                return CreateSale(transaction, settings);
+            }
+            else if (transaction.Type == TransactionType.Settlement)
+            {
+                return CreateSettlement(transaction, settings);
+            }
 
-                AddTitle(doc, string.Format(CultureInfo.CurrentCulture, settings.Acceptance.TitleFormat, acceptance.Basar.Name, acceptance.Number));
-                AddSubtitle(doc, settings.Acceptance.SubTitle);
-
-                AddProductTable(doc, acceptance.Products.GetProducts(), _localizer["Preis"]);
-
-                AddSignature(doc, settings.Acceptance.SignatureText, acceptance);
-
-                doc.Add(GetSpacer(10));
-                doc.Add(GetRegularText(settings.Acceptance.GetTokenText(acceptance.Seller)));
-            });
-        }
+            throw new InvalidOperationException($"Cannot generate transaction document for: {transaction.Type}");
+        }        
         public byte[] CreateLabel(Product product, PrintSettings settings)
         {
             return CreatePdf((pdfDoc, doc) =>
@@ -148,7 +147,25 @@ namespace BraunauMobil.VeloBasar.Printing
                 doc.Add(barcodeAndPrice);
             });
         }
-        public byte[] CreateSale(ProductsTransaction sale, IDictionary<Product, Seller> productToSellerMap, PrintSettings settings)
+
+        private byte[] CreateAcceptance(ProductsTransaction acceptance, PrintSettings settings)
+        {
+            return CreateTransactionPdf(settings, (pdfDoc, doc) =>
+            {
+                AddHeader(doc, acceptance.Seller.GetBigAddressText(), acceptance.Basar.GetLocationAndDateText(), acceptance.Seller.GetIdText(_localizer));
+
+                AddTitle(doc, string.Format(CultureInfo.CurrentCulture, settings.Acceptance.TitleFormat, acceptance.Basar.Name, acceptance.Number));
+                AddSubtitle(doc, settings.Acceptance.SubTitle);
+
+                AddProductTable(doc, acceptance.Products.GetProducts(), _localizer["Preis"]);
+
+                AddSignature(doc, settings.Acceptance.SignatureText, acceptance);
+
+                doc.Add(GetSpacer(10));
+                doc.Add(GetRegularText(settings.Acceptance.GetTokenText(acceptance.Seller)));
+            });
+        }
+        private byte[] CreateSale(ProductsTransaction sale, PrintSettings settings)
         {
             return CreateTransactionPdf(settings, (pdfDoc, doc) =>
             {
@@ -165,7 +182,7 @@ namespace BraunauMobil.VeloBasar.Printing
                 AddTitle(doc, string.Format(CultureInfo.CurrentCulture, settings.Sale.TitleFormat, sale.Basar.Name, sale.Number));
                 AddSubtitle(doc, settings.Sale.SubTitle);
 
-                AddProductTable(doc, sale.Products.GetProducts(), _localizer["Preis"], productToSellerMap, settings.Sale.SellerInfoText);
+                AddProductTable(doc, sale.Products.GetProducts(), _localizer["Preis"], true, settings.Sale.SellerInfoText);
 
                 doc.Add(GetSpacer(20));
                 doc.Add(GetRegularText(settings.Sale.HintText));
@@ -173,7 +190,7 @@ namespace BraunauMobil.VeloBasar.Printing
                 doc.Add(GetRegularText(settings.Sale.FooterText));
             });
         }
-        public byte[] CreateSettlement(ProductsTransaction settlement, PrintSettings settings)
+        private byte[] CreateSettlement(ProductsTransaction settlement, PrintSettings settings)
         {
             return CreateTransactionPdf(settings, (pdfDoc, doc) =>
             {
@@ -195,8 +212,8 @@ namespace BraunauMobil.VeloBasar.Printing
                 {
                     AddCommissionSummary(doc, settlement.GetSoldProductsSum(), settlement.GetSoldCommissionSum(), settlement.GetSoldTotal(), settlement.Basar.ProductCommission);
                     doc.Add(GetSpacer(20));
-                }                
-                
+                }
+
                 AddSubtitle(doc, settings.Settlement.SoldTitle);
                 AddProductTable(doc, products.GetProductsToPayout(), _localizer["Verkaufspreis"]);
 
@@ -286,7 +303,7 @@ namespace BraunauMobil.VeloBasar.Printing
             headerTable.AddCell(addressCell).AddCell(locationAndDateCell).AddCell(sellerIdCell);
             doc.Add(headerTable);
         }
-        private void AddProductTable(Document doc, IEnumerable<Product> products, string priceColumnTitle, IDictionary<Product, Seller> productToSellerMap = null, string sellerInfoText = null)
+        private void AddProductTable(Document doc, IEnumerable<Product> products, string priceColumnTitle, bool printSellerInfo = false, string sellerInfoText = null)
         {
             var productsTable = new Table(4)
                 .UseAllAvailableWidth()
@@ -359,8 +376,9 @@ namespace BraunauMobil.VeloBasar.Printing
                     .SetBorderRight(null)
                     .Add(productInfo);
 
-                if (productToSellerMap != null && productToSellerMap.TryGetValue(product, out var seller))
+                if (printSellerInfo)
                 {
+                    var seller = product.Seller;
                     var sellerInfo = GetSmallText($"* {seller.GetSmallAddressText()}");
                     productInfoCell.Add(new Paragraph(sellerInfo));
                 }

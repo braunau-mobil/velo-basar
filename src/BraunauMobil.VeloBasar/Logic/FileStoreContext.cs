@@ -32,6 +32,21 @@ namespace BraunauMobil.VeloBasar.Logic
 
             return fileData.Id;
         }
+        public async Task<int> CreateTransactionDocumentAsync(ProductsTransaction transaction, PrintSettings printSettings)
+        {
+            Contract.Requires(transaction != null);
+
+            var fileData = new FileData
+            {
+                ContentType = PdfContentType,
+                Data = _printService.CreateTransaction(transaction, printSettings)
+            };
+
+            _db.Files.Add(fileData);
+            await _db.SaveChangesAsync();
+
+            return fileData.Id;
+        }
         public Task<bool> ExistsAsync(int id) => _db.Files.ExistsAsync(id);
         public async Task DeleteAsync(int id)
         {
@@ -75,6 +90,16 @@ namespace BraunauMobil.VeloBasar.Logic
             var file = await GetAsync(product.LabelId);
 
             file.Data = _printService.CreateLabel(product, printSettings);
+
+            await UpdateAsync(file);
+        }
+        public async Task UpdateTransactionDocumentAsync(ProductsTransaction transaction, PrintSettings printSettings)
+        {
+            Contract.Requires(transaction != null);
+
+            var file = await GetAsync(transaction.DocumentId.Value);
+
+            file.Data = _printService.CreateTransaction(transaction, printSettings);
 
             await UpdateAsync(file);
         }

@@ -23,7 +23,7 @@ namespace BraunauMobil.VeloBasar.Pages.Settlements
         public async Task<IActionResult> OnGetAsync()
         {
             var settings = await _settingsContext.GetPrintSettingsAsync();
-            var bytes = _printService.CreateSettlement(SampleSettlement(), settings);
+            var bytes = _printService.CreateTransaction(SampleSettlement(), settings);
             return File(bytes, "application/pdf");
         }
 

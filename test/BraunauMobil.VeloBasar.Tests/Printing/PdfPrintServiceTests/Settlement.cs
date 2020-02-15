@@ -100,7 +100,7 @@ namespace BraunauMobil.VeloBasar.Tests.Printing.PdfPrintServiceTests
             var localizer = new StringLocalizer<SharedResource>(factory);
 
             var creator = new PdfPrintService(localizer);
-            var doc = creator.CreateSettlement(settlement, new PrintSettings());
+            var doc = creator.CreateTransaction(settlement, new PrintSettings());
             Assert.NotNull(doc);
         }
     }

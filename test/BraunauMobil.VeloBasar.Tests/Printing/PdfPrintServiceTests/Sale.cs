@@ -15,8 +15,27 @@ namespace BraunauMobil.VeloBasar.Tests.Printing.PdfPrintServiceTests
         [Fact]
         public void TwoProdcuts()
         {
+            var seller = new Seller
+            {
+                BankAccountHolder = "Bilbo Beutlin",
+                BIC = "ABC123456789",
+                City = "Hopfenhause",
+                Country = new Country
+                {
+                    Name = "Österreich",
+                    Iso3166Alpha3Code = "AUT"
+                },
+                FirstName = "Bilbo",
+                IBAN = "AT00123412341234",
+                LastName = "Beutlin",
+                Street = "Biergasse 12",
+                Token = "GHTGF4",
+                ZIP = "1234"
+            };
+
             var sale = new ProductsTransaction()
             {
+                Type = TransactionType.Sale,
                 Basar = new Basar
                 {
                     Date = new DateTime(2063, 04, 05),
@@ -40,6 +59,7 @@ namespace BraunauMobil.VeloBasar.Tests.Printing.PdfPrintServiceTests
                             Description = "Ganz tolles Rad, leider Fehlt der Sattel",
                             FrameNumber = "123498zdsfvh48",
                             Price = 12.45m,
+                            Seller = seller,
                             TireSize = "Sehgr groß",
                             Type = new ProductType
                             {
@@ -59,6 +79,7 @@ namespace BraunauMobil.VeloBasar.Tests.Printing.PdfPrintServiceTests
                             Description = "Ganz tolles Rad, leider Fehlt der Sattel",
                             FrameNumber = "123498zdsfvh48",
                             Price = 12.45m,
+                            Seller = seller,
                             TireSize = "Sehgr groß0",
                             Type = new ProductType
                             {
@@ -68,34 +89,12 @@ namespace BraunauMobil.VeloBasar.Tests.Printing.PdfPrintServiceTests
                     }
                 }
             };
-            var seller = new Seller
-            {
-                BankAccountHolder = "Bilbo Beutlin",
-                BIC = "ABC123456789",
-                City = "Hopfenhause",
-                Country = new Country
-                {
-                    Name = "Österreich",
-                    Iso3166Alpha3Code = "AUT"
-                },
-                FirstName = "Bilbo",
-                IBAN = "AT00123412341234",
-                LastName = "Beutlin",
-                Street = "Biergasse 12",
-                Token = "GHTGF4",
-                ZIP = "1234"
-            };
-            var productToSellerMap = new Dictionary<Product, Seller>();
-            foreach (var product in sale.Products)
-            {
-                productToSellerMap.Add(product.Product, seller);
-            }
 
             var factory = new ResourceManagerStringLocalizerFactory(Options.Create(new LocalizationOptions()), NullLoggerFactory.Instance);
             var localizer = new StringLocalizer<SharedResource>(factory);
 
             var creator = new PdfPrintService(localizer);
-            var doc = creator.CreateSale(sale, productToSellerMap, new PrintSettings());
+            var doc = creator.CreateTransaction(sale, new PrintSettings());
             Assert.NotNull(doc);
         }
     }
