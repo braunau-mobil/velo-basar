@@ -37,6 +37,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
             return this.GetPage<Transactions.DetailsModel>(new Transactions.DetailsParameter { TransactionId = item.Id });
         }
         public VeloPage GetPaginationPage(int pageIndex, int? pageSize) => this.GetPage<ListModel>(pageIndex, pageSize);
+        public VeloPage GetResetPage() => this.GetPage<ListModel>();
         public VeloPage GetSearchPage() => this.GetPage<ListModel>(Sales.PageIndex, null);
     }
 }

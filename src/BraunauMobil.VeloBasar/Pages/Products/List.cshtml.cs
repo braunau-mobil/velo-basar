@@ -68,6 +68,7 @@ namespace BraunauMobil.VeloBasar.Pages.Products
         }
         public VeloPage GetPaginationPage(int pageIndex) => this.GetPage<ListModel>(GetParameter(pageIndex, null));
         public VeloPage GetPaginationPage(int pageIndex, int? pageSize) => this.GetPage<ListModel>(GetParameter(pageIndex, pageSize));
+        public VeloPage GetResetPage() => this.GetPage<ListModel>();
         public VeloPage GetSearchPage() => this.GetPage<ListModel>(GetParameter(Products.PageIndex, null));
         private SelectList GetStorageStates()
         {

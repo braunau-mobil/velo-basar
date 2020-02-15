@@ -3,6 +3,6 @@
     public interface ISearchable
     {
         string SearchString { get; }
-        VeloPage GetSearchPage();
+        VeloPage GetResetPage();
     }
 }

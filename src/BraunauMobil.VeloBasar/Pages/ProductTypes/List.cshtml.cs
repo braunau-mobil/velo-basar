@@ -44,6 +44,7 @@ namespace BraunauMobil.VeloBasar.Pages.ProductTypes
             return this.GetPage<EditModel>(new EditParameter { PageIndex = ProductTypes.PageIndex, ProductTypeId = item.Id });
         }
         public VeloPage GetPaginationPage(int pageIndex, int? pageSize) => this.GetPage<ListModel>(pageIndex, pageSize);
+        public VeloPage GetResetPage() => this.GetPage<ListModel>();
         public VeloPage GetSearchPage() => this.GetPage<ListModel>(ProductTypes.PageIndex, null);
         public VeloPage GetSetStatePage(ProductType item, ObjectState stateToSet)
         {

@@ -44,6 +44,7 @@ namespace BraunauMobil.VeloBasar.Pages.Countries
             return this.GetPage<EditModel>(new EditParameter { CountryId = item.Id, PageIndex = Countries.PageIndex });
         }
         public VeloPage GetPaginationPage(int pageIndex, int? pageSize) => this.GetPage<ListModel>(pageIndex, pageSize);
+        public VeloPage GetResetPage() => this.GetPage<ListModel>();
         public VeloPage GetSearchPage() => this.GetPage<ListModel>(Countries.PageIndex, null);
         public async Task<bool> CanDeleteAsync(Country item) => await _CountryContext.CanDeleteAsync(item);
     }

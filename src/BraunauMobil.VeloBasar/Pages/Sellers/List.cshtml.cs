@@ -63,6 +63,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
             return this.GetPage<DetailsModel>(new DetailsParameter { SellerId = seller.Id });
         }
         public VeloPage GetPaginationPage(int pageIndex, int? pageSize) => this.GetPage<ListModel>(GetParameter(pageIndex, pageSize));
+        public VeloPage GetResetPage() => this.GetPage<ListModel>();
         public VeloPage GetSearchPage() => this.GetPage<ListModel>(GetParameter(Sellers.PageIndex, null));
         private SelectList GetValueStates()
         {

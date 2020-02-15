@@ -52,6 +52,7 @@ namespace BraunauMobil.VeloBasar.Pages.Basars
             Contract.Requires(item != null);
             return this.GetPage<EditModel>(new EditParameter { BasarToEditId = item.Id, PageIndex = Basars.PageIndex });
         }
+        public VeloPage GetResetPage() => this.GetPage<ListModel>();
         public VeloPage GetSearchPage() => this.GetPage<ListModel>(Basars.PageIndex, null);
         public VeloPage GetPaginationPage(int pageIndex, int? pageSize = null) => this.GetPage<ListModel>(pageIndex, pageSize);
 
