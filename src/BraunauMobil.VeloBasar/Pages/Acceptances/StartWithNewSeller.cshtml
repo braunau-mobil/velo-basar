@@ -44,7 +44,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Seller.ZIP" class="control-label"></label>
-                <input asp-for="Seller.ZIP" class="form-control" velo-validation-for="Seller.ZIP" velo-validation-condition="Model.IsValidationEnabled" onchange="handleZipChanged()" />
+                <input asp-for="Seller.ZIP" class="form-control" velo-validation-for="Seller.ZIP" velo-validation-condition="Model.IsValidationEnabled" onfocusout="handleZipChanged()" />
             </div>
             <div class="form-group">
                 <label asp-for="Seller.City" class="control-label"></label>
@@ -76,6 +76,9 @@
 @section Scripts {
     <script>
         function handleZipChanged() {
+            if ($('#Seller_City').val()) {
+                return;
+            }
             var zip = $('#Seller_ZIP').val();
             var countryId = $('#Seller_CountryId').val();
             $('#Seller_City').val(getCity(countryId, zip));
