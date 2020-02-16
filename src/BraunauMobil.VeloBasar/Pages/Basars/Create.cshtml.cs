@@ -4,6 +4,7 @@ using BraunauMobil.VeloBasar.Models;
 using System;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using BraunauMobil.VeloBasar.Logic;
+using System.ComponentModel.DataAnnotations;
 
 namespace BraunauMobil.VeloBasar.Pages.Basars
 {
@@ -22,6 +23,10 @@ namespace BraunauMobil.VeloBasar.Pages.Basars
 
         [BindProperty]
         public Basar BasarToCreate { get; set; }
+        [Display(Name = "Artikel Provision in Prozent")]
+        [Range(0, 100, ErrorMessage = "Bitte einen Wert zwischen 0 und 100 % eingeben")]
+        [BindProperty]
+        public int ProductCommissionPercentage { get; set; }
 
         public async Task<IActionResult> OnPostAsync()
         {
@@ -30,6 +35,7 @@ namespace BraunauMobil.VeloBasar.Pages.Basars
                 return Page();
             }
 
+            BasarToCreate.ProductCommission = ProductCommissionPercentage / 100.0m;
             await _basarContext.CreateAsync(BasarToCreate);
             return this.RedirectToPage<ListModel>();
         }

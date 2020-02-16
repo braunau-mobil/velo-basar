@@ -4,6 +4,7 @@ using BraunauMobil.VeloBasar.Models;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using BraunauMobil.VeloBasar.Logic;
 using System.Diagnostics.Contracts;
+using System.ComponentModel.DataAnnotations;
 
 namespace BraunauMobil.VeloBasar.Pages.Basars
 {
@@ -24,6 +25,10 @@ namespace BraunauMobil.VeloBasar.Pages.Basars
 
         [BindProperty]
         public Basar BasarToEdit { get; set; }
+        [Display(Name = "Artikel Provision in Prozent")]
+        [Range(0, 100, ErrorMessage = "Bitte einen Wert zwischen 0 und 100 % eingeben")]
+        [BindProperty]
+        public int ProductCommissionPercentage { get; set; }
 
         public async Task OnGetAsync(EditParameter parameter)
         {
@@ -31,6 +36,7 @@ namespace BraunauMobil.VeloBasar.Pages.Basars
 
             _parameter = parameter;
             BasarToEdit = await _context.GetAsync(parameter.BasarToEditId);
+            ProductCommissionPercentage = (int)(BasarToEdit.ProductCommission * 100);
         }
         public async Task<IActionResult> OnPostAsync(EditParameter parameter)
         {
@@ -43,6 +49,7 @@ namespace BraunauMobil.VeloBasar.Pages.Basars
                 return Page();
             }
 
+            BasarToEdit.ProductCommission = ProductCommissionPercentage / 100.0m;
             await _context.UpdateAsync(BasarToEdit);
             return this.RedirectToPage<ListModel>(new SearchAndPaginationParameter { PageIndex = parameter.PageIndex });
         }
