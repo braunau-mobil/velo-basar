@@ -14,6 +14,7 @@ namespace BraunauMobil.VeloBasar.Logic
         Task<Brand> GetAsync(int id);
         IQueryable<Brand> GetMany(string searchString);
         SelectList GetSelectList();
+        SelectList GetSelectListWithAllItem();
         Task UpdateAsync(Brand brand);
     }
 }

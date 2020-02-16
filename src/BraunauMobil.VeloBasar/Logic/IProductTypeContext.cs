@@ -14,6 +14,7 @@ namespace BraunauMobil.VeloBasar.Logic
         Task<ProductType> GetAsync(int id);
         IQueryable<ProductType> GetMany(string searchString);
         SelectList GetSelectList();
+        SelectList GetSelectListWithAllItem();
         Task SetStateAsync(int id, ObjectState state);
         Task UpdateAsync(ProductType toUpdate);
     }

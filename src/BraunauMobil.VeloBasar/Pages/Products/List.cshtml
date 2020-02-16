@@ -15,6 +15,8 @@
             <div class="d-flex justify-content-end">
                 <select class="mx-2 custom-select" asp-for="@Model.StorageStateFilter" asp-items="ViewBag.StorageStates" onchange="this.form.submit()" name="storageState"></select>
                 <select class="mx-2 custom-select" asp-for="@Model.ValueStateFilter" asp-items="ViewBag.ValueStates" onchange="this.form.submit()" name="valueState"></select>
+                <select class="mx-2 custom-select" asp-for="@Model.BrandFilter" asp-items="ViewBag.Brands" onchange="this.form.submit()" name="BrandId"></select>
+                <select class="mx-2 custom-select" asp-for="@Model.ProductTypeFilter" asp-items="ViewBag.ProductTypes" onchange="this.form.submit()" name="ProductTypeId"></select>
             </div>
         </div>
 

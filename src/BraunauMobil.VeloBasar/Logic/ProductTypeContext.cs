@@ -1,8 +1,11 @@
 ﻿using BraunauMobil.VeloBasar.Data;
 using BraunauMobil.VeloBasar.Models;
+using BraunauMobil.VeloBasar.Resources;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -12,10 +15,12 @@ namespace BraunauMobil.VeloBasar.Logic
     public class ProductTypeContext : IProductTypeContext
     {
         private readonly VeloRepository _db;
+        private readonly IStringLocalizer<SharedResource> _stringLocalizer;
 
-        public ProductTypeContext(VeloRepository db)
+        public ProductTypeContext(VeloRepository db, IStringLocalizer<SharedResource> stringLocalizer)
         {
             _db = db;
+            _stringLocalizer = stringLocalizer;
         }
 
         public async Task<bool> CanDeleteAsync(ProductType type) => !await _db.Products.AnyAsync(p => p.TypeId == type.Id);
@@ -45,6 +50,15 @@ namespace BraunauMobil.VeloBasar.Logic
             return _db.ProductTypes.Where(ProductTypeSearch(searchString)).DefaultOrder();
         }
         public SelectList GetSelectList() => new SelectList(_db.ProductTypes.DefaultOrder(), "Id", "Name");
+        public SelectList GetSelectListWithAllItem()
+        {
+            var productTypes = new List<Tuple<int?, string>>
+            {
+                new Tuple<int?, string>(null, _stringLocalizer["Alle"])
+            };
+            productTypes.AddRange(_db.ProductTypes.DefaultOrder().Select(b => new Tuple<int?, string>(b.Id, b.Name)));
+            return new SelectList(productTypes, "Item1", "Item2");
+        }
         public async Task SetStateAsync(int id, ObjectState state)
         {
             var productType = await GetAsync(id);

@@ -32,8 +32,8 @@ namespace BraunauMobil.VeloBasar.Logic
         public async Task<bool> ExistsAsync(int id) => await _db.Products.ExistsAsync(id);
         public async Task<Product> GetAsync(int id) => await _db.Products.IncludeAll().FirstOrDefaultAsync(p => p.Id == id);
         public IQueryable<Product> GetMany(IList<int> ids) => _db.Products.Where(p => ids.Contains(p.Id)).IncludeAll().DefaultOrder();
-        public IQueryable<Product> GetProductsForBasar(Basar basar) => GetProductsForBasar(basar, null, null, null);
-        public IQueryable<Product> GetProductsForBasar(Basar basar, string searchString, StorageState? storageState, ValueState? valueState)
+        public IQueryable<Product> GetProductsForBasar(Basar basar) => GetProductsForBasar(basar, null, null, null, null, null);
+        public IQueryable<Product> GetProductsForBasar(Basar basar, string searchString, StorageState? storageState, ValueState? valueState, int? brandId, int? productTypeId)
         {
             var iq = _db.Products.IncludeAll().Where(p => p.BasarId == basar.Id);
             
@@ -50,6 +50,16 @@ namespace BraunauMobil.VeloBasar.Logic
             if (valueState != null)
             {
                 iq = iq.Where(p => p.ValueState == valueState.Value);
+            }
+
+            if (brandId != null)
+            {
+                iq = iq.Where(p => p.BrandId == brandId.Value);
+            }
+
+            if (productTypeId != null)
+            {
+                iq = iq.Where(p => p.TypeId == productTypeId.Value);
             }
 
             return iq.DefaultOrder();

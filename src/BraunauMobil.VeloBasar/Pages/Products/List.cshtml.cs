@@ -14,22 +14,30 @@ namespace BraunauMobil.VeloBasar.Pages.Products
     {
         public StorageState? StorageState { get; set; }
         public ValueState? ValueState { get; set; }
+        public int? BrandId { get; set; }
+        public int? ProductTypeId { get; set; }
     }
     public class ListModel : PageModel, ISearchable
     {
         private readonly IVeloContext _context;
         private readonly IProductContext _productContext;
+        private readonly IBrandContext _brandContext;
+        private readonly IProductTypeContext _productTypeContext;
 
-        public ListModel(IVeloContext context, IProductContext productContext)
+        public ListModel(IVeloContext context, IProductContext productContext, IBrandContext brandContext, IProductTypeContext productTypeContext)
         {
             _context = context;
             _productContext = productContext;
+            _brandContext = brandContext;
+            _productTypeContext = productTypeContext;
         }
 
         public string SearchString { get; set; }
         public ProductsViewModel Products { get; set; }
         public StorageState? StorageStateFilter { get; set; }
         public ValueState? ValueStateFilter { get; set; }
+        public int? BrandFilter { get; set; }
+        public int? ProductTypeFilter { get; set; }
 
         public async Task<IActionResult> OnGetAsync(ListParameter parameter)
         {
@@ -37,7 +45,11 @@ namespace BraunauMobil.VeloBasar.Pages.Products
 
             ViewData["StorageStates"] = GetStorageStates();
             ViewData["ValueStates"] = GetValueStates();
-            
+            ViewData["Brands"] = _brandContext.GetSelectListWithAllItem();
+            ViewData["ProductTypes"] = _productTypeContext.GetSelectListWithAllItem();
+
+            BrandFilter = parameter.BrandId;
+            ProductTypeFilter = parameter.ProductTypeId;
             StorageStateFilter = parameter.StorageState;
             SearchString = parameter.SearchString;
             ValueStateFilter = parameter.ValueState;
@@ -50,7 +62,7 @@ namespace BraunauMobil.VeloBasar.Pages.Products
                 }
             }
 
-            var productIq = _productContext.GetProductsForBasar(_context.Basar, SearchString, StorageStateFilter, ValueStateFilter);
+            var productIq = _productContext.GetProductsForBasar(_context.Basar, SearchString, StorageStateFilter, ValueStateFilter, BrandFilter, ProductTypeFilter);
             Products = await ProductsViewModel.CreateAsync(productIq, parameter.GetPageIndex(), parameter.GetPageSize(this), GetPaginationPage,
             new[]
             {
@@ -90,8 +102,10 @@ namespace BraunauMobil.VeloBasar.Pages.Products
         {
             return new ListParameter
             {
+                BrandId = BrandFilter,
                 PageIndex = pageIndex,
                 PageSize = pageSize,
+                ProductTypeId = ProductTypeFilter,
                 SearchString = SearchString,
                 StorageState = StorageStateFilter,
                 ValueState = ValueStateFilter
