@@ -12,10 +12,14 @@
         </div>
 
         <form method="post">
-            <div class="d-flex form-actions no-color align-items-md-center">
-                <div class="mx-2">@Localizer["Artikel ID:"]</div>
-                <input asp-for="ProductId" velo-validation-for="ProductId" />
-                <input type="submit" value="@Localizer["Hinzufügen"]" class="btn btn-primary mx-2" />
+            <div class="form-row align-items-center">
+                <label class="mx-2">@Localizer["Artikel ID:"]</label>
+                <div class="col-auto">
+                    <input asp-for="ProductId" class="form-control mb-2" />
+                </div>
+                <div class="col-auto">
+                    <input type="submit" value="@Localizer["Hinzufügen"]" class="btn btn-primary mb-2" />
+                </div>
             </div>
         </form>
 
