@@ -6,26 +6,31 @@
     ViewData["Title"] = Localizer["Annahme - Verkäufer eingeben"];
 }
 
-<div class="card my-3">
-    <div class="card-header d-flex justify-content-between align-items-md-center">
-        <div class="mr-auto"><h5>@ViewData["Title"]</h5></div>
-    </div>
+<form method="post">
+    <div class="card my-3">
+        <div class="card-header d-flex justify-content-between align-items-md-center">
+            <div class="mr-auto"><h5>@ViewData["Title"]</h5></div>
 
-    <div class="card-body">
-        <form method="post">
+            <input type="submit" value="@Localizer["Weiter"]" class="btn btn-primary" velo-parameter="@Model.GetNextParameter()" />
+        </div>
+
+        <div class="card-body">
             <input Condition="@Model.AreWeInEditMode" type="hidden" asp-for="Seller.Id" />
             <input type="hidden" asp-for="Seller.Token" />
 
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label asp-for="Seller.FirstName" class="control-label"></label>
+            <div class="form-group row">
+                <label asp-for="Seller.FirstName" class="col-2 col-form-label"></label>
+                <div class="col-10">
                     <input asp-for="Seller.FirstName" class="form-control" velo-validation-for="Seller.FirstName" velo-validation-condition="Model.IsValidationEnabled" />
                 </div>
-                <div class="col-md-6 mb-3">
-                    <label asp-for="Seller.LastName" class="control-label"></label>
+            </div>
+            <div class="form-group row">
+                <label asp-for="Seller.LastName" class="col-2 col-form-label"></label>
+                <div class="col-10">
                     <input asp-for="Seller.LastName" class="form-control" velo-validation-for="Seller.LastName" velo-validation-condition="Model.IsValidationEnabled" />
                 </div>
             </div>
+
             <div Condition="@Model.ErrorText != null" class="alert alert-danger" role="alert">
                 @Model.ErrorText
             </div>
@@ -34,44 +39,55 @@
                 <input velo-parameter="@new StartWithNewSellerParameter { Search = true }" type="submit" value="@Localizer["Suchen"]" class="btn btn-primary" />
             </div>
 
-            <div condition="Model.HasSellers">
+            <div condition="Model.HasSellers" class="form-group">
                 <partial name="/Pages/Sellers/_SelectionTable.cshtml" model="@Model.Sellers" />
             </div>
 
-            <div class="form-group">
-                <label asp-for="Seller.Country" class="control-label"></label>
-                <select asp-for="Seller.CountryId" class="form-control" asp-items="ViewBag.Countries"></select>
+            <div class="form-group row">
+                <label asp-for="Seller.Country" class="col-2 col-form-label"></label>
+                <div class="col-2">
+                    <select asp-for="Seller.CountryId" class="form-control" asp-items="ViewBag.Countries"></select>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Seller.ZIP" class="control-label"></label>
-                <input asp-for="Seller.ZIP" class="form-control" velo-validation-for="Seller.ZIP" velo-validation-condition="Model.IsValidationEnabled" onfocusout="handleZipChanged()" />
+            <div class="form-group row">
+                <label asp-for="Seller.ZIP" class="col-2 col-form-label"></label>
+                <div class="col-10">
+                    <input asp-for="Seller.ZIP" class="form-control" velo-validation-for="Seller.ZIP" velo-validation-condition="Model.IsValidationEnabled" onfocusout="handleZipChanged()" />
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Seller.City" class="control-label"></label>
-                <input asp-for="Seller.City" class="form-control" velo-validation-for="Seller.City" velo-validation-condition="Model.IsValidationEnabled" />
+            <div class="form-group row">
+                <label asp-for="Seller.City" class="col-2 col-form-label"></label>
+                <div class="col-10">
+                    <input asp-for="Seller.City" class="form-control" velo-validation-for="Seller.City" velo-validation-condition="Model.IsValidationEnabled" />
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Seller.Street" class="control-label"></label>
-                <input asp-for="Seller.Street" class="form-control" velo-validation-for="Seller.Street" velo-validation-condition="Model.IsValidationEnabled" />
+            <div class="form-group row">
+                <label asp-for="Seller.Street" class="col-2 col-form-label"></label>
+                <div class="col-10">
+                    <input asp-for="Seller.Street" class="form-control" velo-validation-for="Seller.Street" velo-validation-condition="Model.IsValidationEnabled" />
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Seller.PhoneNumber" class="control-label"></label>
-                <input asp-for="Seller.PhoneNumber" class="form-control" velo-validation-for="Seller.PhoneNumber" velo-validation-condition="Model.IsValidationEnabled" />
+            <div class="form-group row">
+                <label asp-for="Seller.PhoneNumber" class="col-2 col-form-label"></label>
+                <div class="col-10">
+                    <input asp-for="Seller.PhoneNumber" class="form-control" velo-validation-for="Seller.PhoneNumber" velo-validation-condition="Model.IsValidationEnabled" />
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Seller.IBAN" class="control-label"></label>
-                <input asp-for="Seller.IBAN" class="form-control" velo-validation-for="Seller.IBAN", velo-validation-condition="Model.IsValidationEnabled" />
+            <div class="form-group row">
+                <label asp-for="Seller.IBAN" class="col-2 col-form-label"></label>
+                <div class="col-10">
+                    <input asp-for="Seller.IBAN" class="form-control" velo-validation-for="Seller.IBAN" , velo-validation-condition="Model.IsValidationEnabled" />
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Seller.BankAccountHolder" class="control-label"></label>
-                <input asp-for="Seller.BankAccountHolder" class="form-control" velo-validation-for="Seller.BankAccountHolder" velo-validation-condition="Model.IsValidationEnabled" />
-            </div>
-            <div class="form-group">
-                <input type="submit" value="@Localizer["Weiter"]" class="btn btn-primary" velo-parameter="@Model.GetNextParameter()" />
-            </div>
-        </form>
+            <div class="form-group row">
+                <label asp-for="Seller.BankAccountHolder" class="col-2 col-form-label"></label>
+                <div class="col-10">
+                    <input asp-for="Seller.BankAccountHolder" class="form-control" velo-validation-for="Seller.BankAccountHolder" velo-validation-condition="Model.IsValidationEnabled" />
+                </div>
+            </div>            
+        </div>
     </div>
-</div>
+</form>
 
 @section Scripts {
     <script>
