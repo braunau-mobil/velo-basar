@@ -26,7 +26,14 @@ namespace BraunauMobil.VeloBasar.Logic
 
         public async Task CreateDatabaseAsync()
         {
-            await _db.Database.EnsureCreatedAsync();
+            if (_db.IsSQLITE())
+            {
+                await _db.Database.EnsureCreatedAsync();
+            }
+            else
+            {
+                await _db.Database.MigrateAsync();
+            }
         }
 
         public async Task InitializeDatabaseAsync(InitializationConfiguration config)
