@@ -4,92 +4,105 @@
     ViewData["Title"] = Localizer["Annahme für Verkäufer ID: {0} - Artikel eingeben", Model.SellerId];
 }
 
-<form method="post">
-    <div class="card my-3">
-        <div class="card-header d-flex justify-content-between align-items-md-center">
-            <div class="mr-auto"><h5>@ViewData["Title"]</h5></div>
-            <div class="d-flex justify-content-end">
-                <a velo-page="@Model.GetCancelPage()" class="btn btn-secondary mx-1">@Localizer["Abbrechen"]</a>
-                <a Condition="@Model.Products.List.Count > 0" class="btn btn-primary mx-1" velo-page="@Model.GetAcceptPage()">@Localizer["Annahmebeleg speichern"]</a>
+    <form method="post">
+        <div class="card my-3">
+            <div class="card-header d-flex justify-content-between align-items-md-center">
+                <div class="mr-auto"><h5>@ViewData["Title"]</h5></div>
+                <div class="d-flex justify-content-end">
+                    <a velo-page="@Model.GetCancelPage()" class="btn btn-secondary mx-1">@Localizer["Abbrechen"]</a>
+                    <a Condition="@Model.Products.List.Count > 0" class="btn btn-primary mx-1" velo-page="@Model.GetAcceptPage()">@Localizer["Annahmebeleg speichern"]</a>
+                </div>
+            </div>
+
+            <div class="card-body">
+                <input Condition="@Model.AreWeInEditMode" type="hidden" asp-for="NewProduct.Id" />
+
+                <div class="form-row">
+                    <div class="col-2 mb-3">
+                        <label>@Html.DisplayNameFor(model => model.NewProduct.Type)</label>
+                        <select asp-for="NewProduct.TypeId" class="form-control" asp-items="ViewBag.ProductTypes"></select>
+                    </div>
+                    <div class="col-2 mb-3">
+                        <label>@Html.DisplayNameFor(model => model.NewProduct.Brand)</label>
+                        <select asp-for="NewProduct.BrandId" class="form-control" asp-items="ViewBag.Brands"></select>
+                    </div>
+                    <div class="col-8 mb-3">
+                        <label>@Html.DisplayNameFor(model => model.NewProduct.Description)</label>
+                        <input asp-for="NewProduct.Description" class="form-control" velo-validation-for="NewProduct.Description" />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-4 mb-3">
+                        <label>@Html.DisplayNameFor(model => model.NewProduct.Color)</label>
+                        <input asp-for="NewProduct.Color" class="form-control" velo-validation-for="NewProduct.Color" />
+                    </div>
+                    <div class="col-4 mb-3">
+                        <label>@Html.DisplayNameFor(model => model.NewProduct.FrameNumber)</label>
+                        <input asp-for="NewProduct.FrameNumber" class="form-control" velo-validation-for="NewProduct.FrameNumber" />
+                    </div>
+                    <div class="col-2 mb-3">
+                        <label>@Html.DisplayNameFor(model => model.NewProduct.TireSize)</label>
+                        <input asp-for="NewProduct.TireSize" class="form-control" velo-validation-for="NewProduct.TireSize" />
+                    </div>
+                    <div class="col-2 mb-3">
+                        <label>@Html.DisplayNameFor(model => model.NewProduct.Price)</label>
+                        <input asp-for="NewProduct.Price" class="form-control" velo-validation-for="NewProduct.Price" />
+                    </div>
+                </div>
+                @if (Model.AreWeInEditMode)
+                {
+                    <input type="submit" value="@Localizer["Aktualisieren"]" class="btn btn-primary" velo-parameter="@Model.GetUpdateParameter()" />
+                }
+                else
+                {
+                    <input type="submit" value="@Localizer["Hinzufügen"]" class="btn btn-primary" velo-parameter="@Model.GetAddParameter()" />
+                }
             </div>
         </div>
 
-        <div class="card-body p-0">
-            <input Condition="@Model.AreWeInEditMode" type="hidden" asp-for="NewProduct.Id" />
-            <table class="table m-0">
-                <thead>
-                    <tr>
-                        <th style="width: 10%;">@Html.DisplayNameFor(model => model.NewProduct.Type)</th>
-                        <th style="width: 10%;">@Html.DisplayNameFor(model => model.NewProduct.Brand)</th>
-                        <th style="width: 10%;">@Html.DisplayNameFor(model => model.NewProduct.Color)</th>
-                        <th style="width: 30%;">@Html.DisplayNameFor(model => model.NewProduct.Description)</th>
-                        <th style="width: 20%;">@Html.DisplayNameFor(model => model.NewProduct.FrameNumber)</th>
-                        <th style="width: 10%;">@Html.DisplayNameFor(model => model.NewProduct.TireSize)</th>
-                        <th style="width: 10%;">@Html.DisplayNameFor(model => model.NewProduct.Price)</th>
-                        <th style="width: auto;"></th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    <tr>
-                        <td>
-                            <select asp-for="NewProduct.TypeId" class="form-control" asp-items="ViewBag.ProductTypes"></select>
-                        </td>
-                        <td>
-                            <select asp-for="NewProduct.BrandId" class="form-control" asp-items="ViewBag.Brands"></select>
-                        </td>
-                        <td>
-                            <input asp-for="NewProduct.Color" class="form-control" velo-validation-for="NewProduct.Color" />
-                        </td>
-                        <td>
-                            <input asp-for="NewProduct.Description" class="form-control" velo-validation-for="NewProduct.Description" />
-                        </td>
-                        <td>
-                            <input asp-for="NewProduct.FrameNumber" class="form-control" velo-validation-for="NewProduct.FrameNumber" />
-                        </td>
-                        <td>
-                            <input asp-for="NewProduct.TireSize" class="form-control" velo-validation-for="NewProduct.TireSize" />
-                        </td>
-                        <td>
-                            <input asp-for="NewProduct.Price" class="form-control" velo-validation-for="NewProduct.Price" />
-                        </td>
-                        <th>
-                            @if (Model.AreWeInEditMode)
-                            {
-                                <input type="submit" value="@Localizer["Aktualisieren"]" class="btn btn-primary mx-1" velo-parameter="@Model.GetUpdateParameter()" />
-                            }
-                            else
-                            {
-                                <input type="submit" value="@Localizer["Hinzufügen"]" class="btn btn-primary mx-1" velo-parameter="@Model.GetAddParameter()" />
-                            }
-                        </th>
-                    </tr>
-                    @foreach (var itemViewModel in Model.Products.List)
-                    {
+        <div Condition="Model.Products.List.Count > 0" class="card my-3">
+            <div class="card-body p-0">
+                <table class="table m-0">
+                    <thead>
                         <tr>
-                            <td>@Html.DisplayFor(modelItem => itemViewModel.Item.Type.Name)</td>
-                            <td>@Html.DisplayFor(modelItem => itemViewModel.Item.Brand.Name)</td>
-                            <td>@Html.DisplayFor(modelItem => itemViewModel.Item.Color)</td>
-                            <td>@Html.DisplayFor(modelItem => itemViewModel.Item.Description)</td>
-                            <td>@Html.DisplayFor(modelItem => itemViewModel.Item.FrameNumber)</td>
-                            <td>@Html.DisplayFor(modelItem => itemViewModel.Item.TireSize)</td>
-                            <td>@Html.DisplayFor(modelItem => itemViewModel.Item.Price)</td>
-                            <td>
-                                @foreach (var command in Model.Products.Commands)
-                                {
-                                    if (command.IsEnabled(itemViewModel.Item))
-                                    {
-                                        <a velo-page="@command.GetPage(itemViewModel.Item)">@command.Text</a>
-                                    }
-                                }
-                            </td>
+                            <th style="width: 10%;">@Html.DisplayNameFor(model => model.NewProduct.Type)</th>
+                            <th style="width: 10%;">@Html.DisplayNameFor(model => model.NewProduct.Brand)</th>
+                            <th style="width: 10%;">@Html.DisplayNameFor(model => model.NewProduct.Color)</th>
+                            <th style="width: 30%;">@Html.DisplayNameFor(model => model.NewProduct.Description)</th>
+                            <th style="width: 20%;">@Html.DisplayNameFor(model => model.NewProduct.FrameNumber)</th>
+                            <th style="width: 10%;">@Html.DisplayNameFor(model => model.NewProduct.TireSize)</th>
+                            <th style="width: 10%;">@Html.DisplayNameFor(model => model.NewProduct.Price)</th>
+                            <th style="width: auto;"></th>
                         </tr>
-                    }
-                </tbody>
-            </table>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var itemViewModel in Model.Products.List)
+                        {
+                            <tr>
+                                <td>@Html.DisplayFor(modelItem => itemViewModel.Item.Type.Name)</td>
+                                <td>@Html.DisplayFor(modelItem => itemViewModel.Item.Brand.Name)</td>
+                                <td>@Html.DisplayFor(modelItem => itemViewModel.Item.Color)</td>
+                                <td>@Html.DisplayFor(modelItem => itemViewModel.Item.Description)</td>
+                                <td>@Html.DisplayFor(modelItem => itemViewModel.Item.FrameNumber)</td>
+                                <td>@Html.DisplayFor(modelItem => itemViewModel.Item.TireSize)</td>
+                                <td>@Html.DisplayFor(modelItem => itemViewModel.Item.Price)</td>
+                                <td>
+                                    @foreach (var command in Model.Products.Commands)
+                                    {
+                                        if (command.IsEnabled(itemViewModel.Item))
+                                        {
+                                            <a velo-page="@command.GetPage(itemViewModel.Item)">@command.Text</a>
+                                        }
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>
-</form>
+    </form>
 
 
 @section Scripts {
