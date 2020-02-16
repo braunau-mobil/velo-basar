@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Threading.Tasks;
 using BraunauMobil.VeloBasar.Logic;
 using BraunauMobil.VeloBasar.Models;
@@ -26,6 +27,7 @@ namespace BraunauMobil.VeloBasar.Pages.Setup
         [BindProperty]
         public SettlementPrintSettings Settlement { get; set; }
         [BindProperty]
+        [Display(Name = "Etiketten")]
         public LabelPrintSettings Label { get; set; }
         [BindProperty]
         public Margins PageMargins { get; set; }
