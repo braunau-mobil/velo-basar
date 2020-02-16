@@ -7,16 +7,19 @@
 <form method="post">
     <div class="card my-3">
         <div class="card-header d-flex justify-content-between align-items-md-center">
-            <div><h5 class="mx-2">@Localizer["Annahme Nummer"]</h5></div>
-
-            <input id="AcceptanceNumber" class="mx-2" asp-for="@Model.AcceptanceNumber" />
-
-            <div><input class="mx-2 btn btn-primary" type="submit" value="@Localizer["Ok"]" /></div>
+            <div class="mr-auto"><h5>@ViewData["Title"]</h5></div>
+            <div class="d-flex justify-content-end">
+                <input type="submit" value="@Localizer["Ok"]" class="btn btn-primary mx-1" />
+            </div>
         </div>
 
-        <div class="card-body p-0">
-            <div Condition="@Model.NumberNotFound" class="alert alert-success" role="alert">
-                @Localizer["Es konnte keine Annahme mit der Nummer {0} gefunden werden.", Model.AcceptanceNumber]
+        <div class="card-body">
+            <div class="column">
+                <div class="form-group">
+                    <label asp-for="AcceptanceNumber" class="control-label"></label>
+                    <input id="AcceptanceNumber" asp-for="AcceptanceNumber" class="form-control" velo-validation-for="AcceptanceNumber" />
+                    <span Condition="Model.NumberNotFound" class="text-danger">@Localizer["Es konnte keine Annahme mit der Nummer {0} gefunden werden.", Model.AcceptanceNumber]</span>
+                </div>
             </div>
         </div>
     </div>

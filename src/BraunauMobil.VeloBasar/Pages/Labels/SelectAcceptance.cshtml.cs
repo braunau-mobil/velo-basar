@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.Contracts;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.Contracts;
 using System.Threading.Tasks;
 using BraunauMobil.VeloBasar.Logic;
 using BraunauMobil.VeloBasar.Models;
@@ -30,6 +31,7 @@ namespace BraunauMobil.VeloBasar.Pages.Labels
         }
 
         [BindProperty]
+        [Display(Name = "Annahme Nummer")]
         public int AcceptanceNumber { get; set; }
         public bool NumberNotFound { get; set; }
         public bool OpenPdf { get; set; }
