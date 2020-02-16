@@ -154,6 +154,8 @@ namespace BraunauMobil.VeloBasar.Logic
         }
         public async Task UpdateProductAsync(Product product)
         {
+            Contract.Requires(product != null);
+
             await _productContext.UpdateAsync(product);
             await UpdateTransactionDocumentsForProduct(product);
         }

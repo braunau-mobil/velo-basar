@@ -234,7 +234,6 @@ namespace BraunauMobil.VeloBasar.Printing
                 AddSignature(doc, settings.Settlement.SignatureText, settlement);
             });
         }
-
         private static byte[] CreatePdf(Action<PdfDocument, Document> decorate)
         {
             byte[] bytes;
@@ -277,39 +276,6 @@ namespace BraunauMobil.VeloBasar.Printing
                 .SetFontColor(_green)
                 .SetTextAlignment(TextAlignment.CENTER);
             doc.Add(website);
-        }
-        private void AddHeader(Document doc, string addressText, string locationAndDateText, string sellerIdText)
-        {
-            var headerTable = new Table(2);
-            headerTable.UseAllAvailableWidth();
-            
-            var addressCell = new Cell(2, 1)
-                .SetBorder(null);
-            if (addressText != null)
-            {
-                addressCell.Add(GetRegularText(addressText));
-            }
-
-            var locationAndDateCell = new Cell()
-                .SetBorder(null)
-                .SetTextAlignment(TextAlignment.RIGHT)
-                .SetVerticalAlignment(VerticalAlignment.TOP);
-            if(locationAndDateText != null)
-            {
-                locationAndDateCell.Add(GetRegularText(locationAndDateText));
-            }
-
-            var sellerIdCell = new Cell()
-                .SetBorder(null)
-                .SetTextAlignment(TextAlignment.RIGHT)
-                .SetVerticalAlignment(VerticalAlignment.BOTTOM);
-            if (sellerIdText != null)
-            {
-                sellerIdCell.Add(GetRegularText(sellerIdText));
-            }
-            
-            headerTable.AddCell(addressCell).AddCell(locationAndDateCell).AddCell(sellerIdCell);
-            doc.Add(headerTable);
         }
         private void AddProductTable(Document doc, IEnumerable<Product> products, string priceColumnTitle, bool printSellerInfo = false, string sellerInfoText = null)
         {
@@ -510,14 +476,48 @@ namespace BraunauMobil.VeloBasar.Printing
 
             doc.Add(productsTable);
         }
-        private void AddTitle(Document doc, string text)
+
+        private static void AddHeader(Document doc, string addressText, string locationAndDateText, string sellerIdText)
+        {
+            var headerTable = new Table(2);
+            headerTable.UseAllAvailableWidth();
+
+            var addressCell = new Cell(2, 1)
+                .SetBorder(null);
+            if (addressText != null)
+            {
+                addressCell.Add(GetRegularText(addressText));
+            }
+
+            var locationAndDateCell = new Cell()
+                .SetBorder(null)
+                .SetTextAlignment(TextAlignment.RIGHT)
+                .SetVerticalAlignment(VerticalAlignment.TOP);
+            if (locationAndDateText != null)
+            {
+                locationAndDateCell.Add(GetRegularText(locationAndDateText));
+            }
+
+            var sellerIdCell = new Cell()
+                .SetBorder(null)
+                .SetTextAlignment(TextAlignment.RIGHT)
+                .SetVerticalAlignment(VerticalAlignment.BOTTOM);
+            if (sellerIdText != null)
+            {
+                sellerIdCell.Add(GetRegularText(sellerIdText));
+            }
+
+            headerTable.AddCell(addressCell).AddCell(locationAndDateCell).AddCell(sellerIdCell);
+            doc.Add(headerTable);
+        }
+        private static void AddTitle(Document doc, string text)
         {
             var mainTitle = GetBigText(text)
                 .SetBold()
                 .SetMarginBottom(20);
             doc.Add(mainTitle);
         }
-        private void AddSubtitle(Document doc, string text)
+        private static void AddSubtitle(Document doc, string text)
         {
             var subTitle = GetMediumText(text)
                 .SetBold()
