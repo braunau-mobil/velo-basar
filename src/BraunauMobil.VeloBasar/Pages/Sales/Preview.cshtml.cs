@@ -49,6 +49,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
 
             return new ProductsTransaction()
             {
+                Type = TransactionType.Sale,
                 Basar = new Basar
                 {
                     Date = new DateTime(2063, 04, 05),
