@@ -93,6 +93,7 @@ namespace BraunauMobil.VeloBasar
         {
             services.AddScoped<IBasarContext, BasarContext>();
             services.AddScoped<IBrandContext, BrandContext>();
+            services.AddScoped<IColorProvider, ColorProvider>();
             services.AddScoped<ICountryContext, CountryContext>();
             services.AddScoped<IDataGeneratorContext, DataGeneratorContext>();
             services.AddScoped<IFileStoreContext, FileStoreContext>();

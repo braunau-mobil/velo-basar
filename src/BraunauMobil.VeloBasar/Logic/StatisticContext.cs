@@ -11,19 +11,17 @@ namespace BraunauMobil.VeloBasar.Logic
 {
     public class StatisticContext : IStatisticContext
     {
-        private readonly IStringLocalizer<SharedResource> _localizer;
         private readonly IBasarContext _basarContext;
         private readonly IProductContext _productContext;
         private readonly ITransactionContext _transactionContext;
-        private readonly ISellerContext _sellerContext;
+        private readonly IColorProvider _colorProvider;
 
-        public StatisticContext(IStringLocalizer<SharedResource> localizer, ITransactionContext transactionContext, IBasarContext basarContext, IProductContext productContext, ISellerContext sellerContext)
+        public StatisticContext(ITransactionContext transactionContext, IBasarContext basarContext, IProductContext productContext, IColorProvider colorProvider)
         {
-            _localizer = localizer;
             _transactionContext = transactionContext;
             _basarContext = basarContext;
             _productContext = productContext;
-            _sellerContext = sellerContext;
+            _colorProvider = colorProvider;
         }
 
         public async Task<BasarStatistic> GetBasarStatisticAsnyc(int basarId)
@@ -67,15 +65,45 @@ namespace BraunauMobil.VeloBasar.Logic
         private ChartDataPoint[] GroupByProductType(IEnumerable<Product> products, Func<IGrouping<ProductType, Product>, ChartDataPoint> getPoint)
         {
             var data = new List<ChartDataPoint>();
-            var colors = new ColorDispenser();
             foreach (var group in products.GroupBy(p => p.Type))
             {
                 var point = getPoint(group);
-                point.Color = colors.Next();
+                point.Color = _colorProvider[group.Key.Name];
                 data.Add(point);
             }
             return data.ToArray();
         }
+        private ChartDataPoint[] GetPriceDistribution(IEnumerable<Product> products)
+        {
+            if (!products.Any())
+            {
+                return Array.Empty<ChartDataPoint>();
+            }
+
+            var step = 10.0m;
+            var maxPrice = products.Max(p => p.Price);
+            var currentMin = 0.0m;
+            var currentMax = step;
+
+            var data = new List<ChartDataPoint>();
+            while (currentMax < maxPrice)
+            {
+                var count = products.Count(p => p.Price >= currentMin && p.Price < currentMax);
+                if (count > 0)
+                {
+                    data.Add(new ChartDataPoint
+                    {
+                        Label = $"{currentMax:C}",
+                        Value = count,
+                        Color = _colorProvider.Primary
+                    });
+                }
+                currentMin += step;
+                currentMax += step;
+            }
+            return data.ToArray();
+        }
+
         private static ChartDataPoint FromCount(IGrouping<ProductType, Product> group)
         {
             var count = group.Count();
@@ -93,38 +121,6 @@ namespace BraunauMobil.VeloBasar.Logic
                 Label = $"{group.Key.Name}: {sum:C}",
                 Value = sum
             };
-        }
-        private static ChartDataPoint[] GetPriceDistribution(IEnumerable<Product> products)
-        {
-            if (!products.Any())
-            {
-                return Array.Empty<ChartDataPoint>();
-            }
-
-            var step = 10.0m;
-            var maxPrice = products.Max(p => p.Price);
-            var currentMin = 0.0m;
-            var currentMax = step;
-            var colors = new ColorDispenser();
-            var color = colors.Next();
-
-            var data = new List<ChartDataPoint>();
-            while (currentMax < maxPrice)
-            {
-                var count = products.Count(p => p.Price >= currentMin && p.Price < currentMax);
-                if (count > 0)
-                {
-                    data.Add(new ChartDataPoint
-                    {
-                        Label = $"{currentMax:C}",
-                        Value = count,
-                        Color = color
-                    });
-                }
-                currentMin += step;
-                currentMax += step;
-            }
-            return data.ToArray();
         }
     }
 }
