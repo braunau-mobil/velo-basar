@@ -52,11 +52,6 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
 
             return Page();
         }
-        public VeloPage GetEditPage(Seller seller)
-        {
-            Contract.Requires(seller != null);
-            return this.GetPage<EditModel>(new EditParameter { SellerId = seller.Id });
-        }
         public VeloPage GetDetailsPage(Seller seller)
         {
             Contract.Requires(seller != null);
