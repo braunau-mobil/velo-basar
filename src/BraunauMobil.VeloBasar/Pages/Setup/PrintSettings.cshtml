@@ -15,21 +15,22 @@
             </div>
 
             <div class="card-body">
-                <div class="form-group">
-                    <label asp-for="PrintSettings.Banner" class="control-label"></label>
-                    <br />
-                    <partial name="/Pages/Shared/_ImageData.cshtml" model="@Model.PrintSettings.Banner" />
-                    <br />
-                    <input type="file" asp-for="BannerUpload" accept=".jpeg,.jpg,.png,.gif, image/png,jpeg,gif">
-                    <input type="submit" value="@Localizer["Hochladen"]" />
+                <div class="form-group row">
+                    <label asp-for="PrintSettings.Banner" class="col-2 col-form-label"></label>
+                    <div class="col-10">
+                        <partial name="/Pages/Shared/_ImageData.cshtml" model="@Model.PrintSettings.Banner" />
+                        <br />
+                        <input type="file" asp-for="BannerUpload" accept=".jpeg,.jpg,.png,.gif, image/png,jpeg,gif">
+                        <input type="submit" value="@Localizer["Hochladen"]" />
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label asp-for="PrintSettings.BannerSubtitle" class="control-label"></label>
-                    <input asp-for="PrintSettings.BannerSubtitle" class="form-control" velo-validation-for="PrintSettings.BannerSubtitle" />
+                <div class="form-group row">
+                    <label asp-for="PrintSettings.BannerSubtitle" class="col-2 col-form-label"></label>
+                    <input asp-for="PrintSettings.BannerSubtitle" class="col-10 form-control" velo-validation-for="PrintSettings.BannerSubtitle" />
                 </div>
-                <div class="form-group">
-                    <label asp-for="PrintSettings.Website" class="control-label"></label>
-                    <input asp-for="PrintSettings.Website" class="form-control" velo-validation-for="PrintSettings.Website" />
+                <div class="form-group row">
+                    <label asp-for="PrintSettings.Website" class="col-2 col-form-label"></label>
+                    <input asp-for="PrintSettings.Website" class="col-10 form-control" velo-validation-for="PrintSettings.Website" />
                 </div>
             </div>
         </div>
@@ -45,23 +46,21 @@
             </div>
 
             <div class="card-body">
-                <div class="column">
-                    <div class="form-group">
-                        <label asp-for="Acceptance.TitleFormat" class="control-label"></label>
-                        <input asp-for="Acceptance.TitleFormat" class="form-control" velo-validation-for="Acceptance.TitleFormat" />
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Acceptance.SubTitle" class="control-label"></label>
-                        <input asp-for="Acceptance.SubTitle" class="form-control" velo-validation-for="Acceptance.SubTitle" />
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Acceptance.SignatureText" class="control-label"></label>
-                        <input asp-for="Acceptance.SignatureText" class="form-control" velo-validation-for="Acceptance.SignatureText" />
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Acceptance.TokenFormat" class="control-label"></label>
-                        <input asp-for="Acceptance.TokenFormat" class="form-control" velo-validation-for="Acceptance.TokenFormat" />
-                    </div>
+                <div class="form-group row">
+                    <label asp-for="Acceptance.TitleFormat" class="col-2 col-form-label"></label>
+                    <input asp-for="Acceptance.TitleFormat" class="col-10 form-control" velo-validation-for="Acceptance.TitleFormat" />
+                </div>
+                <div class="form-group row">
+                    <label asp-for="Acceptance.SubTitle" class="col-2 col-form-label"></label>
+                    <input asp-for="Acceptance.SubTitle" class="col-10 form-control" velo-validation-for="Acceptance.SubTitle" />
+                </div>
+                <div class="form-group row">
+                    <label asp-for="Acceptance.SignatureText" class="col-2 col-form-label"></label>
+                    <input asp-for="Acceptance.SignatureText" class="col-10 form-control" velo-validation-for="Acceptance.SignatureText" />
+                </div>
+                <div class="form-group row">
+                    <label asp-for="Acceptance.TokenFormat" class="col-2 col-form-label"></label>
+                    <input asp-for="Acceptance.TokenFormat" class="col-10 form-control" velo-validation-for="Acceptance.TokenFormat" />
                 </div>
             </div>
         </div>
@@ -75,27 +74,25 @@
             </div>
 
             <div class="card-body">
-                <div class="column">
-                    <div class="form-group">
-                        <label asp-for="Sale.TitleFormat" class="control-label"></label>
-                        <input asp-for="Sale.TitleFormat" class="form-control" velo-validation-for="Sale.TitleFormat" />
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Sale.SubTitle" class="control-label"></label>
-                        <input asp-for="Sale.SubTitle" class="form-control" velo-validation-for="Sale.SubTitle" />
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Sale.FooterText" class="control-label"></label>
-                        <input asp-for="Sale.FooterText" class="form-control" velo-validation-for="Sale.FooterText" />
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Sale.HintText" class="control-label"></label>
-                        <input asp-for="Sale.HintText" class="form-control" velo-validation-for="Sale.HintText" />
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Sale.SellerInfoText" class="control-label"></label>
-                        <input asp-for="Sale.SellerInfoText" class="form-control" velo-validation-for="Sale.SellerInfoText" />
-                    </div>
+                <div class="form-group row">
+                    <label asp-for="Sale.TitleFormat" class="col-2 col-form-label"></label>
+                    <input asp-for="Sale.TitleFormat" class="col-10 form-control" velo-validation-for="Sale.TitleFormat" />
+                </div>
+                <div class="form-group row">
+                    <label asp-for="Sale.SubTitle" class="col-2 col-form-label"></label>
+                    <input asp-for="Sale.SubTitle" class="col-10 form-control" velo-validation-for="Sale.SubTitle" />
+                </div>
+                <div class="form-group row">
+                    <label asp-for="Sale.FooterText" class="col-2 col-form-label"></label>
+                    <input asp-for="Sale.FooterText" class="col-10 form-control" velo-validation-for="Sale.FooterText" />
+                </div>
+                <div class="form-group row">
+                    <label asp-for="Sale.HintText" class="col-2 col-form-label"></label>
+                    <input asp-for="Sale.HintText" class="col-10 form-control" velo-validation-for="Sale.HintText" />
+                </div>
+                <div class="form-group row">
+                    <label asp-for="Sale.SellerInfoText" class="col-2 col-form-label"></label>
+                    <input asp-for="Sale.SellerInfoText" class="col-10 form-control" velo-validation-for="Sale.SellerInfoText" />
                 </div>
             </div>
         </div>
@@ -109,27 +106,25 @@
             </div>
 
             <div class="card-body">
-                <div class="column">
-                    <div class="form-group">
-                        <label asp-for="Settlement.TitleFormat" class="control-label"></label>
-                        <input asp-for="Settlement.TitleFormat" class="form-control" velo-validation-for="Settlement.TitleFormat" />
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Settlement.SoldTitle" class="control-label"></label>
-                        <input asp-for="Settlement.SoldTitle" class="form-control" velo-validation-for="Settlement.SoldTitle" />
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Settlement.NotSoldTitle" class="control-label"></label>
-                        <input asp-for="Settlement.NotSoldTitle" class="form-control" velo-validation-for="Settlement.NotSoldTitle" />
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Settlement.ConfirmationText" class="control-label"></label>
-                        <input asp-for="Settlement.ConfirmationText" class="form-control" velo-validation-for="Settlement.ConfirmationText" />
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Settlement.SignatureText" class="control-label"></label>
-                        <input asp-for="Settlement.SignatureText" class="form-control" velo-validation-for="Settlement.SignatureText" />
-                    </div>
+                <div class="form-group row">
+                    <label asp-for="Settlement.TitleFormat" class="col-2 col-form-label"></label>
+                    <input asp-for="Settlement.TitleFormat" class="col-10 form-control" velo-validation-for="Settlement.TitleFormat" />
+                </div>
+                <div class="form-group row">
+                    <label asp-for="Settlement.SoldTitle" class="col-2 col-form-label"></label>
+                    <input asp-for="Settlement.SoldTitle" class="col-10 form-control" velo-validation-for="Settlement.SoldTitle" />
+                </div>
+                <div class="form-group row">
+                    <label asp-for="Settlement.NotSoldTitle" class="col-2 col-form-label"></label>
+                    <input asp-for="Settlement.NotSoldTitle" class="col-10 form-control" velo-validation-for="Settlement.NotSoldTitle" />
+                </div>
+                <div class="form-group row">
+                    <label asp-for="Settlement.ConfirmationText" class="col-2 col-form-label"></label>
+                    <input asp-for="Settlement.ConfirmationText" class="col-10 form-control" velo-validation-for="Settlement.ConfirmationText" />
+                </div>
+                <div class="form-group row">
+                    <label asp-for="Settlement.SignatureText" class="col-2 col-form-label"></label>
+                    <input asp-for="Settlement.SignatureText" class="col-10 form-control" velo-validation-for="Settlement.SignatureText" />
                 </div>
             </div>
         </div>
@@ -143,11 +138,9 @@
             </div>
 
             <div class="card-body">
-                <div class="column">
-                    <div class="form-group">
-                        <label asp-for="Label.TitleFormat" class="control-label"></label>
-                        <input asp-for="Label.TitleFormat" class="form-control" velo-validation-for="Label.TitleFormat" />
-                    </div>
+                <div class="form-group row">
+                    <label asp-for="Label.TitleFormat" class="col-2 col-form-label"></label>
+                    <input asp-for="Label.TitleFormat" class="col-10 form-control" velo-validation-for="Label.TitleFormat" />
                 </div>
             </div>
         </div>

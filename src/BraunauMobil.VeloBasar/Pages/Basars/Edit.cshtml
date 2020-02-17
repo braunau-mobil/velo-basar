@@ -16,27 +16,22 @@
         </div>
 
         <div class="card-body">
-            <div class="column">
-                <input type="hidden" asp-for="BasarToEdit.Id" />
-                <div class="form-group">
-                    <label asp-for="BasarToEdit.Date" class="control-label"></label>
-                    <input asp-for="BasarToEdit.Date" class="form-control" velo-validation-for="BasarToEdit.Date" />
-                </div>
-                <div class="form-group">
-                    <label asp-for="BasarToEdit.Name" class="control-label"></label>
-                    <input asp-for="BasarToEdit.Name" class="form-control" velo-validation-for="BasarToEdit.Name" />
-                </div>
-                <div class="form-group">
-                    <label asp-for="BasarToEdit.Location" class="control-label"></label>
-                    <input asp-for="BasarToEdit.Location" class="form-control" velo-validation-for="BasarToEdit.Location" />
-                </div>
-                <div class="form-group">
-                    <label asp-for="BasarToEdit.ProductCommissionPercentage" class="control-label"></label>
-                    <input asp-for="BasarToEdit.ProductCommissionPercentage" class="form-control" velo-validation-for="BasarToEdit.ProductCommissionPercentage" />
-                </div>
-                <div class="form-group">
-                    <input type="submit" value="Create" class="btn btn-primary" />
-                </div>
+            <input type="hidden" asp-for="BasarToEdit.Id" />
+            <div class="form-group row">
+                <label asp-for="BasarToEdit.Date" class="col-2 col-form-label"></label>
+                <input asp-for="BasarToEdit.Date" class="col-10 form-control" velo-validation-for="BasarToEdit.Date" />
+            </div>
+            <div class="form-group row">
+                <label asp-for="BasarToEdit.Name" class="col-2 col-form-label"></label>
+                <input asp-for="BasarToEdit.Name" class="col-10 form-control" velo-validation-for="BasarToEdit.Name" />
+            </div>
+            <div class="form-group row">
+                <label asp-for="BasarToEdit.Location" class="col-2 col-form-label"></label>
+                <input asp-for="BasarToEdit.Location" class="col-10 form-control" velo-validation-for="BasarToEdit.Location" />
+            </div>
+            <div class="form-group row">
+                <label asp-for="BasarToEdit.ProductCommissionPercentage" class="col-2 col-form-label"></label>
+                <input asp-for="BasarToEdit.ProductCommissionPercentage" class="col-10 form-control" velo-validation-for="BasarToEdit.ProductCommissionPercentage" />
             </div>
         </div>
     </div>

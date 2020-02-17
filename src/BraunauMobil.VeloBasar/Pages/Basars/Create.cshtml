@@ -16,23 +16,21 @@
         </div>
 
         <div class="card-body">
-            <div class="column">
-                <div class="form-group">
-                    <label asp-for="BasarToCreate.Date" class="control-label"></label>
-                    <input asp-for="BasarToCreate.Date" class="form-control" velo-validation-for="BasarToCreate.Date" />
-                </div>
-                <div class="form-group">
-                    <label asp-for="BasarToCreate.Name" class="control-label"></label>
-                    <input asp-for="BasarToCreate.Name" class="form-control" velo-validation-for="BasarToCreate.Name" />
-                </div>
-                <div class="form-group">
-                    <label asp-for="BasarToCreate.Location" class="control-label"></label>
-                    <input asp-for="BasarToCreate.Location" class="form-control" velo-validation-for="BasarToCreate.Location" />
-                </div>
-                <div class="form-group">
-                    <label asp-for="BasarToCreate.ProductCommissionPercentage" class="control-label"></label>
-                    <input asp-for="BasarToCreate.ProductCommissionPercentage" class="form-control" velo-validation-for="BasarToCreate.ProductCommissionPercentage" />
-                </div>
+            <div class="form-group row">
+                <label asp-for="BasarToCreate.Date" class="col-2 col-form-label"></label>
+                <input asp-for="BasarToCreate.Date" class="col-10 form-control" velo-validation-for="BasarToCreate.Date" />
+            </div>
+            <div class="form-group row">
+                <label asp-for="BasarToCreate.Name" class="col-2 col-form-label"></label>
+                <input asp-for="BasarToCreate.Name" class="col-10 form-control" velo-validation-for="BasarToCreate.Name" />
+            </div>
+            <div class="form-group row">
+                <label asp-for="BasarToCreate.Location" class="col-2 col-form-label"></label>
+                <input asp-for="BasarToCreate.Location" class="col-10 form-control" velo-validation-for="BasarToCreate.Location" />
+            </div>
+            <div class="form-group row">
+                <label asp-for="BasarToCreate.ProductCommissionPercentage" class="col-2 col-form-label"></label>
+                <input asp-for="BasarToCreate.ProductCommissionPercentage" class="col-10 form-control" velo-validation-for="BasarToCreate.ProductCommissionPercentage" />
             </div>
         </div>
     </div>

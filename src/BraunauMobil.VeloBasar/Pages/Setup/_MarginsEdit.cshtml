@@ -6,23 +6,21 @@
     </div>
 
     <div class="card-body">
-        <div class="column">
-            <div class="form-group">
-                <label asp-for="Left" class="control-label"></label>
-                <input asp-for="Left" class="form-control" velo-validation-for="Left" />
-            </div>
-            <div class="form-group">
-                <label asp-for="Top" class="control-label"></label>
-                <input asp-for="Top" class="form-control" velo-validation-for="Top" />
-            </div>
-            <div class="form-group">
-                <label asp-for="Right" class="control-label"></label>
-                <input asp-for="Right" class="form-control" velo-validation-for="Right" />
-            </div>
-            <div class="form-group">
-                <label asp-for="Bottom" class="control-label"></label>
-                <input asp-for="Bottom" class="form-control" velo-validation-for="Bottom" />
-            </div>
+        <div class="form-group row">
+            <label asp-for="Left" class="col-2 col-form-label"></label>
+            <input asp-for="Left" class="col-10 form-control" velo-validation-for="Left" />
+        </div>
+        <div class="form-group row">
+            <label asp-for="Top" class="col-2 col-form-label"></label>
+            <input asp-for="Top" class="col-10 form-control" velo-validation-for="Top" />
+        </div>
+        <div class="form-group row">
+            <label asp-for="Right" class="col-2 col-form-label"></label>
+            <input asp-for="Right" class="col-10 form-control" velo-validation-for="Right" />
+        </div>
+        <div class="form-group row">
+            <label asp-for="Bottom" class="col-2 col-form-label"></label>
+            <input asp-for="Bottom" class="col-10 form-control" velo-validation-for="Bottom" />
         </div>
     </div>
 </div>

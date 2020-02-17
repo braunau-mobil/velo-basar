@@ -16,48 +16,46 @@
         </div>
 
         <div class="card-body">
-            <div class="column">
-                <input type="hidden" asp-for="Seller.Id" />
-                <div class="form-group">
-                    <label asp-for="Seller.FirstName" class="control-label"></label>
-                    <input asp-for="Seller.FirstName" class="form-control" velo-validation-for="Seller.FirstName" />
-                </div>
-                <div class="form-group">
-                    <label asp-for="Seller.LastName" class="control-label"></label>
-                    <input asp-for="Seller.LastName" class="form-control" velo-validation-for="Seller.LastName" />
-                </div>
-                <div class="form-group">
-                    <label asp-for="Seller.Street" class="control-label"></label>
-                    <input asp-for="Seller.Street" class="form-control" velo-validation-for="Seller.Street" />
-                </div>
-                <div class="form-group">
-                    <label asp-for="Seller.City" class="control-label"></label>
-                    <input asp-for="Seller.City" class="form-control" velo-validation-for="Seller.City" />
-                </div>
-                <div class="form-group">
-                    <label asp-for="Seller.ZIP" class="control-label"></label>
-                    <input asp-for="Seller.ZIP" class="form-control" velo-validation-for="Seller.ZIP" />
-                </div>
-                <div class="form-group">
-                    <label asp-for="Seller.CountryId" class="control-label"></label>
-                    <select asp-for="Seller.CountryId" class="form-control" asp-items="ViewBag.Countries"></select>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Seller.PhoneNumber" class="control-label"></label>
-                    <input asp-for="Seller.PhoneNumber" class="form-control" velo-validation-for="Seller.PhoneNumber" />
-                </div>
-                <div class="form-group">
-                    <label asp-for="Seller.IBAN" class="control-label"></label>
-                    <input asp-for="Seller.IBAN" class="form-control" velo-validation-for="Seller.IBAN" />
-                </div>
-                <div class="form-group">
-                    <label asp-for="Seller.BankAccountHolder" class="control-label"></label>
-                    <input asp-for="Seller.BankAccountHolder" class="form-control" velo-validation-for="Seller.BankAccountHolder" />
-                </div>
-                <div class="form-group">
-                    <label asp-for="Seller.Token" class="control-label"></label>
-                    <input asp-for="Seller.Token" class="form-control" velo-validation-for="Seller.Token" />
-                </div>
+            <input type="hidden" asp-for="Seller.Id" />
+            <div class="form-group row">
+                <label asp-for="Seller.FirstName" class="col-2 col-form-label"></label>
+                <input asp-for="Seller.FirstName" class="col-10 form-control" velo-validation-for="Seller.FirstName" />
+            </div>
+            <div class="form-group row">
+                <label asp-for="Seller.LastName" class="col-2 col-form-label"></label>
+                <input asp-for="Seller.LastName" class="col-10 form-control" velo-validation-for="Seller.LastName" />
+            </div>
+            <div class="form-group row">
+                <label asp-for="Seller.Street" class="col-2 col-form-label"></label>
+                <input asp-for="Seller.Street" class="col-10 form-control" velo-validation-for="Seller.Street" />
+            </div>
+            <div class="form-group row">
+                <label asp-for="Seller.City" class="col-2 col-form-label"></label>
+                <input asp-for="Seller.City" class="col-10 form-control" velo-validation-for="Seller.City" />
+            </div>
+            <div class="form-group row">
+                <label asp-for="Seller.ZIP" class="col-2 col-form-label"></label>
+                <input asp-for="Seller.ZIP" class="col-10 form-control" velo-validation-for="Seller.ZIP" />
+            </div>
+            <div class="form-group row">
+                <label asp-for="Seller.CountryId" class="col-2 col-form-label"></label>
+                <select asp-for="Seller.CountryId" class="col-10 form-control" asp-items="ViewBag.Countries"></select>
+            </div>
+            <div class="form-group row">
+                <label asp-for="Seller.PhoneNumber" class="col-2 col-form-label"></label>
+                <input asp-for="Seller.PhoneNumber" class="col-10 form-control" velo-validation-for="Seller.PhoneNumber" />
+            </div>
+            <div class="form-group row">
+                <label asp-for="Seller.IBAN" class="col-2 col-form-label"></label>
+                <input asp-for="Seller.IBAN" class="col-10 form-control" velo-validation-for="Seller.IBAN" />
+            </div>
+            <div class="form-group row">
+                <label asp-for="Seller.BankAccountHolder" class="col-2 col-form-label"></label>
+                <input asp-for="Seller.BankAccountHolder" class="col-10 form-control" velo-validation-for="Seller.BankAccountHolder" />
+            </div>
+            <div class="form-group row">
+                <label asp-for="Seller.Token" class="col-2 col-form-label"></label>
+                <input asp-for="Seller.Token" class="col-10 form-control" velo-validation-for="Seller.Token" />
             </div>
         </div>
     </div>

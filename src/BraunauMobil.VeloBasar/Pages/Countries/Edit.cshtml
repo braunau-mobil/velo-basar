@@ -16,16 +16,14 @@
         </div>
 
         <div class="card-body">
-            <div class="column">
-                <input type="hidden" asp-for="Country.Id" />
-                <div class="form-group">
-                    <label asp-for="Country.Name" class="control-label"></label>
-                    <input asp-for="Country.Name" class="form-control" velo-validation-for="Country.Name" />
-                </div>
-                <div class="form-group">
-                    <label asp-for="Country.Iso3166Alpha3Code" class="control-label"></label>
-                    <input asp-for="Country.Iso3166Alpha3Code" class="form-control" velo-validation-for="Country.Iso3166Alpha3Code" />
-                </div>
+            <input type="hidden" asp-for="Country.Id" />
+            <div class="form-group row">
+                <label asp-for="Country.Name" class="col-2 col-form-label"></label>
+                <input asp-for="Country.Name" class="col-10 form-control" velo-validation-for="Country.Name" />
+            </div>
+            <div class="form-group row">
+                <label asp-for="Country.Iso3166Alpha3Code" class="col-2 col-form-label"></label>
+                <input asp-for="Country.Iso3166Alpha3Code" class="col-10 form-control" velo-validation-for="Country.Iso3166Alpha3Code" />
             </div>
         </div>
     </div>
