@@ -1,6 +1,7 @@
 ﻿using BraunauMobil.VeloBasar.Models.Interfaces;
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
 using System.Reflection;
 
@@ -20,6 +21,15 @@ namespace BraunauMobil.VeloBasar.Models
         [DataType(DataType.Currency)]
         [Display(Name = "Artikel Provision")]
         public decimal ProductCommission { get; set; }
+
+        [Display(Name = "Artikel Provision in Prozent")]
+        [Range(0, 100, ErrorMessage = "Bitte einen Wert zwischen 0 und 100 % eingeben")]
+        [NotMapped]
+        public int ProductCommissionPercentage
+        {
+            get => (int)(ProductCommission * 100);
+            set => ProductCommission = value / 100.0m;
+        }
 
         public string GetDateText()
         {
