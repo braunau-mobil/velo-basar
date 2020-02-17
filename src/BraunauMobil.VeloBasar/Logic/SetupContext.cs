@@ -47,11 +47,7 @@ namespace BraunauMobil.VeloBasar.Logic
             };
             await _userManager.CreateAsync(adminUser, "root");
 
-            var settings = new VeloSettings
-            {
-                IsInitialized = true
-            };
-            await _settingsContext.UpdateAsync(settings);
+            await _settingsContext.UpdateAsync(new VeloSettings());
 
             await _settingsContext.UpdateAsync(new PrintSettings());
 

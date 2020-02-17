@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using BraunauMobil.VeloBasar.Logic;
+using BraunauMobil.VeloBasar.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -18,26 +19,25 @@ namespace BraunauMobil.VeloBasar.Pages.Setup
         }
 
         [BindProperty]
-        [Display(Name = "Aktiver Basar")]
-        public int ActiveBasarId { get; set; }
+        public VeloSettings VeloSettings { get; set; }
+        [BindProperty]
+        [Display(Name = "WordPress Verkaufs-Status Push")]
+        public WordPressStatusPushSettings WordPressStatusPushSettings { get; set; }
 
         public async Task OnGetAsync()
         {
             ViewData["Basars"] = _basarContext.GetSelectList();
 
-            var settings = await _settingsContext.GetSettingsAsync();
-            if (settings.ActiveBasarId.HasValue)
-            {
-                ActiveBasarId = settings.ActiveBasarId.Value;
-            }
+            VeloSettings = await _settingsContext.GetSettingsAsync();
+            WordPressStatusPushSettings = VeloSettings.WordPressStatusPushSettings;
         }
         public async Task OnPostAsync()
         {
             ViewData["Basars"] = _basarContext.GetSelectList();
 
-            var settings = await _settingsContext.GetSettingsAsync();
-            settings.ActiveBasarId = ActiveBasarId;
-            await _settingsContext.UpdateAsync(settings);
+            VeloSettings.WordPressStatusPushSettings = WordPressStatusPushSettings;
+            
+            await _settingsContext.UpdateAsync(VeloSettings);
         }
     }
 }

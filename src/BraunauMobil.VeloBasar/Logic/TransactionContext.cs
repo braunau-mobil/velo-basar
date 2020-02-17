@@ -18,8 +18,9 @@ namespace BraunauMobil.VeloBasar.Logic
         private readonly ISettingsContext _settingsContext;
         private readonly IFileStoreContext _fileContext;
         private readonly ISellerContext _sellerContext;
+        private readonly IStatusPushService _productStatusService;
 
-        public TransactionContext(VeloRepository db, INumberContext numberContext, IProductContext productContext, ISettingsContext settingsContext, IFileStoreContext fileContext, ISellerContext sellerContext)
+        public TransactionContext(VeloRepository db, INumberContext numberContext, IProductContext productContext, ISettingsContext settingsContext, IFileStoreContext fileContext, ISellerContext sellerContext, IStatusPushService salesStatusService)
         {
             _db = db;
             _numberContext = numberContext;
@@ -27,6 +28,7 @@ namespace BraunauMobil.VeloBasar.Logic
             _settingsContext = settingsContext;
             _fileContext = fileContext;
             _sellerContext = sellerContext;
+            _productStatusService = salesStatusService;
         }
 
         public async Task<ProductsTransaction> AcceptProductsAsync(Basar basar, int sellerId, IList<Product> products)
@@ -135,6 +137,7 @@ namespace BraunauMobil.VeloBasar.Logic
             }
 
             await DeleteAsync(transaction);
+            await _productStatusService.PushAwayAsync(transaction.Basar, transaction.Products.GetProducts());
         }
         public async Task<ProductsTransaction> SettleSellerAsync(Basar basar, int sellerId)
         {
@@ -188,6 +191,11 @@ namespace BraunauMobil.VeloBasar.Logic
 
             _db.Transactions.Add(transaction);
             await _db.SaveChangesAsync();
+
+            if (transactionType == TransactionType.Acceptance || transactionType == TransactionType.Cancellation || transactionType == TransactionType.Sale || transactionType == TransactionType.Settlement)
+            {
+                await _productStatusService.PushAwayAsync(basar, products);
+            }
             
             return transaction;
         }

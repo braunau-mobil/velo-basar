@@ -100,7 +100,8 @@ namespace BraunauMobil.VeloBasar
             services.AddScoped<INumberContext, NumberContext>();
             services.AddScoped<IProductContext, ProductContext>();
             services.AddScoped<IProductTypeContext, ProductTypeContext>();
-            services.AddScoped<ISellerContext, SellerContext>();
+            services.AddScoped<IStatusPushService, WordPressStatusPushService>();
+            services.AddScoped<ISellerContext, SellerContext>();            
             services.AddScoped<ISettingsContext, SettingsContext>();
             services.AddScoped<ISetupContext, SetupContext>();
             services.AddScoped<IStatisticContext, StatisticContext>();
