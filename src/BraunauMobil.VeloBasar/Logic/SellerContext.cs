@@ -2,6 +2,7 @@
 using BraunauMobil.VeloBasar.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -11,16 +12,23 @@ namespace BraunauMobil.VeloBasar.Logic
     public class SellerContext : ISellerContext
     {
         private readonly VeloRepository _db;
+        private readonly ITokenProvider _tokenProvider;
 
-        public SellerContext(VeloRepository db)
+        public SellerContext(VeloRepository db, ITokenProvider tokenProvider)
         {
             _db = db;
+            _tokenProvider = tokenProvider;
         }
 
         public async Task<Seller> CreateAsync(Seller seller)
         {
+            Contract.Requires(seller != null);
+
             _db.Sellers.Add(seller);
             await _db.SaveChangesAsync();
+
+            seller.Token = _tokenProvider.CreateToken(seller);
+            await UpdateAsync(seller);
             return seller;
         }
         public async Task<bool> ExistsAsync(int id) => await _db.Sellers.ExistsAsync(id);

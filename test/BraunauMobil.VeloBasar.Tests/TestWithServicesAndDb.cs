@@ -52,7 +52,19 @@ namespace BraunauMobil.VeloBasar.Tests
         protected async Task RunOnInitializedDb(Func<VeloRepository, Task> action)
         {
             Contract.Requires(action != null);
-            
+
+            await RunOnEmptyDb(async context =>
+            {
+                await SetupContext.CreateDatabaseAsync();
+                await SetupContext.InitializeDatabaseAsync(new InitializationConfiguration());
+
+                await action(context);
+            });
+        }
+        protected async Task RunOnEmptyDb(Func<VeloRepository, Task> action)
+        {
+            Contract.Requires(action != null);
+
             using var serviceProvider = _services.BuildServiceProvider();
             BasarContext = serviceProvider.GetRequiredService<IBasarContext>();
             BrandContext = serviceProvider.GetRequiredService<IBrandContext>();
@@ -70,15 +82,10 @@ namespace BraunauMobil.VeloBasar.Tests
             PrintService = serviceProvider.GetRequiredService<IPrintService>();
             ZipMapContext = serviceProvider.GetRequiredService<IZipMapContext>();
 
-            // Create the schema in the database
             var options = new DbContextOptionsBuilder<VeloRepository>()
                     .UseSqlite(Connection)
                     .Options;
-
-            // Create the schema in the database
             using var context = new VeloRepository(options);
-            await SetupContext.CreateDatabaseAsync();
-            await SetupContext.InitializeDatabaseAsync(new InitializationConfiguration());
 
             await action(context);
         }
