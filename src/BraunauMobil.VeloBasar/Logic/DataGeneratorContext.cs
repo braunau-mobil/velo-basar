@@ -24,15 +24,17 @@ namespace BraunauMobil.VeloBasar.Logic
         private readonly ITransactionContext _transactionContext;
         private readonly ISetupContext _setupContext;
         private readonly IBasarContext _basarContext;
+        private readonly ISellerContext _sellerContext;
         private DataGeneratorConfiguration _config;
 
-        public DataGeneratorContext(VeloRepository db, ISettingsContext settingsContext, ITransactionContext transactionContext, ISetupContext setupContext, IBasarContext basarContext)
+        public DataGeneratorContext(VeloRepository db, ISettingsContext settingsContext, ITransactionContext transactionContext, ISetupContext setupContext, IBasarContext basarContext, ISellerContext sellerContext)
         {
             _db = db;
             _transactionContext = transactionContext;
             _settingsContext = settingsContext;
             _setupContext = setupContext;
             _basarContext = basarContext;
+            _sellerContext = sellerContext;
         }
 
         public async Task GenerateAsync(DataGeneratorConfiguration config)
@@ -97,8 +99,7 @@ namespace BraunauMobil.VeloBasar.Logic
                 Street = $"{TakeRandom(_streets)} {_rand.Next(1, 50)}",
                 ZIP = $"{_rand.Next(1, 9)}{_rand.Next(1, 9)}{_rand.Next(1, 9)}{_rand.Next(1, 9)}",
             };
-            _db.Sellers.Add(seller);
-            await _db.SaveChangesAsync();
+            await _sellerContext.CreateAsync(seller);
 
             var acceptancePerCustomerCount = _rand.Next(_config.MinAcceptancesPerSeller, _config.MaxAcceptancesPerSeller);
             while (acceptancePerCustomerCount > 0)
