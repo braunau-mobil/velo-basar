@@ -29,12 +29,17 @@
                 </p>
                 <h5 class="card-title">@Localizer["Bankdaten"]</h5>
                 <p class="card-text">
-                    @Html.DisplayNameFor(model => model.Seller.PhoneNumber):
-                    @Html.DisplayFor(model => model.Seller.PhoneNumber)<br />
                     @Html.DisplayNameFor(model => model.Seller.IBAN):
                     @Html.DisplayFor(model => model.Seller.IBAN)<br />
                     @Html.DisplayNameFor(model => model.Seller.BankAccountHolder):
                     @Html.DisplayFor(model => model.Seller.BankAccountHolder)<br />
+                </p>
+                <h5 class="card-title">@Localizer["Sonstiges"]</h5>
+                <p class="card-text">
+                    @Html.DisplayNameFor(model => model.Seller.PhoneNumber):
+                    @Html.DisplayFor(model => model.Seller.PhoneNumber)<br />
+                    @Html.DisplayNameFor(model => model.Seller.Token):
+                    @Html.DisplayFor(model => model.Seller.Token)<br />
                 </p>
             </div>
             <div class="col">
@@ -68,10 +73,7 @@
 <div class="card my-3">
     <h5 class="card-header">@Localizer["Artikel"]</h5>
     <div class="card-body p-0">
-        @if (Model.Products.NotEmpty)
-        {
-            <partial name="/Pages/Products/_ProductsView.cshtml" model="Model.Products" />
-        }
+        <partial Condition="Model.Products.NotEmpty" name="/Pages/Products/_ProductsView.cshtml" model="Model.Products" />
     </div>
 </div>
 
