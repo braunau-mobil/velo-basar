@@ -50,7 +50,7 @@ namespace BraunauMobil.VeloBasar.Logic
 
             if (settingsFileStore.Id != id)
             {
-                throw new InvalidOperationException($"{typeof(T).Name} did't got the right ID.");
+                throw new InvalidOperationException($"{typeof(T).Name} didn't got the right ID.");
             }
         }
         private T GetSettings<T>(int id) where T : class
