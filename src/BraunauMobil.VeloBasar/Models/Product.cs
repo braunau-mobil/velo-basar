@@ -139,7 +139,7 @@ namespace BraunauMobil.VeloBasar.Models
 
             var sb = new StringBuilder();
             sb.Append(Brand.Name).Append(" - ").AppendLine(Type.Name);
-            sb.Append(Description).AppendLine($" {FrameNumber} {Color}");
+            sb.Append(Description).AppendLine($" {Color}   {FrameNumber}");
             return sb.ToString();
         }
         public decimal GetCommissionedPrice(Basar basar)

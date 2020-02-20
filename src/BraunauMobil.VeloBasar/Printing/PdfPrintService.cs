@@ -25,10 +25,10 @@ namespace BraunauMobil.VeloBasar.Printing
 {
     public class PdfPrintService : IPrintService
     {
-        private const int _bigFontSize = 14;
-        private const int _mediumFontSize = 12;
-        private const int _smallFontSize = 8;
-        private const int _regularFontSize = 10;
+        private const int _bigFontSize = 12;
+        private const int _mediumFontSize = 10;
+        private const int _smallFontSize = 6;
+        private const int _regularFontSize = 8;
         private readonly IStringLocalizer<SharedResource> _localizer;
         private readonly iColor _orange;
         private readonly iColor _green;
@@ -161,7 +161,7 @@ namespace BraunauMobil.VeloBasar.Printing
 
                 AddSignature(doc, settings.Acceptance.SignatureText, acceptance);
 
-                doc.Add(GetSpacer(10));
+                //doc.Add(GetSpacer(10));
                 doc.Add(GetRegularText(settings.Acceptance.GetTokenText(acceptance.Seller)));
             });
         }
@@ -184,9 +184,9 @@ namespace BraunauMobil.VeloBasar.Printing
 
                 AddProductTable(doc, sale.Products.GetProducts(), _localizer["Preis"], true, settings.Sale.SellerInfoText);
 
-                doc.Add(GetSpacer(20));
+                doc.Add(GetSpacer(5));
                 doc.Add(GetRegularText(settings.Sale.HintText));
-                doc.Add(GetSpacer(20));
+                //doc.Add(GetSpacer(2));
                 doc.Add(GetRegularText(settings.Sale.FooterText));
             });
         }
@@ -199,7 +199,7 @@ namespace BraunauMobil.VeloBasar.Printing
                 if (settings.Banner.Bytes != null)
                 {
                     var bannerData = ImageDataFactory.Create(settings.Banner.Bytes);
-                    var banner = new Image(bannerData);
+                    var banner = new Image(bannerData);        
                     doc.Add(new Image(bannerData));
                 }
                 AddBannerSubtitle(doc, settings.BannerSubtitle, settings.Website);
@@ -211,7 +211,7 @@ namespace BraunauMobil.VeloBasar.Printing
                 if (products.Any(p => p.StorageState == StorageState.Sold))
                 {
                     AddCommissionSummary(doc, settlement.GetSoldProductsSum(), settlement.GetSoldCommissionSum(), settlement.GetSoldTotal(), settlement.Basar.ProductCommission);
-                    doc.Add(GetSpacer(20));
+                    doc.Add(GetSpacer(10));
                 }
 
                 var payoutProducts = products.GetProductsToPayout();
@@ -228,9 +228,9 @@ namespace BraunauMobil.VeloBasar.Printing
                     AddProductTable(doc, pickupProducts, _localizer["Preis"]);
                 }
 
-                doc.Add(GetSpacer(20));
+                doc.Add(GetSpacer(5));
                 doc.Add(GetRegularText(settings.Settlement.ConfirmationText));
-                doc.Add(GetSpacer(20));
+                //doc.Add(GetSpacer(2));
                 AddSignature(doc, settings.Settlement.SignatureText, settlement);
             });
         }
@@ -293,7 +293,7 @@ namespace BraunauMobil.VeloBasar.Printing
             var productInfoHeaderCell = new Cell()
                 .SetBorderTop(null)
                 .SetTextAlignment(TextAlignment.CENTER)
-                .Add(GetBoldText(_localizer["Hersteller - Artikel\r\nZusatzinformationen"]));
+                .Add(GetBoldText(_localizer["Artikelbeschreibung"]));
 
             var sizeHeaderCell = new Cell()
                 .SetBorderTop(null)
@@ -514,7 +514,7 @@ namespace BraunauMobil.VeloBasar.Printing
         {
             var mainTitle = GetBigText(text)
                 .SetBold()
-                .SetMarginBottom(20);
+                .SetMarginBottom(10);
             doc.Add(mainTitle);
         }
         private static void AddSubtitle(Document doc, string text)
@@ -526,7 +526,7 @@ namespace BraunauMobil.VeloBasar.Printing
         }
         private void AddSignature(Document doc, string text, ProductsTransaction transaction)
         {
-            var signature = new Text($"{text}: ______________________________")
+            var signature = new Text($"{text} ______________________________")
                 .SetFontSize(_regularFontSize)
                 .SetBold();
             var locationAndDate = new Text(_localizer["{0} am {1} Uhr", transaction.Basar.Location, transaction.TimeStamp])
