@@ -29,7 +29,13 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
             SearchString = parameter.SearchString;
 
             var salesIq = _transactionContext.GetMany(_context.Basar, TransactionType.Sale, parameter.SearchString);
-            Sales = await TransactionsViewModel.CreateAsync(salesIq.AsNoTracking(), parameter.GetPageIndex(), parameter.GetPageSize(this), GetPaginationPage, null);
+            Sales = await TransactionsViewModel.CreateAsync(salesIq.AsNoTracking(), parameter.GetPageIndex(), parameter.GetPageSize(this), GetPaginationPage, new[]
+            {
+                new ListCommand<TransactionItemViewModel>(GetTransactionDetailsPage)
+                {
+                    Text  = _context.Localizer["Details"]
+                }
+            });
             Sales.ShowDocumentLink = true;
         }
         public VeloPage GetDetailsPage(ProductsTransaction item)
@@ -40,5 +46,6 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
         public VeloPage GetPaginationPage(int pageIndex, int? pageSize) => this.GetPage<ListModel>(pageIndex, pageSize);
         public VeloPage GetResetPage() => this.GetPage<ListModel>();
         public VeloPage GetSearchPage() => this.GetPage<ListModel>(Sales.PageIndex, null);
+        private VeloPage GetTransactionDetailsPage(TransactionItemViewModel viewModel) => this.GetPage<Transactions.DetailsModel>(new Transactions.DetailsParameter { TransactionId = viewModel.Transaction.Id });
     }
 }
