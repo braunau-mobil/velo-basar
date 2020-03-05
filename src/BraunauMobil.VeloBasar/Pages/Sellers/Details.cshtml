@@ -38,8 +38,23 @@
                 <p class="card-text">
                     @Html.DisplayNameFor(model => model.Seller.PhoneNumber):
                     @Html.DisplayFor(model => model.Seller.PhoneNumber)<br />
+
+                    @if (Model.Seller.HasNewsletterPermission)
+                    {
+                        @Html.DisplayNameFor(model => model.Seller.EMail)
+                        @Html.Raw(":&nbsp;");
+                        @Html.DisplayFor(model => model.Seller.EMail)<br />
+                        @Html.DisplayNameFor(model => model.Seller.NewsletterPermissionTimesStamp)
+                        @Html.Raw(":&nbsp;");
+                        @Html.DisplayFor(model => model.Seller.NewsletterPermissionTimesStamp)<br />
+                    }
+
                     @Html.DisplayNameFor(model => model.Seller.Token):
                     @Html.DisplayFor(model => model.Seller.Token)<br />
+                </p>
+                <h5 class="card-title" Condition="!string.IsNullOrEmpty(Model.Seller.Comment)">@Html.DisplayNameFor(model => model.Seller.Comment)</h5>
+                <p class="card-text" Condition="!string.IsNullOrEmpty(Model.Seller.Comment)">
+                    @Html.DisplayFor(model => model.Seller.Comment)
                 </p>
             </div>
             <div class="col">

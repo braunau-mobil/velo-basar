@@ -46,6 +46,15 @@
                 <input asp-for="Seller.PhoneNumber" class="col-10 form-control" velo-validation-for="Seller.PhoneNumber" />
             </div>
             <div class="form-group row">
+                <div class="checkbox">
+                    <label>@Html.CheckBoxFor(x => Model.Seller.HasNewsletterPermission)&nbsp;@Html.DisplayNameFor(x => Model.Seller.HasNewsletterPermission)</label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="Seller.EMail" class="col-2 col-form-label"></label>
+                <input asp-for="Seller.EMail" class="col-10 form-control" velo-validation-for="Seller.EMail" />
+            </div>
+            <div class="form-group row">
                 <label asp-for="Seller.IBAN" class="col-2 col-form-label"></label>
                 <input asp-for="Seller.IBAN" class="col-10 form-control" velo-validation-for="Seller.IBAN" />
             </div>
@@ -56,6 +65,10 @@
             <div class="form-group row">
                 <label asp-for="Seller.Token" class="col-2 col-form-label"></label>
                 <input asp-for="Seller.Token" class="col-10 form-control" velo-validation-for="Seller.Token" />
+            </div>
+            <div class="form-group row">
+                <label asp-for="Seller.Comment" class="col-2 col-form-label"></label>
+                <textarea asp-for="Seller.Comment" class="col-10 form-control" velo-validation-for="Seller.Comment"></textarea>
             </div>
         </div>
     </div>

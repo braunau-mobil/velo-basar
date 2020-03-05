@@ -15,20 +15,17 @@
         </div>
 
         <div class="card-body">
+            <input type="hidden" asp-for="AreWeInEditMode" />
             <input Condition="@Model.AreWeInEditMode" type="hidden" asp-for="Seller.Id" />
             <input type="hidden" asp-for="Seller.Token" />
 
             <div class="form-group row">
                 <label asp-for="Seller.FirstName" class="col-2 col-form-label"></label>
-                <div class="col-10">
-                    <input asp-for="Seller.FirstName" class="form-control" velo-validation-for="Seller.FirstName" velo-validation-condition="Model.IsValidationEnabled" />
-                </div>
+                <input asp-for="Seller.FirstName" class="col-10 form-control" velo-validation-for="Seller.FirstName" velo-validation-condition="Model.IsValidationEnabled" />
             </div>
             <div class="form-group row">
                 <label asp-for="Seller.LastName" class="col-2 col-form-label"></label>
-                <div class="col-10">
-                    <input asp-for="Seller.LastName" class="form-control" velo-validation-for="Seller.LastName" velo-validation-condition="Model.IsValidationEnabled" />
-                </div>
+                <input asp-for="Seller.LastName" class="col-10 form-control" velo-validation-for="Seller.LastName" velo-validation-condition="Model.IsValidationEnabled" />
             </div>
 
             <div Condition="@Model.ErrorText != null" class="alert alert-danger" role="alert">
@@ -45,46 +42,44 @@
 
             <div class="form-group row">
                 <label asp-for="Seller.Country" class="col-2 col-form-label"></label>
-                <div class="col-2">
-                    <select asp-for="Seller.CountryId" class="form-control" asp-items="ViewBag.Countries"></select>
-                </div>
+                <select asp-for="Seller.CountryId" class="col-2 form-control" asp-items="ViewBag.Countries"></select>
             </div>
             <div class="form-group row">
                 <label asp-for="Seller.ZIP" class="col-2 col-form-label"></label>
-                <div class="col-10">
-                    <input asp-for="Seller.ZIP" class="form-control" velo-validation-for="Seller.ZIP" velo-validation-condition="Model.IsValidationEnabled" onfocusout="handleZipChanged()" />
-                </div>
+                <input asp-for="Seller.ZIP" class="col-10 form-control" velo-validation-for="Seller.ZIP" velo-validation-condition="Model.IsValidationEnabled" onfocusout="handleZipChanged()" />
             </div>
             <div class="form-group row">
                 <label asp-for="Seller.City" class="col-2 col-form-label"></label>
-                <div class="col-10">
-                    <input asp-for="Seller.City" class="form-control" velo-validation-for="Seller.City" velo-validation-condition="Model.IsValidationEnabled" />
-                </div>
+                <input asp-for="Seller.City" class="col-10 form-control" velo-validation-for="Seller.City" velo-validation-condition="Model.IsValidationEnabled" />
             </div>
             <div class="form-group row">
                 <label asp-for="Seller.Street" class="col-2 col-form-label"></label>
-                <div class="col-10">
-                    <input asp-for="Seller.Street" class="form-control" velo-validation-for="Seller.Street" velo-validation-condition="Model.IsValidationEnabled" />
-                </div>
+                <input asp-for="Seller.Street" class="col-10 form-control" velo-validation-for="Seller.Street" velo-validation-condition="Model.IsValidationEnabled" />
             </div>
             <div class="form-group row">
                 <label asp-for="Seller.PhoneNumber" class="col-2 col-form-label"></label>
-                <div class="col-10">
-                    <input asp-for="Seller.PhoneNumber" class="form-control" velo-validation-for="Seller.PhoneNumber" velo-validation-condition="Model.IsValidationEnabled" />
-                </div>
+                <input asp-for="Seller.PhoneNumber" class="col-10 form-control" velo-validation-for="Seller.PhoneNumber" velo-validation-condition="Model.IsValidationEnabled" />
+            </div>
+            <div class="form-group custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" asp-for="Seller.HasNewsletterPermission" velo-validation-for="Seller.HasNewsletterPermission" velo-validation-condition="Model.IsValidationEnabled">
+                <label class="custom-control-label" asp-for="Seller.HasNewsletterPermission"></label>
+            </div>
+            <div class="form-group row">
+                <label asp-for="Seller.EMail" class="col-2 col-form-label"></label>
+                <input asp-for="Seller.EMail" class="col-10 form-control" velo-validation-for="Seller.EMail" velo-validation-condition="Model.IsValidationEnabled"/>
             </div>
             <div class="form-group row">
                 <label asp-for="Seller.IBAN" class="col-2 col-form-label"></label>
-                <div class="col-10">
-                    <input asp-for="Seller.IBAN" class="form-control" velo-validation-for="Seller.IBAN" , velo-validation-condition="Model.IsValidationEnabled" />
-                </div>
+                <input asp-for="Seller.IBAN" class="col-10 form-control" velo-validation-for="Seller.IBAN" , velo-validation-condition="Model.IsValidationEnabled" />
             </div>
             <div class="form-group row">
                 <label asp-for="Seller.BankAccountHolder" class="col-2 col-form-label"></label>
-                <div class="col-10">
-                    <input asp-for="Seller.BankAccountHolder" class="form-control" velo-validation-for="Seller.BankAccountHolder" velo-validation-condition="Model.IsValidationEnabled" />
-                </div>
-            </div>            
+                <input asp-for="Seller.BankAccountHolder" class="col-10 form-control" velo-validation-for="Seller.BankAccountHolder" velo-validation-condition="Model.IsValidationEnabled" />
+            </div>
+            <div class="form-group row">
+                <label asp-for="Seller.Comment" class="col-2 col-form-label"></label>
+                <textarea asp-for="Seller.Comment" class="col-10 form-control" velo-validation-for="Seller.Comment" velo-validation-condition="Model.IsValidationEnabled"></textarea>
+            </div>
         </div>
     </div>
 </form>
@@ -102,7 +97,6 @@
         function getCity(countryId, zip) {
             var map = @Html.Raw(JsonConvert.SerializeObject(Model.GetZipMap()));
             return map[countryId][zip];
-            return 
         }
     </script>
 }

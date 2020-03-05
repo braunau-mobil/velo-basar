@@ -73,6 +73,11 @@ namespace BraunauMobil.VeloBasar
             Contract.Requires(htmlHelper != null);
             return htmlHelper.Raw(values.AsJsArray(x => x));
         }
+        public static bool NextBool(this Random rand)
+        {
+            Contract.Requires(rand != null);
+            return rand.NextDouble() > 0.5;
+        }
         public static double NextGaussian(this Random rand, double mean, double stdDev)
         {
             Contract.Requires(rand != null);

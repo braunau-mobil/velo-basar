@@ -38,7 +38,7 @@ namespace BraunauMobil.VeloBasar.Tests.Models.ProductTests
                 FrameNumber = "Rahmennummer",
                 Color = "Farbe"
             };
-            Assert.Equal($"Marke - Product Typ{Environment.NewLine}Beschreibung Rahmennummer Farbe{Environment.NewLine}", product.GetInfoText(_localizer));
+            Assert.Equal($"Marke - Product Typ{Environment.NewLine}Beschreibung Farbe   Rahmennummer{Environment.NewLine}", product.GetInfoText(_localizer));
         }
     }
 }

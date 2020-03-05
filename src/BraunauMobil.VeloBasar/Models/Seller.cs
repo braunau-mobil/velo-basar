@@ -1,6 +1,7 @@
 ﻿using BraunauMobil.VeloBasar.Models.Interfaces;
 using BraunauMobil.VeloBasar.Resources;
 using Microsoft.Extensions.Localization;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.Contracts;
 using System.Text;
@@ -38,7 +39,20 @@ namespace BraunauMobil.VeloBasar.Models
         [Display(Name = "Land")]
         public Country Country { get; set; }
 
+        [Display(Name = "E-Mail")]
+        [EmailAddress(ErrorMessage = "Bitte eine gültige E-Mail Adresse eingeben.")]
+        public string EMail { get; set; }
+
+        [Display(Name = "Newsletter")]
+        public bool HasNewsletterPermission { get; set; }
+
+        [Display(Name = "Newsletter-Erlaubnis erteilt")]
+        [DisplayFormat(DataFormatString = "{0:dd.MMMM.yyyy}", ApplyFormatInEditMode = true)]
+        public DateTime NewsletterPermissionTimesStamp { get; set; }
+
+        [Required]
         [Display(Name = "Telefonnummer")]
+        [Phone(ErrorMessage = "Bitte eine gültige Telefonnummer eingeben")]
         public string PhoneNumber { get; set; }
 
         [Display(Name = "IBAN")]
@@ -52,6 +66,9 @@ namespace BraunauMobil.VeloBasar.Models
 
         [Display(Name = "Abrechnungsstatus")]
         public ValueState ValueState { get; set; }
+
+        [Display(Name = "Kommentar")]
+        public string Comment { get; set; }
 
         public string GetBigAddressText()
         {
@@ -70,6 +87,18 @@ namespace BraunauMobil.VeloBasar.Models
             Contract.Requires(localizer != null);
 
             return localizer["Verk.-ID: {0}", Id];
+        }
+
+        public void UpdateNewsletterPermissions()
+        {
+            if (HasNewsletterPermission)
+            {
+                NewsletterPermissionTimesStamp = DateTime.Now;
+            }
+            else
+            {
+                EMail = null;
+            }
         }
     }
 }

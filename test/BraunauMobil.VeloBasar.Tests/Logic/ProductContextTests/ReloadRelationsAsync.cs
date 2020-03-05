@@ -28,6 +28,7 @@ namespace BraunauMobil.VeloBasar.Tests.Data.ProductContextTests
                         City = "Deep Space Nine",
                         Street = "",
                         ZIP = "",
+                        PhoneNumber = "",
                         Country = country
                     };
                     await SellerContext.CreateAsync(seller);

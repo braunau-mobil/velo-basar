@@ -24,6 +24,8 @@ namespace BraunauMobil.VeloBasar.Logic
         {
             Contract.Requires(seller != null);
 
+            seller.UpdateNewsletterPermissions();
+
             _db.Sellers.Add(seller);
             await _db.SaveChangesAsync();
 
@@ -55,7 +57,15 @@ namespace BraunauMobil.VeloBasar.Logic
         }
         public async Task UpdateAsync(Seller seller)
         {
+            Contract.Requires(seller != null);
+
+            if (_db.IsModified(seller, nameof(seller.HasNewsletterPermission)))
+            {
+                seller.UpdateNewsletterPermissions();
+            }
+            
             _db.Attach(seller).State = EntityState.Modified;
+
             await _db.SaveChangesAsync();
         }
 

@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace BraunauMobil.VeloBasar.Logic
@@ -90,13 +91,19 @@ namespace BraunauMobil.VeloBasar.Logic
         }
         private async Task CreateSellerWithAcceptancesAsync(Basar basar)
         {
+            var firstName = TakeRandom(_firstNames);
+            var lastName = TakeRandom(_firstNames);
+
             var seller = new Seller
             {
-                FirstName = TakeRandom(_firstNames),
-                LastName = TakeRandom(_firstNames),
+                FirstName = firstName,
+                LastName = lastName,
                 Country = TakeRandom(_db.Countries),
                 City = TakeRandom(_cities),
                 Street = $"{TakeRandom(_streets)} {_rand.Next(1, 50)}",
+                PhoneNumber = NextPhoneNumber(),
+                EMail = $"{firstName}_{lastName}@domain.com",
+                HasNewsletterPermission = _rand.NextBool(),
                 ZIP = $"{_rand.Next(1, 9)}{_rand.Next(1, 9)}{_rand.Next(1, 9)}{_rand.Next(1, 9)}",
             };
             await _sellerContext.CreateAsync(seller);
@@ -134,6 +141,15 @@ namespace BraunauMobil.VeloBasar.Logic
                 TireSize = TakeRandom(_tireSizes),
                 Type = TakeRandom(_db.ProductTypes)
             };
+        }
+        private string NextPhoneNumber()
+        {
+            var sb = new StringBuilder();
+            for (var counter = 0; counter < _rand.Next(8, 10); counter++)
+            {
+                sb.Append(_rand.Next(0, 9));
+            }
+            return sb.ToString();
         }
         private int NextProductCount()
         {

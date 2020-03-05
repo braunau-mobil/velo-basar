@@ -29,6 +29,11 @@ namespace BraunauMobil.VeloBasar.Data
         {
             return Database.GetService<IRelationalDatabaseCreator>().Exists();
         }
+        public bool IsModified(object model, string propertyName)
+        {
+            var entry = Entry(model);
+            return entry.Property(propertyName).IsModified;
+        }
         public bool IsPostgreSQL() => Database.ProviderName == "Npgsql.EntityFrameworkCore.PostgreSQL";
         public bool IsSQLITE() => Database.ProviderName == "Microsoft.EntityFrameworkCore.Sqlite";
 
