@@ -1,0 +1,25 @@
+﻿@model ChangeInfo
+
+<h3 class="m-3" style="text-align: center;" Condition="@Model.IsValid">
+    @Html.DisplayFor(x => Model.Amount)
+</h3>
+
+<table class="table table-striped mx-0 mb-0" Condition="@Model.HasDenomination">
+    <tr>
+        @foreach (var denomination in Model.Denomination)
+        {
+            <th scope="col" style="text-align: center;">@Localizer["{0:C}", denomination.Key]</th>
+        }
+    </tr>
+    <tr>
+        @foreach (var denomination in Model.Denomination)
+        {
+            var cellClass = "";
+            if (denomination.Value > 0)
+            {
+                cellClass = "table-primary";
+            }
+            <td style="text-align: center;" class="@cellClass">@denomination.Value</td>
+        }
+    </tr>
+</table>

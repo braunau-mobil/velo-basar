@@ -33,7 +33,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
             }
             
             Response.Cookies.ClearCart();
-            return this.RedirectToPage<Transactions.DetailsModel>(new Transactions.DetailsParameter { TransactionId = sale.Id, ShowSuccess = true, OpenDocument = true });
+            return this.RedirectToPage<Transactions.DetailsModel>(new Transactions.DetailsParameter { TransactionId = sale.Id, ShowSuccess = true, OpenDocument = true, ShowChange = true });
         }
     }
 }

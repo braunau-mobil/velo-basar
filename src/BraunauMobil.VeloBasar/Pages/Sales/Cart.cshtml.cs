@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using BraunauMobil.VeloBasar.ViewModels;
 using Newtonsoft.Json;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using BraunauMobil.VeloBasar.Logic;
 using System.Diagnostics.Contracts;
@@ -70,13 +69,10 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
             else
             {
                 var product = await _productContext.GetAsync(parameter.ProductId.Value);
-                if (product != null)
+                ErrorText = await GetProductErrorAsync(product, parameter.ProductId.Value);
+                if (product != null && product.IsAllowed(TransactionType.Sale))
                 {
-                    ErrorText = await GetProductErrorAsync(product, parameter.ProductId.Value);
-                    if (product.IsAllowed(TransactionType.Sale))
-                    {
-                        cart.Add(parameter.ProductId.Value);
-                    }
+                    cart.Add(parameter.ProductId.Value);
                 }
             }
             

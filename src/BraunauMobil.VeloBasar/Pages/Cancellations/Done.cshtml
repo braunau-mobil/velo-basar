@@ -13,13 +13,6 @@
     <div class="card-body p-0">
         <partial name="/Pages/Products/_ProductsView.cshtml" model="Model.CancelledProducts" />
     </div>
-
-    <div class="card-footer">
-        <div class="row d-flex justify-content-between align-items-center m-1">
-            <h5>@Html.DisplayNameFor(model => model.PayoutAmout)</h5> 
-            <h5>@Html.DisplayFor(model => model.PayoutAmout)</h5>
-        </div>
-    </div>
 </div>
 
 
@@ -43,3 +36,12 @@
     @Localizer["Es wurden alle Artikel des Verkaufs storniert."]
 </div>
 
+<div class="card my-3" Condition="Model.ChangeInfo != null">
+    <div class="card-header d-flex justify-content-between align-items-md-center">
+        <div><h5 class="mx-2">@Localizer["Auszuzahlender Betrag"]</h5></div>
+    </div>
+
+    <div class="card-body p-0" Condition="Model.ChangeInfo != null">
+        <partial name="/Pages/Shared/_ChangeInfo.cshtml" model="Model.ChangeInfo" />
+    </div>
+</div>

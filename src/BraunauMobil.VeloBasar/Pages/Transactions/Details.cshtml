@@ -15,12 +15,45 @@
     @Localizer["Es wurden alle Artikel des Verkaufs storniert."]
 </div>
 
+<form method="post" velo-page="@Model.GetChangePage()" Condition="Model.Parameter.ShowChange">
+    <div class="card my-3">
+        <div class="card-header d-flex justify-content-between align-items-md-center">
+            <div><h5 class="mx-2">@Localizer["Rückgeld"]</h5></div>
+
+            <div class="d-flex align-items-md-center" Condition="Model.CanInputAmountGiven">
+                <label asp-for="AmountGiven" class="mx-2"></label>
+                <input asp-for="AmountGiven" class="form-control" />
+            </div>
+
+            <div class="d-flex justify-content-end" Condition="Model.CanInputAmountGiven">
+                <input type="submit" value="@Localizer["Wechselgeld berechnen"]" class="btn btn-primary mx-1" />
+            </div>
+        </div>
+
+        <div class="card-body p-0" Condition="Model.ChangeInfo != null">
+            <div Condition="!Model.ChangeInfo.IsValid" class="alert alert-danger m-0" role="alert">
+                @Localizer["Der gegebene Betrag {0:C} muss größer als die Verkaufssumme {1:C} sein!", Model.AmountGiven, Model.TransactionViewModel.Amount]
+            </div>
+            <partial name="/Pages/Shared/_ChangeInfo.cshtml" model="Model.ChangeInfo" />
+        </div>
+    </div>
+</form>
+
 @section Scripts {
-    @if (Model.Parameter.OpenDocument == true)
-    {
-        <script type="text/javascript">
+
+@if (Model.Parameter.OpenDocument == true)
+{
+    <script type="text/javascript">
         // @@todo was ist denn das hier für ein hardcoded fuckup!???
         window.open("/ShowFile?basarId=@VeloContext.Basar.Id.ToString()&fileId=@Model.TransactionViewModel.Transaction.DocumentId.ToString()", "_blank");
-        </script>
-    }
+    </script>
+}
+
+@if (Model.Parameter.ShowChange == true && Model.AmountGiven == 0.0m)
+{
+    <script type="text/javascript">
+        $("#AmountGiven").val("");
+        $("#AmountGiven").focus();
+    </script>
+}
 }

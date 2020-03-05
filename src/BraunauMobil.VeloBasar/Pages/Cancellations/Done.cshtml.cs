@@ -17,11 +17,13 @@ namespace BraunauMobil.VeloBasar.Pages.Cancellations
     [Authorize]
     public class DoneModel : PageModel
     {
-        private readonly ITransactionContext _context;
+        private readonly ITransactionContext _transactionContext;
+        private readonly ISettingsContext _settingsContext;
 
-        public DoneModel(ITransactionContext context)
+        public DoneModel(ITransactionContext context, ISettingsContext settingsContext)
         {
-            _context = context;
+            _transactionContext = context;
+            _settingsContext = settingsContext;
         }
 
         public ProductsTransaction Cancellation { get; set; }
@@ -31,15 +33,16 @@ namespace BraunauMobil.VeloBasar.Pages.Cancellations
         public ProductsTransaction Sale { get; set; }
         public ProductsViewModel CancelledProducts { get; private set; }
         public ProductsViewModel SaleProducts { get; private set; }
+        public ChangeInfo ChangeInfo { get; private set; }
 
         public async Task OnGetAsync(DoneParameter parameter)
         {
             Contract.Requires(parameter != null);
 
-            Cancellation = await _context.GetAsync(parameter.CancellationId);
+            Cancellation = await _transactionContext.GetAsync(parameter.CancellationId);
             if (parameter.SaleId != null)
             {
-                Sale = await _context.GetAsync(parameter.SaleId.Value);
+                Sale = await _transactionContext.GetAsync(parameter.SaleId.Value);
             }
             CancelledProducts = new ProductsViewModel(Cancellation.Products)
             {
@@ -56,6 +59,9 @@ namespace BraunauMobil.VeloBasar.Pages.Cancellations
                     ShowSeller = false
                 };
             }
+
+            var settings = await _settingsContext.GetSettingsAsync();
+            ChangeInfo = Cancellation.CalculateChange(0.0m, settings.Nominations);
         }
     }
 }

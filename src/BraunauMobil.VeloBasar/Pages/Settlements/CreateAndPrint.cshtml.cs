@@ -28,9 +28,14 @@ namespace BraunauMobil.VeloBasar.Pages.Settlements
             Contract.Requires(parameter != null);
 
             var settlement = await _transactionContext.SettleSellerAsync(_context.Basar, parameter.SellerId);
-            var file = await _fileStoreContext.GetAsync(settlement.DocumentId.Value);
 
-            return File( file.Data, file.ContentType);
+            return this.RedirectToPage<Transactions.DetailsModel>(new Transactions.DetailsParameter
+            {
+                OpenDocument = true,
+                ShowChange = true,
+                ShowSuccess = true,
+                TransactionId = settlement.Id
+            });
         }
     }
 }
