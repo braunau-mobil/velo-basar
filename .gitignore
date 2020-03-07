@@ -4,3 +4,4 @@
 *.user
 .vs
 launchSettings.json
+.DS_Store
