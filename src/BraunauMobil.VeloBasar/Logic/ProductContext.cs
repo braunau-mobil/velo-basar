@@ -31,7 +31,7 @@ namespace BraunauMobil.VeloBasar.Logic
 
         public async Task<bool> ExistsAsync(int id) => await _db.Products.ExistsAsync(id);
         public async Task<Product> GetAsync(int id) => await _db.Products.IncludeAll().FirstOrDefaultAsync(p => p.Id == id);
-        public IQueryable<Product> GetMany(IList<int> ids) => _db.Products.Where(p => ids.Contains(p.Id)).IncludeAll().DefaultOrder();
+        public IQueryable<Product> GetMany(IReadOnlyList<int> ids) => _db.Products.Where(p => ids.Contains(p.Id)).IncludeAll().DefaultOrder();
         public IQueryable<Product> GetProductsForBasar(Basar basar) => GetProductsForBasar(basar, null, null, null, null, null);
         public IQueryable<Product> GetProductsForBasar(Basar basar, string searchString, StorageState? storageState, ValueState? valueState, int? brandId, int? productTypeId)
         {
@@ -68,7 +68,7 @@ namespace BraunauMobil.VeloBasar.Logic
         {
             return _db.Products.IncludeAll().Where(p => p.BasarId == basar.Id && p.SellerId == sellerId);
         }
-        public async Task<IList<Product>> InsertProductsAsync(Basar basar, Seller seller, IList<Product> products)
+        public async Task<IReadOnlyList<Product>> InsertProductsAsync(Basar basar, Seller seller, IReadOnlyList<Product> products)
         {
             Contract.Requires(products != null);
 
@@ -100,7 +100,7 @@ namespace BraunauMobil.VeloBasar.Logic
 
             return newProducts;
         }
-        public async Task ReloadRelationsAsync(IList<Product> products)
+        public async Task ReloadRelationsAsync(IReadOnlyList<Product> products)
         {
             Contract.Requires(products != null);
 

@@ -31,7 +31,7 @@ namespace BraunauMobil.VeloBasar.Logic
             _productStatusService = salesStatusService;
         }
 
-        public async Task<ProductsTransaction> AcceptProductsAsync(Basar basar, int sellerId, IList<Product> products)
+        public async Task<ProductsTransaction> AcceptProductsAsync(Basar basar, int sellerId, IReadOnlyList<Product> products)
         {
             Contract.Requires(products != null);
             
@@ -44,7 +44,7 @@ namespace BraunauMobil.VeloBasar.Logic
             await _sellerContext.SetValueStateAsync(sellerId, ValueState.NotSettled);
             return tx;
         }
-        public async Task<ProductsTransaction> CancelProductsAsync(Basar basar, int saleId, IList<int> productIds)
+        public async Task<ProductsTransaction> CancelProductsAsync(Basar basar, int saleId, IReadOnlyList<int> productIds)
         {
             var products = await _productContext.GetMany(productIds).ToArrayAsync();
             if (!products.IsAllowed(TransactionType.Cancellation))
@@ -62,7 +62,7 @@ namespace BraunauMobil.VeloBasar.Logic
 
             return await CreateTransactionAsync(basar, TransactionType.Cancellation, printSettings, products.ToArray());
         }
-        public async Task<ProductsTransaction> CheckoutProductsAsync(Basar basar, IList<int> productIds)
+        public async Task<ProductsTransaction> CheckoutProductsAsync(Basar basar, IReadOnlyList<int> productIds)
         {
             var products = _productContext.GetMany(productIds);
             var printSettings = await _settingsContext.GetPrintSettingsAsync();
@@ -220,7 +220,7 @@ namespace BraunauMobil.VeloBasar.Logic
             return IncludeAll(result);
         }
         private IQueryable<ProductsTransaction> IncludeAll() => IncludeAll(_db.Transactions);
-        private async Task RemoveProductsFromTransactionAsync(ProductsTransaction transaction, IList<Product> productsToRemove)
+        private async Task RemoveProductsFromTransactionAsync(ProductsTransaction transaction, IReadOnlyList<Product> productsToRemove)
         {
             foreach (var product in productsToRemove)
             {

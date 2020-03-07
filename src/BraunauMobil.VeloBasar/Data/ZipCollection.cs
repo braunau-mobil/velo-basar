@@ -1,4 +1,5 @@
 ﻿using BraunauMobil.VeloBasar.Models;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -7,9 +8,10 @@ using System.Text;
 
 namespace BraunauMobil.VeloBasar.Data
 {
-    public class ZipCollection : List<ZipMap>
+    public class ZipCollection : IEnumerable<ZipMap>
     {
         private readonly IReadOnlyCollection<Country> _countries;
+        private readonly List<ZipMap> _zipMaps = new List<ZipMap>();
 
         public ZipCollection(IReadOnlyCollection<Country> countries)
         {
@@ -18,9 +20,12 @@ namespace BraunauMobil.VeloBasar.Data
             var assembly = type.Assembly;
             var ns = type.Namespace;
 
-            AddRange(Load(assembly, $"{ns}.ZipLists", "AUT"));
-            AddRange(Load(assembly, $"{ns}.ZipLists", "GER"));
+            _zipMaps.AddRange(Load(assembly, $"{ns}.ZipLists", "AUT"));
+            _zipMaps.AddRange(Load(assembly, $"{ns}.ZipLists", "GER"));
         }
+
+        public IEnumerator<ZipMap> GetEnumerator() => _zipMaps.GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => _zipMaps.GetEnumerator();
 
         private IReadOnlyCollection<ZipMap> Load(Assembly assembly, string ns, string countryIso3166Alpha3Code)
         {

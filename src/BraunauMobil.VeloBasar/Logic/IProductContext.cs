@@ -9,12 +9,12 @@ namespace BraunauMobil.VeloBasar.Logic
     {
         Task<bool> ExistsAsync(int id);
         Task<Product> GetAsync(int id);
-        IQueryable<Product> GetMany(IList<int> ids);
+        IQueryable<Product> GetMany(IReadOnlyList<int> ids);
         IQueryable<Product> GetProductsForBasar(Basar basar);
         IQueryable<Product> GetProductsForBasar(Basar basar, string searchString, StorageState? storageState, ValueState? valueState, int? brand, int? productType);
         IQueryable<Product> GetProductsForSeller(Basar basar, int sellerId);
-        Task<IList<Product>> InsertProductsAsync(Basar basar, Seller seller, IList<Product> products);
-        Task ReloadRelationsAsync(IList<Product> products);
+        Task<IReadOnlyList<Product>> InsertProductsAsync(Basar basar, Seller seller, IReadOnlyList<Product> products);
+        Task ReloadRelationsAsync(IReadOnlyList<Product> products);
         Task UpdateAsync(Product product);
     }
 }

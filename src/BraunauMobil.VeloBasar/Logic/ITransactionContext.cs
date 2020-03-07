@@ -7,9 +7,9 @@ namespace BraunauMobil.VeloBasar.Logic
 {
     public interface ITransactionContext
     {
-        Task<ProductsTransaction> AcceptProductsAsync(Basar basar, int sellerId, IList<Product> products);
-        Task<ProductsTransaction> CancelProductsAsync(Basar basar, int saleId, IList<int> productIds);
-        Task<ProductsTransaction> CheckoutProductsAsync(Basar basar, IList<int> productIds);
+        Task<ProductsTransaction> AcceptProductsAsync(Basar basar, int sellerId, IReadOnlyList<Product> products);
+        Task<ProductsTransaction> CancelProductsAsync(Basar basar, int saleId, IReadOnlyList<int> productIds);
+        Task<ProductsTransaction> CheckoutProductsAsync(Basar basar, IReadOnlyList<int> productIds);
         Task<ProductsTransaction> DoTransactionAsync(Basar basar, TransactionType transactionType, string notes, int productId);
         Task<ProductsTransaction> DoTransactionAsync(Basar basar, TransactionType transactionType, string notes, PrintSettings printSettings, params Product[] products);
         Task<bool> ExistsAsync(int id);

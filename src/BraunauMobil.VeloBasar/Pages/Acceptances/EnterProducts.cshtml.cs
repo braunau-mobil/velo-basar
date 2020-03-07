@@ -112,7 +112,7 @@ namespace BraunauMobil.VeloBasar.Pages.Acceptances
             ViewData["Brands"] = _brandContext.GetSelectList();
             ViewData["ProductTypes"] = _productTypeContext.GetSelectList();
         }
-        private ListViewModel<Product> CreateViewModels(IList<Product> products)
+        private ListViewModel<Product> CreateViewModels(IReadOnlyList<Product> products)
         {
             return new ListViewModel<Product>(_context.Basar, products.ToArray(), new[]
             {

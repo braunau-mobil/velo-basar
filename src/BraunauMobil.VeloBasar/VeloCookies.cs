@@ -58,7 +58,7 @@ namespace BraunauMobil.VeloBasar
 
             cookies.Delete(_acceptanceProducts.Key, _acceptanceProducts.CookieOptions);
         }
-        public static IList<Product> GetAcceptanceProducts(this IRequestCookieCollection cookies)
+        public static List<Product> GetAcceptanceProducts(this IRequestCookieCollection cookies)
         {
             Contract.Requires(cookies != null);
 
@@ -69,7 +69,7 @@ namespace BraunauMobil.VeloBasar
             }
             return JsonConvert.DeserializeObject<List<Product>>(json);
         }
-        public static void SetAcceptanceProducts(this IResponseCookies cookies, IList<Product> products)
+        public static void SetAcceptanceProducts(this IResponseCookies cookies, IReadOnlyList<Product> products)
         {
             Contract.Requires(cookies != null);
 
@@ -101,7 +101,7 @@ namespace BraunauMobil.VeloBasar
 
             cookies.Delete(_cart.Key, _cart.CookieOptions);
         }
-        public static IList<int> GetCart(this IRequestCookieCollection cookies)
+        public static List<int> GetCart(this IRequestCookieCollection cookies)
         {
             Contract.Requires(cookies != null);
 
@@ -112,7 +112,7 @@ namespace BraunauMobil.VeloBasar
             }
             return JsonConvert.DeserializeObject<List<int>>(json);
         }
-        public static void SetCart(this IResponseCookies cookies, IList<int> cart)
+        public static void SetCart(this IResponseCookies cookies, IReadOnlyList<int> cart)
         {
             Contract.Requires(cookies != null);
 
