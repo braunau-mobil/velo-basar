@@ -44,8 +44,7 @@
 @if (Model.Parameter.OpenDocument == true)
 {
     <script type="text/javascript">
-        // @@todo was ist denn das hier für ein hardcoded fuckup!???
-        window.open("/ShowFile?basarId=@VeloContext.Basar.Id.ToString()&fileId=@Model.TransactionViewModel.Transaction.DocumentId.ToString()", "_blank");
+        window.open("@Model.GetOpenDocumentPath()", "_blank");
     </script>
 }
 

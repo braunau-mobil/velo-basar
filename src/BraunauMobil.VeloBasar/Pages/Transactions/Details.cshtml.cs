@@ -6,6 +6,7 @@ using BraunauMobil.VeloBasar.Models;
 using BraunauMobil.VeloBasar.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Routing;
 
 namespace BraunauMobil.VeloBasar.Pages.Transactions
 {
@@ -20,11 +21,13 @@ namespace BraunauMobil.VeloBasar.Pages.Transactions
     {
         private readonly ITransactionContext _transactionContext;
         private readonly ISettingsContext _settingsContext;
+        private readonly LinkGenerator _linkGenerator;
 
-        public DetailsModel(ITransactionContext context, ISettingsContext settingsContext)
+        public DetailsModel(ITransactionContext context, ISettingsContext settingsContext, LinkGenerator linkGenerator)
         {
             _transactionContext = context;
             _settingsContext = settingsContext;
+            _linkGenerator = linkGenerator;
         }
 
         public TransactionDetailsViewModel TransactionViewModel { get; set; }
@@ -64,6 +67,7 @@ namespace BraunauMobil.VeloBasar.Pages.Transactions
                 TransactionId = Parameter.TransactionId
             });
         }
+        public string GetOpenDocumentPath() => _linkGenerator.GetPath(this.GetPage<ShowFileModel>(new ShowFileParameter { FileId = TransactionViewModel.Transaction.DocumentId.Value }));
 
         private async Task LoadTransactionAsync(DetailsParameter parameter)
         {
