@@ -95,10 +95,6 @@ namespace BraunauMobil.VeloBasar.Models
             {
                 NewsletterPermissionTimesStamp = DateTime.Now;
             }
-            else
-            {
-                EMail = null;
-            }
         }
     }
 }

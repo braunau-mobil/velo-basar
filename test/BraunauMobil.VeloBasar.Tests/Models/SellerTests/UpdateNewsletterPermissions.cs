@@ -38,7 +38,6 @@ namespace BraunauMobil.VeloBasar.Tests.Models.SellerTests
 
             Assert.False(seller.HasNewsletterPermission);
             Assert.Equal(timestamp, seller.NewsletterPermissionTimesStamp);
-            Assert.Null(seller.EMail);
         }
     }
 }

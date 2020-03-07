@@ -26,13 +26,11 @@ namespace BraunauMobil.VeloBasar.Tests.Logic.SellerContextTests
                 Assert.NotNull(createdSeller);
                 Assert.NotEqual(0, createdSeller.Id);
                 Assert.NotNull(createdSeller.Token);
-                Assert.Null(createdSeller.EMail);
                 Assert.Equal(timestamp, createdSeller.NewsletterPermissionTimesStamp);
 
                 await SellerContext.UpdateAsync(createdSeller);
 
                 Assert.False(createdSeller.HasNewsletterPermission);
-                Assert.Null(createdSeller.EMail);
                 Assert.Equal(timestamp, createdSeller.NewsletterPermissionTimesStamp);
             });
         }
@@ -55,7 +53,6 @@ namespace BraunauMobil.VeloBasar.Tests.Logic.SellerContextTests
                 Assert.NotNull(createdSeller);
                 Assert.NotEqual(0, createdSeller.Id);
                 Assert.NotNull(createdSeller.Token);
-                Assert.Null(createdSeller.EMail);
                 Assert.Equal(timestamp, createdSeller.NewsletterPermissionTimesStamp);
 
                 createdSeller.HasNewsletterPermission = true;
@@ -122,7 +119,6 @@ namespace BraunauMobil.VeloBasar.Tests.Logic.SellerContextTests
                 sellerToCreate.HasNewsletterPermission = false;
                 await SellerContext.UpdateAsync(createdSeller);
 
-                Assert.Null(createdSeller.EMail);
                 Assert.False(createdSeller.HasNewsletterPermission);
             });
         }

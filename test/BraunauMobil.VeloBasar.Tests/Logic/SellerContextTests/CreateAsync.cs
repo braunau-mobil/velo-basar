@@ -24,7 +24,6 @@ namespace BraunauMobil.VeloBasar.Tests.Logic.SellerContextTests
                 Assert.NotNull(createdSeller);
                 Assert.NotEqual(0, createdSeller.Id);
                 Assert.NotNull(createdSeller.Token);
-                Assert.Null(createdSeller.EMail);
             });
         }
 
