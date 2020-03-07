@@ -95,32 +95,31 @@ namespace BraunauMobil.VeloBasar.Printing
                 doc.SetFontSize(10);
                 doc.SetFont(PdfFontFactory.CreateFont(StandardFonts.TIMES_ROMAN));
 
-                doc.Add(new Paragraph(
-                    GetSmallText(string.Format(CultureInfo.CurrentCulture, settings.Label.TitleFormat, product.Basar.Name)))
+                doc.Add(GetRegularParagraph(string.Format(CultureInfo.CurrentCulture, settings.Label.TitleFormat, product.Basar.Name))
                         .SetTextAlignment(TextAlignment.CENTER)
                         .SetBorderBottom(new SolidBorder(2)));
 
                 var info = new Paragraph()
-                    .Add(GetSmallText($"{product.Brand.Name} - {product.Type.Name}").SetBold())
+                    .Add(GetRegularText($"{product.Brand.Name} - {product.Type.Name}").SetBold())
                     .Add(Environment.NewLine)
-                    .Add(GetSmallText(product.Description));
+                    .Add(GetRegularText(product.Description));
 
                 if (product.Color != null)
                 {
                     info.Add(Environment.NewLine)
-                        .Add(GetSmallText(product.Color));
+                        .Add(GetRegularText(product.Color));
                 }
 
                 if (product.FrameNumber != null)
                 {
                     info.Add(Environment.NewLine)
-                        .Add(GetSmallText(_localizer["Rahmennummer: {0}", product.FrameNumber]));
+                        .Add(GetRegularText(_localizer["Rahmennummer: {0}", product.FrameNumber]));
                 }
 
                 if (product.TireSize != null)
                 {
                     info.Add(Environment.NewLine)
-                        .Add(GetSmallText(_localizer["Reifengröße: {0}", product.TireSize]));
+                        .Add(GetRegularText(_localizer["Reifengröße: {0}", product.TireSize]));
 
                 }
 
@@ -132,7 +131,7 @@ namespace BraunauMobil.VeloBasar.Printing
                     .SetTextAlignment(TextAlignment.CENTER);
                 var barcode = new Barcode128(pdfDoc);
                 barcode.SetCode($"{product.Id}");
-                var price = GetBigParagraph(string.Format(CultureInfo.CurrentCulture, "{0:C}", product.Price))
+                var price = GetParagraph(14, string.Format(CultureInfo.CurrentCulture, "{0:C}", product.Price))
                     .SetBold()
                     .SetTextAlignment(TextAlignment.RIGHT)
                     .SetBorderTop(new SolidBorder(2))
@@ -543,14 +542,16 @@ namespace BraunauMobil.VeloBasar.Printing
             return new Paragraph(text)
                 .SetFontSize(fontSize);
         }
+        private static Text GetText(int fontSize, string text)
+        {
+            return new Text(text)
+                .SetFontSize(fontSize);
+        }
         private static Paragraph GetBigParagraph(string text) => GetParagraph(_bigFontSize, text);
         private static Paragraph GetMediumParagraph(string text) => GetParagraph(_mediumFontSize, text);
         private static Paragraph GetRegularParagraph(string text) => GetParagraph(_regularFontSize, text);
-        private static Text GetSmallText(string text)
-        {
-            return new Text(text)
-                .SetFontSize(_smallFontSize);
-        }
+        private static Text GetSmallText(string text) => GetText(_smallFontSize, text);
+        private static Text GetRegularText(string text) => GetText(_regularFontSize, text);
         private static Paragraph GetBoldParagraph(string text)
         {
             return new Paragraph(text)
