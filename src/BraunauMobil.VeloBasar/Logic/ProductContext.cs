@@ -91,12 +91,17 @@ namespace BraunauMobil.VeloBasar.Logic
                     Type = product.Type,
                     ValueState = ValueState.NotSettled
                 };
-                newProduct.LabelId = await _fileStoreContext.CreateProductLabelAsync(newProduct, printSettings);
                 newProducts.Add(newProduct);
             }
 
             _db.Products.AddRange(newProducts);
             await _db.SaveChangesAsync();
+
+            foreach (var product in newProducts)
+            {
+                product.LabelId = await _fileStoreContext.CreateProductLabelAsync(product, printSettings);
+                await UpdateAsync(product);
+            }
 
             return newProducts;
         }
