@@ -132,7 +132,7 @@ namespace BraunauMobil.VeloBasar.Printing
                     .SetTextAlignment(TextAlignment.CENTER);
                 var barcode = new Barcode128(pdfDoc);
                 barcode.SetCode($"{product.Id}");
-                var price = GetBigText(string.Format(CultureInfo.CurrentCulture, "{0:C}", product.Price))
+                var price = GetBigParagraph(string.Format(CultureInfo.CurrentCulture, "{0:C}", product.Price))
                     .SetBold()
                     .SetTextAlignment(TextAlignment.RIGHT)
                     .SetBorderTop(new SolidBorder(2))
@@ -162,7 +162,7 @@ namespace BraunauMobil.VeloBasar.Printing
                 AddSignature(doc, settings.Acceptance.SignatureText, acceptance);
 
                 //doc.Add(GetSpacer(10));
-                doc.Add(GetRegularText(settings.Acceptance.GetTokenText(acceptance.Seller)));
+                doc.Add(GetRegularParagraph(settings.Acceptance.GetTokenText(acceptance.Seller)));
             });
         }
         private byte[] CreateSale(ProductsTransaction sale, PrintSettings settings)
@@ -185,9 +185,9 @@ namespace BraunauMobil.VeloBasar.Printing
                 AddProductTable(doc, sale.Products.GetProducts(), _localizer["Preis"], true, settings.Sale.SellerInfoText);
 
                 doc.Add(GetSpacer(5));
-                doc.Add(GetRegularText(settings.Sale.HintText));
+                doc.Add(GetRegularParagraph(settings.Sale.HintText));
                 //doc.Add(GetSpacer(2));
-                doc.Add(GetRegularText(settings.Sale.FooterText));
+                doc.Add(GetRegularParagraph(settings.Sale.FooterText));
             });
         }
         private byte[] CreateSettlement(ProductsTransaction settlement, PrintSettings settings)
@@ -229,7 +229,7 @@ namespace BraunauMobil.VeloBasar.Printing
                 }
 
                 doc.Add(GetSpacer(5));
-                doc.Add(GetRegularText(settings.Settlement.ConfirmationText));
+                doc.Add(GetRegularParagraph(settings.Settlement.ConfirmationText));
                 //doc.Add(GetSpacer(2));
                 AddSignature(doc, settings.Settlement.SignatureText, settlement);
             });
@@ -265,12 +265,12 @@ namespace BraunauMobil.VeloBasar.Printing
 
         private void AddBannerSubtitle(Document doc, string bannerSubtitleText, string websiteText)
         {
-            var bannerSubtitle = GetRegularText(bannerSubtitleText)
+            var bannerSubtitle = GetRegularParagraph(bannerSubtitleText)
                 .SetMargin(0)
                 .SetTextAlignment(TextAlignment.CENTER);
             doc.Add(bannerSubtitle);
 
-            var website = GetRegularText(websiteText)
+            var website = GetRegularParagraph(websiteText)
                 .SetMarginTop(0)
                 .SetMarginBottom(10)
                 .SetFontColor(_green)
@@ -288,25 +288,25 @@ namespace BraunauMobil.VeloBasar.Printing
                 .SetBorderLeft(null)
                 .SetTextAlignment(TextAlignment.CENTER)
                 .SetVerticalAlignment(VerticalAlignment.MIDDLE)
-                .Add(GetBoldText(_localizer["Id"]));
+                .Add(GetBoldParagraph(_localizer["Id"]));
 
             var productInfoHeaderCell = new Cell()
                 .SetBorderTop(null)
                 .SetTextAlignment(TextAlignment.CENTER)
-                .Add(GetBoldText(_localizer["Artikelbeschreibung"]));
+                .Add(GetBoldParagraph(_localizer["Artikelbeschreibung"]));
 
             var sizeHeaderCell = new Cell()
                 .SetBorderTop(null)
                 .SetTextAlignment(TextAlignment.CENTER)
                 .SetVerticalAlignment(VerticalAlignment.MIDDLE)
-                .Add(GetBoldText(_localizer["Größe"]));
+                .Add(GetBoldParagraph(_localizer["Größe"]));
 
             var priceHeaderCell = new Cell()
                 .SetBorderTop(null)
                 .SetBorderRight(null)
                 .SetTextAlignment(TextAlignment.CENTER)
                 .SetVerticalAlignment(VerticalAlignment.MIDDLE)
-                .Add(GetBoldText(priceColumnTitle));
+                .Add(GetBoldParagraph(priceColumnTitle));
 
             productsTable.AddHeaderCell(idHeaderCell).AddHeaderCell(productInfoHeaderCell).AddHeaderCell(sizeHeaderCell).AddHeaderCell(priceHeaderCell);
 
@@ -315,16 +315,16 @@ namespace BraunauMobil.VeloBasar.Printing
                 .SetBorderTop(new DoubleBorder(2))
                 .SetBorderRight(null)
                 .SetBorderBottom(null)
-                .Add(GetBoldText(_localizer["Summe:"]));
+                .Add(GetBoldParagraph(_localizer["Summe:"]));
 
             var productInfoFooterCell = new Cell(1, 2)
                 .SetBorderLeft(null)
                 .SetBorderTop(new DoubleBorder(2))
                 .SetBorderRight(null)
                 .SetBorderBottom(null)
-                .Add(GetBoldText(_localizer["{0} Artikel", products.Count()]));
+                .Add(GetBoldParagraph(_localizer["{0} Artikel", products.Count()]));
 
-            var priceFooter = GetBoldText(string.Format(CultureInfo.CurrentCulture, "{0:C}", products.SumPrice()));
+            var priceFooter = GetBoldParagraph(string.Format(CultureInfo.CurrentCulture, "{0:C}", products.SumPrice()));
             var priceFooterCell = new Cell()
                 .SetSplitCharacters(new NoSplitCharacters())
                 .SetBorderLeft(null)
@@ -394,7 +394,7 @@ namespace BraunauMobil.VeloBasar.Printing
 
             var column0HeaderCell = new Cell()
                 .SetBorder(null)
-                .Add(GetBoldText(_localizer["Einnahmen aus verkauften Artikeln:"]));
+                .Add(GetBoldParagraph(_localizer["Einnahmen aus verkauften Artikeln:"]));
 
             var column1HeaderCell = new Cell()
                 .SetBorder(null);
@@ -403,21 +403,21 @@ namespace BraunauMobil.VeloBasar.Printing
                 .SetBorder(null)
                 .SetSplitCharacters(new NoSplitCharacters())
                 .SetTextAlignment(TextAlignment.RIGHT)
-                .Add(GetBoldText(string.Format(CultureInfo.CurrentCulture, "{0:C}", sum)));
+                .Add(GetBoldParagraph(string.Format(CultureInfo.CurrentCulture, "{0:C}", sum)));
 
             productsTable.AddHeaderCell(column0HeaderCell).AddHeaderCell(column1HeaderCell).AddHeaderCell(column2HeaderCell);
 
             var commissionColumn0Cell = new Cell()
                 .SetBorderLeft(null)
                 .SetBorderRight(null)
-                .Add(GetRegularText(_localizer["Verkaufsprovision ({0:P2} von {1:C}):", commissionFactor, sum]));
+                .Add(GetRegularParagraph(_localizer["Verkaufsprovision ({0:P2} von {1:C}):", commissionFactor, sum]));
 
             var commissionColumn1Cell = new Cell()
                 .SetBorderLeft(null)
                 .SetBorderRight(null)
                 .SetSplitCharacters(new NoSplitCharacters())
                 .SetTextAlignment(TextAlignment.RIGHT)
-                .Add(GetRegularText(string.Format(CultureInfo.CurrentCulture, "{0:C}", commisionAmount)));
+                .Add(GetRegularParagraph(string.Format(CultureInfo.CurrentCulture, "{0:C}", commisionAmount)));
 
             var commissionColumn2Cell = new Cell()
                 .SetBorderLeft(null)
@@ -428,21 +428,21 @@ namespace BraunauMobil.VeloBasar.Printing
             var costsColumn0Cell = new Cell()
                 .SetBorderLeft(null)
                 .SetBorderRight(null)
-                .Add(GetBoldText(_localizer["Kosten:"]));
+                .Add(GetBoldParagraph(_localizer["Kosten:"]));
 
             var costsColumn1Cell = new Cell()
                 .SetBorderLeft(null)
                 .SetBorderRight(null)
                 .SetSplitCharacters(new NoSplitCharacters())
                 .SetTextAlignment(TextAlignment.RIGHT)
-                .Add(GetRegularText(string.Format(CultureInfo.CurrentCulture, "{0:C}", commisionAmount)));
+                .Add(GetRegularParagraph(string.Format(CultureInfo.CurrentCulture, "{0:C}", commisionAmount)));
 
             var costsColumn2Cell = new Cell()
                 .SetBorderLeft(null)
                 .SetBorderRight(null)
                 .SetSplitCharacters(new NoSplitCharacters())
                 .SetTextAlignment(TextAlignment.RIGHT)
-                .Add(GetBoldText(string.Format(CultureInfo.CurrentCulture, "{0:C}", commisionAmount)));
+                .Add(GetBoldParagraph(string.Format(CultureInfo.CurrentCulture, "{0:C}", commisionAmount)));
 
             productsTable.AddCell(costsColumn0Cell).AddCell(costsColumn1Cell).AddCell(costsColumn2Cell);
 
@@ -451,7 +451,7 @@ namespace BraunauMobil.VeloBasar.Printing
                 .SetBorderRight(null)
                 .SetBorderBottom(null)
                 .SetBorderTop(new DoubleBorder(2))
-                .Add(GetBigText(_localizer["Gesamtbetrag:"])
+                .Add(GetBigParagraph(_localizer["Gesamtbetrag:"])
                     .SetBold()
                     .SetFontColor(_orange));
 
@@ -468,7 +468,7 @@ namespace BraunauMobil.VeloBasar.Printing
                 .SetBorderTop(new DoubleBorder(2))
                 .SetSplitCharacters(new NoSplitCharacters())
                 .SetTextAlignment(TextAlignment.RIGHT)
-                .Add(GetBigText(string.Format(CultureInfo.CurrentCulture, "{0:C}", total))
+                .Add(GetBigParagraph(string.Format(CultureInfo.CurrentCulture, "{0:C}", total))
                     .SetBold()
                     .SetFontColor(_orange));
 
@@ -486,7 +486,7 @@ namespace BraunauMobil.VeloBasar.Printing
                 .SetBorder(null);
             if (addressText != null)
             {
-                addressCell.Add(GetRegularText(addressText));
+                addressCell.Add(GetRegularParagraph(addressText));
             }
 
             var locationAndDateCell = new Cell()
@@ -495,7 +495,7 @@ namespace BraunauMobil.VeloBasar.Printing
                 .SetVerticalAlignment(VerticalAlignment.TOP);
             if (locationAndDateText != null)
             {
-                locationAndDateCell.Add(GetRegularText(locationAndDateText));
+                locationAndDateCell.Add(GetRegularParagraph(locationAndDateText));
             }
 
             var sellerIdCell = new Cell()
@@ -504,7 +504,7 @@ namespace BraunauMobil.VeloBasar.Printing
                 .SetVerticalAlignment(VerticalAlignment.BOTTOM);
             if (sellerIdText != null)
             {
-                sellerIdCell.Add(GetRegularText(sellerIdText));
+                sellerIdCell.Add(GetRegularParagraph(sellerIdText));
             }
 
             headerTable.AddCell(addressCell).AddCell(locationAndDateCell).AddCell(sellerIdCell);
@@ -512,14 +512,14 @@ namespace BraunauMobil.VeloBasar.Printing
         }
         private static void AddTitle(Document doc, string text)
         {
-            var mainTitle = GetBigText(text)
+            var mainTitle = GetBigParagraph(text)
                 .SetBold()
                 .SetMarginBottom(10);
             doc.Add(mainTitle);
         }
         private static void AddSubtitle(Document doc, string text)
         {
-            var subTitle = GetMediumText(text)
+            var subTitle = GetMediumParagraph(text)
                 .SetBold()
                 .SetMarginBottom(10);
             doc.Add(subTitle);
@@ -538,30 +538,23 @@ namespace BraunauMobil.VeloBasar.Printing
                 .Add(locationAndDate);
             doc.Add(p);
         }
-        private static Paragraph GetBigText(string text)
+        private static Paragraph GetParagraph(int fontSize, string text)
         {
             return new Paragraph(text)
-                .SetFontSize(_bigFontSize);
+                .SetFontSize(fontSize);
         }
-        private static Paragraph GetBoldText(string text)
-        {
-            return new Paragraph(text)
-                .SetBold();
-        }
-        private static Paragraph GetMediumText(string text)
-        {
-            return new Paragraph(text)
-                .SetFontSize(_mediumFontSize);
-        }
-        private static Paragraph GetRegularText(string text)
-        {
-            return new Paragraph(text)
-                .SetFontSize(_regularFontSize);
-        }
+        private static Paragraph GetBigParagraph(string text) => GetParagraph(_bigFontSize, text);
+        private static Paragraph GetMediumParagraph(string text) => GetParagraph(_mediumFontSize, text);
+        private static Paragraph GetRegularParagraph(string text) => GetParagraph(_regularFontSize, text);
         private static Text GetSmallText(string text)
         {
             return new Text(text)
                 .SetFontSize(_smallFontSize);
+        }
+        private static Paragraph GetBoldParagraph(string text)
+        {
+            return new Paragraph(text)
+                .SetBold();
         }
         private static Paragraph GetSpacer(int verticalSize)
         {
