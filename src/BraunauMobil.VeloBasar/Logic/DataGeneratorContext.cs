@@ -102,7 +102,7 @@ namespace BraunauMobil.VeloBasar.Logic
                 City = TakeRandom(_cities),
                 Street = $"{TakeRandom(_streets)} {_rand.Next(1, 50)}",
                 PhoneNumber = NextPhoneNumber(),
-                EMail = $"{firstName}_{lastName}@domain.com",
+                EMail = $"{_rand.Next()}@domain.com",
                 HasNewsletterPermission = _rand.NextBool(),
                 ZIP = $"{_rand.Next(1, 9)}{_rand.Next(1, 9)}{_rand.Next(1, 9)}{_rand.Next(1, 9)}",
             };
