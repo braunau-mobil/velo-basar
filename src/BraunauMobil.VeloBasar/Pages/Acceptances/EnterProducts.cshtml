@@ -14,8 +14,8 @@
                 </div>
             </div>
 
-            <div class="card-body">
-                <input Condition="@Model.AreWeInEditMode" type="hidden" asp-for="NewProduct.Id" />
+            <div class="card-body" Condition="Model.CanEnterMore || Model.AreWeInEditMode">
+                <input Condition="Model.AreWeInEditMode" type="hidden" asp-for="NewProduct.Id" />
 
                 <div class="form-row">
                     <div class="col-2 mb-3">
@@ -53,10 +53,15 @@
                 {
                     <input type="submit" value="@Localizer["Aktualisieren"]" class="btn btn-primary" velo-parameter="@Model.GetUpdateParameter()" />
                 }
-                else
+                else if (Model.CanEnterMore)
                 {
                     <input type="submit" value="@Localizer["Hinzufügen"]" class="btn btn-primary" velo-parameter="@Model.GetAddParameter()" />
                 }
+            </div>
+            <div class="card-body" Condition="!Model.CanEnterMore && !Model.AreWeInEditMode">
+                <div class="alert alert-danger" role="alert">
+                    @Localizer["Es können maximal {0} Artikel in einem Annahmevorgang erfasst werden. Für weitere Artikel bitte eine neue Annahme starten.", VeloCookies.MaxAcceptanceProducts]
+                </div>
             </div>
         </div>
 

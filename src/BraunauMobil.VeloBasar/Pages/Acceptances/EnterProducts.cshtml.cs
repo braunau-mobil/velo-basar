@@ -32,6 +32,7 @@ namespace BraunauMobil.VeloBasar.Pages.Acceptances
         }
 
         public bool AreWeInEditMode { get; set; }
+        public bool CanEnterMore { get; set; }
         [BindProperty]
         public Product NewProduct { get; set; }
         public EnterProductsParameter Parameter { get; set; }
@@ -67,6 +68,7 @@ namespace BraunauMobil.VeloBasar.Pages.Acceptances
             Response.Cookies.SetAcceptanceProducts(products);
 
             Products = CreateViewModels(products);
+            CanEnterMore = Products.List.Count < VeloCookies.MaxAcceptanceProducts;
         }
         public async Task<IActionResult> OnPostAsync(EnterProductsParameter parameter)
         {
@@ -99,6 +101,7 @@ namespace BraunauMobil.VeloBasar.Pages.Acceptances
 
             Response.Cookies.SetAcceptanceProducts(products);
             Products = CreateViewModels(products);
+            CanEnterMore = Products.List.Count < VeloCookies.MaxAcceptanceProducts;
 
             return Page();
         }

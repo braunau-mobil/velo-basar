@@ -1,9 +1,11 @@
 ﻿using BraunauMobil.VeloBasar.Models;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using System.Globalization;
 
 namespace BraunauMobil.VeloBasar
 {
@@ -15,9 +17,20 @@ namespace BraunauMobil.VeloBasar
 
     public static class VeloCookies
     {
+        public const int MaxAcceptanceProducts = 40;
+
         private static readonly Cookie _acceptanceProducts = new Cookie
         {
-            Key = "acceptanceProducts",
+            Key = "acceptanceProducts_{0}",
+            CookieOptions = new CookieOptions
+            {
+                IsEssential = true,
+                MaxAge = TimeSpan.FromDays(2)
+            }
+        };
+        private static readonly Cookie _acceptanceProductsCount = new Cookie
+        {
+            Key = "acceptanceProductsCount",
             CookieOptions = new CookieOptions
             {
                 IsEssential = true,
@@ -56,25 +69,55 @@ namespace BraunauMobil.VeloBasar
         {
             Contract.Requires(cookies != null);
 
-            cookies.Delete(_acceptanceProducts.Key, _acceptanceProducts.CookieOptions);
+            for (var index = 0; index < MaxAcceptanceProducts; index++)
+            {
+                string key = GetAcceptanceProductCookieKey(index);
+                cookies.Delete(key, _acceptanceProducts.CookieOptions);
+            }
+            cookies.Delete(_acceptanceProductsCount.Key, _acceptanceProductsCount.CookieOptions);
         }
         public static List<Product> GetAcceptanceProducts(this IRequestCookieCollection cookies)
         {
             Contract.Requires(cookies != null);
-
-            var json = cookies[_acceptanceProducts.Key];
-            if (json == null)
+            
+            var products = new List<Product>();
+            
+            var countString = cookies[_acceptanceProductsCount.Key];
+            if (int.TryParse(countString, out var count))
             {
-                return new List<Product>();
+                for (var index = 0; index < count; index++)
+                {
+                    var key = GetAcceptanceProductCookieKey(index);
+                    var json = cookies[key];
+                    if (string.IsNullOrEmpty(json))
+                    {
+                        Log.Warning("Cookie {key} is null or empty.", key);
+                        continue;
+                    }
+                    var product = JsonConvert.DeserializeObject<Product>(json);
+                    products.Add(product);
+                }
             }
-            return JsonConvert.DeserializeObject<List<Product>>(json);
+            
+            return products;
         }
         public static void SetAcceptanceProducts(this IResponseCookies cookies, IReadOnlyList<Product> products)
         {
             Contract.Requires(cookies != null);
+            Contract.Requires(products != null);
 
-            var json = JsonConvert.SerializeObject(products);
-            cookies.Append(_acceptanceProducts.Key, json);
+            if (products.Count > MaxAcceptanceProducts)
+            {
+                throw new ArgumentOutOfRangeException(nameof(products), $"Cannot save more that {MaxAcceptanceProducts} to cookies.");
+            }
+
+            for (var index = 0; index < products.Count; index++)
+            {
+                var key = GetAcceptanceProductCookieKey(index);
+                var json = JsonConvert.SerializeObject(products[index]);
+                cookies.Append(key, json, _acceptanceProducts.CookieOptions);
+            }
+            cookies.Append(_acceptanceProductsCount.Key, products.Count.ToString(CultureInfo.InvariantCulture), _acceptanceProductsCount.CookieOptions);
         }
 
         public static int? GetBasarId(this IRequestCookieCollection cookies)
@@ -139,5 +182,7 @@ namespace BraunauMobil.VeloBasar
             var fullKey = $"{key}.{_pageSize.Key}";
             cookies.Append(fullKey, $"{pageSize}");
         }
+
+        private static string GetAcceptanceProductCookieKey(int index) => string.Format(CultureInfo.InvariantCulture, _acceptanceProducts.Key, index);
     }
 }
