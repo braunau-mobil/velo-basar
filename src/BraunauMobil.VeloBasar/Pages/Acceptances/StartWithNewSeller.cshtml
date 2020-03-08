@@ -18,6 +18,8 @@
             <input type="hidden" asp-for="AreWeInEditMode" />
             <input Condition="@Model.AreWeInEditMode" type="hidden" asp-for="Seller.Id" />
             <input type="hidden" asp-for="Seller.Token" />
+            <input type="hidden" asp-for="Seller.NewsletterPermissionTimesStamp" />
+            <input type="hidden" asp-for="Seller.Comment" />
 
             <div class="form-group row">
                 <label asp-for="Seller.FirstName" class="col-2 col-form-label"></label>
@@ -66,7 +68,7 @@
             </div>
             <div class="form-group row">
                 <label asp-for="Seller.EMail" class="col-2 col-form-label"></label>
-                <input asp-for="Seller.EMail" class="col-10 form-control" velo-validation-for="Seller.EMail" velo-validation-condition="Model.IsValidationEnabled"/>
+                <input asp-for="Seller.EMail" class="col-10 form-control" velo-validation-for="Seller.EMail" velo-validation-condition="Model.IsValidationEnabled" />
             </div>
             <div class="form-group row">
                 <label asp-for="Seller.IBAN" class="col-2 col-form-label"></label>
