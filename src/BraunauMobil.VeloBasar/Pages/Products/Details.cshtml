@@ -50,6 +50,14 @@
     </div>
 </div>
 
+<div class="card my-3">
+    <h5 class="card-header">@Localizer["Verkäufer"]</h5>
+    <div class="card-body">
+        <partial name="/Pages/Sellers/_SmallDetails.cshtml" model="@Model.Product.Seller" />
+        <a velo-page="@Model.GetSellerDetailsPage()">@Localizer["Details"]</a>
+    </div>
+</div>
+
 <div class="card my-3 @cardStyle">
     <h5 class="card-header">@Localizer["Transaktionen"]</h5>
     <div class="card-body p-0">
