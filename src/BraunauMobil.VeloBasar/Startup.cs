@@ -91,6 +91,8 @@ namespace BraunauMobil.VeloBasar
 
         public static void RegisterServices(IServiceCollection services)
         {
+            services.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>();
+
             services.AddScoped<IBasarContext, BasarContext>();
             services.AddScoped<IBrandContext, BrandContext>();
             services.AddScoped<IColorProvider, ColorProvider>();

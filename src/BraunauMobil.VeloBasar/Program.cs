@@ -5,6 +5,7 @@ using Microsoft.AspNetCore;
 using Serilog;
 using Serilog.Events;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace BraunauMobil.VeloBasar
 {
@@ -49,6 +50,10 @@ namespace BraunauMobil.VeloBasar
                     config.AddCommandLine(args);
                 })
                 .UseStartup<Startup>()
-                .UseSerilog();
+                .UseSerilog()
+                .ConfigureServices(services =>
+                {
+                    services.AddHostedService<QueuedHostedService>();
+                });
     }
 }

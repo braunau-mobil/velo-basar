@@ -4,26 +4,30 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Newtonsoft.Json;
 using Serilog;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace BraunauMobil.VeloBasar.Logic
 {
     public class WordPressStatusPushService : IStatusPushService
     {
+        private const int _retryDelyInSeconds = 2;
+
         private readonly IProductContext _productContext;
         private readonly ISettingsContext _settingsContext;
         private readonly IStringLocalizer<SharedResource> _stringLocalizer;
+        private readonly IBackgroundTaskQueue _taskQueue;
 
-        public WordPressStatusPushService(IProductContext productContext, ISettingsContext settingsContext, IStringLocalizer<SharedResource> stringLocalizer)
+        public WordPressStatusPushService(IProductContext productContext, ISettingsContext settingsContext, IStringLocalizer<SharedResource> stringLocalizer, IBackgroundTaskQueue taskQueue)
         {
             _productContext = productContext;
             _settingsContext = settingsContext;
             _stringLocalizer = stringLocalizer;
+            _taskQueue = taskQueue;
         }
 
         public async Task PushAwayAsync(Basar basar, IEnumerable<Product> products)
@@ -38,9 +42,8 @@ namespace BraunauMobil.VeloBasar.Logic
             {
                 var seller = group.Key;
                 var html = await GetStatesList(basar, seller);
-                
-                //  We fire and forget this call, because we are not interested in the result
-                _ = Task.Run(() => PostStatusAsync(settings.WordPressStatusPushSettings, seller.Token, html));
+
+                _taskQueue.QueueBackgroundWorkItem(async token => await PostStatusAsync(settings.WordPressStatusPushSettings, seller.Token, html, token));
             }
         }
 
@@ -84,8 +87,22 @@ namespace BraunauMobil.VeloBasar.Logic
 
             return html.ToString();
         }
-        
-        private static async Task PostStatusAsync(WordPressStatusPushSettings settings, string accessid, string saletext)
+
+        private static async Task PostStatusAsync(WordPressStatusPushSettings settings, string accessid, string saletext, CancellationToken token)
+        {
+            while (!token.IsCancellationRequested)
+            {
+                if (await PostStatusAsync(settings, accessid, saletext))
+                {
+                    break;
+                }
+
+                Log.Warning($"Retry PostStatusAsync in {_retryDelyInSeconds} seconds.");
+                await Task.Delay(_retryDelyInSeconds * 1000);
+            }
+        }
+
+        private static async Task<bool> PostStatusAsync(WordPressStatusPushSettings settings, string accessid, string saletext)
         {
             try
             {
@@ -102,12 +119,13 @@ namespace BraunauMobil.VeloBasar.Logic
                 using var httpClient = new HttpClient();
                 using var response = await httpClient.PostAsync(settings.EndpointUrl, body);
                 response.EnsureSuccessStatusCode();
+                return true;
             }
-            catch (Exception ex)
+            catch (HttpRequestException httpRequestException)
             {
-                Log.ForContext<WordPressStatusPushService>().Error(ex, "Exception while post");
-                throw;
+                Log.Error(httpRequestException, "PostStatusAsync did not return success.");
             }
+            return false;
         }
         private static string ProductInfo(Product product) => $"{product.Brand.Name} - {product.Type.Name}<br/>{product.Description} - {product.Price:C}";
     }
