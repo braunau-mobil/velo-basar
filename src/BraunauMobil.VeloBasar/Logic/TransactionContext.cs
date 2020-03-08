@@ -44,9 +44,9 @@ namespace BraunauMobil.VeloBasar.Logic
             await _sellerContext.SetValueStateAsync(sellerId, ValueState.NotSettled);
             return tx;
         }
-        public async Task<ProductsTransaction> CancelProductsAsync(Basar basar, int saleId, IReadOnlyList<int> productIds)
+        public async Task<ProductsTransaction> CancelProductsAsync(Basar basar, int saleId, IList<int> productIds)
         {
-            var products = await _productContext.GetMany(productIds).ToArrayAsync();
+            var products = await _productContext.GetManyAsync(productIds);
             if (!products.IsAllowed(TransactionType.Cancellation))
             {
                 return null;
@@ -62,18 +62,18 @@ namespace BraunauMobil.VeloBasar.Logic
 
             return await CreateTransactionAsync(basar, TransactionType.Cancellation, printSettings, products.ToArray());
         }
-        public async Task<ProductsTransaction> CheckoutProductsAsync(Basar basar, IReadOnlyList<int> productIds)
+        public async Task<ProductsTransaction> CheckoutProductsAsync(Basar basar, IList<int> productIds)
         {
-            var products = _productContext.GetMany(productIds);
+            var products = await _productContext.GetManyAsync(productIds);
             var printSettings = await _settingsContext.GetPrintSettingsAsync();
-            return await DoTransactionAsync(basar, TransactionType.Sale, null, printSettings, await products.ToArrayAsync());
+            return await DoTransactionAsync(basar, TransactionType.Sale, null, printSettings, products);
         }
         public async Task<ProductsTransaction> DoTransactionAsync(Basar basar, TransactionType transactionType, string notes, int productId)
         {
             var product = await _productContext.GetAsync(productId);
-            return await DoTransactionAsync(basar, transactionType, notes, null, product);
+            return await DoTransactionAsync(basar, transactionType, notes, null, new[] { product });
         }
-        public async Task<ProductsTransaction> DoTransactionAsync(Basar basar, TransactionType transactionType, string notes, PrintSettings printSettings, params Product[] products)
+        public async Task<ProductsTransaction> DoTransactionAsync(Basar basar, TransactionType transactionType, string notes, PrintSettings printSettings, IReadOnlyCollection<Product> products)
         {
             if (!products.IsAllowed(transactionType))
             {
@@ -171,7 +171,7 @@ namespace BraunauMobil.VeloBasar.Logic
         {
             return await CreateTransactionAsync(basar, transactionType, seller, null, printSettings, products);
         }
-        private async Task<ProductsTransaction> CreateTransactionAsync(Basar basar, TransactionType transactionType, Seller seller, string notes, PrintSettings printSettings, params Product[] products)
+        private async Task<ProductsTransaction> CreateTransactionAsync(Basar basar, TransactionType transactionType, Seller seller, string notes, PrintSettings printSettings, IReadOnlyCollection<Product> products)
         {
             var transaction = new ProductsTransaction
             {

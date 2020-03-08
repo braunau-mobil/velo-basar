@@ -43,8 +43,12 @@ namespace BraunauMobil.VeloBasar.ViewModels
         {
             var items = await productsIq.AsNoTracking().ToArrayAsync();
 
-            var productsViewModel = new ProductsViewModel(items, commands);
-            if( decorateAsync != null)
+            return await CreateAsync(items, decorateAsync, commands);
+        }
+        public static async Task<ProductsViewModel> CreateAsync(IReadOnlyCollection<Product> products, Func<ProductViewModel, Task> decorateAsync, IReadOnlyCollection<ListCommand<ProductViewModel>> commands)
+        {
+            var productsViewModel = new ProductsViewModel(products, commands);
+            if (decorateAsync != null)
             {
                 foreach (var vm in productsViewModel.ViewModels)
                 {

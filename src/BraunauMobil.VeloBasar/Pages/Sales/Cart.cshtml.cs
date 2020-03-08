@@ -82,9 +82,10 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
         }
         public VeloPage GetSalesDetailsPage() => this.GetPage<Transactions.DetailsModel>(new Transactions.DetailsParameter { TransactionId = SaleId.Value });
         
-        private async Task LoadProducts(IReadOnlyList<int> productIds)
+        private async Task LoadProducts(IList<int> productIds)
         {
-            Products = await ProductsViewModel.CreateAsync(_productContext.GetMany(productIds),
+            var products = await _productContext.GetManyAsync(productIds);
+            Products = await ProductsViewModel.CreateAsync(products,
             async vm =>
             {
                 if (!vm.Product.IsAllowed(TransactionType.Sale))

@@ -31,7 +31,11 @@ namespace BraunauMobil.VeloBasar.Logic
 
         public async Task<bool> ExistsAsync(int id) => await _db.Products.ExistsAsync(id);
         public async Task<Product> GetAsync(int id) => await _db.Products.IncludeAll().FirstOrDefaultAsync(p => p.Id == id);
-        public IQueryable<Product> GetMany(IReadOnlyList<int> ids) => _db.Products.Where(p => ids.Contains(p.Id)).IncludeAll().DefaultOrder();
+        public async Task<IReadOnlyList<Product>> GetManyAsync(IList<int> ids)
+        {
+            var products = await _db.Products.Where(p => ids.Contains(p.Id)).IncludeAll().ToArrayAsync();
+            return products.OrderBy(p => ids.IndexOf(p.Id)).ToArray();
+        }
         public IQueryable<Product> GetProductsForBasar(Basar basar) => GetProductsForBasar(basar, null, null, null, null, null);
         public IQueryable<Product> GetProductsForBasar(Basar basar, string searchString, StorageState? storageState, ValueState? valueState, int? brandId, int? productTypeId)
         {
