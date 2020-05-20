@@ -1,5 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.Contracts;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 
 namespace BraunauMobil.VeloBasar.Models
@@ -44,7 +44,7 @@ namespace BraunauMobil.VeloBasar.Models
 
         public string GetTokenText(Seller seller)
         {
-            Contract.Requires(seller != null);
+            if (seller == null) throw new ArgumentNullException(nameof(seller));
 
             return string.Format(CultureInfo.CurrentCulture, TokenFormat, seller.Token);
         }

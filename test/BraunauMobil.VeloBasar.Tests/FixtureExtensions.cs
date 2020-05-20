@@ -1,8 +1,8 @@
 ﻿using AutoFixture;
 using AutoFixture.Dsl;
 using BraunauMobil.VeloBasar.Models;
+using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Linq;
 
 namespace BraunauMobil.VeloBasar.Tests
@@ -11,7 +11,7 @@ namespace BraunauMobil.VeloBasar.Tests
     {
         public static IPostprocessComposer<Product> BuildProduct(this Fixture fixture, decimal price)
         {
-            Contract.Requires(fixture != null);
+            if (fixture == null) throw new ArgumentNullException(nameof(fixture));
 
             return fixture.Build<Product>()
                 .With(p => p.Price, price)
@@ -19,9 +19,9 @@ namespace BraunauMobil.VeloBasar.Tests
         }
         public static IPostprocessComposer<Product> BuildProduct(this Fixture fixture, Brand brand, ProductType productType, decimal? price = null)
         {
-            Contract.Requires(fixture != null);
-            Contract.Requires(brand != null);
-            Contract.Requires(productType != null);
+            if (fixture == null) throw new ArgumentNullException(nameof(fixture));
+            if (brand == null) throw new ArgumentNullException(nameof(brand));
+            if (productType == null) throw new ArgumentNullException(nameof(productType));
 
             var builder = fixture.Build<Product>()
                 .Without(p => p.Id)
@@ -38,7 +38,7 @@ namespace BraunauMobil.VeloBasar.Tests
 
         public static ProductsTransaction CreateAcceptance(this Fixture fixture, IEnumerable<Product> products)
         {
-            Contract.Requires(fixture != null);
+            if (fixture == null) throw new ArgumentNullException(nameof(fixture));
 
             var tx = fixture.Build<ProductsTransaction>()
                 .With(t => t.Products, products.Select(p => new ProductToTransaction() { Product = p, ProductId = p.Id }).ToArray())
@@ -49,8 +49,8 @@ namespace BraunauMobil.VeloBasar.Tests
         }
         public static Seller CreateSeller(this Fixture fixture, Country country)
         {
-            Contract.Requires(fixture != null);
-            Contract.Requires(country != null);
+            if (fixture == null) throw new ArgumentNullException(nameof(fixture));
+            if (country == null) throw new ArgumentNullException(nameof(country));
 
             return fixture.Build<Seller>()
                 .With(s => s.Country, country)

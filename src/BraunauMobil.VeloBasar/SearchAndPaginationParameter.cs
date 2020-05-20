@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Diagnostics.Contracts;
 
 namespace BraunauMobil.VeloBasar
 {
@@ -18,7 +18,7 @@ namespace BraunauMobil.VeloBasar
         }
         public int GetPageSize(PageModel pageModel)
         {
-            Contract.Requires(pageModel != null);
+            if (pageModel == null) throw new ArgumentNullException(nameof(pageModel));
 
             var modelName = pageModel.GetType().FullName;
 

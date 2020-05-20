@@ -1,5 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.Contracts;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using BraunauMobil.VeloBasar.Logic;
 using BraunauMobil.VeloBasar.Models;
@@ -36,7 +36,7 @@ namespace BraunauMobil.VeloBasar.Pages.Transactions
 
         public async Task<IActionResult> OnGetAsync(CreateSingleParameter parameter)
         {
-            Contract.Requires(parameter != null);
+            if (parameter == null) throw new ArgumentNullException(nameof(parameter));
 
             if (parameter.TransactionType == TransactionType.Release && !_context.SignInManager.IsSignedIn(User))
             {
@@ -51,7 +51,7 @@ namespace BraunauMobil.VeloBasar.Pages.Transactions
         }
         public async Task<IActionResult> OnPostAsync(CreateSingleParameter parameter)
         {
-            Contract.Requires(parameter != null);
+            if (parameter == null) throw new ArgumentNullException(nameof(parameter));
 
             await _transactionContext.DoTransactionAsync(_context.Basar, parameter.TransactionType, Notes, parameter.ProductId);
 

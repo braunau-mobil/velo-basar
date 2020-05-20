@@ -2,7 +2,6 @@
 using BraunauMobil.VeloBasar.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -22,7 +21,7 @@ namespace BraunauMobil.VeloBasar.Logic
 
         public async Task<Seller> CreateAsync(Seller seller)
         {
-            Contract.Requires(seller != null);
+            if (seller == null) throw new ArgumentNullException(nameof(seller));
 
             seller.UpdateNewsletterPermissions();
 
@@ -57,7 +56,7 @@ namespace BraunauMobil.VeloBasar.Logic
         }
         public async Task UpdateAsync(Seller seller)
         {
-            Contract.Requires(seller != null);
+            if (seller == null) throw new ArgumentNullException(nameof(seller));
 
             if (_db.IsModified(seller, nameof(seller.HasNewsletterPermission)))
             {

@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics.Contracts;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BraunauMobil.VeloBasar.Logic;
@@ -41,7 +41,7 @@ namespace BraunauMobil.VeloBasar.Pages.Acceptances
 
         public void OnGet(EnterProductsParameter parameter)
         {
-            Contract.Requires(parameter != null);
+            if (parameter == null) throw new ArgumentNullException(nameof(parameter));
 
             _parameter = parameter;
             CreateSelectLists();
@@ -72,7 +72,7 @@ namespace BraunauMobil.VeloBasar.Pages.Acceptances
         }
         public async Task<IActionResult> OnPostAsync(EnterProductsParameter parameter)
         {
-            Contract.Requires(parameter != null);
+            if (parameter == null) throw new ArgumentNullException(nameof(parameter));
 
             _parameter = parameter;
 

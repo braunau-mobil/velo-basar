@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using BraunauMobil.VeloBasar.ViewModels;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using BraunauMobil.VeloBasar.Logic;
-using System.Diagnostics.Contracts;
+using System;
 
 namespace BraunauMobil.VeloBasar.Pages.Basars
 {
@@ -27,7 +27,7 @@ namespace BraunauMobil.VeloBasar.Pages.Basars
 
         public async Task<IActionResult> OnGetAsync(SearchAndPaginationParameter parameter)
         {
-            Contract.Requires(parameter != null);
+            if (parameter == null) throw new ArgumentNullException(nameof(parameter));
 
             SearchString = parameter.SearchString;
 
@@ -39,17 +39,17 @@ namespace BraunauMobil.VeloBasar.Pages.Basars
         public VeloPage GetCreatePage() => this.GetPage<CreateModel>();
         public VeloPage GetDeletePage(Basar item)
         {
-            Contract.Requires(item != null);
+            if (item == null) throw new ArgumentNullException(nameof(item));
             return this.GetPage<DeleteModel>(new DeleteParameter { BasarToDeleteId = item.Id, PageIndex = Basars.PageIndex });
         }
         public VeloPage GetDetailsPage(Basar item)
         {
-            Contract.Requires(item != null);
+            if (item == null) throw new ArgumentNullException(nameof(item));
             return this.GetPage<DetailsModel>(new DetailsParameter { BasarId = item.Id });
         }
         public VeloPage GetEditPage(Basar item)
         {
-            Contract.Requires(item != null);
+            if (item == null) throw new ArgumentNullException(nameof(item));
             return this.GetPage<EditModel>(new EditParameter { BasarToEditId = item.Id, PageIndex = Basars.PageIndex });
         }
         public VeloPage GetResetPage() => this.GetPage<ListModel>();

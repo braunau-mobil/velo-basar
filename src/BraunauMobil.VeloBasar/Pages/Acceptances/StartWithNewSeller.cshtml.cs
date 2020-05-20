@@ -5,8 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using BraunauMobil.VeloBasar.ViewModels;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using BraunauMobil.VeloBasar.Logic;
-using System.Diagnostics.Contracts;
 using System.Collections.Generic;
+using System;
 
 namespace BraunauMobil.VeloBasar.Pages.Acceptances
 {
@@ -41,7 +41,7 @@ namespace BraunauMobil.VeloBasar.Pages.Acceptances
 
         public async Task<IActionResult> OnGetAsync(StartWithNewSellerParameter parameter)
         {
-            Contract.Requires(parameter != null);
+            if (parameter == null) throw new ArgumentNullException(nameof(parameter));
 
             ViewData["Countries"] = _countryContext.GetSelectList();
 
@@ -59,7 +59,7 @@ namespace BraunauMobil.VeloBasar.Pages.Acceptances
         }
         public async Task<IActionResult> OnPostAsync(StartWithNewSellerParameter parameter)
         {
-            Contract.Requires(parameter != null);
+            if (parameter == null) throw new ArgumentNullException(nameof(parameter));
 
             ViewData["Countries"] = _countryContext.GetSelectList();
 

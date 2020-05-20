@@ -4,7 +4,6 @@ using BraunauMobil.VeloBasar.Models;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Diagnostics.Contracts;
 using System.Threading.Tasks;
 
 namespace BraunauMobil.VeloBasar.Tests
@@ -39,7 +38,7 @@ namespace BraunauMobil.VeloBasar.Tests
 
         protected async Task RunOn(Func<VeloRepository, Task> runTest)
         {
-            Contract.Requires(runTest != null);
+            if (runTest == null) throw new ArgumentNullException(nameof(runTest));
 
             var options = new DbContextOptionsBuilder<VeloRepository>()
                     .UseSqlite(Connection)

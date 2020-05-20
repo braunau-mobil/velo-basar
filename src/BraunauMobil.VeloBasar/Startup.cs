@@ -14,7 +14,6 @@ using BraunauMobil.VeloBasar.Printing;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.Hosting;
 using System.Linq;
-using System.Diagnostics.Contracts;
 
 namespace BraunauMobil.VeloBasar
 {
@@ -120,7 +119,7 @@ namespace BraunauMobil.VeloBasar
         [SuppressMessage("Performance", "CA1822:Mark members as static")]
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider)
         {
-            Contract.Requires(app != null);
+            if (app == null) throw new ArgumentNullException(nameof(app));
 
             Log.Information("Configure");
 

@@ -7,7 +7,7 @@ using BraunauMobil.VeloBasar.ViewModels;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using BraunauMobil.VeloBasar.Logic;
-using System.Diagnostics.Contracts;
+using System;
 
 namespace BraunauMobil.VeloBasar.Pages.Sales
 {
@@ -40,7 +40,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
 
         public async Task OnGetAsync(CartParameter parameter)
         {
-            Contract.Requires(parameter != null);
+            if (parameter == null) throw new ArgumentNullException(nameof(parameter));
 
             var productIds = Request.Cookies.GetCart();
             if (parameter.ProductId != null && parameter.Delete != null && parameter.Delete == true)
@@ -58,7 +58,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
         }
         public async Task OnPostAsync(CartParameter parameter)
         {
-            Contract.Requires(parameter != null);
+            if (parameter == null) throw new ArgumentNullException(nameof(parameter));
 
             var cart = Request.Cookies.GetCart();
 

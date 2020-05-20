@@ -4,7 +4,6 @@ using Newtonsoft.Json;
 using Serilog;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Globalization;
 
 namespace BraunauMobil.VeloBasar
@@ -67,7 +66,7 @@ namespace BraunauMobil.VeloBasar
 
         public static void ClearAcceptanceProducts(this IResponseCookies cookies)
         {
-            Contract.Requires(cookies != null);
+            if (cookies == null) throw new ArgumentNullException(nameof(cookies));
 
             for (var index = 0; index < MaxAcceptanceProducts; index++)
             {
@@ -78,7 +77,7 @@ namespace BraunauMobil.VeloBasar
         }
         public static List<Product> GetAcceptanceProducts(this IRequestCookieCollection cookies)
         {
-            Contract.Requires(cookies != null);
+            if (cookies == null) throw new ArgumentNullException(nameof(cookies));
             
             var products = new List<Product>();
             
@@ -103,8 +102,8 @@ namespace BraunauMobil.VeloBasar
         }
         public static void SetAcceptanceProducts(this IResponseCookies cookies, IReadOnlyList<Product> products)
         {
-            Contract.Requires(cookies != null);
-            Contract.Requires(products != null);
+            if (cookies == null) throw new ArgumentNullException(nameof(cookies));
+            if (products == null) throw new ArgumentNullException(nameof(products));
 
             if (products.Count > MaxAcceptanceProducts)
             {
@@ -122,7 +121,7 @@ namespace BraunauMobil.VeloBasar
 
         public static int? GetBasarId(this IRequestCookieCollection cookies)
         {
-            Contract.Requires(cookies != null);
+            if (cookies == null) throw new ArgumentNullException(nameof(cookies));
 
             var id = cookies[_basarId.Key];
             if (int.TryParse(id, out int basarId))
@@ -133,20 +132,20 @@ namespace BraunauMobil.VeloBasar
         }
         public static void SetBasarId(this IResponseCookies cookies, int basarId)
         {
-            Contract.Requires(cookies != null);
+            if (cookies == null) throw new ArgumentNullException(nameof(cookies));
 
             cookies.Append(_basarId.Key, $"{basarId}");
         }
 
         public static void ClearCart(this IResponseCookies cookies)
         {
-            Contract.Requires(cookies != null);
+            if (cookies == null) throw new ArgumentNullException(nameof(cookies));
 
             cookies.Delete(_cart.Key, _cart.CookieOptions);
         }
         public static List<int> GetCart(this IRequestCookieCollection cookies)
         {
-            Contract.Requires(cookies != null);
+            if (cookies == null) throw new ArgumentNullException(nameof(cookies));
 
             var json = cookies[_cart.Key];
             if (json == null)
@@ -157,7 +156,7 @@ namespace BraunauMobil.VeloBasar
         }
         public static void SetCart(this IResponseCookies cookies, IReadOnlyList<int> cart)
         {
-            Contract.Requires(cookies != null);
+            if (cookies == null) throw new ArgumentNullException(nameof(cookies));
 
             var json = JsonConvert.SerializeObject(cart);
             cookies.Append(_cart.Key, json, _cart.CookieOptions);
@@ -165,7 +164,7 @@ namespace BraunauMobil.VeloBasar
 
         public static int GetPageSize(this IRequestCookieCollection cookies, string key)
         {
-            Contract.Requires(cookies != null);
+            if (cookies == null) throw new ArgumentNullException(nameof(cookies));
 
             var fullKey = $"{key}.{_pageSize.Key}";
             var id = cookies[fullKey];
@@ -177,7 +176,7 @@ namespace BraunauMobil.VeloBasar
         }
         public static void SetPageSize(this IResponseCookies cookies, string key, int pageSize)
         {
-            Contract.Requires(cookies != null);
+            if (cookies == null) throw new ArgumentNullException(nameof(cookies));
 
             var fullKey = $"{key}.{_pageSize.Key}";
             cookies.Append(fullKey, $"{pageSize}");

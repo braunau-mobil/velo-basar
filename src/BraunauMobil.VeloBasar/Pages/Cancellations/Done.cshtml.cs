@@ -3,9 +3,9 @@ using BraunauMobil.VeloBasar.Models;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using BraunauMobil.VeloBasar.Logic;
-using System.Diagnostics.Contracts;
 using BraunauMobil.VeloBasar.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using System;
 
 namespace BraunauMobil.VeloBasar.Pages.Cancellations
 {
@@ -37,7 +37,7 @@ namespace BraunauMobil.VeloBasar.Pages.Cancellations
 
         public async Task OnGetAsync(DoneParameter parameter)
         {
-            Contract.Requires(parameter != null);
+            if (parameter == null) throw new ArgumentNullException(nameof(parameter));
 
             Cancellation = await _transactionContext.GetAsync(parameter.CancellationId);
             if (parameter.SaleId != null)

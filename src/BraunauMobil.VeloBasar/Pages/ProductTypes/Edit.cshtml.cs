@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using BraunauMobil.VeloBasar.Models;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using BraunauMobil.VeloBasar.Logic;
-using System.Diagnostics.Contracts;
+using System;
 
 namespace BraunauMobil.VeloBasar.Pages.ProductTypes
 {
@@ -27,7 +27,7 @@ namespace BraunauMobil.VeloBasar.Pages.ProductTypes
 
         public async Task<IActionResult> OnGetAsync(EditParameter parameter)
         {
-            Contract.Requires(parameter != null);
+            if (parameter == null) throw new ArgumentNullException(nameof(parameter));
 
             ProductType = await _context.GetAsync(parameter.ProductTypeId);
             _pageIndex = parameter.PageIndex;
@@ -41,7 +41,7 @@ namespace BraunauMobil.VeloBasar.Pages.ProductTypes
         }
         public async Task<IActionResult> OnPostAsync(EditParameter parameter)
         {
-            Contract.Requires(parameter != null);
+            if (parameter == null) throw new ArgumentNullException(nameof(parameter));
 
             if (!ModelState.IsValid)
             {

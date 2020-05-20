@@ -1,6 +1,6 @@
 ﻿using BraunauMobil.VeloBasar.Models;
+using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using Xunit;
 
 namespace BraunauMobil.VeloBasar.Tests
@@ -9,7 +9,7 @@ namespace BraunauMobil.VeloBasar.Tests
     {
         public static void ProductState(StorageState storageState, ValueState valueState, IEnumerable<Product> products)
         {
-            Contract.Requires(products != null);
+            if (products == null) throw new ArgumentNullException(nameof(products));
 
             foreach (var product in products)
             {
@@ -18,7 +18,7 @@ namespace BraunauMobil.VeloBasar.Tests
         }
         public static void ProductState(StorageState storageState, ValueState valueState, Product product)
         {
-            Contract.Requires(product != null);
+            if (product == null) throw new ArgumentNullException(nameof(product));
 
             Assert.Equal(storageState, product.StorageState);
             Assert.Equal(valueState, product.ValueState);

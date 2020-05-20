@@ -1,4 +1,4 @@
-﻿using System.Diagnostics.Contracts;
+﻿using System;
 using System.Threading.Tasks;
 using BraunauMobil.VeloBasar.Logic;
 using Microsoft.AspNetCore.Mvc;
@@ -25,7 +25,7 @@ namespace BraunauMobil.VeloBasar.Pages.Settlements
 
         public async Task<IActionResult> OnGetAsync(CreateAndPrintParameter parameter)
         {
-            Contract.Requires(parameter != null);
+            if (parameter == null) throw new ArgumentNullException(nameof(parameter));
 
             var settlement = await _transactionContext.SettleSellerAsync(_context.Basar, parameter.SellerId);
 

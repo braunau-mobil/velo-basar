@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using BraunauMobil.VeloBasar.ViewModels;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using BraunauMobil.VeloBasar.Logic;
-using System.Diagnostics.Contracts;
+using System;
 
 namespace BraunauMobil.VeloBasar.Pages.ProductTypes
 {
@@ -26,7 +26,7 @@ namespace BraunauMobil.VeloBasar.Pages.ProductTypes
 
         public async Task OnGetAsync(SearchAndPaginationParameter parameter)
         {
-            Contract.Requires(parameter != null);
+            if (parameter == null) throw new ArgumentNullException(nameof(parameter));
 
             SearchString = parameter.SearchString;
 
@@ -35,12 +35,12 @@ namespace BraunauMobil.VeloBasar.Pages.ProductTypes
         }
         public VeloPage GetDeletePage(ProductType item)
         {
-            Contract.Requires(item != null);
+            if (item == null) throw new ArgumentNullException(nameof(item));
             return this.GetPage<DeleteModel>(new DeleteParameter { PageIndex = ProductTypes.PageIndex, ProductTypeId = item.Id });
         }
         public VeloPage GetEditPage(ProductType item)
         {
-            Contract.Requires(item != null);
+            if (item == null) throw new ArgumentNullException(nameof(item));
             return this.GetPage<EditModel>(new EditParameter { PageIndex = ProductTypes.PageIndex, ProductTypeId = item.Id });
         }
         public VeloPage GetPaginationPage(int pageIndex, int? pageSize) => this.GetPage<ListModel>(pageIndex, pageSize);
@@ -48,7 +48,7 @@ namespace BraunauMobil.VeloBasar.Pages.ProductTypes
         public VeloPage GetSearchPage() => this.GetPage<ListModel>(ProductTypes.PageIndex, null);
         public VeloPage GetSetStatePage(ProductType item, ObjectState stateToSet)
         {
-            Contract.Requires(item != null);
+            if (item == null) throw new ArgumentNullException(nameof(item));
             return this.GetPage<SetStateModel>(new SetStateParameter { PageIndex = ProductTypes.PageIndex, ProductTypeId = item.Id, State = stateToSet });
         }
         public async Task<bool> CanDeleteAsync(ProductType item) => await _productTypeContext.CanDeleteAsync(item);

@@ -1,5 +1,5 @@
 ﻿using BraunauMobil.VeloBasar.Models;
-using System.Diagnostics.Contracts;
+using System;
 using System.Globalization;
 using System.Text;
 
@@ -9,7 +9,7 @@ namespace BraunauMobil.VeloBasar.Logic
     {
         public string CreateToken(Seller seller)
         {
-            Contract.Requires(seller != null);
+            if (seller == null) throw new ArgumentNullException(nameof(seller));
 
             var token = new StringBuilder();
 

@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using BraunauMobil.VeloBasar.Models;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using BraunauMobil.VeloBasar.Logic;
-using System.Diagnostics.Contracts;
 using BraunauMobil.VeloBasar.ViewModels;
+using System;
 
 namespace BraunauMobil.VeloBasar.Pages.Sellers
 {
@@ -37,7 +37,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
 
         public async Task<IActionResult> OnGetAsync(DetailsParameter parameter)
         {
-            Contract.Requires(parameter != null);
+            if (parameter == null) throw new ArgumentNullException(nameof(parameter));
 
             Seller = await _sellerContext.GetAsync(parameter.SellerId);
             if (Seller == null)

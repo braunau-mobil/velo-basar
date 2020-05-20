@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.Contracts;
-using System.Threading.Tasks;
+﻿using System;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -13,7 +12,7 @@ namespace BraunauMobil.VeloBasar.Pages.Acceptances
     {
         public IActionResult OnGet(StartWithSellerParameter parameter)
         {
-            Contract.Requires(parameter != null);
+            if (parameter == null) throw new ArgumentNullException(nameof(parameter));
 
             Response.Cookies.ClearAcceptanceProducts();
             return this.RedirectToPage<EnterProductsModel>(new EnterProductsParameter { SellerId = parameter.SellerId });

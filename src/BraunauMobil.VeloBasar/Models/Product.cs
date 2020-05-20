@@ -4,7 +4,6 @@ using BraunauMobil.VeloBasar.Resources;
 using Microsoft.Extensions.Localization;
 using System;
 using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.Contracts;
 using System.Text;
 
 namespace BraunauMobil.VeloBasar.Models
@@ -130,7 +129,7 @@ namespace BraunauMobil.VeloBasar.Models
         }
         public string GetInfoText(IStringLocalizer<SharedResource> localizer)
         {
-            Contract.Requires(localizer != null);
+            if (localizer == null) throw new ArgumentNullException(nameof(localizer));
 
             if(IsEmtpy())
             {
@@ -144,13 +143,13 @@ namespace BraunauMobil.VeloBasar.Models
         }
         public decimal GetCommissionedPrice(Basar basar)
         {
-            Contract.Requires(basar != null);
+            if (basar == null) throw new ArgumentNullException(nameof(basar));
 
             return Price - GetCommisionAmount(basar);
         }
         public decimal GetCommisionAmount(Basar basar)
         {
-            Contract.Requires(basar != null);
+            if (basar == null) throw new ArgumentNullException(nameof(basar));
 
             if (basar.ProductCommission == 0.0m)
             {

@@ -1,4 +1,4 @@
-﻿using System.Diagnostics.Contracts;
+﻿using System;
 using System.Threading.Tasks;
 using BraunauMobil.VeloBasar.Logic;
 using BraunauMobil.VeloBasar.ViewModels;
@@ -24,7 +24,7 @@ namespace BraunauMobil.VeloBasar.Pages.Transactions
 
         public async Task<IActionResult> OnGetAsync(RevertParameter parameter)
         {
-            Contract.Requires(parameter != null);
+            if (parameter == null) throw new ArgumentNullException(nameof(parameter));
 
             var transaction = await _transactionContext.GetAsync(parameter.TransactionId);
             if (transaction.CanRevert())
@@ -37,7 +37,7 @@ namespace BraunauMobil.VeloBasar.Pages.Transactions
         }
         public async Task<IActionResult> OnPostAsync(RevertParameter parameter)
         {
-            Contract.Requires(parameter != null);
+            if (parameter == null) throw new ArgumentNullException(nameof(parameter));
 
             var transaction = await _transactionContext.GetAsync(parameter.TransactionId);
             if (transaction.CanRevert())

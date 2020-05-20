@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -42,7 +41,7 @@ namespace BraunauMobil.VeloBasar.Printing
 
         public byte[] Combine(IEnumerable<byte[]> pdfs)
         {
-            Contract.Requires(pdfs != null);
+            if (pdfs == null) throw new ArgumentNullException(nameof(pdfs));
 
             byte[] bytes;
             using (var combinedStream = new MemoryStream())
@@ -67,7 +66,7 @@ namespace BraunauMobil.VeloBasar.Printing
         }
         public byte[] CreateTransaction(ProductsTransaction transaction, PrintSettings settings)
         {
-            Contract.Requires(transaction != null);
+            if (transaction == null) throw new ArgumentNullException(nameof(transaction));
 
             if (transaction.Type == TransactionType.Acceptance)
             {

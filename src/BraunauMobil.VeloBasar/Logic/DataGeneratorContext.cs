@@ -3,7 +3,6 @@ using BraunauMobil.VeloBasar.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -40,7 +39,7 @@ namespace BraunauMobil.VeloBasar.Logic
 
         public async Task GenerateAsync(DataGeneratorConfiguration config)
         {
-            Contract.Requires(config != null);
+            if (config == null) throw new ArgumentNullException(nameof(config));
 
             _config = config;
 

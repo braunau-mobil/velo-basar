@@ -2,7 +2,7 @@
 using BraunauMobil.VeloBasar.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System.Diagnostics.Contracts;
+using System;
 using System.Threading.Tasks;
 
 namespace BraunauMobil.VeloBasar.Logic
@@ -38,7 +38,7 @@ namespace BraunauMobil.VeloBasar.Logic
 
         public async Task InitializeDatabaseAsync(InitializationConfiguration config)
         {
-            Contract.Requires(config != null);
+            if (config == null) throw new ArgumentNullException(nameof(config));
 
             var adminUser = new IdentityUser
             {

@@ -1,4 +1,4 @@
-﻿using System.Diagnostics.Contracts;
+﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
 using BraunauMobil.VeloBasar.Logic;
@@ -33,7 +33,7 @@ namespace BraunauMobil.VeloBasar.Pages.Cancellations
 
         public async Task OnGetAsync(SelectProductsParameter parameter)
         {
-            Contract.Requires(parameter != null);
+            if (parameter == null) throw new ArgumentNullException(nameof(parameter));
 
             Parameter = parameter;
 
@@ -42,7 +42,7 @@ namespace BraunauMobil.VeloBasar.Pages.Cancellations
         }
         public async Task<IActionResult> OnPostAsync(SelectProductsParameter parameter)
         {
-            Contract.Requires(parameter != null);
+            if (parameter == null) throw new ArgumentNullException(nameof(parameter));
 
             Parameter = parameter;
 

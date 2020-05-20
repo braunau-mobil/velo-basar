@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using BraunauMobil.VeloBasar.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using System.Diagnostics.Contracts;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
+using System;
 
 namespace BraunauMobil.VeloBasar.Data
 {
@@ -39,7 +39,7 @@ namespace BraunauMobil.VeloBasar.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            Contract.Requires(modelBuilder != null);
+            if (modelBuilder == null) throw new ArgumentNullException(nameof(modelBuilder));
 
             base.OnModelCreating(modelBuilder);
 

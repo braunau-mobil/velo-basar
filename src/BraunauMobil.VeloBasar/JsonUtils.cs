@@ -1,6 +1,6 @@
 ﻿using BraunauMobil.VeloBasar.Models;
 using Newtonsoft.Json;
-using System.Diagnostics.Contracts;
+using System;
 using System.Linq;
 using System.Text;
 
@@ -10,7 +10,7 @@ namespace BraunauMobil.VeloBasar
     {
         public static T DeserializeFromJson<T>(byte[] data) where T : class
         {
-            Contract.Requires(data != null);
+            if (data == null) throw new ArgumentNullException(nameof(data));
 
             var json = Encoding.UTF8.GetString(data, 0, data.Length);
             return JsonConvert.DeserializeObject<T>(json);
@@ -71,7 +71,7 @@ namespace BraunauMobil.VeloBasar
         }
         public static string ToChartJsColor(Color c)
         {
-            Contract.Requires(c != null);
+            if (c == null) throw new ArgumentNullException(nameof(c));
 
             return $"rgb({c.R}, {c.G}, {c.B})";
         }

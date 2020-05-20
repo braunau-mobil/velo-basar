@@ -1,4 +1,4 @@
-﻿using System.Diagnostics.Contracts;
+﻿using System;
 using System.Threading.Tasks;
 using BraunauMobil.VeloBasar.Logic;
 using Microsoft.AspNetCore.Mvc;
@@ -26,7 +26,7 @@ namespace BraunauMobil.VeloBasar.Pages.Labels
 
         public async Task<IActionResult> OnGetAsync(PrintForSellerParameter parameter)
         {
-            Contract.Requires(parameter != null);
+            if (parameter == null) throw new ArgumentNullException(nameof(parameter));
 
             var products = await _productContext.GetProductsForSeller(_context.Basar, parameter.SellerId).ToArrayAsync();
             var file = await _fileStoreContext.GetProductLabelsAndCombineToOnePdfAsync(products);

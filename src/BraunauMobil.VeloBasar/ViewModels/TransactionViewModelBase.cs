@@ -1,7 +1,7 @@
 ﻿using BraunauMobil.VeloBasar.Models;
 using BraunauMobil.VeloBasar.Pages;
+using System;
 using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.Contracts;
 
 namespace BraunauMobil.VeloBasar.ViewModels
 {
@@ -9,7 +9,7 @@ namespace BraunauMobil.VeloBasar.ViewModels
     {
         public TransactionViewModelBase(ProductsTransaction transaction)
         {
-            Contract.Requires(transaction != null);
+            if (transaction == null) throw new ArgumentNullException(nameof(transaction));
 
             Transaction = transaction;
         }

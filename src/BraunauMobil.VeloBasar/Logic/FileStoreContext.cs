@@ -2,8 +2,8 @@
 using BraunauMobil.VeloBasar.Models;
 using BraunauMobil.VeloBasar.Printing;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Threading.Tasks;
 
 namespace BraunauMobil.VeloBasar.Logic
@@ -34,7 +34,7 @@ namespace BraunauMobil.VeloBasar.Logic
         }
         public async Task<int> CreateTransactionDocumentAsync(ProductsTransaction transaction, PrintSettings printSettings)
         {
-            Contract.Requires(transaction != null);
+            if (transaction == null) throw new ArgumentNullException(nameof(transaction));
 
             var fileData = new FileData
             {
@@ -63,7 +63,7 @@ namespace BraunauMobil.VeloBasar.Logic
         }
         public async Task<FileData> GetProductLabelsAndCombineToOnePdfAsync(IEnumerable<Product> products)
         {
-            Contract.Requires(products != null);
+            if (products == null) throw new ArgumentNullException(nameof(products));
 
             var files = new List<byte[]>();
             foreach (var product in products)
@@ -85,7 +85,7 @@ namespace BraunauMobil.VeloBasar.Logic
         }
         public async Task UpdateProductLabelAsync(Product product, PrintSettings printSettings)
         {
-            Contract.Requires(product != null);
+            if (product == null) throw new ArgumentNullException(nameof(product));
 
             var file = await GetAsync(product.LabelId);
 
@@ -95,7 +95,7 @@ namespace BraunauMobil.VeloBasar.Logic
         }
         public async Task UpdateTransactionDocumentAsync(ProductsTransaction transaction, PrintSettings printSettings)
         {
-            Contract.Requires(transaction != null);
+            if (transaction == null) throw new ArgumentNullException(nameof(transaction));
 
             var file = await GetAsync(transaction.DocumentId.Value);
 

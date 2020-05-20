@@ -1,5 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.Contracts;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using BraunauMobil.VeloBasar.Logic;
 using BraunauMobil.VeloBasar.Models;
@@ -38,7 +38,7 @@ namespace BraunauMobil.VeloBasar.Pages.Labels
 
         public async Task<IActionResult> OnGetAsync(SelectAcceptanceParameter parameter)
         {
-            Contract.Requires(parameter != null);
+            if (parameter == null) throw new ArgumentNullException(nameof(parameter));
 
             if (parameter.AcceptanceNumber == null)
             {

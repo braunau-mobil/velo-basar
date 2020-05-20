@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using BraunauMobil.VeloBasar.ViewModels;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using BraunauMobil.VeloBasar.Logic;
-using System.Diagnostics.Contracts;
+using System;
 
 namespace BraunauMobil.VeloBasar.Pages.Brands
 {
@@ -26,7 +26,7 @@ namespace BraunauMobil.VeloBasar.Pages.Brands
 
         public async Task OnGetAsync(SearchAndPaginationParameter parameter)
         {
-            Contract.Requires(parameter != null);
+            if (parameter == null) throw new ArgumentNullException(nameof(parameter));
 
             SearchString = parameter.SearchString;
 
@@ -35,12 +35,12 @@ namespace BraunauMobil.VeloBasar.Pages.Brands
         }
         public VeloPage GetDeletePage(Brand item)
         {
-            Contract.Requires(item != null);
+            if (item == null) throw new ArgumentNullException(nameof(item));
             return this.GetPage<DeleteModel>(new DeleteParameter { BrandId = item.Id, PageIndex = Brands.PageIndex });
         }
         public VeloPage GetEditPage(Brand item)
         {
-            Contract.Requires(item != null);
+            if (item == null) throw new ArgumentNullException(nameof(item));
             return this.GetPage<EditModel>(new EditParameter { BrandId = item.Id, PageIndex = Brands.PageIndex });
         }
         public VeloPage GetPaginationPage(int pageIndex, int? pageSize) => this.GetPage<ListModel>(pageIndex, pageSize);
@@ -48,7 +48,7 @@ namespace BraunauMobil.VeloBasar.Pages.Brands
         public VeloPage GetSearchPage() => this.GetPage<ListModel>(Brands.PageIndex, null);
         public VeloPage GetSetStatePage(Brand item, ObjectState stateToSet)
         {
-            Contract.Requires(item != null);
+            if (item == null) throw new ArgumentNullException(nameof(item));
             return this.GetPage<SetStateModel>(new SetStateParameter { BrandId = item.Id, PageIndex = Brands.PageIndex, State = stateToSet });
         }
         public async Task<bool> CanDeleteAsync(Brand item) => await _brandContext.CanDeleteAsync(item);

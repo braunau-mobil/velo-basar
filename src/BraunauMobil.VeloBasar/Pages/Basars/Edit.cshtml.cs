@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using BraunauMobil.VeloBasar.Models;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using BraunauMobil.VeloBasar.Logic;
-using System.Diagnostics.Contracts;
+using System;
 
 namespace BraunauMobil.VeloBasar.Pages.Basars
 {
@@ -27,14 +27,14 @@ namespace BraunauMobil.VeloBasar.Pages.Basars
 
         public async Task OnGetAsync(EditParameter parameter)
         {
-            Contract.Requires(parameter != null);
+            if (parameter == null) throw new ArgumentNullException(nameof(parameter));
 
             _parameter = parameter;
             BasarToEdit = await _context.GetAsync(parameter.BasarToEditId);
         }
         public async Task<IActionResult> OnPostAsync(EditParameter parameter)
         {
-            Contract.Requires(parameter != null);
+            if (parameter == null) throw new ArgumentNullException(nameof(parameter));
 
             _parameter = parameter;
 

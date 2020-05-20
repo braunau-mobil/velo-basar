@@ -1,5 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.Contracts;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using BraunauMobil.VeloBasar.Logic;
 using BraunauMobil.VeloBasar.Models;
@@ -44,13 +44,13 @@ namespace BraunauMobil.VeloBasar.Pages.Transactions
 
         public async Task OnGetAsync(DetailsParameter parameter)
         {
-            Contract.Requires(parameter != null);
+            if (parameter == null) throw new ArgumentNullException(nameof(parameter));
 
             await LoadTransactionAsync(parameter);
         }
         public async Task OnPostAsync(DetailsParameter parameter)
         {
-            Contract.Requires(parameter != null);
+            if (parameter == null) throw new ArgumentNullException(nameof(parameter));
 
             parameter.ShowSuccess = false;
             parameter.OpenDocument = false;

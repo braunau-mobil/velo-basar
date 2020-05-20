@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Diagnostics.Contracts;
 using System.Threading.Tasks;
 
 namespace BraunauMobil.VeloBasar.Tests
@@ -51,7 +50,7 @@ namespace BraunauMobil.VeloBasar.Tests
         }
         protected async Task RunOnInitializedDb(Func<VeloRepository, Task> action)
         {
-            Contract.Requires(action != null);
+            if (action == null) throw new ArgumentNullException(nameof(action));
 
             await RunOnEmptyDb(async context =>
             {
@@ -63,7 +62,7 @@ namespace BraunauMobil.VeloBasar.Tests
         }
         protected async Task RunOnEmptyDb(Func<VeloRepository, Task> action)
         {
-            Contract.Requires(action != null);
+            if (action == null) throw new ArgumentNullException(nameof(action));
 
             using var serviceProvider = _services.BuildServiceProvider();
             BasarContext = serviceProvider.GetRequiredService<IBasarContext>();

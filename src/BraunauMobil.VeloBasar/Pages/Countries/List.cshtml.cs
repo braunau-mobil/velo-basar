@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using BraunauMobil.VeloBasar.ViewModels;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using BraunauMobil.VeloBasar.Logic;
-using System.Diagnostics.Contracts;
+using System;
 
 namespace BraunauMobil.VeloBasar.Pages.Countries
 {
@@ -26,7 +26,7 @@ namespace BraunauMobil.VeloBasar.Pages.Countries
 
         public async Task OnGetAsync(SearchAndPaginationParameter parameter)
         {
-            Contract.Requires(parameter != null);
+            if (parameter == null) throw new ArgumentNullException(nameof(parameter));
 
             SearchString = parameter.SearchString;
 
@@ -35,12 +35,12 @@ namespace BraunauMobil.VeloBasar.Pages.Countries
         }
         public VeloPage GetDeletePage(Country item)
         {
-            Contract.Requires(item != null);
+            if (item == null) throw new ArgumentNullException(nameof(item));
             return this.GetPage<DeleteModel>(new DeleteParameter { CountryId = item.Id, PageIndex = Countries.PageIndex });
         }
         public VeloPage GetEditPage(Country item)
         {
-            Contract.Requires(item != null);
+            if (item == null) throw new ArgumentNullException(nameof(item));
             return this.GetPage<EditModel>(new EditParameter { CountryId = item.Id, PageIndex = Countries.PageIndex });
         }
         public VeloPage GetPaginationPage(int pageIndex, int? pageSize) => this.GetPage<ListModel>(pageIndex, pageSize);

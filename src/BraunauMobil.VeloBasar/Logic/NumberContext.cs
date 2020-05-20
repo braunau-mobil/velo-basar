@@ -3,7 +3,6 @@ using BraunauMobil.VeloBasar.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Diagnostics.Contracts;
 using System.Threading.Tasks;
 
 namespace BraunauMobil.VeloBasar.Logic
@@ -20,7 +19,7 @@ namespace BraunauMobil.VeloBasar.Logic
         [SuppressMessage("Security", "CA2100:Review SQL queries for security vulnerabilities")]
         public int NextNumber(Basar basar, TransactionType transactionType)
         {
-            Contract.Requires(basar != null);
+            if (basar == null) throw new ArgumentNullException(nameof(basar));
 
             var type = (int)transactionType;
             using (var command = _db.Database.GetDbConnection().CreateCommand())

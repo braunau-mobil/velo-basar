@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
-using System.Diagnostics.Contracts;
+using System;
 
 namespace BraunauMobil.VeloBasar.AuthoringTagHelpers.TagHelpers
 {
@@ -27,7 +27,7 @@ namespace BraunauMobil.VeloBasar.AuthoringTagHelpers.TagHelpers
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            Contract.Requires(context != null);
+            if (context == null) throw new ArgumentNullException(nameof(context));
             
             var tagHelper = CreateTagHelper(context.TagName);
             tagHelper.Process(context, output);

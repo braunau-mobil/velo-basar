@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using BraunauMobil.VeloBasar.ViewModels;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using BraunauMobil.VeloBasar.Logic;
-using System.Diagnostics.Contracts;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 
@@ -32,7 +31,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
 
         public async Task<IActionResult> OnGetAsync(ListParameter parameter)
         {
-            Contract.Requires(parameter != null);
+            if (parameter == null) throw new ArgumentNullException(nameof(parameter));
 
             ViewData["ValueStates"] = GetValueStates();
 
@@ -54,7 +53,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
         }
         public VeloPage GetDetailsPage(Seller seller)
         {
-            Contract.Requires(seller != null);
+            if (seller == null) throw new ArgumentNullException(nameof(seller));
             return this.GetPage<DetailsModel>(new DetailsParameter { SellerId = seller.Id });
         }
         public VeloPage GetPaginationPage(int pageIndex, int? pageSize) => this.GetPage<ListModel>(GetParameter(pageIndex, pageSize));

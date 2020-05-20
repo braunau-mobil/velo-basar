@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using System;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -30,7 +29,7 @@ namespace BraunauMobil.VeloBasar.Logic
         public async Task<bool> CanDeleteAsync(Basar basar) => !await _db.Transactions.AnyAsync(t => t.BasarId == basar.Id);
         public async Task<Basar> CreateAsync(Basar toCreate)
         {
-            Contract.Requires(toCreate != null);
+            if (toCreate == null) throw new ArgumentNullException(nameof(toCreate));
 
             _db.Basars.Add(toCreate);
 

@@ -3,7 +3,6 @@ using BraunauMobil.VeloBasar.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -33,7 +32,7 @@ namespace BraunauMobil.VeloBasar.Logic
 
         public async Task<ProductsTransaction> AcceptProductsAsync(Basar basar, int sellerId, IReadOnlyList<Product> products)
         {
-            Contract.Requires(products != null);
+            if (products == null) throw new ArgumentNullException(nameof(products));
             
             var seller = await _sellerContext.GetAsync(sellerId);
             var printSettings = await _settingsContext.GetPrintSettingsAsync();
@@ -123,7 +122,7 @@ namespace BraunauMobil.VeloBasar.Logic
         }
         public async Task RevertAsync(ProductsTransaction transaction)
         {
-            Contract.Requires(transaction != null);
+            if (transaction == null) throw new ArgumentNullException(nameof(transaction));
 
             if (transaction.Type == TransactionType.Settlement)
             {
@@ -157,7 +156,7 @@ namespace BraunauMobil.VeloBasar.Logic
         }
         public async Task UpdateProductAsync(Product product)
         {
-            Contract.Requires(product != null);
+            if (product == null) throw new ArgumentNullException(nameof(product));
 
             await _productContext.UpdateAsync(product);
             await UpdateTransactionDocumentsForProduct(product);

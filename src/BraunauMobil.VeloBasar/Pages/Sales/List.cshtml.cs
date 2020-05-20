@@ -4,7 +4,7 @@ using BraunauMobil.VeloBasar.Models;
 using BraunauMobil.VeloBasar.ViewModels;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using BraunauMobil.VeloBasar.Logic;
-using System.Diagnostics.Contracts;
+using System;
 
 namespace BraunauMobil.VeloBasar.Pages.Sales
 {
@@ -24,7 +24,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
 
         public async Task OnGetAsync(SearchAndPaginationParameter parameter)
         {
-            Contract.Requires(parameter != null);
+            if (parameter == null) throw new ArgumentNullException(nameof(parameter));
 
             SearchString = parameter.SearchString;
 
@@ -40,7 +40,7 @@ namespace BraunauMobil.VeloBasar.Pages.Sales
         }
         public VeloPage GetDetailsPage(ProductsTransaction item)
         {
-            Contract.Requires(item != null);
+            if (item == null) throw new ArgumentNullException(nameof(item));
             return this.GetPage<Transactions.DetailsModel>(new Transactions.DetailsParameter { TransactionId = item.Id });
         }
         public VeloPage GetPaginationPage(int pageIndex, int? pageSize) => this.GetPage<ListModel>(pageIndex, pageSize);

@@ -1,4 +1,4 @@
-﻿using System.Diagnostics.Contracts;
+﻿using System;
 using System.Threading.Tasks;
 using BraunauMobil.VeloBasar.Logic;
 using BraunauMobil.VeloBasar.Models;
@@ -26,7 +26,7 @@ namespace BraunauMobil.VeloBasar.Pages.Labels
 
         public async Task<IActionResult> OnGetAsync(PrintForAcceptanceParameter parameter)
         {
-            Contract.Requires(parameter != null);
+            if (parameter == null) throw new ArgumentNullException(nameof(parameter));
 
             var acceptance = await _transactionService.GetAsync(_context.Basar, TransactionType.Acceptance, parameter.AcceptanceNumber);
             var file = await _fileStoreContext.GetProductLabelsAndCombineToOnePdfAsync(acceptance.Products.GetProducts());

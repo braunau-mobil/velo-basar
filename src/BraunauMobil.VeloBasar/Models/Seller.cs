@@ -3,7 +3,6 @@ using BraunauMobil.VeloBasar.Resources;
 using Microsoft.Extensions.Localization;
 using System;
 using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.Contracts;
 using System.Text;
 
 namespace BraunauMobil.VeloBasar.Models
@@ -84,7 +83,7 @@ namespace BraunauMobil.VeloBasar.Models
         }
         public string GetIdText(IStringLocalizer<SharedResource> localizer)
         {
-            Contract.Requires(localizer != null);
+            if (localizer == null) throw new ArgumentNullException(nameof(localizer));
 
             return localizer["Verk.-ID: {0}", Id];
         }

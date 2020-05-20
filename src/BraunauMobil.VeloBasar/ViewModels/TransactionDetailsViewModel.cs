@@ -1,5 +1,5 @@
 ﻿using BraunauMobil.VeloBasar.Models;
-using System.Diagnostics.Contracts;
+using System;
 
 namespace BraunauMobil.VeloBasar.ViewModels
 {
@@ -7,7 +7,7 @@ namespace BraunauMobil.VeloBasar.ViewModels
     {
         public TransactionDetailsViewModel(ProductsTransaction transaction) : base(transaction)
         {
-            Contract.Requires(transaction != null);
+            if (transaction == null) throw new ArgumentNullException(nameof(transaction));
 
             Products = new ProductsViewModel(transaction.Products)
             {

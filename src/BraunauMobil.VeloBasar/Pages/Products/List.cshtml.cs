@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using BraunauMobil.VeloBasar.Logic;
-using System.Diagnostics.Contracts;
 
 namespace BraunauMobil.VeloBasar.Pages.Products
 {
@@ -41,7 +40,7 @@ namespace BraunauMobil.VeloBasar.Pages.Products
 
         public async Task<IActionResult> OnGetAsync(ListParameter parameter)
         {
-            Contract.Requires(parameter != null);
+            if (parameter == null) throw new ArgumentNullException(nameof(parameter));
 
             ViewData["StorageStates"] = GetStorageStates();
             ViewData["ValueStates"] = GetValueStates();
