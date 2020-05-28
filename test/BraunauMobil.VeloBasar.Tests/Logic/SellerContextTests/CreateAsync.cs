@@ -46,9 +46,9 @@ namespace BraunauMobil.VeloBasar.Tests.Logic.SellerContextTests
                 Assert.NotNull(createdSeller.Token);
                 Assert.NotNull(createdSeller.EMail);
                 //  It is possible that this can fail, but not very likley
-                Assert.Equal(DateTime.Now.Year, createdSeller.NewsletterPermissionTimesStamp.Year);
-                Assert.Equal(DateTime.Now.Month, createdSeller.NewsletterPermissionTimesStamp.Month);
-                Assert.Equal(DateTime.Now.Day, createdSeller.NewsletterPermissionTimesStamp.Day);
+                Assert.Equal(DateTime.Now.Year, createdSeller.NewsletterPermissionTimesStamp.Value.Year);
+                Assert.Equal(DateTime.Now.Month, createdSeller.NewsletterPermissionTimesStamp.Value.Month);
+                Assert.Equal(DateTime.Now.Day, createdSeller.NewsletterPermissionTimesStamp.Value.Day);
             });
         }
     }

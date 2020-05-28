@@ -47,7 +47,7 @@ namespace BraunauMobil.VeloBasar.Models
 
         [Display(Name = "Newsletter-Erlaubnis erteilt")]
         [DisplayFormat(DataFormatString = "{0:dd.MMMM.yyyy}", ApplyFormatInEditMode = true)]
-        public DateTime NewsletterPermissionTimesStamp { get; set; }
+        public DateTime? NewsletterPermissionTimesStamp { get; set; }
 
         [Required]
         [Display(Name = "Telefonnummer")]
