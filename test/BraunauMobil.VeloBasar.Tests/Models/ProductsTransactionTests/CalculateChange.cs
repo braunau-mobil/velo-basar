@@ -55,8 +55,8 @@ namespace BraunauMobil.VeloBasar.Tests.Models.ProductsTransactionTests
             Assert.Equal(changeAmount, changeInfo.Amount);
         }
         [Theory]
-        [InlineData(87.99, 87.99)]
-        public void Settlement(decimal price, decimal changeAmount)
+        [InlineData(87.99, 79.191)]
+        public void SettlementWithTenPercentCommission(decimal price, decimal changeAmount)
         {
             var settings = new VeloSettings();
 
@@ -65,8 +65,12 @@ namespace BraunauMobil.VeloBasar.Tests.Models.ProductsTransactionTests
             soldProduct.StorageState = StorageState.Sold;
             var notSoldProduct = fixture.BuildProduct(price).Create();
             notSoldProduct.StorageState = StorageState.Available;
-            var sale = new ProductsTransaction
+            var settlement = new ProductsTransaction
             {
+                Basar = new Basar
+                {
+                    ProductCommissionPercentage = 10
+                },
                 Type = TransactionType.Settlement,
                 Products = new[]
                 {
@@ -81,7 +85,7 @@ namespace BraunauMobil.VeloBasar.Tests.Models.ProductsTransactionTests
                 }
             };
 
-            var changeInfo = sale.CalculateChange(0.0m, settings.Nominations);
+            var changeInfo = settlement.CalculateChange(0.0m, settings.Nominations);
             Assert.Equal(changeAmount, changeInfo.Amount);
         }
     }

@@ -50,7 +50,7 @@ namespace BraunauMobil.VeloBasar.Models
                 case TransactionType.Cancellation:
                     return new ChangeInfo(GetProductsSum(), nominations);
                 case TransactionType.Settlement:
-                    return new ChangeInfo(GetSoldProductsSum(), nominations);
+                    return new ChangeInfo(GetSoldTotal(), nominations);
                 case TransactionType.Sale:
                     return CalculateSaleChange(amountGiven, nominations);
                 default:
