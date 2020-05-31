@@ -16,7 +16,7 @@ namespace BraunauMobil.VeloBasar
 
     public static class VeloCookies
     {
-        public const int MaxAcceptanceProducts = 40;
+        public const int MaxAcceptanceProducts = 20;
 
         private static readonly Cookie _acceptanceProducts = new Cookie
         {
