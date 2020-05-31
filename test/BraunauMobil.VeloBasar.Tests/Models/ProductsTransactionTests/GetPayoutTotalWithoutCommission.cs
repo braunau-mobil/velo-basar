@@ -4,7 +4,7 @@ using Xunit;
 
 namespace BraunauMobil.VeloBasar.Tests.Models.ProductsTransactionTests
 {
-    public class GetSoldCommissionSum
+    public class GetPayoutTotalWithoutCommission
     {
         [Fact]
         public void Test()
@@ -40,10 +40,26 @@ namespace BraunauMobil.VeloBasar.Tests.Models.ProductsTransactionTests
                             Price = 100.0m,
                             StorageState = StorageState.Available
                         }
+                    },
+                    new ProductToTransaction
+                    {
+                        Product = new Product
+                        {
+                            Price = 100.0m,
+                            StorageState = StorageState.Gone
+                        }
+                    },
+                    new ProductToTransaction
+                    {
+                        Product = new Product
+                        {
+                            Price = 100.0m,
+                            StorageState = StorageState.Locked
+                        }
                     }
                 }
             };
-            Assert.Equal(22.311m, tx.GetSoldCommissionSum());
+            Assert.Equal(290.799m, tx.GetPayoutTotalWithoutCommission());
         }
     }
 }

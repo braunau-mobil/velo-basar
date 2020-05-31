@@ -206,9 +206,9 @@ namespace BraunauMobil.VeloBasar.Printing
 
                 AddTitle(doc, string.Format(CultureInfo.CurrentCulture, settings.Settlement.TitleFormat, settlement.Basar.Name, settlement.Number));
 
-                if (products.Any(p => p.StorageState == StorageState.Sold))
+                if (products.Any(p => p.ShouldBePayedOut()))
                 {
-                    AddCommissionSummary(doc, settlement.GetSoldProductsSum(), settlement.GetSoldCommissionSum(), settlement.GetSoldTotal(), settlement.Basar.ProductCommission);
+                    AddCommissionSummary(doc, settlement.GetPayoutTotalWithoutCommission(), settlement.GetPayoutCommissionTotal(), settlement.GetPayoutTotal(), settlement.Basar.ProductCommission);
                     doc.Add(GetSpacer(10));
                 }
 

@@ -6,6 +6,10 @@ namespace BraunauMobil.VeloBasar.Models
 {
     public static class ExtensionMethods
     {
+        public static IReadOnlyList<Product> GetPayoutProducts(this IEnumerable<ProductToTransaction> productToTransactions)
+        {
+            return productToTransactions.Select(pt => pt.Product).Where(p => p.ShouldBePayedOut()).ToArray();
+        }
         public static IReadOnlyList<Product> GetProducts(this IEnumerable<ProductToTransaction> productToTransactions)
         {
             return productToTransactions.Select(pt => pt.Product).ToArray();

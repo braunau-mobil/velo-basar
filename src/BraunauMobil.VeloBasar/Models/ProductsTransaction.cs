@@ -22,6 +22,18 @@ namespace BraunauMobil.VeloBasar.Models
         {
             return Type == TransactionType.Settlement;
         }
+        public decimal GetPayoutTotal()
+        {
+            return Products.GetPayoutProducts().SumPrice();
+        }
+        public decimal GetPayoutCommissionTotal()
+        {
+            return Products.GetPayoutProducts().Sum(p => p.GetCommisionAmount(Basar));
+        }
+        public decimal GetPayoutTotalWithoutCommission()
+        {
+            return GetPayoutTotal() - GetPayoutCommissionTotal();
+        }
         public decimal GetProductsSum()
         {
             return Products.Select(pt => pt.Product).SumPrice();
@@ -29,10 +41,6 @@ namespace BraunauMobil.VeloBasar.Models
         public decimal GetSoldProductsSum()
         {
             return Products.GetSoldProducts().SumPrice();
-        }
-        public decimal GetSoldCommissionSum()
-        {
-            return Products.GetSoldProducts().Sum(p => p.GetCommisionAmount(Basar));
         }
         public decimal GetSoldTotal()
         {

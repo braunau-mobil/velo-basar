@@ -157,5 +157,11 @@ namespace BraunauMobil.VeloBasar.Models
             }
             return Price * basar.ProductCommission;
         }
+        public bool ShouldBePayedOut()
+        {
+            return ValueState == ValueState.NotSettled
+                &&
+                (StorageState == StorageState.Sold || StorageState == StorageState.Gone);
+        }
     }
 }
