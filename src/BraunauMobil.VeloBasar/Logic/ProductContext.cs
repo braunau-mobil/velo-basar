@@ -69,7 +69,7 @@ namespace BraunauMobil.VeloBasar.Logic
         }
         public IQueryable<Product> GetProductsForSeller(Basar basar, int sellerId)
         {
-            return _db.Products.IncludeAll().Where(p => p.BasarId == basar.Id && p.SellerId == sellerId);
+            return _db.Products.IncludeAll().Where(p => p.BasarId == basar.Id && p.SellerId == sellerId).DefaultOrder();
         }
         public async Task<IReadOnlyList<Product>> InsertProductsAsync(Basar basar, Seller seller, IReadOnlyList<Product> products)
         {
