@@ -48,6 +48,8 @@ namespace BraunauMobil.VeloBasar.Pages.Cancellations
 
             if (Products.List.All(vm => !vm.IsSelected))
             {
+                var sale = await _transactionContext.GetAsync(parameter.SaleId);
+                Products = new ListViewModel<Product>(_context.Basar, sale.Products.GetProducts());
                 ErrorMessage = _context.Localizer["Bitte ein Produkt zum Stornieren auswählen."];
                 return Page();
             }
