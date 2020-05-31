@@ -10,8 +10,8 @@ namespace BraunauMobil.VeloBasar.Tests.Models.ProductTests
         [InlineData(ValueState.Settled, StorageState.Available)]
         [InlineData(ValueState.NotSettled, StorageState.Locked)]
         [InlineData(ValueState.Settled, StorageState.Locked)]
-        [InlineData(ValueState.Settled, StorageState.Gone)]
-        [InlineData(ValueState.Settled, StorageState.Sold)]
+        [InlineData(ValueState.NotSettled, StorageState.Gone)]
+        [InlineData(ValueState.NotSettled, StorageState.Sold)]
         public void False(ValueState valueState, StorageState storageState)
         {
             var product = new Product
@@ -22,8 +22,8 @@ namespace BraunauMobil.VeloBasar.Tests.Models.ProductTests
             Assert.False(product.ShouldBePayedOut());
         }
         [Theory]
-        [InlineData(ValueState.NotSettled, StorageState.Gone)]
-        [InlineData(ValueState.NotSettled, StorageState.Sold)]
+        [InlineData(ValueState.Settled, StorageState.Gone)]
+        [InlineData(ValueState.Settled, StorageState.Sold)]
         public void True(ValueState valueState, StorageState storageState)
         {
             var product = new Product

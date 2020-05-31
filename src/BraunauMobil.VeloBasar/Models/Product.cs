@@ -159,7 +159,7 @@ namespace BraunauMobil.VeloBasar.Models
         }
         public bool ShouldBePayedOut()
         {
-            return ValueState == ValueState.NotSettled
+            return ValueState == ValueState.Settled
                 &&
                 (StorageState == StorageState.Sold || StorageState == StorageState.Gone);
         }

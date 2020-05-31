@@ -22,7 +22,8 @@ namespace BraunauMobil.VeloBasar.Tests.Models.ProductsTransactionTests
                         Product = new Product
                         {
                             Price = 123.12m,
-                            StorageState = StorageState.Sold
+                            StorageState = StorageState.Sold,
+                            ValueState = ValueState.Settled
                         }
                     },
                     new ProductToTransaction
@@ -30,7 +31,8 @@ namespace BraunauMobil.VeloBasar.Tests.Models.ProductsTransactionTests
                         Product = new Product
                         {
                             Price = 99.99m,
-                            StorageState = StorageState.Sold
+                            StorageState = StorageState.Sold,
+                            ValueState = ValueState.Settled
                         }
                     },
                     new ProductToTransaction
@@ -38,7 +40,8 @@ namespace BraunauMobil.VeloBasar.Tests.Models.ProductsTransactionTests
                         Product = new Product
                         {
                             Price = 100.0m,
-                            StorageState = StorageState.Available
+                            StorageState = StorageState.Available,
+                            ValueState = ValueState.Settled
                         }
                     },
                     new ProductToTransaction
@@ -46,7 +49,8 @@ namespace BraunauMobil.VeloBasar.Tests.Models.ProductsTransactionTests
                         Product = new Product
                         {
                             Price = 100.0m,
-                            StorageState = StorageState.Gone
+                            StorageState = StorageState.Gone,
+                            ValueState = ValueState.Settled
                         }
                     },
                     new ProductToTransaction
@@ -54,7 +58,53 @@ namespace BraunauMobil.VeloBasar.Tests.Models.ProductsTransactionTests
                         Product = new Product
                         {
                             Price = 100.0m,
-                            StorageState = StorageState.Locked
+                            StorageState = StorageState.Locked,
+                            ValueState = ValueState.Settled
+                        }
+                    },
+                    new ProductToTransaction
+                    {
+                        Product = new Product
+                        {
+                            Price = 123.12m,
+                            StorageState = StorageState.Sold,
+                            ValueState = ValueState.NotSettled
+                        }
+                    },
+                    new ProductToTransaction
+                    {
+                        Product = new Product
+                        {
+                            Price = 99.99m,
+                            StorageState = StorageState.Sold,
+                            ValueState = ValueState.NotSettled
+                        }
+                    },
+                    new ProductToTransaction
+                    {
+                        Product = new Product
+                        {
+                            Price = 100.0m,
+                            StorageState = StorageState.Available,
+                            ValueState = ValueState.NotSettled
+                        }
+                    },
+                    new ProductToTransaction
+                    {
+                        Product = new Product
+                        {
+                            Price = 100.0m,
+                            StorageState = StorageState.Gone,
+                            ValueState = ValueState.NotSettled
+                        }
+                    },
+                    new ProductToTransaction
+                    {
+                        Product = new Product
+                        {
+                            Price = 100.0m,
+                            StorageState = StorageState.Locked,
+                            ValueState = ValueState.NotSettled
                         }
                     }
                 }
