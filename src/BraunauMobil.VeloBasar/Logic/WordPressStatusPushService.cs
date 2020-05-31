@@ -129,6 +129,7 @@ namespace BraunauMobil.VeloBasar.Logic
             catch (Exception ex)
             {
                 Log.Error(ex, "PostStatusAsync failed due to general error.");
+                throw;
             }
             return false;
         }
