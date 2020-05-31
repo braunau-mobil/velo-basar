@@ -32,7 +32,7 @@ namespace BraunauMobil.VeloBasar.Pages.Settlements
             return this.RedirectToPage<Transactions.DetailsModel>(new Transactions.DetailsParameter
             {
                 OpenDocument = true,
-                ShowChange = true,
+                ShowChange = false,
                 ShowSuccess = true,
                 TransactionId = settlement.Id
             });
