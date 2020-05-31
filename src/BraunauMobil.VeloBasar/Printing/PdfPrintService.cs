@@ -208,7 +208,7 @@ namespace BraunauMobil.VeloBasar.Printing
 
                 if (products.Any(p => p.ShouldBePayedOut()))
                 {
-                    AddCommissionSummary(doc, settlement.GetPayoutTotalWithoutCommission(), settlement.GetPayoutCommissionTotal(), settlement.GetPayoutTotal(), settlement.Basar.ProductCommission);
+                    AddCommissionSummary(doc, settlement.GetPayoutTotal(), settlement.GetPayoutCommissionTotal(), settlement.GetPayoutTotalWithoutCommission(), settlement.Basar.ProductCommission);
                     doc.Add(GetSpacer(10));
                 }
 
@@ -384,7 +384,7 @@ namespace BraunauMobil.VeloBasar.Printing
             }
             doc.Add(productsTable);
         }
-        private void AddCommissionSummary(Document doc, decimal sum, decimal commisionAmount, decimal total, decimal commissionFactor)
+        private void AddCommissionSummary(Document doc, decimal total, decimal commisionAmount, decimal totalWithoutCommission, decimal commissionFactor)
         {
             var productsTable = new Table(3)
                 .UseAllAvailableWidth()
@@ -401,14 +401,14 @@ namespace BraunauMobil.VeloBasar.Printing
                 .SetBorder(null)
                 .SetSplitCharacters(new NoSplitCharacters())
                 .SetTextAlignment(TextAlignment.RIGHT)
-                .Add(GetBoldParagraph(string.Format(CultureInfo.CurrentCulture, "{0:C}", sum)));
+                .Add(GetBoldParagraph(string.Format(CultureInfo.CurrentCulture, "{0:C}", total)));
 
             productsTable.AddHeaderCell(column0HeaderCell).AddHeaderCell(column1HeaderCell).AddHeaderCell(column2HeaderCell);
 
             var commissionColumn0Cell = new Cell()
                 .SetBorderLeft(null)
                 .SetBorderRight(null)
-                .Add(GetRegularParagraph(_localizer["Verkaufsprovision ({0:P2} von {1:C}):", commissionFactor, sum]));
+                .Add(GetRegularParagraph(_localizer["Verkaufsprovision ({0:P2} von {1:C}):", commissionFactor, total]));
 
             var commissionColumn1Cell = new Cell()
                 .SetBorderLeft(null)
@@ -466,7 +466,7 @@ namespace BraunauMobil.VeloBasar.Printing
                 .SetBorderTop(new DoubleBorder(2))
                 .SetSplitCharacters(new NoSplitCharacters())
                 .SetTextAlignment(TextAlignment.RIGHT)
-                .Add(GetBigParagraph(string.Format(CultureInfo.CurrentCulture, "{0:C}", total))
+                .Add(GetBigParagraph(string.Format(CultureInfo.CurrentCulture, "{0:C}", totalWithoutCommission))
                     .SetBold()
                     .SetFontColor(_orange));
 
