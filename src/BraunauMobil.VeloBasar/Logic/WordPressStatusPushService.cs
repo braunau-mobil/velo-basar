@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Newtonsoft.Json;
 using Serilog;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -123,7 +124,11 @@ namespace BraunauMobil.VeloBasar.Logic
             }
             catch (HttpRequestException httpRequestException)
             {
-                Log.Error(httpRequestException, "PostStatusAsync did not return success.");
+                Log.Error(httpRequestException, "PostStatusAsync failed due to HTTP error.");
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "PostStatusAsync failed due to general error.");
             }
             return false;
         }
