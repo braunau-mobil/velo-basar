@@ -54,7 +54,7 @@ namespace BraunauMobil.VeloBasar.Models
     {
         [Display(Name = "Dankestext")]
         public string FooterText { get; set; }
-        [Display(Name ="Hinweistext")]
+        [Display(Name = "Hinweistext")]
         public string HintText { get; set; }
         [Display(Name = "Verkäufer Fußnotentext")]
         public string SellerInfoText { get; set; }
@@ -80,7 +80,9 @@ namespace BraunauMobil.VeloBasar.Models
 
     public class LabelPrintSettings
     {
-        public string TitleFormat { get;  set; }
+        [Display(Name = "Maximale Länge der Beschreibung")]
+        public int MaxDescriptionLength { get; set; }
+        public string TitleFormat { get; set; }
     }
 
     public class PrintSettings
@@ -112,6 +114,7 @@ namespace BraunauMobil.VeloBasar.Models
             };
             Label = new LabelPrintSettings
             {
+                MaxDescriptionLength = 150,
                 TitleFormat = "Braunau mobil - {0}"
             };
             PageMargins = new Margins(20, 20, 20, 20);

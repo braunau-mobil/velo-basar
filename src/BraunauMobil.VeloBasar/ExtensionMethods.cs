@@ -93,6 +93,17 @@ namespace BraunauMobil.VeloBasar
             if (pageModel == null) throw new ArgumentNullException(nameof(pageModel));
             return pageModel.RedirectToPage(RoutingHelper.GetPageForModel<TPageModel>(), parameter);
         }
-
+        public static string Truncate(this string input, int maxLength)
+        {
+            if (string.IsNullOrEmpty(input))
+            {
+                return input;
+            }
+            if (input.Length <= maxLength)
+            {
+                return input;
+            }
+            return input.Substring(0, maxLength);
+        }
     }
 }

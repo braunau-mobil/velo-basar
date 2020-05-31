@@ -101,7 +101,7 @@ namespace BraunauMobil.VeloBasar.Printing
                 var info = new Paragraph()
                     .Add(GetRegularText($"{product.Brand.Name} - {product.Type.Name}").SetBold())
                     .Add(Environment.NewLine)
-                    .Add(GetRegularText(product.Description));
+                    .Add(GetRegularText(product.Description.Truncate(settings.Label.MaxDescriptionLength)));
 
                 if (product.Color != null)
                 {

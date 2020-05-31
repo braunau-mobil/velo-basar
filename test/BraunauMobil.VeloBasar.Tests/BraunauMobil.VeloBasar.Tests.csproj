@@ -27,4 +27,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\BraunauMobil.VeloBasar\BraunauMobil.VeloBasar.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ExtensionMethodsTests\" />
+  </ItemGroup>
 </Project>
