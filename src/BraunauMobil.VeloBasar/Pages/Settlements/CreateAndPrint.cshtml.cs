@@ -14,13 +14,11 @@ namespace BraunauMobil.VeloBasar.Pages.Settlements
     {
         private readonly IVeloContext _context;
         private readonly ITransactionContext _transactionContext;
-        private readonly IFileStoreContext _fileStoreContext;
 
-        public CreateAndPrintModel(IVeloContext context, ITransactionContext transactionContext, IFileStoreContext fileStoreContext)
+        public CreateAndPrintModel(IVeloContext context, ITransactionContext transactionContext)
         {
             _context = context;
             _transactionContext = transactionContext;
-            _fileStoreContext = fileStoreContext;
         }
 
         public async Task<IActionResult> OnGetAsync(CreateAndPrintParameter parameter)
@@ -32,7 +30,7 @@ namespace BraunauMobil.VeloBasar.Pages.Settlements
             return this.RedirectToPage<Transactions.DetailsModel>(new Transactions.DetailsParameter
             {
                 OpenDocument = true,
-                ShowChange = false,
+                ShowChange = true,
                 ShowSuccess = true,
                 TransactionId = settlement.Id
             });
