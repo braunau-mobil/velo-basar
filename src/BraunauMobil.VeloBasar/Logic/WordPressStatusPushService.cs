@@ -122,9 +122,13 @@ namespace BraunauMobil.VeloBasar.Logic
                 response.EnsureSuccessStatusCode();
                 return true;
             }
-            catch (HttpRequestException httpRequestException)
+            catch (HttpRequestException)
             {
-                Log.Error(httpRequestException, "PostStatusAsync failed due to HTTP error.");
+                Log.Error("PostStatusAsync failed due to HTTP error.");
+            }
+            catch (TaskCanceledException)
+            {
+                Log.Error("PostStatusAsync failed due to Task cancelled exception.");
             }
             catch (Exception ex)
             {
