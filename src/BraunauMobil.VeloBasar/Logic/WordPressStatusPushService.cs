@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using Serilog;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -103,6 +104,7 @@ namespace BraunauMobil.VeloBasar.Logic
             }
         }
 
+        [SuppressMessage("Design", "CA1031:Do not catch general exception types")]
         private static async Task<bool> PostStatusAsync(WordPressStatusPushSettings settings, string accessid, string saletext)
         {
             try
@@ -133,7 +135,6 @@ namespace BraunauMobil.VeloBasar.Logic
             catch (Exception ex)
             {
                 Log.Error(ex, "PostStatusAsync failed due to general error.");
-                throw;
             }
             return false;
         }
