@@ -1,11 +1,14 @@
 ﻿using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Routing;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace BraunauMobil.VeloBasar
@@ -28,6 +31,43 @@ namespace BraunauMobil.VeloBasar
             }
             sb.Append("]");
             return sb.ToString();
+        }
+        /// <summary>
+        /// Returns a select list for the given <paramref name="metadata"/>.
+        /// </summary>
+        /// <param name="metadata"><see cref="ModelMetadata"/> to generate a select list for.</param>
+        /// <returns>
+        /// An <see cref="IEnumerable{SelectListItem}"/> containing the select list for the given
+        /// <paramref name="metadata"/>.
+        /// </returns>
+        public static IEnumerable<SelectListItem> GetEnumSelectList(this ModelMetadata metadata)
+        {
+            if (metadata == null) throw new ArgumentNullException(nameof(metadata));
+
+            var selectList = new List<SelectListItem>();
+            var groupList = new Dictionary<string, SelectListGroup>();
+            foreach (var keyValuePair in metadata.EnumGroupedDisplayNamesAndValues)
+            {
+                var selectListItem = new SelectListItem
+                {
+                    Text = keyValuePair.Key.Name,
+                    Value = keyValuePair.Value,
+                };
+
+                if (!string.IsNullOrEmpty(keyValuePair.Key.Group))
+                {
+                    if (!groupList.ContainsKey(keyValuePair.Key.Group))
+                    {
+                        groupList[keyValuePair.Key.Group] = new SelectListGroup() { Name = keyValuePair.Key.Group };
+                    }
+
+                    selectListItem.Group = groupList[keyValuePair.Key.Group];
+                }
+
+                selectList.Add(selectListItem);
+            }
+
+            return selectList;
         }
         public static VeloPage GetPage<TPageModel>(this PageModel page, object parameter = null)
         {
@@ -56,6 +96,14 @@ namespace BraunauMobil.VeloBasar
         {
             if (page == null) throw new ArgumentNullException(nameof(page));
             return linkGenerator.GetPathByPage(page.Page, values: page.Parameter);
+        }
+        public static bool HasHiddenInputAttribute(this ModelMetadata metadata)
+        {
+            if (metadata is DefaultModelMetadata defaultMetadata)
+            {
+                return defaultMetadata.Attributes.Attributes.Any(attribute => attribute is HiddenInputAttribute);
+            }
+            return false;
         }
         public static IHtmlContent JsLiteral(this IHtmlHelper htmlHelper, IEnumerable<int> values)
         {

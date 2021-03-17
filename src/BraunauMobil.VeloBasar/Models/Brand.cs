@@ -1,4 +1,5 @@
 ﻿using BraunauMobil.VeloBasar.Models.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
 namespace BraunauMobil.VeloBasar.Models
@@ -6,6 +7,7 @@ namespace BraunauMobil.VeloBasar.Models
     [Display(Name = "Marke")]
     public class Brand : IModel
     {
+        [HiddenInput]
         public int Id { get; set; }
         [Required(ErrorMessage = "Bitte einen Namen eingeben.")]
         [Display(Name = "Name")]

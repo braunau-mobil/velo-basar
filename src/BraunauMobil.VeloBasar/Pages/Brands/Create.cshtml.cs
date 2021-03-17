@@ -18,6 +18,12 @@ namespace BraunauMobil.VeloBasar.Pages.Brands
         [BindProperty]
         public Brand Brand { get; set; }
 
+        public IActionResult OnGet()
+        {
+            Brand = new Brand();
+            return Page();
+        }
+
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
