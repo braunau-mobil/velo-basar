@@ -1,38 +1,16 @@
-﻿using System.Threading.Tasks;
-using BraunauMobil.VeloBasar.Logic;
+﻿using BraunauMobil.VeloBasar.Logic.Generic;
 using BraunauMobil.VeloBasar.Models;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+using BraunauMobil.VeloBasar.Pages.Generic;
+using BraunauMobil.VeloBasar.Resources;
+using Microsoft.AspNetCore.Mvc.Localization;
 
 namespace BraunauMobil.VeloBasar.Pages.Brands
 {
-    public class CreateModel : PageModel
+    public class CreateModel : CreateModel<Brand, ListModel>
     {
-        private readonly IBrandContext _context;
-
-        public CreateModel(IBrandContext context)
+        public CreateModel(ICrudContext<Brand> context, IHtmlLocalizer<SharedResource> localizer) : base(context, localizer)
         {
-            _context = context;
-        }
-
-        [BindProperty]
-        public Brand Brand { get; set; }
-
-        public IActionResult OnGet()
-        {
-            Brand = new Brand();
-            return Page();
-        }
-
-        public async Task<IActionResult> OnPostAsync()
-        {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
-
-            await _context.CreateAsync(Brand);
-            return this.RedirectToPage<ListModel>();
+            Title = "Marke hinzufügen";
         }
     }
 }

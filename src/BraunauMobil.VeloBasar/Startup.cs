@@ -14,6 +14,8 @@ using BraunauMobil.VeloBasar.Printing;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.Hosting;
 using System.Linq;
+using BraunauMobil.VeloBasar.Logic.Generic;
+using BraunauMobil.VeloBasar.Models;
 
 namespace BraunauMobil.VeloBasar
 {
@@ -93,6 +95,7 @@ namespace BraunauMobil.VeloBasar
             services.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>();
 
             services.AddScoped<IBasarContext, BasarContext>();
+            services.AddScoped<ICrudContext<Brand>, BrandContext>();
             services.AddScoped<IBrandContext, BrandContext>();
             services.AddScoped<IColorProvider, ColorProvider>();
             services.AddScoped<ICountryContext, CountryContext>();

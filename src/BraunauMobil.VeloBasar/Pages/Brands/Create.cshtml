@@ -1,8 +1,5 @@
 ﻿@page
 @model CreateModel
-@{
-    ViewData["Title"] = Localizer["Marke hinzufügen"];
-}
 
 <form method="post">
     <div class="card my-3">
@@ -15,7 +12,7 @@
         </div>
 
         <div class="card-body">
-            <dynamic-form velo-model="@Model.Brand"></dynamic-form>
+            <dynamic-form velo-model="@Model.Item"></dynamic-form>
         </div>
     </div>
 </form>
