@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace BraunauMobil.VeloBasar.Pages.Generic
 {
-    public class CreateModel<TModel, TListPageModel> : PageModel where TModel : IModel, new() where TListPageModel : PageModel
+    public class CreatePageModel<TModel, TListPageModel> : PageModel where TModel : IModel, new() where TListPageModel : PageModel
     {
         private readonly ICrudContext<TModel> _context;
 
-        public CreateModel(ICrudContext<TModel> context)
+        public CreatePageModel(ICrudContext<TModel> context)
         {
             _context = context;
         }

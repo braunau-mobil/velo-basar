@@ -4,7 +4,7 @@ using BraunauMobil.VeloBasar.Pages.Generic;
 
 namespace BraunauMobil.VeloBasar.Pages.Brands
 {
-    public class CreateModel : CreateModel<Brand, ListModel>
+    public class CreateModel : CreatePageModel<Brand, ListModel>
     {
         public CreateModel(ICrudContext<Brand> context) : base(context)
         {

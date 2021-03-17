@@ -12,12 +12,12 @@ namespace BraunauMobil.VeloBasar.Pages.Generic
         public int Id { get; set; }
         public int PageIndex { get; set; }
     }
-    public class EditModel<TModel, TListPageModel> : PageModel where TModel : IModel, new() where TListPageModel : PageModel
+    public class EditPageModel<TModel, TListPageModel> : PageModel where TModel : IModel, new() where TListPageModel : PageModel
     {
         private readonly ICrudContext<TModel> _context;
         private int _pageIndex;
 
-        public EditModel(ICrudContext<TModel> context)
+        public EditPageModel(ICrudContext<TModel> context)
         {
             _context = context;
         }

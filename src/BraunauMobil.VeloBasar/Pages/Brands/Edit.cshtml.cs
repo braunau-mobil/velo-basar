@@ -4,7 +4,7 @@ using BraunauMobil.VeloBasar.Pages.Generic;
 
 namespace BraunauMobil.VeloBasar.Pages.Brands
 {
-    public class EditModel : EditModel<Brand, ListModel>
+    public class EditModel : EditPageModel<Brand, ListModel>
     {
         public EditModel(IBrandContext context) : base(context)
         {

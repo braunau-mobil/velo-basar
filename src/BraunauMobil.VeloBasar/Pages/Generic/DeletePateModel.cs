@@ -12,11 +12,11 @@ namespace BraunauMobil.VeloBasar.Pages.Generic
         public int Id { get; set; }
         public int PageIndex { get; set; }
     }
-    public class DeleteModel<TModel, TListPageModel> : PageModel where TModel : IModel, new() where TListPageModel : PageModel
+    public class DeletePateModel<TModel, TListPageModel> : PageModel where TModel : IModel, new() where TListPageModel : PageModel
     {
         private readonly ICrudContext<TModel> _context;
 
-        public DeleteModel(ICrudContext<TModel> context)
+        public DeletePateModel(ICrudContext<TModel> context)
         {
             _context = context;
         }
