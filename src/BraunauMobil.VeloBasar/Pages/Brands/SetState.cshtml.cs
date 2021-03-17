@@ -1,42 +1,13 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using BraunauMobil.VeloBasar.Logic.Generic;
 using BraunauMobil.VeloBasar.Models;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using BraunauMobil.VeloBasar.Logic;
-using System;
+using BraunauMobil.VeloBasar.Pages.Generic;
 
 namespace BraunauMobil.VeloBasar.Pages.Brands
 {
-    public class SetStateParameter
+    public class SetStateModel : SetStatePageModel<Brand, ListModel>
     {
-        public int BrandId { get; set; }
-        public ObjectState State { get; set; }
-        public int PageIndex { get; set; }
-    }
-    public class SetStateModel : PageModel
-    {
-        private readonly IBrandContext _context;
-
-        public SetStateModel(IBrandContext context)
+        public SetStateModel(ICrudContext<Brand> context) : base(context)
         {
-            _context = context;
-        }
-
-        public async Task<IActionResult> OnGetAsync(SetStateParameter parameter)
-        {
-            if (parameter == null) throw new ArgumentNullException(nameof(parameter));
-
-            if (await _context.ExistsAsync(parameter.BrandId))
-            {
-                var brand = await _context.GetAsync(parameter.BrandId);
-                brand.State = parameter.State;
-                await _context.UpdateAsync(brand);
-            }
-            else
-            {
-                return NotFound();
-            }
-            return this.RedirectToPage<ListModel>(new SearchAndPaginationParameter { PageIndex = parameter.PageIndex });
         }
     }
 }

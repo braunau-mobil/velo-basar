@@ -60,6 +60,12 @@ namespace BraunauMobil.VeloBasar.Logic
             brands.AddRange(_db.Brands.DefaultOrder().Select(b => new Tuple<int?, string>(b.Id, b.Name)));
             return new SelectList(brands, "Item1", "Item2");
         }
+        public async Task SetStateAsync(int id, ObjectState state)
+        {
+            var item = await GetAsync(id);
+            item.State = state;
+            await UpdateAsync(item);
+        }
         public async Task UpdateAsync(Brand brand)
         {
             _db.Attach(brand).State = EntityState.Modified;

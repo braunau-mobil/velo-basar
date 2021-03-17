@@ -50,7 +50,7 @@ namespace BraunauMobil.VeloBasar.Pages.Brands
         public VeloPage GetSetStatePage(Brand item, ObjectState stateToSet)
         {
             if (item == null) throw new ArgumentNullException(nameof(item));
-            return this.GetPage<SetStateModel>(new SetStateParameter { BrandId = item.Id, PageIndex = Brands.PageIndex, State = stateToSet });
+            return this.GetPage<SetStateModel>(new SetStateParameter { Id = item.Id, PageIndex = Brands.PageIndex, State = stateToSet });
         }
         public async Task<bool> CanDeleteAsync(Brand item) => await _brandContext.CanDeleteAsync(item);
     }
