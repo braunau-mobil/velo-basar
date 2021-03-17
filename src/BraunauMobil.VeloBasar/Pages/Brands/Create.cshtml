@@ -1,8 +1,7 @@
 ﻿@page
-@model CreateModel
-
+@model Pages.Generic.CreatePageModel<Brand>
 @{
-    ViewData["Title"] = Localizer[Model.Title];
+    ViewData["Title"] = Localizer["Marke hinzufügen"];
 }
 
 <form method="post">
@@ -10,8 +9,8 @@
         <div class="card-header d-flex justify-content-between align-items-md-center">
             <div class="mr-auto"><h5>@ViewData["Title"]</h5></div>
             <div class="d-flex justify-content-end">
-                <input type="submit" value="@Localizer["Speichern"]" class="btn btn-primary mx-1" velo-page="(this.GetPage<ListModel>())" />
-                <a velo-page="(this.GetPage<ListModel>())" class="btn btn-secondary mx-1">@Localizer["Abbrechen"]</a>
+                <input type="submit" value="@Localizer["Speichern"]" class="btn btn-primary mx-1" velo-page="Pages.Generic.BasePageModel<Brand>.ListPage()" />
+                <a velo-page="Pages.Generic.BasePageModel<Brand>.ListPage()" class="btn btn-secondary mx-1">@Localizer["Abbrechen"]</a>
             </div>
         </div>
 

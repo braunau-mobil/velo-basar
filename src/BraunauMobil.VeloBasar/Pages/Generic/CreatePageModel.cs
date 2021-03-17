@@ -1,12 +1,11 @@
 ﻿using BraunauMobil.VeloBasar.Logic.Generic;
 using BraunauMobil.VeloBasar.Models.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Threading.Tasks;
 
 namespace BraunauMobil.VeloBasar.Pages.Generic
 {
-    public class CreatePageModel<TModel, TListPageModel> : PageModel where TModel : IModel, new() where TListPageModel : PageModel
+    public class CreatePageModel<TModel> : BasePageModel<TModel> where TModel : IModel, new()
     {
         private readonly ICrudContext<TModel> _context;
 
@@ -17,7 +16,6 @@ namespace BraunauMobil.VeloBasar.Pages.Generic
 
         [BindProperty]
         public TModel Item { get; set; }
-        public string Title { get; set; }
 
         public IActionResult OnGet()
         {
@@ -33,7 +31,7 @@ namespace BraunauMobil.VeloBasar.Pages.Generic
             }
 
             await _context.CreateAsync(Item);
-            return this.RedirectToPage<TListPageModel>();
+            return RedirectToList();
         }
     }
 }

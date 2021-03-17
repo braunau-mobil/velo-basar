@@ -1,21 +1,14 @@
 ﻿using BraunauMobil.VeloBasar.Logic.Generic;
 using BraunauMobil.VeloBasar.Models.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using System;
 using System.Threading.Tasks;
 
 namespace BraunauMobil.VeloBasar.Pages.Generic
 {
-    public class EditParameter
-    {
-        public int Id { get; set; }
-        public int PageIndex { get; set; }
-    }
-    public class EditPageModel<TModel, TListPageModel> : PageModel where TModel : IModel, new() where TListPageModel : PageModel
+    public class EditPageModel<TModel> : BasePageModel<TModel> where TModel : IModel, new()
     {
         private readonly ICrudContext<TModel> _context;
-        private int _pageIndex;
 
         public EditPageModel(ICrudContext<TModel> context)
         {
@@ -25,14 +18,11 @@ namespace BraunauMobil.VeloBasar.Pages.Generic
         [BindProperty]
         public TModel Item { get; set; }
 
-        public string Title { get; set; }
-
-        public async Task<IActionResult> OnGetAsync(EditParameter parameter)
+        public async Task<IActionResult> OnGetAsync(BasePageParameter parameter)
         {
-            if (parameter == null) throw new ArgumentNullException(nameof(parameter));
+            Parameter = parameter ?? throw new ArgumentNullException(nameof(parameter));
 
-            Item = await _context.GetAsync(parameter.Id);
-            _pageIndex = parameter.PageIndex;
+            Item = await _context.GetAsync(Parameter.Id);
 
             if (Item == null)
             {
@@ -41,9 +31,9 @@ namespace BraunauMobil.VeloBasar.Pages.Generic
 
             return Page();
         }
-        public async Task<IActionResult> OnPostAsync(EditParameter parameter)
+        public async Task<IActionResult> OnPostAsync(BasePageParameter parameter)
         {
-            if (parameter == null) throw new ArgumentNullException(nameof(parameter));
+            Parameter = parameter ?? throw new ArgumentNullException(nameof(parameter));
 
             if (!ModelState.IsValid)
             {
@@ -51,8 +41,7 @@ namespace BraunauMobil.VeloBasar.Pages.Generic
             }
 
             await _context.UpdateAsync(Item);
-            return this.RedirectToPage<TListPageModel>(new SearchAndPaginationParameter { PageIndex = _pageIndex });
+            return RedirectToListOrigin();
         }
-        public VeloPage GetListPage() => this.GetPage<TListPageModel>(new SearchAndPaginationParameter { PageIndex = _pageIndex });
     }
 }

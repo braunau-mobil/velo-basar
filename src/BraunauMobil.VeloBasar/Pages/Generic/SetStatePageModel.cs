@@ -2,19 +2,16 @@
 using BraunauMobil.VeloBasar.Models;
 using BraunauMobil.VeloBasar.Models.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using System;
 using System.Threading.Tasks;
 
 namespace BraunauMobil.VeloBasar.Pages.Generic
 {
-    public class SetStateParameter
+    public class SetStateParameter : BasePageParameter
     {
-        public int Id { get; set; }
         public ObjectState State { get; set; }
-        public int PageIndex { get; set; }
     }
-    public class SetStatePageModel<TModel, TListPageModel> : PageModel where TModel : IModel, new() where TListPageModel : PageModel
+    public class SetStatePageModel<TModel> : BasePageModel<TModel> where TModel : IModel, new()
     {
         private readonly ICrudContext<TModel> _context;
 
@@ -23,19 +20,19 @@ namespace BraunauMobil.VeloBasar.Pages.Generic
             _context = context;
         }
 
-        public async Task<IActionResult> OnGetAsync(SetStateParameter parameter)
+        public async Task<IActionResult> OnGetAsync(SetStateParameter setStateParameter)
         {
-            if (parameter == null) throw new ArgumentNullException(nameof(parameter));
+            Parameter = setStateParameter ?? throw new ArgumentNullException(nameof(setStateParameter));
 
-            if (await _context.ExistsAsync(parameter.Id))
+            if (await _context.ExistsAsync(Parameter.Id))
             {
-                await _context.SetStateAsync(parameter.Id, parameter.State);
+                await _context.SetStateAsync(Parameter.Id, setStateParameter.State);
             }
             else
             {
                 return NotFound();
             }
-            return this.RedirectToPage<TListPageModel>(new SearchAndPaginationParameter { PageIndex = parameter.PageIndex });
+            return RedirectToListOrigin();
         }
     }
 }
