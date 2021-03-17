@@ -37,7 +37,7 @@ namespace BraunauMobil.VeloBasar.Pages.Brands
         public VeloPage GetDeletePage(Brand item)
         {
             if (item == null) throw new ArgumentNullException(nameof(item));
-            return this.GetPage<DeleteModel>(new DeleteParameter { BrandId = item.Id, PageIndex = Brands.PageIndex });
+            return this.GetPage<DeleteModel>(new DeleteParameter { Id = item.Id, PageIndex = Brands.PageIndex });
         }
         public VeloPage GetEditPage(Brand item)
         {
