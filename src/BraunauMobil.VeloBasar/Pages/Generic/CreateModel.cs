@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BraunauMobil.VeloBasar.Pages.Generic
 {
-    public abstract class CreateModel<TModel, TListPageModel> : PageModel where TModel : IModel, new() where TListPageModel : PageModel
+    public class CreateModel<TModel, TListPageModel> : PageModel where TModel : IModel, new() where TListPageModel : PageModel
     {
         private readonly ICrudContext<TModel> _context;
 
