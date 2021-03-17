@@ -2,7 +2,7 @@
 @model EditModel
 
 @{
-    ViewData["Title"] = Localizer["Marke bearbeiten"];
+    ViewData["Title"] = Localizer[Model.Title];
 }
 
 <form method="post">
@@ -16,7 +16,7 @@
         </div>
 
         <div class="card-body">
-            <dynamic-form velo-model="@Model.Brand"></dynamic-form>
+            <dynamic-form velo-model="@Model.Item"></dynamic-form>
         </div>
     </div>
 </form>

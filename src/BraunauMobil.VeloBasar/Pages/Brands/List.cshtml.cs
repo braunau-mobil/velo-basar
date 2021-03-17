@@ -6,6 +6,7 @@ using BraunauMobil.VeloBasar.ViewModels;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using BraunauMobil.VeloBasar.Logic;
 using System;
+using BraunauMobil.VeloBasar.Pages.Generic;
 
 namespace BraunauMobil.VeloBasar.Pages.Brands
 {
@@ -41,7 +42,7 @@ namespace BraunauMobil.VeloBasar.Pages.Brands
         public VeloPage GetEditPage(Brand item)
         {
             if (item == null) throw new ArgumentNullException(nameof(item));
-            return this.GetPage<EditModel>(new EditParameter { BrandId = item.Id, PageIndex = Brands.PageIndex });
+            return this.GetPage<EditModel>(new EditParameter { Id = item.Id, PageIndex = Brands.PageIndex });
         }
         public VeloPage GetPaginationPage(int pageIndex, int? pageSize) => this.GetPage<ListModel>(pageIndex, pageSize);
         public VeloPage GetResetPage() => this.GetPage<ListModel>();
