@@ -11,14 +11,14 @@ namespace BraunauMobil.VeloBasar.Pages.Generic
     }
     public class BasePageModel<TModel> : PageModel where TModel : IModel, new()
     {
-        public static VeloPage ListPage(object parameter = null)
+        public VeloPage ListPage(object parameter = null)
         {
             return new VeloPage { Page = ListPageRoute(), Parameter = parameter };
         }
-        public static string DeletePageRoute() => $"/{PageDirectory()}/Delete";
-        public static string EditPageRoute() => $"/{PageDirectory()}/Edit";
-        public static string ListPageRoute() => $"/{PageDirectory()}/List";
-        public static string SetStatePageRoute() => $"/{PageDirectory()}/SetState";
+        public string DeletePageRoute() => $"/{PageDirectory()}/Delete";
+        public string EditPageRoute() => $"/{PageDirectory()}/Edit";
+        public string ListPageRoute() => $"/{PageDirectory()}/List";
+        public string SetStatePageRoute() => $"/{PageDirectory()}/SetState";
         private static string PageDirectory()
         {
             var type = typeof(TModel);
