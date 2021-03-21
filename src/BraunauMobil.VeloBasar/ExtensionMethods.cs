@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Routing;
 using System;
 using System.Collections.Generic;
@@ -96,6 +97,14 @@ namespace BraunauMobil.VeloBasar
         {
             if (page == null) throw new ArgumentNullException(nameof(page));
             return linkGenerator.GetPathByPage(page.Page, values: page.Parameter);
+        }
+        public static ModelExplorer GetProperty(this ModelExplorer modelExplorer, string name)
+        {
+            return modelExplorer.Properties.FirstOrDefault(p => p.Metadata.Name == name);
+        }
+        public static ModelMetadata GetProperty(this ModelMetadata modelMetadata, string name)
+        {
+            return modelMetadata.Properties.FirstOrDefault(p => p.Name == name);
         }
         public static bool HasHiddenInputAttribute(this ModelMetadata metadata)
         {

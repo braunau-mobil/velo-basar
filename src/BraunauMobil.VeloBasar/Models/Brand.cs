@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 namespace BraunauMobil.VeloBasar.Models
 {
     [Display(Name = "Marke")]
-    public class Brand : IModel
+    public class Brand : IStateModel
     {
         [HiddenInput]
         public int Id { get; set; }

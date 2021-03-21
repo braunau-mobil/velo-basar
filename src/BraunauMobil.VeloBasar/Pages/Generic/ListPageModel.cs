@@ -5,12 +5,13 @@ using BraunauMobil.VeloBasar.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace BraunauMobil.VeloBasar.Pages.Generic
 {
     [Authorize]
-    public class ListPageModel<TModel> : BasePageModel<TModel>, ISearchable where TModel : class, IModel, new()
+    public class ListPageModel<TModel> : BasePageModel<TModel>, IListPageModel, ISearchable where TModel : class, IModel, new()
     {
         private readonly IVeloContext _veloContext;
         private readonly ICrudContext<TModel> _crudContext;
@@ -23,6 +24,8 @@ namespace BraunauMobil.VeloBasar.Pages.Generic
 
         public string SearchString { get; set; }
         public PaginatedListViewModel<TModel> Items { get; set; }
+        IEnumerable<IListItem> IListPageModel.Items { get => Items.List; }
+        public IPaginatable Paginatable { get => Items; }
 
         public async Task OnGetAsync(SearchAndPaginationParameter parameter)
         {
@@ -33,6 +36,7 @@ namespace BraunauMobil.VeloBasar.Pages.Generic
             var iq = _crudContext.GetMany(parameter.SearchString);
             Items = await PaginationHelper.CreateAsync(_veloContext.Basar, iq.AsNoTracking(), parameter.GetPageIndex(), parameter.GetPageSize(this), GetPaginationPage);
         }
+        public VeloPage CreatePage() => new VeloPage() { Page = CreatePageRoute() };
         public VeloPage GetDeletePage(TModel item)
         {
             if (item == null) throw new ArgumentNullException(nameof(item));
@@ -45,6 +49,15 @@ namespace BraunauMobil.VeloBasar.Pages.Generic
                     OriginPageIndex = Items.PageIndex
                 }
             };
+        }
+        public VeloPage DeletePage(IListItem listItem)
+        {
+            if (listItem == null) throw new ArgumentNullException(nameof(listItem));
+            if (listItem.Item is TModel item)
+            {
+                return GetDeletePage(item);
+            }
+            throw new InvalidOperationException($"Incompatible Item Type");
         }
 
         public VeloPage GetEditPage(TModel item)
@@ -60,6 +73,16 @@ namespace BraunauMobil.VeloBasar.Pages.Generic
                 }
             };
         }
+        public VeloPage EditPage(IListItem listItem)
+        {
+            if (listItem == null) throw new ArgumentNullException(nameof(listItem));
+            if (listItem.Item is TModel item)
+            {
+                return GetEditPage(item);
+            }
+            throw new InvalidOperationException($"Incompatible Item Type");
+        }
+        public VeloPage SearchPage() => ListPage(Items.PageIndex, null);
 
         public VeloPage GetPaginationPage(int pageIndex, int? pageSize) => ListPage(pageIndex, pageSize);
         public VeloPage GetResetPage() => ListPage();
@@ -78,7 +101,25 @@ namespace BraunauMobil.VeloBasar.Pages.Generic
                 }
             };
         }
+        public VeloPage SetStatePage(IListItem listItem, ObjectState stateToSet)
+        {
+            if (listItem == null) throw new ArgumentNullException(nameof(listItem));
+            if (listItem.Item is TModel item)
+            {
+                return GetSetStatePage(item, stateToSet);
+            }
+            throw new InvalidOperationException($"Incompatible Item Type");
+        }
 
         public async Task<bool> CanDeleteAsync(TModel item) => await _crudContext.CanDeleteAsync(item);
+        public async Task<bool> CanDeleteAsync(IListItem listItem)
+        {
+            if (listItem == null) throw new ArgumentNullException(nameof(listItem));
+            if (listItem.Item is TModel item)
+            {
+                return await CanDeleteAsync(item);
+            }
+            throw new InvalidOperationException($"Incompatible Item Type");
+        }
     }
 }

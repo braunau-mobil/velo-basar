@@ -15,6 +15,7 @@ namespace BraunauMobil.VeloBasar.Pages.Generic
         {
             return new VeloPage { Page = ListPageRoute(), Parameter = parameter };
         }
+        public string CreatePageRoute() => $"/{PageDirectory()}/Create";
         public string DeletePageRoute() => $"/{PageDirectory()}/Delete";
         public string EditPageRoute() => $"/{PageDirectory()}/Edit";
         public string ListPageRoute() => $"/{PageDirectory()}/List";
