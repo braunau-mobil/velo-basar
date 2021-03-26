@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace BraunauMobil.VeloBasar.Pages.Generic
 {
-    public class CreatePageModel<TModel> : BasePageModel<TModel>, ICreatePageModel where TModel : IModel, new()
+    public class CreatePageModel<TModel> : BasePageModel<TModel>, IEditPageModel where TModel : IModel, new()
     {
         private readonly ICrudContext<TModel> _context;
 
@@ -16,7 +16,7 @@ namespace BraunauMobil.VeloBasar.Pages.Generic
 
         [BindProperty]
         public TModel Item { get; set; }
-        object ICreatePageModel.Item { get => Item; }
+        object IEditPageModel.Item { get => Item; }
 
         public IActionResult OnGet()
         {

@@ -28,14 +28,15 @@ namespace BraunauMobil.VeloBasar.Pages.Generic
 
         public BasePageParameter Parameter { get; set; }
 
-        public VeloPage ListPageOrigin() => new VeloPage
+        public VeloPage ListPageOrigin()
         {
-            Page = ListPageRoute(),
-            Parameter = new SearchAndPaginationParameter
+            var page = new VeloPage { Page = ListPageRoute() };
+            if (Parameter != null)
             {
-                PageIndex = Parameter.OriginPageIndex
+                page.Parameter = Parameter.OriginPageIndex;
             }
-        };
+            return page;
+        }
         public VeloPage ListPage(int pageIndex, int? pageSize) => new VeloPage
         {
             Page = ListPageRoute(),
