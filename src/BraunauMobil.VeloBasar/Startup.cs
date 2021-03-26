@@ -102,7 +102,7 @@ namespace BraunauMobil.VeloBasar
             services.AddScoped<IFileStoreContext, FileStoreContext>();
             services.AddScoped<INumberContext, NumberContext>();
             services.AddScoped<IProductContext, ProductContext>();
-            services.AddScoped<IProductTypeContext, ProductTypeContext>();
+            services.AddScoped<ICrudContext<ProductType>, ProductTypeContext>();
             services.AddScoped<IStatusPushService, WordPressStatusPushService>();
             services.AddScoped<ISellerContext, SellerContext>();            
             services.AddScoped<ISettingsContext, SettingsContext>();

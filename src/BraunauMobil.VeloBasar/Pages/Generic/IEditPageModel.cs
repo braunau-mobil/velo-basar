@@ -2,6 +2,7 @@
 {
     public interface IEditPageModel
     {
+        VeloPage ListPage(object parameter = null);
         VeloPage ListPageOrigin();
         object Item { get; }
     }

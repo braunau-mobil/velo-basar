@@ -17,10 +17,10 @@ namespace BraunauMobil.VeloBasar.Pages.Products
     {
         private readonly IProductContext _productContext;
         private readonly ICrudContext<Brand> _brandContext;
-        private readonly IProductTypeContext _productTypeContext;
+        private readonly ICrudContext<ProductType> _productTypeContext;
         private readonly ITransactionContext _transactionContext;
 
-        public EditModel(IProductContext productContext , ICrudContext<Brand> brandContext, IProductTypeContext productTypeContext, ITransactionContext transactionContext)
+        public EditModel(IProductContext productContext , ICrudContext<Brand> brandContext, ICrudContext<ProductType> productTypeContext, ITransactionContext transactionContext)
         {
             _productContext = productContext;
             _brandContext = brandContext;

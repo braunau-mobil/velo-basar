@@ -22,9 +22,9 @@ namespace BraunauMobil.VeloBasar.Pages.Products
         private readonly IVeloContext _context;
         private readonly IProductContext _productContext;
         private readonly ICrudContext<Brand> _brandContext;
-        private readonly IProductTypeContext _productTypeContext;
+        private readonly ICrudContext<ProductType> _productTypeContext;
 
-        public ListModel(IVeloContext context, IProductContext productContext, ICrudContext<Brand> brandContext, IProductTypeContext productTypeContext)
+        public ListModel(IVeloContext context, IProductContext productContext, ICrudContext<Brand> brandContext, ICrudContext<ProductType> productTypeContext)
         {
             _context = context;
             _productContext = productContext;

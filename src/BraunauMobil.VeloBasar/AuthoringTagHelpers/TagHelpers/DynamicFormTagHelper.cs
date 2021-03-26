@@ -43,7 +43,7 @@ namespace BraunauMobil.VeloBasar.AuthoringTagHelpers.TagHelpers
             var listPageModel = PageModel.Model as IEditPageModel;
 
             var buttonContainer = html.Div("d-flex justify-content-end");
-            buttonContainer.InnerHtml.AppendHtml (await html.SaveButtonAsync(listPageModel.ListPageOrigin()));
+            buttonContainer.InnerHtml.AppendHtml(await html.SaveButtonAsync(listPageModel.ListPage()));
             buttonContainer.InnerHtml.AppendHtml(await html.CancelButtonAsync(listPageModel.ListPageOrigin()));
 
             var cardHeader = html.CardHeader(html.CardHeaderTitle(TitleText), buttonContainer);

@@ -36,7 +36,7 @@ namespace BraunauMobil.VeloBasar.Tests
         protected IFileStoreContext FileStoreContext { get; private set; }
         protected INumberContext NumberContext { get; private set; }
         protected IProductContext ProductContext { get; private set; }
-        protected IProductTypeContext ProductTypeContext { get; private set; }
+        protected ICrudContext<ProductType> ProductTypeContext { get; private set; }
         protected ISellerContext SellerContext { get; private set; }
         protected ISettingsContext SettingsContext { get; private set; }
         protected ISetupContext SetupContext { get; private set; }
@@ -73,7 +73,7 @@ namespace BraunauMobil.VeloBasar.Tests
             FileStoreContext = serviceProvider.GetRequiredService<IFileStoreContext>();
             NumberContext = serviceProvider.GetRequiredService<INumberContext>();
             ProductContext = serviceProvider.GetRequiredService<IProductContext>();
-            ProductTypeContext = serviceProvider.GetRequiredService<IProductTypeContext>();
+            ProductTypeContext = serviceProvider.GetRequiredService<ICrudContext<ProductType>>();
             SellerContext = serviceProvider.GetRequiredService<ISellerContext>();
             SettingsContext = serviceProvider.GetRequiredService<ISettingsContext>();
             SetupContext = serviceProvider.GetRequiredService<ISetupContext>();

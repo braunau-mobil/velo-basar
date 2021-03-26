@@ -73,7 +73,7 @@
                                 <a class="nav-link" velo-page="new Generic.BasePageModel<Brand>().ListPage()">@Localizer["Marken"]</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" velo-page="@(this.GetPage<ProductTypes.ListModel>())">@Localizer["Artikel Typen"]</a>
+                                <a class="nav-link" velo-page="new Generic.BasePageModel<ProductType>().ListPage()">@Localizer["Artikel Typen"]</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" velo-page="@(this.GetPage<Countries.ListModel>())">@Localizer["Länder"]</a>

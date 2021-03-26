@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Routing;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 
@@ -32,6 +33,14 @@ namespace BraunauMobil.VeloBasar
             }
             sb.Append("]");
             return sb.ToString();
+        }
+        public static TAttributeType GetAttribute<TAttributeType>(this ModelMetadata metadata) where TAttributeType : class
+        {
+            if (metadata is DefaultModelMetadata defaultMetadata)
+            {
+                return defaultMetadata.Attributes.Attributes.FirstOrDefault(a => a is TAttributeType) as TAttributeType;
+            }
+            return null;
         }
         /// <summary>
         /// Returns a select list for the given <paramref name="metadata"/>.
@@ -106,11 +115,21 @@ namespace BraunauMobil.VeloBasar
         {
             return modelMetadata.Properties.FirstOrDefault(p => p.Name == name);
         }
-        public static bool HasHiddenInputAttribute(this ModelMetadata metadata)
+        public static bool HasAttribute<TAttributeType>(this ModelMetadata metadata)
         {
             if (metadata is DefaultModelMetadata defaultMetadata)
             {
-                return defaultMetadata.Attributes.Attributes.Any(attribute => attribute is HiddenInputAttribute);
+                return defaultMetadata.Attributes.Attributes.Any(attribute => attribute is TAttributeType);
+            }
+            return false;
+        }
+        public static bool HasHiddenInputAttribute(this ModelMetadata metadata) => metadata.HasAttribute<HiddenInputAttribute>();
+        public static bool HasMultilineTextDataTypeAttribute(this ModelMetadata metadata)
+        {
+            var attribute = metadata.GetAttribute<DataTypeAttribute>();
+            if (attribute != null)
+            {
+                return attribute.DataType == DataType.MultilineText;
             }
             return false;
         }

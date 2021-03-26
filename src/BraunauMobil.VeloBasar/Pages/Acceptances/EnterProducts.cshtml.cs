@@ -22,10 +22,10 @@ namespace BraunauMobil.VeloBasar.Pages.Acceptances
     {
         private readonly IVeloContext _context;
         private readonly ICrudContext<Brand> _brandContext;
-        private readonly IProductTypeContext _productTypeContext;
+        private readonly ICrudContext<ProductType> _productTypeContext;
         private EnterProductsParameter _parameter;
 
-        public EnterProductsModel(IVeloContext context, ICrudContext<Brand> brandContext, IProductTypeContext productTypeContext)
+        public EnterProductsModel(IVeloContext context, ICrudContext<Brand> brandContext, ICrudContext<ProductType> productTypeContext)
         {
             _context = context;
             _brandContext = brandContext;

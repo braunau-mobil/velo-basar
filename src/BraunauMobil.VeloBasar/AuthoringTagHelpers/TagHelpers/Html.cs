@@ -153,7 +153,7 @@ namespace BraunauMobil.VeloBasar.AuthoringTagHelpers.TagHelpers
         {
             var attributes = new TagHelperAttributeList
             {
-                {  "class", "ml-auto btn btn-primary" }
+                {  "class", "ml-auto btn btn-secondary" }
             };
 
             return await LinkAsync(page, content, attributes);
@@ -401,6 +401,10 @@ namespace BraunauMobil.VeloBasar.AuthoringTagHelpers.TagHelpers
             {
                 control = await EnumSelectAsync(property);
             }
+            else if (property.Metadata.HasMultilineTextDataTypeAttribute())
+            {
+                control = await TextAreaAsync(property);
+            }
             else
             {
                 control = await InputAsync(property);
@@ -440,7 +444,11 @@ namespace BraunauMobil.VeloBasar.AuthoringTagHelpers.TagHelpers
             }
 
             var td = Td();
-            td.InnerHtml.SetContent(property.PropertyGetter(listItem.Item).ToString());
+            var value = property.PropertyGetter(listItem.Item);
+            if (value != null)
+            {
+                td.InnerHtml.SetContent(value.ToString());
+            }
             return td;
         }
         private async Task<IHtmlContent> HiddenInputAsync(ModelExplorer property)
@@ -514,6 +522,29 @@ namespace BraunauMobil.VeloBasar.AuthoringTagHelpers.TagHelpers
                 tag.AddCssClass(cssClass);
             }
             return tag;
+        }
+        private async Task<IHtmlContent> TextAreaAsync(ModelExplorer property)
+        {
+            var attributes = new TagHelperAttributeList
+            {
+                 new TagHelperAttribute("class", "col-10 form-control")
+            };
+            var tagHelpers = new List<ITagHelper>
+            {
+                new TextAreaTagHelper(_htmlGenerator)
+                {
+                    For = new ModelExpression(property.Metadata.PropertyName, property),
+                    ViewContext = _viewContext
+                },
+            };
+
+            tagHelpers.Add(new ValidationTagHelper()
+            {
+                For = new ModelExpression(property.Metadata.PropertyName, property),
+                ViewContext = _viewContext
+            });
+
+            return await GetGeneratedContentFromTagHelpersAsync("textarea", TagMode.StartTagAndEndTag, tagHelpers, attributes);
         }
     }
 }
