@@ -371,8 +371,16 @@ namespace BraunauMobil.VeloBasar.AuthoringTagHelpers.TagHelpers
 
             return await GetGeneratedContentFromTagHelpersAsync("select", TagMode.StartTagAndEndTag, tagHelpers, attributes);
         }
-        private async Task<IHtmlContent> FormAsync(string method, IEnumerable<IHtmlContent> children, IEnumerable<ITagHelper> tagHelpers)
+        private async Task<IHtmlContent> FormAsync(string method, IEnumerable<IHtmlContent> children, IEnumerable<ITagHelper> additionalTagHelpers)
         {
+            var tagHelpers = new List<ITagHelper>(additionalTagHelpers)
+            {
+                new FormTagHelper(_htmlGenerator)
+                {
+                    Antiforgery = true,
+                    ViewContext = _viewContext
+                }
+            };
             var attributes = new TagHelperAttributeList
             {
                 { "method", method }
