@@ -31,7 +31,7 @@ namespace BraunauMobil.VeloBasar.Tests
 
         protected IBasarContext BasarContext { get; private set; }
         protected ICrudContext<Brand> BrandContext { get; private set; }
-        protected ICountryContext CountryContext { get; private set; }
+        protected ICrudContext<Country> CountryContext { get; private set; }
         protected IDataGeneratorContext DataGeneratorContext { get; private set; }
         protected IFileStoreContext FileStoreContext { get; private set; }
         protected INumberContext NumberContext { get; private set; }
@@ -68,7 +68,7 @@ namespace BraunauMobil.VeloBasar.Tests
             using var serviceProvider = _services.BuildServiceProvider();
             BasarContext = serviceProvider.GetRequiredService<IBasarContext>();
             BrandContext = serviceProvider.GetRequiredService<ICrudContext<Brand>>();
-            CountryContext = serviceProvider.GetRequiredService<ICountryContext>();
+            CountryContext = serviceProvider.GetRequiredService<ICrudContext<Country>>();
             DataGeneratorContext = serviceProvider.GetRequiredService<IDataGeneratorContext>();
             FileStoreContext = serviceProvider.GetRequiredService<IFileStoreContext>();
             NumberContext = serviceProvider.GetRequiredService<INumberContext>();

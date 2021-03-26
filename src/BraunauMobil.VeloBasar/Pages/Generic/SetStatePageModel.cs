@@ -11,22 +11,24 @@ namespace BraunauMobil.VeloBasar.Pages.Generic
     {
         public ObjectState State { get; set; }
     }
-    public class SetStatePageModel<TModel> : BasePageModel<TModel> where TModel : IModel, new()
+    public class SetStatePageModel<TModel> : BasePageModel<TModel> where TModel : IStateModel, new()
     {
-        private readonly ICrudContext<TModel> _context;
+        private readonly ICrudContext<TModel> _crudContext;
+        private readonly IStateContext<TModel> _stateContext;
 
-        public SetStatePageModel(ICrudContext<TModel> context)
+        public SetStatePageModel(ICrudContext<TModel> crudContext, IStateContext<TModel> stateContext)
         {
-            _context = context;
+            _crudContext = crudContext;
+            _stateContext = stateContext;
         }
 
         public async Task<IActionResult> OnGetAsync(SetStateParameter setStateParameter)
         {
             Parameter = setStateParameter ?? throw new ArgumentNullException(nameof(setStateParameter));
 
-            if (await _context.ExistsAsync(Parameter.Id))
+            if (await _crudContext.ExistsAsync(Parameter.Id))
             {
-                await _context.SetStateAsync(Parameter.Id, setStateParameter.State);
+                await _stateContext.SetStateAsync(Parameter.Id, setStateParameter.State);
             }
             else
             {

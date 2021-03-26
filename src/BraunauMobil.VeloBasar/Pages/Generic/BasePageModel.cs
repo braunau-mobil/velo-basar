@@ -1,6 +1,7 @@
 ﻿using BraunauMobil.VeloBasar.Models.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System;
 
 namespace BraunauMobil.VeloBasar.Pages.Generic
 {
@@ -23,7 +24,12 @@ namespace BraunauMobil.VeloBasar.Pages.Generic
         private static string PageDirectory()
         {
             var type = typeof(TModel);
-            return $"{type.Name}s";
+            var name = type.Name;
+            if (name.EndsWith("y", StringComparison.InvariantCultureIgnoreCase))
+            {
+                return $"{name.Substring(0, name.Length - 1)}ies";
+            }
+            return $"{name}s";
         }
 
         public BasePageParameter Parameter { get; set; }

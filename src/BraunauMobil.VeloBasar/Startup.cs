@@ -96,13 +96,15 @@ namespace BraunauMobil.VeloBasar
 
             services.AddScoped<IBasarContext, BasarContext>();
             services.AddScoped<ICrudContext<Brand>, BrandContext>();
+            services.AddScoped<IStateContext<Brand>, BrandContext>();
             services.AddScoped<IColorProvider, ColorProvider>();
-            services.AddScoped<ICountryContext, CountryContext>();
+            services.AddScoped<ICrudContext<Country>, CountryContext>();
             services.AddScoped<IDataGeneratorContext, DataGeneratorContext>();
             services.AddScoped<IFileStoreContext, FileStoreContext>();
             services.AddScoped<INumberContext, NumberContext>();
             services.AddScoped<IProductContext, ProductContext>();
             services.AddScoped<ICrudContext<ProductType>, ProductTypeContext>();
+            services.AddScoped<IStateContext<ProductType>, ProductTypeContext>();
             services.AddScoped<IStatusPushService, WordPressStatusPushService>();
             services.AddScoped<ISellerContext, SellerContext>();            
             services.AddScoped<ISettingsContext, SettingsContext>();

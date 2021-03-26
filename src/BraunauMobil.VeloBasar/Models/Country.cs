@@ -1,4 +1,5 @@
 ﻿using BraunauMobil.VeloBasar.Models.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
 namespace BraunauMobil.VeloBasar.Models
@@ -6,6 +7,7 @@ namespace BraunauMobil.VeloBasar.Models
     [Display(Name = "Land")]
     public class Country : IModel
     {
+        [HiddenInput]
         public int Id { get; set; }
 
         [Display(Name = "Name")]

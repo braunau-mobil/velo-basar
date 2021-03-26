@@ -4,6 +4,7 @@ using BraunauMobil.VeloBasar.Models;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using BraunauMobil.VeloBasar.Logic;
 using System;
+using BraunauMobil.VeloBasar.Logic.Generic;
 
 namespace BraunauMobil.VeloBasar.Pages.Sellers
 {
@@ -15,9 +16,9 @@ namespace BraunauMobil.VeloBasar.Pages.Sellers
     public class EditModel : PageModel
     {
         private readonly ISellerContext _sellerContext;
-        private readonly ICountryContext _countryContext;
+        private readonly ICrudContext<Country> _countryContext;
 
-        public EditModel(ISellerContext sellerContext, ICountryContext countryContext)
+        public EditModel(ISellerContext sellerContext, ICrudContext<Country> countryContext)
         {
             _sellerContext = sellerContext;
             _countryContext = countryContext;

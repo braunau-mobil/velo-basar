@@ -16,7 +16,6 @@ namespace BraunauMobil.VeloBasar.Logic.Generic
         IQueryable<TModel> GetMany(string searchString);
         SelectList GetSelectList();
         SelectList GetSelectListWithAllItem();
-        Task SetStateAsync(int id, ObjectState state);
         Task UpdateAsync(TModel item);
     }
 }

@@ -73,10 +73,12 @@
                                 <a class="nav-link" velo-page="new Generic.BasePageModel<Brand>().ListPage()">@Localizer["Marken"]</a>
                             </li>
                             <li class="nav-item">
+                                @* @todo find better solution than instanciation  *@
                                 <a class="nav-link" velo-page="new Generic.BasePageModel<ProductType>().ListPage()">@Localizer["Artikel Typen"]</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" velo-page="@(this.GetPage<Countries.ListModel>())">@Localizer["Länder"]</a>
+                                @* @todo find better solution than instanciation  *@
+                                <a class="nav-link" velo-page="new Generic.BasePageModel<Country>().ListPage()">@Localizer["Länder"]</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" velo-page="@(this.GetPage<Setup.PrintSettingsModel>())">@Localizer["Druckeinstellungen"]</a>

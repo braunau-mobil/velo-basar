@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace BraunauMobil.VeloBasar.Logic
 {
-    public class BrandContext : ICrudContext<Brand>
+    public class BrandContext : ICrudContext<Brand>, IStateContext<Brand>
     {
         private readonly VeloRepository _db;
         private readonly IStringLocalizer<SharedResource> _stringLocalizer;

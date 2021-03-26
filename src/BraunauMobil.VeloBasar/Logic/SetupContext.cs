@@ -1,4 +1,5 @@
 ﻿using BraunauMobil.VeloBasar.Data;
+using BraunauMobil.VeloBasar.Logic.Generic;
 using BraunauMobil.VeloBasar.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -14,9 +15,9 @@ namespace BraunauMobil.VeloBasar.Logic
         private readonly VeloRepository _db;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly ISettingsContext _settingsContext;
-        private readonly ICountryContext _countryContext;
+        private readonly ICrudContext<Country> _countryContext;
 
-        public SetupContext(VeloRepository db, UserManager<IdentityUser> userManager, ISettingsContext settingsContext, ICountryContext countryContext)
+        public SetupContext(VeloRepository db, UserManager<IdentityUser> userManager, ISettingsContext settingsContext, ICrudContext<Country> countryContext)
         {
             _db = db;
             _userManager = userManager;

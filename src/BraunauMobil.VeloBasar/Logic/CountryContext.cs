@@ -1,21 +1,27 @@
 ﻿using BraunauMobil.VeloBasar.Data;
+using BraunauMobil.VeloBasar.Logic.Generic;
 using BraunauMobil.VeloBasar.Models;
+using BraunauMobil.VeloBasar.Resources;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace BraunauMobil.VeloBasar.Logic
 {
-    public class CountryContext : ICountryContext
+    public class CountryContext : ICrudContext<Country>
     {
         private readonly VeloRepository _db;
+        private readonly IStringLocalizer<SharedResource> _stringLocalizer;
 
-        public CountryContext(VeloRepository db)
+        public CountryContext(VeloRepository db, IStringLocalizer<SharedResource> stringLocalizer)
         {
             _db = db;
+            _stringLocalizer = stringLocalizer;
         }
 
         public async Task<bool> CanDeleteAsync(Country item) =>  !await _db.Sellers.AnyAsync(s => s.CountryId == item.Id);
@@ -45,6 +51,15 @@ namespace BraunauMobil.VeloBasar.Logic
             return _db.Countries.Where(CountrySearch(searchString)).DefaultOrder();
         }
         public SelectList GetSelectList() => new SelectList(_db.Countries, "Id", "Name");
+        public SelectList GetSelectListWithAllItem()
+        {
+            var countries = new List<Tuple<int?, string>>
+            {
+                new Tuple<int?, string>(null, _stringLocalizer["Alle"])
+            };
+            countries.AddRange(_db.Brands.DefaultOrder().Select(b => new Tuple<int?, string>(b.Id, b.Name)));
+            return new SelectList(countries, "Item1", "Item2");
+        }
         public async Task UpdateAsync(Country country)
         {
             _db.Attach(country).State = EntityState.Modified;
