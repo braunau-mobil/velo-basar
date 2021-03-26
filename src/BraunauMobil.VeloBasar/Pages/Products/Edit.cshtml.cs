@@ -4,6 +4,7 @@ using BraunauMobil.VeloBasar.Models;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using BraunauMobil.VeloBasar.Logic;
 using System;
+using BraunauMobil.VeloBasar.Logic.Generic;
 
 namespace BraunauMobil.VeloBasar.Pages.Products
 {
@@ -15,11 +16,11 @@ namespace BraunauMobil.VeloBasar.Pages.Products
     public class EditModel : PageModel
     {
         private readonly IProductContext _productContext;
-        private readonly IBrandContext _brandContext;
+        private readonly ICrudContext<Brand> _brandContext;
         private readonly IProductTypeContext _productTypeContext;
         private readonly ITransactionContext _transactionContext;
 
-        public EditModel(IProductContext productContext , IBrandContext brandContext, IProductTypeContext productTypeContext, ITransactionContext transactionContext)
+        public EditModel(IProductContext productContext , ICrudContext<Brand> brandContext, IProductTypeContext productTypeContext, ITransactionContext transactionContext)
         {
             _productContext = productContext;
             _brandContext = brandContext;

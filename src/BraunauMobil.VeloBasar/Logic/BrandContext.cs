@@ -1,4 +1,5 @@
 ﻿using BraunauMobil.VeloBasar.Data;
+using BraunauMobil.VeloBasar.Logic.Generic;
 using BraunauMobil.VeloBasar.Models;
 using BraunauMobil.VeloBasar.Resources;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -12,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace BraunauMobil.VeloBasar.Logic
 {
-    public class BrandContext : IBrandContext
+    public class BrandContext : ICrudContext<Brand>
     {
         private readonly VeloRepository _db;
         private readonly IStringLocalizer<SharedResource> _stringLocalizer;

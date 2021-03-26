@@ -1,4 +1,5 @@
 ﻿using BraunauMobil.VeloBasar.Data;
+using BraunauMobil.VeloBasar.Logic.Generic;
 using BraunauMobil.VeloBasar.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -12,13 +13,13 @@ namespace BraunauMobil.VeloBasar.Logic
     public class ProductContext : IProductContext
     {
         private readonly IBasarContext _basarContext;
-        private readonly IBrandContext _brandContext;
+        private readonly ICrudContext<Brand> _brandContext;
         private readonly IProductTypeContext _productTypeContext;
         private readonly IFileStoreContext _fileStoreContext;
         private readonly ISettingsContext _settingsContext;
         private readonly VeloRepository _db;
 
-        public ProductContext(VeloRepository db, IBasarContext basarContext, IBrandContext brandContext, IProductTypeContext productTypeContext, IFileStoreContext fileStoreContext, ISettingsContext settingsContext)
+        public ProductContext(VeloRepository db, IBasarContext basarContext, ICrudContext<Brand> brandContext, IProductTypeContext productTypeContext, IFileStoreContext fileStoreContext, ISettingsContext settingsContext)
         {
             _db = db;
             _basarContext = basarContext;

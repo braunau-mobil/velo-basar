@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BraunauMobil.VeloBasar.Logic;
+using BraunauMobil.VeloBasar.Logic.Generic;
 using BraunauMobil.VeloBasar.Models;
 using BraunauMobil.VeloBasar.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -20,11 +21,11 @@ namespace BraunauMobil.VeloBasar.Pages.Acceptances
     public class EnterProductsModel : PageModel
     {
         private readonly IVeloContext _context;
-        private readonly IBrandContext _brandContext;
+        private readonly ICrudContext<Brand> _brandContext;
         private readonly IProductTypeContext _productTypeContext;
         private EnterProductsParameter _parameter;
 
-        public EnterProductsModel(IVeloContext context, IBrandContext brandContext, IProductTypeContext productTypeContext)
+        public EnterProductsModel(IVeloContext context, ICrudContext<Brand> brandContext, IProductTypeContext productTypeContext)
         {
             _context = context;
             _brandContext = brandContext;

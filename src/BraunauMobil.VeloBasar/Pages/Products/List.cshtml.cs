@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using BraunauMobil.VeloBasar.Logic;
+using BraunauMobil.VeloBasar.Logic.Generic;
 
 namespace BraunauMobil.VeloBasar.Pages.Products
 {
@@ -20,10 +21,10 @@ namespace BraunauMobil.VeloBasar.Pages.Products
     {
         private readonly IVeloContext _context;
         private readonly IProductContext _productContext;
-        private readonly IBrandContext _brandContext;
+        private readonly ICrudContext<Brand> _brandContext;
         private readonly IProductTypeContext _productTypeContext;
 
-        public ListModel(IVeloContext context, IProductContext productContext, IBrandContext brandContext, IProductTypeContext productTypeContext)
+        public ListModel(IVeloContext context, IProductContext productContext, ICrudContext<Brand> brandContext, IProductTypeContext productTypeContext)
         {
             _context = context;
             _productContext = productContext;

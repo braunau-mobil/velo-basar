@@ -1,5 +1,6 @@
 ﻿using BraunauMobil.VeloBasar.Data;
 using BraunauMobil.VeloBasar.Logic;
+using BraunauMobil.VeloBasar.Logic.Generic;
 using BraunauMobil.VeloBasar.Models;
 using BraunauMobil.VeloBasar.Printing;
 using Microsoft.AspNetCore.Identity;
@@ -29,7 +30,7 @@ namespace BraunauMobil.VeloBasar.Tests
         }
 
         protected IBasarContext BasarContext { get; private set; }
-        protected IBrandContext BrandContext { get; private set; }
+        protected ICrudContext<Brand> BrandContext { get; private set; }
         protected ICountryContext CountryContext { get; private set; }
         protected IDataGeneratorContext DataGeneratorContext { get; private set; }
         protected IFileStoreContext FileStoreContext { get; private set; }
@@ -66,7 +67,7 @@ namespace BraunauMobil.VeloBasar.Tests
 
             using var serviceProvider = _services.BuildServiceProvider();
             BasarContext = serviceProvider.GetRequiredService<IBasarContext>();
-            BrandContext = serviceProvider.GetRequiredService<IBrandContext>();
+            BrandContext = serviceProvider.GetRequiredService<ICrudContext<Brand>>();
             CountryContext = serviceProvider.GetRequiredService<ICountryContext>();
             DataGeneratorContext = serviceProvider.GetRequiredService<IDataGeneratorContext>();
             FileStoreContext = serviceProvider.GetRequiredService<IFileStoreContext>();
