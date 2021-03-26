@@ -1,10 +1,12 @@
-﻿using BraunauMobil.VeloBasar.Resources;
+﻿using BraunauMobil.VeloBasar.Pages.Generic;
+using BraunauMobil.VeloBasar.Resources;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Localization;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using System;
+using System.Collections.Generic;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 
@@ -15,8 +17,8 @@ namespace BraunauMobil.VeloBasar.AuthoringTagHelpers.TagHelpers
     /// </summary>
     public class DynamicFormTagHelper : TagHelper
     {
-        [HtmlAttributeName("velo-model")]
-        public ModelExpression Model { get; set; }
+        public ModelExpression PageModel { get; set; }
+        public IHtmlContent TitleText { get; set; }
 
         [ViewContext]
         public ViewContext ViewContext { get; set; }
@@ -38,15 +40,31 @@ namespace BraunauMobil.VeloBasar.AuthoringTagHelpers.TagHelpers
             if (output == null) throw new ArgumentNullException(nameof(output));
 
             var html = new Html(_localizer, _htmlGenerator, _htmlEncoder, ViewContext);
+            var listPageModel = PageModel.Model as IEditPageModel;
+
+            var buttonContainer = html.Div("d-flex justify-content-end");
+            buttonContainer.InnerHtml.AppendHtml (await html.SaveButtonAsync(listPageModel.ListPageOrigin()));
+            buttonContainer.InnerHtml.AppendHtml(await html.CancelButtonAsync(listPageModel.ListPageOrigin()));
+
+            var cardHeader = html.CardHeader(html.CardHeaderTitle(TitleText), buttonContainer);
+            var propertyRows = new List<IHtmlContent>();
+            foreach (var property in GetItemModel().Properties)
+            {
+                propertyRows.Add(await html.FormRowAsync(property));
+            }
+            var cardBody = html.EditCardBody(propertyRows.ToArray());
+            var card = html.Card(cardHeader, cardBody);
+            var form = await html.FormAsync("post", card);
 
             output.Content.AppendLine("====DynamicFormStart====");
-
-            foreach (var property in Model.ModelExplorer.Properties)
-            {
-                output.Content.AppendHtml(await html.FormRowAsync(property));
-            }
-
+            output.Content.AppendHtml(form);
             output.Content.AppendLine("====DynamicFormEnd====");
+        }
+
+        private ModelExplorer GetItemModel()
+        {
+            var item = PageModel.ModelExplorer.GetProperty("Item");
+            return item;
         }
     }
 }

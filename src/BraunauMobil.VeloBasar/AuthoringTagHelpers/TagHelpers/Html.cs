@@ -34,6 +34,7 @@ namespace BraunauMobil.VeloBasar.AuthoringTagHelpers.TagHelpers
             _viewContext = viewContext;
         }
 
+        public async Task<IHtmlContent> CancelButtonAsync(VeloPage page) => await LinkSecondaryAsync(page, _localizer["Abbrechen"]);
         public TagBuilder Card(IHtmlContent header, IHtmlContent body)
         {
             var card = Div("card my-3");
@@ -41,16 +42,16 @@ namespace BraunauMobil.VeloBasar.AuthoringTagHelpers.TagHelpers
             card.InnerHtml.AppendHtml(body);
             return card;
         }
-        public TagBuilder CardBody(params IHtmlContent[] children)
+        public TagBuilder CardBody(string additionalCssClasses, params IHtmlContent[] children)
         {
             if (children == null) throw new ArgumentNullException(nameof(children));
 
-            var cardHeader = Div("card-body p-0");
+            var cardBody = Div($"card-body {additionalCssClasses}");
             foreach (var child in children)
             {
-                cardHeader.InnerHtml.AppendHtml(child);
+                cardBody.InnerHtml.AppendHtml(child);
             }
-            return cardHeader;
+            return cardBody;
         }
         public TagBuilder CardHeader(params IHtmlContent[] children)
         {
@@ -70,21 +71,20 @@ namespace BraunauMobil.VeloBasar.AuthoringTagHelpers.TagHelpers
             return div;
         }
         public TagBuilder Div(string cssClass = null) => Tag("div", cssClass);
+        public TagBuilder EditCardBody(params IHtmlContent[] children) => CardBody("", children);
+        public async Task<IHtmlContent> FormAsync(string method, params IHtmlContent[] children)
+        {
+            if (children == null) throw new ArgumentNullException(nameof(children));
+
+            return await FormAsync(method, children, Array.Empty<ITagHelper>());
+        }
         public async Task<IHtmlContent> FormAsync(VeloPage veloPage, string method, params IHtmlContent[] children)
         {
             if (children == null) throw new ArgumentNullException(nameof(children));
 
-            var attributes = new TagHelperAttributeList
-            {
-                { "method", method }
-            };
+            var tagHelpers = new[] { CreateTagHelper(veloPage) };
 
-            var form = await GetOutputFromTagHelperAsync("form", TagMode.StartTagAndEndTag, CreateTagHelper(veloPage), attributes);
-            foreach (var child in children)
-            {
-                form.Content.AppendHtml(child);
-            }
-            return RenderTag(form);
+            return await FormAsync(method, children, tagHelpers);
         }
         public async Task<IHtmlContent> FormRowAsync(ModelExplorer property)
         {
@@ -96,8 +96,6 @@ namespace BraunauMobil.VeloBasar.AuthoringTagHelpers.TagHelpers
             }
             return await FormGroupRowAsync(property);
         }
-        
-        
         public async Task<IHtmlContent> GetGeneratedContentFromTagHelpersAsync(string tagName, TagMode tagMode, IEnumerable<ITagHelper> tagHelpers, TagHelperAttributeList attributes)
         {
             var output = await GetOutputFromTagHelpersAsync(tagName, tagMode, tagHelpers, attributes);
@@ -143,6 +141,15 @@ namespace BraunauMobil.VeloBasar.AuthoringTagHelpers.TagHelpers
             return div;
         }
         public async Task<TagBuilder> LinkPrimaryAsync(VeloPage page, IHtmlContent content)
+        {
+            var attributes = new TagHelperAttributeList
+            {
+                {  "class", "ml-auto btn btn-primary" }
+            };
+
+            return await LinkAsync(page, content, attributes);
+        }
+        public async Task<TagBuilder> LinkSecondaryAsync(VeloPage page, IHtmlContent content)
         {
             var attributes = new TagHelperAttributeList
             {
@@ -207,6 +214,24 @@ namespace BraunauMobil.VeloBasar.AuthoringTagHelpers.TagHelpers
             output.WriteTo(writer, _htmlEncoder);
             return new HtmlString(writer.ToString());
         }
+        public async Task<IHtmlContent> SaveButtonAsync(VeloPage page)
+        {
+            var tagHelpers = new List<ITagHelper>
+            {
+                new VeloPageTagHelper(_htmlGenerator)
+                {
+                    Page = page,
+                    ViewContext = _viewContext
+                }
+            };
+            var attributes = new TagHelperAttributeList
+            {
+                 new TagHelperAttribute("class", "btn btn-primary mx-1"),
+                 new TagHelperAttribute("type", "submit"),
+                 new TagHelperAttribute("value", _localizer["Speichern"].Value)
+            };
+            return await GetGeneratedContentFromTagHelpersAsync("input", TagMode.SelfClosing, tagHelpers, attributes);
+        }
         public async Task<IHtmlContent> SearchAsync(ISearchable searchable)
         {
             if (searchable == null) throw new ArgumentNullException(nameof(searchable));
@@ -260,6 +285,7 @@ namespace BraunauMobil.VeloBasar.AuthoringTagHelpers.TagHelpers
 
             return tbody;
         }
+        public TagBuilder TableCardBody(params IHtmlContent[] children) => CardBody("p-0", children);
         public IHtmlContent TableHeader(DynamicTableConfiguration configuration)
         {
             var thead = THead();
@@ -344,6 +370,20 @@ namespace BraunauMobil.VeloBasar.AuthoringTagHelpers.TagHelpers
             };
 
             return await GetGeneratedContentFromTagHelpersAsync("select", TagMode.StartTagAndEndTag, tagHelpers, attributes);
+        }
+        private async Task<IHtmlContent> FormAsync(string method, IEnumerable<IHtmlContent> children, IEnumerable<ITagHelper> tagHelpers)
+        {
+            var attributes = new TagHelperAttributeList
+            {
+                { "method", method }
+            };
+
+            var form = await GetOutputFromTagHelpersAsync("form", TagMode.StartTagAndEndTag, tagHelpers, attributes);
+            foreach (var child in children)
+            {
+                form.Content.AppendHtml(child);
+            }
+            return RenderTag(form);
         }
         private async Task<IHtmlContent> FormGroupRowAsync(ModelExplorer property)
         {

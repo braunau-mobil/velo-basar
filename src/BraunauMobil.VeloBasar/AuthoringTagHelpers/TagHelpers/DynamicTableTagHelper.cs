@@ -74,7 +74,7 @@ namespace BraunauMobil.VeloBasar.AuthoringTagHelpers.TagHelpers
 
             var cardHeader = html.CardHeader(headerItems.ToArray());
             var table = html.Table(html.TableHeader(configuration), await html.TableBodyAsync(configuration, listPageModel));
-            var cardBody = html.CardBody(table);
+            var cardBody = html.TableCardBody(table);
             var card = html.Card(cardHeader, cardBody);
 
             var form = await html.FormAsync(listPageModel.SearchPage(), "get", card);
