@@ -254,8 +254,8 @@ namespace BraunauMobil.VeloBasar.Printing
             {
                 pdfDoc.SetDefaultPageSize(pageSize: PageSize.A4);
                 doc.SetFont(PdfFontFactory.CreateFont(StandardFonts.TIMES_ROMAN));
-                doc.SetMargins(settings.PageMargins.Top, settings.PageMargins.Right, settings.PageMargins.Bottom, settings.PageMargins.Left);
-                pdfDoc.AddEventHandler(PdfDocumentEvent.END_PAGE, new PageFooterHandler(doc, _localizer));
+                doc.SetMargins(settings.PageMargins.Top, settings.PageMargins.Right, settings.PageMargins.Bottom + PageFooterHandler.Height, settings.PageMargins.Left);
+                pdfDoc.AddEventHandler(PdfDocumentEvent.END_PAGE, new PageFooterHandler(settings.PageMargins, doc, _localizer));
 
                 decorate(pdfDoc, doc);
             });
