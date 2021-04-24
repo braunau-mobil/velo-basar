@@ -252,7 +252,7 @@ namespace BraunauMobil.VeloBasar.Printing
         {
             return CreatePdf((pdfDoc, doc) =>
             {
-                pdfDoc.SetDefaultPageSize(pageSize: PageSize.A5);
+                pdfDoc.SetDefaultPageSize(pageSize: PageSize.A4);
                 doc.SetFont(PdfFontFactory.CreateFont(StandardFonts.TIMES_ROMAN));
                 doc.SetMargins(settings.PageMargins.Top, settings.PageMargins.Right, settings.PageMargins.Bottom, settings.PageMargins.Left);
                 pdfDoc.AddEventHandler(PdfDocumentEvent.END_PAGE, new PageFooterHandler(doc, _localizer));
