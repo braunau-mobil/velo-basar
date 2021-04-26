@@ -7,8 +7,15 @@ namespace BraunauMobil.VeloBasar.AuthoringTagHelpers.TagHelpers
     [HtmlTargetElement(ParentTag = "dynamic-table")]
     public class DynamicColumnTagHelper : TagHelper
     {
+        [HtmlAttributeName("get-page")]
+        public Func<object, VeloPage> GetPage { get; set; }
+
+        [HtmlAttributeName("page-text")]
+        public string PageText { get; set; }
+
         [HtmlAttributeName("property-name")]
         public string PropertyName { get; set; }
+
         [HtmlAttributeName("width")]
         public string Width { get; set; }
 
@@ -19,7 +26,7 @@ namespace BraunauMobil.VeloBasar.AuthoringTagHelpers.TagHelpers
 
             if (context.Items[nameof(DynamicTableConfiguration)] is DynamicTableConfiguration configuration)
             {
-                configuration.AddColumn(PropertyName, Width);
+                configuration.AddColumn(this);
             }
             output.SuppressOutput();
 

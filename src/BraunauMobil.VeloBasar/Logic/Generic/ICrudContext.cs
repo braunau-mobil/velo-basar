@@ -1,5 +1,4 @@
-﻿using BraunauMobil.VeloBasar.Models;
-using BraunauMobil.VeloBasar.Models.Interfaces;
+﻿using BraunauMobil.VeloBasar.Models.Interfaces;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,7 +12,7 @@ namespace BraunauMobil.VeloBasar.Logic.Generic
         Task DeleteAsync(int id);
         Task<bool> ExistsAsync(int id);
         Task<TModel> GetAsync(int id);
-        IQueryable<TModel> GetMany(string searchString);
+        IQueryable<TModel> GetMany(string searchString = null);
         SelectList GetSelectList();
         SelectList GetSelectListWithAllItem();
         Task UpdateAsync(TModel item);

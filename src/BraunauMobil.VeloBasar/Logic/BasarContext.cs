@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -78,6 +79,15 @@ namespace BraunauMobil.VeloBasar.Logic
             return _db.Basars.Where(BasarSearch(searchString)).DefaultOrder();
         }
         public SelectList GetSelectList() => new SelectList(_db.Basars, "Id", "Name");
+        public SelectList GetSelectListWithAllItem()
+        {
+            var basars = new List<Tuple<int?, string>>
+            {
+                new Tuple<int?, string>(null, _localizer["Alle"])
+            };
+            basars.AddRange(_db.Basars.DefaultOrder().Select(b => new Tuple<int?, string>(b.Id, b.Name)));
+            return new SelectList(basars, "Item1", "Item2");
+        }
         public bool HasBasars()
         {
             if (_db.IsInitialized())
@@ -100,9 +110,11 @@ namespace BraunauMobil.VeloBasar.Logic
             }
             if (_db.IsPostgreSQL())
             {
-                return b => EF.Functions.ILike(b.Name, $"%{searchString}%");
+                return b => EF.Functions.ILike(b.Name, $"%{searchString}%")
+                    || EF.Functions.ILike(b.Location, $"%{searchString}%");
             }
-            return b => EF.Functions.Like(b.Name, $"%{searchString}%");
+            return b => EF.Functions.Like(b.Name, $"%{searchString}%")
+                || EF.Functions.Like(b.Location, $"%{searchString}%");
         }
     }
 }

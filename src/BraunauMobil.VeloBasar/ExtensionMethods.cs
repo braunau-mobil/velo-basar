@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Routing;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 
@@ -109,10 +110,12 @@ namespace BraunauMobil.VeloBasar
         }
         public static ModelExplorer GetProperty(this ModelExplorer modelExplorer, string name)
         {
+            if (modelExplorer == null) throw new ArgumentNullException(nameof(modelExplorer));
             return modelExplorer.Properties.FirstOrDefault(p => p.Metadata.Name == name);
         }
         public static ModelMetadata GetProperty(this ModelMetadata modelMetadata, string name)
         {
+            if (modelMetadata == null) throw new ArgumentNullException(nameof(modelMetadata));
             return modelMetadata.Properties.FirstOrDefault(p => p.Name == name);
         }
         public static bool HasAttribute<TAttributeType>(this ModelMetadata metadata)
@@ -132,6 +135,12 @@ namespace BraunauMobil.VeloBasar
                 return attribute.DataType == DataType.MultilineText;
             }
             return false;
+        }
+        public static bool HasNotMappedAttribute(this ModelMetadata metadata) => metadata.HasAttribute<NotMappedAttribute>();
+        public static bool IncludeInDynamicForm(this ModelExplorer modelExplorer)
+        {
+            if (modelExplorer == null) throw new ArgumentNullException(nameof(modelExplorer));
+            return modelExplorer.Metadata.ShowForEdit && !modelExplorer.Metadata.HasNotMappedAttribute();
         }
         public static IHtmlContent JsLiteral(this IHtmlHelper htmlHelper, IEnumerable<int> values)
         {

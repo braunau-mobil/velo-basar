@@ -45,7 +45,7 @@ namespace BraunauMobil.VeloBasar.AuthoringTagHelpers.TagHelpers
             var listPageModel = PageModel.Model as IListPageModel;
             if (listPageModel == null)
             {
-                throw new InvalidOperationException("TODO");
+                throw new InvalidOperationException("@TODO");
             }
 
             var configuration = new DynamicTableConfiguration(GetItemModel());
@@ -56,7 +56,7 @@ namespace BraunauMobil.VeloBasar.AuthoringTagHelpers.TagHelpers
             {
                 foreach (var property in PageModel.ModelExplorer.Properties)
                 {
-                    configuration.Columns.Add(new DynamicColumnConfiguration { Property = property.Metadata});
+                    configuration.Columns.Add(new DynamicPropertyColumnConfiguration { Property = property.Metadata});
                 }
             }
 

@@ -66,7 +66,8 @@
                                 <a class="nav-link" velo-page="@(this.GetPage<Cancellations.StartModel>())">@Localizer["Storno"]</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" velo-page="@(this.GetPage<Basars.ListModel>())">@Localizer["Basare"]</a>
+                                @* @todo find better solution than instanciation  *@
+                                <a class="nav-link" velo-page="new Generic.BasePageModel<Basar>().ListPage()">@Localizer["Basare"]</a>
                             </li>
                             <li class="nav-item">
                                 @* @todo find better solution than instanciation  *@

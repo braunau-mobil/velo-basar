@@ -50,7 +50,10 @@ namespace BraunauMobil.VeloBasar.AuthoringTagHelpers.TagHelpers
             var propertyRows = new List<IHtmlContent>();
             foreach (var property in GetItemModel().Properties)
             {
-                propertyRows.Add(await html.FormRowAsync(property));
+                if (property.IncludeInDynamicForm())
+                {
+                    propertyRows.Add(await html.FormRowAsync(property));
+                }
             }
             var cardBody = html.EditCardBody(propertyRows.ToArray());
             var card = html.Card(cardHeader, cardBody);

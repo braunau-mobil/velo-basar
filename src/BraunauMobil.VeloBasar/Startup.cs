@@ -93,18 +93,21 @@ namespace BraunauMobil.VeloBasar
         public static void RegisterServices(IServiceCollection services)
         {
             services.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>();
+            
+            services.AddScoped<ICrudContext<Basar>, BasarContext>();
+            services.AddScoped<ICrudContext<ProductType>, ProductTypeContext>();
+            services.AddScoped<ICrudContext<Country>, CountryContext>();
+            services.AddScoped<ICrudContext<Brand>, BrandContext>();
+
+            services.AddScoped<IStateContext<ProductType>, ProductTypeContext>();
+            services.AddScoped<IStateContext<Brand>, BrandContext>();
 
             services.AddScoped<IBasarContext, BasarContext>();
-            services.AddScoped<ICrudContext<Brand>, BrandContext>();
-            services.AddScoped<IStateContext<Brand>, BrandContext>();
             services.AddScoped<IColorProvider, ColorProvider>();
-            services.AddScoped<ICrudContext<Country>, CountryContext>();
             services.AddScoped<IDataGeneratorContext, DataGeneratorContext>();
             services.AddScoped<IFileStoreContext, FileStoreContext>();
             services.AddScoped<INumberContext, NumberContext>();
             services.AddScoped<IProductContext, ProductContext>();
-            services.AddScoped<ICrudContext<ProductType>, ProductTypeContext>();
-            services.AddScoped<IStateContext<ProductType>, ProductTypeContext>();
             services.AddScoped<IStatusPushService, WordPressStatusPushService>();
             services.AddScoped<ISellerContext, SellerContext>();            
             services.AddScoped<ISettingsContext, SettingsContext>();

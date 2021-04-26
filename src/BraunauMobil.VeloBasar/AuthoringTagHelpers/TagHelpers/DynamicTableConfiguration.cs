@@ -14,6 +14,17 @@ namespace BraunauMobil.VeloBasar.AuthoringTagHelpers.TagHelpers
             _model = model;
         }
 
+        public void AddColumn(DynamicColumnTagHelper tagHelper)
+        {
+            if (tagHelper.GetPage != null)
+            {
+                AddColumn(tagHelper.GetPage, tagHelper.PageText, tagHelper.Width);
+            }
+            else
+            {
+                AddColumn(tagHelper.PropertyName, tagHelper.Width);
+            }
+        }
         public void AddColumn(string name, string width)
         {
             var property = _model.Properties.FirstOrDefault(p => p.Name == name);
@@ -21,9 +32,18 @@ namespace BraunauMobil.VeloBasar.AuthoringTagHelpers.TagHelpers
             {
                 throw new InvalidOperationException($"No matching property with name: {name} found on {_model.ModelType.Name}");
             }
-            Columns.Add(new DynamicColumnConfiguration
+            Columns.Add(new DynamicPropertyColumnConfiguration
             {
                 Property = property,
+                Width = width
+            });
+        }
+        public void AddColumn(Func<object, VeloPage> getPage, string pageText, string width)
+        {
+            Columns.Add(new DynamicPageColumnConfiguration
+            {
+                GetPage = getPage,
+                PageText = pageText,
                 Width = width
             });
         }

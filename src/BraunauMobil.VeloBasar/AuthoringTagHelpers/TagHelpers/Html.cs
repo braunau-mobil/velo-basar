@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
@@ -265,6 +266,9 @@ namespace BraunauMobil.VeloBasar.AuthoringTagHelpers.TagHelpers
         }
         public async Task<IHtmlContent> TableBodyAsync(DynamicTableConfiguration configuration, IListPageModel listPageModel)
         {
+            if (configuration == null) throw new ArgumentNullException(nameof(configuration));
+            if (listPageModel == null) throw new ArgumentNullException(nameof(listPageModel));
+
             var tbody = TBody();
 
             foreach (var item in listPageModel.Items)
@@ -273,7 +277,7 @@ namespace BraunauMobil.VeloBasar.AuthoringTagHelpers.TagHelpers
 
                 foreach (var column in configuration.Columns)
                 {
-                    var cell = ItemCell(item, column.Property);
+                    var cell = await ItemCellAsync(item, column);
                     tr.InnerHtml.AppendHtml(cell);
                 }
 
@@ -288,17 +292,24 @@ namespace BraunauMobil.VeloBasar.AuthoringTagHelpers.TagHelpers
         public TagBuilder TableCardBody(params IHtmlContent[] children) => CardBody("p-0", children);
         public IHtmlContent TableHeader(DynamicTableConfiguration configuration)
         {
+            if (configuration == null) throw new ArgumentNullException(nameof(configuration));
+
             var thead = THead();
             var tr = Tr();
 
             foreach (var column in configuration.Columns)
             {
                 var th = Th($"width: {column.Width};", "col");
-                th.InnerHtml.SetContent(column.Property.DisplayName ?? column.Property.Name);
+                if (column is DynamicPropertyColumnConfiguration propertyColumn)
+                {
+                    th.InnerHtml.SetContent(propertyColumn.Property.DisplayName ?? propertyColumn.Property.Name);
+                }
                 tr.InnerHtml.AppendHtml(th);
             }
 
+            //  Edit
             tr.InnerHtml.AppendHtml(Th("width: auto;", "col"));
+            //  Delete/SetStatus
             tr.InnerHtml.AppendHtml(Th("width: auto;", "col"));
 
             thead.InnerHtml.AppendHtml(tr);
@@ -434,8 +445,22 @@ namespace BraunauMobil.VeloBasar.AuthoringTagHelpers.TagHelpers
 
             return await GetGeneratedContentFromTagHelperAsync("label", TagMode.StartTagAndEndTag, labelTagHelper, attributes);
         }
-        private IHtmlContent ItemCell(IListItem listItem, ModelMetadata property)
+        private async Task<IHtmlContent> ItemCellAsync(IListItem listItem, DynamicColumnConfiguration column)
         {
+            if (column is DynamicPropertyColumnConfiguration propertyColumn)
+            {
+                return ItemCell(listItem, propertyColumn);
+            }
+            if (column is DynamicPageColumnConfiguration pageColumn)
+            {
+                return await ItemCellAsync(listItem, pageColumn);
+            }
+            throw new InvalidOperationException("Unsupported DynamicColumnConfiguration");
+        }
+        private IHtmlContent ItemCell(IListItem listItem, DynamicPropertyColumnConfiguration propertyColumn)
+        {
+            var property = propertyColumn.Property;
+
             if (property.Name == "Id")
             {
                 var th = Th("", "row");
@@ -447,8 +472,22 @@ namespace BraunauMobil.VeloBasar.AuthoringTagHelpers.TagHelpers
             var value = property.PropertyGetter(listItem.Item);
             if (value != null)
             {
-                td.InnerHtml.SetContent(value.ToString());
+                if (string.IsNullOrEmpty(property.DisplayFormatString))
+                {
+                    td.InnerHtml.SetContent(value.ToString());
+                }
+                else
+                {
+                    td.InnerHtml.SetContent(string.Format(CultureInfo.CurrentCulture, property.DisplayFormatString, value));
+                }
             }
+            return td;
+        }
+        private async Task<IHtmlContent> ItemCellAsync(IListItem listItem, DynamicPageColumnConfiguration pageColumn)
+        {
+            var page = pageColumn.GetPage(listItem.Item);
+            var td = Td();
+            td.InnerHtml.AppendHtml(await LinkAsync(page, _localizer[pageColumn.PageText]));
             return td;
         }
         private async Task<IHtmlContent> HiddenInputAsync(ModelExplorer property)

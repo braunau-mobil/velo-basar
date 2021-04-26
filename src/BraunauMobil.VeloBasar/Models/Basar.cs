@@ -1,4 +1,5 @@
 ﻿using BraunauMobil.VeloBasar.Models.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -10,6 +11,7 @@ namespace BraunauMobil.VeloBasar.Models
     [Display(Name = "Basar")]
     public class Basar : IModel
     {
+        [HiddenInput]
         public int Id { get; set; }
         [Display(Name = "Datum")]
         [DisplayFormat(DataFormatString = "{0:dd.MMMM.yyyy}", ApplyFormatInEditMode = true)]
