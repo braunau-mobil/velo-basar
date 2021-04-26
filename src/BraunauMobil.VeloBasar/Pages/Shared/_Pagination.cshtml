@@ -1,4 +1,5 @@
-﻿@model IPaginatable
+﻿@* @todo This is a copy of Html.PaginationAsync *@
+@model IPaginatable
 @{
     var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
     var nextDisabled = !Model.HasNextPage ? "disabled" : "";
