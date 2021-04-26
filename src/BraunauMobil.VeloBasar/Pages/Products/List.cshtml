@@ -1,4 +1,22 @@
 ﻿@page
+@model Pages.Generic.ListPageModel<Product>
+
+@{
+    ViewData["Title"] = Localizer["Marken"];
+}
+
+<dynamic-table page-model="@Model" title-text="@Localizer["Marken"]" new-item-text="@Localizer["Neue Marke"]">
+    <dynamic-filter property-name="StorageState" type="comboBox"></dynamic-filter>
+    <dynamic-filter property-name="ValueState" type="comboBox"></dynamic-filter>
+    <dynamic-filter property-name="Brand" type="comboBox"></dynamic-filter>
+    <dynamic-filter property-name="ProductType" type="comboBox"></dynamic-filter>
+
+    <dynamic-column property-name="Id" width="auto"></dynamic-column>
+    <dynamic-column property-name="Name" width="100%"></dynamic-column>
+</dynamic-table>
+
+
+@page
 @model ListModel
 
 @{
