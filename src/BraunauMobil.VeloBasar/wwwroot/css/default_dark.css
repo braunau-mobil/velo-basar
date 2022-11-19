@@ -1,0 +1,88 @@
+:root {
+  --bs-blue: #0d6efd;
+  --bs-indigo: #6610f2;
+  --bs-purple: #6f42c1;
+  --bs-pink: #d63384;
+  --bs-red: #dc3545;
+  --bs-orange: #fd7e14;
+  --bs-yellow: #ffc107;
+  --bs-green: #198754;
+  --bs-teal: #20c997;
+  --bs-cyan: #0dcaf0;
+  --bs-black: #fff;
+  --bs-white: #000;
+  --bs-gray: #ced4da;
+  --bs-gray-dark: #e9ecef;
+  --bs-gray-900: #f8f9fa;
+  --bs-gray-800: #e9ecef;
+  --bs-gray-700: #dee2e6;
+  --bs-gray-600: #ced4da;
+  --bs-gray-500: #adb5bd;
+  --bs-gray-400: #6c757d;
+  --bs-gray-300: #495057;
+  --bs-gray-200: #343a40;
+  --bs-gray-100: #212529;
+  --bs-primary: #0d6efd;
+  --bs-secondary: #ced4da;
+  --bs-success: #198754;
+  --bs-info: #0dcaf0;
+  --bs-warning: #ffc107;
+  --bs-danger: #dc3545;
+  --bs-light: #212529;
+  --bs-dark: #f8f9fa;
+  --bs-primary-rgb: 13, 110, 253;
+  --bs-secondary-rgb: 108, 117, 125;
+  --bs-success-rgb: 25, 135, 84;
+  --bs-info-rgb: 13, 202, 240;
+  --bs-warning-rgb: 255, 193, 7;
+  --bs-danger-rgb: 220, 53, 69;
+  --bs-light-rgb: 33, 37, 41;
+  --bs-dark-rgb: 248, 249, 250;
+  --bs-white-rgb: 0, 0, 0;
+  --bs-black-rgb: 255, 255, 255;
+  --bs-body-color-rgb: 255, 255, 255;
+  --bs-body-bg-rgb: 33, 37, 41;
+  --bs-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.15));
+  --bs-body-color: #f8f9fa;
+  --bs-body-bg: #000;
+  --bs-border-color: #f8f9fa;
+  --bs-border-color-translucent: rgba(255, 255, 255, 0.175);
+  --bs-link-color: #0d6efd;
+  --bs-link-hover-color: #0a58ca;
+  --bs-code-color: #d63384;
+  --bs-highlight-bg: #fff3cd;
+}
+
+.card {
+  --bs-card-bg: var(--bs-white);
+}
+
+.form-control {
+    color: var(--bs-black);
+    background-color: var(--bs-white);
+}
+
+.form-select {
+    color: var(--bs-black);
+    background-color: var(--bs-white);
+}
+
+.navbar {
+  --bs-dark-rgb: 33, 37, 41;
+}
+
+.offcanvas-lg {
+  --bs-offcanvas-bg: var(--bs-white);
+}
+
+.pagination {
+  --bs-pagination-bg: var(--bs-white);
+  --bs-pagination-disabled-bg: var(--bs-white);
+}
+
+.table {
+  --bs-table-bg: #000;
+  --bs-table-accent-bg: var(--bs-white);
+}
+
+

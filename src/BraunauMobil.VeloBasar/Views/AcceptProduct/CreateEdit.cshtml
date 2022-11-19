@@ -1,0 +1,56 @@
+﻿@model AcceptProductModel
+@inject BusinessLogic.ISelectListService SelectLists
+@{
+    ViewData.SetTitle(Txt.AcceptanceForSellerId(Model.SellerId));
+}
+
+<form method="post">
+    <div class="card m-2">
+        @VeloHtml.TitleCardHeader()
+        <div class="card-body">
+            @VeloHtml.HiddenInput(nameof(Model.Entity.Id), Model.Entity.Id)
+            @VeloHtml.HiddenInput(nameof(Model.Entity.SessionId), Model.Entity.SessionId)
+            <div class="row">
+                <div class="col-2">@VeloHtml.SelectField(nameof(Model.Entity.TypeId), Model.Entity.TypeId, await SelectLists.ProductTypesAsync(), Txt.ProductType, autoFocus: true)</div>
+                <div class="col-2">@VeloHtml.SelectField(nameof(Model.Entity.BrandId), Model.Entity.BrandId, await SelectLists.BrandsAsync(), Txt.Brand)</div>
+                <div class="col-3">@VeloHtml.TextInputField(nameof(Model.Entity.Color), Model.Entity.Color, Txt.Color)</div>
+                <div class="col-4">@VeloHtml.TextInputField(nameof(Model.Entity.FrameNumber), Model.Entity.FrameNumber, Txt.FrameNumber)</div>
+            </div>
+            <div class="row">
+                <div class="col-8">@VeloHtml.TextInputField(nameof(Model.Entity.Description), Model.Entity.Description, Txt.Description)</div>
+                <div class="col-3">@VeloHtml.TextInputField(nameof(Model.Entity.TireSize), Model.Entity.TireSize, Txt.TireSize)</div>
+                <div class="col-2">@VeloHtml.NumberInputField(nameof(Model.Entity.Price), Model.Entity.Price, Txt.Price)</div>
+            </div>
+            <div class="row">
+                <div class="col">@VeloHtml.CheckBoxField(nameof(Model.Entity.DonateIfNotSold), Model.Entity.DonateIfNotSold, Txt.DonateIfNotSold)</div>
+            </div>
+        </div>
+        <div class="card-footer">
+            @if (Model.Entity.Id == 0)
+            {
+                <button class="btn btn-primary">@Txt.Add</button>
+            }
+            else
+            {
+                <button class="btn btn-primary">@Txt.Update</button>
+                <a class="btn btn-secondary" href="@Router.AcceptProduct.ToCreate(Model.SessionId)">@Txt.Cancel</a>
+            }
+        </div>
+    </div>
+</form>
+
+<div class="card m-2">
+    <div class="card-body p-0">
+        @(VeloHtml.ProductsTable(Model.Products)
+            .LinkColumn()
+                .ForLink(product => Router.AcceptProduct.ToEdit(product.Id), Txt.Edit)
+            .LinkColumn()
+                .ForLink(product => Router.AcceptProduct.ToDelete(product.SessionId, product.Id), Txt.Delete)
+            .Build()
+            )
+    </div>
+    <div class="card-footer">
+        <a class="btn btn-primary @VeloHtml.EnabledCss(Model.CanAccept)" href="@Router.AcceptSession.ToSubmit(Model.SessionId)">@Txt.SaveAcceptSession</a>
+        <a class="btn btn-danger" href="@Router.AcceptSession.ToCancel(Model.SessionId)">@Txt.Cancel</a>
+    </div>
+</div>

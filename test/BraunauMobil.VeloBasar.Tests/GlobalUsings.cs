@@ -1,0 +1,10 @@
+global using System;
+global using System.Linq;
+global using System.Threading.Tasks;
+global using Xunit;
+global using Moq;
+global using AutoFixture;
+global using AutoFixture.Xunit2;
+global using BraunauMobil.VeloBasar.Models;
+global using BraunauMobil.VeloBasar.Models.Entities;
+global using FluentAssertions;

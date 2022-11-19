@@ -6,6 +6,8 @@ namespace BraunauMobil.VeloBasar.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            ArgumentNullException.ThrowIfNull(migrationBuilder);
+
             migrationBuilder.AddColumn<string>(
                 name: "Description",
                 table: "ProductTypes",
@@ -14,6 +16,8 @@ namespace BraunauMobil.VeloBasar.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            ArgumentNullException.ThrowIfNull(migrationBuilder);
+
             migrationBuilder.DropColumn(
                 name: "Description",
                 table: "ProductTypes");

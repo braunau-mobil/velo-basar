@@ -1,0 +1,9 @@
+﻿@model ProductAnnotateModel
+@{
+    ViewData.SetTitle(Txt.LostProduct(Model.ProductId));
+}
+<partial name="_AnnotateEditor.cshtml" model="Model" />
+
+<div class="m-2">
+    @VeloHtml.Alert(MessageType.Info, @Txt.Info, @Txt.LostInfo)
+</div>

@@ -1,0 +1,27 @@
+﻿@using BraunauMobil.VeloBasar.Cookies;
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>@ViewData.Title() - Velo Basar</title>
+    
+    <link href="~/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/css/common.css" rel="stylesheet" />
+    <link href="@Context.Request.Cookies.GetCurrentTheme().CssFilePath()" rel="stylesheet" />
+
+    <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+    <div class="container-fluid">
+        <main>
+            @RenderBody()
+        </main>
+    </div>
+
+    <partial name="_Footer.cshtml" />
+</body>
+@RenderSection("Scripts", required: false)
+
+</html>

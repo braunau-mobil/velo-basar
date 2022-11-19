@@ -1,0 +1,48 @@
+﻿@model SellerEntity
+@inject BusinessLogic.ISelectListService SelectLists
+@{
+    string zipInputName = nameof(Model.ZIP);
+    string cityInputName = nameof(Model.City);
+    string countrySelectName = nameof(Model.CountryId);
+}
+
+@VeloHtml.HiddenInput(nameof(Model.Id), Model.Id)
+@VeloHtml.HiddenInput(nameof(Model.Token), Model.Token)
+@VeloHtml.HiddenInput(nameof(Model.ValueState), (int)Model.ValueState)
+
+<div class="row">
+    <div class="col-2">@VeloHtml.SelectField(countrySelectName, Model.CountryId, await SelectLists.CountriesAsync(), Txt.Country)</div>
+    <div class="col-2">@VeloHtml.TextInputField(zipInputName, Model.ZIP, Txt.ZIP)</div>
+    <div class="col-8">@VeloHtml.TextInputField(cityInputName, Model.City, Txt.City)</div>
+</div>
+
+@VeloHtml.TextInputField(nameof(Model.Street), Model.Street, Txt.Street)
+
+<div class="row">
+    <div class="col">@VeloHtml.PhoneNumberInputField(nameof(Model.PhoneNumber), Model.PhoneNumber, Txt.PhoneNumber)</div>
+    <div class="col">@VeloHtml.EmailInputField(nameof(Model.EMail), Model.EMail, Txt.EMail)</div>
+</div>
+
+@VeloHtml.CheckBoxField(nameof(Model.HasNewsletterPermission), Model.HasNewsletterPermission, Txt.NewsletterPermission)
+@VeloHtml.TextInputField(nameof(Model.IBAN), Model.IBAN, Txt.IBAN)
+@VeloHtml.TextInputField(nameof(Model.BankAccountHolder), Model.BankAccountHolder, Txt.BankAccountHolder)
+
+<script>
+    document.getElementById("@VeloHtml.Id(zipInputName)").addEventListener("focusout", handleZipChanged);
+
+    function handleZipChanged() {
+        if (document.getElementById("@VeloHtml.Id(cityInputName)").value) {
+            return;
+        }
+        var zip = document.getElementById("@VeloHtml.Id(zipInputName)").value;
+        var countryId = document.getElementById("@VeloHtml.Id(countrySelectName)").value;
+        var country = getCity(countryId, zip);
+        if (country !== undefined) {
+            document.getElementById("@VeloHtml.Id(cityInputName)").value = country;
+        }
+    }
+    function getCity(countryId, zip) {
+        var map = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(await SelectLists.ZipCodeMapAsync()));
+        return map[countryId][zip];
+    }
+</script>

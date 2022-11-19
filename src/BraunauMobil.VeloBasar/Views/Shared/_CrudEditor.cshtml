@@ -1,0 +1,14 @@
+﻿@model ICrudModel
+
+<form method="post">
+    <div class="card m-2">
+        @VeloHtml.TitleCardHeader()
+        <div class="card-body">
+            @await Model.EditorAsync(ViewContext)
+        </div>
+        <div class="card-footer">
+            <button class="btn btn-primary">@Txt.Save</button>
+            <a class="btn btn-danger" href="@ViewContext.HttpContext.Request.Headers.Referer">@Txt.Cancel</a>
+        </div>
+    </div>
+</form>

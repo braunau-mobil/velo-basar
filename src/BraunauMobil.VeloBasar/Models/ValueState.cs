@@ -1,12 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿namespace BraunauMobil.VeloBasar.Models;
 
-namespace BraunauMobil.VeloBasar.Models
+public enum ValueState
 {
-    public enum ValueState
-    {
-        [Display(Name = "Nicht abgerechnet")]
-        NotSettled = 0,
-        [Display(Name = "Abgerechnet")]
-        Settled = 10
-    }
+    NotSettled = 0,
+    Settled = 1
 }

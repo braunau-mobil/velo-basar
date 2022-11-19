@@ -1,15 +1,11 @@
-﻿using BraunauMobil.VeloBasar.Models;
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
+﻿namespace BraunauMobil.VeloBasar.Data;
 
-namespace BraunauMobil.VeloBasar.Data
+public static class SellerExtensions
 {
-    public static class SellerExtensions
+    public static IQueryable<SellerEntity> DefaultOrder(this IQueryable<SellerEntity> sellers)
     {
-        public static IQueryable<Seller> IncludeAll(this IQueryable<Seller> sellers)
-        {
-            return sellers
-                .Include(s => s.Country);
-        }
+        ArgumentNullException.ThrowIfNull(sellers);
+        return sellers.OrderBy(seller => seller.FirstName)
+            .ThenBy(seller => seller.LastName);
     }
 }

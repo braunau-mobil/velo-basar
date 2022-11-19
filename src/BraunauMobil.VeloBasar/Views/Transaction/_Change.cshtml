@@ -1,0 +1,22 @@
+﻿@model ChangeInfo
+
+<h3 class="m-3">@Model.Amount.ToHtmlPrice()</h3>
+<table class="table table-striped m-0">
+    <tr>
+        @foreach (KeyValuePair<decimal, int> denomination in Model.Denomination)
+        {
+            <th scope="col" style="text-align: center;">@denomination.Key.ToHtmlPrice()</th>
+        }
+    </tr>
+    <tr>
+        @foreach (KeyValuePair<decimal, int> denomination in Model.Denomination)
+        {
+            string css = "";
+            if (denomination.Value > 0)
+            {
+                css = "table-primary";
+            }
+            <td scope="col" style="text-align: center;" class="@css">@denomination.Value</td>
+        }
+    </tr>
+</table>

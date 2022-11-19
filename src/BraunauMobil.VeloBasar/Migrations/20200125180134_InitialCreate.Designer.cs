@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace BraunauMobil.VeloBasar.Migrations
 {
-    [DbContext(typeof(VeloRepository))]
+    [DbContext(typeof(VeloDbContext))]
     [Migration("20200125180134_InitialCreate")]
     partial class InitialCreate
     {

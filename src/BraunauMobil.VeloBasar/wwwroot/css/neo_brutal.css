@@ -1,0 +1,70 @@
+:root {
+    --velo-box-shadow: 0.2rem 0.2rem #000;
+}
+
+.btn {
+    --bs-btn-border-color: #000f;
+    --bs-btn-active-border-color: #000f;
+    --bs-btn-hover-border-color: #000f;
+    box-shadow: var(--velo-box-shadow);
+}
+
+.card {
+    --bs-card-border-color: #000;
+    box-shadow: var(--velo-box-shadow);
+}
+
+.form-control {
+    border-color: #000;
+    box-shadow: var(--velo-box-shadow);
+}
+
+.form-select {
+    border-color: #000;
+    box-shadow: var(--velo-box-shadow);
+}
+
+.form-check-input {
+    box-shadow: var(--velo-box-shadow);
+}
+
+.form-check-label {
+    margin-left: 0.5rem;
+}
+
+footer {
+    margin: 0.5rem;
+    border: solid;
+    border-width: 0.1rem;
+    border-color: #000;
+    box-shadow: var(--velo-box-shadow);
+}
+
+h5 {
+    margin: 0.5rem;
+}
+
+.input-group-text {
+    border: var(--bs-border-width) solid var(--bs-border-color);
+    box-shadow: var(--velo-box-shadow);
+}
+
+.navbar-toggler {
+    margin: 0.5rem;
+    border: solid;
+    border-width: 0.1rem;
+    border-color: #000;
+    box-shadow: var(--velo-box-shadow);
+}
+
+.page-item {
+    box-shadow: var(--velo-box-shadow);
+}
+
+.pie-chart {
+    max-height: calc(40vh);
+}
+
+.progress {
+    border: var(--bs-border-width) solid var(--bs-border-color);
+}

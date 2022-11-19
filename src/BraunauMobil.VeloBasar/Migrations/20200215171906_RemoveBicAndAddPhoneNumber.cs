@@ -6,6 +6,8 @@ namespace BraunauMobil.VeloBasar.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            ArgumentNullException.ThrowIfNull(migrationBuilder);
+
             migrationBuilder.DropColumn(
                 name: "BIC",
                 table: "Sellers");
@@ -18,6 +20,8 @@ namespace BraunauMobil.VeloBasar.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            ArgumentNullException.ThrowIfNull(migrationBuilder);
+
             migrationBuilder.DropColumn(
                 name: "PhoneNumber",
                 table: "Sellers");

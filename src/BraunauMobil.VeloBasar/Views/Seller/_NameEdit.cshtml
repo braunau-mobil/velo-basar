@@ -1,0 +1,6 @@
+﻿@model SellerEntity
+
+<div class="row">
+    @VeloHtml.TextInputField(nameof(Model.FirstName), Model.FirstName, Txt.FirstName, autoFocus: true)
+    @VeloHtml.TextInputField(nameof(Model.LastName), Model.LastName, Txt.LastName)
+</div>

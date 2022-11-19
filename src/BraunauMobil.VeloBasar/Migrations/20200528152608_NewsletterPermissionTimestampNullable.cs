@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BraunauMobil.VeloBasar.Migrations
 {
@@ -7,6 +6,8 @@ namespace BraunauMobil.VeloBasar.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            ArgumentNullException.ThrowIfNull(migrationBuilder);
+
             migrationBuilder.AlterColumn<DateTime>(
                 name: "NewsletterPermissionTimesStamp",
                 table: "Sellers",
@@ -17,6 +18,8 @@ namespace BraunauMobil.VeloBasar.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            ArgumentNullException.ThrowIfNull(migrationBuilder);
+
             migrationBuilder.AlterColumn<DateTime>(
                 name: "NewsletterPermissionTimesStamp",
                 table: "Sellers",

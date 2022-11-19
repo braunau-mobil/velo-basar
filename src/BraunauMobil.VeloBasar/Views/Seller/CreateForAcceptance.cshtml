@@ -1,0 +1,38 @@
+﻿@model SellerCreateForAcceptanceModel
+@{
+    ViewData.SetTitle(Txt.AcceptanceCreateSeller);
+}
+
+<form method="post">
+    <div class="card m-2">
+        @VeloHtml.TitleCardHeader()
+        <div class="card-body">
+            <partial name="_NameEdit.cshtml" model="Model.Seller" />
+
+            <div class="mb-2">
+                <button class="btn btn-primary" formaction="@Router.Seller.ToSearchForAcceptance()">@Txt.Search</button>
+
+                @if (Model.HasSearched)
+                {
+                    @if (Model.FoundSellers.Any())
+                    {
+                        @(VeloHtml.SellersTable(Model.FoundSellers)
+                            .LinkColumn()
+                                .ForLink(item => Router.Seller.ToCreateForAcceptance(item.Id), Txt.Apply)
+                            .Build())
+                    }
+                    else
+                    {
+                        @Txt.NoSellerFound
+                    }
+                }
+            </div>
+
+            <partial name="_AllButNameEdit.cshtml" model="Model.Seller" />
+
+        </div>
+        <div class="card-footer">
+            <button class="btn btn-primary" formaction="@Router.Seller.ToCreateForAcceptance()">@Txt.Continue</button>
+        </div>
+    </div>
+</form>

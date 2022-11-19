@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace BraunauMobil.VeloBasar.Migrations
 {
-    [DbContext(typeof(VeloRepository))]
+    [DbContext(typeof(VeloDbContext))]
     [Migration("20200528152608_NewsletterPermissionTimestampNullable")]
     partial class NewsletterPermissionTimestampNullable
     {

@@ -1,0 +1,51 @@
+﻿@model ListModel<AcceptSessionEntity, AcceptSessionListParameter>
+@inject BusinessLogic.ISelectListService SelectLists
+@{
+    ViewData.SetTitle(Txt.AcceptSessionList(Model.TotalItemCount));
+}
+
+<form method="get">
+    <div class="card m-2">
+        <div class="card-header">
+            <div class="row align-items-center">
+                <h4 class="col-auto m-0">@ViewData.Title()</h4>
+                <div class="col"></div>
+                <div class="col-auto">
+                    @VeloHtml.Select(nameof(Model.Parameter.AcceptSessionState), Model.Parameter.AcceptSessionState, SelectLists.AcceptStates(true), submitOnChange: true)
+                </div>
+                <div class="col"></div>
+            </div>
+        </div>
+        <div class="card-body p-0">
+            @(VeloHtml.Table(Model)
+                .Column()
+                    .AutoWidth()
+                    .Title(Txt.Id)
+                    .DoNotBreak()
+                    .For(item => item.Id)
+                .Column()
+                    .PercentWidth(40)
+                    .Title(Txt.Start)
+                    .For(item => item.StartTimeStamp.ToHtmlTimeStamp())
+                .Column()
+                    .PercentWidth(40)
+                    .Title(Txt.End)
+                    .For(item => item.EndTimeStamp.ToHtmlTimeStamp())
+                .Column()
+                    .PercentWidth(20)
+                    .Title(Txt.ProductCount)
+                    .For(item => item.Products.Count)
+                .LinkColumn()
+                    .Title(Txt.Seller)
+                    .ForLink(item => Router.Seller.ToDetails(item.SellerId), item => item.SellerId.ToHtml())
+                .LinkColumn()
+                    .ForLink(item => Router.AcceptProduct.ToCreate(item.Id), Txt.Continue, item => !item.IsCompleted)
+                .LinkColumn()
+                    .ForLink(item => Router.AcceptSession.ToCancel(item.Id, returnToList: true), Txt.Cancel, item => !item.IsCompleted)
+                .Build())
+        </div>
+        <div class="card-footer">
+            <vc:pagination items="@Model" current-parameter="@Model.Parameter" to-list="@Router.AcceptSession.ToList"></vc:pagination>
+        </div>
+    </div>
+</form>

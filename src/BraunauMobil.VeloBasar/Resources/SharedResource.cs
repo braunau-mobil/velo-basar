@@ -1,6 +1,4 @@
-﻿namespace BraunauMobil.VeloBasar.Resources
-{
-    public class SharedResource
-    {
-    }
-}
+﻿namespace BraunauMobil.VeloBasar.Resources;
+
+public sealed class SharedResource
+{ }

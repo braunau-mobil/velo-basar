@@ -1,0 +1,133 @@
+﻿@using BraunauMobil.VeloBasar.BusinessLogic
+@using BraunauMobil.VeloBasar.Cookies;
+@using Microsoft.AspNetCore.Html
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.Extensions.Localization;
+
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@inject IBasarService BasarService
+@inject IAppContext AppContext
+@inject IAcceptSessionService AcceptSessionService
+
+@{
+    int? activeBasarId = await BasarService.GetActiveBasarIdAsync();
+    IHtmlContent basarInfo;
+    @if (activeBasarId.HasValue)
+    {
+        string basarName = await BasarService.GetBasarNameAsync(activeBasarId.Value);
+        basarInfo = new HtmlString(basarName);
+    }
+    else
+    {
+        basarInfo = @VeloHtml.Alert(MessageType.Warning, Txt.NoBasarActive);
+    }
+
+    LocalizedString startAcceptSessionText = Txt.NewAcceptance;
+    if (await AcceptSessionService.IsSessionRunning(Context.Request.Cookies.GetActiveAcceptSessionId()))
+    {
+        startAcceptSessionText = Txt.ContinueAcceptSession;
+    }
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>@ViewData.Title() - Velo Basar</title>
+    
+    <link href="~/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/css/common.css" rel="stylesheet" />
+    <link href="@Context.Request.Cookies.GetCurrentTheme().CssFilePath()" rel="stylesheet" />
+
+    <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+    <header class="navbar navbar-expand-lg sticky-top navbar-light bg-light p-0 mb-2">
+        <nav class="container-xxl flex-wrap flex-lg-nowrap">
+            <div>
+                <button class="navbar-toggler p-2 m-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#veloSidebar">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container-fluid velo-layout">
+        <aside class="velo-sidebar">
+            <div class="offcanvas-lg offcanvas-start" tabindex="-1" id="veloSidebar">
+                <div class="offcanvas-header border-bottom">
+                    <h5 class="offcanvas-title" id="veloSidebarOffcanvasLabel">@Txt.Menu</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#veloSidebar"></button>
+                </div>
+
+                <div class="offcanvas-body">
+                    <nav>
+                        <ul class="list-unstyled mb-0 pb-3 pb-md-2 pe-lg-2 ">
+                            <li class="py-2">
+                                <strong class="d-flex w-100 align-items-center fw-semibold">
+                                    @basarInfo
+                                </strong>
+                                <ul class="nav flex-column nav-pills">
+                                    <li class="nav-item"><a class="nav-link" href="@Router.Basar.ToActiveBasarDetails()">@Txt.Overview</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="@Router.AcceptSession.ToStart()">@startAcceptSessionText</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="@Router.AcceptanceLabels.ToSelect()">@Txt.PrintLabels</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="@Router.Seller.ToList()">@Txt.SellerList</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="@Router.Product.ToList()">@Txt.Products</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="@Router.Cart.ToIndex()">@Txt.Cart</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="@Router.Transaction.ToList(TransactionType.Sale)">@Txt.Sales</a></li>
+                                </ul>
+                            </li>
+                            <li class="py-2">
+                                <strong class="d-flex w-100 align-items-center fw-semibold">
+                                    @Txt.Admin
+                                </strong>
+                                <ul class="nav flex-column nav-pills">
+                                    @if (SignInManager.IsSignedIn(User))
+                                    {
+                                        <li class="nav-item"><a class="nav-link" href="@Router.ToLogout()">@Txt.LogOut - @UserManager.GetUserName(User)</a></li>
+                                        <li class="nav-item"><a class="nav-link" href="@Router.Cancel.ToSelectSale()">@Txt.Cancellate</a></li>
+                                        <li class="nav-item"><a class="nav-link" href="@Router.Transaction.ToList()">@Txt.Transactions</a></li>
+                                        <li class="nav-item"><a class="nav-link" href="@Router.AcceptSession.ToList()">@Txt.AcceptSessions</a></li>
+                                        <li class="nav-item"><a class="nav-link" href="@Router.Basar.ToList()">@Txt.BasarList</a></li>
+                                        <li class="nav-item"><a class="nav-link" href="@Router.Brand.ToList()">@Txt.BrandList</a></li>
+                                        <li class="nav-item"><a class="nav-link" href="@Router.ProductType.ToList()">@Txt.ProductTypeList</a></li>
+                                        <li class="nav-item"><a class="nav-link" href="@Router.Country.ToList()">@Txt.CountryList</a></li>
+                                        <li class="nav-item"><a class="nav-link" href="@Router.Admin.ToPrintTest()">@Txt.PrintTest</a></li>
+                                    }
+                                    else
+                                    {
+                                        <li class="nav-item"><a class="nav-link" href="@Router.ToLogin()">@Txt.LogIn</a></li>
+                                    }
+                                </ul>
+                            </li>
+                            @if (AppContext.DevToolsEnabled())
+                            {
+                                <li class="py-2">
+                                    <strong class="d-flex w-100 align-items-center fw-semibold">
+                                        Dev
+                                    </strong>
+                                    <ul class="nav flex-column nav-pills">
+                                        <li class="nav-item"><a class="nav-link" href="@Router.Dev.ToDangerZone()">Danger Zone!</a></li>
+                                        <li class="nav-item"><a class="nav-link" href="@Router.Dev.ToDropDatabase()">Drop Database</a></li>
+                                        <li class="nav-item"><a class="nav-link" href="@Router.Dev.ToUnlockAllUsers()">Unlock all users</a></li>
+                                    </ul>
+                                </li>
+                            }
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </aside>
+
+        <main>
+            @RenderBody()
+        </main>
+    </div>
+
+    <partial name="_Footer.cshtml" />
+</body>
+@RenderSection("Scripts", required: false)
+
+</html>

@@ -1,7 +1,9 @@
 **/bin/
 **/obj/
+/output/
 *.log
 *.user
 .vs
 launchSettings.json
 .DS_Store
+/src/BraunauMobil.VeloBasar/.config/dotnet-tools.json

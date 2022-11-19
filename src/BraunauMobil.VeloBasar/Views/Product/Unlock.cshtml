@@ -1,0 +1,6 @@
+﻿@model ProductAnnotateModel
+@{
+    ViewData.SetTitle(Txt.UnlockProduct(Model.ProductId));
+}
+
+<partial name="_AnnotateEditor.cshtml" model="Model" />

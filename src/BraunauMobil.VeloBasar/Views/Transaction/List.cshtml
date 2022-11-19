@@ -1,0 +1,37 @@
+﻿@using Microsoft.AspNetCore.Identity
+@model ListModel<TransactionEntity, TransactionListParameter>
+@inject SignInManager<IdentityUser> SignInManager
+@inject BusinessLogic.ISelectListService SelectLists
+@{
+    var title = Txt.TransactionList(Model.TotalItemCount);
+    if (Model.Parameter.TransactionType.HasValue)
+    {
+        title = Txt.Plural(Model.Parameter.TransactionType.Value, Model.TotalItemCount);
+    }
+    ViewData.SetTitle(title);
+}
+
+<form method="get">
+    <div class="card m-2">
+        <div class="card-header">
+            <div class="row align-items-center">
+                <h4 class="col-auto m-0">@ViewData.Title()</h4>
+                <div class="col"></div>
+                <div class="col-auto"><vc:search search-string="@Model.Parameter.SearchString" reset-url="@Router.Transaction.ToList(Model.PageSize, Model.PageIndex))"></vc:search></div>
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    <div class="col"></div>
+                    <div class="col-auto">
+                        @VeloHtml.Select(nameof(Model.Parameter.TransactionType), Model.Parameter.TransactionType, SelectLists.TransactionTypes(true), submitOnChange: true)
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="card-body p-0">
+            @VeloHtml.TransactionsTable(Model, showType: Model.Parameter.TransactionType == null, showProducts: true).Build()
+        </div>
+        <div class="card-footer">
+            <vc:pagination items="@Model" current-parameter="@Model.Parameter" to-list="@Router.Transaction.ToList"></vc:pagination>
+        </div>
+    </div>   
+</form>

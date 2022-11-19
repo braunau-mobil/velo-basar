@@ -1,0 +1,7 @@
+﻿@model SearchModel
+
+<div class="input-group">
+    <input type="text" class="form-control" autofocus name="@nameof(Model.SearchString)" value="@Model.SearchString" />
+    <button class="btn btn-outline-primary">@Txt.Search</button>
+    <a class="btn btn-outline-secondary" href="@Model.ResetUrl">@Txt.Reset</a>
+</div>

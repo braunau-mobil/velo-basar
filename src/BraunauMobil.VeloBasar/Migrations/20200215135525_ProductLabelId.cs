@@ -6,11 +6,14 @@ namespace BraunauMobil.VeloBasar.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-           migrationBuilder.DropColumn(
-                name: "Label",
-                table: "Products");
+            ArgumentNullException.ThrowIfNull(migrationBuilder);
 
-            migrationBuilder.AddColumn<int>(
+            migrationBuilder.RenameColumn(
+                name: "Label",
+                table: "Products",
+                newName: "LabelId");
+
+            migrationBuilder.AlterColumn<int>(
                 name: "LabelId",
                 table: "Products",
                 nullable: false,
@@ -19,15 +22,18 @@ namespace BraunauMobil.VeloBasar.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "LabelId",
-                table: "Products");
+            ArgumentNullException.ThrowIfNull(migrationBuilder);
 
-            migrationBuilder.AddColumn<int>(
-                name: "Label",
+            migrationBuilder.AlterColumn<int>(
+                name: "LabelId",
                 table: "Products",
-                type: "integer",
-                nullable: true);
+                nullable: true,
+                defaultValue: null);
+            
+            migrationBuilder.RenameColumn(
+                name: "LabelId",
+                table: "Products",
+                newName: "Label");
         }
     }
 }

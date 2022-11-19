@@ -1,59 +1,173 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using System;
-using Microsoft.AspNetCore;
-using Serilog;
-using Serilog.Events;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Http;
+using BraunauMobil.VeloBasar.Data;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using BraunauMobil.VeloBasar.Routing;
+using BraunauMobil.VeloBasar.Rendering;
+using BraunauMobil.VeloBasar.Configuration;
+using Microsoft.Extensions.Logging;
+using BraunauMobil.VeloBasar.Filters;
+using BraunauMobil.VeloBasar.BusinessLogic;
+using BraunauMobil.VeloBasar.Crud;
+using BraunauMobil.VeloBasar.Controllers;
+using Xan.AspNetCore.Mvc;
+using System.Net.Http;
+using Xan.Extensions;
+using FluentValidation;
+using Xan.Extensions.Tasks;
+using Xan.AspNetCore;
+using System.Globalization;
+using BraunauMobil.VeloBasar.Pdf;
 
-namespace BraunauMobil.VeloBasar
+namespace BraunauMobil.VeloBasar;
+
+public static class Program
 {
-    public static class Program
+    public static void Main(string[] args)
     {
-        public static void Main(string[] args)
-        {
-#if DEBUG
-            Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Debug()
-                .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
-                .Enrich.FromLogContext()
-                .WriteTo.File("velo-basar.log")
-                .WriteTo.Debug()
-                .CreateLogger();
-#else
-            Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Warning()
-                .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
-                .Enrich.FromLogContext()
-                .WriteTo.File("velo-basar.log")
-                .WriteTo.Console()
-                .CreateLogger();
-#endif
+        WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+        builder.Logging.AddConsole();
+        builder.Configuration.AddCommandLine(args);
 
-            try
-            {
-                Log.Information("Starting web host");
-                CreateWebHostBuilder(args).Build().Run();
-            }
-            catch (Exception ex)
-            {
-                Log.Fatal(ex, "Host terminated unexpectedly");
-                throw;
-            }
+        ApplicationSettings? applicationSettings = builder.Configuration.GetSection(nameof(ApplicationSettings)).Get<ApplicationSettings>();
+        if (applicationSettings == null)
+        {
+            throw new InvalidOperationException($"No {nameof(ApplicationSettings)} section found.");
+        }
+        CultureInfo.CurrentCulture = CultureInfo.GetCultureInfo(applicationSettings.Culture);
+        CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo(applicationSettings.Culture);
+
+        ConfigureServices(builder.Services, builder.Configuration);
+
+        WebApplication app = builder.Build();
+        app.UseDeveloperExceptionPage();
+        app.UseHttpsRedirection();
+        app.UseStaticFiles();
+        app.UseCookiePolicy();
+        app.UseAuthentication();
+        app.UseRouting();
+        app.UseAuthorization();
+
+        app.MapControllerRoute(
+            name: "default",
+            pattern: "{controller}/{action}",
+            defaults: new { controller = MvcHelper.ControllerName<HomeController>(), action = nameof(HomeController.Index) });
+
+        using (IServiceScope scope = app.Services.CreateScope())
+        {
+            DatabaseMigrator migrator = scope.ServiceProvider.GetRequiredService<DatabaseMigrator>();
+            migrator.Migrate();
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                .ConfigureAppConfiguration((hostingContext, config) =>
+        app.Run();
+    }
+
+    private static void ConfigureServices(IServiceCollection services, ConfigurationManager configuration)
+    {
+        services
+           .AddDefaultIdentity<IdentityUser>()
+           .AddEntityFrameworkStores<VeloDbContext>();
+        
+        services.AddControllersWithViews(options =>
+            {
+                options.Filters.Add<PageSizeFilter>();
+                options.Filters.Add<ActiveBasarEntityFilter>();
+            })
+            .AddViewLocalization(options =>
+            {
+                options.ResourcesPath = "Resources";
+            });
+
+        services
+            .AddDbContext<VeloDbContext>(options =>
+            {
+                ApplicationSettings? applicationSettings = configuration.GetSection(nameof(ApplicationSettings)).Get<ApplicationSettings>();
+                if (applicationSettings == null)
                 {
-                    config.AddCommandLine(args);
-                })
-                .UseStartup<Startup>()
-                .UseSerilog()
-                .ConfigureServices(services =>
+                    throw new InvalidOperationException($"No {nameof(ApplicationSettings)} section found.");
+                }
+
+                options.UseNpgsql(applicationSettings.ConnectionString);
+                AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+            })
+            .AddHttpContextAccessor()
+            .AddSingleton<HttpClient>(sp =>
+            {
+                SocketsHttpHandler socketsHandler = new()
                 {
-                    services.AddHostedService<QueuedHostedService>();
-                });
+                    PooledConnectionLifetime = TimeSpan.FromMinutes(2)
+                };
+                return new HttpClient(socketsHandler);
+            })
+            .AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>()
+            .AddSingleton<IClock, SystemClock>()
+            .AddBusinessLogic()
+            .AddVeloRendering()
+            .AddVeloRouting()
+            .AddPdf()
+            .AddScoped<IAppContext, VeloBasarAppContext>()
+            .AddScoped<DatabaseMigrator>()
+            .AddSingleton<VeloTexts>()
+            .AddScoped<SellerCrudModelFactory>()
+            .AddValidatorsFromAssemblyContaining<SellerSearchModelValidator>()
+
+            .AddHostedService<QueuedHostedService>();
+
+        services
+            .AddOptions<ApplicationSettings>()
+                .Bind(configuration.GetSection(nameof(ApplicationSettings)))
+                .ValidateDataAnnotations();
+        
+        services
+            .AddOptions<PrintSettings>()
+                .Bind(configuration.GetSection(nameof(PrintSettings)))
+                .ValidateDataAnnotations();
+        services
+            .AddOptions<WordPressStatusPushSettings>()
+                .Bind(configuration.GetSection(nameof(WordPressStatusPushSettings)))
+                .ValidateDataAnnotations();
+
+        services.AddCrud(options =>
+        {
+            options.AddController<BasarEntity, BasarCrudService, BasarCrudModelFactory>(true);
+            options.AddController<BrandEntity, BrandCrudService, BrandCrudModelFactory>(true);
+            options.AddController<CountryEntity, CountryCrudService, CountryCrudModelFactory>(true);
+            options.AddController<ProductTypeEntity, ProductTypeCrudService, ProductTypeCrudModelFactory>(true);
+        });
+
+        services
+            .Configure<CookiePolicyOptions>(options =>
+            {
+                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
+                options.CheckConsentNeeded = context => false;
+                options.MinimumSameSitePolicy = SameSiteMode.None;
+            })
+            .Configure<IdentityOptions>(options =>
+            {
+                // Password settings.
+                options.Password.RequireDigit = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequiredLength = 1;
+                options.Password.RequiredUniqueChars = 1;
+
+                // Lockout settings.
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+                options.Lockout.MaxFailedAccessAttempts = 5;
+                options.Lockout.AllowedForNewUsers = true;
+
+                // User settings.
+                options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+                options.User.RequireUniqueEmail = true;
+            })
+            .ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = "/security/login";
+                options.LogoutPath = "/security/logout";
+            });
     }
 }

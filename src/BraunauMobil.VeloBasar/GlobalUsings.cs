@@ -1,0 +1,9 @@
+﻿global using System;
+global using System.Collections.Generic;
+global using System.Linq;
+global using System.Threading.Tasks;
+global using BraunauMobil.VeloBasar.Models;
+global using BraunauMobil.VeloBasar.Models.Entities;
+global using Xan.AspNetCore.Models;
+global using Xan.AspNetCore.Mvc.Abstractions;
+global using Xan.AspNetCore.Mvc.Crud;

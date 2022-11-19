@@ -1,0 +1,28 @@
+﻿@model ProductEntity
+@inject BusinessLogic.ISelectListService SelectLists
+@{
+    ViewData.SetTitle(Txt.EditProduct);
+}
+
+<form method="post">
+    <div class="card m-2">
+        @VeloHtml.TitleCardHeader()
+        <div class="card-body">
+            @VeloHtml.SelectField(nameof(Model.TypeId), Model.TypeId, await SelectLists.ProductTypesAsync(), Txt.ProductType, autoFocus: true)
+            @VeloHtml.SelectField(nameof(Model.BrandId), Model.BrandId, await SelectLists.BrandsAsync(), Txt.Brand)
+            @VeloHtml.TextInputField(nameof(Model.Description), Model.Description, Txt.Description)
+            @VeloHtml.TextInputField(nameof(Model.Color), Model.Color, Txt.Color)
+            @VeloHtml.TextInputField(nameof(Model.FrameNumber), Model.FrameNumber, Txt.FrameNumber)
+            @VeloHtml.TextInputField(nameof(Model.TireSize), Model.TireSize, Txt.TireSize)
+            @VeloHtml.NumberInputField(nameof(Model.Price), Model.Price, Txt.Price)
+            @VeloHtml.CheckBoxField(nameof(Model.DonateIfNotSold), Model.DonateIfNotSold, Txt.DonateIfNotSold)
+            @VeloHtml.HiddenInput(nameof(Model.Id), Model.Id)
+            @VeloHtml.HiddenInput(nameof(Model.SessionId), Model.SessionId)
+
+        </div>
+        <div class="card-footer">
+            <a class="btn btn-secondary" href="@Router.Product.ToDetails(Model.Id)">@Txt.Cancel</a>
+            <button class="btn btn-primary">@Txt.Save</button>
+        </div>
+    </div>
+</form>

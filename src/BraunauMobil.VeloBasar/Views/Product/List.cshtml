@@ -1,0 +1,39 @@
+﻿@model ListModel<ProductEntity, ProductListParameter>
+@inject BusinessLogic.ISelectListService SelectLists
+@{
+    ViewData.SetTitle(Txt.Products);
+}
+
+<form method="get">
+    <div class="card m-2">
+        <div class="card-header">
+            <div class="row align-items-center">
+                <h4 class="col m-0">@Model.TotalItemCount @ViewData.Title()</h4>
+                <div class="col"></div>
+                <div class="col-auto"><vc:search search-string="@Model.Parameter.SearchString" reset-url="@Router.Product.ToList(Model.PageSize, Model.PageIndex))"></vc:search></div>
+                <div class="col"></div>
+                <div class="col-auto">
+                    <div class="input-group">
+                        @VeloHtml.Select(nameof(Parameters.ProductListParameter.StorageState), Model.Parameter.StorageState, SelectLists.StorageStates(true), submitOnChange: true)
+                        @VeloHtml.Select(nameof(Parameters.ProductListParameter.ValueState), Model.Parameter.ValueState, SelectLists.ValueStates(true), submitOnChange: true)
+                        @VeloHtml.Select(nameof(Parameters.ProductListParameter.BrandId), Model.Parameter.BrandId, await SelectLists.BrandsAsync(true), submitOnChange: true)
+                        @VeloHtml.Select(nameof(Parameters.ProductListParameter.ProductTypeId), Model.Parameter.ProductTypeId, await SelectLists.ProductTypesAsync(true), submitOnChange: true)
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-body p-0">
+            @(VeloHtml.ProductsTable(Model, showId: true, showState: true)
+                .LinkColumn()
+                    .Title(Txt.Seller)
+                    .Align(ColumnAlign.Center)
+                    .ForLink(item => Router.Seller.ToDetails(item.Session.SellerId), item => item.Session.SellerId.ToHtml())
+                .LinkColumn()
+                    .ForLink(item => Router.Product.ToDetails(item.Id), Txt.Details)
+                .Build())
+        </div>
+        <div class="card-footer">
+            <vc:pagination items="@Model" current-parameter="@Model.Parameter" to-list="@Router.Product.ToList"></vc:pagination>
+        </div>
+    </div>
+</form>

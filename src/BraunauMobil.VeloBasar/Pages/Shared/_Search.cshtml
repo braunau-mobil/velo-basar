@@ -1,9 +1,0 @@
-﻿@model ISearchable
-
-<div class="d-flex form-actions no-color align-items-md-center">
-    <div class="mx-2">@Localizer["Suchen:"]</div>
-    <input class="mx-2 form-control" type="text" name="searchString" value="@Model.SearchString" />
-    <input type="submit" value="@Localizer["Suchen"]" class="btn btn-secondary mx-2" /> |
-    <a class="mx-2" velo-page="@Model.GetResetPage()">@Localizer["Zurücksetzen"]</a>
-</div>
-

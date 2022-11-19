@@ -1,19 +1,32 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using FluentValidation;
 
-namespace BraunauMobil.VeloBasar.Models
+namespace BraunauMobil.VeloBasar.Models;
+
+#nullable disable warnings
+public class InitializationConfiguration
 {
-    public class InitializationConfiguration
+    public string AdminUserEMail { get; set; }
+    
+    public bool GenerateCountries { get; set; }
+    
+    public bool GenerateBrands { get; set; }
+    
+    public bool GenerateProductTypes { get; set; }
+    
+    public bool GenerateZipCodes { get; set; }
+}
+
+public sealed class InitializationConfigurationValidator
+    : AbstractValidator<InitializationConfiguration>
+{
+    private readonly VeloTexts _txt;
+
+    public InitializationConfigurationValidator(VeloTexts txt)
     {
-        [Required]
-        [Display(Name = "Admin E-Mail")]
-        public string AdminUserEMail { get; set; }
-        [Display(Name = "Beispiel Länder generieren")]
-        public bool GenerateCountries { get; set; }
-        [Display(Name = "Beispiel Marken generieren")]
-        public bool GenerateBrands { get; set; }
-        [Display(Name = "Beispiel Produkt Typen generieren")]
-        public bool GenerateProductTypes { get; set; }
-        [Display(Name = "Postleitzahlen laden")]
-        public bool GenerateZipMap { get; set; }
+        _txt = txt ?? throw new ArgumentNullException(nameof(txt));
+
+        RuleFor(seller => seller.AdminUserEMail)
+            .NotNull()
+            .WithMessage(_txt.PleaseEnterAdminUserEmail);
     }
 }

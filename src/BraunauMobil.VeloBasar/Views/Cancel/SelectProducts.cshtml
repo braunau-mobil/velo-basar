@@ -1,0 +1,34 @@
+﻿@using Microsoft.AspNetCore.Html
+@model SelectProductsModel
+@{
+    ViewBag.Title = @Txt.PleaseSelectProductToCanellate;
+}
+
+<form method="post">
+    <div class="m-2">
+        @VeloHtml.NonFieldValidationResults()
+    </div>
+    @VeloHtml.HiddenInput(nameof(Model.TransactionId), Model.TransactionId)
+
+    <div class="card m-2">
+        @VeloHtml.TitleCardHeader()
+        <div class="card-body p-0">
+                @(VeloHtml.ProductsTable(Model.Products, item => item.Value, showId: true, showState: true)
+                    .Column(0)
+                        .For((index, item) =>
+                        {
+                            TagBuilder checkBox = VeloHtml.CheckBox($"{nameof(SelectProductsModel.Products)}[{index}].{nameof(SelectModel<ProductEntity>.IsSelected)}", item.IsSelected);
+                            TagBuilder idInput = VeloHtml.HiddenInput($"{nameof(SelectProductsModel.Products)}[{index}].{nameof(SelectModel<ProductEntity>.Value)}.{nameof(ProductEntity.Id)}", item.Value.Id);
+
+                            HtmlContentBuilder tags = new();
+                            tags.AppendHtml(checkBox);
+                            tags.AppendHtml(idInput);
+                            return tags;
+                        })
+                    .Build())
+        </div>
+        <div class="card-footer">
+            <button class="btn btn-primary">@Txt.Cancellate</button>
+        </div>
+    </div>
+</form>

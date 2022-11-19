@@ -1,0 +1,41 @@
+﻿@using Microsoft.AspNetCore.Identity
+@model TransactionEntity
+@inject SignInManager<IdentityUser> SignInManager
+
+<div class="card m-2">
+    <h4 class="card-header">
+        @ViewData.Title()
+        <small class="text-muted">@Model.TimeStamp.ToHtmlTimeStamp()</small>
+    </h4>
+    <div class="card-body p-0">
+        @VeloHtml.ProductsTable(Model.Products.GetProducts(), showId: true, showState: true, showSum: true).Build()
+    </div>
+    <div class="card-footer">
+        @if (Model.CanHasDocument)
+        {
+            <a class="btn btn-outline-primary" href="@Router.Transaction.ToDocument(Model.Id)" target="_blank">@Txt.Document</a>
+        }
+        @if (SignInManager.IsSignedIn(User) && Model.CanCancel)
+        {
+            <a class="btn btn-info" href="@Router.Transaction.ToCancel(Model.Id)">@Txt.Cancellate</a>
+        }
+        @if (Model.ParentTransaction != null)
+        {
+            <a class="btn btn-outline-@Model.ParentTransaction.Type.ToCssColor()" href="@Router.Transaction.ToDetails(Model.ParentTransaction.Id)">@Txt.ParentTransaction(Model.ParentTransaction.Type, Model.ParentTransaction.Number)</a>
+        }
+    </div>
+</div>
+
+@if (Model.ChildTransactions.Any())
+{
+    <div class="card m-2">
+        <div class="card-header">
+            <div class="row">
+                <div class="col">Nachfolger</div>
+            </div>
+        </div>
+        <div class="card-body p-0">
+            @VeloHtml.TransactionsTable(Model.ChildTransactions, showType: true, showProducts: false).Build()
+        </div>
+    </div>
+}

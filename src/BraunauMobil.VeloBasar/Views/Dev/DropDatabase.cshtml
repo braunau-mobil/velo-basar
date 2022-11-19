@@ -1,0 +1,20 @@
+﻿@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<SharedResource> Localizer
+@{
+    Layout = "_LayoutSimple";
+    ViewData.SetTitle(Localizer["DEV DROP DATABASE"]);
+}
+
+<form method="post">
+    <div class="card m-2">
+        <h4 class="card-header">
+            @ViewData.Title()
+        </h4>
+        <div class="card-body">
+            @VeloHtml.Alert(MessageType.Danger, Localizer["This drops the database and deletes all data within it. Consider making a backup."])
+        </div>
+        <div class="card-footer">
+            <button class="btn btn-primary">@Txt.Ok</button>
+        </div>
+    </div>
+</form>

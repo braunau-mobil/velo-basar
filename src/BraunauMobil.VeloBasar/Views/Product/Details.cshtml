@@ -1,0 +1,114 @@
+﻿@model ProductDetailsModel
+
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@{
+    ViewData.SetTitle(Txt.ProductDetails(Model.Entity.Id));
+
+    var cardStyle = "";
+    if (Model.Entity.IsLocked())
+    {
+        cardStyle = "border-danger ";
+    }
+    else if (Model.Entity.IsLost())
+    {
+        cardStyle = "border-warning";
+    }
+}
+
+<div class="card m-2 @cardStyle">
+    <div class="card-header">
+        <div class="row align-items-center">
+            <h4 class="col m-0">@ViewData.Title()</h4>
+            <div class="col-auto">
+                @VeloHtml.ProductState(Model.Entity)
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row align-items-start">
+            <div class="col">
+                <dl class="row">
+                    <dt class="col-sm-2">@Txt.Type</dt>
+                    <dd class="col-sm-10">@Model.Entity.Type.Name</dd>
+                    
+                    <dt class="col-sm-2">@Txt.Brand</dt>
+                    <dd class="col-sm-10">@Model.Entity.Brand.Name</dd>
+
+                    <dt class="col-sm-2">@Txt.FrameNumber</dt>
+                    <dd class="col-sm-10">@Model.Entity.FrameNumber</dd>
+
+                    <dt class="col-sm-2">@Txt.Description</dt>
+                    <dd class="col-sm-10">@Model.Entity.Description</dd>
+
+                    <dt class="col-sm-2">@Txt.Color</dt>
+                    <dd class="col-sm-10">@Model.Entity.Color</dd>
+
+                    <dt class="col-sm-2">@Txt.Price</dt>
+                    <dd class="col-sm-10">@Model.Entity.Price.ToHtmlPrice()</dd>
+
+                    <dt class="col-sm-2">@Txt.DonateIfNotSold</dt>
+                    <dd class="col-sm-10">
+                        @if (Model.Entity.DonateIfNotSold)
+                        {
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-square" viewBox="0 0 16 16">
+                                <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+                                <path d="M10.97 4.97a.75.75 0 0 1 1.071 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.235.235 0 0 1 .02-.022z"/>
+                            </svg>
+                        }
+                        else
+                        {
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-square" viewBox="0 0 16 16">
+                                <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" />
+                            </svg>
+                        }
+                    </dd>
+
+                    <dt class="col-sm-2">@Txt.CreatedAt</dt>
+                    <dd class="col-sm-10">@Model.Entity.CreatedAt.ToHtmlTimeStamp()</dd>
+
+                    <dt class="col-sm-2">@Txt.UpdatedAt</dt>
+                    <dd class="col-sm-10">@Model.Entity.UpdatedAt.ToHtmlTimeStamp()</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer">
+        <a class="btn btn-outline-primary" href="@Router.Product.ToLabel(Model.Entity.Id)" target="_blank">@Txt.Label</a>
+        @if (SignInManager.IsSignedIn(User) && Model.CanUnlock)
+        {
+            <a class="btn btn-secondary" href="@Router.Product.ToUnlock(Model.Entity.Id)">@Txt.Unlock</a>
+        }
+        @if (Model.CanLock)
+        {
+            <a class="btn btn-danger" href="@Router.Product.ToLock(Model.Entity.Id)">@Txt.Lock</a>
+        }
+        @if (Model.CanSetAsLost)
+        {
+            <a class="btn btn-warning" href="@Router.Product.ToSetAsLost(Model.Entity.Id)">@Txt.SetAsLost</a>
+        }
+        @if (Model.Entity.CanEdit)
+        {
+            <a class="btn btn-primary" href="@Router.Product.ToEdit(Model.Entity.Id)">@Txt.Edit</a>
+        }
+    </div>
+</div>
+
+<div class="card m-2">
+    <div class="card-header">@Txt.Seller</div>
+    <div class="card-body">
+        <partial name="/Views/Seller/_Properties.cshtml" model="Model.Entity.Session.Seller" />
+
+        
+    </div>
+    <div class="card-footer">
+        <a class="btn btn-outline-primary" href="@Router.Seller.ToDetails(Model.Entity.Session.SellerId)">@Txt.Details</a>
+    </div>
+</div>
+
+<div class="card m-2">
+    <div class="card-header">@Txt.Transactions</div>
+    <div class="card-body p-0">
+        @VeloHtml.TransactionsTable(Model.Transactions, showType: true, showProducts: false).Build()
+    </div>
+</div>

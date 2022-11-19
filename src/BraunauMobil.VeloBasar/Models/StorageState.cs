@@ -1,16 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿namespace BraunauMobil.VeloBasar.Models;
 
-namespace BraunauMobil.VeloBasar.Models
+public enum StorageState
 {
-    public enum StorageState
-    {
-        [Display(Name = "Verfügbar")]
-        Available = 0,
-        [Display(Name = "Verkauft")]
-        Sold = 10,
-        [Display(Name = "Verschwunden")]
-        Gone = 20,
-        [Display(Name = "Gesperrt")]
-        Locked = 30
-    }
+    NotAccepted = 0,
+    Available = 1,
+    Sold = 2,
+    Lost = 3,
+    Locked = 4,
 }

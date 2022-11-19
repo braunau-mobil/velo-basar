@@ -1,13 +1,10 @@
-﻿using BraunauMobil.VeloBasar.Models;
-using System.Linq;
+﻿namespace BraunauMobil.VeloBasar.Data;
 
-namespace BraunauMobil.VeloBasar.Data
+public static class ProductTypeExtensions
 {
-    public static class ProductTypeExtensions
+    public static IQueryable<ProductTypeEntity> DefaultOrder(this IQueryable<ProductTypeEntity> productTypes)
     {
-        public static IQueryable<ProductType> DefaultOrder(this IQueryable<ProductType> productTypes)
-        {
-            return productTypes.OrderBy(b => b.Name);
-        }
+        ArgumentNullException.ThrowIfNull(productTypes);
+        return productTypes.OrderBy(b => b.Name);
     }
 }

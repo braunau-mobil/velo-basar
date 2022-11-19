@@ -1,0 +1,71 @@
+﻿@model SellerDetailsModel
+@{
+    ViewData.SetTitle(Txt.SellerDetails(Model.Entity.Id, Model.Entity.FirstName, Model.Entity.LastName));
+}
+
+<div class="card m-2">
+    <h4 class="card-header">
+        @Model.Entity.FirstName @Model.Entity.LastName
+        <small class="text-muted">@Txt.SellerId(Model.Entity.Id)</small>
+    </h4>
+    <div class="card-body">
+        <div class="row align-items-start">
+            <div class="col">
+                <partial name="_Properties.cshtml" model="Model.Entity" />
+            </div>
+            <div class="col">
+                <ul class="list-group">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        @Txt.AcceptedProductsCount
+                        <span class="badge rounded-pill text-bg-success">@Model.AcceptedProductCount</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        @Txt.SoldProductCount
+                        <span class="badge rounded-pill text-bg-success">@Model.SoldProductCount</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        @Txt.NotSoldProductCount
+                        <span class="badge rounded-pill text-bg-warning">@Model.NotSoldProductCount</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        @Txt.PickedUpProductCount
+                        <span class="badge rounded-pill text-bg-secondary">@Model.PickedUpProductCount</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        @Txt.SettlementAmout
+                        <span class="badge rounded-pill text-bg-primary">@Model.SettlementAmout.ToHtmlPrice()</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer">
+        <a class="btn btn-secondary" href="@Router.AcceptSession.ToStartForSeller(Model.Entity.Id)">@Txt.AcceptProducts</a>
+        @if (Model.Entity.ValueState == ValueState.NotSettled)
+        {
+            <a class="btn btn-secondary" href="@Router.Seller.ToSettle(Model.Entity.Id)">@Txt.Settle</a>
+        }
+        @if (Model.Procucts.Any())
+        {
+            <a class="btn btn-outline-primary" href="@Router.Seller.ToLabels(Model.Entity.Id)" target="_blank">@Txt.PrintLabels</a>            
+        }
+        <a class="btn btn-primary" href="@Router.Seller.ToEdit(Model.Entity.Id)">@Txt.Edit</a>
+    </div>
+</div>
+
+<div class="card m-2">
+    <div class="card-header">@Txt.Products</div>
+    <div class="card-body p-0">
+        @(VeloHtml.ProductsTable(Model.Procucts, showId: true, showState: true)
+            .LinkColumn()
+                .ForLink(item => Router.Product.ToDetails(item.Id), Txt.Details)
+            .Build())
+    </div>
+</div>
+
+<div class="card m-2">
+    <div class="card-header">@Txt.Transactions</div>
+    <div class="card-body p-0">
+        @VeloHtml.TransactionsTable(Model.Transactions, showType: true, showProducts: true).Build()
+    </div>
+</div>

@@ -1,0 +1,65 @@
+﻿@model PaginationModel
+@{
+    string ActiveCss(bool isActive)
+    {
+        if (isActive)
+        {
+            return "active";
+        }
+        return "";
+    }
+    string EnabledCss(bool isEnabled)
+    {
+        if (isEnabled)
+        {
+            return "";
+        }
+        return "disabled";
+    }
+}
+
+<div class="d-flex">
+    <div class="me-auto">
+        <ul class="pagination m-0">
+            @if (Model.Items.TotalPageCount > 1)
+            {
+                <li class="page-item"><a class="page-link @EnabledCss(Model.Items.HasPreviousPage)" href="@Model.ToPreviousPage()">@Html.Raw("&laquo;")</a></li>
+            }
+            @foreach (int? button in Model.GetPages())
+            {
+                if (button.HasValue)
+                {
+                    <li class="page-item"><a class="page-link @ActiveCss(Model.IsActive(button.Value))" href="@Model.ToPage(button.Value)">@button.Value</a></li>
+                }
+                else
+                {
+                    <li class="page-item"><span class="page-link disabled">@Html.Raw("&hellip;")</span></li>
+                }
+            }
+            @if (Model.Items.TotalPageCount > 1)
+            {
+                <li class="page-item"><a class="page-link @EnabledCss(Model.Items.HasNextPage)" href="@Model.ToNextPage()">@Html.Raw("&raquo;")</a></li>
+            }
+        </ul>
+    </div>
+    <div>
+        <ul class="pagination m-0">
+            @foreach (int pageSize in PaginationModel.GetPageSizes())
+            {
+                <li class="page-item">
+                    <a class="page-link @ActiveCss(Model.Items.PageSize == pageSize)" href="@Model.ToPageSize(pageSize)">
+                        @if (pageSize == Xan.Extensions.Collections.IPaginatedList.AllPageSize)
+                        {
+                            @Txt.All
+                        }
+                        else
+                        {
+                            @pageSize
+                        }
+                    </a>
+                </li>
+            }
+        </ul>
+    </div>
+</div>
+

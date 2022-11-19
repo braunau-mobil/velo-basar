@@ -1,0 +1,37 @@
+﻿@model ListModel<SellerEntity, SellerListParameter>
+@inject BusinessLogic.ISelectListService SelectLists
+@{
+    ViewData.SetTitle(Txt.SellerList);
+}
+
+<form method="get">
+    <div class="card m-2">
+        <div class="card-header">
+            <div class="row align-items-center">
+                <h4 class="col m-0">@Model.TotalItemCount @ViewData.Title()</h4>
+                <div class="col"></div>
+                <div class="col-auto"><vc:search search-string="@Model.Parameter.SearchString" reset-url="@Router.Seller.ToList(Model.PageSize, Model.PageIndex))"></vc:search></div>
+                <div class="col"></div>
+                <div class="col-auto">
+                    <div class="input-group">
+                        @VeloHtml.Select(nameof(SellerListParameter.ValueState), Model.Parameter.ValueState, SelectLists.ValueStates(true), submitOnChange: true)
+                    </div>
+                </div>
+            </div>            
+        </div>
+        <div class="card-body p-0">
+            @(VeloHtml.SellersTable(Model)
+                .LinkColumn()
+                    .ForLink(item => Router.Seller.ToDetails(item.Id), Txt.Details)
+                .LinkColumn()
+                    .ForLink(item => Router.Seller.ToEdit(item.Id), Txt.Edit)
+                .Build())
+        </div>
+        <div class="card-footer">
+            <vc:pagination items="@Model" current-parameter="@Model.Parameter" to-list="@Router.Seller.ToList"></vc:pagination>
+        </div>
+        <div class="card-footer">
+            <button class="btn btn-primary" formaction="@Router.Seller.ToCreate()">@Txt.CreateSeller</button>
+        </div>
+    </div>
+</form>

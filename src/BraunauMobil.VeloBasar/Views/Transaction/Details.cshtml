@@ -1,0 +1,6 @@
+﻿@model TransactionEntity
+@{
+    ViewData.SetTitle(Txt.TransactionTypeWithNumber(Model.Type, Model.Number));
+}
+
+<partial name="_Details.cshtml" model="Model" />

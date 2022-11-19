@@ -1,0 +1,24 @@
+﻿@model SelectSaleModel
+@{
+    ViewData.SetTitle(Txt.SelectSale);
+}
+
+<form method="post">
+    <div class="card m-2">
+        @VeloHtml.TitleCardHeader()
+        <div class="card-body">
+            @VeloHtml.NumberInputField(nameof(Model.SaleNumber), Model.SaleNumber, Txt.SaleNumber, autoFocus: true)
+        </div>
+        <div class="card-footer">
+            <button class="btn btn-primary">@Txt.Ok</button>
+        </div>
+    </div>
+</form>
+
+@section Scripts
+    {
+        <script type="text/javascript">
+            const input = document.getElementById('@VeloHtml.Id(nameof(Model.SaleNumber))');
+            input.select();
+        </script>
+}

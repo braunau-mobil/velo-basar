@@ -1,0 +1,32 @@
+﻿@inject IVeloRouter Router
+@model AcceptanceLabelsModel
+@{
+    ViewData.SetTitle(Txt.PrintLabels);
+}
+
+<form method="post">
+    <div class="card m-2">
+        @VeloHtml.TitleCardHeader()
+        <div class="card-body">
+            @VeloHtml.NumberInputField(nameof(Model.Number), Model.Number, Txt.AcceptanceNumber, autoFocus: true)            
+        </div>
+        <div class="card-footer">
+            <button class="btn btn-primary">@Txt.Ok</button>
+        </div>
+    </div>
+</form>
+
+@section Scripts
+{
+    @if (Model.OpenDocument)
+    {
+        <script type="text/javascript">
+            window.open("@Router.AcceptanceLabels.ToDownload(Model.Id)");
+        </script>
+    }
+
+    <script type="text/javascript">
+        const input = document.getElementById('@VeloHtml.Id(nameof(Model.Number))');
+        input.select();
+    </script>
+}

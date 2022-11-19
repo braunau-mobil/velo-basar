@@ -1,13 +1,11 @@
-﻿using BraunauMobil.VeloBasar.Models;
-using System.Linq;
+﻿namespace BraunauMobil.VeloBasar.Data;
 
-namespace BraunauMobil.VeloBasar.Data
+public static class CountryExtensions
 {
-    public static class CountryExtensions
+    public static IQueryable<CountryEntity> DefaultOrder(this IQueryable<CountryEntity> countries)
     {
-        public static IQueryable<Country> DefaultOrder(this IQueryable<Country> countries)
-        {
-            return countries.OrderBy(c => c.Name);
-        }
+        ArgumentNullException.ThrowIfNull(countries);
+
+        return countries.OrderBy(c => c.Iso3166Alpha3Code);
     }
 }

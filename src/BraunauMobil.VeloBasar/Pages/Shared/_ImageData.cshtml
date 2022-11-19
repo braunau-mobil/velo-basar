@@ -1,9 +1,0 @@
-﻿@model ImageData
-@{
-    @if (Model.Bytes != null)
-    {
-        var img64 = Convert.ToBase64String(Model.Bytes);
-        var img64Url = string.Format("data:image/" + Model.ImageType + ";base64,{0}", img64); //imagetype can be e.g. gif, jpeg, png etc.
-        <img src="@img64Url" />
-    }
-}

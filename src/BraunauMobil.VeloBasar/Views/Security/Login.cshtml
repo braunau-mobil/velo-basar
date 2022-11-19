@@ -1,0 +1,26 @@
+﻿@model LoginModel
+@{
+    ViewData.SetTitle(@Txt.LogIn);
+}
+
+<form method="post">
+    @if (Model.ShowErrorMessage)
+    {
+        <div class="m-2">
+            @VeloHtml.Alert(MessageType.Danger, Txt.InvalidLoginAttempt)
+        </div>
+    }
+
+    <div class="card m-2">
+        @VeloHtml.TitleCardHeader()
+        <div class="card-body">
+            @VeloHtml.TextInputField(nameof(Model.Email), Model.Email, Txt.EMail, autoFocus: true)
+            @VeloHtml.PasswordInputField(nameof(Model.Password), Model.Password, Txt.Password)
+            @VeloHtml.CheckBoxField(nameof(Model.RememberMe), Model.RememberMe, Txt.RememberMe)
+
+        </div>
+        <div class="card-footer">
+            <button class="btn btn-primary">@Txt.Ok</button>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,28 @@
+﻿@model ICrudListModel
+@inject BusinessLogic.ISelectListService SelectLists
+@{
+    ViewData.SetTitle(Model.ListTitle);
+}
+
+<form method="get">
+    <div class="card m-2">
+        <div class="card-header">
+            <div class="row align-items-center">
+                <h4 class="col-auto m-0">@ViewData.Title()</h4>
+                <div class="col"></div>
+                <div class="col-auto"><vc:search search-string="@Model.Parameter.SearchString" reset-url="@Model.Router.ToList(Model.PageSize, Model.PageIndex))"></vc:search></div>
+                <div class="col"></div>
+                <div class="col-auto">@VeloHtml.Select(nameof(ListParameter.State), Model.Parameter.State, SelectLists.States(true), submitOnChange: true)</div>
+            </div>
+        </div>
+        <div class="card-body p-0">
+            @await Model.TableAsync(ViewContext)
+        </div>
+        <div class="card-footer">
+            <vc:pagination items="@Model" current-parameter="@Model.Parameter" to-list="@Model.Router.ToList"></vc:pagination>
+        </div>
+        <div class="card-footer">
+            <a class="btn btn-primary" href="@Model.Router.ToCreate()">@Model.CreateText</a>
+        </div>
+    </div>
+</form>

@@ -1,61 +1,71 @@
-﻿using BraunauMobil.VeloBasar.Models;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace BraunauMobil.VeloBasar.Data
+namespace BraunauMobil.VeloBasar.Data;
+
+public sealed class ZipCollection
+    : IEnumerable<ZipCodeEntity>
 {
-    public class ZipCollection : IEnumerable<ZipMap>
+    private readonly IReadOnlyList<CountryEntity> _countries;
+    private readonly List<ZipCodeEntity> _zipCodes = new ();
+
+    public ZipCollection(IReadOnlyList<CountryEntity> countries)
     {
-        private readonly IReadOnlyCollection<Country> _countries;
-        private readonly List<ZipMap> _zipMaps = new List<ZipMap>();
+        _countries = countries ?? throw new ArgumentNullException(nameof(countries));
 
-        public ZipCollection(IReadOnlyCollection<Country> countries)
+        Type type = typeof(ZipCollection);
+        Assembly assembly = type.Assembly;
+        string? ns = type.Namespace;
+
+        _zipCodes.AddRange(Load(assembly, $"{ns}.ZipLists", "AUT"));
+        _zipCodes.AddRange(Load(assembly, $"{ns}.ZipLists", "GER"));
+    }
+
+    public IEnumerator<ZipCodeEntity> GetEnumerator() => _zipCodes.GetEnumerator();
+    IEnumerator IEnumerable.GetEnumerator() => _zipCodes.GetEnumerator();
+
+    private IReadOnlyList<ZipCodeEntity> Load(Assembly assembly, string ns, string countryIso3166Alpha3Code)
+    {
+        string fileName = $"{ns}.{countryIso3166Alpha3Code}.csv";
+
+        using Stream? stream = assembly.GetManifestResourceStream($"{ns}.{countryIso3166Alpha3Code}.csv");
+        if (stream == null)
         {
-            _countries = countries;
-            var type = typeof(ZipCollection);
-            var assembly = type.Assembly;
-            var ns = type.Namespace;
-
-            _zipMaps.AddRange(Load(assembly, $"{ns}.ZipLists", "AUT"));
-            _zipMaps.AddRange(Load(assembly, $"{ns}.ZipLists", "GER"));
+            throw new InvalidOperationException();
         }
 
-        public IEnumerator<ZipMap> GetEnumerator() => _zipMaps.GetEnumerator();
-        IEnumerator IEnumerable.GetEnumerator() => _zipMaps.GetEnumerator();
+        using StreamReader streamReader = new (stream, Encoding.UTF8);
+        List<ZipCodeEntity> result = new ();
+        HashSet<string> zips = new ();
 
-        private IReadOnlyCollection<ZipMap> Load(Assembly assembly, string ns, string countryIso3166Alpha3Code)
+        while (!streamReader.EndOfStream)
         {
-            using var stream = assembly.GetManifestResourceStream($"{ns}.{countryIso3166Alpha3Code}.csv");
-            using var streamReader = new StreamReader(stream, Encoding.UTF8);
-            var result = new List<ZipMap>();
-            var zips = new HashSet<string>();
-            while (!streamReader.EndOfStream)
+            string? line = streamReader.ReadLine();
+            if (line == null)
             {
-                var line = streamReader.ReadLine();
-                var tokens = line.Split(',');
-
-                var zip = tokens[0];
-                //  To simplifiy we skip duplicates (Thank you Germany)
-                if (zips.Contains(zip))
-                {
-                    continue;
-                }
-                zips.Add(zip);
-
-                var city = tokens[1];
-                result.Add(new ZipMap
-                {
-                    Zip = zip,
-                    City = city,
-                    CountryId = _countries.First(c => c.Iso3166Alpha3Code == countryIso3166Alpha3Code).Id
-                });
+                throw new InvalidOperationException($"ZIP-CSV {fileName} contains empty lines");
             }
+            IReadOnlyList<string> tokens = line.Split(',');
 
-            return result;
+            string zip = tokens[0];
+            //  To simplifiy we skip duplicates (Thank you Germany)
+            if (zips.Contains(zip))
+            {
+                continue;
+            }
+            zips.Add(zip);
+
+            string city = tokens[1];
+            result.Add(new ZipCodeEntity
+            {
+                Zip = zip,
+                City = city,
+                CountryId = _countries.First(c => c.Iso3166Alpha3Code == countryIso3166Alpha3Code).Id
+            });
         }
+
+        return result;
     }
 }

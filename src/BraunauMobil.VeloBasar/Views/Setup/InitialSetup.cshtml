@@ -1,0 +1,24 @@
+﻿@model InitializationConfiguration
+@{
+    Layout = "_LayoutSimple";
+    ViewData.SetTitle(Txt.InitialSetup);
+}
+
+<form method="post">
+    <div class="card m-2">
+        <div class="card-header align-items-center">
+            <h2>velo-basar</h2>
+            <h4>@ViewData.Title()</h4>
+        </div>
+        <div class="card-body">
+            @VeloHtml.EmailInputField(nameof(Model.AdminUserEMail), Model.AdminUserEMail, Txt.AdminUserEMail, autoFocus: true)
+            @VeloHtml.CheckBoxField(nameof(Model.GenerateCountries), Model.GenerateCountries, Txt.GenerateCountries)
+            @VeloHtml.CheckBoxField(nameof(Model.GenerateBrands), Model.GenerateBrands, Txt.GenerateBrands)
+            @VeloHtml.CheckBoxField(nameof(Model.GenerateProductTypes), Model.GenerateProductTypes, Txt.GenerateProductTypes)
+            @VeloHtml.CheckBoxField(nameof(Model.GenerateZipCodes), Model.GenerateZipCodes, Txt.GenerateZipCodes)
+        </div>
+        <div class="card-footer">
+            <button class="btn btn-primary">@Txt.Ok</button>
+        </div>
+    </div>
+</form>
