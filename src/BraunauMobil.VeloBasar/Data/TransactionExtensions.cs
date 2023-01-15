@@ -34,6 +34,7 @@ public static class TransactionExtensions
             .Include(t => t.Products)
                 .ThenInclude(pt => pt.Product)
                     .ThenInclude(p => p.Type)
+            .AsSplitQuery()
             ;
     }
 
