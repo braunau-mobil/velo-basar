@@ -8,15 +8,18 @@ public static class ActiveAcceptSessionCooke
         "activeAcceptSessionId",
         new CookieOptions
         {
+            HttpOnly = true,
             IsEssential = true,
-            MaxAge = TimeSpan.FromDays(2)
+            MaxAge = TimeSpan.FromDays(2),
+            SameSite = SameSiteMode.Strict,
+            Secure = false
         });
 
     public static void ClearActiveAcceptSession(this IResponseCookies cookies)
     {
         ArgumentNullException.ThrowIfNull(cookies);
 
-        cookies.Delete(_activeAcceptSession.Key);
+        cookies.Delete(_activeAcceptSession.Key, _activeAcceptSession.CookieOptions);
     }
 
     public static int? GetActiveAcceptSessionId(this IRequestCookieCollection cookies)
@@ -24,9 +27,9 @@ public static class ActiveAcceptSessionCooke
         ArgumentNullException.ThrowIfNull(cookies);
 
         string? id = cookies[_activeAcceptSession.Key];
-        if (int.TryParse(id, out int basarId))
+        if (int.TryParse(id, out int sessionId))
         {
-            return basarId;
+            return sessionId;
         }
         return null;
     }
@@ -36,6 +39,6 @@ public static class ActiveAcceptSessionCooke
         ArgumentNullException.ThrowIfNull(cookies);
         ArgumentNullException.ThrowIfNull(session);
 
-        cookies.Append(_activeAcceptSession.Key, $"{session.Id}");
+        cookies.Append(_activeAcceptSession.Key, $"{session.Id}", _activeAcceptSession.CookieOptions);
     }
 }

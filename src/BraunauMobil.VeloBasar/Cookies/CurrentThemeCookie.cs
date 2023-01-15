@@ -9,8 +9,11 @@ public static class CurrentThemeCookie
         "currentTheme",
         new CookieOptions
         {
+            HttpOnly = true,
             IsEssential = true,
-            MaxAge = TimeSpan.FromDays(2)
+            MaxAge = TimeSpan.FromDays(2),
+            SameSite = SameSiteMode.Strict,
+            Secure = false
         });
 
     public static Theme GetCurrentTheme(this IRequestCookieCollection cookies)
@@ -28,6 +31,6 @@ public static class CurrentThemeCookie
     {
         ArgumentNullException.ThrowIfNull(cookies);
 
-        cookies.Append(_currentThemeId.Key, $"{theme}");
+        cookies.Append(_currentThemeId.Key, $"{theme}", _currentThemeId.CookieOptions);
     }
 }

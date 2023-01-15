@@ -12,8 +12,11 @@ public static class PageSizeCookie
         "pageSize",
         new CookieOptions
         {
+            HttpOnly = true,
             IsEssential = false,
-            MaxAge = TimeSpan.FromDays(2)
+            MaxAge = TimeSpan.FromDays(2),
+            SameSite = SameSiteMode.Strict,
+            Secure = false
         });
 
     public static bool HasPageSize(this IRequestCookieCollection cookies, string key)
@@ -42,7 +45,7 @@ public static class PageSizeCookie
         ArgumentNullException.ThrowIfNull(cookies);
         ArgumentNullException.ThrowIfNull(key);
 
-        cookies.Append(key, pageSize.ToString(CultureInfo.InvariantCulture));
+        cookies.Append(key, pageSize.ToString(CultureInfo.InvariantCulture), _pageSize.CookieOptions);
     }
 
     public static bool HasPageSize(this IRequestCookieCollection cookies, RouteValueDictionary routeValues)

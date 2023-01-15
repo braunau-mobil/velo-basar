@@ -9,8 +9,11 @@ public static class CartCookie
         "cart",
         new CookieOptions
         {
+            HttpOnly = true,
             IsEssential = true,
-            MaxAge = TimeSpan.FromDays(2)
+            MaxAge = TimeSpan.FromDays(2),
+            SameSite = SameSiteMode.Strict,
+            Secure = false
         });
 
     public static void ClearCart(this IResponseCookies cookies)
