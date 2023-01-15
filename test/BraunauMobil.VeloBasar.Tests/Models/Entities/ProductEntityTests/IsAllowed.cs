@@ -12,8 +12,7 @@ public class IsAllowed
     [InlineData(StorageState.Locked, TransactionType.Unlock)]
     [InlineData(StorageState.Locked, TransactionType.Settlement)]
     [InlineData(StorageState.NotAccepted, TransactionType.Acceptance)]
-    [InlineData(StorageState.Sold, TransactionType.Cancellation)]
-    [InlineData(StorageState.Sold, TransactionType.Lock)]
+    [InlineData(StorageState.Sold, TransactionType.Cancellation)]    
     [InlineData(StorageState.Sold, TransactionType.Settlement)]
     public void NotSettledAllow(StorageState storageState, TransactionType transactionType)
     {
@@ -47,6 +46,7 @@ public class IsAllowed
     [InlineData(StorageState.NotAccepted, TransactionType.Settlement)]
     [InlineData(StorageState.Sold, TransactionType.Acceptance)]
     [InlineData(StorageState.Sold, TransactionType.SetLost)]
+    [InlineData(StorageState.Sold, TransactionType.Lock)]
     [InlineData(StorageState.Sold, TransactionType.Unlock)]
     [InlineData(StorageState.Sold, TransactionType.Sale)]
     public void NotSettledDisallow(StorageState storageState, TransactionType transactionType)
