@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using System.IO;
 using System.Text;
 using BraunauMobil.VeloBasar.Configuration;
 using iText.Barcodes;
@@ -104,12 +105,7 @@ public sealed class TransactionDocumentService
     {
         return CreateTransactionPdf((pdfDoc, doc) =>
         {
-            if (_settings.BannerFilePath != null)
-            {
-                ImageData bannerData = ImageDataFactory.Create(_settings.BannerFilePath);
-                Image banner = new(bannerData);
-                doc.Add(banner);
-            }
+            AddBanner(doc);
             _pdf.AddBannerSubtitle(doc, _settings.BannerSubtitle, _settings.Website);
 
             _pdf.AddHeader(doc, null, GetLocationAndDateText(sale.Basar), null);
@@ -136,13 +132,7 @@ public sealed class TransactionDocumentService
         return CreateTransactionPdf((pdfDoc, doc) =>
         {
             IEnumerable<ProductEntity> products = settlement.Products.GetProducts();
-
-            if (_settings.BannerFilePath != null)
-            {
-                ImageData bannerData = ImageDataFactory.Create(_settings.BannerFilePath);
-                Image banner = new(bannerData);
-                doc.Add(banner);
-            }
+            AddBanner(doc);
             _pdf.AddBannerSubtitle(doc, _settings.BannerSubtitle, _settings.Website);
 
             _pdf.AddHeader(doc, GetBigAddressText(settlement.Seller), GetLocationAndDateText(settlement.Basar), _txt.SellerIdShort(settlement.Seller.Id));
@@ -201,6 +191,21 @@ public sealed class TransactionDocumentService
                 doc.Add(barcode);
             }
         });
+    }
+
+    private void AddBanner(Document doc)
+    {
+        if (string.IsNullOrEmpty(_settings.BannerFilePath))
+        {
+            return;
+        }
+        if (!File.Exists(_settings.BannerFilePath))
+        {
+            throw new FileNotFoundException($"{nameof(PrintSettings.BannerFilePath)} '{_settings.BannerFilePath}' not found.");
+        }
+        ImageData bannerData = ImageDataFactory.Create(_settings.BannerFilePath);
+        Image banner = new(bannerData);
+        doc.Add(banner);
     }
 
     private byte[] CreateTransactionPdf(Action<PdfDocument, Document> decorate)
