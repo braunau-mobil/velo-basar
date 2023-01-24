@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Microsoft.Extensions.Localization;
 
 namespace BraunauMobil.VeloBasar.Models;
 
@@ -39,11 +40,11 @@ public sealed class TransactionSuccessModel
 public sealed class TransactionSuccessModelValidator
     : AbstractValidator<TransactionSuccessModel>
 {
-    private readonly VeloTexts _txt;
+    private readonly IStringLocalizer<SharedResources> _localizer;
 
-    public TransactionSuccessModelValidator(VeloTexts txt)
+    public TransactionSuccessModelValidator(IStringLocalizer<SharedResources> localizer)
     {
-        _txt = txt ?? throw new ArgumentNullException(nameof(txt));
+        _localizer = localizer ?? throw new ArgumentNullException(nameof(localizer));
 
         RuleFor(model => model.AmountGiven)
             .Custom(ValidateAmountGiven);
@@ -55,7 +56,7 @@ public sealed class TransactionSuccessModelValidator
 
         if (!transaction.Entity.Change.IsValid)
         {
-            context.AddFailure(_txt.AmountGivenTooSmall(transaction.AmountGiven, transaction.Entity.GetSoldProductsSum()));
+            context.AddFailure(_localizer[VeloTexts.AmountGivenTooSmall, transaction.AmountGiven, transaction.Entity.GetSoldProductsSum()]);
         }
     }
 }

@@ -13,14 +13,14 @@ public sealed class ProductController
     private readonly IProductService _productService;
     private readonly IVeloRouter _router;
     private readonly IValidator<ProductAnnotateModel> _productAnnotateValidator;
-    private readonly ProductEntityValidator _productValidator;
+    private readonly IValidator<ProductEntity> _productValidator;
 
-    public ProductController(IVeloRouter router, IProductService productService, IValidator<ProductAnnotateModel> productAnnotateValidator, VeloTexts txt)
+    public ProductController(IVeloRouter router, IProductService productService, IValidator<ProductAnnotateModel> productAnnotateValidator, IValidator<ProductEntity> productValidator)
     {
         _productService = productService ?? throw new ArgumentNullException(nameof(productService));
         _router = router ?? throw new ArgumentNullException(nameof(router));
         _productAnnotateValidator = productAnnotateValidator ?? throw new ArgumentNullException(nameof(productAnnotateValidator));
-        _productValidator = new ProductEntityValidator(txt);
+        _productValidator = productValidator ?? throw new ArgumentNullException(nameof(productValidator));
     }
 
     public async Task<IActionResult> Details(int activeBasarId, int productId)

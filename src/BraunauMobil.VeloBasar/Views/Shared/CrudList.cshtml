@@ -1,7 +1,7 @@
 ﻿@model ICrudListModel
-@inject BusinessLogic.ISelectListService SelectLists
+@inject ISelectListService SelectLists
 @{
-    ViewData.SetTitle(Model.ListTitle);
+    ViewData.SetTitle(Localizer[Model.ListTitle]);
 }
 
 <form method="get">

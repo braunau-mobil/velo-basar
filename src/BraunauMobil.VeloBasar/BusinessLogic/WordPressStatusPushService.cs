@@ -1,5 +1,6 @@
 ﻿using BraunauMobil.VeloBasar.Configuration;
 using BraunauMobil.VeloBasar.Data;
+using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
@@ -21,15 +22,15 @@ public sealed class WordPressStatusPushService
     private readonly IBackgroundTaskQueue _taskQueue;
     private readonly VeloDbContext _db;
     private readonly HttpClient _httpClient;
-    private readonly VeloTexts _txt;
+    private readonly IStringLocalizer<SharedResources> _localizer;
 
     public WordPressStatusPushService(IOptions<WordPressStatusPushSettings>
-        settings, VeloTexts txt, IBackgroundTaskQueue taskQueue, ILogger<WordPressStatusPushService> logger, VeloDbContext db, HttpClient httpClient)
+        settings, IStringLocalizer<SharedResources> localizer, IBackgroundTaskQueue taskQueue, ILogger<WordPressStatusPushService> logger, VeloDbContext db, HttpClient httpClient)
     {
         ArgumentNullException.ThrowIfNull(settings);
 
         _settings = settings.Value;
-        _txt = txt ?? throw new ArgumentNullException(nameof(txt));
+        _localizer = localizer ?? throw new ArgumentNullException(nameof(localizer));
         _taskQueue = taskQueue ?? throw new ArgumentNullException(nameof(taskQueue));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _db = db ?? throw new ArgumentNullException(nameof(db));
@@ -71,19 +72,19 @@ public sealed class WordPressStatusPushService
         Dictionary<string, IReadOnlyList<string>> statusMap = new()
         {
             {
-                _txt.Sold,
+                _localizer[VeloTexts.Sold],
                 products.Where(p => p.ValueState == ValueState.NotSettled && (p.StorageState == StorageState.Sold || p.StorageState == StorageState.Lost)).Select(p => ProductInfo(p)).ToArray()
             },
             {
-                _txt.NotSold,
+                _localizer[VeloTexts.NotSold],
                 products.Where(p => p.ValueState == ValueState.NotSettled && (p.StorageState == StorageState.Available || p.StorageState == StorageState.Locked)).Select(p => ProductInfo(p)).ToArray()
             },
             {
-                _txt.Settled,
+                _localizer[VeloTexts.Settled],
                 products.Where(p => p.ValueState == ValueState.Settled && (p.StorageState == StorageState.Sold || p.StorageState == StorageState.Lost)).Select(p => ProductInfo(p)).ToArray()
             },
             {
-                _txt.NotSettled,
+                _localizer[VeloTexts.NotSettled],
                 products.Where(p => p.ValueState == ValueState.Settled && (p.StorageState == StorageState.Available || p.StorageState == StorageState.Locked)).Select(p => ProductInfo(p)).ToArray()
             }
         };

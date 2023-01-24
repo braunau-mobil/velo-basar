@@ -1,28 +1,28 @@
 ﻿@model ProductEntity
-@inject BusinessLogic.ISelectListService SelectLists
+@inject ISelectListService SelectLists
 @{
-    ViewData.SetTitle(Txt.EditProduct);
+    ViewData.SetTitle(Localizer[VeloTexts.EditProduct]);
 }
 
 <form method="post">
     <div class="card m-2">
         @VeloHtml.TitleCardHeader()
         <div class="card-body">
-            @VeloHtml.SelectField(nameof(Model.TypeId), Model.TypeId, await SelectLists.ProductTypesAsync(), Txt.ProductType, autoFocus: true)
-            @VeloHtml.SelectField(nameof(Model.BrandId), Model.BrandId, await SelectLists.BrandsAsync(), Txt.Brand)
-            @VeloHtml.TextInputField(nameof(Model.Description), Model.Description, Txt.Description)
-            @VeloHtml.TextInputField(nameof(Model.Color), Model.Color, Txt.Color)
-            @VeloHtml.TextInputField(nameof(Model.FrameNumber), Model.FrameNumber, Txt.FrameNumber)
-            @VeloHtml.TextInputField(nameof(Model.TireSize), Model.TireSize, Txt.TireSize)
-            @VeloHtml.NumberInputField(nameof(Model.Price), Model.Price, Txt.Price)
-            @VeloHtml.CheckBoxField(nameof(Model.DonateIfNotSold), Model.DonateIfNotSold, Txt.DonateIfNotSold)
+            @VeloHtml.SelectField(nameof(Model.TypeId), Model.TypeId, await SelectLists.ProductTypesAsync(), Localizer[VeloTexts.ProductType], autoFocus: true)
+            @VeloHtml.SelectField(nameof(Model.BrandId), Model.BrandId, await SelectLists.BrandsAsync(), Localizer[VeloTexts.Brand])
+            @VeloHtml.TextInputField(nameof(Model.Description), Model.Description, Localizer[VeloTexts.Description])
+            @VeloHtml.TextInputField(nameof(Model.Color), Model.Color, Localizer[VeloTexts.Color])
+            @VeloHtml.TextInputField(nameof(Model.FrameNumber), Model.FrameNumber, Localizer[VeloTexts.FrameNumber])
+            @VeloHtml.TextInputField(nameof(Model.TireSize), Model.TireSize, Localizer[VeloTexts.TireSize])
+            @VeloHtml.NumberInputField(nameof(Model.Price), Model.Price, Localizer[VeloTexts.Price])
+            @VeloHtml.CheckBoxField(nameof(Model.DonateIfNotSold), Model.DonateIfNotSold, Localizer[VeloTexts.DonateIfNotSold])
             @VeloHtml.HiddenInput(nameof(Model.Id), Model.Id)
             @VeloHtml.HiddenInput(nameof(Model.SessionId), Model.SessionId)
 
         </div>
         <div class="card-footer">
-            <a class="btn btn-secondary" href="@Router.Product.ToDetails(Model.Id)">@Txt.Cancel</a>
-            <button class="btn btn-primary">@Txt.Save</button>
+            <a class="btn btn-secondary" href="@Router.Product.ToDetails(Model.Id)">@Localizer[VeloTexts.Cancel]</a>
+            <button class="btn btn-primary">@Localizer[VeloTexts.Save]</button>
         </div>
     </div>
 </form>

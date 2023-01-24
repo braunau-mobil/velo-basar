@@ -1,5 +1,5 @@
 ﻿@model SellerEntity
-@inject BusinessLogic.ISelectListService SelectLists
+@inject ISelectListService SelectLists
 @{
     string zipInputName = nameof(Model.ZIP);
     string cityInputName = nameof(Model.City);
@@ -11,21 +11,21 @@
 @VeloHtml.HiddenInput(nameof(Model.ValueState), (int)Model.ValueState)
 
 <div class="row">
-    <div class="col-2">@VeloHtml.SelectField(countrySelectName, Model.CountryId, await SelectLists.CountriesAsync(), Txt.Country)</div>
-    <div class="col-2">@VeloHtml.TextInputField(zipInputName, Model.ZIP, Txt.ZIP)</div>
-    <div class="col-8">@VeloHtml.TextInputField(cityInputName, Model.City, Txt.City)</div>
+    <div class="col-2">@VeloHtml.SelectField(countrySelectName, Model.CountryId, await SelectLists.CountriesAsync(), Localizer[VeloTexts.Country])</div>
+    <div class="col-2">@VeloHtml.TextInputField(zipInputName, Model.ZIP, Localizer[VeloTexts.ZIP])</div>
+    <div class="col-8">@VeloHtml.TextInputField(cityInputName, Model.City, Localizer[VeloTexts.City])</div>
 </div>
 
-@VeloHtml.TextInputField(nameof(Model.Street), Model.Street, Txt.Street)
+@VeloHtml.TextInputField(nameof(Model.Street), Model.Street, Localizer[VeloTexts.Street])
 
 <div class="row">
-    <div class="col">@VeloHtml.PhoneNumberInputField(nameof(Model.PhoneNumber), Model.PhoneNumber, Txt.PhoneNumber)</div>
-    <div class="col">@VeloHtml.EmailInputField(nameof(Model.EMail), Model.EMail, Txt.EMail)</div>
+    <div class="col">@VeloHtml.PhoneNumberInputField(nameof(Model.PhoneNumber), Model.PhoneNumber, Localizer[VeloTexts.PhoneNumber])</div>
+    <div class="col">@VeloHtml.EmailInputField(nameof(Model.EMail), Model.EMail, Localizer[VeloTexts.EMail])</div>
 </div>
 
-@VeloHtml.CheckBoxField(nameof(Model.HasNewsletterPermission), Model.HasNewsletterPermission, Txt.NewsletterPermission)
-@VeloHtml.TextInputField(nameof(Model.IBAN), Model.IBAN, Txt.IBAN)
-@VeloHtml.TextInputField(nameof(Model.BankAccountHolder), Model.BankAccountHolder, Txt.BankAccountHolder)
+@VeloHtml.CheckBoxField(nameof(Model.HasNewsletterPermission), Model.HasNewsletterPermission, Localizer[VeloTexts.NewsletterPermission])
+@VeloHtml.TextInputField(nameof(Model.IBAN), Model.IBAN, Localizer[VeloTexts.IBAN])
+@VeloHtml.TextInputField(nameof(Model.BankAccountHolder), Model.BankAccountHolder, Localizer[VeloTexts.BankAccountHolder])
 
 <script>
     document.getElementById("@VeloHtml.Id(zipInputName)").addEventListener("focusout", handleZipChanged);

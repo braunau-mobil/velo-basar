@@ -5,6 +5,7 @@ using iText.Kernel.Font;
 using iText.Kernel.Pdf;
 using iText.Kernel.Pdf.Canvas;
 using iText.Layout;
+using Microsoft.Extensions.Localization;
 
 namespace BraunauMobil.VeloBasar.Pdf;
 
@@ -15,13 +16,13 @@ public sealed class PageFooterHandler
 
     private readonly Margins _pageMargins;
     private readonly Document _doc;
-    private readonly VeloTexts _txt;
+    private readonly IStringLocalizer<SharedResources> _localizer;
 
-    public PageFooterHandler(Margins pageMargins, Document doc, VeloTexts txt)
+    public PageFooterHandler(Margins pageMargins, Document doc, IStringLocalizer<SharedResources> localizer)
     {
         _pageMargins = pageMargins ?? throw new ArgumentNullException(nameof(pageMargins));
         _doc = doc ?? throw new ArgumentNullException(nameof(doc));
-        _txt = txt ?? throw new ArgumentNullException(nameof(txt));
+        _localizer = localizer ?? throw new ArgumentNullException(nameof(localizer));
     }
 
     public void HandleEvent(Event @event)
@@ -36,7 +37,7 @@ public sealed class PageFooterHandler
             canvas.BeginText();
             canvas.SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), Height);
             canvas.MoveText(_doc.GetLeftMargin(), _pageMargins.Bottom);
-            canvas.ShowText(_txt.PageNumberFromOverall(pageNumber, docEvent.GetDocument().GetNumberOfPages()));
+            canvas.ShowText(_localizer[VeloTexts.PageNumberFromOverall, pageNumber, docEvent.GetDocument().GetNumberOfPages()]);
             canvas.ShowText("  - powered by https://github.com/braunau-mobil/velo-basar");
             canvas.EndText().Release();
         }

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace BraunauMobil.VeloBasar.BusinessLogic;
+namespace BraunauMobil.VeloBasar.Rendering;
 
 public interface ISelectListService
 {

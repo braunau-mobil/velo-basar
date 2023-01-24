@@ -2,24 +2,22 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
-using System.Threading;
 using Xan.Extensions;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Npgsql;
 using Microsoft.Data.SqlClient;
 using System.Data.Common;
+using Xan.AspNetCore.EntityFrameworkCore;
 
 namespace BraunauMobil.VeloBasar.Data;
 
 public sealed class VeloDbContext
     : IdentityDbContext
 {
-    private readonly IClock _clock;
-
     public VeloDbContext(IClock clock, DbContextOptions<VeloDbContext> options)
         : base(options)
     {
-        _clock = clock ?? throw new ArgumentNullException(nameof(clock));
+        ArgumentNullException.ThrowIfNull(clock);
+        this.AddTimestampHandler(clock);
     }
 
     public DbSet<AcceptSessionEntity> AcceptSessions => Set<AcceptSessionEntity>();
@@ -80,21 +78,5 @@ public sealed class VeloDbContext
             .WithMany(x => x.ChildTransactions)
             .HasForeignKey(x => x.ParentTransactionId)
             .IsRequired(false);
-    }
-
-    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-    {
-        foreach (IHasTimestamps entity in ChangeTracker.Entries().AddedEntities<IHasTimestamps>())
-        {
-            entity.CreatedAt = _clock.GetCurrentDateTime();
-            entity.UpdatedAt = _clock.GetCurrentDateTime();
-        }      
-
-        foreach (IHasTimestamps entity in ChangeTracker.Entries().ModifedEntities<IHasTimestamps>())
-        {
-            entity.UpdatedAt = _clock.GetCurrentDateTime();
-        }
-
-        return await base.SaveChangesAsync(cancellationToken);
     }
 }

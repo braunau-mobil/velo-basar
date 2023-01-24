@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Microsoft.Extensions.Localization;
 
 namespace BraunauMobil.VeloBasar.Models.Entities;
 
@@ -14,16 +15,16 @@ public sealed class CountryEntity
 public sealed class CountryEntityValidator
     : AbstractValidator<CountryEntity>
 {
-    public CountryEntityValidator(VeloTexts txt)
+    public CountryEntityValidator(IStringLocalizer<SharedResources> localizer)
     {
-        ArgumentNullException.ThrowIfNull(txt);
+        ArgumentNullException.ThrowIfNull(localizer);
 
         RuleFor(b => b.Name)
             .NotEmpty()
-            .WithMessage(txt.PleaseEnterName);
+            .WithMessage(localizer[VeloTexts.PleaseEnterName]);
 
         RuleFor(b => b.Iso3166Alpha3Code)
             .NotEmpty()
-            .WithMessage(txt.PleaseEnterIso3166Alpha3Code);
+            .WithMessage(localizer[VeloTexts.PleaseEnterIso3166Alpha3Code]);
     }
 }

@@ -15,14 +15,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="wwwroot\sass\**" />
-    <Content Remove="wwwroot\sass\**" />
-    <EmbeddedResource Remove="wwwroot\sass\**" />
-    <None Remove="wwwroot\sass\**" />
-    <None Remove="Views\Shared\Components\Search\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="FluentValidation" Version="11.4.0" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.4.0" />
     <PackageReference Include="itext7" Version="7.2.4" />
@@ -38,7 +30,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.2" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.2" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.1" />
-    <PackageReference Include="Xan.AspNetCore" Version="0.2.2" />
+    <PackageReference Include="Xan.AspNetCore" Version="0.3.1" />
     <PackageReference Include="Xan.Extensions" Version="0.2.0" />
   </ItemGroup>
 

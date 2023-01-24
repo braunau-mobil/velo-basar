@@ -1,13 +1,13 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @model TransactionSuccessModel
 @{
-    ViewData.SetTitle(Txt.TransactionTypeWithNumber(Model.Entity.Type, Model.Entity.Number));
+    ViewData.SetTitle(Localizer[VeloTexts.TransactionTypeWithNumber, Localizer[VeloTexts.Singular(Model.Entity.Type)], Model.Entity.Number]);
 }
 @inject SignInManager<IdentityUser> SignInManager
 
 
 <div class="m-2">
-    @VeloHtml.Alert(MessageType.Success, Txt.TransactionSuccesful(Model.Entity.Type))
+    @VeloHtml.Alert(MessageType.Success, Localizer[VeloTexts.TransactionSuccesful, Localizer[VeloTexts.Singular(Model.Entity.Type)]])
 </div>
 
 <partial name="_Details.cshtml" model="Model.Entity" />
@@ -15,13 +15,13 @@
 @if (Model.ShowAmountInput || Model.ShowChange)
 {
     <div class="card m-2">
-        <div class="card-header">@Txt.ChangeMoney</div>
+        <div class="card-header">@Localizer[VeloTexts.ChangeMoney]</div>
         @if (Model.ShowAmountInput)
         {
             <div class="card-body">
                 <form method="post">
-                    @VeloHtml.NumberInputField(nameof(Model.AmountGiven), Model.AmountGiven, Txt.AmountGiven, autoFocus: true)
-                    <button class="btn btn-primary">@Txt.CalculateChangeMoney</button>
+                    @VeloHtml.NumberInputField(nameof(Model.AmountGiven), Model.AmountGiven, Localizer[VeloTexts.AmountGiven], autoFocus: true)
+                    <button class="btn btn-primary">@Localizer[VeloTexts.CalculateChangeMoney]</button>
                 </form>
             </div>
         }
@@ -36,7 +36,7 @@
 
 @if (Model.Entity.Type == TransactionType.Sale)
 {
-    <a class="btn btn-@TransactionType.Sale.ToCssColor() m-2" href="@Router.Cart.ToIndex()">@Txt.NewSale</a>
+    <a class="btn btn-@TransactionType.Sale.ToCssColor() m-2" href="@Router.Cart.ToIndex()">@Localizer[VeloTexts.NewSale]</a>
 }
 
 @section Scripts {

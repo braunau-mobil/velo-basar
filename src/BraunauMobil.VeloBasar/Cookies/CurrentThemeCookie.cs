@@ -1,11 +1,12 @@
 ﻿using BraunauMobil.VeloBasar.Rendering;
 using Microsoft.AspNetCore.Http;
+using Xan.AspNetCore.Http;
 
 namespace BraunauMobil.VeloBasar.Cookies;
 
 public static class CurrentThemeCookie
 {
-    private static readonly Cookie _currentThemeId = new(
+    private static readonly CookieConfig _currentThemeId = new(
         "currentTheme",
         new CookieOptions
         {

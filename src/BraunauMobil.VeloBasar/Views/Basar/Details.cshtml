@@ -1,22 +1,22 @@
 ﻿@model BasarDetailsModel
 
 @{
-    ViewData.SetTitle(Txt.BasarDetails);
+    ViewData.SetTitle(Localizer[VeloTexts.BasarDetails]);
 }
 <div class="card m-2">
     <div class="card-header">
         <div class="row justify-content-evenly align-items-center">
-            <h4 class="col-auto m-0">@Txt.AcceptanceCount(Model.AcceptanceCount)</h4>
-            <h4 class="col-auto m-0">@Txt.SaleCount(Model.SaleCount)</h4>
-            <h4 class="col-auto m-0">@Txt.SellerCount(@Model.SellerCount)</h4>
-            <h4 class="col-auto m-0">@Txt.LostProducts(Model.LostProductsCount)</h4>
-            <h4 class="col-auto m-0">@Txt.LockedProductsCount(Model.LockedProductsCount)</h4>
+            <h4 class="col-auto m-0">@Localizer[VeloTexts.AcceptancesCount, Model.AcceptanceCount]</h4>
+            <h4 class="col-auto m-0">@Localizer[VeloTexts.SaleCount, Model.SaleCount]</h4>
+            <h4 class="col-auto m-0">@Localizer[VeloTexts.SellerCount, Model.SellerCount]</h4>
+            <h4 class="col-auto m-0">@Localizer[VeloTexts.LostProducts, Model.LostProductsCount]</h4>
+            <h4 class="col-auto m-0">@Localizer[VeloTexts.LockedProductsCount, Model.LockedProductsCount]</h4>
         </div>
     </div>
     @if (Model.SettlementPercentage > 0)
     {
         <div class="card-body">
-            <h6>@Txt.SettlementProgress</h6>
+            <h6>@Localizer[VeloTexts.SettlementProgress]</h6>
             <div class="progress">
                 <div class="progress-bar" role="progressbar" style="width: @Model.SettlementPercentage%;">@Model.SettlementPercentage %</div>
             </div>
@@ -27,7 +27,7 @@
 <div class="row">
     <div class="col">
         <div class="card m-2">
-            <div class="card-header">@Txt.AcceptedProductsCount @Model.AcceptedProductsCount</div>
+            <div class="card-header">@Localizer[VeloTexts.AcceptedProductsWithCount, Model.AcceptedProductsCount]</div>
             <div class="card-body">
                 <canvas class="pie-chart" id="AcceptedProductsCountChartArea"></canvas>
             </div>
@@ -35,7 +35,7 @@
     </div>
     <div class="col">
         <div class="card m-2">
-            <div class="card-header">@Txt.SoldProductsCount(Model.SoldProductsCount)</div>
+            <div class="card-header">@Localizer[VeloTexts.SoldProductsCount, Model.SoldProductsCount]</div>
             <div class="card-body">
                 <canvas class="pie-chart" id="SoldProductsCountChartArea"></canvas>
             </div>
@@ -46,7 +46,7 @@
 <div class="row">
     <div class="col">
         <div class="card m-2">
-            <div class="card-header">@Txt.AcceptedProductsAmount(Model.AcceptedProductsAmount)</div>
+            <div class="card-header">@Localizer[VeloTexts.AcceptedProductsAmount, Model.AcceptedProductsAmount]</div>
             <div class="card-body">
                 <canvas class="pie-chart" id="AcceptedProductsValueChartArea"></canvas>
             </div>
@@ -54,7 +54,7 @@
     </div>
     <div class="col">
         <div class="card m-2">
-            <div class="card-header">@Txt.SoldProductsAmount(Model.SoldProductsAmount)</div>
+            <div class="card-header">@Localizer[VeloTexts.SoldProductsAmount, Model.SoldProductsAmount]</div>
             <div class="card-body">
                 <canvas class="pie-chart" id="SoldProductsValueChartArea"></canvas>
             </div>
@@ -63,12 +63,12 @@
 </div>
 
 <div class="card m-2">
-    <div class="card-header">@Txt.PriceDistribution</div>
+    <div class="card-header">@Localizer[VeloTexts.PriceDistribution]</div>
     <div class="card-body"><canvas id="PriceDistributionChartArea"></canvas></div>
 </div>
 
 <div class="card m-2">
-    <div class="card-header">@Txt.SaleDistribution</div>
+    <div class="card-header">@Localizer[VeloTexts.SaleDistribution]</div>
     <div class="card-body"><canvas id="SaleDistributionChartArea"></canvas></div>
 </div>
 
@@ -85,8 +85,8 @@
             renderData('AcceptedProductsValueChartArea', @Html.Raw(JsonUtils.GetDonutConfig(Model.AcceptedProductsByAmount)));
             renderData('SoldProductsCountChartArea', @Html.Raw(JsonUtils.GetDonutConfig(Model.SoldProductsByCount)));
             renderData('SoldProductsValueChartArea', @Html.Raw(JsonUtils.GetDonutConfig(Model.SoldProductsByAmount)));
-            renderData('PriceDistributionChartArea', @Html.Raw(JsonUtils.GetLineConfig(Model.PriceDistribution, @Txt.PriceDistribution)));
-            renderData('SaleDistributionChartArea', @Html.Raw(JsonUtils.GetLineConfig(Model.SaleDistribution, @Txt.SaleDistribution)));
+            renderData('PriceDistributionChartArea', @Html.Raw(JsonUtils.GetLineConfig(Model.PriceDistribution, Localizer[VeloTexts.PriceDistribution])));
+            renderData('SaleDistributionChartArea', @Html.Raw(JsonUtils.GetLineConfig(Model.SaleDistribution, Localizer[VeloTexts.SaleDistribution])));
         };
     </script>
 }

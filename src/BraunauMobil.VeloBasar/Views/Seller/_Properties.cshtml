@@ -1,7 +1,7 @@
 ﻿@model SellerEntity
 @using Xan.Extensions;
 
-<h5>@Txt.Address</h5>
+<h5>@Localizer[VeloTexts.Address]</h5>
 <p>
     @Model.Street
     <br />
@@ -13,29 +13,29 @@
     <br />
 </p>
 
-<h5>@Txt.Bankdata</h5>
+<h5>@Localizer[VeloTexts.Bankdata]</h5>
 <dl class="row">
-    <dt class="col-sm-2">@Txt.IBAN</dt>
+    <dt class="col-sm-2">@Localizer[VeloTexts.IBAN]</dt>
     <dd class="col-sm-10">@Model.IBAN.ToPrettyIBAN()</dd>
 
-    <dt class="col-sm-2">@Txt.BankAccountHolder</dt>
+    <dt class="col-sm-2">@Localizer[VeloTexts.BankAccountHolder]</dt>
     <dd class="col-sm-10">@Model.BankAccountHolder</dd>
 </dl>
 
-<h5>@Txt.Misc</h5>
+<h5>@Localizer[VeloTexts.Misc]</h5>
 <dl class="row">
-    <dt class="col-sm-2">@Txt.PhoneNumber</dt>
+    <dt class="col-sm-2">@Localizer[VeloTexts.PhoneNumber]</dt>
     <dd class="col-sm-10">@Model.PhoneNumber</dd>
 
-    <dt class="col-sm-2">@Txt.Token</dt>
+    <dt class="col-sm-2">@Localizer[VeloTexts.Token]</dt>
     <dd class="col-sm-10">@Model.Token</dd>
 
     @if (Model.HasNewsletterPermission)
     {
-        <dt class="col-sm-2">@Txt.EMail</dt>
+        <dt class="col-sm-2">@Localizer[VeloTexts.EMail]</dt>
         <dd class="col-sm-10">@Model.EMail</dd>
 
-        <dt class="col-sm-2">@Txt.NewsletterPermission</dt>
+        <dt class="col-sm-2">@Localizer[VeloTexts.NewsletterPermission]</dt>
         <dd class="col-sm-10">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-square" viewBox="0 0 16 16">
                 <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
@@ -46,7 +46,7 @@
     }
     @if (!string.IsNullOrEmpty(Model.Comment))
     {
-        <dt class="col-sm-2">@Txt.Comment</dt>
+        <dt class="col-sm-2">@Localizer[VeloTexts.Comment]</dt>
         <dd class="col-sm-10"><p style="white-space: pre-line">@Model.Comment</p></dd>
     }
 </dl>

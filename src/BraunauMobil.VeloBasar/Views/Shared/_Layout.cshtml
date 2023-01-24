@@ -20,13 +20,13 @@
     }
     else
     {
-        basarInfo = @VeloHtml.Alert(MessageType.Warning, Txt.NoBasarActive);
+        basarInfo = @VeloHtml.Alert(MessageType.Warning, Localizer[VeloTexts.NoBasarActive]);
     }
 
-    LocalizedString startAcceptSessionText = Txt.NewAcceptance;
+    LocalizedString startAcceptSessionText = Localizer[VeloTexts.NewAcceptance];
     if (await AcceptSessionService.IsSessionRunning(Context.Request.Cookies.GetActiveAcceptSessionId()))
     {
-        startAcceptSessionText = Txt.ContinueAcceptSession;
+        startAcceptSessionText = Localizer[VeloTexts.ContinueAcceptSession];
     }
 }
 
@@ -58,7 +58,7 @@
         <aside class="velo-sidebar">
             <div class="offcanvas-lg offcanvas-start" tabindex="-1" id="veloSidebar">
                 <div class="offcanvas-header border-bottom">
-                    <h5 class="offcanvas-title" id="veloSidebarOffcanvasLabel">@Txt.Menu</h5>
+                    <h5 class="offcanvas-title" id="veloSidebarOffcanvasLabel">@Localizer[VeloTexts.Menu]</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#veloSidebar"></button>
                 </div>
 
@@ -70,35 +70,35 @@
                                     @basarInfo
                                 </strong>
                                 <ul class="nav flex-column nav-pills">
-                                    <li class="nav-item"><a class="nav-link" href="@Router.Basar.ToActiveBasarDetails()">@Txt.Overview</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="@Router.Basar.ToActiveBasarDetails()">@Localizer[VeloTexts.Overview]</a></li>
                                     <li class="nav-item"><a class="nav-link" href="@Router.AcceptSession.ToStart()">@startAcceptSessionText</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="@Router.AcceptanceLabels.ToSelect()">@Txt.PrintLabels</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="@Router.Seller.ToList()">@Txt.SellerList</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="@Router.Product.ToList()">@Txt.Products</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="@Router.Cart.ToIndex()">@Txt.Cart</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="@Router.Transaction.ToList(TransactionType.Sale)">@Txt.Sales</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="@Router.AcceptanceLabels.ToSelect()">@Localizer[VeloTexts.PrintLabels]</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="@Router.Seller.ToList()">@Localizer[VeloTexts.SellerList]</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="@Router.Product.ToList()">@Localizer[VeloTexts.Products]</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="@Router.Cart.ToIndex()">@Localizer[VeloTexts.Cart]</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="@Router.Transaction.ToList(TransactionType.Sale)">@Localizer[VeloTexts.SalesPlural]</a></li>
                                 </ul>
                             </li>
                             <li class="py-2">
                                 <strong class="d-flex w-100 align-items-center fw-semibold">
-                                    @Txt.Admin
+                                    @Localizer[VeloTexts.Admin]
                                 </strong>
                                 <ul class="nav flex-column nav-pills">
                                     @if (SignInManager.IsSignedIn(User))
                                     {
-                                        <li class="nav-item"><a class="nav-link" href="@Router.ToLogout()">@Txt.LogOut - @UserManager.GetUserName(User)</a></li>
-                                        <li class="nav-item"><a class="nav-link" href="@Router.Cancel.ToSelectSale()">@Txt.Cancellate</a></li>
-                                        <li class="nav-item"><a class="nav-link" href="@Router.Transaction.ToList()">@Txt.Transactions</a></li>
-                                        <li class="nav-item"><a class="nav-link" href="@Router.AcceptSession.ToList()">@Txt.AcceptSessions</a></li>
-                                        <li class="nav-item"><a class="nav-link" href="@Router.Basar.ToList()">@Txt.BasarList</a></li>
-                                        <li class="nav-item"><a class="nav-link" href="@Router.Brand.ToList()">@Txt.BrandList</a></li>
-                                        <li class="nav-item"><a class="nav-link" href="@Router.ProductType.ToList()">@Txt.ProductTypeList</a></li>
-                                        <li class="nav-item"><a class="nav-link" href="@Router.Country.ToList()">@Txt.CountryList</a></li>
-                                        <li class="nav-item"><a class="nav-link" href="@Router.Admin.ToPrintTest()">@Txt.PrintTest</a></li>
+                                        <li class="nav-item"><a class="nav-link" href="@Router.ToLogout()">@Localizer[VeloTexts.LogOut ]- @UserManager.GetUserName(User)</a></li>
+                                        <li class="nav-item"><a class="nav-link" href="@Router.Cancel.ToSelectSale()">@Localizer[VeloTexts.Cancellate]</a></li>
+                                        <li class="nav-item"><a class="nav-link" href="@Router.Transaction.ToList()">@Localizer[VeloTexts.Transactions]</a></li>
+                                        <li class="nav-item"><a class="nav-link" href="@Router.AcceptSession.ToList()">@Localizer[VeloTexts.AcceptSessions]</a></li>
+                                        <li class="nav-item"><a class="nav-link" href="@Router.Basar.ToList()">@Localizer[VeloTexts.BasarList]</a></li>
+                                        <li class="nav-item"><a class="nav-link" href="@Router.Brand.ToList()">@Localizer[VeloTexts.BrandList]</a></li>
+                                        <li class="nav-item"><a class="nav-link" href="@Router.ProductType.ToList()">@Localizer[VeloTexts.ProductTypeList]</a></li>
+                                        <li class="nav-item"><a class="nav-link" href="@Router.Country.ToList()">@Localizer[VeloTexts.CountryList]</a></li>
+                                        <li class="nav-item"><a class="nav-link" href="@Router.Admin.ToPrintTest()">@Localizer[VeloTexts.PrintTest]</a></li>
                                     }
                                     else
                                     {
-                                        <li class="nav-item"><a class="nav-link" href="@Router.ToLogin()">@Txt.LogIn</a></li>
+                                        <li class="nav-item"><a class="nav-link" href="@Router.ToLogin()">@Localizer[VeloTexts.LogIn]</a></li>
                                     }
                                 </ul>
                             </li>

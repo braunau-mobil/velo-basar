@@ -11,13 +11,11 @@ public sealed class AcceptProductController
     private readonly IAcceptProductService _acceptProductService;    
     private readonly IValidator<ProductEntity> _validator;
     private readonly IVeloRouter _router;
-    private readonly VeloTexts _txt;
 
-    public AcceptProductController(IAcceptProductService acceptProductService, IVeloRouter router, VeloTexts txt, IValidator<ProductEntity> validator)
+    public AcceptProductController(IAcceptProductService acceptProductService, IVeloRouter router, IValidator<ProductEntity> validator)
     {
         _acceptProductService = acceptProductService ?? throw new ArgumentNullException(nameof(acceptProductService));
         _router = router ?? throw new ArgumentNullException(nameof(router));
-        _txt = txt ?? throw new ArgumentNullException(nameof(txt));
         _validator = validator ?? throw new ArgumentNullException(nameof(validator));
     }
 

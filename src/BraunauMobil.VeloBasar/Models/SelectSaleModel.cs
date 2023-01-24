@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Microsoft.Extensions.Localization;
 
 namespace BraunauMobil.VeloBasar.Models;
 
@@ -13,11 +14,11 @@ public sealed class SelectSaleModel
 public sealed class SelectSaleModelValidator
     : AbstractValidator<SelectSaleModel>
 {
-    private readonly VeloTexts _txt;
+    private readonly IStringLocalizer<SharedResources> _localizer;
 
-    public SelectSaleModelValidator(VeloTexts txt)
+    public SelectSaleModelValidator(IStringLocalizer<SharedResources> localizer)
     {
-        _txt = txt ?? throw new ArgumentNullException(nameof(txt));
+        _localizer = localizer ?? throw new ArgumentNullException(nameof(localizer));
 
         RuleFor(cart => cart.SaleNumber)
             .Custom(ValidateSaleNumber);
@@ -27,11 +28,11 @@ public sealed class SelectSaleModelValidator
     {
         if (context.InstanceToValidate.Sale == null)
         {
-            context.AddFailure(_txt.NoSaleFoundWithNumber(number));
+            context.AddFailure(_localizer[VeloTexts.NoSaleFoundWithNumber, number]);
         }
         else if (!context.InstanceToValidate.Sale.Products.Any(pt => pt.Product.IsAllowed(TransactionType.Cancellation)))
         {
-            context.AddFailure(_txt.AllProductsOfSaleAlreadyCancelledOrSettled);
+            context.AddFailure(_localizer[VeloTexts.AllProductsOfSaleAlreadyCancelledOrSettled]);
         }
     }
 }

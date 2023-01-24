@@ -1,31 +1,30 @@
 ﻿@model CartModel
 @{
-    ViewData.SetTitle(Txt.NewSale);
+    ViewData.SetTitle(Localizer[VeloTexts.NewSale]);
 }
 
 <form method="post">
     <div class="card m-2">
         @VeloHtml.TitleCardHeader()
         <div class="card-body">
-            @VeloHtml.NumberInputField(nameof(Model.ProductId), Model.ProductId, Txt.EnterProductId, autoFocus: true)
+            @VeloHtml.NumberInputField(nameof(Model.ProductId), Model.ProductId, Localizer[VeloTexts.EnterProductId], autoFocus: true)
         </div>
         <div class="card-footer">
-            <button class="btn btn-primary" formaction="@Router.Cart.ToAdd()">@Txt.Add</button>
+            <button class="btn btn-primary" formaction="@Router.Cart.ToAdd()">@Localizer[VeloTexts.Add]</button>
         </div>
     </div>
 
     <div class="card m-2">
         <div class="card-body p-0">
             @(VeloHtml.ProductsTable(Model.Products, showId: true, showState: true, showSum: true)
-                .LinkColumn()
-                    .ForLink(product => Router.Cart.ToDelete(product.Id), Txt.Delete)
+                .Column(c => c.ForLink(product => Router.Cart.ToDelete(product.Id), Localizer[VeloTexts.Delete]))
                 .Build())
         </div>
         <div class="card-footer">
             @if (Model.HasProducts)
             {
-                <button class="btn btn-primary" formaction="@Router.Cart.ToCheckout()">@Txt.Checkout</button>
-                <a class="btn btn-danger" href="@Router.Cart.ToClear()">@Txt.ClearCart</a>
+                <button class="btn btn-primary" formaction="@Router.Cart.ToCheckout()">@Localizer[VeloTexts.Checkout]</button>
+                <a class="btn btn-danger" href="@Router.Cart.ToClear()">@Localizer[VeloTexts.ClearCart]</a>
             }
         </div>
     </div>

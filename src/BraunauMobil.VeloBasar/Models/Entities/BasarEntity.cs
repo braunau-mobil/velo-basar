@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Microsoft.Extensions.Localization;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BraunauMobil.VeloBasar.Models.Entities;
@@ -31,16 +32,16 @@ public sealed class BasarEntity
 public sealed class BasarEntityValidator
     : AbstractValidator<BasarEntity>
 {
-    public BasarEntityValidator(VeloTexts txt)
+    public BasarEntityValidator(IStringLocalizer<SharedResources> localizer)
     {
-        ArgumentNullException.ThrowIfNull(txt);
+        ArgumentNullException.ThrowIfNull(localizer);
 
         RuleFor(b => b.Name)
             .NotEmpty()
-            .WithMessage(txt.PleaseEnterName);
+            .WithMessage(localizer[VeloTexts.PleaseEnterName]);
 
         RuleFor(b => b.ProductCommissionPercentage)
             .InclusiveBetween(0, 100)
-            .WithMessage(txt.PleaseEnterValidPercentage);
+            .WithMessage(localizer[VeloTexts.PleaseEnterValidPercentage]);
     }
 }

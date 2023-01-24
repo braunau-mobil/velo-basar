@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Microsoft.Extensions.Localization;
 
 namespace BraunauMobil.VeloBasar.Models;
 
@@ -12,12 +13,12 @@ public sealed class ProductAnnotateModel
 public sealed class ProductAnnotateModelValidator
     : AbstractValidator<ProductAnnotateModel>
 {
-    public ProductAnnotateModelValidator(VeloTexts txt)
+    public ProductAnnotateModelValidator(IStringLocalizer<SharedResources> localizer)
     {
-        ArgumentNullException.ThrowIfNull(txt);
+        ArgumentNullException.ThrowIfNull(localizer);
 
         RuleFor(x => x.Notes)
             .NotEmpty()
-            .WithMessage(txt.PleaseEnterNotes);
+            .WithMessage(localizer[VeloTexts.PleaseEnterNotes]);
     }
 }

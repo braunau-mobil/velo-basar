@@ -1,12 +1,12 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @model ListModel<TransactionEntity, TransactionListParameter>
 @inject SignInManager<IdentityUser> SignInManager
-@inject BusinessLogic.ISelectListService SelectLists
+@inject ISelectListService SelectLists
 @{
-    var title = Txt.TransactionList(Model.TotalItemCount);
+    LocalizedString title = Localizer[VeloTexts.TransactionList, Model.TotalItemCount];
     if (Model.Parameter.TransactionType.HasValue)
     {
-        title = Txt.Plural(Model.Parameter.TransactionType.Value, Model.TotalItemCount);
+        title = Localizer[VeloTexts.PluralWithCountFormat(Model.Parameter.TransactionType.Value), Model.TotalItemCount];
     }
     ViewData.SetTitle(title);
 }

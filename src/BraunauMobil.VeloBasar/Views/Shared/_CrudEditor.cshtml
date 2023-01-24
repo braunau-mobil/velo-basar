@@ -7,8 +7,8 @@
             @await Model.EditorAsync(ViewContext)
         </div>
         <div class="card-footer">
-            <button class="btn btn-primary">@Txt.Save</button>
-            <a class="btn btn-danger" href="@ViewContext.HttpContext.Request.Headers.Referer">@Txt.Cancel</a>
+            <button class="btn btn-primary">@Localizer[VeloTexts.Save]</button>
+            <a class="btn btn-danger" href="@ViewContext.HttpContext.Request.Headers.Referer">@Localizer[VeloTexts.Cancel]</a>
         </div>
     </div>
 </form>

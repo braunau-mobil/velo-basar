@@ -1,7 +1,7 @@
 ﻿@model ListModel<AcceptSessionEntity, AcceptSessionListParameter>
-@inject BusinessLogic.ISelectListService SelectLists
+@inject ISelectListService SelectLists
 @{
-    ViewData.SetTitle(Txt.AcceptSessionList(Model.TotalItemCount));
+    ViewData.SetTitle(Localizer[VeloTexts.AcceptSessionList, Model.TotalItemCount]);
 }
 
 <form method="get">
@@ -18,30 +18,13 @@
         </div>
         <div class="card-body p-0">
             @(VeloHtml.Table(Model)
-                .Column()
-                    .AutoWidth()
-                    .Title(Txt.Id)
-                    .DoNotBreak()
-                    .For(item => item.Id)
-                .Column()
-                    .PercentWidth(40)
-                    .Title(Txt.Start)
-                    .For(item => item.StartTimeStamp.ToHtmlTimeStamp())
-                .Column()
-                    .PercentWidth(40)
-                    .Title(Txt.End)
-                    .For(item => item.EndTimeStamp.ToHtmlTimeStamp())
-                .Column()
-                    .PercentWidth(20)
-                    .Title(Txt.ProductCount)
-                    .For(item => item.Products.Count)
-                .LinkColumn()
-                    .Title(Txt.Seller)
-                    .ForLink(item => Router.Seller.ToDetails(item.SellerId), item => item.SellerId.ToHtml())
-                .LinkColumn()
-                    .ForLink(item => Router.AcceptProduct.ToCreate(item.Id), Txt.Continue, item => !item.IsCompleted)
-                .LinkColumn()
-                    .ForLink(item => Router.AcceptSession.ToCancel(item.Id, returnToList: true), Txt.Cancel, item => !item.IsCompleted)
+                .IdColumn()
+                .Column(c => c.PercentWidth(40).Title(Localizer[VeloTexts.Start]).For(item => item.StartTimeStamp.ToHtmlTimeStamp()))
+                .Column(c => c.PercentWidth(40).Title(Localizer[VeloTexts.End]).For(item => item.EndTimeStamp.ToHtmlTimeStamp()))
+                .Column(c => c.PercentWidth(20).Title(Localizer[VeloTexts.ProductCount]).For(item => item.Products.Count))
+                .Column( c=> c.Title(Localizer[VeloTexts.Seller]).ForLink(item => Router.Seller.ToDetails(item.SellerId), item => item.SellerId.ToHtml()))
+                .Column(c => c.ForLink(item => Router.AcceptProduct.ToCreate(item.Id), Localizer[VeloTexts.Continue], item => !item.IsCompleted))
+                .Column(c => c.ForLink(item => Router.AcceptSession.ToCancel(item.Id, returnToList: true), Localizer[VeloTexts.Cancel], item => !item.IsCompleted))
                 .Build())
         </div>
         <div class="card-footer">

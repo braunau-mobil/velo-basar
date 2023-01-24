@@ -1,5 +1,4 @@
 ﻿@using Microsoft.Extensions.Localization
-@inject IStringLocalizer<SharedResource> Localizer
 @model DataGeneratorConfiguration
 @{
     Layout = "_LayoutSimple";
@@ -36,7 +35,7 @@
             @VeloHtml.CheckBoxField(nameof(Model.GenerateZipCodes), Model.GenerateZipCodes, Localizer["GenerateZipCodes"])
         </div>
         <div class="card-footer">
-            <button class="btn btn-primary">@Txt.Ok</button>
+            <button class="btn btn-primary">@Localizer[VeloTexts.Ok]</button>
         </div>
     </div>
 </form>

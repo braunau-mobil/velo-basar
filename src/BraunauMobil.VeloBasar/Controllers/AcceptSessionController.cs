@@ -4,6 +4,7 @@ using BraunauMobil.VeloBasar.Parameters;
 using BraunauMobil.VeloBasar.Routing;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using Xan.Extensions.Collections.Generic;
 
 namespace BraunauMobil.VeloBasar.Controllers;
@@ -13,13 +14,13 @@ public sealed class AcceptSessionController
 {
     private readonly IAcceptSessionService _acceptSessionService;
     private readonly IVeloRouter _router;
-    private readonly VeloTexts _txt;
+    private readonly IStringLocalizer<SharedResources> _localizer;
 
-    public AcceptSessionController(IAcceptSessionService acceptSessionService, IVeloRouter router, VeloTexts txt)
+    public AcceptSessionController(IAcceptSessionService acceptSessionService, IVeloRouter router, IStringLocalizer<SharedResources> localizer)
     {
         _acceptSessionService = acceptSessionService ?? throw new ArgumentNullException(nameof(acceptSessionService));
         _router = router ?? throw new ArgumentNullException(nameof(router));
-        _txt = txt ?? throw new ArgumentNullException(nameof(txt));
+        _localizer = localizer ?? throw new ArgumentNullException(nameof(localizer));
     }
 
     public async Task<IActionResult> Cancel(int sessionId, bool returnToList)
@@ -27,7 +28,7 @@ public sealed class AcceptSessionController
         AcceptSessionEntity session = await _acceptSessionService.GetAsync(sessionId);
         if (session.IsCompleted)
         {
-            return BadRequest(_txt.AcceptSessionIsCompleted(sessionId));
+            return BadRequest(_localizer[VeloTexts.AcceptSessionIsCompleted, sessionId]);
         }
 
         await _acceptSessionService.DeleteAsync(session.Id);

@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Xan.AspNetCore.Http;
 
 namespace BraunauMobil.VeloBasar.Cookies;
 
 public static class ActiveAcceptSessionCooke
 {
-    private static readonly Cookie _activeAcceptSession = new(
+    private static readonly CookieConfig _activeAcceptSession = new(
         "activeAcceptSessionId",
         new CookieOptions
         {

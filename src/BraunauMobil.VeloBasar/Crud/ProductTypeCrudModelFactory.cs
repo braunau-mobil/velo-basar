@@ -1,5 +1,4 @@
-﻿using BraunauMobil.VeloBasar.BusinessLogic;
-using BraunauMobil.VeloBasar.Rendering;
+﻿using BraunauMobil.VeloBasar.Rendering;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Localization;
@@ -12,22 +11,22 @@ public sealed class ProductTypeCrudModelFactory
     : AbstractCrudModelFactory<ProductTypeEntity>
 {
     private readonly IVeloHtmlFactory _html;
-    private readonly VeloTexts _txt;
+    private readonly IStringLocalizer<SharedResources> _localizer;
     private readonly ISelectListService _selectListSevice;
 
-    public ProductTypeCrudModelFactory(IVeloHtmlFactory html, VeloTexts txt, ICrudRouter<ProductTypeEntity> router, ISelectListService selectListService)
+    public ProductTypeCrudModelFactory(IVeloHtmlFactory html, IStringLocalizer<SharedResources> localizer, ICrudRouter<ProductTypeEntity> router, ISelectListService selectListService)
         : base(router)
     {
         _html = html ?? throw new ArgumentNullException(nameof(html));
-        _txt = txt ?? throw new ArgumentNullException(nameof(txt));
+        _localizer = localizer ?? throw new ArgumentNullException(nameof(localizer));
         _selectListSevice = selectListService ?? throw new ArgumentNullException(nameof(selectListService));
     }
 
-    protected override LocalizedString CreateTitle => _txt.CreateProductType;
+    protected override string CreateTitle => VeloTexts.CreateProductType;
 
-    protected override LocalizedString EditTitle => _txt.EditProductType;
+    protected override string EditTitle => VeloTexts.EditProductType;
 
-    protected override LocalizedString ListTitle => _txt.ProductTypeList;
+    protected override string ListTitle => VeloTexts.ProductTypeList;
 
     protected override IHtmlContent CreateEditor(ViewContext viewContext, ProductTypeEntity entity)
     {
@@ -36,9 +35,9 @@ public sealed class ProductTypeCrudModelFactory
 
         HtmlContentBuilder result = new();
         result.AppendHtml(_html.HiddenInput(nameof(entity.Id), entity.Id));
-        result.AppendHtml(_html.TextInputField(nameof(entity.Name), entity.Name, _txt.Name, autoFocus: true));
-        result.AppendHtml(_html.TextAreaField(nameof(entity.Description), entity.Description, _txt.Description));
-        result.AppendHtml(_html.SelectField(nameof(entity.State), entity.State, _selectListSevice.States(), _txt.State));
+        result.AppendHtml(_html.TextInputField(nameof(entity.Name), entity.Name, _localizer[VeloTexts.Name], autoFocus: true));
+        result.AppendHtml(_html.TextAreaField(nameof(entity.Description), entity.Description, _localizer[VeloTexts.Description]));
+        result.AppendHtml(_html.SelectField(nameof(entity.State), entity.State, _selectListSevice.States(), _localizer[VeloTexts.State]));
         return result;
     }
 
@@ -48,34 +47,14 @@ public sealed class ProductTypeCrudModelFactory
         ArgumentNullException.ThrowIfNull(model);
 
         return _html.Table(model)
-            .Column()
-                .AutoWidth()
-                .Title(_txt.Id)
-                .DoNotBreak()
-                .For(item => item.Entity.Id)
-            .Column()
-                .PercentWidth(20)
-                .Title(_txt.Id)
-                .For(item => item.Entity.Name)
-            .Column()
-                .PercentWidth(50)
-                .Title(_txt.Description)
-                .For(item => item.Entity.Description)
-            .Column()
-                .PercentWidth(10)
-                .Title(_txt.CreatedAt)
-                .For(item => item.Entity.CreatedAt.ToHtmlTimeStamp())
-            .Column()
-                .PercentWidth(10)
-                .Title(_txt.UpdatedAt)
-                .For(item => item.Entity.UpdatedAt.ToHtmlTimeStamp())
-            .Column()
-                .PercentWidth(10)
-                .Title(_txt.State)
-                .For(item => _txt.Singular(item.Entity.State))
-            .LinkColumn()
-                .ForLink(item => Router.ToEdit(item.Entity.Id), _txt.Edit)
-            .BaseDataStateLinkColumn(_html, Router)
+            .IdColumn()
+            .Column(c => c.PercentWidth(30).Title(_localizer[VeloTexts.Name]).For(item => item.Entity.Name))
+            .Column(c => c.PercentWidth(70).Title(_localizer[VeloTexts.Description]).For(item => item.Entity.Description))
+            .CreatedAtColumn()
+            .UpdatedAtColumn()
+            .StateColumn()
+            .EditLinkColumn(Router)
+            .DeleteOrToggleStateLinkColumn(Router)
             .Build();
     }
 }

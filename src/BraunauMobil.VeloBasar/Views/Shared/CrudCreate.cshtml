@@ -1,6 +1,6 @@
 ﻿@model ICrudModel
 @{
-    ViewData.SetTitle(Model.Title);
+    ViewData.SetTitle(Localizer[Model.Title]);
 }
 
 <partial name="_CrudEditor.cshtml" model="Model" />

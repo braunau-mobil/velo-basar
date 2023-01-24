@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Microsoft.Extensions.Localization;
 using System.ComponentModel.DataAnnotations.Schema;
 using Xan.AspNetCore.Validation;
 using Xan.Extensions;
@@ -82,57 +83,55 @@ public sealed class SellerEntityValidator
     public const int MaxCityLength = 100;
     public const int MaxPhoneNumberLength = 30;
 
-    private readonly VeloTexts _txt;
-
-    public SellerEntityValidator(VeloTexts txt)
+    public SellerEntityValidator(IStringLocalizer<SharedResources> localizer)
     {
-        _txt = txt ?? throw new ArgumentNullException(nameof(txt));
+        ArgumentNullException.ThrowIfNull(localizer);
 
         RuleFor(seller => seller.FirstName)
             .NotNull()
-            .WithMessage(_txt.PleaseEnterFirstName)
+            .WithMessage(localizer[VeloTexts.PleaseEnterFirstName])
             .MaximumLength(MaxNameLength)
-            .WithMessage(_txt.FirstNameIsTooLong(MaxNameLength));
+            .WithMessage(localizer[VeloTexts.FirstNameIsTooLong, MaxNameLength]);
 
         RuleFor(seller => seller.LastName)
             .NotNull()
-            .WithMessage(_txt.PleaseEnterLastName)
+            .WithMessage(localizer[VeloTexts.PleaseEnterLastName])
             .MaximumLength(MaxNameLength)
-            .WithMessage(_txt.FirstNameIsTooLong(MaxNameLength));
+            .WithMessage(localizer[VeloTexts.FirstNameIsTooLong, MaxNameLength]);
 
         RuleFor(seller => seller.Street)
             .NotNull()
-            .WithMessage(_txt.PleaseEnterStreet)
+            .WithMessage(localizer[VeloTexts.PleaseEnterStreet])
             .MaximumLength(MaxStreetLength)
-            .WithMessage(_txt.StreetIsTooLong(MaxStreetLength));
+            .WithMessage(localizer[VeloTexts.StreetIsTooLong, MaxStreetLength]);
 
         RuleFor(seller => seller.City)
             .NotNull()
-            .WithMessage(_txt.PleaseEnterCity)
+            .WithMessage(localizer[VeloTexts.PleaseEnterCity])
             .MaximumLength(MaxCityLength)
-            .WithMessage(_txt.CityIsTooLong(MaxCityLength));
+            .WithMessage(localizer[VeloTexts.CityIsTooLong, MaxCityLength]);
 
         RuleFor(seller => seller.ZIP)
             .NotNull()
-            .WithMessage(_txt.PleaseEnterZIP);
+            .WithMessage(localizer[VeloTexts.PleaseEnterZIP]);
 
         RuleFor(seller => seller.CountryId)
             .NotEqual(0)
-            .WithMessage(_txt.PleaseEnterCountry);
+            .WithMessage(localizer[VeloTexts.PleaseEnterCountry]);
 
         RuleFor(seller => seller.PhoneNumber)
             .NotNull()
-            .WithMessage(_txt.PleaseEnterPhoneNumber)
+            .WithMessage(localizer[VeloTexts.PleaseEnterPhoneNumber])
             .MaximumLength(MaxPhoneNumberLength)
-            .WithMessage(_txt.PhoneNumberIsTooLong(MaxPhoneNumberLength));
+            .WithMessage(localizer[VeloTexts.PhoneNumberIsTooLong, MaxPhoneNumberLength]);
 
         RuleFor(seller => seller.IBAN)
             .Iban()
-            .WithMessage(_txt.PleaseEnterValidIBAN);
+            .WithMessage(localizer[VeloTexts.PleaseEnterValidIBAN]);
 
         RuleFor(seller => seller.EMail)
             .EmailAddress()
             .NotNull()
-            .When(seller => seller.HasNewsletterPermission).WithMessage(_txt.PleaseEnterValidEMail);
+            .When(seller => seller.HasNewsletterPermission).WithMessage(localizer[VeloTexts.PleaseEnterValidEMail]);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using BraunauMobil.VeloBasar.Data;
 using BraunauMobil.VeloBasar.Pdf;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 using System.Linq.Expressions;
 using Xan.AspNetCore.EntityFrameworkCore;
 using Xan.Extensions;
@@ -17,9 +18,9 @@ public sealed class TransactionService
     private readonly VeloDbContext _db;
     private readonly IProductLabelService _productLabelService;
     private readonly IClock _clock;
-    private readonly VeloTexts _txt;
+    private readonly IStringLocalizer<SharedResources> _localizer;
 
-    public TransactionService(INumberService numberService, ITransactionDocumentService transactionDocumentService, IStatusPushService statusPushService, VeloDbContext db, IProductLabelService productLabelService, IClock clock, VeloTexts txt)
+    public TransactionService(INumberService numberService, ITransactionDocumentService transactionDocumentService, IStatusPushService statusPushService, VeloDbContext db, IProductLabelService productLabelService, IClock clock, IStringLocalizer<SharedResources> localizer)
     {
         _numberService = numberService ?? throw new ArgumentNullException(nameof(numberService));
         _transactionDocumentService = transactionDocumentService ?? throw new ArgumentNullException(nameof(transactionDocumentService));
@@ -27,7 +28,7 @@ public sealed class TransactionService
         _db = db ?? throw new ArgumentNullException(nameof(db));
         _productLabelService = productLabelService ?? throw new ArgumentNullException(nameof(productLabelService));
         _clock = clock ?? throw new ArgumentNullException(nameof(clock));
-        _txt = txt ?? throw new ArgumentNullException(nameof(txt));
+        _localizer = localizer ?? throw new ArgumentNullException(nameof(localizer));
     }
 
     public async Task<int> AcceptAsync(int basarId, int sellerId, IEnumerable<int> productIds)
@@ -96,7 +97,7 @@ public sealed class TransactionService
             .SelectMany(transaction => transaction.Products.Select(pt => pt.Product))
             .ToArrayAsync();
 
-        string fileName = GetTransactionFileName(timeStamp, TransactionType.Acceptance, id, $"_{_txt.Labels}");
+        string fileName = GetTransactionFileName(timeStamp, TransactionType.Acceptance, id, $"_{_localizer[VeloTexts.Labels]}");
         byte[] data = await _productLabelService.CreateLabelsAsync(products);
         return FileDataEntity.Pdf(fileName, data);
     }
@@ -291,7 +292,7 @@ public sealed class TransactionService
     }
 
     private string GetTransactionFileName(DateTime timeStamp, TransactionType type, int id, string suffix = "")
-        => $"{timeStamp:s}_{_txt.Singular(type)}-{id}{suffix}.pdf";
+        => $"{timeStamp:s}_{_localizer[VeloTexts.Singular(type)]}-{id}{suffix}.pdf";
 
     private async Task UpdateFileDataAsync(FileDataEntity toUpdate, TransactionEntity transaction)
     {

@@ -19,8 +19,10 @@ using Xan.Extensions;
 using FluentValidation;
 using Xan.Extensions.Tasks;
 using Xan.AspNetCore;
-using System.Globalization;
 using BraunauMobil.VeloBasar.Pdf;
+using Xan.AspNetCore.Http;
+using Xan.AspNetCore.Mvc.Filters;
+using System.Globalization;
 
 namespace BraunauMobil.VeloBasar;
 
@@ -37,8 +39,9 @@ public static class Program
         {
             throw new InvalidOperationException($"No {nameof(ApplicationSettings)} section found.");
         }
-        CultureInfo.CurrentCulture = CultureInfo.GetCultureInfo(applicationSettings.Culture);
-        CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo(applicationSettings.Culture);
+        CultureInfo applicationCulture = CultureInfo.GetCultureInfo(applicationSettings.Culture);
+        CultureInfo.DefaultThreadCurrentCulture = applicationCulture;
+        CultureInfo.DefaultThreadCurrentUICulture = applicationCulture;
 
         ConfigureServices(builder.Services, builder.Configuration);
 
@@ -50,7 +53,6 @@ public static class Program
         app.UseAuthentication();
         app.UseRouting();
         app.UseAuthorization();
-
         app.MapControllerRoute(
             name: "default",
             pattern: "{controller}/{action}",
@@ -58,12 +60,15 @@ public static class Program
 
         using (IServiceScope scope = app.Services.CreateScope())
         {
+            ILogger<SharedResources> logger = scope.ServiceProvider.GetRequiredService<ILogger<SharedResources>>();
+            VeloTexts.CheckIfAllIsTranslated(logger);
+            
             DatabaseMigrator migrator = scope.ServiceProvider.GetRequiredService<DatabaseMigrator>();
             migrator.Migrate();
         }
 
         app.Run();
-    }
+    }    
 
     private static void ConfigureServices(IServiceCollection services, ConfigurationManager configuration)
     {
@@ -110,7 +115,6 @@ public static class Program
             .AddPdf()
             .AddScoped<IAppContext, VeloBasarAppContext>()
             .AddScoped<DatabaseMigrator>()
-            .AddSingleton<VeloTexts>()
             .AddScoped<SellerCrudModelFactory>()
             .AddValidatorsFromAssemblyContaining<SellerSearchModelValidator>()
 
@@ -137,6 +141,8 @@ public static class Program
             options.AddController<CountryEntity, CountryCrudService, CountryCrudModelFactory>(true);
             options.AddController<ProductTypeEntity, ProductTypeCrudService, ProductTypeCrudModelFactory>(true);
         });
+
+        PageSizeCookie.Options.MaxAge = TimeSpan.FromDays(2);
 
         services
             .Configure<CookiePolicyOptions>(options =>

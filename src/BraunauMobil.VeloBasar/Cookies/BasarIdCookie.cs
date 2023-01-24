@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Xan.AspNetCore.Http;
 
 namespace BraunauMobil.VeloBasar.Cookies;
 
 public static class BasarIdCookie
 {
-    private static readonly Cookie _basarId = new(
+    private static readonly CookieConfig _basarId = new(
         "basarId",
         new CookieOptions
         {

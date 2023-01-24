@@ -1,17 +1,17 @@
 ﻿@inject IVeloRouter Router
 @model AcceptanceLabelsModel
 @{
-    ViewData.SetTitle(Txt.PrintLabels);
+    ViewData.SetTitle(Localizer[VeloTexts.PrintLabels]);
 }
 
 <form method="post">
     <div class="card m-2">
         @VeloHtml.TitleCardHeader()
         <div class="card-body">
-            @VeloHtml.NumberInputField(nameof(Model.Number), Model.Number, Txt.AcceptanceNumber, autoFocus: true)            
+            @VeloHtml.NumberInputField(nameof(Model.Number), Model.Number, Localizer[VeloTexts.AcceptanceNumber], autoFocus: true)            
         </div>
         <div class="card-footer">
-            <button class="btn btn-primary">@Txt.Ok</button>
+            <button class="btn btn-primary">@Localizer[VeloTexts.Ok]</button>
         </div>
     </div>
 </form>

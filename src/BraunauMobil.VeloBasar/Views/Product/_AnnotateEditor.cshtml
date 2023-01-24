@@ -5,11 +5,11 @@
         @VeloHtml.TitleCardHeader()
         <div class="card-body">
             @VeloHtml.HiddenInput(nameof(Model.ProductId), Model.ProductId)
-            @VeloHtml.TextAreaField(nameof(Model.Notes), Model.Notes, Txt.Notes, autoFocus: true)
+            @VeloHtml.TextAreaField(nameof(Model.Notes), Model.Notes, Localizer[VeloTexts.Notes], autoFocus: true)
         </div>
         <div class="card-footer">
-            <a class="btn btn-secondary" href="@Router.Product.ToDetails(Model.ProductId)">@Txt.Cancel</a>
-            <button class="btn btn-primary">@Txt.Save</button>
+            <a class="btn btn-secondary" href="@Router.Product.ToDetails(Model.ProductId)">@Localizer[VeloTexts.Cancel]</a>
+            <button class="btn btn-primary">@Localizer[VeloTexts.Save]</button>
         </div>
     </div>
 </form>

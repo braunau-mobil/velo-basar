@@ -1,13 +1,13 @@
 ﻿@{
-    ViewData.SetTitle(Txt.PrintTest);
+    ViewData.SetTitle(Localizer[VeloTexts.PrintTest]);
 }
 
 <div class="card m-2">
     @VeloHtml.TitleCardHeader()
     <div class="card-body">
-        <a class="btn btn-outline-primary" href="@Router.Admin.ToCreateSampleAcceptanceDocument()" target="_blank">@Txt.Singular(TransactionType.Acceptance)</a>
-        <a class="btn btn-outline-primary" href="@Router.Admin.ToCreateSampleSaleDocument()" target="_blank">@Txt.Singular(TransactionType.Sale)</a>
-        <a class="btn btn-outline-primary" href="@Router.Admin.ToCreateSampleSettlementDocument()" target="_blank">@Txt.Singular(TransactionType.Settlement)</a>
-        <a class="btn btn-outline-primary" href="@Router.Admin.ToCreateSampleLabels()" target="_blank">@Txt.Label</a>
+        <a class="btn btn-outline-primary" href="@Router.Admin.ToCreateSampleAcceptanceDocument()" target="_blank">@Localizer[VeloTexts.Singular(TransactionType.Acceptance)]</a>
+        <a class="btn btn-outline-primary" href="@Router.Admin.ToCreateSampleSaleDocument()" target="_blank">@Localizer[VeloTexts.Singular(TransactionType.Sale)]</a>
+        <a class="btn btn-outline-primary" href="@Router.Admin.ToCreateSampleSettlementDocument()" target="_blank">@Localizer[VeloTexts.Singular(TransactionType.Settlement)]</a>
+        <a class="btn btn-outline-primary" href="@Router.Admin.ToCreateSampleLabels()" target="_blank">@Localizer[VeloTexts.Label]</a>
     </div>
 </div>

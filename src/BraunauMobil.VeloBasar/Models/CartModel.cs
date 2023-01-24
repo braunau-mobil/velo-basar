@@ -1,7 +1,7 @@
 ﻿using BraunauMobil.VeloBasar.BusinessLogic;
 using BraunauMobil.VeloBasar.Routing;
 using FluentValidation;
-
+using Microsoft.Extensions.Localization;
 using System.Threading;
 
 namespace BraunauMobil.VeloBasar.Models;
@@ -22,14 +22,14 @@ public sealed class CartModelValidator
     private readonly IProductService _productService;
     private readonly ITransactionService _transactionService;
     private readonly IVeloRouter _router;
-    private readonly VeloTexts _txt;
+    private readonly IStringLocalizer<SharedResources> _localizer;
 
-    public CartModelValidator(IProductService productService, ITransactionService transactionService, IVeloRouter router, VeloTexts txt)
+    public CartModelValidator(IProductService productService, ITransactionService transactionService, IVeloRouter router, IStringLocalizer<SharedResources> localizer)
     {
         _productService = productService ?? throw new ArgumentNullException(nameof(productService));
         _transactionService = transactionService ?? throw new ArgumentNullException(nameof(transactionService));
         _router = router ?? throw new ArgumentNullException(nameof(router));
-        _txt = txt ?? throw new ArgumentNullException(nameof(txt));
+        _localizer = localizer ?? throw new ArgumentNullException(nameof(localizer));
 
         RuleFor(cart => cart.ProductId)
             .CustomAsync(ValidateProductId);       
@@ -46,31 +46,31 @@ public sealed class CartModelValidator
 
         if (product == null)
         {
-            context.AddFailure(_txt.NoProductWithIdFound(id));
+            context.AddFailure(_localizer[VeloTexts.NoProductWithIdFound, id]);
         }
         else if (product.ValueState == ValueState.Settled)
         {
-            context.AddFailure(_txt.ProductWasSettled);
+            context.AddFailure(_localizer[VeloTexts.ProductWasSettled]);
         }
         else if (product.StorageState == StorageState.Lost)
         {
             TransactionEntity transaction = await _transactionService.GetLatestAsync(context.InstanceToValidate.ActiveBasarId, product.Id);
-            context.AddFailure(_txt.ProductIsLost(transaction.Notes));
+            context.AddFailure(_localizer[VeloTexts.ProductIsLost, transaction.Notes ?? ""]);
         }
         else if (product.StorageState == StorageState.Locked)
         {
             TransactionEntity transaction = await _transactionService.GetLatestAsync(context.InstanceToValidate.ActiveBasarId, product.Id);
-            context.AddFailure(_txt.ProductIsLocked(transaction.Notes));
+            context.AddFailure(_localizer[VeloTexts.ProductIsLocked, transaction.Notes ?? ""]);
         }
         else if (product.StorageState == StorageState.Sold)
         {
             TransactionEntity sale = await _transactionService.GetLatestAsync(context.InstanceToValidate.ActiveBasarId, product.Id);
             string saleUrl = _router.Transaction.ToDetails(sale.Id);
-            context.AddFailure(_txt.ProductSold(saleUrl, sale.Number));
+            context.AddFailure(_localizer[VeloTexts.ProductSold, saleUrl, sale.Number]);
         }
         else if (product.StorageState == StorageState.NotAccepted)
         {
-            context.AddFailure(_txt.ProductNotAccepted);
+            context.AddFailure(_localizer[VeloTexts.ProductNotAccepted]);
         }
         else
         {

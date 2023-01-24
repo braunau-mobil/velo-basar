@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
+using Xan.AspNetCore.Http;
 
 namespace BraunauMobil.VeloBasar.Cookies;
 
 public static class CartCookie
 {
-    private static readonly Cookie _cart = new(
+    private static readonly CookieConfig _cart = new(
         "cart",
         new CookieOptions
         {

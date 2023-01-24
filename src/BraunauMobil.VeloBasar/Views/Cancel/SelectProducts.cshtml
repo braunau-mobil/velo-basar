@@ -1,7 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Html
 @model SelectProductsModel
 @{
-    ViewBag.Title = @Txt.PleaseSelectProductToCanellate;
+    ViewData.SetTitle(Localizer[VeloTexts.PleaseSelectProductToCanellate]);
 }
 
 <form method="post">
@@ -13,22 +13,26 @@
     <div class="card m-2">
         @VeloHtml.TitleCardHeader()
         <div class="card-body p-0">
-                @(VeloHtml.ProductsTable(Model.Products, item => item.Value, showId: true, showState: true)
-                    .Column(0)
-                        .For((index, item) =>
+            @(
+                VeloHtml.ProductsTable(Model.Products, item => item.Value, showId: true, showState: true)
+                        .Column(0, c =>
                         {
-                            TagBuilder checkBox = VeloHtml.CheckBox($"{nameof(SelectProductsModel.Products)}[{index}].{nameof(SelectModel<ProductEntity>.IsSelected)}", item.IsSelected);
-                            TagBuilder idInput = VeloHtml.HiddenInput($"{nameof(SelectProductsModel.Products)}[{index}].{nameof(SelectModel<ProductEntity>.Value)}.{nameof(ProductEntity.Id)}", item.Value.Id);
+                            c.For((index, item) =>
+                            {
+                                TagBuilder checkBox = VeloHtml.CheckBox($"{nameof(SelectProductsModel.Products)}[{index}].{nameof(SelectModel<ProductEntity>.IsSelected)}", item.IsSelected);
+                                TagBuilder idInput = VeloHtml.HiddenInput($"{nameof(SelectProductsModel.Products)}[{index}].{nameof(SelectModel<ProductEntity>.Value)}.{nameof(ProductEntity.Id)}", item.Value.Id);
 
-                            HtmlContentBuilder tags = new();
-                            tags.AppendHtml(checkBox);
-                            tags.AppendHtml(idInput);
-                            return tags;
-                        })
-                    .Build())
+                                HtmlContentBuilder tags = new();
+                                tags.AppendHtml(checkBox);
+                                tags.AppendHtml(idInput);
+                                return tags;                                
+                            });
+                    })
+                    .Build()
+            )
         </div>
         <div class="card-footer">
-            <button class="btn btn-primary">@Txt.Cancellate</button>
+            <button class="btn btn-primary">@Localizer[VeloTexts.Cancellate]</button>
         </div>
     </div>
 </form>

@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Microsoft.Extensions.Localization;
 using System.Diagnostics.CodeAnalysis;
 
 namespace BraunauMobil.VeloBasar.Models;
@@ -28,11 +29,11 @@ public sealed class SelectProductsModel
 public sealed class SelectProductsModelValidator
     : AbstractValidator<SelectProductsModel>
 {
-    private readonly VeloTexts _txt;
+    private readonly IStringLocalizer<SharedResources> _localizer;
 
-    public SelectProductsModelValidator(VeloTexts txt)
+    public SelectProductsModelValidator(IStringLocalizer<SharedResources> localizer)
     {
-        _txt = txt ?? throw new ArgumentNullException(nameof(txt));
+        _localizer = localizer ?? throw new ArgumentNullException(nameof(localizer));
 
         RuleFor(model => model.Products)
             .Custom(ValidatProducts);
@@ -42,7 +43,7 @@ public sealed class SelectProductsModelValidator
     {
         if (!products.Any(vm => vm.IsSelected))
         {
-            context.AddFailure(_txt.PleaseSelectProductToCanellate);
+            context.AddFailure(_localizer[VeloTexts.PleaseSelectProductToCanellate]);
         }
     }
 }

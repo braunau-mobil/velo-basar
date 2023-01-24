@@ -1,10 +1,10 @@
 ﻿@model ProductAnnotateModel
 @{
-    ViewData.SetTitle(Txt.LockProduct(Model.ProductId));
+    ViewData.SetTitle(Localizer[VeloTexts.LockProduct, Model.ProductId]);
 }
 
 <partial name="_AnnotateEditor.cshtml" model="Model" />
 
 <div class="m-2">
-    @VeloHtml.Alert(MessageType.Info, @Txt.Info, @Txt.LockInfo)
+    @VeloHtml.Alert(MessageType.Info, Localizer[VeloTexts.Info], Localizer[VeloTexts.LockInfo])
 </div>

@@ -1,6 +1,7 @@
 ﻿using BraunauMobil.VeloBasar.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.Extensions.Localization;
 using Xan.AspNetCore.EntityFrameworkCore;
 
 namespace BraunauMobil.VeloBasar.BusinessLogic;
@@ -9,12 +10,12 @@ public sealed class AcceptProductService
     : IAcceptProductService
 {
     private readonly VeloDbContext _db;
-    private readonly VeloTexts _txt;
+    private readonly IStringLocalizer<SharedResources> _localizer;
 
-    public AcceptProductService(VeloDbContext db, VeloTexts txt)
+    public AcceptProductService(VeloDbContext db, IStringLocalizer<SharedResources> localizer)
     {
         _db = db ?? throw new ArgumentNullException(nameof(db));
-        _txt = txt ?? throw new ArgumentNullException(nameof(txt));
+        _localizer = localizer ?? throw new ArgumentNullException(nameof(localizer));
     }
 
     public async Task<AcceptProductModel> CreateNewAsync(int sessionId)
@@ -23,7 +24,7 @@ public sealed class AcceptProductService
 
         if (session.IsCompleted)
         {
-            throw new InvalidOperationException(_txt.AcceptSessionIsCompleted(sessionId));
+            throw new InvalidOperationException(_localizer[VeloTexts.AcceptSessionIsCompleted, sessionId]);
         }
 
         ProductEntity newProduct = new()

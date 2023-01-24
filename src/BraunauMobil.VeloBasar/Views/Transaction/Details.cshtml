@@ -1,6 +1,6 @@
 ﻿@model TransactionEntity
 @{
-    ViewData.SetTitle(Txt.TransactionTypeWithNumber(Model.Type, Model.Number));
+    ViewData.SetTitle(Localizer[VeloTexts.TransactionTypeWithNumber, Localizer[VeloTexts.Singular(Model.Type)], Model.Number]);
 }
 
 <partial name="_Details.cshtml" model="Model" />

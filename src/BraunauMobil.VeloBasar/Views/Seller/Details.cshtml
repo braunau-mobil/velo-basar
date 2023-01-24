@@ -1,12 +1,12 @@
 ﻿@model SellerDetailsModel
 @{
-    ViewData.SetTitle(Txt.SellerDetails(Model.Entity.Id, Model.Entity.FirstName, Model.Entity.LastName));
+    ViewData.SetTitle(Localizer[VeloTexts.SellerDetails, Model.Entity.Id, Model.Entity.FirstName, Model.Entity.LastName]);
 }
 
 <div class="card m-2">
     <h4 class="card-header">
         @Model.Entity.FirstName @Model.Entity.LastName
-        <small class="text-muted">@Txt.SellerId(Model.Entity.Id)</small>
+        <small class="text-muted">@Localizer[VeloTexts.SellerId, Model.Entity.Id]</small>
     </h4>
     <div class="card-body">
         <div class="row align-items-start">
@@ -16,23 +16,23 @@
             <div class="col">
                 <ul class="list-group">
                     <li class="list-group-item d-flex justify-content-between align-items-center">
-                        @Txt.AcceptedProductsCount
+                        @Localizer[VeloTexts.AcceptedProducts]
                         <span class="badge rounded-pill text-bg-success">@Model.AcceptedProductCount</span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between align-items-center">
-                        @Txt.SoldProductCount
+                        @Localizer[VeloTexts.SoldProductCount]
                         <span class="badge rounded-pill text-bg-success">@Model.SoldProductCount</span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between align-items-center">
-                        @Txt.NotSoldProductCount
+                        @Localizer[VeloTexts.NotSoldProductCount]
                         <span class="badge rounded-pill text-bg-warning">@Model.NotSoldProductCount</span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between align-items-center">
-                        @Txt.PickedUpProductCount
+                        @Localizer[VeloTexts.PickedUpProductCount]
                         <span class="badge rounded-pill text-bg-secondary">@Model.PickedUpProductCount</span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between align-items-center">
-                        @Txt.SettlementAmout
+                        @Localizer[VeloTexts.SettlementAmout]
                         <span class="badge rounded-pill text-bg-primary">@Model.SettlementAmout.ToHtmlPrice()</span>
                     </li>
                 </ul>
@@ -40,31 +40,30 @@
         </div>
     </div>
     <div class="card-footer">
-        <a class="btn btn-secondary" href="@Router.AcceptSession.ToStartForSeller(Model.Entity.Id)">@Txt.AcceptProducts</a>
+        <a class="btn btn-secondary" href="@Router.AcceptSession.ToStartForSeller(Model.Entity.Id)">@Localizer[VeloTexts.AcceptProducts]</a>
         @if (Model.Entity.ValueState == ValueState.NotSettled)
         {
-            <a class="btn btn-secondary" href="@Router.Seller.ToSettle(Model.Entity.Id)">@Txt.Settle</a>
+            <a class="btn btn-secondary" href="@Router.Seller.ToSettle(Model.Entity.Id)">@Localizer[VeloTexts.Settle]</a>
         }
         @if (Model.Procucts.Any())
         {
-            <a class="btn btn-outline-primary" href="@Router.Seller.ToLabels(Model.Entity.Id)" target="_blank">@Txt.PrintLabels</a>            
+            <a class="btn btn-outline-primary" href="@Router.Seller.ToLabels(Model.Entity.Id)" target="_blank">@Localizer[VeloTexts.PrintLabels]</a>            
         }
-        <a class="btn btn-primary" href="@Router.Seller.ToEdit(Model.Entity.Id)">@Txt.Edit</a>
+        <a class="btn btn-primary" href="@Router.Seller.ToEdit(Model.Entity.Id)">@Localizer[VeloTexts.Edit]</a>
     </div>
 </div>
 
 <div class="card m-2">
-    <div class="card-header">@Txt.Products</div>
+    <div class="card-header">@Localizer[VeloTexts.Products]</div>
     <div class="card-body p-0">
         @(VeloHtml.ProductsTable(Model.Procucts, showId: true, showState: true)
-            .LinkColumn()
-                .ForLink(item => Router.Product.ToDetails(item.Id), Txt.Details)
+            .Column(c => c.ForLink(item => Router.Product.ToDetails(item.Id), Localizer[VeloTexts.Details]))
             .Build())
     </div>
 </div>
 
 <div class="card m-2">
-    <div class="card-header">@Txt.Transactions</div>
+    <div class="card-header">@Localizer[VeloTexts.Transactions]</div>
     <div class="card-body p-0">
         @VeloHtml.TransactionsTable(Model.Transactions, showType: true, showProducts: true).Build()
     </div>

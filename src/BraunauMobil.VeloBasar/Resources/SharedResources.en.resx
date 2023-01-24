@@ -1,0 +1,948 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="VeloBasar_AcceptancesCount" xml:space="preserve">
+    <value>{0} Acceptances</value>
+  </data>
+  <data name="VeloBasar_AcceptanceCreateSeller" xml:space="preserve">
+    <value>Acceptance - Enter seller</value>
+  </data>
+  <data name="VeloBasar_AcceptanceForSellerId" xml:space="preserve">
+    <value>Acceptance for seller with ID: {0} - Enter products</value>
+  </data>
+  <data name="VeloBasar_AcceptanceNumber" xml:space="preserve">
+    <value>Acceptance number</value>
+  </data>
+  <data name="VeloBasar_AcceptanceSuccess" xml:space="preserve">
+    <value>Acceptance successful!</value>
+  </data>
+  <data name="VeloBasar_AcceptedProductsAmount" xml:space="preserve">
+    <value>Accepted products value of {0:C}</value>
+  </data>
+  <data name="VeloBasar_Accepting" xml:space="preserve">
+    <value>Accepting</value>
+  </data>
+  <data name="VeloBasar_AcceptProducts" xml:space="preserve">
+    <value>Accept products</value>
+  </data>
+  <data name="VeloBasar_AcceptSessionIsCompleted" xml:space="preserve">
+    <value>The Accept session with ID {0} is already completed.</value>
+  </data>
+  <data name="VeloBasar_AcceptSessionList" xml:space="preserve">
+    <value>Accept sessions ({0})</value>
+  </data>
+  <data name="VeloBasar_AcceptSessionNotFound" xml:space="preserve">
+    <value>No Accept session with ID {0} found.</value>
+  </data>
+  <data name="VeloBasar_AcceptSessions" xml:space="preserve">
+    <value>Accept sessions</value>
+  </data>
+  <data name="VeloBasar_AceptedProductCount" xml:space="preserve">
+    <value>Accepted prodcuts: {0}</value>
+  </data>
+  <data name="VeloBasar_Add" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="VeloBasar_Address" xml:space="preserve">
+    <value>Address</value>
+  </data>
+  <data name="VeloBasar_Admin" xml:space="preserve">
+    <value>Administration</value>
+  </data>
+  <data name="VeloBasar_AdminUserEMail" xml:space="preserve">
+    <value>Admin User E-Mail (Password = root)</value>
+  </data>
+  <data name="VeloBasar_All" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="VeloBasar_AllBrand" xml:space="preserve">
+    <value>All (Brands)</value>
+  </data>
+  <data name="VeloBasar_AllProductsOfSaleAlreadyCancelledOrSettled" xml:space="preserve">
+    <value>All items of the sale have already been settled or cancelled. Cancellation is no longer possible.</value>
+  </data>
+  <data name="VeloBasar_AmountGiven" xml:space="preserve">
+    <value>Money given</value>
+  </data>
+  <data name="VeloBasar_AmountGivenTooSmall" xml:space="preserve">
+    <value>The given amount {0:C} must be greater than the sale amount {1:C}!</value>
+  </data>
+  <data name="VeloBasar_Apply" xml:space="preserve">
+    <value>Apply</value>
+  </data>
+  <data name="VeloBasar_AtDateAndTime" xml:space="preserve">
+    <value>{1:D} at {1:t}</value>
+  </data>
+  <data name="VeloBasar_AtLocationAndDateAndTime" xml:space="preserve">
+    <value>{0} on {1:D} at {1:t}</value>
+  </data>
+  <data name="VeloBasar_Available" xml:space="preserve">
+    <value>Available</value>
+  </data>
+  <data name="VeloBasar_BankAccountHolder" xml:space="preserve">
+    <value>Account holder</value>
+  </data>
+  <data name="VeloBasar_Bankdata" xml:space="preserve">
+    <value>Bank data</value>
+  </data>
+  <data name="VeloBasar_Basar" xml:space="preserve">
+    <value>Bazaar</value>
+  </data>
+  <data name="VeloBasar_BasarDetails" xml:space="preserve">
+    <value>Bazaar details</value>
+  </data>
+  <data name="VeloBasar_BasarList" xml:space="preserve">
+    <value>Bazaars</value>
+  </data>
+  <data name="VeloBasar_Brand" xml:space="preserve">
+    <value>Brands</value>
+  </data>
+  <data name="VeloBasar_BrandList" xml:space="preserve">
+    <value>Brands</value>
+  </data>
+  <data name="VeloBasar_CalculateChangeMoney" xml:space="preserve">
+    <value>Calculate change</value>
+  </data>
+  <data name="VeloBasar_Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="VeloBasar_Cancellate" xml:space="preserve">
+    <value>Cancellate</value>
+  </data>
+  <data name="VeloBasar_CancellationSingular" xml:space="preserve">
+    <value>Cancellation</value>
+  </data>
+  <data name="VeloBasar_CannotDeleteBasar" xml:space="preserve">
+    <value>Bazaar with ID={0} cannot be deleted.</value>
+  </data>
+  <data name="VeloBasar_Cart" xml:space="preserve">
+    <value>Cart</value>
+  </data>
+  <data name="VeloBasar_ChangeMoney" xml:space="preserve">
+    <value>Change</value>
+  </data>
+  <data name="VeloBasar_Checkout" xml:space="preserve">
+    <value>Sell</value>
+  </data>
+  <data name="VeloBasar_City" xml:space="preserve">
+    <value>City</value>
+  </data>
+  <data name="VeloBasar_CityIsTooLong" xml:space="preserve">
+    <value>The city must not be longer than {0} characters.</value>
+  </data>
+  <data name="VeloBasar_ClearCart" xml:space="preserve">
+    <value>Clear cart</value>
+  </data>
+  <data name="VeloBasar_Color" xml:space="preserve">
+    <value>Color</value>
+  </data>
+  <data name="VeloBasar_Comment" xml:space="preserve">
+    <value>Comment</value>
+  </data>
+  <data name="VeloBasar_Continue" xml:space="preserve">
+    <value>Continue</value>
+  </data>
+  <data name="VeloBasar_ContinueAcceptSession" xml:space="preserve">
+    <value>Continue accept session</value>
+  </data>
+  <data name="VeloBasar_Cost" xml:space="preserve">
+    <value>Costs</value>
+  </data>
+  <data name="VeloBasar_Country" xml:space="preserve">
+    <value>Country</value>
+  </data>
+  <data name="VeloBasar_CountryList" xml:space="preserve">
+    <value>Countries</value>
+  </data>
+  <data name="VeloBasar_CreateBasar" xml:space="preserve">
+    <value>Create Bazaar</value>
+  </data>
+  <data name="VeloBasar_CreateBrand" xml:space="preserve">
+    <value>Create Brand</value>
+  </data>
+  <data name="VeloBasar_CreateCountry" xml:space="preserve">
+    <value>Create Country</value>
+  </data>
+  <data name="VeloBasar_CreatedAt" xml:space="preserve">
+    <value>Created</value>
+  </data>
+  <data name="VeloBasar_CreateProductType" xml:space="preserve">
+    <value>Create product type</value>
+  </data>
+  <data name="VeloBasar_CreateSeller" xml:space="preserve">
+    <value>Create seller</value>
+  </data>
+  <data name="VeloBasar_Date" xml:space="preserve">
+    <value>Date</value>
+  </data>
+  <data name="VeloBasar_Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="VeloBasar_Description" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="VeloBasar_Details" xml:space="preserve">
+    <value>Details</value>
+  </data>
+  <data name="VeloBasar_Disable" xml:space="preserve">
+    <value>Disable</value>
+  </data>
+  <data name="VeloBasar_Document" xml:space="preserve">
+    <value>Voucher</value>
+  </data>
+  <data name="VeloBasar_DonateIfNotSold" xml:space="preserve">
+    <value>Donate if not sold</value>
+  </data>
+  <data name="VeloBasar_Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="VeloBasar_EditBasar" xml:space="preserve">
+    <value>Edit Bazaar</value>
+  </data>
+  <data name="VeloBasar_EditBrand" xml:space="preserve">
+    <value>Edit Brand</value>
+  </data>
+  <data name="VeloBasar_EditCountry" xml:space="preserve">
+    <value>Edit Country</value>
+  </data>
+  <data name="VeloBasar_EditProduct" xml:space="preserve">
+    <value>Edit Product</value>
+  </data>
+  <data name="VeloBasar_EditProductType" xml:space="preserve">
+    <value>Edit Product type</value>
+  </data>
+  <data name="VeloBasar_EditSeller" xml:space="preserve">
+    <value>Edit Seller</value>
+  </data>
+  <data name="VeloBasar_EMail" xml:space="preserve">
+    <value>E-Mail</value>
+  </data>
+  <data name="VeloBasar_Empty" xml:space="preserve">
+    <value />
+  </data>
+  <data name="VeloBasar_Enable" xml:space="preserve">
+    <value>Enable</value>
+  </data>
+  <data name="VeloBasar_End" xml:space="preserve">
+    <value>End</value>
+  </data>
+  <data name="VeloBasar_EnterProductId" xml:space="preserve">
+    <value>Product ID:</value>
+  </data>
+  <data name="VeloBasar_FirstName" xml:space="preserve">
+    <value>First name</value>
+  </data>
+  <data name="VeloBasar_FirstNameIsTooLong" xml:space="preserve">
+    <value>The first name must not be longer than {0} characters.</value>
+  </data>
+  <data name="VeloBasar_FrameNumber" xml:space="preserve">
+    <value>Frame number</value>
+  </data>
+  <data name="VeloBasar_FrameNumberLabel" xml:space="preserve">
+    <value>Frame number: {0}</value>
+  </data>
+  <data name="VeloBasar_GenerateBrands" xml:space="preserve">
+    <value>Generate brands example</value>
+  </data>
+  <data name="VeloBasar_GenerateCountries" xml:space="preserve">
+    <value>Generate countries example</value>
+  </data>
+  <data name="VeloBasar_GenerateProductTypes" xml:space="preserve">
+    <value>Example generate product types</value>
+  </data>
+  <data name="VeloBasar_GenerateZipCodes" xml:space="preserve">
+    <value>Load ZIPs</value>
+  </data>
+  <data name="VeloBasar_IBAN" xml:space="preserve">
+    <value>IBAN</value>
+  </data>
+  <data name="VeloBasar_Id" xml:space="preserve">
+    <value>Id</value>
+  </data>
+  <data name="VeloBasar_IncomeFromSoldProducts" xml:space="preserve">
+    <value>Revenue from items sold:</value>
+  </data>
+  <data name="VeloBasar_Info" xml:space="preserve">
+    <value>Info</value>
+  </data>
+  <data name="VeloBasar_InitialSetup" xml:space="preserve">
+    <value>Initial setup</value>
+  </data>
+  <data name="VeloBasar_InvalidLoginAttempt" xml:space="preserve">
+    <value>Invalid login attempt</value>
+  </data>
+  <data name="VeloBasar_IsActive" xml:space="preserve">
+    <value>Is active</value>
+  </data>
+  <data name="VeloBasar_Iso3166Alpha3Code" xml:space="preserve">
+    <value>ISO-3166 Code</value>
+  </data>
+  <data name="VeloBasar_Label" xml:space="preserve">
+    <value>Label</value>
+  </data>
+  <data name="VeloBasar_Labels" xml:space="preserve">
+    <value>Labels</value>
+  </data>
+  <data name="VeloBasar_LastName" xml:space="preserve">
+    <value>Last name</value>
+  </data>
+  <data name="VeloBasar_LastNameIsTooLong" xml:space="preserve">
+    <value>The last name must not be longer than {0} characters.</value>
+  </data>
+  <data name="VeloBasar_Location" xml:space="preserve">
+    <value>Location</value>
+  </data>
+  <data name="VeloBasar_DoLock" xml:space="preserve">
+    <value>Lock</value>
+  </data>
+  <data name="VeloBasar_Locked" xml:space="preserve">
+    <value>Locked</value>
+  </data>
+  <data name="VeloBasar_LockedProductsCount" xml:space="preserve">
+    <value>Locked products: {0}</value>
+  </data>
+  <data name="VeloBasar_LockInfo" xml:space="preserve">
+    <value>Blocked items are still in stock and cannot be used in any transaction (except billing). When a blocked item is settled, it is treated as if it was not sold and is still in stock.</value>
+  </data>
+  <data name="VeloBasar_LockProduct" xml:space="preserve">
+    <value>Lock item {0}</value>
+  </data>
+  <data name="VeloBasar_LogIn" xml:space="preserve">
+    <value>Log in</value>
+  </data>
+  <data name="VeloBasar_LogOut" xml:space="preserve">
+    <value>Log out</value>
+  </data>
+  <data name="VeloBasar_Lost" xml:space="preserve">
+    <value>Missing</value>
+  </data>
+  <data name="VeloBasar_LostInfo" xml:space="preserve">
+    <value>Disappeared items are no longer in stock and cannot be used in any transaction (except settlement). If a blocked item is settled, it will be treated as if it was sold.</value>
+  </data>
+  <data name="VeloBasar_LostProduct" xml:space="preserve">
+    <value>Mark item {0} as disappeared</value>
+  </data>
+  <data name="VeloBasar_LostProducts" xml:space="preserve">
+    <value>Disappeared items: {0}</value>
+  </data>
+  <data name="VeloBasar_Menu" xml:space="preserve">
+    <value>Menu</value>
+  </data>
+  <data name="VeloBasar_Misc" xml:space="preserve">
+    <value>Other</value>
+  </data>
+  <data name="VeloBasar_Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="VeloBasar_NewAcceptance" xml:space="preserve">
+    <value>New Acceptance</value>
+  </data>
+  <data name="VeloBasar_NewSale" xml:space="preserve">
+    <value>New Sale</value>
+  </data>
+  <data name="VeloBasar_Newsletter" xml:space="preserve">
+    <value>Newsletter</value>
+  </data>
+  <data name="VeloBasar_NewsletterPermission" xml:space="preserve">
+    <value>Newsletter permission</value>
+  </data>
+  <data name="VeloBasar_NewsletterPermissionTimesStamp" xml:space="preserve">
+    <value>Newsletter permission granted on {0}</value>
+  </data>
+  <data name="VeloBasar_Next" xml:space="preserve">
+    <value>Continue</value>
+  </data>
+  <data name="VeloBasar_NoAcceptanceFound" xml:space="preserve">
+    <value>No acceptance with number {0} could be found.</value>
+  </data>
+  <data name="VeloBasar_NoBasarActive" xml:space="preserve">
+    <value>No bazaar active</value>
+  </data>
+  <data name="VeloBasar_NoProductWithIdFound" xml:space="preserve">
+    <value>No article with the ID {0} could be found.</value>
+  </data>
+  <data name="VeloBasar_NoSaleFoundWithNumber" xml:space="preserve">
+    <value>No sale could be found with the number {0}</value>
+  </data>
+  <data name="VeloBasar_NoSellerFound" xml:space="preserve">
+    <value>No seller could be found.</value>
+  </data>
+  <data name="VeloBasar_Notes" xml:space="preserve">
+    <value>Notes</value>
+  </data>
+  <data name="VeloBasar_NotSettled" xml:space="preserve">
+    <value>Not settled</value>
+  </data>
+  <data name="VeloBasar_NotSold" xml:space="preserve">
+    <value>Not sold</value>
+  </data>
+  <data name="VeloBasar_NotSoldProductCount" xml:space="preserve">
+    <value>Not sold products</value>
+  </data>
+  <data name="VeloBasar_Number" xml:space="preserve">
+    <value>Number</value>
+  </data>
+  <data name="VeloBasar_Ok" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="VeloBasar_Other" xml:space="preserve">
+    <value>Other</value>
+  </data>
+  <data name="VeloBasar_Overview" xml:space="preserve">
+    <value>Overview</value>
+  </data>
+  <data name="VeloBasar_PageNumberFromOverall" xml:space="preserve">
+    <value>Page {0} of {1}</value>
+  </data>
+  <data name="VeloBasar_ParentTransaction" xml:space="preserve">
+    <value>Predecessor: {0} #{1}</value>
+  </data>
+  <data name="VeloBasar_Password" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="VeloBasar_PhoneNumber" xml:space="preserve">
+    <value>Phone number</value>
+  </data>
+  <data name="VeloBasar_PhoneNumberIsTooLong" xml:space="preserve">
+    <value>The phone number must not be longer than {0} characters.</value>
+  </data>
+  <data name="VeloBasar_PickedUp" xml:space="preserve">
+    <value>Picked up</value>
+  </data>
+  <data name="VeloBasar_PickedUpProductCount" xml:space="preserve">
+    <value>Picked up products</value>
+  </data>
+  <data name="VeloBasar_PleaseEnterAdminUserEmail" xml:space="preserve">
+    <value>Please provide an admin email address.</value>
+  </data>
+  <data name="VeloBasar_PleaseEnterBrand" xml:space="preserve">
+    <value>Please select a brand.</value>
+  </data>
+  <data name="VeloBasar_PleaseEnterCity" xml:space="preserve">
+    <value>Please enter a city.</value>
+  </data>
+  <data name="VeloBasar_PleaseEnterCountry" xml:space="preserve">
+    <value>Please select a country.</value>
+  </data>
+  <data name="VeloBasar_PleaseEnterDescription" xml:space="preserve">
+    <value>Please enter a description.</value>
+  </data>
+  <data name="VeloBasar_PleaseEnterFirstName" xml:space="preserve">
+    <value>Please enter a first name.</value>
+  </data>
+  <data name="VeloBasar_PleaseEnterFirstNameForSearch" xml:space="preserve">
+    <value>Please enter a first name for the search.</value>
+  </data>
+  <data name="VeloBasar_PleaseEnterIso3166Alpha3Code" xml:space="preserve">
+    <value>Please enter an ISO code.</value>
+  </data>
+  <data name="VeloBasar_PleaseEnterLastName" xml:space="preserve">
+    <value>Please enter a last name.</value>
+  </data>
+  <data name="VeloBasar_PleaseEnterLastNameForSearch" xml:space="preserve">
+    <value>Please enter a last name for the search.</value>
+  </data>
+  <data name="VeloBasar_PleaseEnterName" xml:space="preserve">
+    <value>Please enter a name.</value>
+  </data>
+  <data name="VeloBasar_PleaseEnterNotes" xml:space="preserve">
+    <value>Please enter comments.</value>
+  </data>
+  <data name="VeloBasar_PleaseEnterPhoneNumber" xml:space="preserve">
+    <value>Please enter a valid phone number.</value>
+  </data>
+  <data name="VeloBasar_PleaseEnterProductType" xml:space="preserve">
+    <value>Please select a type.</value>
+  </data>
+  <data name="VeloBasar_PleaseEnterStreet" xml:space="preserve">
+    <value>Please enter a street.</value>
+  </data>
+  <data name="VeloBasar_PleaseEnterValidEMail" xml:space="preserve">
+    <value>Please enter a valid e-mail address.</value>
+  </data>
+  <data name="VeloBasar_PleaseEnterValidIBAN" xml:space="preserve">
+    <value>Please enter a valid IBAN.</value>
+  </data>
+  <data name="VeloBasar_PleaseEnterValidPercentage" xml:space="preserve">
+    <value>Please enter a value between 0 and 100%.</value>
+  </data>
+  <data name="VeloBasar_PleaseEnterZIP" xml:space="preserve">
+    <value>Please enter a postal code.</value>
+  </data>
+  <data name="VeloBasar_PleaseSelectProductToCanellate" xml:space="preserve">
+    <value>Please select a product to cancel.</value>
+  </data>
+  <data name="VeloBasar_Price" xml:space="preserve">
+    <value>Price</value>
+  </data>
+  <data name="VeloBasar_PriceDistribution" xml:space="preserve">
+    <value>Price distribution</value>
+  </data>
+  <data name="VeloBasar_PriceMustBeGreaterThanZero" xml:space="preserve">
+    <value>Please enter a price larger than 0.01.</value>
+  </data>
+  <data name="VeloBasar_PriceMustHavePrecisition" xml:space="preserve">
+    <value>Only 2 decimal places are allowed.</value>
+  </data>
+  <data name="VeloBasar_PrintLabels" xml:space="preserve">
+    <value>Print labels</value>
+  </data>
+  <data name="VeloBasar_PrintLables" xml:space="preserve">
+    <value>Print labels</value>
+  </data>
+  <data name="VeloBasar_PrintTest" xml:space="preserve">
+    <value>Test printouts</value>
+  </data>
+  <data name="VeloBasar_Product" xml:space="preserve">
+    <value>Produc</value>
+  </data>
+  <data name="VeloBasar_ProductCommissionPercentage" xml:space="preserve">
+    <value>Sales commission in percent</value>
+  </data>
+  <data name="VeloBasar_ProductCount" xml:space="preserve">
+    <value>Number of procuts</value>
+  </data>
+  <data name="VeloBasar_ProductCounter" xml:space="preserve">
+    <value>{0} Product</value>
+  </data>
+  <data name="VeloBasar_ProductDescription" xml:space="preserve">
+    <value>Procuct description</value>
+  </data>
+  <data name="VeloBasar_ProductDescriptionIsTooLong" xml:space="preserve">
+    <value>The description must not be longer than {0} characters.</value>
+  </data>
+  <data name="VeloBasar_ProductDetails" xml:space="preserve">
+    <value>Procuct #{0}</value>
+  </data>
+  <data name="VeloBasar_ProductIsLocked" xml:space="preserve">
+    <value>The product has been locked. Notes: {0}</value>
+  </data>
+  <data name="VeloBasar_ProductIsLost" xml:space="preserve">
+    <value>The product has been marked as disappeared. Notes: {0}</value>
+  </data>
+  <data name="VeloBasar_ProductNotAccepted" xml:space="preserve">
+    <value>The product has not yet been fully accepted.</value>
+  </data>
+  <data name="VeloBasar_ProductNotFound" xml:space="preserve">
+    <value>No product with ID {0} could be found</value>
+  </data>
+  <data name="VeloBasar_Products" xml:space="preserve">
+    <value>Product</value>
+  </data>
+  <data name="VeloBasar_ProductSold" xml:space="preserve">
+    <value>The product was already sold. See sale &lt;a href=\"{0}\"&gt;#{1}&lt;/a&gt;</value>
+  </data>
+  <data name="VeloBasar_ProductType" xml:space="preserve">
+    <value>Product type</value>
+  </data>
+  <data name="VeloBasar_ProductTypeList" xml:space="preserve">
+    <value>Product types</value>
+  </data>
+  <data name="VeloBasar_ProductWasSettled" xml:space="preserve">
+    <value>The product has already been settled.</value>
+  </data>
+  <data name="VeloBasar_RememberMe" xml:space="preserve">
+    <value>Stay logged in?</value>
+  </data>
+  <data name="VeloBasar_Reset" xml:space="preserve">
+    <value>Reset</value>
+  </data>
+  <data name="VeloBasar_ReturnMoney" xml:space="preserve">
+    <value>Change</value>
+  </data>
+  <data name="VeloBasar_SaleCount" xml:space="preserve">
+    <value>{0} Sales</value>
+  </data>
+  <data name="VeloBasar_SaleNumber" xml:space="preserve">
+    <value>Sales number</value>
+  </data>
+  <data name="VeloBasar_SalesPlural" xml:space="preserve">
+    <value>Sales</value>
+  </data>
+  <data name="VeloBasar_SalesCommision" xml:space="preserve">
+    <value>Sales commission ({0:P2} of {1:C}):</value>
+  </data>
+  <data name="VeloBasar_SaleDistribution" xml:space="preserve">
+    <value>Distribution sales totals</value>
+  </data>
+  <data name="VeloBasar_SaleSuccesful" xml:space="preserve">
+    <value>Sale successful.</value>
+  </data>
+  <data name="VeloBasar_Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="VeloBasar_SaveAcceptSession" xml:space="preserve">
+    <value>Save accept session</value>
+  </data>
+  <data name="VeloBasar_Search" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="VeloBasar_SelectSale" xml:space="preserve">
+    <value>Select sale</value>
+  </data>
+  <data name="VeloBasar_Seller" xml:space="preserve">
+    <value>Seller</value>
+  </data>
+  <data name="VeloBasar_SellerCount" xml:space="preserve">
+    <value>{0} Seller</value>
+  </data>
+  <data name="VeloBasar_SellerDetails" xml:space="preserve">
+    <value>Seller #{0} {1} {2}</value>
+  </data>
+  <data name="VeloBasar_SellerId" xml:space="preserve">
+    <value>Seller-ID: {0}</value>
+  </data>
+  <data name="VeloBasar_SellerIdShort" xml:space="preserve">
+    <value>Seller.-ID: {0}</value>
+  </data>
+  <data name="VeloBasar_SellerList" xml:space="preserve">
+    <value>Seller</value>
+  </data>
+  <data name="VeloBasar_SellerNotFound" xml:space="preserve">
+    <value>No seller with ID {0} could be found.</value>
+  </data>
+  <data name="VeloBasar_SellingPrice" xml:space="preserve">
+    <value>Selling price</value>
+  </data>
+  <data name="VeloBasar_SetAsLost" xml:space="preserve">
+    <value>Missing</value>
+  </data>
+  <data name="VeloBasar_Settle" xml:space="preserve">
+    <value>Settle</value>
+  </data>
+  <data name="VeloBasar_Settled" xml:space="preserve">
+    <value>Settled</value>
+  </data>
+  <data name="VeloBasar_SettlementAmout" xml:space="preserve">
+    <value>Settled amount</value>
+  </data>
+  <data name="VeloBasar_SettlementProgress" xml:space="preserve">
+    <value>Settlement progress</value>
+  </data>
+  <data name="VeloBasar_SettlementSuccesful" xml:space="preserve">
+    <value>Settlement successful</value>
+  </data>
+  <data name="VeloBasar_Size" xml:space="preserve">
+    <value>Size</value>
+  </data>
+  <data name="VeloBasar_Sold" xml:space="preserve">
+    <value>Sold</value>
+  </data>
+  <data name="VeloBasar_SoldProductCount" xml:space="preserve">
+    <value>Sold products</value>
+  </data>
+  <data name="VeloBasar_SoldProductsAmount" xml:space="preserve">
+    <value>Products worth {0:C} sold</value>
+  </data>
+  <data name="VeloBasar_SoldProductsCount" xml:space="preserve">
+    <value>Products sold: {0}</value>
+  </data>
+  <data name="VeloBasar_Start" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="VeloBasar_State" xml:space="preserve">
+    <value>State</value>
+  </data>
+  <data name="VeloBasar_Street" xml:space="preserve">
+    <value>Street</value>
+  </data>
+  <data name="VeloBasar_StreetIsTooLong" xml:space="preserve">
+    <value>The street must not be longer than {0} characters.</value>
+  </data>
+  <data name="VeloBasar_Sum" xml:space="preserve">
+    <value>Sum</value>
+  </data>
+  <data name="VeloBasar_TimeStamp" xml:space="preserve">
+    <value>Date and Time</value>
+  </data>
+  <data name="VeloBasar_TireSize" xml:space="preserve">
+    <value>Tire size</value>
+  </data>
+  <data name="VeloBasar_TireSizeLabel" xml:space="preserve">
+    <value>Tire size: {0}</value>
+  </data>
+  <data name="VeloBasar_Token" xml:space="preserve">
+    <value>Token</value>
+  </data>
+  <data name="VeloBasar_TotalAmount" xml:space="preserve">
+    <value>Total amount</value>
+  </data>
+  <data name="VeloBasar_TransactionList" xml:space="preserve">
+    <value>Transactions ({0})</value>
+  </data>
+  <data name="VeloBasar_Transactions" xml:space="preserve">
+    <value>Transactions</value>
+  </data>
+  <data name="VeloBasar_TransactionSuccesful" xml:space="preserve">
+    <value>{0} successful!</value>
+  </data>
+  <data name="VeloBasar_TransactionTypeWithNumber" xml:space="preserve">
+    <value>{0} #{1}</value>
+  </data>
+  <data name="VeloBasar_Type" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="VeloBasar_UndefinedProductState" xml:space="preserve">
+    <value>UNDEFINED PRODUCT STATE</value>
+  </data>
+  <data name="VeloBasar_DoUnlock" xml:space="preserve">
+    <value>Unlock</value>
+  </data>
+  <data name="VeloBasar_UnlockProduct" xml:space="preserve">
+    <value>Unlock product {0}</value>
+  </data>
+  <data name="VeloBasar_Update" xml:space="preserve">
+    <value>Update</value>
+  </data>
+  <data name="VeloBasar_UpdatedAt" xml:space="preserve">
+    <value>Updated at</value>
+  </data>
+  <data name="VeloBasar_ValueState" xml:space="preserve">
+    <value>Settlement status</value>
+  </data>
+  <data name="VeloBasar_ZIP" xml:space="preserve">
+    <value>ZIP</value>
+  </data>
+  <data name="Xan_AspNetCore_AllStates" xml:space="preserve">
+    <value>All (State)</value>
+  </data>
+  <data name="Xan_AspNetCore_Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Xan_AspNetCore_CreatedAt" xml:space="preserve">
+    <value>Created at</value>
+  </data>
+  <data name="Xan_AspNetCore_Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Xan_AspNetCore_Disable" xml:space="preserve">
+    <value>Disable</value>
+  </data>
+  <data name="Xan_AspNetCore_Disabled" xml:space="preserve">
+    <value>Disabled</value>
+  </data>
+  <data name="Xan_AspNetCore_Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="Xan_AspNetCore_Enable" xml:space="preserve">
+    <value>Enable</value>
+  </data>
+  <data name="Xan_AspNetCore_Enabled" xml:space="preserve">
+    <value>Enabled</value>
+  </data>
+  <data name="Xan_AspNetCore_Id" xml:space="preserve">
+    <value>Id</value>
+  </data>
+  <data name="Xan_AspNetCore_Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="Xan_AspNetCore_State" xml:space="preserve">
+    <value>State</value>
+  </data>
+  <data name="Xan_AspNetCore_UpdatedAt" xml:space="preserve">
+    <value>Updated at</value>
+  </data>
+  <data name="VeloBasar_AcceptanceSingular" xml:space="preserve">
+    <value>Acceptance</value>
+  </data>
+  <data name="VeloBasar_AcceptancesPlural" xml:space="preserve">
+    <value>Acceptances</value>
+  </data>
+  <data name="VeloBasar_AcceptancesPluralWithCount" xml:space="preserve">
+    <value>Acceptances ({0})</value>
+  </data>
+  <data name="VeloBasar_AllStates" xml:space="preserve">
+    <value>Alle (States)</value>
+  </data>
+  <data name="VeloBasar_AllStorageStates" xml:space="preserve">
+    <value>Alle (Storage states)</value>
+  </data>
+  <data name="VeloBasar_AllValueStates" xml:space="preserve">
+    <value>All (billing status)</value>
+  </data>
+  <data name="VeloBasar_CancellationsPlural" xml:space="preserve">
+    <value>Cancellations</value>
+  </data>
+  <data name="VeloBasar_CancellationsPluralWithCount" xml:space="preserve">
+    <value>Cancellations ({0})</value>
+  </data>
+  <data name="VeloBasar_Completed" xml:space="preserve">
+    <value>Completed</value>
+  </data>
+  <data name="VeloBasar_LockSingular" xml:space="preserve">
+    <value>Lock</value>
+  </data>
+  <data name="VeloBasar_LocksPlural" xml:space="preserve">
+    <value>Locks</value>
+  </data>
+  <data name="VeloBasar_LocksPluralWithCount" xml:space="preserve">
+    <value>Locks ({0})</value>
+  </data>
+  <data name="VeloBasar_NotAccepted" xml:space="preserve">
+    <value>Accepting</value>
+  </data>
+  <data name="VeloBasar_SaleSingular" xml:space="preserve">
+    <value>Sale</value>
+  </data>
+  <data name="VeloBasar_SetLostSingular" xml:space="preserve">
+    <value>Missing</value>
+  </data>
+  <data name="VeloBasar_SetLostsPlural" xml:space="preserve">
+    <value>Missings</value>
+  </data>
+  <data name="VeloBasar_SetLostsPluralWithCount" xml:space="preserve">
+    <value>Missings ({0})</value>
+  </data>
+  <data name="VeloBasar_SettlementSingular" xml:space="preserve">
+    <value>Settlement</value>
+  </data>
+  <data name="VeloBasar_SettlementsPlural" xml:space="preserve">
+    <value>Settlements</value>
+  </data>
+  <data name="VeloBasar_SettlementsPluralWithCount" xml:space="preserve">
+    <value>Settlements ({0})</value>
+  </data>
+  <data name="VeloBasar_Uncompleted" xml:space="preserve">
+    <value>Umcompleted</value>
+  </data>
+  <data name="VeloBasar_UnlockSingular" xml:space="preserve">
+    <value>Unlock</value>
+  </data>
+  <data name="VeloBasar_UnlocksPlural" xml:space="preserve">
+    <value>Unlocks</value>
+  </data>
+  <data name="VeloBasar_UnlocksPluralWithCount" xml:space="preserve">
+    <value>Unlocks ({0})</value>
+  </data>
+  <data name="VeloBasar_AcceptedProducts" xml:space="preserve">
+    <value>Accepted products</value>
+  </data>
+  <data name="VeloBasar_AcceptedProductsWithCount" xml:space="preserve">
+    <value>Accepted products: {0}</value>
+  </data>
+  <data name="VeloBasar_SalesPluralWithCount" xml:space="preserve">
+    <value>Sales ({0})</value>
+  </data>
+  <data name="VeloBasar_AllProductTypes" xml:space="preserve">
+    <value>All (Product Types)</value>
+  </data>
+  <data name="VeloBasar_AllTransactionTypes" xml:space="preserve">
+    <value>All (Transactions)</value>
+  </data>
+</root>

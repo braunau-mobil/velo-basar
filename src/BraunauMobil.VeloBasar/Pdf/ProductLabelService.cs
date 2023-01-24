@@ -8,6 +8,7 @@ using iText.Layout;
 using iText.Layout.Borders;
 using iText.Layout.Element;
 using iText.Layout.Properties;
+using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using System.Globalization;
 using Xan.Extensions;
@@ -18,13 +19,13 @@ public sealed class ProductLabelService
     : IProductLabelService
 {
     private readonly PdfGenerator _pdf;
-    private readonly VeloTexts _txt;
+    private readonly IStringLocalizer<SharedResources> _localizer;
     private readonly LabelPrintSettings _printSettings;
 
-    public ProductLabelService(PdfGenerator pdf, VeloTexts txt, IOptions<PrintSettings> options)
+    public ProductLabelService(PdfGenerator pdf, IStringLocalizer<SharedResources> localizer, IOptions<PrintSettings> options)
     {
         _pdf = pdf ?? throw new ArgumentNullException(nameof(pdf));
-        _txt = txt ?? throw new ArgumentNullException(nameof(txt));
+        _localizer = localizer ?? throw new ArgumentNullException(nameof(localizer));
         ArgumentNullException.ThrowIfNull(options);
         _printSettings = options.Value.Label;
     }
@@ -83,13 +84,13 @@ public sealed class ProductLabelService
         if (product.FrameNumber != null)
         {
             info.Add(Environment.NewLine)
-                .Add(_pdf.GetRegularText(_txt.FrameNumberLabel(product.FrameNumber)));
+                .Add(_pdf.GetRegularText(_localizer[VeloTexts.FrameNumberLabel, product.FrameNumber]));
         }
 
         if (product.TireSize != null)
         {
             info.Add(Environment.NewLine)
-                .Add(_pdf.GetRegularText(_txt.TireSizeLabel(product.TireSize)));
+                .Add(_pdf.GetRegularText(_localizer[VeloTexts.TireSizeLabel, product.TireSize]));
         }
 
         info.SetMargin(2);

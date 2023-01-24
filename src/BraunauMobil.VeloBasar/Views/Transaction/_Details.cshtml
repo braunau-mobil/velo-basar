@@ -13,15 +13,15 @@
     <div class="card-footer">
         @if (Model.CanHasDocument)
         {
-            <a class="btn btn-outline-primary" href="@Router.Transaction.ToDocument(Model.Id)" target="_blank">@Txt.Document</a>
+            <a class="btn btn-outline-primary" href="@Router.Transaction.ToDocument(Model.Id)" target="_blank">@Localizer[VeloTexts.Document]</a>
         }
         @if (SignInManager.IsSignedIn(User) && Model.CanCancel)
         {
-            <a class="btn btn-info" href="@Router.Transaction.ToCancel(Model.Id)">@Txt.Cancellate</a>
+            <a class="btn btn-info" href="@Router.Transaction.ToCancel(Model.Id)">@Localizer[VeloTexts.Cancellate]</a>
         }
         @if (Model.ParentTransaction != null)
         {
-            <a class="btn btn-outline-@Model.ParentTransaction.Type.ToCssColor()" href="@Router.Transaction.ToDetails(Model.ParentTransaction.Id)">@Txt.ParentTransaction(Model.ParentTransaction.Type, Model.ParentTransaction.Number)</a>
+            <a class="btn btn-outline-@Model.ParentTransaction.Type.ToCssColor()" href="@Router.Transaction.ToDetails(Model.ParentTransaction.Id)">@Localizer[VeloTexts.ParentTransaction, Localizer[VeloTexts.Singular(Model.ParentTransaction.Type)], Model.ParentTransaction.Number]</a>
         }
     </div>
 </div>

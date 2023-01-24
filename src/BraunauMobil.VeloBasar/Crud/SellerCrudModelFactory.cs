@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.Extensions.Localization;
 using Xan.Extensions.Collections.Generic;
 
 namespace BraunauMobil.VeloBasar.Crud;
@@ -9,12 +10,12 @@ namespace BraunauMobil.VeloBasar.Crud;
 public sealed class SellerCrudModelFactory
     : ICrudModelFactory<SellerEntity, SellerListParameter>
 {
-    private readonly VeloTexts _txt;
+    private readonly IStringLocalizer<SharedResources> _localizer;
     private readonly IHtmlHelper _htmlHelper;
 
-    public SellerCrudModelFactory(VeloTexts txt, IHtmlHelper htmlHelper)
+    public SellerCrudModelFactory(IStringLocalizer<SharedResources> localizer, IHtmlHelper htmlHelper)
     {
-        _txt = txt ?? throw new ArgumentNullException(nameof(txt));
+        _localizer = localizer ?? throw new ArgumentNullException(nameof(localizer));
         _htmlHelper = htmlHelper ?? throw new ArgumentNullException(nameof(htmlHelper));
     }
 
@@ -22,7 +23,7 @@ public sealed class SellerCrudModelFactory
     {
         ArgumentNullException.ThrowIfNull(entity);
 
-        ICrudModel model = new CrudModel<SellerEntity>(entity, CreateEditorAsync, _txt.CreateSeller);
+        ICrudModel model = new CrudModel<SellerEntity>(entity, CreateEditorAsync, _localizer[VeloTexts.CreateSeller]);
         return await Task.FromResult(model);
     }
 
@@ -30,7 +31,7 @@ public sealed class SellerCrudModelFactory
     {
         ArgumentNullException.ThrowIfNull(entity);
 
-        ICrudModel model = new CrudModel<SellerEntity>(entity, CreateEditorAsync, _txt.EditSeller);
+        ICrudModel model = new CrudModel<SellerEntity>(entity, CreateEditorAsync, _localizer[VeloTexts.EditSeller]);
         return await Task.FromResult(model);
     }
 

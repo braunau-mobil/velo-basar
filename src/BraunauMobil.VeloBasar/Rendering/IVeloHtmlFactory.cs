@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Html;
-
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Xan.AspNetCore.Rendering;
 
 namespace BraunauMobil.VeloBasar.Rendering;
@@ -7,14 +7,15 @@ namespace BraunauMobil.VeloBasar.Rendering;
 public interface IVeloHtmlFactory
     : IBootstrapHtmlFactory
 {
-    IHtmlContent BaseDataStateLink<TEntity>(CrudItemModel<TEntity> item, ICrudRouter router)
-        where TEntity : class, ICrudEntity, new();
+    TagBuilder Alert(MessageType type, string text);
+
+    TagBuilder Alert(MessageType type, string title, string text);
+
+    TagBuilder Badge(BadgeType type);
 
     IHtmlContent ProductState(ProductEntity product);
 
     IHtmlContent ProductState(StorageState storageState, ValueState valueState);
-
-    TableBuilder<TModel> Table<TModel>(IEnumerable<TModel> list);
 
     TableBuilder<ProductEntity> ProductsTable(IEnumerable<ProductEntity> products, bool showSum = false, bool showId = false, bool showState = false);
 

@@ -13,14 +13,12 @@ public sealed class TransactionController
 {
     private readonly ITransactionService _transactionService;
     private readonly SignInManager<IdentityUser> _signInManager;
-    private readonly VeloTexts _txt;
     private readonly IVeloRouter _router;
     private readonly IValidator<TransactionSuccessModel> _transactionSuccessValidator;
 
-    public TransactionController(ITransactionService transactionService, IVeloRouter router, VeloTexts txt, SignInManager<IdentityUser> signInManager, IValidator<TransactionSuccessModel> transactionSuccessValidator)
+    public TransactionController(ITransactionService transactionService, IVeloRouter router, SignInManager<IdentityUser> signInManager, IValidator<TransactionSuccessModel> transactionSuccessValidator)
     {
         _transactionService = transactionService ?? throw new ArgumentNullException(nameof(transactionService));
-        _txt = txt ?? throw new ArgumentNullException(nameof(txt));
         _router = router ?? throw new ArgumentNullException(nameof(router));
         _signInManager = signInManager ?? throw new ArgumentNullException(nameof(signInManager));
         _transactionSuccessValidator = transactionSuccessValidator ?? throw new ArgumentNullException(nameof(transactionSuccessValidator));

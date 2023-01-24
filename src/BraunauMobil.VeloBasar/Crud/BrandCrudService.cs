@@ -7,13 +7,11 @@ namespace BraunauMobil.VeloBasar.Crud;
 public sealed class BrandCrudService
     : AbstractCrudService<BrandEntity>
 {
-    private readonly VeloTexts _txt;
     private readonly VeloDbContext _db;
 
-    public BrandCrudService(VeloTexts txt, VeloDbContext db)
+    public BrandCrudService(VeloDbContext db)
         : base(db)
     {
-        _txt = txt ?? throw new ArgumentNullException(nameof(txt));
         _db = db ?? throw new ArgumentNullException(nameof(db));
     }
 

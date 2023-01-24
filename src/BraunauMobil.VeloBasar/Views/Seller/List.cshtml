@@ -1,7 +1,7 @@
 ﻿@model ListModel<SellerEntity, SellerListParameter>
-@inject BusinessLogic.ISelectListService SelectLists
+@inject ISelectListService SelectLists
 @{
-    ViewData.SetTitle(Txt.SellerList);
+    ViewData.SetTitle(Localizer[VeloTexts.SellerList]);
 }
 
 <form method="get">
@@ -21,17 +21,15 @@
         </div>
         <div class="card-body p-0">
             @(VeloHtml.SellersTable(Model)
-                .LinkColumn()
-                    .ForLink(item => Router.Seller.ToDetails(item.Id), Txt.Details)
-                .LinkColumn()
-                    .ForLink(item => Router.Seller.ToEdit(item.Id), Txt.Edit)
+                .Column(c => c.ForLink(item => Router.Seller.ToDetails(item.Id), Localizer[VeloTexts.Details]))
+                .Column(c => c.ForLink(item => Router.Seller.ToEdit(item.Id), Localizer[VeloTexts.Edit]))
                 .Build())
         </div>
         <div class="card-footer">
             <vc:pagination items="@Model" current-parameter="@Model.Parameter" to-list="@Router.Seller.ToList"></vc:pagination>
         </div>
         <div class="card-footer">
-            <button class="btn btn-primary" formaction="@Router.Seller.ToCreate()">@Txt.CreateSeller</button>
+            <button class="btn btn-primary" formaction="@Router.Seller.ToCreate()">@Localizer[VeloTexts.CreateSeller]</button>
         </div>
     </div>
 </form>

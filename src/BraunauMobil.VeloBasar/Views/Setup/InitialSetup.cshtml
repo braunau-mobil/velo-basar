@@ -1,7 +1,7 @@
 ﻿@model InitializationConfiguration
 @{
     Layout = "_LayoutSimple";
-    ViewData.SetTitle(Txt.InitialSetup);
+    ViewData.SetTitle(Localizer[VeloTexts.InitialSetup]);
 }
 
 <form method="post">
@@ -11,14 +11,14 @@
             <h4>@ViewData.Title()</h4>
         </div>
         <div class="card-body">
-            @VeloHtml.EmailInputField(nameof(Model.AdminUserEMail), Model.AdminUserEMail, Txt.AdminUserEMail, autoFocus: true)
-            @VeloHtml.CheckBoxField(nameof(Model.GenerateCountries), Model.GenerateCountries, Txt.GenerateCountries)
-            @VeloHtml.CheckBoxField(nameof(Model.GenerateBrands), Model.GenerateBrands, Txt.GenerateBrands)
-            @VeloHtml.CheckBoxField(nameof(Model.GenerateProductTypes), Model.GenerateProductTypes, Txt.GenerateProductTypes)
-            @VeloHtml.CheckBoxField(nameof(Model.GenerateZipCodes), Model.GenerateZipCodes, Txt.GenerateZipCodes)
+            @VeloHtml.EmailInputField(nameof(Model.AdminUserEMail), Model.AdminUserEMail, Localizer[VeloTexts.AdminUserEMail], autoFocus: true)
+            @VeloHtml.CheckBoxField(nameof(Model.GenerateCountries), Model.GenerateCountries, Localizer[VeloTexts.GenerateCountries])
+            @VeloHtml.CheckBoxField(nameof(Model.GenerateBrands), Model.GenerateBrands, Localizer[VeloTexts.GenerateBrands])
+            @VeloHtml.CheckBoxField(nameof(Model.GenerateProductTypes), Model.GenerateProductTypes, Localizer[VeloTexts.GenerateProductTypes])
+            @VeloHtml.CheckBoxField(nameof(Model.GenerateZipCodes), Model.GenerateZipCodes, Localizer[VeloTexts.GenerateZipCodes])
         </div>
         <div class="card-footer">
-            <button class="btn btn-primary">@Txt.Ok</button>
+            <button class="btn btn-primary">@Localizer[VeloTexts.Ok]</button>
         </div>
     </div>
 </form>

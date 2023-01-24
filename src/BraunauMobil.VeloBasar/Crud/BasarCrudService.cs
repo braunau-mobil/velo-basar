@@ -1,5 +1,6 @@
 ﻿using BraunauMobil.VeloBasar.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 using System.Linq.Expressions;
 using Xan.AspNetCore.EntityFrameworkCore;
 
@@ -8,14 +9,14 @@ namespace BraunauMobil.VeloBasar.Crud;
 public sealed class BasarCrudService
     : AbstractCrudService<BasarEntity>
 {
-    private readonly VeloTexts _txt;
+    private readonly IStringLocalizer<SharedResources> _localizer;
     private readonly VeloDbContext _db;
 
-    public BasarCrudService(VeloTexts txt, VeloDbContext db)
+    public BasarCrudService(IStringLocalizer<SharedResources> localizer, VeloDbContext db)
         : base(db)
     {
         _db = db ?? throw new ArgumentNullException(nameof(db));
-        _txt = txt ?? throw new ArgumentNullException(nameof(txt));
+        _localizer = localizer ?? throw new ArgumentNullException(nameof(localizer));
     }
 
     public override DbSet<BasarEntity> Set => _db.Basars;
@@ -65,7 +66,7 @@ public sealed class BasarCrudService
     {
         if (await _db.Transactions.AnyAsync(t => t.BasarId == id))
         {
-            throw new InvalidOperationException(_txt.CannotDeleteBasar(id));
+            throw new InvalidOperationException(_localizer[VeloTexts.CannotDeleteBasar, id]);
         }
 
         BasarEntity basar = await _db.Basars.FirstByIdAsync(id);

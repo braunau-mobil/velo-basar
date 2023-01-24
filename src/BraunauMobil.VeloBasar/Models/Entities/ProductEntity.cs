@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Microsoft.Extensions.Localization;
 using System.Diagnostics;
 
 namespace BraunauMobil.VeloBasar.Models.Entities;
@@ -140,32 +141,30 @@ public sealed class ProductEntityValidator
 {
     public const int MaxDescriptionLength = 80;
 
-    private readonly VeloTexts _txt;
-
-    public ProductEntityValidator(VeloTexts txt)
+    public ProductEntityValidator(IStringLocalizer<SharedResources> localizer)
     {
-        _txt = txt ?? throw new ArgumentNullException(nameof(txt));
+        ArgumentNullException.ThrowIfNull(localizer);
 
         RuleFor(seller => seller.BrandId)
             .NotEqual(0)
-            .WithMessage(_txt.PleaseEnterBrand);
+            .WithMessage(localizer[VeloTexts.PleaseEnterBrand]);
 
         RuleFor(seller => seller.TypeId)
             .NotEqual(0)
-            .WithMessage(_txt.PleaseEnterProductType);
+            .WithMessage(localizer[VeloTexts.PleaseEnterProductType]);
 
         RuleFor(seller => seller.Description)
             .NotNull()
-            .WithMessage(_txt.PleaseEnterDescription)
+            .WithMessage(localizer[VeloTexts.PleaseEnterDescription])
             .MaximumLength(MaxDescriptionLength)
-            .WithMessage(_txt.ProductDescriptionIsTooLong(MaxDescriptionLength));
+            .WithMessage(localizer[VeloTexts.ProductDescriptionIsTooLong, MaxDescriptionLength]);
 
         RuleFor(seller => seller.Price)
             .GreaterThan(0)
-            .WithMessage(_txt.PriceMustBeGreaterThanZero);
+            .WithMessage(localizer[VeloTexts.PriceMustBeGreaterThanZero]);
 
         RuleFor(seller => seller.Price)
             .PrecisionScale(12, 2, true)
-            .WithMessage(_txt.PriceMustHavePrecisition);
+            .WithMessage(localizer[VeloTexts.PriceMustHavePrecisition]);
     }
 }

@@ -50,7 +50,7 @@
                     <a class="page-link @ActiveCss(Model.Items.PageSize == pageSize)" href="@Model.ToPageSize(pageSize)">
                         @if (pageSize == Xan.Extensions.Collections.IPaginatedList.AllPageSize)
                         {
-                            @Txt.All
+                            @Localizer[VeloTexts.All]
                         }
                         else
                         {

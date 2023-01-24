@@ -13,6 +13,7 @@ using iText.Layout;
 using iText.Layout.Borders;
 using iText.Layout.Element;
 using iText.Layout.Properties;
+using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 
 namespace BraunauMobil.VeloBasar.Pdf;
@@ -22,12 +23,12 @@ public sealed class TransactionDocumentService
 {
     private readonly PdfGenerator _pdf;
     private readonly PrintSettings _settings;
-    private readonly VeloTexts _txt;
+    private readonly IStringLocalizer<SharedResources> _localizer;
 
-    public TransactionDocumentService(PdfGenerator pdf, IOptions<PrintSettings> options, VeloTexts txt)
+    public TransactionDocumentService(PdfGenerator pdf, IOptions<PrintSettings> options, IStringLocalizer<SharedResources> localizer)
     {
         _pdf = pdf ?? throw new ArgumentNullException(nameof(pdf));
-        _txt = txt ?? throw new ArgumentNullException(nameof(txt));
+        _localizer = localizer ?? throw new ArgumentNullException(nameof(localizer));
 
         ArgumentNullException.ThrowIfNull(options);
         _settings = options.Value;
@@ -62,12 +63,12 @@ public sealed class TransactionDocumentService
 
         return CreateTransactionPdf((pdfDoc, doc) =>
         {
-            _pdf.AddHeader(doc, GetBigAddressText(acceptance.Seller), GetLocationAndDateText(acceptance.Basar), _txt.SellerIdShort(acceptance.Seller.Id));
+            _pdf.AddHeader(doc, GetBigAddressText(acceptance.Seller), GetLocationAndDateText(acceptance.Basar), _localizer[VeloTexts.SellerIdShort, acceptance.Seller.Id]);
 
             _pdf.AddTitle(doc, string.Format(CultureInfo.CurrentCulture, _settings.Acceptance.TitleFormat, acceptance.Basar.Name, acceptance.Number));
             _pdf.AddSubtitle(doc, _settings.Acceptance.SubTitle);
 
-            AddProductTable(doc, acceptance.Products.GetProducts(), _txt.Price);
+            AddProductTable(doc, acceptance.Products.GetProducts(), _localizer[VeloTexts.Price]);
 
             AddSignature(doc, _settings.Acceptance.SignatureText, acceptance);
 
@@ -113,7 +114,7 @@ public sealed class TransactionDocumentService
             _pdf.AddTitle(doc, string.Format(CultureInfo.CurrentCulture, _settings.Sale.TitleFormat, sale.Basar.Name, sale.Number));
             _pdf.AddSubtitle(doc, _settings.Sale.SubTitle);
 
-            AddProductTable(doc, sale.Products.GetProducts(), _txt.Price, true, _settings.Sale.SellerInfoText);
+            AddProductTable(doc, sale.Products.GetProducts(), _localizer[VeloTexts.Price, true, _settings.Sale.SellerInfoText]);
 
             doc.Add(_pdf.GetSpacer(5));
             doc.Add(_pdf.GetRegularParagraph(_settings.Sale.HintText));
@@ -135,7 +136,7 @@ public sealed class TransactionDocumentService
             AddBanner(doc);
             _pdf.AddBannerSubtitle(doc, _settings.BannerSubtitle, _settings.Website);
 
-            _pdf.AddHeader(doc, GetBigAddressText(settlement.Seller), GetLocationAndDateText(settlement.Basar), _txt.SellerIdShort(settlement.Seller.Id));
+            _pdf.AddHeader(doc, GetBigAddressText(settlement.Seller), GetLocationAndDateText(settlement.Basar), _localizer[VeloTexts.SellerIdShort, settlement.Seller.Id]);
 
             _pdf.AddTitle(doc, string.Format(CultureInfo.CurrentCulture, _settings.Settlement.TitleFormat, settlement.Basar.Name, settlement.Number));
 
@@ -149,14 +150,14 @@ public sealed class TransactionDocumentService
             if (payoutProducts.Any())
             {
                 _pdf.AddSubtitle(doc, _settings.Settlement.SoldTitle);
-                AddProductTable(doc, payoutProducts, _txt.SellingPrice);
+                AddProductTable(doc, payoutProducts, _localizer[VeloTexts.SellingPrice]);
             }
 
             IEnumerable<ProductEntity> pickupProducts = products.GetProductsToPickup();
             if (pickupProducts.Any())
             {
                 _pdf.AddSubtitle(doc, _settings.Settlement.NotSoldTitle);
-                AddProductTable(doc, pickupProducts, _txt.Price);
+                AddProductTable(doc, pickupProducts, _localizer[VeloTexts.Price]);
             }
 
             doc.Add(_pdf.GetSpacer(5));
@@ -215,7 +216,7 @@ public sealed class TransactionDocumentService
             pdfDoc.SetDefaultPageSize(pageSize: PageSize.A4);
             doc.SetFont(PdfFontFactory.CreateFont(StandardFonts.TIMES_ROMAN));
             doc.SetMargins(_settings.PageMargins.Top, _settings.PageMargins.Right, _settings.PageMargins.Bottom + PageFooterHandler.Height, _settings.PageMargins.Left);
-            pdfDoc.AddEventHandler(PdfDocumentEvent.END_PAGE, new PageFooterHandler(_settings.PageMargins, doc, _txt));
+            pdfDoc.AddEventHandler(PdfDocumentEvent.END_PAGE, new PageFooterHandler(_settings.PageMargins, doc, _localizer));
 
             decorate(pdfDoc, doc);
         });
@@ -234,18 +235,18 @@ public sealed class TransactionDocumentService
             .SetBorderLeft(null)
             .SetTextAlignment(TextAlignment.CENTER)
             .SetVerticalAlignment(VerticalAlignment.MIDDLE)
-            .Add(_pdf.GetBoldParagraph(_txt.Id));
+            .Add(_pdf.GetBoldParagraph(_localizer[VeloTexts.Id]));
 
         Cell productInfoHeaderCell = new Cell()
             .SetBorderTop(null)
             .SetTextAlignment(TextAlignment.CENTER)
-            .Add(_pdf.GetBoldParagraph(_txt.ProductDescription));
+            .Add(_pdf.GetBoldParagraph(_localizer[VeloTexts.ProductDescription]));
 
         Cell sizeHeaderCell = new Cell()
             .SetBorderTop(null)
             .SetTextAlignment(TextAlignment.CENTER)
             .SetVerticalAlignment(VerticalAlignment.MIDDLE)
-            .Add(_pdf.GetBoldParagraph(_txt.Size));
+            .Add(_pdf.GetBoldParagraph(_localizer[VeloTexts.Size]));
 
         Cell priceHeaderCell = new Cell()
             .SetBorderTop(null)
@@ -261,14 +262,14 @@ public sealed class TransactionDocumentService
             .SetBorderTop(new DoubleBorder(2))
             .SetBorderRight(null)
             .SetBorderBottom(null)
-            .Add(_pdf.GetBoldParagraph($"{_txt.Sum}:"));
+            .Add(_pdf.GetBoldParagraph($"{_localizer[VeloTexts.Sum]}:"));
 
         Cell productInfoFooterCell = new Cell(1, 2)
             .SetBorderLeft(null)
             .SetBorderTop(new DoubleBorder(2))
             .SetBorderRight(null)
             .SetBorderBottom(null)
-            .Add(_pdf.GetBoldParagraph(_txt.ProductCounter(productsArray.Length)));
+            .Add(_pdf.GetBoldParagraph(_localizer[VeloTexts.ProductCounter, productsArray.Length]));
 
         Paragraph priceFooter = _pdf.GetBoldParagraph(string.Format(CultureInfo.CurrentCulture, "{0:C}", products.SumPrice()));
         Cell priceFooterCell = new Cell()
@@ -364,7 +365,7 @@ public sealed class TransactionDocumentService
 
         Cell column0HeaderCell = new Cell()
             .SetBorder(null)
-            .Add(_pdf.GetBoldParagraph(_txt.IncomeFromSoldProducts));
+            .Add(_pdf.GetBoldParagraph(_localizer[VeloTexts.IncomeFromSoldProducts]));
 
         Cell column1HeaderCell = new Cell()
             .SetBorder(null);
@@ -380,7 +381,7 @@ public sealed class TransactionDocumentService
         Cell commissionColumn0Cell = new Cell()
             .SetBorderLeft(null)
             .SetBorderRight(null)
-            .Add(_pdf.GetRegularParagraph(_txt.SalesCommision(commissionFactor, total)));
+            .Add(_pdf.GetRegularParagraph(_localizer[VeloTexts.SalesCommision, commissionFactor, total]));
 
         Cell commissionColumn1Cell = new Cell()
             .SetBorderLeft(null)
@@ -398,7 +399,7 @@ public sealed class TransactionDocumentService
         Cell costsColumn0Cell = new Cell()
             .SetBorderLeft(null)
             .SetBorderRight(null)
-            .Add(_pdf.GetBoldParagraph($"{_txt.Cost}:"));
+            .Add(_pdf.GetBoldParagraph($"{_localizer[VeloTexts.Cost]}:"));
 
         Cell costsColumn1Cell = new Cell()
             .SetBorderLeft(null)
@@ -421,7 +422,7 @@ public sealed class TransactionDocumentService
             .SetBorderRight(null)
             .SetBorderBottom(null)
             .SetBorderTop(new DoubleBorder(2))
-            .Add(_pdf.GetBigParagraph($"{_txt.TotalAmount}:")
+            .Add(_pdf.GetBigParagraph($"{_localizer[VeloTexts.TotalAmount]}:")
                 .SetBold()
                 .SetFontColor(_pdf.Orange));
 
@@ -452,7 +453,16 @@ public sealed class TransactionDocumentService
         Text signature = new Text($"{text} ______________________________")
             .SetFontSize(_pdf.RegularFontSize)
             .SetBold();
-        Text locationAndDate = new Text(_txt.LocationAndDate(transaction.Basar.Location, transaction.TimeStamp))
+        LocalizedString locationAndDateString;
+        if (string.IsNullOrEmpty(transaction.Basar.Location))
+        {
+            locationAndDateString = _localizer[VeloTexts.AtDateAndTime, transaction.TimeStamp];
+        }
+        else
+        {
+            locationAndDateString = _localizer[VeloTexts.AtLocationAndDateAndTime, transaction.Basar.Location, transaction.TimeStamp];
+        }
+        Text locationAndDate = new Text(locationAndDateString)
             .SetFontSize(_pdf.SmallFontSize);
 
         Paragraph p = new Paragraph()

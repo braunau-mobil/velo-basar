@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Microsoft.Extensions.Localization;
 
 namespace BraunauMobil.VeloBasar.Models;
 
@@ -19,14 +20,12 @@ public class InitializationConfiguration
 public sealed class InitializationConfigurationValidator
     : AbstractValidator<InitializationConfiguration>
 {
-    private readonly VeloTexts _txt;
-
-    public InitializationConfigurationValidator(VeloTexts txt)
+    public InitializationConfigurationValidator(IStringLocalizer<SharedResources> localizer)
     {
-        _txt = txt ?? throw new ArgumentNullException(nameof(txt));
+        ArgumentNullException.ThrowIfNull(localizer);
 
         RuleFor(seller => seller.AdminUserEMail)
             .NotNull()
-            .WithMessage(_txt.PleaseEnterAdminUserEmail);
+            .WithMessage(localizer[VeloTexts.PleaseEnterAdminUserEmail]);
     }
 }

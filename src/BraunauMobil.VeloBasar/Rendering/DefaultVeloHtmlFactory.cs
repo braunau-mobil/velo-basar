@@ -11,40 +11,49 @@ public sealed class DefaultVeloHtmlFactory
      : DefaultBoostrapHtmlFactory
     , IVeloHtmlFactory
 {
-    public DefaultVeloHtmlFactory(IVeloRouter router, VeloTexts txt)
-        : base(router, txt)
-    { }
+    private readonly IVeloRouter _router;
 
-    public IHtmlContent BaseDataStateLink<TEntity>(CrudItemModel<TEntity> item, ICrudRouter router)
-        where TEntity : class, ICrudEntity, new()
+    public DefaultVeloHtmlFactory(IVeloRouter router, IStringLocalizer<SharedResources> localizer)
+        : base(localizer)
     {
-        ArgumentNullException.ThrowIfNull(item);
-        ArgumentNullException.ThrowIfNull(router);
+        _router = router ?? throw new ArgumentNullException(nameof(router));}
 
-        string href;
-        LocalizedString text;
-        if (item.CanDelete)
-        {
-            href = router.ToDelete(item.Entity.Id);
-            text = Txt.Delete;
-        }
-        else
-        {
-            if (item.Entity.State == ObjectState.Enabled)
-            {
-                href = router.ToDisable(item.Entity.Id);
-                text = Txt.Disable;
-            }
-            else
-            {
-                href = router.ToEnable(item.Entity.Id);
-                text = Txt.Enable;
-            }
-        }
-        TagBuilder link = Link(href);
-        link.InnerHtml.SetHtmlContent(text);
-        return link;
-    }    
+    public TagBuilder Alert(MessageType type, string text)
+    {
+        ArgumentNullException.ThrowIfNull(text);
+
+        TagBuilder p = Paragraph();
+        p.InnerHtml.SetHtmlContent(text);
+
+        return Alert(type, p);
+    }
+
+    public TagBuilder Alert(MessageType type, string title, string text)
+    {
+        ArgumentNullException.ThrowIfNull(title);
+        ArgumentNullException.ThrowIfNull(text);
+
+        TagBuilder heading = Heading(4);
+        heading.AddCssClass("alert-heading");
+        heading.InnerHtml.SetHtmlContent(title);
+
+        TagBuilder p = Paragraph();
+        p.InnerHtml.SetHtmlContent(text);
+
+        HtmlContentBuilder content = new();
+        content.AppendHtml(heading);
+        content.AppendHtml(p);
+
+        return Alert(type, content);
+    }
+
+    public TagBuilder Badge(BadgeType type)
+    {
+        string css = $"badge rounded-pill {type.ToCss()}";
+        TagBuilder span = Span();
+        span.AddCssClass(css);
+        return span;
+    }
 
     public IHtmlContent ProductState(ProductEntity product)
     {
@@ -55,60 +64,53 @@ public sealed class DefaultVeloHtmlFactory
 
     public IHtmlContent ProductState(StorageState storageState, ValueState valueState)
     {
-        LocalizedString text;
+        string text;
         BadgeType type;
 
         if (storageState == StorageState.NotAccepted && valueState == ValueState.NotSettled)
         {
-            text = Txt.Accepting;
+            text = VeloTexts.Accepting;
             type = BadgeType.Light;
         }
         else if (storageState == StorageState.Available && valueState == ValueState.NotSettled)
         {
-            text = Txt.Available;
+            text = VeloTexts.Available;
             type = BadgeType.Success;
         }
         else if (storageState == StorageState.Sold && valueState == ValueState.NotSettled)
         {
-            text = Txt.Sold;
+            text = VeloTexts.Sold;
             type = BadgeType.Warning;
         }
         else if (storageState == StorageState.Available && valueState == ValueState.Settled)
         {
-            text = Txt.PickedUp;
+            text = VeloTexts.PickedUp;
             type = BadgeType.Secondary;
         }
         else if (storageState == StorageState.Sold && valueState == ValueState.Settled)
         {
-            text = Txt.Settled;
+            text = VeloTexts.Settled;
             type = BadgeType.Secondary;
         }
         else if (storageState == StorageState.Locked)
         {
-            text = Txt.Locked;
+            text = VeloTexts.Locked;
             type = BadgeType.Danger;
         }
         else if (storageState == StorageState.Lost)
         {
-            text = Txt.Lost;
+            text = VeloTexts.Lost;
             type = BadgeType.Danger;
         }
         else
         {
-            text = Txt.UndefinedProductState;
+            text = VeloTexts.UndefinedProductState;
             type = BadgeType.Danger;
         }
 
         TagBuilder badge = Badge(type);
-        badge.InnerHtml.SetHtmlContent(text);
+        badge.InnerHtml.SetHtmlContent(Localizer[text]);
         return badge;
-    }
-
-    public TableBuilder<TModel> Table<TModel>(IEnumerable<TModel> list)
-    {
-        ArgumentNullException.ThrowIfNull(list);
-
-        return new(list, this);
     }
 
     public TableBuilder<ProductEntity> ProductsTable(IEnumerable<ProductEntity> products, bool showSum = false, bool showId = false, bool showState = false)
@@ -119,68 +121,34 @@ public sealed class DefaultVeloHtmlFactory
         TableBuilder<TItemViewModel> builder = Table(products);
         if (showId)
         {
-            builder.Column()
-                .AutoWidth()
-                .Title(Txt.Id)
-                .DoNotBreak()
-                .For(item => getProduct(item).Id);
+            builder.IdColumn(item => getProduct(item).Id);
         }
         builder
-            .Column()
-                .PercentWidth(10)
-                .Title(Txt.Brand)
-                .For(item => getProduct(item).Brand.Name)
-            .Column()
-                .PercentWidth(10)
-                .Title(Txt.Type)
-                .For(item => getProduct(item).Type.Name)
-            .Column()
-                .PercentWidth(20)
-                .Title(Txt.Color)
-                .For(item => getProduct(item).Color)
-            .Column()
-                .PercentWidth(10)
-                .Title(Txt.FrameNumber)
-                .For(item => getProduct(item).FrameNumber)
-            .Column()
-                .PercentWidth(40)
-                .Title(Txt.Description)
-                .For(item => getProduct(item).Description);
-
-        ColumnBuilder<TItemViewModel> tireSizeBuilder = builder.Column()
-            .PercentWidth(5)
-            .DoNotBreak()
-            .Title(Txt.TireSize);
-        if (showSum)
-        {
-            tireSizeBuilder.Footer()
-                .Align(ColumnAlign.Right)
-                .For(Txt.Sum);
-        }
-        tireSizeBuilder
-            .For(item => getProduct(item).TireSize);
-
-        ColumnBuilder<TItemViewModel> priceBuilder = builder.Column()
-            .PercentWidth(5)
-            .DoNotBreak()
-            .Align(ColumnAlign.Right)
-            .Title(Txt.Price);
-        if (showSum)
-        {
-            priceBuilder.Footer()
-                .Align(ColumnAlign.Right)
-                .For(products.Select(getProduct).SumPrice().ToHtmlPrice());
-        }
-        priceBuilder
-            .ForPrice(item => getProduct(item).Price);
-
+            .Column(c => c.PercentWidth(10).Title(Localizer[VeloTexts.Brand]).For(item => getProduct(item).Brand.Name))
+            .Column(c => c.PercentWidth(10).Title(Localizer[VeloTexts.Type]).For(item => getProduct(item).Type.Name))
+            .Column(c => c.PercentWidth(20).BreakText().Title(Localizer[VeloTexts.Color]).For(item => getProduct(item).Color))
+            .Column(c => c.PercentWidth(10).Title(Localizer[VeloTexts.FrameNumber]).For(item => getProduct(item).FrameNumber))
+            .Column(c => c.PercentWidth(40).BreakText().Title(Localizer[VeloTexts.Description]).For(item => getProduct(item).Description))
+            .Column(c =>
+            {
+                c.PercentWidth(5).Title(Localizer[VeloTexts.TireSize]).For(item => getProduct(item).TireSize);
+                if (showSum)
+                {
+                    c.Footer(f => f.Align(ColumnAlign.Right).For(Localizer[VeloTexts.Sum]));
+                }
+            })
+            .Column(c =>
+            {
+                c.PercentWidth(5).Align(ColumnAlign.Right).Title(Localizer[VeloTexts.Price]).ForPrice(item => getProduct(item).Price);
+                if (showSum)
+                {
+                    IHtmlContent sum = products.Select(getProduct).SumPrice().ToHtmlPrice();
+                    c.Footer(f => f.Align(ColumnAlign.Right).For(sum));
+                }
+            });
         if (showState)
         {
-            builder.Column()
-                .AutoWidth()
-                .DoNotBreak()
-                .Align(ColumnAlign.Center)
-                .For(item => ProductState(getProduct(item)));
+            builder.Column(c => c.AutoWidth().Align(ColumnAlign.Center).For(item => ProductState(getProduct(item))));
         }
         return builder;
     }
@@ -190,39 +158,14 @@ public sealed class DefaultVeloHtmlFactory
         ArgumentNullException.ThrowIfNull(sellers);
 
         return Table(sellers)
-            .Column()
-                .AutoWidth()
-                .Title(Txt.Id)
-                .DoNotBreak()
-                .For(item => item.Id)
-            .Column()
-                .PercentWidth(20)
-                .Title(Txt.FirstName)
-                .For(item => item.FirstName)
-            .Column()
-                .PercentWidth(10)
-                .Title(Txt.LastName)
-                .For(item => item.LastName)
-            .Column()
-                .PercentWidth(35)
-                .Title(Txt.Street)
-                .For(item => item.Street)
-            .Column()
-                .PercentWidth(5)
-                .Title(Txt.City)
-                .For(item => item.City)
-            .Column()
-                .PercentWidth(5)
-                .Title(Txt.ZIP)
-                .For(item => item.ZIP)
-            .Column()
-                .PercentWidth(10)
-                .Title(Txt.Country)
-                .For(item => item.Country.Name)
-            .Column()
-                .PercentWidth(5)
-                .Title(Txt.ValueState)
-                .For(item => Txt.Singular(item.ValueState));
+            .IdColumn()
+            .Column(c => c.PercentWidth(20).Title(Localizer[VeloTexts.FirstName]).For(item => item.FirstName))
+            .Column(c => c.PercentWidth(10).Title(Localizer[VeloTexts.LastName]).For(item => item.LastName))
+            .Column(c => c.PercentWidth(35).Title(Localizer[VeloTexts.Street]).For(item => item.Street))
+            .Column(c => c.PercentWidth(5).Title(Localizer[VeloTexts.City]).For(item => item.City))
+            .Column(c => c.PercentWidth(5).Title(Localizer[VeloTexts.ZIP]).For(item => item.ZIP))
+            .Column(c => c.PercentWidth(10).Title(Localizer[VeloTexts.Country]).For(item => item.Country.Name))
+            .Column(c => c.PercentWidth(5).Title(Localizer[VeloTexts.ValueState]).For(item => Localizer[VeloTexts.Singular(item.ValueState)]));
     }
 
     public TableBuilder<TransactionEntity> TransactionsTable(IEnumerable<TransactionEntity> transactions, bool showType = false, bool showProducts = false)
@@ -232,60 +175,46 @@ public sealed class DefaultVeloHtmlFactory
         TableBuilder<TransactionEntity> builder = Table(transactions);
 
         builder
-            .Column()
-                .AutoWidth()
-                .Title(Txt.Number)
-                .For(item => item.Number)
-            .Column()
-                .PercentWidth(10)
-                .Title(Txt.TimeStamp)
-                .ForTimeStamp(item => item.TimeStamp);
+            .Column(c => c.AutoWidth().Title(Localizer[VeloTexts.Number]).For(item => item.Number))
+            .Column(c => c.PercentWidth(10).Title(Localizer[VeloTexts.TimeStamp]).ForTimeStamp(item => item.TimeStamp));
 
         if (showType)
         {
-            builder.Column()
-                .AutoWidth()
-                .Title(Txt.Type)
-                .DoNotBreak()
-                .For(item =>
-                {
-                    TagBuilder span = Span();
-                    span.AddCssClass($"badge text-bg-{item.Type.ToCssColor()}");
-                    span.InnerHtml.SetContent(Txt.Singular(item.Type));
-                    return span;
-                });
+            builder.Column(c => c.AutoWidth().Title(Localizer[VeloTexts.Type]).For(item =>
+            {
+                TagBuilder span = Span();
+                span.AddCssClass($"badge text-bg-{item.Type.ToCssColor()}");
+                span.InnerHtml.SetContent(Localizer[VeloTexts.Singular(item.Type)]);
+                return span;
+            }));
         }
 
         if (showProducts)
         {
-            builder.Column()
-                .AutoWidth()
-                .Align(ColumnAlign.Center)
-                .Title(Txt.ProductCount)
-                .For(item => item.Products.Count);
+            builder.Column(c => c.AutoWidth().Title(Localizer[VeloTexts.ProductCount]).Align(ColumnAlign.Center).For(item => item.Products.Count));
         }
 
-        builder.Column()
-            .PercentWidth(90)
-            .Title(Txt.Notes)
-            .For(item => item.Notes);
+        builder.Column(c => c.PercentWidth(90).BreakText().Title(Localizer[VeloTexts.Notes]).For(item => item.Notes));
 
         if (showProducts)
         {
-            builder.Column()
-                .AutoWidth()
-                .Title(Txt.Sum)
-                .Align(ColumnAlign.Right)
-                .DoNotBreak()
-                .ForPrice(item => item.GetProductsSum());
+            builder.Column(c => c.AutoWidth().Title(Localizer[VeloTexts.Sum]).Align(ColumnAlign.Right).ForPrice(item => item.GetProductsSum()));
         }
 
         builder
-            .LinkColumn()
-                .ForLink(item => Router.Transaction.ToDocument(item.Id), Txt.Document, item => item.CanHasDocument)
-            .LinkColumn()
-                .ForLink(item => Router.Transaction.ToDetails(item.Id), Txt.Details);
+            .Column(c => c.AutoWidth().ForLink(item => _router.Transaction.ToDocument(item.Id), Localizer[VeloTexts.Document], item => item.CanHasDocument))
+            .Column(c => c.AutoWidth().ForLink(item => _router.Transaction.ToDetails(item.Id), Localizer[VeloTexts.Details]));
 
         return builder;
+    }
+
+    private TagBuilder Alert(MessageType type, IHtmlContent content)
+    {
+        TagBuilder div = Div();
+        div.AddCssClass("alert");
+        div.AddCssClass(type.ToCss());
+        div.Attributes.Add("role", "alert");
+        div.InnerHtml.SetHtmlContent(content);
+        return div;
     }
 }

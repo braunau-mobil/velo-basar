@@ -1,6 +1,6 @@
 ﻿@model SellerCreateForAcceptanceModel
 @{
-    ViewData.SetTitle(Txt.AcceptanceCreateSeller);
+    ViewData.SetTitle(Localizer[VeloTexts.AcceptanceCreateSeller]);
 }
 
 <form method="post">
@@ -10,20 +10,19 @@
             <partial name="_NameEdit.cshtml" model="Model.Seller" />
 
             <div class="mb-2">
-                <button class="btn btn-primary" formaction="@Router.Seller.ToSearchForAcceptance()">@Txt.Search</button>
+                <button class="btn btn-primary" formaction="@Router.Seller.ToSearchForAcceptance()">@Localizer[VeloTexts.Search]</button>
 
                 @if (Model.HasSearched)
                 {
                     @if (Model.FoundSellers.Any())
                     {
                         @(VeloHtml.SellersTable(Model.FoundSellers)
-                            .LinkColumn()
-                                .ForLink(item => Router.Seller.ToCreateForAcceptance(item.Id), Txt.Apply)
+                            .Column(c => c.ForLink(item => Router.Seller.ToCreateForAcceptance(item.Id), Localizer[VeloTexts.Apply]))
                             .Build())
                     }
                     else
                     {
-                        @Txt.NoSellerFound
+                        @Localizer[VeloTexts.NoSellerFound]
                     }
                 }
             </div>
@@ -32,7 +31,7 @@
 
         </div>
         <div class="card-footer">
-            <button class="btn btn-primary" formaction="@Router.Seller.ToCreateForAcceptance()">@Txt.Continue</button>
+            <button class="btn btn-primary" formaction="@Router.Seller.ToCreateForAcceptance()">@Localizer[VeloTexts.Continue]</button>
         </div>
     </div>
 </form>

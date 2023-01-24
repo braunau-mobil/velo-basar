@@ -1,8 +1,6 @@
-﻿using BraunauMobil.VeloBasar.BusinessLogic;
-using BraunauMobil.VeloBasar.Rendering;
+﻿using BraunauMobil.VeloBasar.Rendering;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Xan.AspNetCore.Rendering;
 using Xan.Extensions.Collections.Generic;
@@ -13,22 +11,22 @@ public sealed class BrandCrudModelFactory
     : AbstractCrudModelFactory<BrandEntity>
 {
     private readonly IVeloHtmlFactory _html;
-    private readonly VeloTexts _txt;
+    private readonly IStringLocalizer<SharedResources> _localizer;
     private readonly ISelectListService _selectLists;
 
-    public BrandCrudModelFactory(IVeloHtmlFactory html, VeloTexts txt, ICrudRouter<BrandEntity> router, ISelectListService selectLists)
+    public BrandCrudModelFactory(IVeloHtmlFactory html, IStringLocalizer<SharedResources> localizer, ICrudRouter<BrandEntity> router, ISelectListService selectLists)
         : base(router)
     {
         _html = html ?? throw new ArgumentNullException(nameof(html));
-        _txt = txt ?? throw new ArgumentNullException(nameof(txt));
+        _localizer = localizer ?? throw new ArgumentNullException(nameof(localizer));
         _selectLists = selectLists ?? throw new ArgumentNullException(nameof(selectLists));
     }
 
-    protected override LocalizedString CreateTitle => _txt.CreateBrand;
+    protected override string CreateTitle => _localizer[VeloTexts.CreateBrand];
 
-    protected override LocalizedString EditTitle => _txt.EditBrand;
+    protected override string EditTitle => _localizer[VeloTexts.EditBrand];
 
-    protected override LocalizedString ListTitle => _txt.BrandList;
+    protected override string ListTitle => _localizer[VeloTexts.BrandList];
 
     protected override IHtmlContent CreateEditor(ViewContext viewContext, BrandEntity entity)
     {
@@ -37,8 +35,8 @@ public sealed class BrandCrudModelFactory
 
         HtmlContentBuilder result = new();
         result.AppendHtml(_html.HiddenInput(nameof(entity.Id), entity.Id));
-        result.AppendHtml(_html.TextInputField(nameof(entity.Name), entity.Name, _txt.Name, autoFocus: true));
-        result.AppendHtml(_html.SelectField(nameof(entity.State), entity.State, _selectLists.States(), _txt.State));
+        result.AppendHtml(_html.TextInputField(nameof(entity.Name), entity.Name, _localizer[VeloTexts.Name], autoFocus: true));
+        result.AppendHtml(_html.SelectField(nameof(entity.State), entity.State, _selectLists.States(), _localizer[VeloTexts.State]));
         return result;
     }
 
@@ -48,30 +46,13 @@ public sealed class BrandCrudModelFactory
         ArgumentNullException.ThrowIfNull(model);
 
         return _html.Table(model)
-            .Column()
-                .AutoWidth()
-                .Title(_txt.Id)
-                .DoNotBreak()
-                .For(item => item.Entity.Id)
-            .Column()
-                .PercentWidth(70)
-                .Title(_txt.Id)
-                .For(item => item.Entity.Name)
-            .Column()
-                .PercentWidth(10)
-                .Title(_txt.CreatedAt)
-                .For(item => item.Entity.CreatedAt.ToHtmlTimeStamp())
-            .Column()
-                .PercentWidth(10)
-                .Title(_txt.UpdatedAt)
-                .For(item => item.Entity.UpdatedAt.ToHtmlTimeStamp())
-            .Column()
-                .PercentWidth(10)
-                .Title(_txt.State)
-                .For(item => _txt.Singular(item.Entity.State))
-            .LinkColumn()
-                .ForLink(item => Router.ToEdit(item.Entity.Id), _txt.Edit)
-            .BaseDataStateLinkColumn(_html, Router)
+            .IdColumn()
+            .Column(c => c.PercentWidth(100).Title(_localizer[VeloTexts.Name]).For(item => item.Entity.Name))
+            .CreatedAtColumn()
+            .UpdatedAtColumn()
+            .StateColumn()
+            .EditLinkColumn(Router)
+            .DeleteOrToggleStateLinkColumn(Router)
             .Build();
     }
 }

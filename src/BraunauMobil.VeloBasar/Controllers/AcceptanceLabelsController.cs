@@ -1,5 +1,6 @@
 ﻿using BraunauMobil.VeloBasar.BusinessLogic;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 
 namespace BraunauMobil.VeloBasar.Controllers;
 
@@ -7,12 +8,12 @@ public sealed class AcceptanceLabelsController
     : AbstractVeloController
 {
     private readonly ITransactionService _transactionService;
-    private readonly VeloTexts _txt;
+    private readonly IStringLocalizer<SharedResources> _localizer;
 
-    public AcceptanceLabelsController(ITransactionService transactionService, VeloTexts txt)
+    public AcceptanceLabelsController(ITransactionService transactionService, IStringLocalizer<SharedResources> localizer)
     {
         _transactionService = transactionService ?? throw new ArgumentNullException(nameof(transactionService));
-        _txt = txt ?? throw new ArgumentNullException(nameof(txt));
+        _localizer = localizer ?? throw new ArgumentNullException(nameof(localizer));
     }
 
     public async Task<IActionResult> Download(int id)
@@ -32,7 +33,7 @@ public sealed class AcceptanceLabelsController
         TransactionEntity? acceptance = await _transactionService.FindAsync(model.ActiveBasarId, TransactionType.Acceptance, model.Number);
         if (acceptance == null)
         {
-            ModelState.AddModelError(nameof(AcceptanceLabelsModel.Number), _txt.NoAcceptanceFound(model.Number));
+            ModelState.AddModelError(nameof(AcceptanceLabelsModel.Number), _localizer[VeloTexts.NoAcceptanceFound, model.Number]);
             return View(new AcceptanceLabelsModel { Number = model.Number });
         }
 

@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Microsoft.Extensions.Localization;
 
 namespace BraunauMobil.VeloBasar.Models;
 
@@ -13,18 +14,16 @@ public sealed class SellerSearchModel
 public sealed class SellerSearchModelValidator
     : AbstractValidator<SellerSearchModel>
 {
-    private readonly VeloTexts _txt;
-
-    public SellerSearchModelValidator(VeloTexts txt)
+    public SellerSearchModelValidator(IStringLocalizer<SharedResources> localizer)
     {
-        _txt = txt ?? throw new ArgumentNullException(nameof(txt));
+        ArgumentNullException.ThrowIfNull(localizer);
 
         RuleFor(seller => seller.FirstName)
             .NotNull()
-            .WithMessage(_txt.PleaseEnterFirstNameForSearch);
+            .WithMessage(localizer[VeloTexts.PleaseEnterFirstNameForSearch]);
 
         RuleFor(seller => seller.LastName)
             .NotNull()
-            .WithMessage(_txt.PleaseEnterLastNameForSearch);
+            .WithMessage(localizer[VeloTexts.PleaseEnterLastNameForSearch]);
     }
 }

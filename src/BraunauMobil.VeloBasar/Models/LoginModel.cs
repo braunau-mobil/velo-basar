@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Microsoft.Extensions.Localization;
 using System.ComponentModel.DataAnnotations;
 
 namespace BraunauMobil.VeloBasar.Models;
@@ -19,16 +20,14 @@ public sealed class LoginModel
 public sealed class LoginModelValidator
     : AbstractValidator<LoginModel>
 {
-    private readonly VeloTexts _txt;
-
-    public LoginModelValidator(VeloTexts txt)
+    public LoginModelValidator(IStringLocalizer<SharedResources> localizer)
     {
-        _txt = txt ?? throw new ArgumentNullException(nameof(txt));
+        ArgumentNullException.ThrowIfNull(localizer);
 
         RuleFor(login => login.Email)
             .NotNull()
             .EmailAddress()
-            .WithMessage(_txt.PleaseEnterValidEMail);
+            .WithMessage(localizer[VeloTexts.PleaseEnterValidEMail]);
 
         RuleFor(login => login.Password)
             .NotNull();

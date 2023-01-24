@@ -12,15 +12,13 @@ public sealed class CartController
 {
     private readonly IProductService _productService;
     private readonly ITransactionService _transactionService;
-    private readonly VeloTexts _txt;
     private readonly IVeloRouter _router;
     private readonly IValidator<CartModel> _validator;
 
-    public CartController(IProductService productService, ITransactionService transactionService, IVeloRouter router, VeloTexts txt, IValidator<CartModel> validator)
+    public CartController(IProductService productService, ITransactionService transactionService, IVeloRouter router, IValidator<CartModel> validator)
     {
         _productService = productService ?? throw new ArgumentNullException(nameof(productService));
         _transactionService = transactionService ?? throw new ArgumentNullException(nameof(transactionService));
-        _txt = txt ?? throw new ArgumentNullException(nameof(txt));
         _router = router ?? throw new ArgumentNullException(nameof(router));
         _validator = validator ?? throw new ArgumentNullException(nameof(validator));
     }
