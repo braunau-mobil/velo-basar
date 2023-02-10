@@ -22,11 +22,11 @@ public sealed class ProductTypeCrudModelFactory
         _selectListSevice = selectListService ?? throw new ArgumentNullException(nameof(selectListService));
     }
 
-    protected override string CreateTitle => VeloTexts.CreateProductType;
+    protected override string CreateTitle => _localizer[VeloTexts.CreateProductType];
 
-    protected override string EditTitle => VeloTexts.EditProductType;
+    protected override string EditTitle => _localizer[VeloTexts.EditProductType];
 
-    protected override string ListTitle => VeloTexts.ProductTypeList;
+    protected override string ListTitle => _localizer[VeloTexts.ProductTypeList];
 
     protected override IHtmlContent CreateEditor(ViewContext viewContext, ProductTypeEntity entity)
     {

@@ -28,11 +28,11 @@
         <div class="card-footer">
             @if (Model.Entity.Id == 0)
             {
-                <button class="btn btn-primary">Localizer[VeloTexts.Add]</button>
+                <button class="btn btn-primary">@Localizer[VeloTexts.Add]</button>
             }
             else
             {
-                <button class="btn btn-primary">Localizer[VeloTexts.Update]</button>
+                <button class="btn btn-primary">@Localizer[VeloTexts.Update]</button>
                 <a class="btn btn-secondary" href="@Router.AcceptProduct.ToCreate(Model.SessionId)">@Localizer[VeloTexts.Cancel]</a>
             }
         </div>

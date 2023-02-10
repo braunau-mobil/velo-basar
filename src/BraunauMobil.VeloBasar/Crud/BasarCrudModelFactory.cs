@@ -36,8 +36,8 @@ public sealed class BasarCrudModelFactory
 
         HtmlContentBuilder result = new();
         result.AppendHtml(_html.HiddenInput(nameof(entity.Id), entity.Id));
-        result.AppendHtml(_html.DateInputField(nameof(entity.Date), entity.Date, VeloTexts.Date, autoFocus: true));
-        result.AppendHtml(_html.TextInputField(nameof(entity.Name), entity.Name, VeloTexts.Name));
+        result.AppendHtml(_html.DateInputField(nameof(entity.Date), entity.Date, _localizer[VeloTexts.Date], autoFocus: true));
+        result.AppendHtml(_html.TextInputField(nameof(entity.Name), entity.Name, _localizer[VeloTexts.Name]));
         result.AppendHtml(_html.TextInputField(nameof(entity.Location), entity.Location, _localizer[VeloTexts.Location]));
         result.AppendHtml(_html.NumberInputField(nameof(entity.ProductCommissionPercentage), entity.ProductCommissionPercentage, _localizer[VeloTexts.ProductCommissionPercentage]));
         result.AppendHtml(_html.SelectField(nameof(entity.State), entity.State, _selectLists.States(), _localizer[VeloTexts.State]));

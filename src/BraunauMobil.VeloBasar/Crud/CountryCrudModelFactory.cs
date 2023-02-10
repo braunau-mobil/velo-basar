@@ -22,11 +22,11 @@ public sealed class CountryCrudModelFactory
         _selectLists = selectLists ?? throw new ArgumentNullException(nameof(selectLists));
     }
 
-    protected override string CreateTitle => VeloTexts.CreateCountry;
+    protected override string CreateTitle => _localizer[VeloTexts.CreateCountry];
 
-    protected override string EditTitle => VeloTexts.EditCountry;
+    protected override string EditTitle => _localizer[VeloTexts.EditCountry];
 
-    protected override string ListTitle => VeloTexts.CountryList;
+    protected override string ListTitle => _localizer[VeloTexts.CountryList];
 
     protected override IHtmlContent CreateEditor(ViewContext viewContext, CountryEntity entity)
     {
