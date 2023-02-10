@@ -115,6 +115,7 @@ public static class VeloTexts
     public const string FrameNumberLabel = $"{Prefix}{nameof(FrameNumberLabel)}";
     public const string GenerateBrands = $"{Prefix}{nameof(GenerateBrands)}";
     public const string GenerateCountries = $"{Prefix}{nameof(GenerateCountries)}";
+    public const string GenerateCountriesMustBeActiveForGeneratingZipCodes = $"{Prefix}{nameof(GenerateCountriesMustBeActiveForGeneratingZipCodes)}";
     public const string GenerateProductTypes = $"{Prefix}{nameof(GenerateProductTypes)}";
     public const string GenerateZipCodes = $"{Prefix}{nameof(GenerateZipCodes)}";
     public const string IBAN = $"{Prefix}{nameof(IBAN)}";

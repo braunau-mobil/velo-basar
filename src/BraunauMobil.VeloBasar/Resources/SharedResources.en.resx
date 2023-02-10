@@ -358,13 +358,13 @@
     <value>Frame number: {0}</value>
   </data>
   <data name="VeloBasar_GenerateBrands" xml:space="preserve">
-    <value>Generate brands example</value>
+    <value>Generate sample brands</value>
   </data>
   <data name="VeloBasar_GenerateCountries" xml:space="preserve">
-    <value>Generate countries example</value>
+    <value>Generate sample countries</value>
   </data>
   <data name="VeloBasar_GenerateProductTypes" xml:space="preserve">
-    <value>Example generate product types</value>
+    <value>Generate sample product types</value>
   </data>
   <data name="VeloBasar_GenerateZipCodes" xml:space="preserve">
     <value>Load ZIPs</value>
@@ -944,5 +944,8 @@
   </data>
   <data name="VeloBasar_AllTransactionTypes" xml:space="preserve">
     <value>All (Transactions)</value>
+  </data>
+  <data name="VeloBasar_GenerateCountriesMustBeActiveForGeneratingZipCodes" xml:space="preserve">
+    <value>Please activate the option 'Generate sample countries'.</value>
   </data>
 </root>

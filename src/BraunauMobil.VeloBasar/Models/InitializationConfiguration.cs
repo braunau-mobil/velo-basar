@@ -24,8 +24,20 @@ public sealed class InitializationConfigurationValidator
     {
         ArgumentNullException.ThrowIfNull(localizer);
 
-        RuleFor(seller => seller.AdminUserEMail)
+        RuleFor(config => config.AdminUserEMail)
             .NotNull()
             .WithMessage(localizer[VeloTexts.PleaseEnterAdminUserEmail]);
+
+        RuleFor(config => config.GenerateZipCodes)
+            .Custom((generateZipCodes, context) =>
+            {
+                if (generateZipCodes)
+                {
+                    if (!context.InstanceToValidate.GenerateCountries)
+                    {
+                        context.AddFailure(localizer[VeloTexts.GenerateCountriesMustBeActiveForGeneratingZipCodes]);
+                    }
+                }
+            });
     }
 }

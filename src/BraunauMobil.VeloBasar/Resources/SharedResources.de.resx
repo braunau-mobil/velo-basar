@@ -945,4 +945,7 @@
   <data name="VeloBasar_AllTransactionTypes" xml:space="preserve">
     <value>Alle (Transaktionen)</value>
   </data>
+  <data name="VeloBasar_GenerateCountriesMustBeActiveForGeneratingZipCodes" xml:space="preserve">
+    <value>Bitte aktivieren sie die Option 'Beispiel Länder generieren'.</value>
+  </data>
 </root>
