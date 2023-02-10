@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using System.Linq.Expressions;
 using Xan.AspNetCore.EntityFrameworkCore;
+using Xan.Extensions;
 
 namespace BraunauMobil.VeloBasar.Crud;
 
@@ -10,12 +11,14 @@ public sealed class BasarCrudService
     : AbstractCrudService<BasarEntity>
 {
     private readonly IStringLocalizer<SharedResources> _localizer;
+    private readonly IClock _clock;
     private readonly VeloDbContext _db;
 
-    public BasarCrudService(IStringLocalizer<SharedResources> localizer, VeloDbContext db)
+    public BasarCrudService(IStringLocalizer<SharedResources> localizer, IClock clock, VeloDbContext db)
         : base(db)
     {
         _db = db ?? throw new ArgumentNullException(nameof(db));
+        _clock = clock ?? throw new ArgumentNullException(nameof(clock));
         _localizer = localizer ?? throw new ArgumentNullException(nameof(localizer));
     }
 
@@ -26,6 +29,15 @@ public sealed class BasarCrudService
         ArgumentNullException.ThrowIfNull(entity);
 
         return !await _db.Transactions.AnyAsync(t => t.BasarId == entity.Id);
+    }
+
+    public override async Task<BasarEntity> CreateNewAsync()
+    {
+        BasarEntity basar = new()
+        {
+            Date = _clock.GetCurrentDateTime()
+        };
+        return await Task.FromResult(basar);
     }
 
     public async override Task<int> CreateAsync(BasarEntity entity)
