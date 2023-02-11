@@ -168,7 +168,7 @@ public sealed class TransactionDocumentService
 
             if (!string.IsNullOrEmpty(settlement.Seller.IBAN))
             {
-                decimal amount = settlement.GetPayoutTotal();
+                decimal amount = settlement.GetPayoutTotalWithoutCommission();
                 string text = string.Format(CultureInfo.InvariantCulture, _settings.Settlement.BankTransactionTextFormat, settlement.Basar.Name);
                 string epQrCode = GetEpQrCode(settlement.Seller.EffectiveBankAccountHolder, settlement.Seller.IBAN, amount, text);
 
@@ -504,8 +504,7 @@ public sealed class TransactionDocumentService
             .AppendLine()
             .AppendLine(bankAccountHolder)
             .AppendLine(iban)
-            .AppendLine(CultureInfo.InvariantCulture, $"EUR{amount}#.##")
-            .AppendLine()
+            .AppendFormat(CultureInfo.InvariantCulture, "EUR{0:#.##}", amount).AppendLine()
             .AppendLine()
             .AppendLine(text)
             .AppendLine()
