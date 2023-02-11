@@ -75,6 +75,11 @@ public sealed class DefaultVeloHtmlFactory
 
         HtmlContentBuilder badges = new();
         badges.AppendHtml(ProductStateBadge(product));
+        TagBuilder br = new("br")
+        {
+            TagRenderMode = TagRenderMode.StartTag
+        };
+        badges.AppendHtml(br);
         badges.AppendHtml(ProductDonateableBadge(product));
 
         return badges;
