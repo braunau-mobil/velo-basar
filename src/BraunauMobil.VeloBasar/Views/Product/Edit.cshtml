@@ -18,6 +18,8 @@
             @VeloHtml.CheckBoxField(nameof(Model.DonateIfNotSold), Model.DonateIfNotSold, Localizer[VeloTexts.DonateIfNotSold])
             @VeloHtml.HiddenInput(nameof(Model.Id), Model.Id)
             @VeloHtml.HiddenInput(nameof(Model.SessionId), Model.SessionId)
+            @VeloHtml.HiddenInput(nameof(Model.ValueState), (int)Model.ValueState)
+            @VeloHtml.HiddenInput(nameof(Model.StorageState), (int)Model.StorageState)
 
         </div>
         <div class="card-footer">
