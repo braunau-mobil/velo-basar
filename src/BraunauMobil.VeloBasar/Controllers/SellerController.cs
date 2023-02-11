@@ -82,7 +82,7 @@ public sealed class SellerController
         {
             if (await _sellerService.ExistsAsync(id))
             {
-                return Redirect(_router.Product.ToDetails(id));
+                return Redirect(_router.Seller.ToDetails(id));
             }
         }
 
