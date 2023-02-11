@@ -15,7 +15,7 @@ public interface IVeloHtmlFactory
 
     IHtmlContent ProductState(ProductEntity product);
 
-    IHtmlContent ProductState(StorageState storageState, ValueState valueState);
+    IHtmlContent ProductState(StorageState storageState, ValueState valueState, bool donateIfNotSold);
 
     TableBuilder<ProductEntity> ProductsTable(IEnumerable<ProductEntity> products, bool showSum = false, bool showId = false, bool showState = false);
 

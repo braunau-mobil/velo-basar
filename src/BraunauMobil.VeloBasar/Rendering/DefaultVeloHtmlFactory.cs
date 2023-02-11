@@ -59,10 +59,10 @@ public sealed class DefaultVeloHtmlFactory
     {
         if (product == null) throw new ArgumentNullException(nameof(product));
 
-        return ProductState(product.StorageState, product.ValueState);
+        return ProductState(product.StorageState, product.ValueState, product.DonateIfNotSold);
     }
 
-    public IHtmlContent ProductState(StorageState storageState, ValueState valueState)
+    public IHtmlContent ProductState(StorageState storageState, ValueState valueState, bool donateIfNotSold)
     {
         string text;
         BadgeType type;
@@ -110,7 +110,24 @@ public sealed class DefaultVeloHtmlFactory
 
         TagBuilder badge = Badge(type);
         badge.InnerHtml.SetHtmlContent(Localizer[text]);
-        return badge;
+
+        HtmlContentBuilder stateBadge = new();
+        stateBadge.AppendHtml(badge);
+
+        if (donateIfNotSold)
+        {
+            TagBuilder br = new("br")
+            {
+                TagRenderMode = TagRenderMode.StartTag
+            };
+            stateBadge.AppendHtml(br);
+
+            TagBuilder donateBadge = Badge(BadgeType.Info);
+            donateBadge.InnerHtml.SetHtmlContent(Localizer[VeloTexts.Donateable]);
+            stateBadge.AppendHtml(donateBadge);
+
+        }
+        return stateBadge;
     }
 
     public TableBuilder<ProductEntity> ProductsTable(IEnumerable<ProductEntity> products, bool showSum = false, bool showId = false, bool showState = false)

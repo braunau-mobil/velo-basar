@@ -948,4 +948,7 @@
   <data name="VeloBasar_GenerateCountriesMustBeActiveForGeneratingZipCodes" xml:space="preserve">
     <value>Bitte aktivieren sie die Option 'Beispiel Länder generieren'.</value>
   </data>
+  <data name="VeloBasar_Donateable" xml:space="preserve">
+    <value>Spendbar</value>
+  </data>
 </root>
