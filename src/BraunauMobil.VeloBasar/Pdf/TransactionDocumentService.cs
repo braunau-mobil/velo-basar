@@ -115,7 +115,7 @@ public sealed class TransactionDocumentService
             _pdf.AddTitle(doc, string.Format(CultureInfo.CurrentCulture, _settings.Sale.TitleFormat, sale.Basar.Name, sale.Number));
             _pdf.AddSubtitle(doc, _settings.Sale.SubTitle);
 
-            AddProductTable(doc, sale.Products.GetProducts(), _localizer[VeloTexts.Price, true, _settings.Sale.SellerInfoText]);
+            AddProductTable(doc, sale.Products.GetProducts(), _localizer[VeloTexts.Price], true, _settings.Sale.SellerInfoText);
 
             doc.Add(_pdf.GetSpacer(5));
             doc.Add(_pdf.GetRegularParagraph(_settings.Sale.HintText));
