@@ -74,10 +74,10 @@ public class AdminService
         BasarEntity basar = _dataGeneratorService.NextBasar();
         ProductEntity[] products = new[]
         {
-            NextProduct(basar, seller, StorageState.Available, ValueState.NotSettled),
-            NextProduct(basar, seller, StorageState.Available, ValueState.NotSettled),
-            NextProduct(basar, seller, StorageState.Sold, ValueState.NotSettled),
-            NextProduct(basar, seller, StorageState.Sold, ValueState.NotSettled)
+            NextProduct(basar, seller, StorageState.Available, ValueState.Settled),
+            NextProduct(basar, seller, StorageState.Available, ValueState.Settled),
+            NextProduct(basar, seller, StorageState.Sold, ValueState.Settled),
+            NextProduct(basar, seller, StorageState.Sold, ValueState.Settled)
         };
 
         TransactionEntity transaction = NextTransaction(TransactionType.Settlement, basar, seller, products);

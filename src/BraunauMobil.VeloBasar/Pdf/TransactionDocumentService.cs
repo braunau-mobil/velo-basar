@@ -506,6 +506,7 @@ public sealed class TransactionDocumentService
             .AppendLine(iban)
             .AppendFormat(CultureInfo.InvariantCulture, "EUR{0:#.##}", amount).AppendLine()
             .AppendLine()
+            .AppendLine()
             .AppendLine(text)
             .AppendLine()
         ;
