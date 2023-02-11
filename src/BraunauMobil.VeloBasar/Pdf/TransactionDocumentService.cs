@@ -93,7 +93,7 @@ public sealed class TransactionDocumentService
                     .SetTextAlignment(TextAlignment.CENTER)
                     .SetBorderRadius(new BorderRadius(5))
                     .SetBorder(new SolidBorder(2))
-                    .SetMarginTop(25.ToUnit())
+                    .SetMarginTop(5.ToUnit())
                     .SetPadding(4.ToUnit())
                     .SetMaxWidth(length)
                     ;
