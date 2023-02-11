@@ -95,11 +95,9 @@
 </div>
 
 <div class="card m-2">
-    <div class="card-header">@Localizer[VeloTexts.Seller]</div>
+    <div class="card-header">@Localizer[VeloTexts.Seller]: @Model.Entity.Session.Seller.FirstName @Model.Entity.Session.Seller.LastName</div>
     <div class="card-body">
         <partial name="/Views/Seller/_Properties.cshtml" model="Model.Entity.Session.Seller" />
-
-        
     </div>
     <div class="card-footer">
         <a class="btn btn-outline-primary" href="@Router.Seller.ToDetails(Model.Entity.Session.SellerId)">@Localizer[VeloTexts.Details]</a>
