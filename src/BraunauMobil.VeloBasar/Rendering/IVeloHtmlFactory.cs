@@ -13,9 +13,11 @@ public interface IVeloHtmlFactory
 
     TagBuilder Badge(BadgeType type);
 
-    IHtmlContent ProductState(ProductEntity product);
+    IHtmlContent ProductDonateableBadge(ProductEntity product);
 
-    IHtmlContent ProductState(StorageState storageState, ValueState valueState, bool donateIfNotSold);
+    IHtmlContent ProductInfoBadges(ProductEntity product);
+
+    IHtmlContent ProductStateBadge(ProductEntity product);
 
     TableBuilder<ProductEntity> ProductsTable(IEnumerable<ProductEntity> products, bool showSum = false, bool showId = false, bool showState = false);
 

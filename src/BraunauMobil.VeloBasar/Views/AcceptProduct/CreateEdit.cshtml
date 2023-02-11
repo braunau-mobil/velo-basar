@@ -42,6 +42,7 @@
 <div class="card m-2">
     <div class="card-body p-0">
         @(VeloHtml.ProductsTable(Model.Products)
+            .Column(c => c.AutoWidth().Align(ColumnAlign.Center).For(item => VeloHtml.ProductDonateableBadge(item)))
             .Column(c => c.ForLink(product => Router.AcceptProduct.ToEdit(product.Id), Localizer[VeloTexts.Edit]))
             .Column(c => c.ForLink(product => Router.AcceptProduct.ToDelete(product.SessionId, product.Id), Localizer[VeloTexts.Delete]))
             .Build()

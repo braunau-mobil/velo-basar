@@ -55,17 +55,39 @@ public sealed class DefaultVeloHtmlFactory
         return span;
     }
 
-    public IHtmlContent ProductState(ProductEntity product)
+    public IHtmlContent ProductDonateableBadge(ProductEntity product)
     {
         if (product == null) throw new ArgumentNullException(nameof(product));
 
-        return ProductState(product.StorageState, product.ValueState, product.DonateIfNotSold);
+        if (product.DonateIfNotSold)
+        {
+            TagBuilder donateBadge = Badge(BadgeType.Info);
+            donateBadge.InnerHtml.SetHtmlContent(Localizer[VeloTexts.Donateable]);
+            return donateBadge;
+        }
+
+        return new HtmlString("");
     }
 
-    public IHtmlContent ProductState(StorageState storageState, ValueState valueState, bool donateIfNotSold)
+    public IHtmlContent ProductInfoBadges(ProductEntity product)
     {
+        if (product == null) throw new ArgumentNullException(nameof(product));
+
+        HtmlContentBuilder badges = new();
+        badges.AppendHtml(ProductStateBadge(product));
+        badges.AppendHtml(ProductDonateableBadge(product));
+
+        return badges;
+    }
+
+    public IHtmlContent ProductStateBadge(ProductEntity product)
+    {
+        if (product == null) throw new ArgumentNullException(nameof(product));
+
         string text;
         BadgeType type;
+        StorageState storageState = product.StorageState;
+        ValueState valueState = product.ValueState;
 
         if (storageState == StorageState.NotAccepted && valueState == ValueState.NotSettled)
         {
@@ -111,23 +133,7 @@ public sealed class DefaultVeloHtmlFactory
         TagBuilder badge = Badge(type);
         badge.InnerHtml.SetHtmlContent(Localizer[text]);
 
-        HtmlContentBuilder stateBadge = new();
-        stateBadge.AppendHtml(badge);
-
-        if (donateIfNotSold)
-        {
-            TagBuilder br = new("br")
-            {
-                TagRenderMode = TagRenderMode.StartTag
-            };
-            stateBadge.AppendHtml(br);
-
-            TagBuilder donateBadge = Badge(BadgeType.Info);
-            donateBadge.InnerHtml.SetHtmlContent(Localizer[VeloTexts.Donateable]);
-            stateBadge.AppendHtml(donateBadge);
-
-        }
-        return stateBadge;
+        return badge;
     }
 
     public TableBuilder<ProductEntity> ProductsTable(IEnumerable<ProductEntity> products, bool showSum = false, bool showId = false, bool showState = false)
@@ -165,7 +171,7 @@ public sealed class DefaultVeloHtmlFactory
             });
         if (showState)
         {
-            builder.Column(c => c.AutoWidth().Align(ColumnAlign.Center).For(item => ProductState(getProduct(item))));
+            builder.Column(c => c.AutoWidth().Align(ColumnAlign.Center).For(item => ProductInfoBadges(getProduct(item))));
         }
         return builder;
     }
