@@ -51,9 +51,9 @@ public sealed class BasarCrudModelFactory
 
         return _html.Table(model)
             .IdColumn()
-            .Column(c => c.PercentWidth(20).Title(_localizer[VeloTexts.Date]).For(item => item.Entity.Date.ToHtmlDate()))
-            .Column(c => c.PercentWidth(40).Title(_localizer[VeloTexts.Name]).For(item => item.Entity.Name))
-            .Column(c => c.PercentWidth(40).Title(_localizer[VeloTexts.Location]).For(item => item.Entity.Location))
+            .Column(c => c.PercentWidth(20).BreakText().Title(_localizer[VeloTexts.Date]).For(item => item.Entity.Date.ToHtmlDate()))
+            .Column(c => c.PercentWidth(40).BreakText().Title(_localizer[VeloTexts.Name]).For(item => item.Entity.Name))
+            .Column(c => c.PercentWidth(40).BreakText().Title(_localizer[VeloTexts.Location]).For(item => item.Entity.Location))
             .CreatedAtColumn()
             .UpdatedAtColumn()
             .StateColumn()

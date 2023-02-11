@@ -124,14 +124,14 @@ public sealed class DefaultVeloHtmlFactory
             builder.IdColumn(item => getProduct(item).Id);
         }
         builder
-            .Column(c => c.PercentWidth(10).Title(Localizer[VeloTexts.Brand]).For(item => getProduct(item).Brand.Name))
-            .Column(c => c.PercentWidth(10).Title(Localizer[VeloTexts.Type]).For(item => getProduct(item).Type.Name))
+            .Column(c => c.PercentWidth(10).BreakText().Title(Localizer[VeloTexts.Brand]).For(item => getProduct(item).Brand.Name))
+            .Column(c => c.PercentWidth(10).BreakText().Title(Localizer[VeloTexts.Type]).For(item => getProduct(item).Type.Name))
             .Column(c => c.PercentWidth(20).BreakText().Title(Localizer[VeloTexts.Color]).For(item => getProduct(item).Color))
             .Column(c => c.PercentWidth(10).Title(Localizer[VeloTexts.FrameNumber]).For(item => getProduct(item).FrameNumber))
             .Column(c => c.PercentWidth(40).BreakText().Title(Localizer[VeloTexts.Description]).For(item => getProduct(item).Description))
             .Column(c =>
             {
-                c.PercentWidth(5).Title(Localizer[VeloTexts.TireSize]).For(item => getProduct(item).TireSize);
+                c.PercentWidth(5).BreakText().Title(Localizer[VeloTexts.TireSize]).For(item => getProduct(item).TireSize);
                 if (showSum)
                 {
                     c.Footer(f => f.Align(ColumnAlign.Right).For(Localizer[VeloTexts.Sum]));
@@ -159,13 +159,13 @@ public sealed class DefaultVeloHtmlFactory
 
         return Table(sellers)
             .IdColumn()
-            .Column(c => c.PercentWidth(20).Title(Localizer[VeloTexts.FirstName]).For(item => item.FirstName))
-            .Column(c => c.PercentWidth(10).Title(Localizer[VeloTexts.LastName]).For(item => item.LastName))
-            .Column(c => c.PercentWidth(35).Title(Localizer[VeloTexts.Street]).For(item => item.Street))
-            .Column(c => c.PercentWidth(5).Title(Localizer[VeloTexts.City]).For(item => item.City))
+            .Column(c => c.PercentWidth(20).BreakText().Title(Localizer[VeloTexts.FirstName]).For(item => item.FirstName))
+            .Column(c => c.PercentWidth(10).BreakText().Title(Localizer[VeloTexts.LastName]).For(item => item.LastName))
+            .Column(c => c.PercentWidth(35).BreakText().Title(Localizer[VeloTexts.Street]).For(item => item.Street))
+            .Column(c => c.PercentWidth(5).BreakText().Title(Localizer[VeloTexts.City]).For(item => item.City))
             .Column(c => c.PercentWidth(5).Title(Localizer[VeloTexts.ZIP]).For(item => item.ZIP))
-            .Column(c => c.PercentWidth(10).Title(Localizer[VeloTexts.Country]).For(item => item.Country.Name))
-            .Column(c => c.PercentWidth(5).Title(Localizer[VeloTexts.ValueState]).For(item => Localizer[VeloTexts.Singular(item.ValueState)]));
+            .Column(c => c.PercentWidth(10).BreakText().Title(Localizer[VeloTexts.Country]).For(item => item.Country.Name))
+            .Column(c => c.PercentWidth(5).BreakText().Title(Localizer[VeloTexts.ValueState]).For(item => Localizer[VeloTexts.Singular(item.ValueState)]));
     }
 
     public TableBuilder<TransactionEntity> TransactionsTable(IEnumerable<TransactionEntity> transactions, bool showType = false, bool showProducts = false)
