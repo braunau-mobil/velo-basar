@@ -69,6 +69,8 @@ public class AdminService
     {
         CountryEntity country = _dataGeneratorService.NextCountry();
         SellerEntity seller = _dataGeneratorService.NextSeller(country);
+        seller.IBAN = "AT536616326924127723";
+
         BasarEntity basar = _dataGeneratorService.NextBasar();
         ProductEntity[] products = new[]
         {

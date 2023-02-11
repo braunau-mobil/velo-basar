@@ -15,6 +15,7 @@ using iText.Layout.Element;
 using iText.Layout.Properties;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
+using Xan.Extensions;
 
 namespace BraunauMobil.VeloBasar.Pdf;
 
@@ -179,6 +180,9 @@ public sealed class TransactionDocumentService
 
                 Paragraph barcode = new Paragraph()
                     .Add(qrImage)
+                    .Add(_pdf.GetRegularParagraph(settlement.Seller.EffectiveBankAccountHolder))
+                    .Add(Environment.NewLine)
+                    .Add(_pdf.GetRegularParagraph(settlement.Seller.IBAN.ToPrettyIBAN()))
                     .SetKeepTogether(true)
                     .SetHorizontalAlignment(HorizontalAlignment.CENTER)
                     .SetTextAlignment(TextAlignment.CENTER)
