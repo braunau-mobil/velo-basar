@@ -84,7 +84,7 @@ public sealed class WordPressStatusPushService
                 products.Where(p => p.ValueState == ValueState.Settled && (p.StorageState == StorageState.Sold || p.StorageState == StorageState.Lost)).Select(p => ProductInfo(p)).ToArray()
             },
             {
-                _localizer[VeloTexts.NotSettled],
+                _localizer[VeloTexts.PickedUp],
                 products.Where(p => p.ValueState == ValueState.Settled && (p.StorageState == StorageState.Available || p.StorageState == StorageState.Locked)).Select(p => ProductInfo(p)).ToArray()
             }
         };
