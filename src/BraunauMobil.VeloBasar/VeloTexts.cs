@@ -110,6 +110,7 @@ public static class VeloTexts
     public const string Enable = $"{Prefix}{nameof(Enable)}";
     public const string End = $"{Prefix}{nameof(End)}";
     public const string EnterProductId = $"{Prefix}{nameof(EnterProductId)}";
+    public const string Export = $"{Prefix}{nameof(Export)}";
     public const string FirstName = $"{Prefix}{nameof(FirstName)}";
     public const string FirstNameIsTooLong = $"{Prefix}{nameof(FirstNameIsTooLong)}";
     public const string FrameNumber = $"{Prefix}{nameof(FrameNumber)}";
@@ -240,6 +241,7 @@ public static class VeloTexts
     public const string SellerIdShort = $"{Prefix}{nameof(SellerIdShort)}";
     public const string SellerList = $"{Prefix}{nameof(SellerList)}";
     public const string SellerNotFound = $"{Prefix}{nameof(SellerNotFound)}";
+    public const string SellersForNewsletter = $"{Prefix}{nameof(SellersForNewsletter)}";
     public const string SellingPrice = $"{Prefix}{nameof(SellingPrice)}";
     public const string SetAsLost = $"{Prefix}{nameof(SetAsLost)}";
     public const string SetLostSingular = $"{Prefix}{nameof(SetLostSingular)}";

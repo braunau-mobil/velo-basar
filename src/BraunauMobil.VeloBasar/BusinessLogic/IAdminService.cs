@@ -9,4 +9,6 @@ public interface IAdminService
     Task<FileDataEntity> CreateSampleSaleDocumentAsync();
 
     Task<FileDataEntity> CreateSampleSettlementDocumentAsync();
+
+    Task<FileDataEntity> ExportSellersForNewsletterAsCsvAsync();
 }

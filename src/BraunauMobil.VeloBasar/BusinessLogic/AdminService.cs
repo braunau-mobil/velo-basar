@@ -1,21 +1,37 @@
-﻿using BraunauMobil.VeloBasar.Pdf;
+﻿using BraunauMobil.VeloBasar.Configuration;
+using BraunauMobil.VeloBasar.Data;
+using BraunauMobil.VeloBasar.Pdf;
+using CsvHelper;
+using CsvHelper.Configuration;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using System.Globalization;
+using System.IO;
+using System.Text;
 using Xan.Extensions;
 
 namespace BraunauMobil.VeloBasar.BusinessLogic;
 
-public class AdminService
+public partial class AdminService
     : IAdminService
 {
     private readonly IProductLabelService _productLabelService;
     private readonly ITransactionDocumentService _transactionDocumentService;
     private readonly IDataGeneratorService _dataGeneratorService;
+    private readonly ExportSettings _exportSettings;
+    private readonly VeloDbContext _db;
 
-    public AdminService(IProductLabelService productLabelService, ITransactionDocumentService transactionDocumentService, IDataGeneratorService dataGeneratorService)
+    public AdminService(IProductLabelService productLabelService, ITransactionDocumentService transactionDocumentService, IDataGeneratorService dataGeneratorService, IOptions<ExportSettings> options, VeloDbContext db)
     {
         _productLabelService = productLabelService ?? throw new ArgumentNullException(nameof(productLabelService));
         _transactionDocumentService = transactionDocumentService ?? throw new ArgumentNullException(nameof(transactionDocumentService));
         _dataGeneratorService = dataGeneratorService ?? throw new ArgumentNullException(nameof(dataGeneratorService));
         _dataGeneratorService.Contextualize(new DataGeneratorConfiguration());
+
+        ArgumentNullException.ThrowIfNull(options);
+        _exportSettings = options.Value;
+
+        _db = db ?? throw new ArgumentNullException(nameof(db));
     }
 
     public async Task<FileDataEntity> CreateSampleAcceptanceDocumentAsync()
@@ -82,6 +98,33 @@ public class AdminService
 
         TransactionEntity transaction = NextTransaction(TransactionType.Settlement, basar, seller, products);
         return await CreateTransactionDocumentAsync(transaction);
+    }
+
+    public async Task<FileDataEntity> ExportSellersForNewsletterAsCsvAsync()
+    {
+        Encoding encoding = Encoding.GetEncoding(_exportSettings.EncodingName);
+        CsvConfiguration csvConfig = new (CultureInfo.InvariantCulture)
+        {
+            Delimiter = _exportSettings.Delimiter,
+            Encoding = encoding,
+            NewLine = _exportSettings.NewLine,
+            Quote = _exportSettings.QuoteChar
+        };
+
+        SellerEntity[] sellers = await _db.Sellers
+            .Include(seller => seller.Country)
+            .Where(seller => seller.HasNewsletterPermission)
+            .ToArrayAsync();
+
+        using MemoryStream memoryStream = new();
+        using StreamWriter streamWriter = new(memoryStream, encoding);
+        using CsvWriter csvWriter = new(streamWriter, csvConfig);
+        
+        csvWriter.Context.RegisterClassMap<SellerNewsletterExportMap>();
+        csvWriter.WriteRecords(sellers);
+        await csvWriter.FlushAsync();
+            
+        return FileDataEntity.Csv("sellers.csv", memoryStream.ToArray());
     }
 
     private async Task<FileDataEntity> CreateTransactionDocumentAsync(TransactionEntity transaction)

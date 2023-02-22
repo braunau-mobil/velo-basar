@@ -6,7 +6,20 @@ namespace BraunauMobil.VeloBasar.Models.Entities;
 public sealed class FileDataEntity
     : IEntity
 {
+    public const string CsvContentType = "text/csv";
     public const string PdfContentType = "application/pdf";
+
+    public static FileDataEntity Csv(string fileName, byte[] data)
+    {
+        ArgumentNullException.ThrowIfNull(fileName);
+        ArgumentNullException.ThrowIfNull(data);
+        return new()
+        {
+            ContentType = CsvContentType,
+            Data = data ?? throw new ArgumentNullException(nameof(data)),
+            FileName = fileName ?? throw new ArgumentNullException(nameof(fileName))
+        };
+    }
 
     public static FileDataEntity Pdf(string fileName, byte[] data)
     {

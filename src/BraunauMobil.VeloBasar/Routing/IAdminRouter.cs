@@ -10,5 +10,9 @@ public interface IAdminRouter
 
     string ToCreateSampleSettlementDocument();
 
+    string ToExport();
+
+    string ToExportSellersForNewsletter();
+
     string ToPrintTest();
 }

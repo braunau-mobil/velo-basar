@@ -123,8 +123,7 @@ public static class Program
         services
             .AddOptions<ApplicationSettings>()
                 .Bind(configuration.GetSection(nameof(ApplicationSettings)))
-                .ValidateDataAnnotations();
-        
+                .ValidateDataAnnotations();        
         services
             .AddOptions<PrintSettings>()
                 .Bind(configuration.GetSection(nameof(PrintSettings)))
@@ -132,6 +131,10 @@ public static class Program
         services
             .AddOptions<WordPressStatusPushSettings>()
                 .Bind(configuration.GetSection(nameof(WordPressStatusPushSettings)))
+                .ValidateDataAnnotations();
+        services
+            .AddOptions<ExportSettings>()
+                .Bind(configuration.GetSection(nameof(ExportSettings)))
                 .ValidateDataAnnotations();
 
         services.AddCrud(options =>

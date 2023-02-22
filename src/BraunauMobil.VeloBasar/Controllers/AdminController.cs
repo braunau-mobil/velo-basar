@@ -43,6 +43,17 @@ public sealed class AdminController
     }
 
     [Authorize]
+    public IActionResult Export()
+        => View();
+
+    [Authorize]
+    public async Task<IActionResult> ExportSellersForNewsletter()
+    {
+        FileDataEntity fileData = await _adminService.ExportSellersForNewsletterAsCsvAsync();
+        return File(fileData.Data, fileData.ContentType, fileData.FileName);
+    }
+
+    [Authorize]
     public IActionResult PrintTest()
         => View();
 }

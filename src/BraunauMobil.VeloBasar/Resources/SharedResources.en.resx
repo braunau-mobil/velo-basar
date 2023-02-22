@@ -951,4 +951,10 @@
   <data name="VeloBasar_Donateable" xml:space="preserve">
     <value>Donateable</value>
   </data>
+  <data name="VeloBasar_Export" xml:space="preserve">
+    <value>Export</value>
+  </data>
+  <data name="VeloBasar_SellersForNewsletter" xml:space="preserve">
+    <value>Sellers with newsletter</value>
+  </data>
 </root>

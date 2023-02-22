@@ -1,0 +1,10 @@
+﻿@{
+    ViewData.SetTitle(Localizer[VeloTexts.PrintTest]);
+}
+
+<div class="card m-2">
+    @VeloHtml.TitleCardHeader()
+    <div class="card-body">
+        <a class="btn btn-outline-primary" href="@Router.Admin.ToExportSellersForNewsletter()" target="_blank">@Localizer[VeloTexts.SellersForNewsletter]</a>
+    </div>
+</div>
