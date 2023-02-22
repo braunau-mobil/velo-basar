@@ -113,6 +113,7 @@ public partial class AdminService
 
         SellerEntity[] sellers = await _db.Sellers
             .Include(seller => seller.Country)
+            .OrderBy(seller => seller.NewsletterPermissionTimesStamp)
             .Where(seller => seller.HasNewsletterPermission)
             .ToArrayAsync();
 
