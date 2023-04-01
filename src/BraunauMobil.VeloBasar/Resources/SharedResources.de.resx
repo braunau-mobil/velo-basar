@@ -136,7 +136,7 @@
     <value>Artikel im Wert von {0:C} angenommen</value>
   </data>
   <data name="VeloBasar_AcceptedProductsWithCount" xml:space="preserve">
-    <value>Artikel angenommen</value>
+    <value>{0} Artikel angenommen</value>
   </data>
   <data name="VeloBasar_Accepting" xml:space="preserve">
     <value>In Annahme</value>
