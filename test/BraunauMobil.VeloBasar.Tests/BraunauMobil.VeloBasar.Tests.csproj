@@ -83,6 +83,8 @@
     <Compile Include="Controllers\AcceptanceLabelsControllerTests\TestBase.cs" />
     <Compile Include="Controllers\AcceptanceLabelsControllerTests\Download.cs" />
     <Compile Include="Controllers\AcceptanceLabelsControllerTests\Select.cs" />
+    <Compile Include="Controllers\AcceptProductControllerTests\Create.cs" />
+    <Compile Include="Controllers\AcceptProductControllerTests\TestBase.cs" />
     <Compile Include="Models\ChangeInfoTests\Ctor.cs" />
     <Compile Include="Models\Entities\SellerTests\UpdateNewsletterPermissions.cs" />
     <Compile Include="Models\ExtensionMethodsTests\SumPrice.cs" />
