@@ -11,13 +11,19 @@ namespace BraunauMobil.VeloBasar.Tests.Controllers.AcceptProductControllerTests
         {
             Validator = new (Localizer);
             Sut = new AcceptProductController(AcceptProductService.Object, Router.Object, Validator);
+
+            Router.Setup(_ => _.AcceptProduct)
+                .Returns(AcceptProductRouter.Object);
         }
 
         public void VerifyNoOtherCalls()
         {
             AcceptProductService.VerifyNoOtherCalls();
+            AcceptProductRouter.VerifyNoOtherCalls();
             Router.VerifyNoOtherCalls();
         }
+
+        protected Mock<IAcceptProductRouter> AcceptProductRouter { get; } = new ();
 
         protected Mock<IAcceptProductService> AcceptProductService { get; } = new ();
 
