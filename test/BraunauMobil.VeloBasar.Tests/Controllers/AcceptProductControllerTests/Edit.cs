@@ -2,35 +2,33 @@
 
 namespace BraunauMobil.VeloBasar.Tests.Controllers.AcceptProductControllerTests
 {
-    public class Create
+    public class Edit
         : TestBase
     {
         [Theory]
         [AutoData]
-        public async Task WithId_ReturnsView(int sessionId)
+        public async Task WithId_CallsGet_And_ReturnsView(int productId)
         {
-            //  Arrange
             AcceptProductModel model = Fixture.Create<AcceptProductModel>();
-            AcceptProductService.Setup(_ => _.CreateNewAsync(sessionId))
+            AcceptProductService.Setup(_ => _.GetAsync(productId))
                 .ReturnsAsync(model);
 
             //  Act
-            IActionResult result = await Sut.Create(sessionId);
+            IActionResult result = await Sut.Edit(productId);
 
             //  Assert
             result.Should().NotBeNull();
             ViewResult viewResult = result.Should().BeOfType<ViewResult>().Subject;
             viewResult.Model.Should().Be(model);
-            viewResult.ViewName.Should().Be("CreateEdit");
             viewResult.ViewData.ModelState.ErrorCount.Should().Be(0);
 
-            AcceptProductService.Verify(_ => _.CreateNewAsync(sessionId));
+            AcceptProductService.Verify(_ => _.GetAsync(productId), Times.Once);
             VerifyNoOtherCalls();
         }
 
         [Theory]
         [AutoData]
-        public async Task WithValidEntity_CallsCreate_And_ReturnsRedirectToCreate(int sessionId, string url)
+        public async Task WithValidEntity_CallsUpdate_And_ReturnsRedirectToCreate(int sessionId, string url)
         {
             //  Arrange
             ProductEntity entity = Fixture.Create<ProductEntity>();
@@ -39,14 +37,14 @@ namespace BraunauMobil.VeloBasar.Tests.Controllers.AcceptProductControllerTests
                 .Returns(url);
 
             //  Act
-            IActionResult result = await Sut.Create(entity);
+            IActionResult result = await Sut.Edit(entity);
 
             //  Assert
             result.Should().NotBeNull();
             RedirectResult redirectResult = result.Should().BeOfType<RedirectResult>().Subject;
             redirectResult.Url.Should().Be(url);
 
-            AcceptProductService.Verify(_ => _.CreateAsync(entity), Times.Once());
+            AcceptProductService.Verify(_ => _.UpdateAsync(entity), Times.Once());
             Router.Verify(_ => _.AcceptProduct, Times.Once());
             AcceptProductRouter.Verify(_ => _.ToCreate(sessionId));
             VerifyNoOtherCalls();
