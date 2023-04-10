@@ -12,21 +12,29 @@ namespace BraunauMobil.VeloBasar.Tests.Controllers.AcceptSessionsControllerTests
         {
             Sut = new AcceptSessionController(AcceptSessionService.Object, Router.Object, Localizer, Cookie.Object);
 
+            Router.Setup(_ => _.AcceptProduct)
+                .Returns(AcceptProductRouter.Object);
             Router.Setup(_ => _.AcceptSession)
                 .Returns(AcceptSessionRouter.Object);
             Router.Setup(_ => _.Seller)
                 .Returns(SellerRouter.Object);
+            Router.Setup(_ => _.Transaction)
+                .Returns(TransactionRouter.Object);
         }
 
         public void VerifyNoOtherCalls()
         {
+            AcceptProductRouter.VerifyNoOtherCalls();
             AcceptSessionService.VerifyNoOtherCalls();
             AcceptSessionRouter.VerifyNoOtherCalls();
             Cookie.VerifyNoOtherCalls();
             Router.VerifyNoOtherCalls();
             SellerRouter.VerifyNoOtherCalls();
+            TransactionRouter.VerifyNoOtherCalls();
         }
 
+        protected Mock<IAcceptProductRouter> AcceptProductRouter { get; } = new ();
+        
         protected Mock<IAcceptSessionRouter> AcceptSessionRouter { get; } = new ();
 
         protected Mock<IAcceptSessionService> AcceptSessionService { get; } = new ();
@@ -42,5 +50,7 @@ namespace BraunauMobil.VeloBasar.Tests.Controllers.AcceptSessionsControllerTests
         protected Mock<ISellerRouter> SellerRouter { get; } = new();
 
         protected AcceptSessionController Sut { get; }
+
+        protected Mock<ITransactionRouter> TransactionRouter { get; } = new ();
     }
 }
