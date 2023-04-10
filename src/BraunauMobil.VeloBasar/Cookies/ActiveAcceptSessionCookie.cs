@@ -3,9 +3,9 @@ using Xan.AspNetCore.Http;
 
 namespace BraunauMobil.VeloBasar.Cookies;
 
-public static class ActiveAcceptSessionCooke
+public static class ActiveAcceptSessionCookie
 {
-    private static readonly CookieConfig _activeAcceptSession = new(
+    public static readonly CookieConfig ActiveAcceptSession = new(
         "activeAcceptSessionId",
         new CookieOptions
         {
@@ -20,14 +20,14 @@ public static class ActiveAcceptSessionCooke
     {
         ArgumentNullException.ThrowIfNull(cookies);
 
-        cookies.Delete(_activeAcceptSession.Key, _activeAcceptSession.CookieOptions);
+        cookies.Delete(ActiveAcceptSession.Key, ActiveAcceptSession.CookieOptions);
     }
 
     public static int? GetActiveAcceptSessionId(this IRequestCookieCollection cookies)
     {
         ArgumentNullException.ThrowIfNull(cookies);
 
-        string? id = cookies[_activeAcceptSession.Key];
+        string? id = cookies[ActiveAcceptSession.Key];
         if (int.TryParse(id, out int sessionId))
         {
             return sessionId;
@@ -40,6 +40,6 @@ public static class ActiveAcceptSessionCooke
         ArgumentNullException.ThrowIfNull(cookies);
         ArgumentNullException.ThrowIfNull(session);
 
-        cookies.Append(_activeAcceptSession.Key, $"{session.Id}", _activeAcceptSession.CookieOptions);
+        cookies.Append(ActiveAcceptSession.Key, $"{session.Id}", ActiveAcceptSession.CookieOptions);
     }
 }
