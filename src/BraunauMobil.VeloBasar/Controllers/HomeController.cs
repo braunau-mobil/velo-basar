@@ -13,12 +13,14 @@ public sealed class HomeController
     private readonly ILogger<HomeController> _logger;
     private readonly IVeloRouter _router;
     private readonly VeloDbContext _db;
+    private readonly ICurrentThemeCookie _cookie;
 
-    public HomeController(IVeloRouter router, ILogger<HomeController> logger, VeloDbContext db)
+    public HomeController(IVeloRouter router, ILogger<HomeController> logger, VeloDbContext db, ICurrentThemeCookie cookie)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _router = router ?? throw new ArgumentNullException(nameof(router));
         _db = db ?? throw new ArgumentNullException(nameof(db));
+        _cookie = cookie ?? throw new ArgumentNullException(nameof(cookie));
     }
 
     public IActionResult Index()
@@ -35,7 +37,7 @@ public sealed class HomeController
 
     public IActionResult SetTheme(Theme theme)
     {
-        Response.Cookies.SetCurrentTheme(theme);
+        _cookie.SetCurrentTheme(theme);
 
         return RedirectToReferer();
     }

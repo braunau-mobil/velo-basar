@@ -49,7 +49,7 @@ public class Cancel
         RedirectResult redirectResult = result.Should().BeOfType<RedirectResult>().Subject;
         redirectResult.Url.Should().Be(url);
 
-        ResponseCookies.Verify(_ => _.Delete(ActiveAcceptSessionCookie.ActiveAcceptSession.Key, ActiveAcceptSessionCookie.ActiveAcceptSession.CookieOptions), Times.Once());
+        Cookie.Verify(_ => _.ClearActiveAcceptSession(), Times.Once());
         AcceptSessionRouter.Verify(_ => _.ToList(), Times.Once());
         AcceptSessionService.Verify(_ => _.GetAsync(sessionId), Times.Once());
         AcceptSessionService.Verify(_ => _.DeleteAsync(sessionId), Times.Once());
@@ -74,7 +74,7 @@ public class Cancel
         RedirectResult redirectResult = result.Should().BeOfType<RedirectResult>().Subject;
         redirectResult.Url.Should().Be(url);
 
-        ResponseCookies.Verify(_ => _.Delete(ActiveAcceptSessionCookie.ActiveAcceptSession.Key, ActiveAcceptSessionCookie.ActiveAcceptSession.CookieOptions), Times.Once());
+        Cookie.Verify(_ => _.ClearActiveAcceptSession(), Times.Once());
         SellerRouter.Verify(_ => _.ToDetails(sellerId), Times.Once());
         AcceptSessionService.Verify(_ => _.GetAsync(sessionId), Times.Once());
         AcceptSessionService.Verify(_ => _.DeleteAsync(sessionId), Times.Once());

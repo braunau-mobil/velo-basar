@@ -23,6 +23,7 @@ using BraunauMobil.VeloBasar.Pdf;
 using Xan.AspNetCore.Http;
 using Xan.AspNetCore.Mvc.Filters;
 using System.Globalization;
+using BraunauMobil.VeloBasar.Cookies;
 
 namespace BraunauMobil.VeloBasar;
 
@@ -110,6 +111,7 @@ public static class Program
             .AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>()
             .AddSingleton<IClock, SystemClock>()
             .AddBusinessLogic()
+            .AddVeloCookies()
             .AddVeloRendering()
             .AddVeloRouting()
             .AddPdf()

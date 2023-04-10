@@ -1,33 +1,37 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Xan.AspNetCore.Http;
 
 namespace BraunauMobil.VeloBasar.Cookies;
 
-public static class ActiveAcceptSessionCookie
+public class ActiveAcceptSessionCookie
+    : IActiveAcceptSessionCookie
 {
-    public static readonly CookieConfig ActiveAcceptSession = new(
-        "activeAcceptSessionId",
-        new CookieOptions
-        {
-            HttpOnly = true,
-            IsEssential = true,
-            MaxAge = TimeSpan.FromDays(2),
-            SameSite = SameSiteMode.Strict,
-            Secure = false
-        });
+    private readonly HttpContext _httpContext;
 
-    public static void ClearActiveAcceptSession(this IResponseCookies cookies)
+    public ActiveAcceptSessionCookie(IHttpContextAccessor httpContextAccessor)
     {
-        ArgumentNullException.ThrowIfNull(cookies);
-
-        cookies.Delete(ActiveAcceptSession.Key, ActiveAcceptSession.CookieOptions);
+        if (httpContextAccessor is null) throw new ArgumentNullException(nameof(httpContextAccessor));
+        _httpContext = httpContextAccessor.HttpContext ?? throw new ArgumentException(nameof(httpContextAccessor.HttpContext));
     }
 
-    public static int? GetActiveAcceptSessionId(this IRequestCookieCollection cookies)
-    {
-        ArgumentNullException.ThrowIfNull(cookies);
+    public string Key { get; } = "activeAcceptSessionId";
 
-        string? id = cookies[ActiveAcceptSession.Key];
+    public CookieOptions Options { get; } = new()
+    {
+        HttpOnly = true,
+        IsEssential = true,
+        MaxAge = TimeSpan.FromDays(2),
+        SameSite = SameSiteMode.Strict,
+        Secure = false
+    };
+
+    public void ClearActiveAcceptSession()
+    {
+        _httpContext.Response.Cookies.Delete(Key, Options);
+    }
+
+    public int? GetActiveAcceptSessionId()
+    {
+        string? id = _httpContext.Request.Cookies[Key];
         if (int.TryParse(id, out int sessionId))
         {
             return sessionId;
@@ -35,11 +39,10 @@ public static class ActiveAcceptSessionCookie
         return null;
     }
 
-    public static void SetActiveAcceptSession(this IResponseCookies cookies, AcceptSessionEntity session)
+    public void SetActiveAcceptSession(AcceptSessionEntity session)
     {
-        ArgumentNullException.ThrowIfNull(cookies);
         ArgumentNullException.ThrowIfNull(session);
 
-        cookies.Append(ActiveAcceptSession.Key, $"{session.Id}", ActiveAcceptSession.CookieOptions);
+        _httpContext.Response.Cookies.Append(Key, $"{session.Id}", Options);
     }
 }

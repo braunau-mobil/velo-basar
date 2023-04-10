@@ -1,4 +1,5 @@
 ﻿@using BraunauMobil.VeloBasar.Cookies;
+@inject ICurrentThemeCookie CurrentThemeCookie
 
 <!DOCTYPE html>
 <html lang="en">
@@ -9,7 +10,7 @@
     
     <link href="~/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <link href="~/css/common.css" rel="stylesheet" />
-    <link href="@Context.Request.Cookies.GetCurrentTheme().CssFilePath()" rel="stylesheet" />
+    <link href="@CurrentThemeCookie.GetCurrentTheme().CssFilePath()" rel="stylesheet" />
 
     <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
 </head>

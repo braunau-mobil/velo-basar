@@ -9,6 +9,8 @@
 @inject IBasarService BasarService
 @inject IAppContext AppContext
 @inject IAcceptSessionService AcceptSessionService
+@inject IActiveAcceptSessionCookie ActiveAcceptSessionCookie
+@inject ICurrentThemeCookie CurrentThemeCookie
 
 @{
     int? activeBasarId = await BasarService.GetActiveBasarIdAsync();
@@ -24,7 +26,7 @@
     }
 
     LocalizedString startAcceptSessionText = Localizer[VeloTexts.NewAcceptance];
-    if (await AcceptSessionService.IsSessionRunning(Context.Request.Cookies.GetActiveAcceptSessionId()))
+    if (await AcceptSessionService.IsSessionRunning(ActiveAcceptSessionCookie.GetActiveAcceptSessionId()))
     {
         startAcceptSessionText = Localizer[VeloTexts.ContinueAcceptSession];
     }
@@ -39,7 +41,7 @@
     
     <link href="~/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <link href="~/css/common.css" rel="stylesheet" />
-    <link href="@Context.Request.Cookies.GetCurrentTheme().CssFilePath()" rel="stylesheet" />
+    <link href="@CurrentThemeCookie.GetCurrentTheme().CssFilePath()" rel="stylesheet" />
 
     <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
 </head>

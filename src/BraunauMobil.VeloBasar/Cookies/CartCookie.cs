@@ -1,33 +1,38 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
-using Xan.AspNetCore.Http;
 
 namespace BraunauMobil.VeloBasar.Cookies;
 
-public static class CartCookie
+public class CartCookie
+    : ICartCookie
 {
-    private static readonly CookieConfig _cart = new(
-        "cart",
-        new CookieOptions
-        {
-            HttpOnly = true,
-            IsEssential = true,
-            MaxAge = TimeSpan.FromDays(2),
-            SameSite = SameSiteMode.Strict,
-            Secure = false
-        });
+    private readonly HttpContext _httpContext;
 
-    public static void ClearCart(this IResponseCookies cookies)
+    public CartCookie(IHttpContextAccessor httpContextAccessor)
     {
-        ArgumentNullException.ThrowIfNull(cookies);
-
-        cookies.Delete(_cart.Key, _cart.CookieOptions);
+        if (httpContextAccessor is null) throw new ArgumentNullException(nameof(httpContextAccessor));
+        _httpContext = httpContextAccessor.HttpContext ?? throw new ArgumentException(nameof(httpContextAccessor.HttpContext));
     }
-    public static IList<int> GetCart(this IRequestCookieCollection cookies)
-    {
-        ArgumentNullException.ThrowIfNull(cookies);
 
-        string? json = cookies[_cart.Key];
+    public string Key { get; } = "cart";
+    
+    public CookieOptions Options { get; } = new()
+    {
+        HttpOnly = true,
+        IsEssential = true,
+        MaxAge = TimeSpan.FromDays(2),
+        SameSite = SameSiteMode.Strict,
+        Secure = false
+    };
+
+    public void ClearCart()
+    {
+        _httpContext.Response.Cookies.Delete(Key, Options);
+    }
+
+    public IList<int> GetCart()
+    {
+        string? json = _httpContext.Request.Cookies[Key];
         if (json == null)
         {
             return new List<int>();
@@ -35,11 +40,10 @@ public static class CartCookie
         return JsonConvert.DeserializeObject<List<int>>(json) 
             ?? new();
     }
-    public static void SetCart(this IResponseCookies cookies, IList<int> cart)
-    {
-        ArgumentNullException.ThrowIfNull(cookies);
 
+    public void SetCart(IList<int> cart)
+    {
         string? json = JsonConvert.SerializeObject(cart);
-        cookies.Append(_cart.Key, json, _cart.CookieOptions);
+        _httpContext.Response.Cookies.Append(Key, json, Options);
     }
 }

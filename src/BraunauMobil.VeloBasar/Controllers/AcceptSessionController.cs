@@ -15,12 +15,14 @@ public sealed class AcceptSessionController
     private readonly IAcceptSessionService _acceptSessionService;
     private readonly IVeloRouter _router;
     private readonly IStringLocalizer<SharedResources> _localizer;
+    private readonly IActiveAcceptSessionCookie _cookie;
 
-    public AcceptSessionController(IAcceptSessionService acceptSessionService, IVeloRouter router, IStringLocalizer<SharedResources> localizer)
+    public AcceptSessionController(IAcceptSessionService acceptSessionService, IVeloRouter router, IStringLocalizer<SharedResources> localizer, IActiveAcceptSessionCookie cookie)
     {
         _acceptSessionService = acceptSessionService ?? throw new ArgumentNullException(nameof(acceptSessionService));
         _router = router ?? throw new ArgumentNullException(nameof(router));
         _localizer = localizer ?? throw new ArgumentNullException(nameof(localizer));
+        _cookie = cookie ?? throw new ArgumentNullException(nameof(cookie));
     }
 
     public async Task<IActionResult> Cancel(int sessionId, bool returnToList)
@@ -32,7 +34,7 @@ public sealed class AcceptSessionController
         }
 
         await _acceptSessionService.DeleteAsync(session.Id);
-        Response.Cookies.ClearActiveAcceptSession();
+        _cookie.ClearActiveAcceptSession();
 
         if (returnToList)
         {
@@ -76,7 +78,7 @@ public sealed class AcceptSessionController
         }
 
         AcceptSessionEntity acceptSession = await _acceptSessionService.CreateAsync(activeBasarId, sellerId);
-        Response.Cookies.SetActiveAcceptSession(acceptSession);
+        _cookie.SetActiveAcceptSession(acceptSession);
 
         return Redirect(_router.AcceptProduct.ToCreate(acceptSession.Id));
     }
@@ -89,14 +91,14 @@ public sealed class AcceptSessionController
 
     private async Task<IActionResult?> RedirectToActiveSessionAsync()
     {
-        int? activeSessionId = Request.Cookies.GetActiveAcceptSessionId();
+        int? activeSessionId = _cookie.GetActiveAcceptSessionId();
         if (activeSessionId.HasValue)
         {
             if (await _acceptSessionService.IsSessionRunning(activeSessionId))
             {
                 return Redirect(_router.AcceptProduct.ToCreate(activeSessionId.Value));
             }
-            Response.Cookies.ClearActiveAcceptSession();
+            _cookie.ClearActiveAcceptSession();
         }
 
         return null;

@@ -14,13 +14,15 @@ public sealed class CartController
     private readonly ITransactionService _transactionService;
     private readonly IVeloRouter _router;
     private readonly IValidator<CartModel> _validator;
+    private readonly ICartCookie _cookie;
 
-    public CartController(IProductService productService, ITransactionService transactionService, IVeloRouter router, IValidator<CartModel> validator)
+    public CartController(IProductService productService, ITransactionService transactionService, IVeloRouter router, IValidator<CartModel> validator, ICartCookie cookie)
     {
         _productService = productService ?? throw new ArgumentNullException(nameof(productService));
         _transactionService = transactionService ?? throw new ArgumentNullException(nameof(transactionService));
         _router = router ?? throw new ArgumentNullException(nameof(router));
         _validator = validator ?? throw new ArgumentNullException(nameof(validator));
+        _cookie = cookie ?? throw new ArgumentNullException(nameof(cookie));
     }
 
     [HttpPost]
@@ -28,14 +30,14 @@ public sealed class CartController
     {
         ArgumentNullException.ThrowIfNull(model);
 
-        IList<int> cart = Request.Cookies.GetCart();
+        IList<int> cart = _cookie.GetCart();
 
         SetValidationResult(await _validator.ValidateAsync(model));
 
         if (ModelState.IsValid)
         {
             cart.Add(model.ProductId);
-            Response.Cookies.SetCart(cart);
+            _cookie.SetCart(cart);
         }
             
         model.Products = await _productService.GetManyAsync(cart);
@@ -46,36 +48,36 @@ public sealed class CartController
     {
         ArgumentNullException.ThrowIfNull(activeBasarId);
 
-        IList<int> cart = Request.Cookies.GetCart();
+        IList<int> cart = _cookie.GetCart();
         if (cart.Count <= 0)
         {
             return StatusCode(StatusCodes.Status405MethodNotAllowed);
         }
 
         int saleId = await _transactionService.CheckoutAsync(activeBasarId, cart);
-        Response.Cookies.ClearCart();
+        _cookie.ClearCart();
         return Redirect(_router.Transaction.ToSucess(saleId));
     }
 
     public IActionResult Clear()
     {
-        Response.Cookies.ClearCart();
+        _cookie.ClearCart();
 
         return RedirectToAction(nameof(Index));
     }
 
     public IActionResult Delete(int productId)
     {
-        IList<int> cart = Request.Cookies.GetCart();
+        IList<int> cart = _cookie.GetCart();
         cart.Remove(productId);
-        Response.Cookies.SetCart(cart);
+        _cookie.SetCart(cart);
 
         return RedirectToAction(nameof(Index));
     }
 
     public async Task<IActionResult> Index()
     {
-        IList<int> cart = Request.Cookies.GetCart();
+        IList<int> cart = _cookie.GetCart();
         CartModel model = new()
         {
             Products = await _productService.GetManyAsync(cart)

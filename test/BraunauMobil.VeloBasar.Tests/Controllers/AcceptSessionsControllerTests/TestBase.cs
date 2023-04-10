@@ -1,29 +1,16 @@
 ﻿using BraunauMobil.VeloBasar.BusinessLogic;
 using BraunauMobil.VeloBasar.Controllers;
+using BraunauMobil.VeloBasar.Cookies;
 using BraunauMobil.VeloBasar.Routing;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Localization;
 
 namespace BraunauMobil.VeloBasar.Tests.Controllers.AcceptSessionsControllerTests
 {
     public class TestBase
     {
-        private readonly Mock<HttpResponse> _response = new();
-
         public TestBase()
         {
-            _response.Setup(_ => _.Cookies)
-                .Returns(ResponseCookies.Object);
-            HttpContext.Setup(_ => _.Response)
-                .Returns(_response.Object);
-
-            Sut = new AcceptSessionController(AcceptSessionService.Object, Router.Object, Localizer)
-            {
-                ControllerContext = new()
-                {
-                    HttpContext = HttpContext.Object
-                }
-            };
+            Sut = new AcceptSessionController(AcceptSessionService.Object, Router.Object, Localizer, Cookie.Object);
 
             Router.Setup(_ => _.AcceptSession)
                 .Returns(AcceptSessionRouter.Object);
@@ -35,7 +22,7 @@ namespace BraunauMobil.VeloBasar.Tests.Controllers.AcceptSessionsControllerTests
         {
             AcceptSessionService.VerifyNoOtherCalls();
             AcceptSessionRouter.VerifyNoOtherCalls();
-            ResponseCookies.VerifyNoOtherCalls();
+            Cookie.VerifyNoOtherCalls();
             Router.VerifyNoOtherCalls();
             SellerRouter.VerifyNoOtherCalls();
         }
@@ -44,14 +31,12 @@ namespace BraunauMobil.VeloBasar.Tests.Controllers.AcceptSessionsControllerTests
 
         protected Mock<IAcceptSessionService> AcceptSessionService { get; } = new ();
 
-        protected Fixture Fixture { get; } = new ();
+        protected Mock<IActiveAcceptSessionCookie> Cookie { get; } = new ();
 
-        protected Mock<HttpContext> HttpContext { get; } = new();
+        protected Fixture Fixture { get; } = new ();
 
         protected IStringLocalizer<SharedResources> Localizer { get; } = Helpers.CreateActualLocalizer();
         
-        protected Mock<IResponseCookies> ResponseCookies { get; } = new();
-
         protected Mock<IVeloRouter> Router { get; } = new ();
 
         protected Mock<ISellerRouter> SellerRouter { get; } = new();
