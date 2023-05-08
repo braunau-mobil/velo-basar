@@ -101,6 +101,9 @@
     <Compile Include="Controllers\AdminControllerTests\CreateSampleLabels.cs" />
     <Compile Include="Controllers\AdminControllerTests\CreateSampleAcceptanceDocument.cs" />
     <Compile Include="Controllers\AdminControllerTests\TestBase.cs" />
+    <Compile Include="Controllers\BasarControllerTests\ActiveBasarDetails.cs" />
+    <Compile Include="Controllers\BasarControllerTests\Details.cs" />
+    <Compile Include="Controllers\BasarControllerTests\TestBase.cs" />
     <Compile Include="Models\ChangeInfoTests\Ctor.cs" />
     <Compile Include="Models\Entities\SellerTests\UpdateNewsletterPermissions.cs" />
     <Compile Include="Models\ExtensionMethodsTests\SumPrice.cs" />
