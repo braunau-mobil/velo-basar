@@ -93,6 +93,14 @@
     <Compile Include="Controllers\AcceptSessionControllerTests\List.cs" />
     <Compile Include="Controllers\AcceptSessionControllerTests\Cancel.cs" />
     <Compile Include="Controllers\AcceptSessionControllerTests\TestBase.cs" />
+    <Compile Include="Controllers\AdminControllerTests\PrintTest.cs" />
+    <Compile Include="Controllers\AdminControllerTests\Export.cs" />
+    <Compile Include="Controllers\AdminControllerTests\ExportSellersForNewsletter.cs" />
+    <Compile Include="Controllers\AdminControllerTests\CreateSampleSettlementDocument.cs" />
+    <Compile Include="Controllers\AdminControllerTests\CreateSampleSaleDocument.cs" />
+    <Compile Include="Controllers\AdminControllerTests\CreateSampleLabels.cs" />
+    <Compile Include="Controllers\AdminControllerTests\CreateSampleAcceptanceDocument.cs" />
+    <Compile Include="Controllers\AdminControllerTests\TestBase.cs" />
     <Compile Include="Models\ChangeInfoTests\Ctor.cs" />
     <Compile Include="Models\Entities\SellerTests\UpdateNewsletterPermissions.cs" />
     <Compile Include="Models\ExtensionMethodsTests\SumPrice.cs" />
