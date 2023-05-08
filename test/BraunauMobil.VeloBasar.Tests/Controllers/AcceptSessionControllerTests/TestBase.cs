@@ -4,7 +4,7 @@ using BraunauMobil.VeloBasar.Cookies;
 using BraunauMobil.VeloBasar.Routing;
 using Microsoft.Extensions.Localization;
 
-namespace BraunauMobil.VeloBasar.Tests.Controllers.AcceptSessionsControllerTests
+namespace BraunauMobil.VeloBasar.Tests.Controllers.AcceptSessionControllerTests
 {
     public class TestBase
     {

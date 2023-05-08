@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 
-namespace BraunauMobil.VeloBasar.Tests.Controllers.AcceptSessionsControllerTests;
+namespace BraunauMobil.VeloBasar.Tests.Controllers.AcceptSessionControllerTests;
 
 public class Cancel
     : TestBase

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace BraunauMobil.VeloBasar.Tests.Controllers.AcceptSessionsControllerTests;
+namespace BraunauMobil.VeloBasar.Tests.Controllers.AcceptSessionControllerTests;
 
 public class Submit
     : TestBase

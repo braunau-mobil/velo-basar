@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Xan.AspNetCore.Models;
 
-namespace BraunauMobil.VeloBasar.Tests.Controllers.AcceptSessionsControllerTests;
+namespace BraunauMobil.VeloBasar.Tests.Controllers.AcceptSessionControllerTests;
 
 public class List
     : TestBase
