@@ -9,7 +9,24 @@ namespace BraunauMobil.VeloBasar.Tests
             ArgumentNullException.ThrowIfNull(fixture);
 
             return fixture.Build<FileDataEntity>()
-                .With(f => f.ContentType, "application/pdf");
+                .With(_ => _.ContentType, "application/pdf");
+        }
+
+        public static IPostprocessComposer<ProductToTransactionEntity> BuildProductToTransactionEntity(this Fixture fixture, TransactionEntity transaction)
+        {
+            ArgumentNullException.ThrowIfNull(fixture);
+            ArgumentNullException.ThrowIfNull(transaction);
+
+            return fixture.Build<ProductToTransactionEntity>()
+                .With (_ => _.Transaction, transaction);
+        }
+
+        public static IPostprocessComposer<SelectSaleModel> BuildSelectSaleModel(this Fixture fixture)
+        {
+            ArgumentNullException.ThrowIfNull(fixture);
+
+            return fixture.Build<SelectSaleModel>()
+                .Without(_ => _.Sale);
         }
 
         public static IPostprocessComposer<TransactionEntity> BuildTransaction(this Fixture fixture)
@@ -17,7 +34,7 @@ namespace BraunauMobil.VeloBasar.Tests
             ArgumentNullException.ThrowIfNull(fixture);
 
             return fixture.Build<TransactionEntity>()
-                .Without(t => t.ParentTransaction);
+                .Without(_ => _.ParentTransaction);
         }
 
         //public static IPostprocessComposer<Product> BuildProduct(this Fixture fixture, decimal price)

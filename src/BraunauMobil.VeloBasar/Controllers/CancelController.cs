@@ -39,11 +39,7 @@ public sealed class CancelController
             return View(model);
         }
 
-        if (model.Sale == null)
-        {
-            throw new InvalidOperationException();
-        }
-        return Redirect(_router.Cancel.ToSelectProducts(model.Sale.Id));
+        return Redirect(_router.Cancel.ToSelectProducts(model.Sale!.Id));
     }
 
     public async Task<IActionResult> SelectProducts(int id)
