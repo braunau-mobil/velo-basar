@@ -107,6 +107,8 @@
     <Compile Include="Controllers\CancelControllerTests\SelectProducts.cs" />
     <Compile Include="Controllers\CancelControllerTests\SelectSale.cs" />
     <Compile Include="Controllers\CancelControllerTests\TestBase.cs" />
+    <Compile Include="Controllers\CartControllerTests\Add.cs" />
+    <Compile Include="Controllers\CartControllerTests\TestBase.cs" />
     <Compile Include="Models\ChangeInfoTests\Ctor.cs" />
     <Compile Include="Models\Entities\SellerTests\UpdateNewsletterPermissions.cs" />
     <Compile Include="Models\ExtensionMethodsTests\SumPrice.cs" />
