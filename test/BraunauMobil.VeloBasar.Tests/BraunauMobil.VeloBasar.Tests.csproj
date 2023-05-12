@@ -108,6 +108,10 @@
     <Compile Include="Controllers\CancelControllerTests\SelectSale.cs" />
     <Compile Include="Controllers\CancelControllerTests\TestBase.cs" />
     <Compile Include="Controllers\CartControllerTests\Add.cs" />
+    <Compile Include="Controllers\CartControllerTests\Checkout.cs" />
+    <Compile Include="Controllers\CartControllerTests\Index.cs" />
+    <Compile Include="Controllers\CartControllerTests\Delete.cs" />
+    <Compile Include="Controllers\CartControllerTests\Clear.cs" />
     <Compile Include="Controllers\CartControllerTests\TestBase.cs" />
     <Compile Include="Models\ChangeInfoTests\Ctor.cs" />
     <Compile Include="Models\Entities\SellerTests\UpdateNewsletterPermissions.cs" />
