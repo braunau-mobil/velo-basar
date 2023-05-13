@@ -12,7 +12,7 @@ public class Delete
     public void CallsRemoveAndReturnsRedirectToIndex(int productId)
     {
         //  Arrange
-        Mock<IList<int>> cartMock = new Mock<IList<int>>();
+        Mock<IList<int>> cartMock = new ();
         Cookie.Setup(_ => _.GetCart())
             .Returns(cartMock.Object);
 

@@ -1,4 +1,6 @@
 ﻿using AutoFixture.Dsl;
+using System.Collections.Generic;
+using Xan.Extensions.Collections.Generic;
 
 namespace BraunauMobil.VeloBasar.Tests
 {
@@ -10,6 +12,14 @@ namespace BraunauMobil.VeloBasar.Tests
 
             return fixture.Build<FileDataEntity>()
                 .With(_ => _.ContentType, "application/pdf");
+        }
+
+        public static IPostprocessComposer<ProductDetailsModel> BuildProductDetailsModel(this Fixture fixture)
+        {
+            ArgumentNullException.ThrowIfNull(fixture);
+
+            return fixture.Build<ProductDetailsModel>()
+                .Without(_ => _.Transactions);
         }
 
         public static IPostprocessComposer<ProductToTransactionEntity> BuildProductToTransactionEntity(this Fixture fixture, TransactionEntity transaction)
@@ -35,6 +45,14 @@ namespace BraunauMobil.VeloBasar.Tests
 
             return fixture.Build<TransactionEntity>()
                 .Without(_ => _.ParentTransaction);
+        }
+
+        public static IPaginatedList<T> CreatePaginatedList<T>(this Fixture fixture)
+        {
+            ArgumentNullException.ThrowIfNull(fixture);
+
+            IList<T> list = fixture.CreateMany<T>().ToList();
+            return new PaginatedList<T>(list, fixture.Create<int>(), fixture.Create<int>(), fixture.Create<int>(), fixture.Create<int>());
         }
 
         //public static IPostprocessComposer<Product> BuildProduct(this Fixture fixture, decimal price)
