@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using BraunauMobil.VeloBasar.Data;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
 namespace BraunauMobil.VeloBasar;
@@ -7,10 +8,12 @@ public sealed class VeloBasarAppContext
     : IAppContext
 {
     private readonly IWebHostEnvironment _env;
+    private readonly VeloDbContext _db;
 
-    public VeloBasarAppContext(IWebHostEnvironment env)
+    public VeloBasarAppContext(IWebHostEnvironment env, VeloDbContext db)
     {
         _env = env ?? throw new ArgumentNullException(nameof(env));
+        _db = db ?? throw new ArgumentNullException(nameof(db));
 
         Version? version = typeof(VeloBasarAppContext).Assembly.GetName().Version;
         if (version == null)
@@ -23,4 +26,6 @@ public sealed class VeloBasarAppContext
     public string Version { get; }
 
     public bool DevToolsEnabled() => _env.IsDevelopment();
+
+    public bool IsDatabaseInitialized() => _db.IsInitialized();
 }

@@ -5,4 +5,6 @@ public interface IAppContext
     string Version { get; }
 
     bool DevToolsEnabled();
+
+    bool IsDatabaseInitialized();
 }

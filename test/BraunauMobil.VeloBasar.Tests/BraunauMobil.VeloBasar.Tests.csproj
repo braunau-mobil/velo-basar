@@ -113,6 +113,9 @@
     <Compile Include="Controllers\CartControllerTests\Delete.cs" />
     <Compile Include="Controllers\CartControllerTests\Clear.cs" />
     <Compile Include="Controllers\CartControllerTests\TestBase.cs" />
+    <Compile Include="Controllers\HomeControllerTests\SetTheme.cs" />
+    <Compile Include="Controllers\HomeControllerTests\Index.cs" />
+    <Compile Include="Controllers\HomeControllerTests\TestBase.cs" />
     <Compile Include="Controllers\DevControllerTests\UnlockAllUsers.cs" />
     <Compile Include="Controllers\DevControllerTests\DropDatabaseConfirmed.cs" />
     <Compile Include="Controllers\DevControllerTests\DropDatabase.cs" />

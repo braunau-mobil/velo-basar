@@ -1,5 +1,4 @@
 ﻿using BraunauMobil.VeloBasar.Cookies;
-using BraunauMobil.VeloBasar.Data;
 using BraunauMobil.VeloBasar.Rendering;
 using BraunauMobil.VeloBasar.Routing;
 using Microsoft.AspNetCore.Mvc;
@@ -10,23 +9,24 @@ namespace BraunauMobil.VeloBasar.Controllers;
 public sealed class HomeController
     : AbstractVeloController
 {
+    private readonly IAppContext _appContext;
     private readonly ILogger<HomeController> _logger;
     private readonly IVeloRouter _router;
-    private readonly VeloDbContext _db;
+    
     private readonly ICurrentThemeCookie _cookie;
 
-    public HomeController(IVeloRouter router, ILogger<HomeController> logger, VeloDbContext db, ICurrentThemeCookie cookie)
+    public HomeController(IAppContext appContext, IVeloRouter router, ILogger<HomeController> logger, ICurrentThemeCookie cookie)
     {
+        _appContext = appContext ?? throw new ArgumentNullException(nameof(appContext));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _router = router ?? throw new ArgumentNullException(nameof(router));
-        _db = db ?? throw new ArgumentNullException(nameof(db));
         _cookie = cookie ?? throw new ArgumentNullException(nameof(cookie));
     }
 
     public IActionResult Index()
     {
         //  check if we need initial setup
-        if (!_db.IsInitialized())
+        if (!_appContext.IsDatabaseInitialized())
         {
             _logger.LogInformation("DB not initialized");
             return Redirect(_router.Setup.ToInitialSetup());
