@@ -40,4 +40,11 @@
     <EmbeddedResource Include="Data\ZipLists\AUT.csv" />
     <EmbeddedResource Include="Data\ZipLists\GER.csv" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Update="Properties\launchSettings.json">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
 </Project>

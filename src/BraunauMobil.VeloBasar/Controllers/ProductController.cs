@@ -36,7 +36,7 @@ public sealed class ProductController
     }
 
     [HttpPost]
-    public async Task<IActionResult> EditAsync(ProductEntity product)
+    public async Task<IActionResult> Edit(ProductEntity product)
     {
         ArgumentNullException.ThrowIfNull(product);
 
@@ -69,10 +69,10 @@ public sealed class ProductController
         return View(model);
     }
 
-    public async Task<IActionResult> Lock(int id)
+    public IActionResult Lock(int id)
     {
         ProductAnnotateModel model = new() { ProductId = id };
-        return await Task.FromResult(base.View(model));
+        return View(model);
     }
 
     [HttpPost]
@@ -91,10 +91,10 @@ public sealed class ProductController
         return Redirect(_router.Product.ToDetails(model.ProductId));
     }
 
-    public async Task<IActionResult> Lost(int id)
+    public IActionResult Lost(int id)
     {
         ProductAnnotateModel model = new() { ProductId = id };
-        return await Task.FromResult(base.View(model));
+        return View(model);
     }
 
     [HttpPost]
@@ -119,10 +119,10 @@ public sealed class ProductController
         return File(label.Data, label.ContentType, label.FileName);
     }
 
-    public async Task<IActionResult> UnLock(int id)
+    public IActionResult UnLock(int id)
     {
         ProductAnnotateModel model = new() { ProductId = id };
-        return await Task.FromResult(base.View(model));
+        return View(model);
     }
 
     [HttpPost]

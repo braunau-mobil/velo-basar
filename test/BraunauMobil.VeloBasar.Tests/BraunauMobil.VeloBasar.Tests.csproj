@@ -120,6 +120,10 @@
     <Compile Include="Models\ChangeInfoTests\Ctor.cs" />
     <Compile Include="Models\Entities\SellerTests\UpdateNewsletterPermissions.cs" />
     <Compile Include="Models\ExtensionMethodsTests\SumPrice.cs" />
+    <Compile Include="Controllers\ProductControllerTests\Lock.cs" />
+    <Compile Include="Controllers\ProductControllerTests\Lost.cs" />
+    <Compile Include="Controllers\ProductControllerTests\Label.cs" />
+    <Compile Include="Controllers\ProductControllerTests\Unlock.cs" />
   </ItemGroup>
 
   <ItemGroup>
