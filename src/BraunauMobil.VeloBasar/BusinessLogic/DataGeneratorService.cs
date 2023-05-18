@@ -52,6 +52,12 @@ public sealed class DataGeneratorService
         _config = config;
     }
 
+    public async Task DropDatabaseAsync()
+    {
+        await _db.Database.EnsureDeletedAsync();
+        await _db.SaveChangesAsync();
+    }
+
     public async Task GenerateAsync()
     {
         //  Detach everything because otherwise this could lead to problems when creating new data
@@ -168,6 +174,8 @@ public sealed class DataGeneratorService
     private async Task<BasarEntity> CreateBasarAsync(DateTime date, string name)
     {
         BasarEntity basar = NextBasar();
+        basar.Date = date;
+        basar.Name = name;
         basar.Id = 0;
         int basarId = await _basarCrudService.CreateAsync(basar);
 

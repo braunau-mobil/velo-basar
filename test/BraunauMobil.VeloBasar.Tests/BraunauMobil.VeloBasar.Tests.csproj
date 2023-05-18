@@ -113,6 +113,11 @@
     <Compile Include="Controllers\CartControllerTests\Delete.cs" />
     <Compile Include="Controllers\CartControllerTests\Clear.cs" />
     <Compile Include="Controllers\CartControllerTests\TestBase.cs" />
+    <Compile Include="Controllers\DevControllerTests\UnlockAllUsers.cs" />
+    <Compile Include="Controllers\DevControllerTests\DropDatabaseConfirmed.cs" />
+    <Compile Include="Controllers\DevControllerTests\DropDatabase.cs" />
+    <Compile Include="Controllers\DevControllerTests\DangerZone.cs" />
+    <Compile Include="Controllers\DevControllerTests\TestBase.cs" />
     <Compile Include="Controllers\ProductControllerTests\Edit.cs" />
     <Compile Include="Controllers\ProductControllerTests\Details.cs" />
     <Compile Include="Controllers\ProductControllerTests\List.cs" />
