@@ -132,6 +132,8 @@
     <Compile Include="Controllers\ProductControllerTests\Lost.cs" />
     <Compile Include="Controllers\ProductControllerTests\Label.cs" />
     <Compile Include="Controllers\ProductControllerTests\Unlock.cs" />
+    <Compile Include="Controllers\SellerControllerTests\TestBase.cs" />
+    <Compile Include="Controllers\SellerControllerTests\CreateForAcceptance.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -155,4 +157,7 @@
     <ProjectReference Include="..\..\src\BraunauMobil.VeloBasar\BraunauMobil.VeloBasar.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers\SellerControllerTests\" />
+  </ItemGroup>
 </Project>

@@ -1,0 +1,36 @@
+﻿using BraunauMobil.VeloBasar.BusinessLogic;
+using BraunauMobil.VeloBasar.Controllers;
+using BraunauMobil.VeloBasar.Routing;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Localization;
+
+namespace BraunauMobil.VeloBasar.Tests.Controllers.SellerControllerTests;
+
+public class TestBase
+{
+    public TestBase()
+    {
+        Sut = new (SellerService.Object, new SellerSearchModelValidator(Localizer), Router.Object, SellerRouter.Object, new Crud.SellerCrudModelFactory(Localizer, Mock.Of<IHtmlHelper>()), new SellerEntityValidator(Localizer));
+
+        Router.Setup(_ => _.Seller)
+            .Returns(SellerRouter.Object);
+    }
+
+    public void VerifyNoOtherCalls()
+    {
+        SellerRouter.VerifyNoOtherCalls();
+        SellerService.VerifyNoOtherCalls();
+    }
+
+    protected Fixture Fixture { get; } = new ();
+
+    protected IStringLocalizer<SharedResources> Localizer { get; } = Helpers.CreateActualLocalizer();
+
+    protected Mock<IVeloRouter> Router { get; } = new();
+
+    protected SellerController Sut { get; }
+
+    protected Mock<ISellerRouter> SellerRouter { get; } = new();
+
+    protected Mock<ISellerService> SellerService { get; } = new();
+}

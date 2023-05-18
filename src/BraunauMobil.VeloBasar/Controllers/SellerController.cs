@@ -27,10 +27,14 @@ public sealed class SellerController
 
     public async Task<IActionResult> CreateForAcceptance(int? id)
     {
-        SellerEntity seller = await _sellerService.CreateNewAsync();
+        SellerEntity seller;
         if (id.HasValue)
         {
             seller = await _sellerService.GetAsync(id.Value);
+        }
+        else
+        {
+            seller = await _sellerService.CreateNewAsync();
         }
 
         SellerCreateForAcceptanceModel model = new(seller);
