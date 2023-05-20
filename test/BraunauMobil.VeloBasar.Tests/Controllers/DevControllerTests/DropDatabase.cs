@@ -33,9 +33,9 @@ public class DropDatabase
         IActionResult result = Sut.DropDatabase();
 
         //  Assert
-        ViewResult viewResult = result.Should().BeOfType<ViewResult>().Subject;
-        viewResult.Model.Should().BeNull();
-        viewResult.ViewData.ModelState.ErrorCount.Should().Be(0);
+        ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
+        view.Model.Should().BeNull();
+        view.ViewData.ModelState.IsValid.Should().BeTrue();
 
         AppContext.Verify(_ => _.DevToolsEnabled(), Times.Once());
         VerifyNoOtherCalls();

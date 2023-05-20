@@ -14,13 +14,11 @@ public class SelectSale
         IActionResult result = Sut.SelectSale();
 
         // Assert
-        result.Should().NotBeNull();
+        ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
+        view.ViewData.ModelState.IsValid.Should().BeTrue();
 
-        ViewResult viewResult = result.Should().BeOfType<ViewResult>().Subject;
-        viewResult.ViewData.ModelState.ErrorCount.Should().Be(0);
-
-        viewResult.Model.Should().NotBeNull();
-        viewResult.Model.Should().BeOfType<SelectSaleModel>();
+        view.Model.Should().NotBeNull();
+        view.Model.Should().BeOfType<SelectSaleModel>();
 
         VerifyNoOtherCalls();
     }
@@ -46,8 +44,8 @@ public class SelectSale
         IActionResult result = await Sut.SelectSale(model);
 
         //  Assert
-        RedirectResult redirectResult = result.Should().BeOfType<RedirectResult>().Subject;
-        redirectResult.Url.Should().Be(url);
+        RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
+        redirect.Url.Should().Be(url);
 
         TransactionService.Verify(_ => _.FindAsync(model.ActiveBasarId, TransactionType.Sale, model.SaleNumber), Times.Once());
         CancelRouter.Verify(_ => _.ToSelectProducts(sale.Id), Times.Once());
@@ -72,11 +70,11 @@ public class SelectSale
         IActionResult result = await Sut.SelectSale(model);
 
         //  Assert
-        ViewResult viewResult = result.Should().BeOfType<ViewResult>().Subject;
-        viewResult.ViewData.ModelState.ErrorCount.Should().Be(1);
+        ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
+        view.ViewData.ModelState.IsValid.Should().BeFalse();
 
-        viewResult.Model.Should().NotBeNull();
-        viewResult.Model.Should().Be(model);
+        view.Model.Should().NotBeNull();
+        view.Model.Should().Be(model);
 
         TransactionService.Verify(_ => _.FindAsync(model.ActiveBasarId, TransactionType.Sale, model.SaleNumber), Times.Once());
         VerifyNoOtherCalls();

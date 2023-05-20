@@ -15,10 +15,9 @@ public class Clear
         IActionResult result = Sut.Clear();
 
         //  Assert
-        result.Should().NotBeNull();
-        RedirectToActionResult redirectResult = result.Should().BeOfType<RedirectToActionResult>().Subject;
-        redirectResult.ActionName.Should().Be(nameof(CartController.Index));
-        redirectResult.ControllerName.Should().BeNull();
+        RedirectToActionResult redirect = result.Should().BeOfType<RedirectToActionResult>().Subject;
+        redirect.ActionName.Should().Be(nameof(CartController.Index));
+        redirect.ControllerName.Should().BeNull();
 
         Cookie.Verify(_ => _.ClearCart(), Times.Once());
         VerifyNoOtherCalls();

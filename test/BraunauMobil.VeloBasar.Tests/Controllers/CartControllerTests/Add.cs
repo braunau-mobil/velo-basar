@@ -20,13 +20,11 @@ public class Add
         IActionResult result = await Sut.Add(cartModel);
 
         // Assert
-        result.Should().NotBeNull();
+        ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
+        view.ViewData.ModelState.IsValid.Should().BeFalse();
 
-        ViewResult viewResult = result.Should().BeOfType<ViewResult>().Subject;
-        viewResult.ViewData.ModelState.ErrorCount.Should().Be(1);
-
-        viewResult.Model.Should().NotBeNull();
-        viewResult.Model.Should().Be(cartModel);
+        view.Model.Should().NotBeNull();
+        view.Model.Should().Be(cartModel);
 
         Cookie.Verify(_ => _.GetCart(), Times.Once());
         ProductService.Verify(_ => _.GetManyAsync(cart), Times.Once());
@@ -53,13 +51,11 @@ public class Add
         IActionResult result = await Sut.Add(cartModel);
 
         // Assert
-        result.Should().NotBeNull();
+        ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
+        view.ViewData.ModelState.IsValid.Should().BeTrue();
 
-        ViewResult viewResult = result.Should().BeOfType<ViewResult>().Subject;
-        viewResult.ViewData.ModelState.ErrorCount.Should().Be(0);
-
-        viewResult.Model.Should().NotBeNull();
-        viewResult.Model.Should().Be(cartModel);
+        view.Model.Should().NotBeNull();
+        view.Model.Should().Be(cartModel);
 
         cartMock.Verify(_ => _.Add(cartModel.ProductId));
         cartMock.VerifyNoOtherCalls();

@@ -21,13 +21,12 @@ public class Index
         IActionResult result = await Sut.Index();
 
         //  Assert
-        result.Should().NotBeNull();
-        ViewResult viewResult = result.Should().BeOfType<ViewResult>().Subject;
-        CartModel model = viewResult.Model.Should().BeOfType<CartModel>().Subject;
+        ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
+        view.ViewData.ModelState.IsValid.Should().BeTrue();
+        CartModel model = view.Model.Should().BeOfType<CartModel>().Subject;
         model.Products.Should().BeEquivalentTo(products);
         model.ActiveBasarId.Should().Be(0);
         model.ProductId.Should().Be(0);
-        viewResult.ViewData.ModelState.ErrorCount.Should().Be(0);
 
         Cookie.Verify(_ => _.GetCart(), Times.Once());
         ProductService.Verify(_ => _.GetManyAsync(cart), Times.Once());

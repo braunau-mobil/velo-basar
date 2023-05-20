@@ -35,9 +35,9 @@ public class List
 
         //  Assert
         result.Should().NotBeNull();
-        ViewResult viewResult = result.Should().BeOfType<ViewResult>().Subject;
-        viewResult.Model.Should().BeOfType<ListModel<AcceptSessionEntity, AcceptSessionListParameter>>();
-        viewResult.ViewData.ModelState.ErrorCount.Should().Be(0);
+        ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
+        view.Model.Should().BeOfType<ListModel<AcceptSessionEntity, AcceptSessionListParameter>>();
+        view.ViewData.ModelState.IsValid.Should().BeTrue();
 
         AcceptSessionService.Verify(_ => _.GetAllAsync(parameter.PageSize.Value, parameter.PageIndex, activeBasarId, parameter.AcceptSessionState), Times.Once());
         VerifyNoOtherCalls();

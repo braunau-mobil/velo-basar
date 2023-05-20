@@ -14,9 +14,8 @@ public class PrintTest
         IActionResult result = Sut.PrintTest();
 
         //  Assert
-        result.Should().NotBeNull();
-        ViewResult viewResult = result.Should().BeOfType<ViewResult>().Subject;
-        viewResult.ViewData.ModelState.ErrorCount.Should().Be(0);
+        ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
+        view.ViewData.ModelState.IsValid.Should().BeTrue();
 
         VerifyNoOtherCalls();
     }

@@ -20,7 +20,7 @@ public class CreateForAcceptance
 
 		//	Assert
 		ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
-		view.ViewData.ModelState.ErrorCount.Should().Be(0);
+		view.ViewData.ModelState.IsValid.Should().BeTrue();
 		SellerCreateForAcceptanceModel model = view.Model.Should().BeOfType<SellerCreateForAcceptanceModel>().Subject;
 		model.Seller.Should().Be(seller);
 
@@ -42,7 +42,7 @@ public class CreateForAcceptance
 
         //	Assert
         ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
-        view.ViewData.ModelState.ErrorCount.Should().Be(0);
+        view.ViewData.ModelState.IsValid.Should().BeTrue();
         SellerCreateForAcceptanceModel model = view.Model.Should().BeOfType<SellerCreateForAcceptanceModel>().Subject;
         model.Seller.Should().Be(seller);
 
@@ -62,8 +62,8 @@ public class CreateForAcceptance
 
 		//	Assert
 		ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
-		view.ViewData.ModelState.ErrorCount.Should().NotBe(0);
-		SellerCreateForAcceptanceModel model = view.Model.Should().BeOfType<SellerCreateForAcceptanceModel>().Subject;
+		view.ViewData.ModelState.IsValid.Should().BeFalse();
+        SellerCreateForAcceptanceModel model = view.Model.Should().BeOfType<SellerCreateForAcceptanceModel>().Subject;
 		model.Seller.Should().Be(seller);
 
 		VerifyNoOtherCalls();

@@ -18,9 +18,8 @@ public class ActiveBasarDetails
         IActionResult result = Sut.ActiveBasarDetails(activeBasarId);
 
         //  Assert
-        result.Should().NotBeNull();
-        RedirectResult redirectResult = result.Should().BeOfType<RedirectResult>().Subject;
-        redirectResult.Url.Should().Be(url);
+        RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
+        redirect.Url.Should().Be(url);
 
         BasarRouter.Verify(_ => _.GetUriByAction(nameof(BasarController.Details), It.IsAny<object>()), Times.Once());
         VerifyNoOtherCalls();

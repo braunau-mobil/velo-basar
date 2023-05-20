@@ -18,10 +18,9 @@ public class Edit
         IActionResult result = await Sut.Edit(productId);
 
         //  Assert
-        result.Should().NotBeNull();
-        ViewResult viewResult = result.Should().BeOfType<ViewResult>().Subject;
-        viewResult.Model.Should().Be(product);
-        viewResult.ViewData.ModelState.ErrorCount.Should().Be(0);
+        ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
+        view.Model.Should().Be(product);
+        view.ViewData.ModelState.IsValid.Should().BeTrue();
 
         ProductService.Verify(_ => _.GetAsync(productId), Times.Once());
         VerifyNoOtherCalls();
@@ -39,9 +38,8 @@ public class Edit
         IActionResult result = await Sut.Edit(product);
 
         //  Assert
-        result.Should().NotBeNull();
-        RedirectResult redirectResult = result.Should().BeOfType<RedirectResult>().Subject;
-        redirectResult.Url.Should().Be(url);
+        RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
+        redirect.Url.Should().Be(url);
 
         ProductService.Verify(_ => _.UpdateAsync(product), Times.Once());
         ProductRouter.Verify(_ => _.ToDetails(product.Id), Times.Once());
@@ -59,10 +57,9 @@ public class Edit
         IActionResult result = await Sut.Edit(product);
 
         //  Assert
-        result.Should().NotBeNull();
-        ViewResult viewResult = result.Should().BeOfType<ViewResult>().Subject;
-        viewResult.Model.Should().Be(product);
-        viewResult.ViewData.ModelState.ErrorCount.Should().Be(1);
+        ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
+        view.Model.Should().Be(product);
+        view.ViewData.ModelState.IsValid.Should().BeFalse();
 
         VerifyNoOtherCalls();
     }

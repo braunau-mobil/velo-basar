@@ -20,7 +20,7 @@ public class Details
         //  Assert
         ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
         view.Model.Should().Be(model);
-        view.ViewData.ModelState.ErrorCount.Should().Be(0);
+        view.ViewData.ModelState.IsValid.Should().BeTrue();
 
         SellerService.Verify(_ => _.GetDetailsAsync(activeBasarId, sellerId), Times.Once());
         VerifyNoOtherCalls();

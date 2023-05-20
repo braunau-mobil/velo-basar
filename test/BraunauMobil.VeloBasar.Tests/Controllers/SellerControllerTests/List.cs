@@ -23,8 +23,8 @@ public class List
         IActionResult result = await Sut.List(parameter);
 
         //  Assert
-        RedirectResult redirectResult = result.Should().BeOfType<RedirectResult>().Subject;
-        redirectResult.Url.Should().Be(url);
+        RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
+        redirect.Url.Should().Be(url);
 
         SellerService.Verify(_ => _.ExistsAsync(sellerId), Times.Once());
         SellerRouter.Verify(_ => _.ToDetails(sellerId), Times.Once());
@@ -47,8 +47,9 @@ public class List
         IActionResult result = await Sut.List(parameter);
 
         //  Assert
-        ViewResult viewResult = result.Should().BeOfType<ViewResult>().Subject;
-        viewResult.Model.Should().BeOfType<ListModel<SellerEntity, SellerListParameter>>();
+        ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
+        view.Model.Should().BeOfType<ListModel<SellerEntity, SellerListParameter>>();
+        view.ViewData.ModelState.IsValid.Should().BeTrue();
 
         SellerService.Verify(_ => _.ExistsAsync(sellerId), Times.Once());
         SellerService.Verify(_ => _.GetManyAsync(parameter.PageSize!.Value, parameter.PageIndex, parameter.SearchString, parameter.State, parameter.ValueState), Times.Once());
@@ -68,8 +69,9 @@ public class List
         IActionResult result = await Sut.List(parameter);
 
         //  Assert
-        ViewResult viewResult = result.Should().BeOfType<ViewResult>().Subject;
-        viewResult.Model.Should().BeOfType<ListModel<SellerEntity, SellerListParameter>>();
+        ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
+        view.Model.Should().BeOfType<ListModel<SellerEntity, SellerListParameter>>();
+        view.ViewData.ModelState.IsValid.Should().BeTrue();
 
         SellerService.Verify(_ => _.GetManyAsync(parameter.PageSize!.Value, parameter.PageIndex, parameter.SearchString, parameter.State, parameter.ValueState), Times.Once());
         VerifyNoOtherCalls();

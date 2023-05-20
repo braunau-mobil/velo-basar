@@ -17,11 +17,10 @@ public class CreateSampleAcceptanceDocument
         IActionResult result = await Sut.CreateSampleAcceptanceDocument();
 
         //  Assert
-        result.Should().NotBeNull();
-        FileContentResult fileContentResult = result.Should().BeOfType<FileContentResult>().Subject;
-        fileContentResult.ContentType.Should().Be(fileData.ContentType);
-        fileContentResult.FileContents.Should().BeEquivalentTo(fileData.Data);
-        fileContentResult.FileDownloadName.Should().BeEquivalentTo(fileData.FileName);
+        FileContentResult fileContent = result.Should().BeOfType<FileContentResult>().Subject;
+        fileContent.ContentType.Should().Be(fileData.ContentType);
+        fileContent.FileContents.Should().BeEquivalentTo(fileData.Data);
+        fileContent.FileDownloadName.Should().BeEquivalentTo(fileData.FileName);
 
         AdminService.Verify(_ => _.CreateSampleAcceptanceDocumentAsync(), Times.Once);
         VerifyNoOtherCalls();

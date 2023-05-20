@@ -34,13 +34,13 @@ public class DangerZone
         IActionResult result = Sut.DangerZone();
 
         //  Assert
-        ViewResult viewResult = result.Should().BeOfType<ViewResult>().Subject;
-        DataGeneratorConfiguration model = viewResult.Model.Should().BeOfType<DataGeneratorConfiguration>().Subject;
+        ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
+        view.ViewData.ModelState.IsValid.Should().BeTrue();
+        DataGeneratorConfiguration model = view.Model.Should().BeOfType<DataGeneratorConfiguration>().Subject;
         model.GenerateBrands.Should().Be(true);
         model.GenerateCountries.Should().Be(true);
         model.GenerateProductTypes.Should().Be(true);
         model.GenerateZipCodes.Should().Be(true);
-        viewResult.ViewData.ModelState.ErrorCount.Should().Be(0);
 
         AppContext.Verify(_ => _.DevToolsEnabled(), Times.Once());
         VerifyNoOtherCalls();
@@ -82,8 +82,8 @@ public class DangerZone
         IActionResult result = await Sut.DangerZone(configuration);
 
         //  Assert
-        RedirectResult redirectResult = result.Should().BeOfType<RedirectResult>().Subject;
-        redirectResult.Url.Should().Be(url);
+        RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
+        redirect.Url.Should().Be(url);
 
         AppContext.Verify(_ => _.DevToolsEnabled(), Times.Once());
         DataGeneratorService.Verify(_ => _.Contextualize(configuration), Times.Once());

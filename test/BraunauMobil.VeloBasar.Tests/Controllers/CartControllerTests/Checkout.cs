@@ -19,9 +19,8 @@ public class Checkout
         IActionResult result = await Sut.Checkout(activeBasarId);
 
         //  Assert
-        result.Should().NotBeNull();
-        StatusCodeResult statusCodeResult = result.Should().BeOfType<StatusCodeResult>().Subject;
-        statusCodeResult.StatusCode.Should().Be(StatusCodes.Status405MethodNotAllowed);
+        StatusCodeResult statusCode = result.Should().BeOfType<StatusCodeResult>().Subject;
+        statusCode.StatusCode.Should().Be(StatusCodes.Status405MethodNotAllowed);
 
         Cookie.Verify(_ => _.GetCart(), Times.Once());
         VerifyNoOtherCalls();
@@ -43,9 +42,8 @@ public class Checkout
         IActionResult result = await Sut.Checkout(activeBasarId);
 
         //  Assert
-        result.Should().NotBeNull();
-        RedirectResult redirectResult = result.Should().BeOfType<RedirectResult>().Subject;
-        redirectResult.Url.Should().Be(url);
+        RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
+        redirect.Url.Should().Be(url);
 
         Cookie.Verify(_ => _.GetCart(), Times.Once());
         Cookie.Verify(_ => _.ClearCart(), Times.Once());

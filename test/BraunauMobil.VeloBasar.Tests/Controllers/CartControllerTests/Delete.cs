@@ -20,10 +20,9 @@ public class Delete
         IActionResult result = Sut.Delete(productId);
 
         //  Assert
-        result.Should().NotBeNull();
-        RedirectToActionResult redirectResult = result.Should().BeOfType<RedirectToActionResult>().Subject;
-        redirectResult.ActionName.Should().Be(nameof(CartController.Index));
-        redirectResult.ControllerName.Should().BeNull();
+        RedirectToActionResult redirectToAction = result.Should().BeOfType<RedirectToActionResult>().Subject;
+        redirectToAction.ActionName.Should().Be(nameof(CartController.Index));
+        redirectToAction.ControllerName.Should().BeNull();
 
         Cookie.Verify(_ => _.GetCart(), Times.Once());
         Cookie.Verify(_ => _.SetCart(cartMock.Object), Times.Once());

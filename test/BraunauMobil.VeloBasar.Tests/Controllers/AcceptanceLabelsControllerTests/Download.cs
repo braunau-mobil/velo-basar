@@ -20,10 +20,10 @@ public class Download
         // Assert
         result.Should().NotBeNull();
         
-        FileContentResult fileResult = result.Should().BeOfType<FileContentResult>().Subject;
-        fileResult.ContentType.Should().Be(fileData.ContentType);
-        fileResult.FileContents.Should().BeEquivalentTo(fileData.Data);
-        fileResult.FileDownloadName.Should().Be(fileData.FileName);
+        FileContentResult fileContent = result.Should().BeOfType<FileContentResult>().Subject;
+        fileContent.ContentType.Should().Be(fileData.ContentType);
+        fileContent.FileContents.Should().BeEquivalentTo(fileData.Data);
+        fileContent.FileDownloadName.Should().Be(fileData.FileName);
 
         TransactionService.Verify(ts => ts.GetAcceptanceLabelsAsync(id), Times.Once);
     }

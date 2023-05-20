@@ -18,11 +18,10 @@ public class Create
         IActionResult result = await Sut.Create(sessionId);
 
         //  Assert
-        result.Should().NotBeNull();
-        ViewResult viewResult = result.Should().BeOfType<ViewResult>().Subject;
-        viewResult.Model.Should().Be(model);
-        viewResult.ViewName.Should().Be("CreateEdit");
-        viewResult.ViewData.ModelState.ErrorCount.Should().Be(0);
+        ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
+        view.Model.Should().Be(model);
+        view.ViewName.Should().Be("CreateEdit");
+        view.ViewData.ModelState.IsValid.Should().BeTrue();
 
         AcceptProductService.Verify(_ => _.CreateNewAsync(sessionId));
         VerifyNoOtherCalls();
@@ -42,9 +41,8 @@ public class Create
         IActionResult result = await Sut.Create(entity);
 
         //  Assert
-        result.Should().NotBeNull();
-        RedirectResult redirectResult = result.Should().BeOfType<RedirectResult>().Subject;
-        redirectResult.Url.Should().Be(url);
+        RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
+        redirect.Url.Should().Be(url);
 
         AcceptProductService.Verify(_ => _.CreateAsync(entity), Times.Once());
         Router.Verify(_ => _.AcceptProduct, Times.Once());
@@ -70,11 +68,10 @@ public class Create
         IActionResult result = await Sut.Create(entity);
 
         //  Assert
-        result.Should().NotBeNull();
-        ViewResult viewResult = result.Should().BeOfType<ViewResult>().Subject;
-        viewResult.Model.Should().Be(acceptProductModel);
-        viewResult.ViewData.ModelState.ErrorCount.Should().Be(1);
-        viewResult.ViewName.Should().Be("CreateEdit");
+        ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
+        view.Model.Should().Be(acceptProductModel);
+        view.ViewData.ModelState.IsValid.Should().BeFalse();
+        view.ViewName.Should().Be("CreateEdit");
 
         AcceptProductService.Verify(_ => _.GetAsync(sessionId, entity), Times.Once);
         VerifyNoOtherCalls();

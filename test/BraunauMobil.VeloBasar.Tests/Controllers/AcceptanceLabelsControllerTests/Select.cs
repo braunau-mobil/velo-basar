@@ -15,11 +15,11 @@ public class Select
         // Assert
         result.Should().NotBeNull();
         
-        ViewResult viewResult = result.Should().BeOfType<ViewResult>().Subject;
-        viewResult.ViewData.ModelState.ErrorCount.Should().Be(0);
+        ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
+        view.ViewData.ModelState.IsValid.Should().BeTrue();
 
-        viewResult.Model.Should().NotBeNull();
-        viewResult.Model.Should().BeOfType<AcceptanceLabelsModel>();
+        view.Model.Should().NotBeNull();
+        view.Model.Should().BeOfType<AcceptanceLabelsModel>();
 
         VerifyNoOtherCalls();
     }
@@ -39,11 +39,10 @@ public class Select
         IActionResult result = await Sut.Select(model);
 
         // Assert
-        result.Should().NotBeNull();
-        ViewResult viewResult = result.Should().BeOfType<ViewResult>().Subject;
-        viewResult.ViewData.ModelState.ErrorCount.Should().Be(0);
+        ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
+        view.ViewData.ModelState.IsValid.Should().BeTrue();
 
-        viewResult.Model.Should().Be(model);
+        view.Model.Should().Be(model);
 
         model.OpenDocument.Should().BeTrue();
         model.Id.Should().Be(transaction.Id);
@@ -67,13 +66,12 @@ public class Select
         IActionResult result = await Sut.Select(model);
 
         // Assert
-        result.Should().NotBeNull();
-        ViewResult viewResult = result.Should().BeOfType<ViewResult>().Subject;
-        viewResult.ViewData.ModelState.ErrorCount.Should().Be(1);
+        ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
+        view.ViewData.ModelState.IsValid.Should().BeFalse();
 
-        viewResult.Model.Should().NotBe(model);
+        view.Model.Should().NotBe(model);
 
-        AcceptanceLabelsModel resultModel = viewResult.Model.Should().BeOfType<AcceptanceLabelsModel>().Subject;
+        AcceptanceLabelsModel resultModel = view.Model.Should().BeOfType<AcceptanceLabelsModel>().Subject;
         resultModel.Number.Should().Be(model.Number);
         resultModel.OpenDocument.Should().BeFalse();
         resultModel.Id.Should().Be(0);

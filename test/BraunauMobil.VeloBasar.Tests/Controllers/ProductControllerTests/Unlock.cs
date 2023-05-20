@@ -15,11 +15,10 @@ public class UnLock
         IActionResult result = Sut.UnLock(productId);
 
         //  Assert
-        result.Should().NotBeNull();
-        ViewResult viewResult = result.Should().BeOfType<ViewResult>().Subject;
-        ProductAnnotateModel annotateModel = viewResult.Model.Should().BeOfType<ProductAnnotateModel>().Subject;
+        ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
+        ProductAnnotateModel annotateModel = view.Model.Should().BeOfType<ProductAnnotateModel>().Subject;
         annotateModel.ProductId.Should().Be(productId);
-        viewResult.ViewData.ModelState.ErrorCount.Should().Be(0);
+        view.ViewData.ModelState.IsValid.Should().BeTrue();
 
         VerifyNoOtherCalls();
     }
@@ -36,9 +35,8 @@ public class UnLock
         IActionResult result = await Sut.UnLock(annotateModel);
 
         //  Assert
-        result.Should().NotBeNull();
-        RedirectResult redirectResult = result.Should().BeOfType<RedirectResult>().Subject;
-        redirectResult.Url.Should().Be(url);
+        RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
+        redirect.Url.Should().Be(url);
 
         ProductService.Verify(_ => _.UnlockAsync(annotateModel.ProductId, annotateModel.Notes), Times.Once());
         ProductRouter.Verify(_ => _.ToDetails(annotateModel.ProductId), Times.Once());
@@ -56,10 +54,9 @@ public class UnLock
         IActionResult result = await Sut.UnLock(annotateModel);
 
         //  Assert
-        result.Should().NotBeNull();
-        ViewResult viewResult = result.Should().BeOfType<ViewResult>().Subject;
-        viewResult.Model.Should().Be(annotateModel);
-        viewResult.ViewData.ModelState.ErrorCount.Should().Be(1);
+        ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
+        view.Model.Should().Be(annotateModel);
+        view.ViewData.ModelState.IsValid.Should().BeFalse();
 
         VerifyNoOtherCalls();
     }

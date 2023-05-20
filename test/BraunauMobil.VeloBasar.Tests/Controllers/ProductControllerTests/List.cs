@@ -23,8 +23,8 @@ public class List
         IActionResult result = await Sut.List(parameter, activeBasarId);
 
         //  Assert
-        RedirectResult redirectResult = result.Should().BeOfType<RedirectResult>().Subject;
-        redirectResult.Url.Should().Be(url);
+        RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
+        redirect.Url.Should().Be(url);
 
         ProductService.Verify(_ => _.ExistsForBasarAsync(activeBasarId, productId), Times.Once());
         ProductRouter.Verify(_ => _.ToDetails(productId), Times.Once());
@@ -47,8 +47,9 @@ public class List
         IActionResult result = await Sut.List(parameter, activeBasarId);
 
         //  Assert
-        ViewResult viewResult = result.Should().BeOfType<ViewResult>().Subject;
-        viewResult.Model.Should().BeOfType<ListModel<ProductEntity, ProductListParameter>>();
+        ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
+        view.Model.Should().BeOfType<ListModel<ProductEntity, ProductListParameter>>();
+        view.ViewData.ModelState.IsValid.Should().BeTrue();
 
         ProductService.Verify(_ => _.ExistsForBasarAsync(activeBasarId, productId), Times.Once());
         ProductService.Verify(_ => _.GetManyAsync(parameter.PageSize!.Value, parameter.PageIndex, activeBasarId, parameter.SearchString, parameter.StorageState, parameter.ValueState, parameter.BrandId, parameter.ProductTypeId), Times.Once());
@@ -68,8 +69,9 @@ public class List
         IActionResult result = await Sut.List(parameter, activeBasarId);
 
         //  Assert
-        ViewResult viewResult = result.Should().BeOfType<ViewResult>().Subject;
-        viewResult.Model.Should().BeOfType<ListModel<ProductEntity, ProductListParameter>>();
+        ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
+        view.Model.Should().BeOfType<ListModel<ProductEntity, ProductListParameter>>();
+        view.ViewData.ModelState.IsValid.Should().BeTrue();
 
         ProductService.Verify(_ => _.GetManyAsync(parameter.PageSize!.Value, parameter.PageIndex, activeBasarId, parameter.SearchString, parameter.StorageState, parameter.ValueState, parameter.BrandId, parameter.ProductTypeId), Times.Once());
         VerifyNoOtherCalls();

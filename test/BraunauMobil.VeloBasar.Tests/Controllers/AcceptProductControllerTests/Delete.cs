@@ -17,9 +17,8 @@ public class Delete
         IActionResult result = await Sut.Delete(sessionId, productId);
 
         //  Assert
-        result.Should().NotBeNull();
-        RedirectResult redirectResult = result.Should().BeOfType<RedirectResult>().Subject;
-        redirectResult.Url.Should().Be(url);
+        RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
+        redirect.Url.Should().Be(url);
 
         AcceptProductService.Verify(_ => _.DeleteAsync(productId), Times.Once);
         AcceptProductRouter.Verify(_ => _.ToCreate(sessionId), Times.Once);

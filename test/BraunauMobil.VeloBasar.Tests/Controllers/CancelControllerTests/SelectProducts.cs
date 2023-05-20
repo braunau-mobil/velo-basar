@@ -18,12 +18,12 @@ public class SelectProducts
         IActionResult result = await Sut.SelectProducts(id);
 
         //  Assert
-        ViewResult viewResult = result.Should().BeOfType<ViewResult>().Subject;
-        SelectProductsModel model = viewResult.Model.Should().BeOfType<SelectProductsModel>().Subject;
+        ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
+        SelectProductsModel model = view.Model.Should().BeOfType<SelectProductsModel>().Subject;
         model.TransactionId.Should().Be(id);
         model.Products.Should().NotBeNull();
         model.Products.Should().HaveCount(products.Count);
-        viewResult.ViewData.ModelState.ErrorCount.Should().Be(0);
+        view.ViewData.ModelState.IsValid.Should().BeTrue();
 
         TransactionService.Verify(_ => _.GetProductsToCancelAsync(id), Times.Once());
         VerifyNoOtherCalls();
@@ -46,12 +46,12 @@ public class SelectProducts
         IActionResult result = await Sut.SelectProducts(inputModel);
 
         //  Assert
-        ViewResult viewResult = result.Should().BeOfType<ViewResult>().Subject;
-        SelectProductsModel resultModel = viewResult.Model.Should().BeOfType<SelectProductsModel>().Subject;
+        ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
+        view.ViewData.ModelState.IsValid.Should().BeFalse();
+        SelectProductsModel resultModel = view.Model.Should().BeOfType<SelectProductsModel>().Subject;
         resultModel.TransactionId.Should().Be(id);
         resultModel.Products.Should().NotBeNull();
         resultModel.Products.Should().HaveCount(products.Count);
-        viewResult.ViewData.ModelState.ErrorCount.Should().Be(1);
 
         TransactionService.Verify(_ => _.GetProductsToCancelAsync(id), Times.Once());
         VerifyNoOtherCalls();
@@ -78,9 +78,8 @@ public class SelectProducts
         IActionResult result = await Sut.SelectProducts(inputModel);
 
         //  Assert
-        result.Should().NotBeNull();
-        RedirectResult redirectResult = result.Should().BeOfType<RedirectResult>().Subject;
-        redirectResult.Url.Should().Be(url);
+        RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
+        redirect.Url.Should().Be(url);
 
         TransactionService.Verify(_ => _.CancelAsync(activeBasarId, saleId, inputModel.SelectedProductIds()), Times.Once());
         TransactionRouter.Verify(_ => _.ToSucess(revertId), Times.Once());

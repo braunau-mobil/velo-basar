@@ -19,8 +19,8 @@ public class Submit
         IActionResult result = await Sut.Submit(sessionId);
 
         //  Act & Assert
-        RedirectResult redirectResult = result.Should().BeOfType<RedirectResult>().Subject;
-        redirectResult.Url.Should().Be(url);
+        RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
+        redirect.Url.Should().Be(url);
         
         AcceptSessionService.Verify(_ => _.SubmitAsync(sessionId), Times.Once());
         TransactionRouter.Verify(_ => _.ToSucess(acceptanceId), Times.Once());

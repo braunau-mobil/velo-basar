@@ -21,8 +21,8 @@ public class StartForSeller
         IActionResult result = await Sut.StartForSeller(sellerId, activeBasarId);
 
         //  Act & Assert
-        RedirectResult redirectResult = result.Should().BeOfType<RedirectResult>().Subject;
-        redirectResult.Url.Should().Be(url);
+        RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
+        redirect.Url.Should().Be(url);
         
         Cookie.Verify(_ => _.GetActiveAcceptSessionId(), Times.Once());
         Cookie.Verify(_ => _.SetActiveAcceptSession(entity), Times.Once());
@@ -49,8 +49,8 @@ public class StartForSeller
         IActionResult result = await Sut.StartForSeller(sellerId, activeBasarId);
 
         //  Act & Assert
-        RedirectResult redirectResult = result.Should().BeOfType<RedirectResult>().Subject;
-        redirectResult.Url.Should().Be(url);
+        RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
+        redirect.Url.Should().Be(url);
 
         Cookie.Verify(_ => _.GetActiveAcceptSessionId(), Times.Once());
         Cookie.Verify(_ => _.ClearActiveAcceptSession(), Times.Once());
@@ -77,8 +77,8 @@ public class StartForSeller
         IActionResult result = await Sut.StartForSeller(sellerId, activeBasarId);
 
         //  Act & Assert
-        RedirectResult redirectResult = result.Should().BeOfType<RedirectResult>().Subject;
-        redirectResult.Url.Should().Be(url);
+        RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
+        redirect.Url.Should().Be(url);
 
         Cookie.Verify(_ => _.GetActiveAcceptSessionId(), Times.Once());
         AcceptSessionService.Verify(_ => _.IsSessionRunning(activeSessionId), Times.Once());

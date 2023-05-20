@@ -22,10 +22,9 @@ public class Cancel
         IActionResult result = await Sut.Cancel(sessionId, returnToList);
 
         //  Assert
-        result.Should().NotBeNull();
-        BadRequestObjectResult badRequestResult = result.Should().BeOfType<BadRequestObjectResult>().Subject;
-        badRequestResult.Value.Should().BeOfType<LocalizedString>();
-        badRequestResult.StatusCode.Should().Be(400);
+        BadRequestObjectResult badRequest = result.Should().BeOfType<BadRequestObjectResult>().Subject;
+        badRequest.Value.Should().BeOfType<LocalizedString>();
+        badRequest.StatusCode.Should().Be(400);
 
         AcceptSessionService.Verify(_ => _.GetAsync(sessionId), Times.Once());
         VerifyNoOtherCalls();
@@ -45,9 +44,8 @@ public class Cancel
         IActionResult result = await Sut.Cancel(sessionId, true);
 
         //  Assert
-        result.Should().NotBeNull();
-        RedirectResult redirectResult = result.Should().BeOfType<RedirectResult>().Subject;
-        redirectResult.Url.Should().Be(url);
+        RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
+        redirect.Url.Should().Be(url);
 
         Cookie.Verify(_ => _.ClearActiveAcceptSession(), Times.Once());
         AcceptSessionRouter.Verify(_ => _.ToList(), Times.Once());
@@ -70,9 +68,8 @@ public class Cancel
         IActionResult result = await Sut.Cancel(sessionId, false);
 
         //  Assert
-        result.Should().NotBeNull();
-        RedirectResult redirectResult = result.Should().BeOfType<RedirectResult>().Subject;
-        redirectResult.Url.Should().Be(url);
+        RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
+        redirect.Url.Should().Be(url);
 
         Cookie.Verify(_ => _.ClearActiveAcceptSession(), Times.Once());
         SellerRouter.Verify(_ => _.ToDetails(sellerId), Times.Once());
