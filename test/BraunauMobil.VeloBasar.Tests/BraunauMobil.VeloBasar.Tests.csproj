@@ -76,7 +76,6 @@
     <Compile Remove="TestUtils.cs" />
     <Compile Remove="TestWithServicesAndDb.cs" />
     <Compile Remove="TestWithSqliteDb.cs" />
-    <Compile Remove="VeloFixture.cs" />
   </ItemGroup>
 
   <ItemGroup>

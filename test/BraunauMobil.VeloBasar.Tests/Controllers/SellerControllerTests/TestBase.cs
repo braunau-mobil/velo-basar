@@ -12,15 +12,20 @@ public class TestBase
     {
         Sut = new (SellerService.Object, new SellerSearchModelValidator(Localizer), Router.Object, SellerRouter.Object, new Crud.SellerCrudModelFactory(Localizer, Mock.Of<IHtmlHelper>()), new SellerEntityValidator(Localizer));
 
+        Router.Setup(_ => _.AcceptSession)
+            .Returns(AcceptSessionRouter.Object);
         Router.Setup(_ => _.Seller)
             .Returns(SellerRouter.Object);
     }
 
     public void VerifyNoOtherCalls()
     {
+        AcceptSessionRouter.VerifyNoOtherCalls();
         SellerRouter.VerifyNoOtherCalls();
         SellerService.VerifyNoOtherCalls();
     }
+
+    protected Mock<IAcceptSessionRouter> AcceptSessionRouter { get; } = new();
 
     protected Fixture Fixture { get; } = new ();
 
