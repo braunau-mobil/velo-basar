@@ -25,7 +25,7 @@ public sealed class InitializationConfigurationValidator
         ArgumentNullException.ThrowIfNull(localizer);
 
         RuleFor(config => config.AdminUserEMail)
-            .NotNull()
+            .NotEmpty()
             .WithMessage(localizer[VeloTexts.PleaseEnterAdminUserEmail]);
 
         RuleFor(config => config.GenerateZipCodes)

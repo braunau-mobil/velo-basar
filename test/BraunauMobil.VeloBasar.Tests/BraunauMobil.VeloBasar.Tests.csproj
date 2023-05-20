@@ -129,6 +129,9 @@
     <Compile Include="Controllers\SellerControllerTests\Labels.cs" />
     <Compile Include="Controllers\SellerControllerTests\List.cs" />
     <Compile Include="Controllers\SellerControllerTests\SearchForAcceptance.cs" />
+    <Compile Include="Controllers\SetupControllerTests\InitialSetup.cs" />
+    <Compile Include="Controllers\SetupControllerTests\InitialSetupConfirmed.cs" />
+    <Compile Include="Controllers\SetupControllerTests\TestBase.cs" />
     <Compile Include="Models\ChangeInfoTests\Ctor.cs" />
     <Compile Include="Models\Entities\SellerTests\UpdateNewsletterPermissions.cs" />
     <Compile Include="Models\ExtensionMethodsTests\SumPrice.cs" />
