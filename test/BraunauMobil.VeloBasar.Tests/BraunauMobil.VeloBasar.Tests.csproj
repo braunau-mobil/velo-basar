@@ -19,7 +19,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Controllers\**" />
     <Compile Remove="Data\**" />
     <Compile Remove="ExtensionMethodsTests\**" />
     <Compile Remove="IbanAttributeTests\**" />
@@ -33,7 +32,6 @@
     <Compile Remove="Models\ProductsTransactionTests\**" />
     <Compile Remove="Printing\**" />
     <Compile Remove="Rendering\**" />
-    <EmbeddedResource Remove="Controllers\**" />
     <EmbeddedResource Remove="Data\**" />
     <EmbeddedResource Remove="ExtensionMethodsTests\**" />
     <EmbeddedResource Remove="IbanAttributeTests\**" />
@@ -47,7 +45,6 @@
     <EmbeddedResource Remove="Models\ProductsTransactionTests\**" />
     <EmbeddedResource Remove="Printing\**" />
     <EmbeddedResource Remove="Rendering\**" />
-    <None Remove="Controllers\**" />
     <None Remove="Data\**" />
     <None Remove="ExtensionMethodsTests\**" />
     <None Remove="IbanAttributeTests\**" />
@@ -79,68 +76,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="Controllers\AcceptanceLabelsControllerTests\TestBase.cs" />
-    <Compile Include="Controllers\AcceptanceLabelsControllerTests\Download.cs" />
-    <Compile Include="Controllers\AcceptanceLabelsControllerTests\Select.cs" />
-    <Compile Include="Controllers\AcceptProductControllerTests\Edit.cs" />
-    <Compile Include="Controllers\AcceptProductControllerTests\Delete.cs" />
-    <Compile Include="Controllers\AcceptProductControllerTests\Create.cs" />
-    <Compile Include="Controllers\AcceptProductControllerTests\TestBase.cs" />
-    <Compile Include="Controllers\AcceptSessionControllerTests\StartForSeller.cs" />
-    <Compile Include="Controllers\AcceptSessionControllerTests\Start.cs" />
-    <Compile Include="Controllers\AcceptSessionControllerTests\Submit.cs" />
-    <Compile Include="Controllers\AcceptSessionControllerTests\List.cs" />
-    <Compile Include="Controllers\AcceptSessionControllerTests\Cancel.cs" />
-    <Compile Include="Controllers\AcceptSessionControllerTests\TestBase.cs" />
-    <Compile Include="Controllers\AdminControllerTests\PrintTest.cs" />
-    <Compile Include="Controllers\AdminControllerTests\Export.cs" />
-    <Compile Include="Controllers\AdminControllerTests\ExportSellersForNewsletter.cs" />
-    <Compile Include="Controllers\AdminControllerTests\CreateSampleSettlementDocument.cs" />
-    <Compile Include="Controllers\AdminControllerTests\CreateSampleSaleDocument.cs" />
-    <Compile Include="Controllers\AdminControllerTests\CreateSampleLabels.cs" />
-    <Compile Include="Controllers\AdminControllerTests\CreateSampleAcceptanceDocument.cs" />
-    <Compile Include="Controllers\AdminControllerTests\TestBase.cs" />
-    <Compile Include="Controllers\BasarControllerTests\ActiveBasarDetails.cs" />
-    <Compile Include="Controllers\BasarControllerTests\Details.cs" />
-    <Compile Include="Controllers\BasarControllerTests\TestBase.cs" />
-    <Compile Include="Controllers\CancelControllerTests\SelectProducts.cs" />
-    <Compile Include="Controllers\CancelControllerTests\SelectSale.cs" />
-    <Compile Include="Controllers\CancelControllerTests\TestBase.cs" />
-    <Compile Include="Controllers\CartControllerTests\Add.cs" />
-    <Compile Include="Controllers\CartControllerTests\Checkout.cs" />
-    <Compile Include="Controllers\CartControllerTests\Index.cs" />
-    <Compile Include="Controllers\CartControllerTests\Delete.cs" />
-    <Compile Include="Controllers\CartControllerTests\Clear.cs" />
-    <Compile Include="Controllers\CartControllerTests\TestBase.cs" />
-    <Compile Include="Controllers\HomeControllerTests\SetTheme.cs" />
-    <Compile Include="Controllers\HomeControllerTests\Index.cs" />
-    <Compile Include="Controllers\HomeControllerTests\TestBase.cs" />
-    <Compile Include="Controllers\DevControllerTests\UnlockAllUsers.cs" />
-    <Compile Include="Controllers\DevControllerTests\DropDatabaseConfirmed.cs" />
-    <Compile Include="Controllers\DevControllerTests\DropDatabase.cs" />
-    <Compile Include="Controllers\DevControllerTests\DangerZone.cs" />
-    <Compile Include="Controllers\DevControllerTests\TestBase.cs" />
-    <Compile Include="Controllers\ProductControllerTests\Edit.cs" />
-    <Compile Include="Controllers\ProductControllerTests\Details.cs" />
-    <Compile Include="Controllers\ProductControllerTests\List.cs" />
-    <Compile Include="Controllers\ProductControllerTests\TestBase.cs" />
-    <Compile Include="Controllers\SellerControllerTests\Details.cs" />
-    <Compile Include="Controllers\SellerControllerTests\Settle.cs" />
-    <Compile Include="Controllers\SellerControllerTests\Labels.cs" />
-    <Compile Include="Controllers\SellerControllerTests\List.cs" />
-    <Compile Include="Controllers\SellerControllerTests\SearchForAcceptance.cs" />
-    <Compile Include="Controllers\SetupControllerTests\InitialSetup.cs" />
-    <Compile Include="Controllers\SetupControllerTests\InitialSetupConfirmed.cs" />
-    <Compile Include="Controllers\SetupControllerTests\TestBase.cs" />
     <Compile Include="Models\ChangeInfoTests\Ctor.cs" />
     <Compile Include="Models\Entities\SellerTests\UpdateNewsletterPermissions.cs" />
     <Compile Include="Models\ExtensionMethodsTests\SumPrice.cs" />
-    <Compile Include="Controllers\ProductControllerTests\Lock.cs" />
-    <Compile Include="Controllers\ProductControllerTests\Lost.cs" />
-    <Compile Include="Controllers\ProductControllerTests\Label.cs" />
-    <Compile Include="Controllers\ProductControllerTests\Unlock.cs" />
-    <Compile Include="Controllers\SellerControllerTests\TestBase.cs" />
-    <Compile Include="Controllers\SellerControllerTests\CreateForAcceptance.cs" />
   </ItemGroup>
 
   <ItemGroup>
