@@ -16,6 +16,8 @@ public class TestBase
             .Returns(AcceptSessionRouter.Object);
         Router.Setup(_ => _.Seller)
             .Returns(SellerRouter.Object);
+        Router.Setup(_ => _.Transaction)
+            .Returns(TransactionRouter.Object);
     }
 
     public void VerifyNoOtherCalls()
@@ -23,6 +25,7 @@ public class TestBase
         AcceptSessionRouter.VerifyNoOtherCalls();
         SellerRouter.VerifyNoOtherCalls();
         SellerService.VerifyNoOtherCalls();
+        TransactionRouter.VerifyNoOtherCalls();
     }
 
     protected Mock<IAcceptSessionRouter> AcceptSessionRouter { get; } = new();
@@ -38,4 +41,6 @@ public class TestBase
     protected Mock<ISellerRouter> SellerRouter { get; } = new();
 
     protected Mock<ISellerService> SellerService { get; } = new();
+
+    protected Mock<ITransactionRouter> TransactionRouter { get; } = new();
 }

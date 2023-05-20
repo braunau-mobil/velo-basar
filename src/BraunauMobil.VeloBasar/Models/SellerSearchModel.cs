@@ -19,11 +19,11 @@ public sealed class SellerSearchModelValidator
         ArgumentNullException.ThrowIfNull(localizer);
 
         RuleFor(seller => seller.FirstName)
-            .NotNull()
+            .NotEmpty()
             .WithMessage(localizer[VeloTexts.PleaseEnterFirstNameForSearch]);
 
         RuleFor(seller => seller.LastName)
-            .NotNull()
+            .NotEmpty()
             .WithMessage(localizer[VeloTexts.PleaseEnterLastNameForSearch]);
     }
 }

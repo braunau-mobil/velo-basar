@@ -74,13 +74,13 @@ public class CreateForAcceptance
 	public async Task WithValidModelThatExists_CallsUpdateAndReturnsRedirectToStartSession(SellerEntity seller, string url)
 	{
 		//	Arrange
-		SellerService.Setup(_ => _.UpdateAsync(seller));
-		AcceptSessionRouter.Setup(_ => _.ToStartForSeller(seller.Id))
-			.Returns(url);
 		seller.IBAN = null;
 		seller.HasNewsletterPermission = false;
 		seller.EMail = null;
 		seller.PhoneNumber = "123";
+		SellerService.Setup(_ => _.UpdateAsync(seller));
+		AcceptSessionRouter.Setup(_ => _.ToStartForSeller(seller.Id))
+			.Returns(url);
 
 		//	Act
 		IActionResult result = await Sut.CreateForAcceptance(seller);
@@ -93,4 +93,30 @@ public class CreateForAcceptance
 		SellerService.Verify(_ => _.UpdateAsync(seller), Times.Once());
 		VerifyNoOtherCalls();
 	}
+
+    [Theory]
+    [AutoData]
+    public async Task WithValidModelThatNotExists_CallsCreateAndReturnsRedirectToStartSession(SellerEntity seller, string url)
+    {
+        //	Arrange
+		seller.Id = 0;
+        seller.IBAN = null;
+        seller.HasNewsletterPermission = false;
+        seller.EMail = null;
+        seller.PhoneNumber = "123";
+        SellerService.Setup(_ => _.CreateAsync(seller));
+        AcceptSessionRouter.Setup(_ => _.ToStartForSeller(seller.Id))
+            .Returns(url);
+
+        //	Act
+        IActionResult result = await Sut.CreateForAcceptance(seller);
+
+        //	Assert
+        RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
+        redirect.Url.Should().Be(url);
+
+        AcceptSessionRouter.Verify(_ => _.ToStartForSeller(seller.Id), Times.Once());
+        SellerService.Verify(_ => _.CreateAsync(seller), Times.Once());
+        VerifyNoOtherCalls();
+    }
 }

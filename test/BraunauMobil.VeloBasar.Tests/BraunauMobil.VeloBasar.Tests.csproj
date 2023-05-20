@@ -124,6 +124,11 @@
     <Compile Include="Controllers\ProductControllerTests\Details.cs" />
     <Compile Include="Controllers\ProductControllerTests\List.cs" />
     <Compile Include="Controllers\ProductControllerTests\TestBase.cs" />
+    <Compile Include="Controllers\SellerControllerTests\Details.cs" />
+    <Compile Include="Controllers\SellerControllerTests\Settle.cs" />
+    <Compile Include="Controllers\SellerControllerTests\Labels.cs" />
+    <Compile Include="Controllers\SellerControllerTests\List.cs" />
+    <Compile Include="Controllers\SellerControllerTests\SearchForAcceptance.cs" />
     <Compile Include="Models\ChangeInfoTests\Ctor.cs" />
     <Compile Include="Models\Entities\SellerTests\UpdateNewsletterPermissions.cs" />
     <Compile Include="Models\ExtensionMethodsTests\SumPrice.cs" />
@@ -154,9 +159,5 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\BraunauMobil.VeloBasar\BraunauMobil.VeloBasar.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Controllers\SellerControllerTests\" />
   </ItemGroup>
 </Project>

@@ -39,6 +39,15 @@ namespace BraunauMobil.VeloBasar.Tests
                 .Without(_ => _.Sale);
         }
 
+        public static IPostprocessComposer<SellerDetailsModel> BuildSellerDetailsModel(this Fixture fixture)
+        {
+            ArgumentNullException.ThrowIfNull(fixture);
+
+            return fixture.Build<SellerDetailsModel>()
+                .With(_ => _.Transactions, fixture.BuildTransaction().CreateMany().ToList());
+
+        }
+
         public static IPostprocessComposer<TransactionEntity> BuildTransaction(this Fixture fixture)
         {
             ArgumentNullException.ThrowIfNull(fixture);
