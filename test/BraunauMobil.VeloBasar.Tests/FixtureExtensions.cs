@@ -53,7 +53,14 @@ namespace BraunauMobil.VeloBasar.Tests
             ArgumentNullException.ThrowIfNull(fixture);
 
             return fixture.Build<TransactionEntity>()
-                .Without(_ => _.ParentTransaction);
+                .Without(_ => _.ParentTransaction)
+                .Do(transaction =>
+                {
+                    foreach (ProductToTransactionEntity productToTransactionEntity in fixture.BuildProductToTransactionEntity(transaction).CreateMany())
+                    {
+                        transaction.Products.Add(productToTransactionEntity);
+                    }
+                });
         }
 
         public static IPaginatedList<T> CreatePaginatedList<T>(this Fixture fixture)

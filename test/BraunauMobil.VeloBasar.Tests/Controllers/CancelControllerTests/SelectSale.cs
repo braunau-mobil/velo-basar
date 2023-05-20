@@ -58,6 +58,7 @@ public class SelectSale
         //  Arrange
         SelectSaleModel model = Fixture.BuildSelectSaleModel().Create();
         TransactionEntity sale = Fixture.BuildTransaction().Create();
+        sale.Products.Clear();
         ProductToTransactionEntity productToTransaction = Fixture.BuildProductToTransactionEntity(sale).Create();
         productToTransaction.Product.ValueState = ValueState.NotSettled;
         productToTransaction.Product.StorageState = StorageState.Available;
