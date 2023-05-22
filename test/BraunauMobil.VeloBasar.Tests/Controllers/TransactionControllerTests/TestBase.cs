@@ -9,7 +9,7 @@ public class TestBase
 {
     public TestBase()
     {
-        Sut = new (TransactionService.Object, Router.Object, new SignInManagerMock(), new TransactionSuccessModelValidator(Localizer));
+        Sut = new (TransactionService.Object, Router.Object, SignInManager, new TransactionSuccessModelValidator(Localizer));
 
         Router.Setup(_ => _.Cancel)
             .Returns(CancelRouter.Object);
@@ -28,6 +28,8 @@ public class TestBase
     protected IStringLocalizer<SharedResources> Localizer { get; } = Helpers.CreateActualLocalizer();
 
     protected Mock<IVeloRouter> Router { get; } = new();
+
+    protected SignInManagerMock SignInManager { get; } = new ();
 
     protected TransactionController Sut { get; }
 

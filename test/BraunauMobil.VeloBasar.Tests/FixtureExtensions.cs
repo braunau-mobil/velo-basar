@@ -68,7 +68,15 @@ namespace BraunauMobil.VeloBasar.Tests
             ArgumentNullException.ThrowIfNull(fixture);
 
             IList<T> list = fixture.CreateMany<T>().ToList();
-            return new PaginatedList<T>(list, fixture.Create<int>(), fixture.Create<int>(), fixture.Create<int>(), fixture.Create<int>());
+            return fixture.CreatePaginatedList(list);
+        }
+
+        public static IPaginatedList<T> CreatePaginatedList<T>(this Fixture fixture, IList<T> items)
+        {
+            ArgumentNullException.ThrowIfNull(fixture);
+            ArgumentNullException.ThrowIfNull(items);
+
+            return new PaginatedList<T>(items, fixture.Create<int>(), fixture.Create<int>(), fixture.Create<int>(), fixture.Create<int>());
         }
 
         //public static IPostprocessComposer<Product> BuildProduct(this Fixture fixture, decimal price)
