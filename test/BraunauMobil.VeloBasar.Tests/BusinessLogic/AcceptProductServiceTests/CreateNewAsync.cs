@@ -1,65 +1,38 @@
-﻿using BraunauMobil.VeloBasar.BusinessLogic;
-using BraunauMobil.VeloBasar.Data;
-using Microsoft.Data.Sqlite;
-using Microsoft.EntityFrameworkCore;
-using Xan.Extensions;
-
-namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.AcceptProductServiceTests;
+﻿namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.AcceptProductServiceTests;
 
 public class CreateNewAsync
-    : IDisposable
+    : TestBase
 {
-    public CreateNewAsync()
+    [Theory]
+    [AutoData]
+    public async Task UncompletedSession_ReturnsNewAcceptProductModel(AcceptSessionEntity acceptSession)
     {
-        //Connection = new SqliteConnection("DataSource=:memory:");
-        Connection = new SqliteConnection("Data Source=c:\\temp\\test.db;");
-        Connection.Open();
+        //  Arrange
+        acceptSession.EndTimeStamp = null;
+        Db.AcceptSessions.Add(acceptSession);
+        await Db.SaveChangesAsync();
 
-        DbContextOptions<VeloDbContext> options = new DbContextOptionsBuilder<VeloDbContext>()
-            .UseSqlite(Connection)
-            .Options;
+        //  Act
+        AcceptProductModel result = await Sut.CreateNewAsync(acceptSession.Id);
 
-        // Create the schema in the database
-        using (var context = new VeloDbContext(Clock.Object, options))
-        {
-            context.Database.Migrate();
-        }
-
-        Db = new VeloDbContext(Clock.Object, options);
-
-        Sut = new AcceptProductService(Db, Helpers.CreateActualLocalizer());
-    }
-    
-    public AcceptProductService Sut { get; }
-
-    protected SqliteConnection Connection { get; }
-
-    public VeloDbContext Db { get; }
-
-    public Mock<IClock> Clock { get; } = new();
-
-    public virtual void Dispose()
-    {
-        Db.Dispose();
-        Connection.Dispose();
-        Clock.VerifyNoOtherCalls();
+        //  Assert
+        result.Should().NotBeNull();
+        result.Entity.Should().NotBeNull();
+        result.Entity.SessionId.Should().Be(acceptSession.Id);
     }
 
-    [Fact]
-    public async Task Test()
+    [Theory]
+    [AutoData]
+    public async Task CompletedSession_ThrowsInvalidOperationException(AcceptSessionEntity acceptSession)
     {
-        //  @todo SQLIte Migrate does not work
-        await Task.CompletedTask;
-        ////  Arrange
-        //Db.AcceptSessions.Add(new AcceptSessionEntity()
-        //{
-        //    Id = 1
-        //});
-        //await Db.SaveChangesAsync();
+        //  Arrange
+        Db.AcceptSessions.Add(acceptSession);
+        await Db.SaveChangesAsync();
 
-        ////  Act
-        //AcceptProductModel result = await Sut.CreateNewAsync(1);
+        //  Act
+        Func<Task> act = async () => await Sut.CreateNewAsync(acceptSession.Id);
 
-        ////  Assert
+        //  Assert
+        await act.Should().ThrowAsync<InvalidOperationException>();
     }
 }
