@@ -2,7 +2,6 @@
 
 namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.AcceptProductServiceTests;
 
-
 public class UpdateAsync
 	: TestBase
 {
@@ -32,5 +31,32 @@ public class UpdateAsync
 		ProductEntity updatedProduct = await Db.Products.FirstByIdAsync(productToInsert.Id);
 		updatedProduct.Should().BeEquivalentTo(productToUpdate);
 	}
-}
 
+    [Theory]
+    [AutoData]
+    public async Task RelationsAreReloaded(ProductEntity initial, ProductEntity updated)
+    {
+        //  Arrange
+        Db.Products.Add(initial);
+        await Db.SaveChangesAsync();
+        Db.ChangeTracker.Clear();
+
+        updated.Id = initial.Id;
+        updated.BrandId = initial.BrandId;
+        updated.Brand = null!;
+        updated.TypeId = initial.TypeId;
+        updated.Type = null!;
+        updated.SessionId = initial.SessionId;
+        updated.Session = null!;
+
+        //  Arrange
+        await Sut.UpdateAsync(updated);
+
+        //  Assert
+        updated.Id.Should().Be(initial.Id);
+        updated.Brand.Should().BeEquivalentTo(initial.Brand);
+        updated.Type.Should().BeEquivalentTo(initial.Type);
+        updated.Session.Should().NotBeNull();
+        updated.Should().NotBeEquivalentTo(initial);
+    }
+}
