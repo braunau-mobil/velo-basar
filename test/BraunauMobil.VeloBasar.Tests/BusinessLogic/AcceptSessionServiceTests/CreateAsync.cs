@@ -1,10 +1,22 @@
-﻿using System;
-namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.AcceptSessionServiceTests;
+﻿namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.AcceptSessionServiceTests;
 
 public class CreateAsync
 	: TestBase
 {
-	[Theory]
+    [Theory]
+    [AutoData]
+    public async Task InvaliBasarAndSellerId_ThrowsInvalidOperationException(int basarId, int sellerId)
+    {
+        //  Arrange
+
+        //  Act
+        Func<Task> act = async () => await Sut.CreateAsync(basarId, sellerId);
+
+        //  Assert
+        await act.Should().ThrowAsync<InvalidOperationException>();
+    }
+
+    [Theory]
 	[AutoData]
 	public async Task AcceptSessionIsCreatedAndInserted(BasarEntity basar, SellerEntity seller, DateTime dateTime)
 	{
@@ -30,4 +42,3 @@ public class CreateAsync
 		VerifyNoOtherCalls();
 	}
 }
-
