@@ -46,26 +46,29 @@ public sealed class BasarService
         int saleCount = await _db.Transactions.AsNoTracking().ForBasar(id, TransactionType.Sale).CountAsync();
         int sellerCount = await GetSellerCountAsync(id);
         int settledSellerCount = await GetSettledSellersCountAsync(id);
-        int settlementPercentage = (int)((double)settledSellerCount / sellerCount * 100.0);        
+        int settlementPercentage = (int)((double)settledSellerCount / sellerCount * 100.0);
+
+        ProductEntity[] acceptedProducts = await AcceptedProducts(id).ToArrayAsync();
+        ProductEntity[] soldProducts = await SoldProducts(id).ToArrayAsync();
 
         return new BasarDetailsModel(basar)
         {
             AcceptanceCount = acceptanceCount,
-            AcceptedProductsAmount = await AcceptedProducts(id).SumAsync(product => product.Price),
-            AcceptedProductsCount = await AcceptedProducts(id).CountAsync(),
-            AcceptedProductsByAmount = await GroupByTypeAndAmountAsync(AcceptedProducts(id)),
-            AcceptedProductsByCount = await GroupByTypeAndCountAsync(AcceptedProducts(id)),
-            LostProductsCount = await AcceptedProducts(id).CountAsync(procuct => procuct.StorageState == StorageState.Lost),
-            LockedProductsCount = await AcceptedProducts(id).CountAsync(procuct => procuct.StorageState == StorageState.Locked),
+            AcceptedProductsAmount = acceptedProducts.Sum(product => product.Price),
+            AcceptedProductsCount = acceptedProducts.Length,
+            AcceptedProductsByAmount = GroupByTypeAndAmount(acceptedProducts),
+            AcceptedProductsByCount = GroupByTypeAndCount(acceptedProducts),
+            LostProductsCount = acceptedProducts.Count(procuct => procuct.StorageState == StorageState.Lost),
+            LockedProductsCount = acceptedProducts.Count(procuct => procuct.StorageState == StorageState.Locked),
             PriceDistribution = await GetPriceDistributionAsync(id),
             SaleCount = saleCount,
             SaleDistribution = await GetSaleDistributionAsync(id),
             SettlementPercentage = settlementPercentage,
             SellerCount = sellerCount,
-            SoldProductsAmount = await SoldProducts(id).SumAsync(product => product.Price),
-            SoldProductsCount = await SoldProducts(id).CountAsync(),
-            SoldProductsByAmount = await GroupByTypeAndAmountAsync(SoldProducts(id)),
-            SoldProductsByCount = await GroupByTypeAndCountAsync(SoldProducts(id)),
+            SoldProductsAmount = soldProducts.Sum(product => product.Price),
+            SoldProductsCount = soldProducts.Length,
+            SoldProductsByAmount = GroupByTypeAndAmount(soldProducts),
+            SoldProductsByCount = GroupByTypeAndCount(soldProducts),
         };
     }
 
@@ -80,32 +83,30 @@ public sealed class BasarService
         => AcceptedProducts(basarId)
             .Where(product => product.StorageState == StorageState.Sold);
 
-    private async Task<IReadOnlyList<ChartDataPoint>> GroupByTypeAndAmountAsync(IQueryable<ProductEntity> products)
+    private IReadOnlyList<ChartDataPoint> GroupByTypeAndAmount(ProductEntity[] products)
     {
-        var productTypeAmounts = await products
+        var productTypeAmounts = products
             .GroupBy(product => product.Type.Name)
             .Select(group => new
             {
                 Name = group.Key,
                 Amount = group.Sum(product => product.Price)
-            })
-            .ToArrayAsync();
+            });
 
         return productTypeAmounts
             .Select(x => new ChartDataPoint(x.Amount, x.Name, _colorProvider[x.Name]))
             .ToArray();
     }
 
-    private async Task<IReadOnlyList<ChartDataPoint>> GroupByTypeAndCountAsync(IQueryable<ProductEntity> products)
+    private IReadOnlyList<ChartDataPoint> GroupByTypeAndCount(ProductEntity[] products)
     {
-        var productTypeAmounts = await products
+        var productTypeAmounts = products
             .GroupBy(product => product.Type.Name)
             .Select(group => new
             {
                 Name = group.Key,
                 Count = group.Count()
-            })
-            .ToArrayAsync();
+            });
 
         return productTypeAmounts
             .Select(x => new ChartDataPoint(x.Count, x.Name, _colorProvider[x.Name]))
