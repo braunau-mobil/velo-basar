@@ -19,7 +19,7 @@ public class FindAsync
 
     [Theory]
     [AutoData]
-    public async Task SessoinIsFound(AcceptSessionEntity session)
+    public async Task SessionIsFound(AcceptSessionEntity session)
     {
         // Arrange
         Db.AcceptSessions.Add(session);
