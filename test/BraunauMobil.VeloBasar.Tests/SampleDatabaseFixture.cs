@@ -16,7 +16,9 @@ public class SampleDatabaseFixture
 {
     public SampleDatabaseFixture()
     {
-        CultureInfo.CurrentCulture = new CultureInfo("de-AT");
+        CultureInfo enUS = new ("en-US");
+
+        CultureInfo.CurrentCulture = enUS;
 
         Connection = new SqliteConnection("DataSource=:memory:");
         Connection.Open();
