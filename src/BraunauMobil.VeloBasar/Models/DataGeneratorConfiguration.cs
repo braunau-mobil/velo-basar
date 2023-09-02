@@ -41,5 +41,5 @@ public sealed class DataGeneratorConfiguration
 
     public decimal StdDevPrice { get; set; }
 
-    public bool SimulateSales { get; set; }
+    public bool SimulateBasar { get; set; }
 }

@@ -104,7 +104,7 @@ public sealed class DataGeneratorService
                 basar.State = ObjectState.Enabled;
             }
 
-            if (Config.SimulateSales && basarNumber < Config.BasarCount)
+            if (Config.SimulateBasar && basarNumber < Config.BasarCount)
             {
                 await SettleSellers(basar.Id);
             }
@@ -206,9 +206,9 @@ public sealed class DataGeneratorService
             await CreateSellerWithAcceptancesAsync(basarId);
         }
 
-        if (Config.SimulateSales)
+        if (Config.SimulateBasar)
         {
-            await SimulateSalesAsync(basarId);
+            await SimulateBasarAsync(basarId);
         }
 
         return basar;
@@ -239,18 +239,26 @@ public sealed class DataGeneratorService
         }
     }
 
+    private async Task SimulateBasarAsync(int basarId)
+    {
+        await SimulateSalesAsync(basarId);
+        await SimulateLossesAsync(basarId);
+        await SimulateLocksAsync(basarId);
+        await SimulateSettlementsAsync(basarId);
+    }
+
     private async Task SimulateSalesAsync(int basarId)
     {
         IReadOnlyList<int> productIds = await _db.Products
             .Include(product => product.Session)
-            .Where(product => product.Session.BasarId == basarId)
+            .Where(product => product.Session.BasarId == basarId && product.StorageState == StorageState.Available)
             .Select(product => product.Id)
             .ToArrayAsync();
         Queue<int> productIdsForSale = new(productIds.Take(Random.Next(productIds.Count / 3, productIds.Count + 1)));
         while (productIdsForSale.Count > 0)
         {
             int productCountForSale = Random.Next(1, 5);
-            List<int> productIdsForSaleTransaction = new ();
+            List<int> productIdsForSaleTransaction = new();
             while (productCountForSale > 0)
             {
                 int productId = Random.GetRandomElement(productIds);
@@ -259,6 +267,51 @@ public sealed class DataGeneratorService
             }
 
             await _transactionService.CheckoutAsync(basarId, productIdsForSaleTransaction);
+        }
+    }
+
+    private async Task SimulateLossesAsync(int basarId)
+    {
+        IReadOnlyList<int> availableProductIds = await _db.Products
+            .Include(product => product.Session)
+            .Where(product => product.Session.BasarId == basarId && product.StorageState == StorageState.Available)
+            .Select(product => product.Id)
+            .ToArrayAsync();
+        Queue<int> productIdsToLoose = new(availableProductIds.Take(Random.Next(1, availableProductIds.Count / 10)));
+        while (productIdsToLoose.Count > 0)
+        {
+            int productId = productIdsToLoose.Dequeue();
+            await _transactionService.SetLostAsync(basarId, "Product could not be found anymore", productId);
+        }
+    }
+
+    private async Task SimulateLocksAsync(int basarId)
+    {
+        IReadOnlyList<int> availableProductIds = await _db.Products
+            .Include(product => product.Session)
+            .Where(product => product.Session.BasarId == basarId && product.StorageState == StorageState.Available)
+            .Select(product => product.Id)
+            .ToArrayAsync();
+        Queue<int> productIdsToLock = new(availableProductIds.Take(Random.Next(1, availableProductIds.Count / 10)));
+        while (productIdsToLock.Count > 0)
+        {
+            int productId = productIdsToLock.Dequeue();
+            await _transactionService.LockAsync(basarId, "Product is damaged", productId);
+        }
+    }
+
+    private async Task SimulateSettlementsAsync(int basarId)
+    {
+        IReadOnlyList<int> sellerIds = await _db.Sellers
+            .Where(seller => seller.ValueState == ValueState.NotSettled)
+            .Select(seller => seller.Id)
+            .ToArrayAsync();
+
+        Queue<int> sellerIdsToSettle = new(sellerIds.Take(Random.Next(1, sellerIds.Count / 2)));
+        while (sellerIdsToSettle.Count > 0)
+        {
+            int sellerId = sellerIdsToSettle.Dequeue();
+            await _sellerService.SettleAsync(basarId, sellerId);
         }
     }
 
