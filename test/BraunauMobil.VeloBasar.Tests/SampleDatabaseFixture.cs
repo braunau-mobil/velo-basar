@@ -11,10 +11,10 @@ using Xan.Extensions;
 
 namespace BraunauMobil.VeloBasar.Tests;
 
-public class SampleDatabaseTestBase
+public class SampleDatabaseFixture
     : IDisposable
 {
-    public SampleDatabaseTestBase()
+    public SampleDatabaseFixture()
     {
         CultureInfo.CurrentCulture = new CultureInfo("de-AT"); ;
 
@@ -72,9 +72,9 @@ public class SampleDatabaseTestBase
 
     public Mock<IClock> Clock { get; } = new();
 
-    protected SqliteConnection Connection { get; }
+    public SqliteConnection Connection { get; }
 
-    protected IServiceScope ServiceScope { get; }
+    public IServiceScope ServiceScope { get; }
 
-    protected Mock<IStatusPushService> StatusPushService { get; } = new();
+    public Mock<IStatusPushService> StatusPushService { get; } = new();
 }
