@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using System.Globalization;
 using Xan.Extensions;
 
 namespace BraunauMobil.VeloBasar.Tests;
@@ -15,11 +14,7 @@ public class SampleDatabaseFixture
     : IDisposable
 {
     public SampleDatabaseFixture()
-    {
-        CultureInfo enUS = new ("en-US");
-
-        CultureInfo.CurrentCulture = enUS;
-
+    {       
         Connection = new SqliteConnection("DataSource=:memory:");
         Connection.Open();
 

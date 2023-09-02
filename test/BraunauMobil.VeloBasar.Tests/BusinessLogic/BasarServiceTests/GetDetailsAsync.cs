@@ -1,16 +1,26 @@
 ﻿using BraunauMobil.VeloBasar.BusinessLogic;
 using Microsoft.Extensions.DependencyInjection;
+using System.Globalization;
 
 namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.BasarServiceTests;
 
 [Collection(TestCollections.SampleDatabase)]
-public class GetDetailsAsync
+public sealed class GetDetailsAsync
+    : IDisposable
 {
+    private readonly CultureInfo _initialCultureInfo = CultureInfo.CurrentCulture;
     private readonly SampleDatabaseFixture _db;
 
     public GetDetailsAsync(SampleDatabaseFixture db)
     {
         _db = db ?? throw new ArgumentNullException(nameof(db));
+        
+        CultureInfo.CurrentCulture = new CultureInfo("de-AT");
+    }
+
+    public void Dispose()
+    {
+        CultureInfo.CurrentCulture = _initialCultureInfo;
     }
 
     [Fact]
