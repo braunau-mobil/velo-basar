@@ -6,6 +6,7 @@ public sealed class DataGeneratorConfiguration
 {
     public DataGeneratorConfiguration()
     {
+        Seed = -1;
         FirstBasarDate = new DateTime(2063, 4, 5);
         BasarCount = 1;
         MinAcceptancesPerSeller = 1;
@@ -17,6 +18,8 @@ public sealed class DataGeneratorConfiguration
         MeanProductsPerSeller = 1.3;
         StdDevProductsPerSeller = 4.5;
     }
+
+    public int Seed { get; set; }
 
     public DateTime FirstBasarDate { get; set; }
 

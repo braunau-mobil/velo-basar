@@ -2,7 +2,6 @@
 using BraunauMobil.VeloBasar.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using System.Security.Cryptography;
 using System.Text;
 using Xan.Extensions;
 
@@ -20,6 +19,7 @@ public sealed class DataGeneratorService
     private readonly BasarCrudService _basarCrudService;
     private readonly IClock _clock;
     private DataGeneratorConfiguration? _config;
+    private Random? _random;
 
     public DataGeneratorService(VeloDbContext db, ISetupService setupService, BasarCrudService basarCrudService, ISellerService sellerService, IAcceptSessionService acceptSessionService, IAcceptProductService acceptProductService, ITransactionService transactionService, IClock clock)
     {
@@ -45,11 +45,32 @@ public sealed class DataGeneratorService
         }
     }
 
+    private Random Random
+    {
+        get
+        {
+            if (_random == null)
+            {
+                throw new InvalidOperationException($"Please call {nameof(Contextualize)} first.");
+            }
+
+            return _random;
+        }
+    }
+
     public void Contextualize(DataGeneratorConfiguration config)
     {
         ArgumentNullException.ThrowIfNull(config);
 
         _config = config;
+        if (_config.Seed >= 0)
+        {
+            _random = new Random(_config.Seed);
+        }
+        else
+        {
+            _random = new Random();
+        }
     }
 
     public async Task DropDatabaseAsync()
@@ -95,12 +116,12 @@ public sealed class DataGeneratorService
     public BasarEntity NextBasar()
         => new()
         {
-            Id = RandomExtensions.GetPositiveInt32(),
+            Id = Random.Next(),
             CreatedAt = _clock.GetCurrentDateTime(),
             Date = new DateTime(2063, 04, 05),
-            Location = Names.Cities.GetRandomElement(),
-            Name = $"Basar #{RandomExtensions.GetPositiveInt32()}",
-            ProductCommissionPercentage = RandomNumberGenerator.GetInt32(5, 21),
+            Location = Random.GetRandomElement(Names.Cities),
+            Name = $"Basar #{Random.Next()}",
+            ProductCommissionPercentage = Random.Next(5, 21),
             State = ObjectState.Enabled,
             UpdatedAt = _clock.GetCurrentDateTime(),
         };
@@ -108,9 +129,9 @@ public sealed class DataGeneratorService
     public BrandEntity NextBrand()
         => new()
         {
-            Id = RandomExtensions.GetPositiveInt32(),
+            Id = Random.Next(),
             CreatedAt = _clock.GetCurrentDateTime(),
-            Name = $"Basar #{RandomExtensions.GetPositiveInt32()}",
+            Name = $"Basar #{Random.Next()}",
             State = ObjectState.Enabled,
             UpdatedAt = _clock.GetCurrentDateTime(),
         };
@@ -118,7 +139,7 @@ public sealed class DataGeneratorService
     public CountryEntity NextCountry()
         => new()
         {
-            Id = RandomExtensions.GetPositiveInt32(),
+            Id = Random.Next(),
             CreatedAt = _clock.GetCurrentDateTime(),
             Name = "Mittelerde",
             Iso3166Alpha3Code = "MEA",
@@ -133,7 +154,7 @@ public sealed class DataGeneratorService
         return new()
         {
             Brand = brand,
-            Color = Names.Colors.GetRandomElement(),
+            Color = Random.GetRandomElement(Names.Colors),
             Description = $"Beschreibung für Produkt",
             FrameNumber = Guid.NewGuid().ToString(),
             Price = NextPrice(),
@@ -141,7 +162,7 @@ public sealed class DataGeneratorService
             SessionId = session.Id,
             StorageState = StorageState.NotAccepted,
             ValueState = ValueState.NotSettled,
-            TireSize = Names.TireSizes.GetRandomElement(),
+            TireSize = Random.GetRandomElement(Names.TireSizes),
             Type = productType
         };
     }
@@ -149,9 +170,9 @@ public sealed class DataGeneratorService
     public ProductTypeEntity NextProductType()
         => new()
         {
-            Id = RandomExtensions.GetPositiveInt32(),
+            Id = Random.Next(),
             CreatedAt = _clock.GetCurrentDateTime(),
-            Name = $"Basar #{RandomExtensions.GetPositiveInt32()}",
+            Name = $"Basar #{Random.Next()}",
             State = ObjectState.Enabled,
             UpdatedAt = _clock.GetCurrentDateTime(),
         };
@@ -159,15 +180,15 @@ public sealed class DataGeneratorService
     public SellerEntity NextSeller(CountryEntity country)
         => new()
         {
-            FirstName = Names.FirstNames.GetRandomElement(),
-            LastName = Names.FirstNames.GetRandomElement(),
+            FirstName = Random.GetRandomElement(Names.FirstNames),
+            LastName = Random.GetRandomElement(Names.FirstNames),
             Country = country,
-            City = Names.Cities.GetRandomElement(),
-            Street = $"{Names.Streets.GetRandomElement()} {RandomNumberGenerator.GetInt32(1, 50)}",
+            City = Random.GetRandomElement(Names.Cities),
+            Street = $"{Random.GetRandomElement(Names.Streets)} {Random.Next(1, 50)}",
             PhoneNumber = NextPhoneNumber(),
-            EMail = $"{RandomExtensions.GetPositiveInt32()}@domain.com",
-            HasNewsletterPermission = RandomExtensions.GetBool(),
-            ZIP = $"{RandomNumberGenerator.GetInt32(1, 10)}{RandomNumberGenerator.GetInt32(1, 10)}{RandomNumberGenerator.GetInt32(1, 10)}{RandomNumberGenerator.GetInt32(1, 10)}",
+            EMail = $"{Random.Next()}@domain.com",
+            HasNewsletterPermission = Random.GetBool(),
+            ZIP = $"{Random.Next(1, 10)}{Random.Next(1, 10)}{Random.Next(1, 10)}{Random.Next(1, 10)}",
             State = ObjectState.Enabled
         };
 
@@ -179,7 +200,7 @@ public sealed class DataGeneratorService
         basar.Id = 0;
         int basarId = await _basarCrudService.CreateAsync(basar);
 
-        int sellerCount = RandomNumberGenerator.GetInt32(Config.MinSellers, Config.MaxSellers + 1);
+        int sellerCount = Random.Next(Config.MinSellers, Config.MaxSellers + 1);
         for (int sellerNumber = 1; sellerNumber <= sellerCount; sellerNumber++)
         {
             await CreateSellerWithAcceptancesAsync(basarId);
@@ -225,14 +246,14 @@ public sealed class DataGeneratorService
             .Where(product => product.Session.BasarId == basarId)
             .Select(product => product.Id)
             .ToArrayAsync();
-        Queue<int> productIdsForSale = new(productIds.Take(RandomNumberGenerator.GetInt32(productIds.Count / 3, productIds.Count + 1)));
+        Queue<int> productIdsForSale = new(productIds.Take(Random.Next(productIds.Count / 3, productIds.Count + 1)));
         while (productIdsForSale.Count > 0)
         {
-            int productCountForSale = RandomNumberGenerator.GetInt32(1, 5);
+            int productCountForSale = Random.Next(1, 5);
             List<int> productIdsForSaleTransaction = new ();
             while (productCountForSale > 0)
             {
-                int productId = productIds.GetRandomElement();
+                int productId = Random.GetRandomElement(productIds);
                 productIdsForSaleTransaction.Add(productIdsForSale.Dequeue());
                 productCountForSale--;
             }
@@ -243,11 +264,11 @@ public sealed class DataGeneratorService
 
     private async Task CreateSellerWithAcceptancesAsync(int basarId)
     {
-        SellerEntity seller = NextSeller(_db.Countries.GetRandomElement());
+        SellerEntity seller = NextSeller(Random.GetRandomElement(_db.Countries));
         seller.Id = 0;
         await _sellerService.CreateAsync(seller);
 
-        int acceptancePerCustomerCount = RandomNumberGenerator.GetInt32(Config.MinAcceptancesPerSeller, Config.MaxAcceptancesPerSeller + 1);
+        int acceptancePerCustomerCount = Random.Next(Config.MinAcceptancesPerSeller, Config.MaxAcceptancesPerSeller + 1);
         while (acceptancePerCustomerCount > 0)
         {
             await CreateAcceptanceAsync(basarId, seller);
@@ -270,21 +291,21 @@ public sealed class DataGeneratorService
     }
 
     private ProductEntity NextProduct(AcceptSessionEntity session)
-        => NextProduct(_db.Brands.GetRandomElement(), _db.ProductTypes.GetRandomElement(), session);
+        => NextProduct(Random.GetRandomElement(_db.Brands), Random.GetRandomElement(_db.ProductTypes), session);
 
-    private static string NextPhoneNumber()
+    private string NextPhoneNumber()
     {
         StringBuilder sb = new();
-        for (int counter = 0; counter < RandomNumberGenerator.GetInt32(8, 11); counter++)
+        for (int counter = 0; counter < Random.Next(8, 11); counter++)
         {
-            sb.Append(RandomNumberGenerator.GetInt32(0, 10));
+            sb.Append(Random.Next(0, 10));
         }
         return sb.ToString();
     }
 
     private int NextProductCount()
-         => Math.Max((int)RandomExtensions.GetGaussian(Config.MeanProductsPerSeller, Config.StdDevProductsPerSeller), 1);
+         => Math.Max((int)Random.GetGaussian(Config.MeanProductsPerSeller, Config.StdDevProductsPerSeller), 1);
 
     private decimal NextPrice()
-        => Math.Round((decimal)RandomExtensions.GetGaussian((double)Config.MeanPrice, (double)Config.StdDevPrice), 2);
+        => Math.Round((decimal)Random.GetGaussian((double)Config.MeanPrice, (double)Config.StdDevPrice), 2);
 }

@@ -17,6 +17,7 @@
             <h4>Drop Database and generate sample data, this can take very long!!</h4>
         </div>
         <div class="card-body">
+            @VeloHtml.NumberInputField(nameof(Model.Seed), Model.Seed, Localizer["Seed"])
             @VeloHtml.EmailInputField(nameof(Model.AdminUserEMail), Model.AdminUserEMail, Localizer["AdminUserEMail"])
             @VeloHtml.DateInputField(nameof(Model.FirstBasarDate), Model.FirstBasarDate, Localizer["FirstBasarDate"])
             @VeloHtml.NumberInputField(nameof(Model.BasarCount), Model.BasarCount, Localizer["BasarCount"])

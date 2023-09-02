@@ -8,13 +8,13 @@ using Microsoft.Extensions.Options;
 using System.Globalization;
 using System.IO;
 using System.Text;
-using Xan.Extensions;
 
 namespace BraunauMobil.VeloBasar.BusinessLogic;
 
 public partial class AdminService
     : IAdminService
 {
+    private readonly Random _random = new ();
     private readonly IProductLabelService _productLabelService;
     private readonly ITransactionDocumentService _transactionDocumentService;
     private readonly IDataGeneratorService _dataGeneratorService;
@@ -155,16 +155,16 @@ public partial class AdminService
         return product;
     }
 
-    private static TransactionEntity NextTransaction(TransactionType transactionType, BasarEntity basar, SellerEntity? seller, IReadOnlyList<ProductEntity> products)
+    private TransactionEntity NextTransaction(TransactionType transactionType, BasarEntity basar, SellerEntity? seller, IReadOnlyList<ProductEntity> products)
     {
         TransactionEntity transaction = new()
         {
             Basar = basar,
             BasarId= basar.Id,
-            Id = RandomExtensions.GetPositiveInt32(),
+            Id = _random.Next(),
             Type = transactionType,
             Notes = "Bla Bla Bla Anmerkung...",
-            Number = RandomExtensions.GetPositiveInt32(),
+            Number = _random.Next(),
             TimeStamp = new DateTime(2063, 04, 05, 15, 22, 11)
         };
         if (seller != null)
