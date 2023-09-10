@@ -33,7 +33,6 @@ public class SampleDatabaseFixture
             .AddScoped<BasarCrudService>()
             .AddSingleton(Clock.Object)
             .AddSingleton(StatusPushService.Object)
-            .AddSingleton<INumberService, MemoryNumberService>()
             .AddSingleton(Helpers.CreateActualLocalizer())
             .AddSingleton<ITransactionDocumentService, TransactionDocumentServiceMock>()
             .AddSingleton<IProductLabelService, ProductLabelServiceMock>()
