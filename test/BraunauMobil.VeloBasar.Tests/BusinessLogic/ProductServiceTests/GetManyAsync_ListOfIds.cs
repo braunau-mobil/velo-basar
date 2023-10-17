@@ -20,6 +20,21 @@ public class GetManyAsync_ListOfIds
 
     [Theory]
     [AutoData]
+    public async Task ProductExists_EmptyIdList_ReturnsEmptyList(ProductEntity[] products)
+    {
+        //  Arrange
+        Db.Products.AddRange(products);
+        await Db.SaveChangesAsync();
+
+        //  Act
+        IReadOnlyCollection<ProductEntity> result = await Sut.GetManyAsync(new List<int>());
+
+        //  Assert
+        result.Should().BeEmpty();
+    }
+
+    [Theory]
+    [AutoData]
     public async Task ProductExists_ReturnsListOfProducts(ProductEntity p1, ProductEntity p2, ProductEntity p3, int productIdThatDoesNotExist)
     {
         //  Arrange
