@@ -11,6 +11,12 @@ public class TestBase
         Sut = new ProductService(Db, ProductLabelService.Object, TransactionService.Object);
     }
 
+    public override void Dispose()
+    {
+        VerifyNoOtherCalls();
+        base.Dispose();
+    }
+
     public void VerifyNoOtherCalls()
     {
         ProductLabelService.VerifyNoOtherCalls();

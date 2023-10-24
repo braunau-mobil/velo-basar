@@ -34,5 +34,6 @@ public class GetLabelAsync
         fileData.ContentType.Should().Be(FileDataEntity.PdfContentType);
         fileData.Data.Should().BeEquivalentTo(labelData);
         fileData.FileName.Should().Be("Product-1_Label.pdf");
+        ProductLabelService.Verify(_ => _.CreateLabelAsync(product), Times.Once());
     }
 }
