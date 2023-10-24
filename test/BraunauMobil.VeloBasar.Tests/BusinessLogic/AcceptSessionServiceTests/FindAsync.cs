@@ -1,7 +1,7 @@
 ﻿namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.AcceptSessionServiceTests;
 
 public class FindAsync
-    : TestBase
+    : TestBase<EmptySqliteDbFixture>
 {
     [Theory]
     [AutoData]
@@ -14,6 +14,8 @@ public class FindAsync
 
         //  Assert
         foundSession.Should().BeNull();
+
+        VerifyNoOtherCalls();
     }
 
 
@@ -30,5 +32,7 @@ public class FindAsync
 
         // Assert
         foundSession.Should().Be(session);
+
+        VerifyNoOtherCalls();
     }
 }

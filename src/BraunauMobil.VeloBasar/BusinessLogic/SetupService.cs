@@ -37,6 +37,7 @@ public sealed class SetupService
             Email = config.AdminUserEMail,
             UserName = config.AdminUserEMail
         };
+        
         await _userManager.CreateAsync(adminUser, "root");
 
         if (config.GenerateCountries)

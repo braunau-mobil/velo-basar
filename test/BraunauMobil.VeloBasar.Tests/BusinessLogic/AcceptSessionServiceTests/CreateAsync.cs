@@ -1,7 +1,7 @@
 ﻿namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.AcceptSessionServiceTests;
 
 public class CreateAsync
-	: TestBase
+	: TestBase<EmptySqliteDbFixture>
 {
     [Theory]
     [AutoData]
@@ -14,6 +14,8 @@ public class CreateAsync
 
         //  Assert
         await act.Should().ThrowAsync<InvalidOperationException>();
+
+        VerifyNoOtherCalls();
     }
 
     [Theory]

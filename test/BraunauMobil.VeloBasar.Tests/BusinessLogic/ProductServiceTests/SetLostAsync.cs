@@ -1,7 +1,7 @@
 ﻿namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.ProductServiceTests;
 
 public class SetLostAsync
-    : TestBase
+    : TestBase<EmptySqliteDbFixture>
 {
     [Theory]
     [AutoData]
@@ -16,5 +16,6 @@ public class SetLostAsync
 
         //  Assert
         TransactionService.Verify(_ => _.SetLostAsync(product.Session.BasarId, notes, product.Id));
+        VerifyNoOtherCalls();
     }
 }

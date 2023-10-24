@@ -1,9 +1,9 @@
 ﻿using BraunauMobil.VeloBasar.BusinessLogic;
 using Xan.Extensions;
 
-namespace BraunauMobil.VeloBasar.Tests;
+namespace BraunauMobil.VeloBasar.DataGenerator.Mockups;
 
-public sealed class OnlyBlackColorProvider
+public sealed class ColorProviderMock
     : IColorProvider
 {
     public static readonly Color Black = Color.FromRgb(0, 0, 0);

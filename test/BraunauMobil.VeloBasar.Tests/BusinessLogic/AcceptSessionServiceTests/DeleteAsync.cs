@@ -1,7 +1,7 @@
 ﻿namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.AcceptSessionServiceTests;
 
 public class DeleteAsync
-    : TestBase
+    : TestBase<EmptySqliteDbFixture>
 {
     [Theory]
     [AutoData]
@@ -14,6 +14,8 @@ public class DeleteAsync
 
         //  Assert
         await act.Should().ThrowAsync<InvalidOperationException>();
+
+        VerifyNoOtherCalls();
     }
 
 
@@ -30,5 +32,7 @@ public class DeleteAsync
 
         // Assert
         Db.AcceptSessions.Should().BeEmpty();
+
+        VerifyNoOtherCalls();
     }
 }

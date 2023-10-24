@@ -1,7 +1,7 @@
 ﻿namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.AcceptSessionServiceTests;
 
 public class IsSessionRunning
-    : TestBase
+    : TestBase<EmptySqliteDbFixture>
 {
     [Fact]
     public async Task Null_ReturnsFalse()
@@ -13,6 +13,8 @@ public class IsSessionRunning
 
         //  Assert
         isRunning.Should().BeFalse();
+
+        VerifyNoOtherCalls();
     }
 
     [Theory]
@@ -26,6 +28,8 @@ public class IsSessionRunning
 
         //  Assert
         isRunning.Should().BeFalse();
+
+        VerifyNoOtherCalls();
     }
 
     [Theory]
@@ -42,6 +46,8 @@ public class IsSessionRunning
 
         //  Assert
         isRunning.Should().BeFalse();
+
+        VerifyNoOtherCalls();
     }
 
     [Theory]
@@ -58,5 +64,7 @@ public class IsSessionRunning
 
         //  Assert
         isRunning.Should().BeTrue();
+
+        VerifyNoOtherCalls();
     }
 }

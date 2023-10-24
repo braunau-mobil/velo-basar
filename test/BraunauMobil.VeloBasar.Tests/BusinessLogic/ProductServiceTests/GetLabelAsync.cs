@@ -1,7 +1,7 @@
 ﻿namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.ProductServiceTests;
 
 public class GetLabelAsync
-    : TestBase
+    : TestBase<EmptySqliteDbFixture>
 {
     [Theory]
     [AutoData]
@@ -14,6 +14,8 @@ public class GetLabelAsync
 
         //  Assert
         act.Should().ThrowAsync<InvalidOperationException>();
+
+        VerifyNoOtherCalls();
     }
 
     [Theory]
@@ -35,5 +37,6 @@ public class GetLabelAsync
         fileData.Data.Should().BeEquivalentTo(labelData);
         fileData.FileName.Should().Be("Product-1_Label.pdf");
         ProductLabelService.Verify(_ => _.CreateLabelAsync(product), Times.Once());
+        VerifyNoOtherCalls();
     }
 }

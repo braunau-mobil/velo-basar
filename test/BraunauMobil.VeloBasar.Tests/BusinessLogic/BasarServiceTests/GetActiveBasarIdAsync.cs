@@ -1,23 +1,23 @@
-﻿using BraunauMobil.VeloBasar.BusinessLogic;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Xan.AspNetCore.Models;
 
 namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.BasarServiceTests;
 
 public class GetActiveBasarIdAsync
-    : SqliteTestBase
+    : TestBase<EmptySqliteDbFixture>
 {
     [Fact]
     public async Task NoBasars_ReturnsNull()
     {
         //  Arrange
-        BasarService sut = new (Db, new OnlyBlackColorProvider());
 
         //  Act
-        int? id = await sut.GetActiveBasarIdAsync();
+        int? id = await Sut.GetActiveBasarIdAsync();
 
         //  Assert
         id.Should().BeNull();
+
+        VerifyNoOtherCalls();
     }
 
     [Fact]
@@ -30,13 +30,14 @@ public class GetActiveBasarIdAsync
             .CreateMany();
         Db.Basars.AddRange(basars);
         await Db.SaveChangesAsync();
-        BasarService sut = new(Db, new OnlyBlackColorProvider());
 
         //  Act
-        int? id = await sut.GetActiveBasarIdAsync();
+        int? id = await Sut.GetActiveBasarIdAsync();
 
         //  Assert
         id.Should().BeNull();
+
+        VerifyNoOtherCalls();
     }
 
     [Fact]
@@ -53,12 +54,13 @@ public class GetActiveBasarIdAsync
             .Create();
         Db.Basars.Add(enabledBasar);
         await Db.SaveChangesAsync();
-        BasarService sut = new(Db, new OnlyBlackColorProvider());
 
         //  Act
-        int? id = await sut.GetActiveBasarIdAsync();
+        int? id = await Sut.GetActiveBasarIdAsync();
 
         //  Assert
         id.Should().Be(enabledBasar.Id);
+
+        VerifyNoOtherCalls();
     }
 }

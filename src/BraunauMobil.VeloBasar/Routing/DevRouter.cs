@@ -13,8 +13,8 @@ public sealed class DevRouter
         : base(MvcHelper.ControllerName<DevController>(), linkGenerator)
     { }
 
-    public string ToDangerZone()
-        => GetUriByAction(nameof(DevController.DangerZone));
+    public string ToDeleteCookies()
+        => GetUriByAction(nameof(DevController.DeleteCookies));
 
     public string ToDropDatabase()
         => GetUriByAction(nameof(DevController.DropDatabase));

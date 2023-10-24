@@ -22,33 +22,23 @@ public sealed class DevController
         _router = router ?? throw new ArgumentNullException(nameof(router));
     }
 
-    public IActionResult DangerZone()
+    public IActionResult DeleteCookies()
     {
         if (!_appContext.DevToolsEnabled())
         {
             return Unauthorized();
         }
-        DataGeneratorConfiguration config = new()
-        {
-            GenerateBrands = true,
-            GenerateCountries = true,
-            GenerateProductTypes = true,
-            GenerateZipCodes = true
-        };
-        return View(config);
+        return View();
     }
 
     [HttpPost]
-    public async Task<IActionResult> DangerZone(DataGeneratorConfiguration configuration)
+    [ActionName(nameof(DeleteCookies))]
+    public IActionResult DeleteCookiesConfirmed()
     {
-        ArgumentNullException.ThrowIfNull(configuration);
-
         if (!_appContext.DevToolsEnabled())
         {
             return Unauthorized();
         }
-        _generatorService.Contextualize(configuration);
-        await _generatorService.GenerateAsync();
         foreach (string cookie in Request.Cookies.Keys)
         {
             Response.Cookies.Delete(cookie);

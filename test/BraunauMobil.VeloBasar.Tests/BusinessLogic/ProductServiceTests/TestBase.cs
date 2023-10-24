@@ -3,18 +3,13 @@ using BraunauMobil.VeloBasar.Pdf;
 
 namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.ProductServiceTests;
 
-public class TestBase
-    : SqliteTestBase
+public class TestBase<TDbFixture>
+    : DbTestBase<TDbFixture>
+    where TDbFixture : IDbFixture, new()
 {
     public TestBase()
     {
         Sut = new ProductService(Db, ProductLabelService.Object, TransactionService.Object);
-    }
-
-    public override void Dispose()
-    {
-        VerifyNoOtherCalls();
-        base.Dispose();
     }
 
     public void VerifyNoOtherCalls()

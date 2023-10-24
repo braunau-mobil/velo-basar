@@ -3,7 +3,7 @@
 namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.ProductServiceTests;
 
 public class UpdateAsync
-    : TestBase
+    : TestBase<EmptySqliteDbFixture>
 {
     [Theory]
     [AutoData]
@@ -20,5 +20,7 @@ public class UpdateAsync
         //  Assert
         ProductEntity updatedProduct = await Db.Products.FirstByIdAsync(product.Id);
         updatedProduct.Should().BeEquivalentTo(product);
+
+        VerifyNoOtherCalls();
     }
 }

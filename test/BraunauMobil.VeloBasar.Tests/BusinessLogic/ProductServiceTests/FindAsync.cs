@@ -1,7 +1,7 @@
 ﻿namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.ProductServiceTests;
 
 public class FindAsync
-    : TestBase
+    : TestBase<EmptySqliteDbFixture>
 {
     [Theory]
     [AutoData]
@@ -14,6 +14,8 @@ public class FindAsync
 
         //  Assert
         product.Should().BeNull();
+
+        VerifyNoOtherCalls();
     }
 
     [Theory]
@@ -29,5 +31,7 @@ public class FindAsync
 
         //  Assert
         foundProduct.Should().BeEquivalentTo(product);
+
+        VerifyNoOtherCalls();
     }
 }

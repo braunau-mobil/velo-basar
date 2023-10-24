@@ -2,7 +2,7 @@
 
 public interface IDevRouter
 {
-    string ToDangerZone();
+    string ToDeleteCookies();
 
     string ToDropDatabase();
 

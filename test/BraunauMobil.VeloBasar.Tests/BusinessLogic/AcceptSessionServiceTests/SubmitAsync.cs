@@ -1,7 +1,7 @@
 ﻿namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.AcceptSessionServiceTests;
 
 public class SubmitAsync
-    : TestBase
+    : TestBase<EmptySqliteDbFixture>
 {
     [Theory]
     [AutoData]
@@ -28,5 +28,6 @@ public class SubmitAsync
         session.EndTimeStamp.Should().Be(endTimeStamp);
         session.Seller.ValueState.Should().Be(ValueState.NotSettled);
         TransactionService.Verify(_ => _.AcceptAsync(session.BasarId, session.SellerId, Enumerable.Empty<int>()), Times.Once());
+        VerifyNoOtherCalls();
     }
 }

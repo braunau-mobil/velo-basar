@@ -4,7 +4,7 @@ using Xan.Extensions.Collections.Generic;
 namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.AcceptSessionServiceTests;
 
 public class GetAllAsync
-    : TestBase
+    : TestBase<EmptySqliteDbFixture>
 {
     private const int _pageSize = 5;
 
@@ -21,6 +21,8 @@ public class GetAllAsync
 
         //  Assert
         sessions.Should().BeEmpty();
+
+        VerifyNoOtherCalls();
     }
 
     [Theory]
@@ -43,6 +45,8 @@ public class GetAllAsync
         // Assert
         foundSessions.Should().HaveCount(_pageSize);
         foundSessions.TotalItemCount.Should().Be(_pageSize);
+
+        VerifyNoOtherCalls();
     }
 
     [Theory]
@@ -71,5 +75,7 @@ public class GetAllAsync
 
         // Assert
         foundSessions.TotalItemCount.Should().Be(uncompletedSessions.Count());
+
+        VerifyNoOtherCalls();
     }
 }

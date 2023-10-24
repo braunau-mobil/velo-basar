@@ -5,36 +5,36 @@ using Xan.Extensions;
 
 namespace BraunauMobil.VeloBasar.Tests;
 
-public class SqliteTestBase
-    : IDisposable
+public sealed class EmptySqliteDbFixture
+    : IDbFixture
 {
-    public SqliteTestBase()
+    private readonly SqliteConnection _connection;
+
+    public EmptySqliteDbFixture()
     {
-        Connection = new SqliteConnection("DataSource=:memory:");
-        Connection.Open();
+        _connection = new SqliteConnection("DataSource=:memory:");
+        _connection.Open();
 
         DbContextOptions<VeloDbContext> options = new DbContextOptionsBuilder<VeloDbContext>()
-            .UseSqlite(Connection)
+            .UseSqlite(_connection)
             .Options;
 
-        using (VeloDbContext context = new (Clock.Object, options))
+        using (VeloDbContext context = new(Clock.Object, options))
         {
             context.Database.EnsureCreated();
         }
 
-        Db = new (Clock.Object, options);
-    }
-    
-    protected SqliteConnection Connection { get; }
+        Db = new(Clock.Object, options);
+    }    
 
     public VeloDbContext Db { get; }
 
     public Mock<IClock> Clock { get; } = new();
 
-    public virtual void Dispose()
+    public void Dispose()
     {
         Db.Dispose();
-        Connection.Dispose();
+        _connection.Dispose();
         GC.SuppressFinalize(this);
     }
 }

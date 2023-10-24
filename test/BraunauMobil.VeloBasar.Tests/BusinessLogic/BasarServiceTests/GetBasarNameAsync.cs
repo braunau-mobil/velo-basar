@@ -1,41 +1,39 @@
 ﻿using BraunauMobil.VeloBasar.BusinessLogic;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.BasarServiceTests;
 
-[Collection(TestCollections.SampleDatabase)]
 public class GetBasarNameAsync
+    : TestBase<SampleSqliteDbFixture>
 {
-    private readonly SampleDatabaseFixture _db;
-
-    public GetBasarNameAsync(SampleDatabaseFixture db)
-    {
-        _db = db ?? throw new ArgumentNullException(nameof(db));
-    }
-
     [Fact]
     public async Task NonExistentBasar_Throws()
     {
         //  Arrange
-        IBasarService sut = _db.ServiceScope.ServiceProvider.GetRequiredService<IBasarService>();
+        Mock<IColorProvider> colorProvider = new ();
+        BasarService sut = new(Db, colorProvider.Object);
 
         //  Act
         Func<Task> act = async () => await sut.GetBasarNameAsync(666);
 
         //  Assert
         await act.Should().ThrowAsync<InvalidOperationException>();
+
+        VerifyNoOtherCalls();
     }
 
     [Fact]
     public async Task ExistingBasar_ShouldReturnName()
     {
         //  Arrange
-        IBasarService sut = _db.ServiceScope.ServiceProvider.GetRequiredService<IBasarService>();
+        Mock<IColorProvider> colorProvider = new();
+        BasarService sut = new(Db, colorProvider.Object);
 
         //  Act
         string name = await sut.GetBasarNameAsync(1);
 
         //  Assert
         name.Should().Be("1. Fahrradbasar");
+
+        VerifyNoOtherCalls();
     }
 }

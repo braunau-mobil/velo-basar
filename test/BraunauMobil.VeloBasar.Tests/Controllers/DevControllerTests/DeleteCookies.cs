@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BraunauMobil.VeloBasar.Tests.Controllers.DevControllerTests;
 
-public class DangerZone
+public class DeleteCookies
     : TestBase
 { 
     [Fact]
@@ -14,7 +14,7 @@ public class DangerZone
             .Returns(false);
 
         //  Act
-        IActionResult result = Sut.DangerZone();
+        IActionResult result = Sut.DeleteCookies();
 
         //  Assert
         UnauthorizedResult unauthorized = result.Should().BeOfType<UnauthorizedResult>().Subject;
@@ -31,31 +31,25 @@ public class DangerZone
             .Returns(true);
 
         //  Act
-        IActionResult result = Sut.DangerZone();
+        IActionResult result = Sut.DeleteCookies();
 
         //  Assert
         ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
         view.ViewData.ModelState.IsValid.Should().BeTrue();
-        DataGeneratorConfiguration model = view.Model.Should().BeOfType<DataGeneratorConfiguration>().Subject;
-        model.GenerateBrands.Should().Be(true);
-        model.GenerateCountries.Should().Be(true);
-        model.GenerateProductTypes.Should().Be(true);
-        model.GenerateZipCodes.Should().Be(true);
 
         AppContext.Verify(_ => _.DevToolsEnabled(), Times.Once());
         VerifyNoOtherCalls();
     }
 
-    [Theory]
-    [AutoData]
-    public async Task WithConfig_DevToolsNotEnabled_ReturnsUnauthorized(DataGeneratorConfiguration configuration)
+    [Fact]
+    public void WithConfig_DevToolsNotEnabled_ReturnsUnauthorized()
     {
         //  Arrange
         AppContext.Setup(_ => _.DevToolsEnabled())
             .Returns(false);
 
         //  Act
-        IActionResult result = await Sut.DangerZone(configuration);
+        IActionResult result = Sut.DeleteCookiesConfirmed();
 
         //  Assert
         UnauthorizedResult unauthorized = result.Should().BeOfType<UnauthorizedResult>().Subject;
@@ -66,7 +60,7 @@ public class DangerZone
 
     [Theory]
     [AutoData]
-    public async Task WithConfig_DevToolsEnabled_ContextualizesServiceAndCallsGenerateAndClearsCookiesAndReturnsRedirectToHome(DataGeneratorConfiguration configuration, string url)
+    public void WithConfig_DevToolsEnabled_ContextualizesServiceAndCallsGenerateAndClearsCookiesAndReturnsRedirectToHome(string url)
     {
         //  Arrange
         AppContext.Setup(_ => _.DevToolsEnabled())
@@ -79,15 +73,13 @@ public class DangerZone
         };
 
         //  Act
-        IActionResult result = await Sut.DangerZone(configuration);
+        IActionResult result = Sut.DeleteCookiesConfirmed();
 
         //  Assert
         RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
         redirect.Url.Should().Be(url);
 
         AppContext.Verify(_ => _.DevToolsEnabled(), Times.Once());
-        DataGeneratorService.Verify(_ => _.Contextualize(configuration), Times.Once());
-        DataGeneratorService.Verify(_ => _.GenerateAsync(), Times.Once());
         Router.Verify(_ => _.ToHome(), Times.Once());
         VerifyNoOtherCalls();
     }

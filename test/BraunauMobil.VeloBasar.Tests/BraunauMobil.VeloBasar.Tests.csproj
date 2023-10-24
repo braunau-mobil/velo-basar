@@ -101,4 +101,10 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\BraunauMobil.VeloBasar\BraunauMobil.VeloBasar.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Update="VeloBasarTest.db">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>

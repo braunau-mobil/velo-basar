@@ -1,7 +1,7 @@
 ﻿namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.ProductServiceTests;
 
 public class LockAsync
-    : TestBase
+    : TestBase<EmptySqliteDbFixture>
 {
     [Theory]
     [AutoData]
@@ -16,5 +16,6 @@ public class LockAsync
 
         //  Assert
         TransactionService.Verify(_ => _.LockAsync(product.Session.BasarId, notes, product.Id));
+        VerifyNoOtherCalls();
     }
 }
