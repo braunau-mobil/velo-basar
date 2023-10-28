@@ -1,5 +1,6 @@
 ﻿using BraunauMobil.VeloBasar.Crud;
 using BraunauMobil.VeloBasar.Data;
+using BraunauMobil.VeloBasar.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.Text;
@@ -216,11 +217,12 @@ public sealed class DataGeneratorService
 
     private async Task SettleSellers(int basarId)
     {
-        IReadOnlyList<int?> sellerIds = await _db.Transactions
+        IList<int?> sellerIds = await _db.Transactions
             .Where(transaction => transaction.BasarId == basarId && transaction.SellerId.HasValue)
             .Select(Transaction => Transaction.SellerId)
             .Distinct()
             .ToArrayAsync();
+        Random.Shuffle(sellerIds);
 
         foreach (int? sellerId in sellerIds)
         {
@@ -241,43 +243,39 @@ public sealed class DataGeneratorService
 
     private async Task SimulateBasarAsync(int basarId)
     {
-        await SimulateSalesAsync(basarId);
-        await SimulateLossesAsync(basarId);
-        await SimulateLocksAsync(basarId);
+        await SimulateSalesAsync(basarId, 45, 55);
+        await SimulateLossesAsync(basarId, 5, 10);
+        await SimulateLocksAsync(basarId, 5, 10);
         await SimulateSettlementsAsync(basarId);
     }
 
-    private async Task SimulateSalesAsync(int basarId)
+    private async Task SimulateSalesAsync(int basarId, int minPercentage, int maxPercentage)
     {
-        IReadOnlyList<int> productIds = await _db.Products
-            .Include(product => product.Session)
-            .Where(product => product.Session.BasarId == basarId && product.StorageState == StorageState.Available)
-            .Select(product => product.Id)
-            .ToArrayAsync();
-        Queue<int> productIdsForSale = new(productIds.Take(Random.Next(productIds.Count / 3, productIds.Count + 1)));
+        IList<int> availableProductIds = await GetAvailableProductIdsAsync(basarId);
+        Random.Shuffle(availableProductIds);
+
+        Queue<int> productIdsForSale = new(Random.TakePercentage(availableProductIds, minPercentage, maxPercentage));
         while (productIdsForSale.Count > 0)
         {
-            int productCountForSale = Random.Next(1, 5);
+            int productCount = NextSaleProductCount();
             List<int> productIdsForSaleTransaction = new();
-            while (productCountForSale > 0)
+            while (productCount > 0 && productIdsForSale.Count > 0)
             {
-                int productId = Random.GetRandomElement(productIds);
-                productIdsForSaleTransaction.Add(productIdsForSale.Dequeue());
-                productCountForSale--;
+                int productId = productIdsForSale.Dequeue();
+                productIdsForSaleTransaction.Add(productId);
+                productCount--;
             }
 
             await _transactionService.CheckoutAsync(basarId, productIdsForSaleTransaction);
         }
     }
 
-    private async Task SimulateLossesAsync(int basarId)
+    private async Task SimulateLossesAsync(int basarId, int minPercentage, int maxPercentage)
     {
-        IReadOnlyList<int> availableProductIds = await _db.Products
-            .Include(product => product.Session)
-            .Where(product => product.Session.BasarId == basarId && product.StorageState == StorageState.Available)
-            .Select(product => product.Id)
-            .ToArrayAsync();
-        Queue<int> productIdsToLoose = new(availableProductIds.Take(Random.Next(1, availableProductIds.Count / 10)));
+        IList<int> availableProductIds = await GetAvailableProductIdsAsync(basarId);
+        Random.Shuffle(availableProductIds);
+
+        Queue<int> productIdsToLoose = new(Random.TakePercentage(availableProductIds, minPercentage, maxPercentage));
         while (productIdsToLoose.Count > 0)
         {
             int productId = productIdsToLoose.Dequeue();
@@ -285,14 +283,12 @@ public sealed class DataGeneratorService
         }
     }
 
-    private async Task SimulateLocksAsync(int basarId)
+    private async Task SimulateLocksAsync(int basarId, int minPercentage, int maxPercentage)
     {
-        IReadOnlyList<int> availableProductIds = await _db.Products
-            .Include(product => product.Session)
-            .Where(product => product.Session.BasarId == basarId && product.StorageState == StorageState.Available)
-            .Select(product => product.Id)
-            .ToArrayAsync();
-        Queue<int> productIdsToLock = new(availableProductIds.Take(Random.Next(1, availableProductIds.Count / 10)));
+        IList<int> availableProductIds = await GetAvailableProductIdsAsync(basarId);
+        Random.Shuffle(availableProductIds);
+
+        Queue<int> productIdsToLock = new(Random.TakePercentage(availableProductIds, minPercentage, maxPercentage));
         while (productIdsToLock.Count > 0)
         {
             int productId = productIdsToLock.Dequeue();
@@ -302,12 +298,13 @@ public sealed class DataGeneratorService
 
     private async Task SimulateSettlementsAsync(int basarId)
     {
-        IReadOnlyList<int> sellerIds = await _db.Sellers
+        IList<int> sellerIds = await _db.Sellers
             .Where(seller => seller.ValueState == ValueState.NotSettled)
             .Select(seller => seller.Id)
             .ToArrayAsync();
+        Random.Shuffle(sellerIds);
 
-        Queue<int> sellerIdsToSettle = new(sellerIds.Take(Random.Next(1, sellerIds.Count / 2)));
+        Queue<int> sellerIdsToSettle = new(Random.TakePercentage(sellerIds, 50, 60));
         while (sellerIdsToSettle.Count > 0)
         {
             int sellerId = sellerIdsToSettle.Dequeue();
@@ -361,4 +358,35 @@ public sealed class DataGeneratorService
 
     private decimal NextPrice()
         => Math.Round((decimal)Random.GetGaussian((double)Config.MeanPrice, (double)Config.StdDevPrice), 2);
+
+    private int NextSaleProductCount()
+    {
+        int number = Random.Next(0, 100);
+        if (number.IsInRange(98, 99))
+        {
+            return 5;
+        }
+        if (number.IsInRange(95, 97))
+        {
+            return 4;
+        }
+        if (number.IsInRange(90, 94))
+        {
+            return 3;
+        }
+        if (number.IsInRange(80, 89))
+        {
+            return 2;
+        }
+        return 1;
+    }
+
+    private async Task<IList<int>> GetAvailableProductIdsAsync(int basarId)
+    {
+        return await _db.Products
+            .Include(product => product.Session)
+            .Where(product => product.Session.BasarId == basarId && product.StorageState == StorageState.Available)
+            .Select(product => product.Id)
+            .ToArrayAsync();
+    }
 }
