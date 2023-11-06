@@ -157,7 +157,7 @@ public sealed class DataGeneratorService
             Brand = brand,
             Color = Random.GetRandomElement(Names.Colors),
             Description = $"Beschreibung für Produkt",
-            FrameNumber = Guid.NewGuid().ToString(),
+            FrameNumber = $"Rahmennummer #{Random.Next()}",
             Price = NextPrice(),
             Session = session,
             SessionId = session.Id,
