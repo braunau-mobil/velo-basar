@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.Text;
 using Xan.Extensions;
+using Xan.AspNetCore.EntityFrameworkCore;
 
 namespace BraunauMobil.VeloBasar.BusinessLogic;
 
@@ -21,6 +22,7 @@ public sealed class DataGeneratorService
     private readonly IClock _clock;
     private DataGeneratorConfiguration? _config;
     private Random? _random;
+    private DateTime _timeStamp;
 
     public DataGeneratorService(VeloDbContext db, ISetupService setupService, BasarCrudService basarCrudService, ISellerService sellerService, IAcceptSessionService acceptSessionService, IAcceptProductService acceptProductService, ITransactionService transactionService, IClock clock)
     {
@@ -243,9 +245,16 @@ public sealed class DataGeneratorService
 
     private async Task SimulateBasarAsync(int basarId)
     {
+        DateTime timeStampBeforeSales = _timeStamp;
         await SimulateSalesAsync(basarId, 45, 55);
+        DateTime timeStampAfterSales = _timeStamp;
+
+        _timeStamp = timeStampBeforeSales;
         await SimulateLossesAsync(basarId, 5, 10);
+        _timeStamp = timeStampBeforeSales;
         await SimulateLocksAsync(basarId, 5, 10);
+
+        _timeStamp = timeStampAfterSales;
         await SimulateSettlementsAsync(basarId);
     }
 
@@ -266,7 +275,8 @@ public sealed class DataGeneratorService
                 productCount--;
             }
 
-            await _transactionService.CheckoutAsync(basarId, productIdsForSaleTransaction);
+            int transactionId = await _transactionService.CheckoutAsync(basarId, productIdsForSaleTransaction);
+            await SetTransactionTimestamp(transactionId);
         }
     }
 
@@ -279,7 +289,8 @@ public sealed class DataGeneratorService
         while (productIdsToLoose.Count > 0)
         {
             int productId = productIdsToLoose.Dequeue();
-            await _transactionService.SetLostAsync(basarId, "Product could not be found anymore", productId);
+            int transactionId = await _transactionService.SetLostAsync(basarId, "Product could not be found anymore", productId);
+            await SetTransactionTimestamp(transactionId);
         }
     }
 
@@ -292,7 +303,8 @@ public sealed class DataGeneratorService
         while (productIdsToLock.Count > 0)
         {
             int productId = productIdsToLock.Dequeue();
-            await _transactionService.LockAsync(basarId, "Product is damaged", productId);
+            int transactionId = await _transactionService.LockAsync(basarId, "Product is damaged", productId);
+            await SetTransactionTimestamp(transactionId);
         }
     }
 
@@ -337,7 +349,8 @@ public sealed class DataGeneratorService
             await _acceptProductService.CreateAsync(product);
         }
 
-        await _acceptSessionService.SubmitAsync(session.Id);
+        int transactionId = await _acceptSessionService.SubmitAsync(session.Id);
+        await SetTransactionTimestamp(transactionId);
     }
 
     private ProductEntity NextProduct(AcceptSessionEntity session)
@@ -388,5 +401,14 @@ public sealed class DataGeneratorService
             .Where(product => product.Session.BasarId == basarId && product.StorageState == StorageState.Available)
             .Select(product => product.Id)
             .ToArrayAsync();
+    }
+
+    private async Task SetTransactionTimestamp(int transactionId)
+    {
+        TransactionEntity tx = await _db.Transactions.FirstByIdAsync(transactionId);
+        tx.TimeStamp = _timeStamp;
+        await _db.SaveChangesAsync();
+
+        _timeStamp = _timeStamp.AddMinutes(Random.Next(3, 8));
     }
 }

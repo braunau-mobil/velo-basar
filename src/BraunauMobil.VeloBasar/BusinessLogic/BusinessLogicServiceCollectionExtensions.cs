@@ -15,6 +15,7 @@ public static class BusinessLogicServiceCollectionExtensions
             .AddScoped<IAcceptSessionService, AcceptSessionService>()
             .AddScoped<IAdminService, AdminService>()
             .AddScoped<IBasarService, BasarService>()
+            .AddScoped<IBasarStatsService, BasarStatsService>()
             .AddScoped<IColorProvider, ColorProvider>()
             .AddScoped<IDataGeneratorService, DataGeneratorService>()
             .AddScoped<INumberService, NumberService>()

@@ -29,7 +29,7 @@
         <div class="card m-2">
             <div class="card-header">@Localizer[VeloTexts.AcceptedProductsWithCount, Model.AcceptedProductsCount]</div>
             <div class="card-body">
-                <canvas class="pie-chart" id="AcceptedProductsCountChartArea"></canvas>
+                <canvas class="pie-chart" id="AcceptedProductTypesByCountChartArea"></canvas>
             </div>
         </div>
     </div>
@@ -37,7 +37,7 @@
         <div class="card m-2">
             <div class="card-header">@Localizer[VeloTexts.SoldProductsCount, Model.SoldProductsCount]</div>
             <div class="card-body">
-                <canvas class="pie-chart" id="SoldProductsCountChartArea"></canvas>
+                <canvas class="pie-chart" id="SoldProductTypesByCountChartArea"></canvas>
             </div>
         </div>
     </div>
@@ -48,7 +48,7 @@
         <div class="card m-2">
             <div class="card-header">@Localizer[VeloTexts.AcceptedProductsAmount, Model.AcceptedProductsAmount]</div>
             <div class="card-body">
-                <canvas class="pie-chart" id="AcceptedProductsValueChartArea"></canvas>
+                <canvas class="pie-chart" id="AcceptedProductTypesByAmountChartArea"></canvas>
             </div>
         </div>
     </div>
@@ -56,7 +56,7 @@
         <div class="card m-2">
             <div class="card-header">@Localizer[VeloTexts.SoldProductsAmount, Model.SoldProductsAmount]</div>
             <div class="card-body">
-                <canvas class="pie-chart" id="SoldProductsValueChartArea"></canvas>
+                <canvas class="pie-chart" id="SoldProductTypesByAmountChartArea"></canvas>
             </div>
         </div>
     </div>
@@ -81,10 +81,10 @@
         }
 
         window.onload = function () {
-            renderData('AcceptedProductsCountChartArea', @Html.Raw(JsonUtils.GetDonutConfig(Model.AcceptedProductsByCount)));
-            renderData('AcceptedProductsValueChartArea', @Html.Raw(JsonUtils.GetDonutConfig(Model.AcceptedProductsByAmount)));
-            renderData('SoldProductsCountChartArea', @Html.Raw(JsonUtils.GetDonutConfig(Model.SoldProductsByCount)));
-            renderData('SoldProductsValueChartArea', @Html.Raw(JsonUtils.GetDonutConfig(Model.SoldProductsByAmount)));
+            renderData('AcceptedProductTypesByCountChartArea', @Html.Raw(JsonUtils.GetDonutConfig(Model.AcceptedProductTypesByCount)));
+            renderData('AcceptedProductTypesByAmountChartArea', @Html.Raw(JsonUtils.GetDonutConfig(Model.AcceptedProductTypesByAmount)));
+            renderData('SoldProductTypesByCountChartArea', @Html.Raw(JsonUtils.GetDonutConfig(Model.SoldProductTypesByCount)));
+            renderData('SoldProductTypesByAmountChartArea', @Html.Raw(JsonUtils.GetDonutConfig(Model.SoldProductTypesByAmount)));
             renderData('PriceDistributionChartArea', @Html.Raw(JsonUtils.GetLineConfig(Model.PriceDistribution, Localizer[VeloTexts.PriceDistribution])));
             renderData('SaleDistributionChartArea', @Html.Raw(JsonUtils.GetLineConfig(Model.SaleDistribution, Localizer[VeloTexts.SaleDistribution])));
         };

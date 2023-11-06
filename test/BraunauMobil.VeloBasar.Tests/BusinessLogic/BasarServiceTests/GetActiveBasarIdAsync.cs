@@ -4,7 +4,7 @@ using Xan.AspNetCore.Models;
 namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.BasarServiceTests;
 
 public class GetActiveBasarIdAsync
-    : TestBase<EmptySqliteDbFixture>
+    : TestBase
 {
     [Fact]
     public async Task NoBasars_ReturnsNull()
@@ -24,9 +24,9 @@ public class GetActiveBasarIdAsync
     public async Task NoEnabledBasar_ReturnsNull()
     {
         //  Arrange
-        Fixture fixture = new ();
+        Fixture fixture = new();
         IEnumerable<BasarEntity> basars = fixture.Build<BasarEntity>()
-            .With(basar => basar.State, ObjectState.Disabled)
+            .With(_ => _.State, ObjectState.Disabled)
             .CreateMany();
         Db.Basars.AddRange(basars);
         await Db.SaveChangesAsync();
@@ -46,11 +46,11 @@ public class GetActiveBasarIdAsync
         //  Arrange
         Fixture fixture = new();
         IEnumerable<BasarEntity> basars = fixture.Build<BasarEntity>()
-            .With(basar => basar.State, ObjectState.Disabled)
+            .With(_ => _.State, ObjectState.Disabled)
             .CreateMany();
         Db.Basars.AddRange(basars);
         BasarEntity enabledBasar = fixture.Build<BasarEntity>()
-            .With(basar => basar.State, ObjectState.Enabled)
+            .With(_ => _.State, ObjectState.Enabled)
             .Create();
         Db.Basars.Add(enabledBasar);
         await Db.SaveChangesAsync();

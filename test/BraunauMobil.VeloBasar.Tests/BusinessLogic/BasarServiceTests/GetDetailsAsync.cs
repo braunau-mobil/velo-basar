@@ -1,111 +1,84 @@
-﻿using System.Globalization;
-using Xan.Extensions;
-
-namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.BasarServiceTests;
+﻿namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.BasarServiceTests;
 
 public sealed class GetDetailsAsync
-    : TestBase<SampleSqliteDbFixture>
-{
-    private readonly CultureInfo _initialCultureInfo = CultureInfo.CurrentCulture;
-    
-    public GetDetailsAsync()
-    {
-        CultureInfo.CurrentCulture = new CultureInfo("de-AT");
-    }
-
-    public override void Dispose()
-    {
-        base.Dispose();
-        CultureInfo.CurrentCulture = _initialCultureInfo;
-    }
-
+    : TestBase
+{    
     [Theory]
     [AutoData]
-    public async Task ValuesShouldBeCorrect(Color color)
+    public async Task ValuesShouldBeCorrect(BasarDetailsModel details, ProductEntity[] acceptedProducts, Tuple<TimeOnly, decimal>[] transactionsAndTotals, int settledSellerCount)
     {
         //  Arrange
-        ColorProvider.Setup(_ => _.Primary)
-            .Returns(color);
-        ColorProvider.SetupGet(_ => _[It.IsAny<string>()])
-            .Returns(color);
+        Db.Basars.Add(details.Entity);
+        await Db.SaveChangesAsync();
+        int basarId = details.Entity.Id;
+        
+        StatsService.Setup(_ => _.GetAcceptanceCountAsync(basarId))
+            .ReturnsAsync(details.AcceptanceCount);
+        StatsService.Setup(_ => _.GetSaleCountAsync(basarId))
+            .ReturnsAsync(details.SaleCount);
+        StatsService.Setup(_ => _.GetSellerCountAsync(basarId))
+            .ReturnsAsync(details.SellerCount);
+        StatsService.Setup(_ => _.GetAcceptedProductsAsync(basarId))
+            .ReturnsAsync(acceptedProducts);
+        StatsService.Setup(_ => _.GetSoldProductTimestampsAndPricesAsync(basarId))
+            .ReturnsAsync(transactionsAndTotals);
+        StatsService.Setup(_ => _.GetAcceptedProductsAmount(acceptedProducts))
+            .Returns(details.AcceptedProductsAmount);
+        StatsService.Setup(_ => _.GetAcceptedProductsCount(acceptedProducts))
+            .Returns(details.AcceptedProductsCount);
+        StatsService.Setup(_ => _.GetAcceptedProductTypesWithAmount(acceptedProducts))
+            .Returns(details.AcceptedProductTypesByAmount);
+        StatsService.Setup(_ => _.GetAcceptedProductTypesWithCount(acceptedProducts))
+            .Returns(details.AcceptedProductTypesByCount);
+        StatsService.Setup(_ => _.GetLostProductsCount(acceptedProducts))
+            .Returns(details.LostProductsCount);
+        StatsService.Setup(_ => _.GetLockedProductsCount(acceptedProducts))
+            .Returns(details.LockedProductsCount);
+        StatsService.Setup(_ => _.GetPriceDistribution(acceptedProducts))
+            .Returns(details.PriceDistribution);
+        StatsService.Setup(_ => _.GetSaleDistribution(transactionsAndTotals))
+            .Returns(details.SaleDistribution);
+        StatsService.Setup(_ => _.GetSettledSellerCountAsync(basarId))
+            .ReturnsAsync(settledSellerCount);
+        StatsService.Setup(_ => _.GetSettlementPercentage(details.SellerCount, settledSellerCount))
+            .Returns(details.SettlementPercentage);
+        StatsService.Setup(_ => _.GetSoldProductsAmount(acceptedProducts))
+            .Returns(details.SoldProductsAmount);
+        StatsService.Setup(_ => _.GetSoldProductsCount(acceptedProducts))
+            .Returns(details.SoldProductsCount);
+        StatsService.Setup(_ => _.GetSoldProductTypesWithAmount(acceptedProducts))
+            .Returns(details.SoldProductTypesByAmount);
+        StatsService.Setup(_ => _.GetSoldProductTypesWithCount(acceptedProducts))
+            .Returns(details.SoldProductTypesByCount);
 
         //  Act
-        BasarDetailsModel details = await Sut.GetDetailsAsync(1);
+        BasarDetailsModel result = await Sut.GetDetailsAsync(basarId);
 
         //  Assert
-        details.AcceptanceCount.Should().Be(52);
-        details.AcceptedProductsAmount.Should().Be(12995.81M);
-        details.AcceptedProductsByAmount.Should().BeEquivalentTo(new[]
-        {
-            new ChartDataPoint(1598.13M, "City-Bike Herren", color),
-            new ChartDataPoint(1860.51M, "Einrad", color),
-            new ChartDataPoint(1937.27M, "Stahlross", color),
-            new ChartDataPoint(817.89M, "Roller", color),
-            new ChartDataPoint(2237.50M, "Rennrad", color),
-            new ChartDataPoint(990.78M, "Kinderrad", color),
-            new ChartDataPoint(1566.57M, "E-Bike", color),
-            new ChartDataPoint(1987.16M, "City-Bike Frauen", color)
-        });
-        details.AcceptedProductsByCount.Should().BeEquivalentTo(new[]
-        {
-            new ChartDataPoint(17, "City-Bike Herren", color),
-            new ChartDataPoint(19, "Einrad", color),
-            new ChartDataPoint(19, "Stahlross", color),
-            new ChartDataPoint(8, "Roller", color),
-            new ChartDataPoint(22, "Rennrad", color),
-            new ChartDataPoint(10, "Kinderrad", color),
-            new ChartDataPoint(16, "E-Bike", color),
-            new ChartDataPoint(21, "City-Bike Frauen", color)
-        });
-        details.AcceptedProductsCount.Should().Be(132);
-        details.LockedProductsCount.Should().Be(4);
-        details.LostProductsCount.Should().Be(6);
-        details.PriceDistribution.Should().BeEquivalentTo(new[]
-        {
-            new ChartDataPoint(1, "€ 50,00", color),
-            new ChartDataPoint(2, "€ 60,00", color),
-            new ChartDataPoint(3, "€ 70,00", color),
-            new ChartDataPoint(15, "€ 80,00", color),
-            new ChartDataPoint(16, "€ 90,00", color),
-            new ChartDataPoint(26, "€ 100,00", color),
-            new ChartDataPoint(37, "€ 110,00", color),
-            new ChartDataPoint(18, "€ 120,00", color),
-            new ChartDataPoint(11, "€ 130,00", color)
-        });
-        details.SaleCount.Should().Be(41);
-        details.SaleDistribution.Should().BeEquivalentTo(new[]
-        {
-            new ChartDataPoint(5730.48M, "11:22", color)
-        });
-        details.SellerCount.Should().Be(28);
-        details.SettlementPercentage.Should().Be(50);
-        details.SoldProductsAmount.Should().Be(5730.48M);
-        details.SoldProductsByAmount.Should().BeEquivalentTo(new[]
-        {
-            new ChartDataPoint(836.27M, "City-Bike Herren", color),
-            new ChartDataPoint(1051.40M, "Einrad", color),
-            new ChartDataPoint(1209.03M, "Stahlross", color),
-            new ChartDataPoint(619.86M, "Roller", color),
-            new ChartDataPoint(495.18M, "Rennrad", color),
-            new ChartDataPoint(270.08M, "Kinderrad", color),
-            new ChartDataPoint(650.97M, "E-Bike", color),
-            new ChartDataPoint(597.69M, "City-Bike Frauen", color)
-        });
-        details.SoldProductsByCount.Should().BeEquivalentTo(new[]
-        {
-            new ChartDataPoint(9, "City-Bike Herren", color),
-            new ChartDataPoint(11, "Einrad", color),
-            new ChartDataPoint(12, "Stahlross", color),
-            new ChartDataPoint(3, "Kinderrad", color),
-            new ChartDataPoint(5, "Rennrad", color),
-            new ChartDataPoint(7, "E-Bike", color),
-            new ChartDataPoint(6, "City-Bike Frauen", color),
-            new ChartDataPoint(6, "Roller", color),
-        });
-        details.SoldProductsCount.Should().Be(59);
+        result.Should().BeEquivalentTo(details);
 
-        ColorProvider.Verify(_ => _.Primary, Times.AtLeastOnce());
-        ColorProvider.VerifyGet(_ => _[It.IsAny<string>()], Times.AtLeastOnce());
+        // add verifications for all mocks
+        result.Entity.Should().BeEquivalentTo(details.Entity);
+        StatsService.Verify(_ => _.GetAcceptanceCountAsync(basarId), Times.Once);
+        StatsService.Verify(_ => _.GetSaleCountAsync(basarId), Times.Once);
+        StatsService.Verify(_ => _.GetSellerCountAsync(basarId), Times.Once);
+        StatsService.Verify(_ => _.GetAcceptedProductsAsync(basarId), Times.Once);
+        StatsService.Verify(_ => _.GetSoldProductTimestampsAndPricesAsync(basarId), Times.Once);
+        StatsService.Verify(_ => _.GetAcceptedProductsAmount(acceptedProducts), Times.Once);
+        StatsService.Verify(_ => _.GetAcceptedProductsCount(acceptedProducts), Times.Once);
+        StatsService.Verify(_ => _.GetAcceptedProductTypesWithAmount(acceptedProducts), Times.Once);
+        StatsService.Verify(_ => _.GetAcceptedProductTypesWithCount(acceptedProducts), Times.Once);
+        StatsService.Verify(_ => _.GetLostProductsCount(acceptedProducts), Times.Once);
+        StatsService.Verify(_ => _.GetLockedProductsCount(acceptedProducts), Times.Once);
+        StatsService.Verify(_ => _.GetPriceDistribution(acceptedProducts), Times.Once);
+        StatsService.Verify(_ => _.GetSaleDistribution(transactionsAndTotals), Times.Once);
+        StatsService.Verify(_ => _.GetSettledSellerCountAsync(basarId), Times.Once);
+        StatsService.Verify(_ => _.GetSettlementPercentage(details.SellerCount, settledSellerCount), Times.Once);
+        StatsService.Verify(_ => _.GetSoldProductsAmount(acceptedProducts), Times.Once);
+        StatsService.Verify(_ => _.GetSoldProductsCount(acceptedProducts), Times.Once);
+        StatsService.Verify(_ => _.GetSoldProductTypesWithAmount(acceptedProducts), Times.Once);
+        StatsService.Verify(_ => _.GetSoldProductTypesWithCount(acceptedProducts), Times.Once);
+
         VerifyNoOtherCalls();
     }
 }

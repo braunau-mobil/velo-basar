@@ -14,6 +14,15 @@ namespace BraunauMobil.VeloBasar.Tests
                 .With(_ => _.ContentType, "application/pdf");
         }
 
+        public static IPostprocessComposer<ProductEntity> BuildProductEntity(this Fixture fixture)
+        {
+            ArgumentNullException.ThrowIfNull(fixture);
+
+            return fixture.Build<ProductEntity>()
+                .Without(_ => _.Session)
+                .Without(_ => _.SessionId);
+        }
+
         public static IPostprocessComposer<ProductDetailsModel> BuildProductDetailsModel(this Fixture fixture)
         {
             ArgumentNullException.ThrowIfNull(fixture);
@@ -28,7 +37,8 @@ namespace BraunauMobil.VeloBasar.Tests
             ArgumentNullException.ThrowIfNull(transaction);
 
             return fixture.Build<ProductToTransactionEntity>()
-                .With (_ => _.Transaction, transaction);
+                .With(_ => _.Transaction, transaction)
+                .With(_ => _.TransactionId, transaction.Id);
         }
 
         public static IPostprocessComposer<SelectSaleModel> BuildSelectSaleModel(this Fixture fixture)
@@ -54,13 +64,7 @@ namespace BraunauMobil.VeloBasar.Tests
 
             return fixture.Build<TransactionEntity>()
                 .Without(_ => _.ParentTransaction)
-                .Do(transaction =>
-                {
-                    foreach (ProductToTransactionEntity productToTransactionEntity in fixture.BuildProductToTransactionEntity(transaction).CreateMany())
-                    {
-                        transaction.Products.Add(productToTransactionEntity);
-                    }
-                });
+                .Without(_ => _.ParentTransactionId);
         }
 
         public static IPaginatedList<T> CreatePaginatedList<T>(this Fixture fixture)
@@ -78,6 +82,44 @@ namespace BraunauMobil.VeloBasar.Tests
 
             return new PaginatedList<T>(items, fixture.Create<int>(), fixture.Create<int>(), fixture.Create<int>(), fixture.Create<int>());
         }
+
+        public static void ExcludeEnumValues<TEnum>(this IFixture fixture, params TEnum[] valuesToExclude)
+        where TEnum : struct, Enum
+        {
+            ArgumentNullException.ThrowIfNull(fixture);
+            ArgumentNullException.ThrowIfNull(valuesToExclude);
+
+            fixture.Customize<TEnum>(c => new ExcludingEnumBuilder<TEnum>(valuesToExclude));
+        }
+
+        public static IPostprocessComposer<TransactionEntity> WithBasar(this IPostprocessComposer<TransactionEntity> composer, BasarEntity basar)
+        {
+            ArgumentNullException.ThrowIfNull(composer);
+            ArgumentNullException.ThrowIfNull(basar);
+
+            return composer
+                .With(_ => _.Basar, basar)
+                .With(_ => _.BasarId, basar.Id);
+        }
+
+        // public static IPostprocessComposer<TransactionEntity> WithProducts(this Fixture fixture, BasarEntity basar)
+        // {
+        //     ArgumentNullException.ThrowIfNull(fixture);
+
+        //     return fixture.Build<TransactionEntity>()
+        //         .Without(_ => _.ParentTransaction)
+        //         .Without(_ => _.ParentTransactionId)
+        //         .Do(transaction =>
+        //         {
+        //             foreach (ProductToTransactionEntity productToTransactionEntity in fixture.BuildProductToTransactionEntity(transaction).CreateMany())
+        //             {
+        //                 productToTransactionEntity.Product.Session.Basar = basar;
+        //                 productToTransactionEntity.Product.Session.BasarId = basar.Id;
+
+        //                 transaction.Products.Add(productToTransactionEntity);
+        //             }
+        //         });
+        // }
 
         //public static IPostprocessComposer<Product> BuildProduct(this Fixture fixture, decimal price)
         //{

@@ -15,9 +15,9 @@ public sealed class BasarDetailsModel
 
     public int AcceptedProductsCount { get; init; }
 
-    public IReadOnlyList<ChartDataPoint> AcceptedProductsByAmount { get; init; } = Array.Empty<ChartDataPoint>();
+    public IReadOnlyList<ChartDataPoint> AcceptedProductTypesByAmount { get; init; } = Array.Empty<ChartDataPoint>();
 
-    public IReadOnlyList<ChartDataPoint> AcceptedProductsByCount { get; init; } = Array.Empty<ChartDataPoint>();
+    public IReadOnlyList<ChartDataPoint> AcceptedProductTypesByCount { get; init; } = Array.Empty<ChartDataPoint>();
 
     public int LockedProductsCount { get; init; }
 
@@ -37,7 +37,7 @@ public sealed class BasarDetailsModel
 
     public int SoldProductsCount { get; init; }
 
-    public IReadOnlyList<ChartDataPoint> SoldProductsByCount { get; init; } = Array.Empty<ChartDataPoint>();
+    public IReadOnlyList<ChartDataPoint> SoldProductTypesByCount { get; init; } = Array.Empty<ChartDataPoint>();
 
-    public IReadOnlyList<ChartDataPoint> SoldProductsByAmount { get; init; } = Array.Empty<ChartDataPoint>();   
+    public IReadOnlyList<ChartDataPoint> SoldProductTypesByAmount { get; init; } = Array.Empty<ChartDataPoint>();   
 }

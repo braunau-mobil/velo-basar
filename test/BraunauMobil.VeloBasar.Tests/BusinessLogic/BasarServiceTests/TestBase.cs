@@ -2,21 +2,19 @@
 
 namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.BasarServiceTests;
 
-public class TestBase<TDbFixture>
-    : DbTestBase<TDbFixture>
-    where TDbFixture : IDbFixture, new()
+public class TestBase
+    : DbTestBase<EmptySqliteDbFixture>
 {
     public TestBase()
     {
-        Sut = new BasarService(Db, ColorProvider.Object);
+        Sut = new BasarService(Db, StatsService.Object);
     }
 
     public void VerifyNoOtherCalls()
     {
-        ColorProvider.VerifyNoOtherCalls();
+        StatsService.VerifyNoOtherCalls();
     }
 
+    public Mock<IBasarStatsService> StatsService { get; } = new();
     public BasarService Sut { get; set; }
-
-    public Mock<IColorProvider> ColorProvider { get; } = new();
 }

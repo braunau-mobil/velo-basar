@@ -19,7 +19,7 @@ public class Program
     public static async Task Main()
     {
         await GenerateSqlite("DataSource=../../../../BraunauMobil.VeloBasar.Tests/VeloBasarTest.db");
-        //await GeneratePostgres("User ID=postgres;Password=postgres;Host=localhost;Port=5432;Database=velobasar;Pooling=true;");
+        await GeneratePostgres("User ID=postgres;Password=postgres;Host=localhost;Port=5432;Database=velobasar;Pooling=true;");
     }
 
     private static async Task GeneratePostgres(string connectionString)

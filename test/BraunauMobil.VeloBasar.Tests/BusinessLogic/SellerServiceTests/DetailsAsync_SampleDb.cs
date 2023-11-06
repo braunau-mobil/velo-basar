@@ -1,6 +1,6 @@
 ﻿namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.SellerServiceTests;
 
-public class DetailsAsync
+public class DetailsAsync_SampleDb
     : TestBase<SampleSqliteDbFixture>
 {
     [Theory]
@@ -13,15 +13,15 @@ public class DetailsAsync
         SellerDetailsModel model = await Sut.GetDetailsAsync(basarId, sellerId);
 
         //  Assert
-        model.AcceptedProductCount.Should().Be(3);
+        model.AcceptedProductCount.Should().Be(12);
         model.Entity.Id.Should().Be(sellerId);
-        model.Entity.ValueState.Should().Be(ValueState.NotSettled);
-        model.NotSoldProductCount.Should().Be(1);
-        model.PickedUpProductCount.Should().Be(0);
-        model.Procucts.Should().HaveCount(3);
-        model.SettlementAmout.Should().Be(181.65M);
-        model.SoldProductCount.Should().Be(2);
-        model.Transactions.Should().HaveCount(3);
+        model.Entity.ValueState.Should().Be(ValueState.Settled);
+        model.NotSoldProductCount.Should().Be(5);
+        model.PickedUpProductCount.Should().Be(1);
+        model.Procucts.Should().HaveCount(12);
+        model.SettlementAmout.Should().Be(590.8896M);
+        model.SoldProductCount.Should().Be(7);
+        model.Transactions.Should().HaveCount(4);
 
         VerifyNoOtherCalls();
     }
