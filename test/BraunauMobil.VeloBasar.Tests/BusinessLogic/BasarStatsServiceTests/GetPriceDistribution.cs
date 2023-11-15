@@ -62,12 +62,41 @@ public class GetPriceDistribution
         // Assert
         result.Should().BeEquivalentTo(new[]
         {
-            new ChartDataPoint(4, "€ 10,00", primaryColor),
-            new ChartDataPoint(3, "€ 20,00", primaryColor),
-            new ChartDataPoint(1, "€ 110,00", primaryColor),
+            new ChartDataPoint(5, "€ 10,00", primaryColor),
+            new ChartDataPoint(2, "€ 20,00", primaryColor),
+            new ChartDataPoint(1, "€ 100,00", primaryColor),
+            new ChartDataPoint(1, "€ 1.000,00", primaryColor),
         });
 
-        ColorProvider.Verify(_ => _.Primary, Times.Exactly(3));
+        ColorProvider.Verify(_ => _.Primary, Times.Exactly(4));
+        VerifyNoOtherCalls();
+    }
+
+    [Theory]
+    [AutoData]
+    public void ProductsWithPricesLowerThan10_ShouldReturnDistribution(Color primaryColor)
+    {
+        // Arrange
+        ColorProvider.Setup(_ => _.Primary)
+            .Returns(primaryColor);
+        ProductEntity[] products = new[]
+        {
+            CreateProduct(0),
+            CreateProduct(0),
+            CreateProduct(1),
+            CreateProduct(5)
+        };
+        
+        // Act
+        IReadOnlyList<ChartDataPoint> result = Sut.GetPriceDistribution(products);
+
+        // Assert
+        result.Should().BeEquivalentTo(new[]
+        {
+            new ChartDataPoint(4, "€ 5,00", primaryColor),
+        });
+
+        ColorProvider.Verify(_ => _.Primary, Times.Exactly(1));
         VerifyNoOtherCalls();
     }
 

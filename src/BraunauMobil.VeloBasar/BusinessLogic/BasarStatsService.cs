@@ -75,7 +75,7 @@ public class BasarStatsService
     {
         ArgumentNullException.ThrowIfNull(products);
 
-        IEnumerable<decimal> productPrices = products.Select(product => product.Price).ToArray();
+        IEnumerable<decimal> productPrices = products.Select(product => decimal.Round(product.Price, 2)).ToArray();
 
         if (!productPrices.Any())
         {
@@ -84,20 +84,28 @@ public class BasarStatsService
 
         decimal step = 10.0m;
         decimal maxPrice = productPrices.Max();
-        decimal currentMin = 0.0m;
+        decimal currentMin = 0;
         decimal currentMax = Math.Min(step, maxPrice);
 
         List<ChartDataPoint> data = new();
-        while (currentMax < maxPrice)
+        while (currentMax <= maxPrice)
         {
-            int count = productPrices.Count(price => price >= currentMin && price < currentMax);
+            int count = productPrices.Count(price => price >= currentMin && price <= currentMax);
             if (count > 0)
             {
                 string label = $"{currentMax:C}";
                 Color color = _colorProvider.Primary;
                 data.Add(new ChartDataPoint(count, label, color));
             }
-            currentMin += step;
+
+            if (currentMin == 0)
+            {
+                currentMin = 10.01M;
+            }
+            else
+            {
+                currentMin += step;
+            }
             currentMax += step;
         }
         return data.ToArray();
