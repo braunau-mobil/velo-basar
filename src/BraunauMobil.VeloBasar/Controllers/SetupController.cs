@@ -32,7 +32,7 @@ public sealed class SetupController
             Response.Cookies.Delete(cookie);
         }
 
-        SetValidationResult(_validator.Validate(config));
+        SetValidationResult(await _validator.ValidateAsync(config));
 
         if (ModelState.IsValid)
         {

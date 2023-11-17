@@ -33,7 +33,7 @@ public sealed class CancelController
 
         model.Sale = await _transactionService.FindAsync(model.ActiveBasarId, TransactionType.Sale, model.SaleNumber);
 
-        SetValidationResult(_selectSaleValidator.Validate(model));
+        SetValidationResult(await _selectSaleValidator.ValidateAsync(model));
         if (!ModelState.IsValid)
         {
             return View(model);
@@ -58,7 +58,7 @@ public sealed class CancelController
     {
         ArgumentNullException.ThrowIfNull(model);
 
-        SetValidationResult(_selectProductsValidator.Validate(model));
+        SetValidationResult(await _selectProductsValidator.ValidateAsync(model));
 
         if (ModelState.IsValid)
         {

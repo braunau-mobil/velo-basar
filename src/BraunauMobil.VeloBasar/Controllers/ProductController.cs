@@ -40,7 +40,7 @@ public sealed class ProductController
     {
         ArgumentNullException.ThrowIfNull(product);
 
-        SetValidationResult(_productValidator.Validate(product));
+        SetValidationResult(await _productValidator.ValidateAsync(product));
 
         if (ModelState.IsValid)
         {
@@ -80,7 +80,7 @@ public sealed class ProductController
     {
         ArgumentNullException.ThrowIfNull(model);
 
-        SetValidationResult(_productAnnotateValidator.Validate(model));
+        SetValidationResult(await _productAnnotateValidator.ValidateAsync(model));
 
         if (!ModelState.IsValid)
         {
@@ -102,7 +102,7 @@ public sealed class ProductController
     {
         ArgumentNullException.ThrowIfNull(model);
 
-        SetValidationResult(_productAnnotateValidator.Validate(model));
+        SetValidationResult(await _productAnnotateValidator.ValidateAsync(model));
 
         if (!ModelState.IsValid)
         {
@@ -130,7 +130,7 @@ public sealed class ProductController
     {
         ArgumentNullException.ThrowIfNull(model);
 
-        SetValidationResult(_productAnnotateValidator.Validate(model));
+        SetValidationResult(await _productAnnotateValidator.ValidateAsync(model));
 
         if (!ModelState.IsValid)
         {

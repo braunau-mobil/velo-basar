@@ -46,7 +46,7 @@ public sealed class SellerController
     {
         ArgumentNullException.ThrowIfNull(seller);
 
-        SetValidationResult(_sellerValidator.Validate(seller));
+        SetValidationResult(await _sellerValidator.ValidateAsync(seller));
 
         if (ModelState.IsValid)
         {
@@ -100,7 +100,7 @@ public sealed class SellerController
     {
         ArgumentNullException.ThrowIfNull(searchModel);
 
-        SetValidationResult(_searchValidator.Validate(searchModel));
+        SetValidationResult(await _searchValidator.ValidateAsync(searchModel));
 
         IReadOnlyList<SellerEntity> foundSellers;
         if (ModelState.IsValid)

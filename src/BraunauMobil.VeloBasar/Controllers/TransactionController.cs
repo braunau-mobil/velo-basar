@@ -55,7 +55,7 @@ public sealed class TransactionController
             AmountGiven = amountGiven
         };
 
-        SetValidationResult(_transactionSuccessValidator.Validate(model));
+        SetValidationResult(await _transactionSuccessValidator.ValidateAsync(model));
 
         return View(model);
     }

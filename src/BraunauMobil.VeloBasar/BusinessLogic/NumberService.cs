@@ -16,7 +16,7 @@ public sealed class NumberService
 
     public async Task<int> NextNumberAsync(int basarId, TransactionType transactionType)
     {
-        using (IDbContextTransaction transaction = _db.Database.BeginTransaction())
+        using (IDbContextTransaction transaction = await _db.Database.BeginTransactionAsync())
         {
             await _db.Numbers
                 .Where(number => number.BasarId == basarId && number.Type == transactionType)

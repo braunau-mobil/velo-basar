@@ -36,7 +36,7 @@ public sealed class SecurityController
     {
         if (model == null) throw new ArgumentNullException(nameof(model));
 
-        SetValidationResult(_loginValidator.Validate(model));
+        SetValidationResult(await _loginValidator.ValidateAsync(model));
 
         if (ModelState.IsValid)
         {

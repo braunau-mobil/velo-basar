@@ -30,7 +30,7 @@ public sealed class AcceptProductController
     {
         ArgumentNullException.ThrowIfNull(product);
 
-        SetValidationResult(_validator.Validate(product));
+        SetValidationResult(await _validator.ValidateAsync(product));
 
         if (ModelState.IsValid)
         {
@@ -61,7 +61,7 @@ public sealed class AcceptProductController
     {
         ArgumentNullException.ThrowIfNull(product);
 
-        SetValidationResult(_validator.Validate(product));
+        SetValidationResult(await _validator.ValidateAsync(product));
 
         if (ModelState.IsValid)
         {
