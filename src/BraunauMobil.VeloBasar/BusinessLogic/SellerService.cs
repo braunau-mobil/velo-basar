@@ -137,7 +137,7 @@ public sealed class SellerService
           || s.BankAccountHolder != null && EF.Functions.Like(s.BankAccountHolder, $"%{searchString}%");
     }
 
-    public Expression<Func<SellerEntity, bool>> SellerSearch(string firstName, string lastName)
+    private Expression<Func<SellerEntity, bool>> SellerSearch(string firstName, string lastName)
     {
         if (_db.IsPostgreSQL())
         {
