@@ -1,7 +1,5 @@
 ﻿using BraunauMobil.VeloBasar.Controllers;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-
 namespace BraunauMobil.VeloBasar.Tests.Controllers.SellerControllerTests;
 
 public class SearchForAcceptance

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.SellerServiceTests;
+﻿namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.SellerServiceTests;
 
 public class GetLabelsAsync
     : TestBase<EmptySqliteDbFixture>

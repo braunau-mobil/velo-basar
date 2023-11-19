@@ -1,5 +1,4 @@
 ﻿using BraunauMobil.VeloBasar.Cookies;
-using System.Collections.Generic;
 using System.Text.Json;
 
 namespace BraunauMobil.VeloBasar.Tests.Cookies.CartCookieTests;

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Xan.AspNetCore.Models;
+﻿using Xan.AspNetCore.Models;
 
 namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.BasarServiceTests;
 

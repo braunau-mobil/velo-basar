@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
-using System.Collections.Generic;
 using Xan.Extensions.Collections.Generic;
 
 namespace BraunauMobil.VeloBasar.Tests

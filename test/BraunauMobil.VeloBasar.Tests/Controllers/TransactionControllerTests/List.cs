@@ -1,10 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using BraunauMobil.VeloBasar.Parameters;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Xan.AspNetCore.Models;
-using Xan.Extensions.Collections.Generic;
 
 namespace BraunauMobil.VeloBasar.Tests.Controllers.TransactionControllerTests;
 

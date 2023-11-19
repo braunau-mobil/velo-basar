@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.BasarStatsServiceTests;
 public class GetAcceptedProductsAsync

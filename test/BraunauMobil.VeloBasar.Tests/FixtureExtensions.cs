@@ -1,5 +1,4 @@
 ﻿using AutoFixture.Dsl;
-using System.Collections.Generic;
 using Xan.Extensions.Collections.Generic;
 
 namespace BraunauMobil.VeloBasar.Tests

@@ -1,5 +1,4 @@
 ﻿using AutoFixture.Dsl;
-using System.Collections.Generic;
 using Xan.AspNetCore.Models;
 using Xan.Extensions.Collections.Generic;
 

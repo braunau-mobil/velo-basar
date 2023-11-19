@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.ProductServiceTests;
+﻿namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.ProductServiceTests;
 
 public class GetManyAsync_ListOfIds
     : TestBase<EmptySqliteDbFixture>

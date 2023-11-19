@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.BasarStatsServiceTests;
+﻿namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.BasarStatsServiceTests;
 
 public class GetSoldProductTimestampsAndPricesAsync
     : TestBase<EmptySqliteDbFixture>
