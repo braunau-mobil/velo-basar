@@ -9,7 +9,7 @@ public class UserManagerMock
 {
     public UserManagerMock()
         : base(
-            Mock.Of<IUserStore<IdentityUser>>(),
+            Mock.Of<IUserStoreMock<IdentityUser>>(),
             Mock.Of<IOptions<IdentityOptions>>(),
             Mock.Of<IPasswordHasher<IdentityUser>>(),
             Enumerable.Empty<IUserValidator<IdentityUser>>(),
@@ -22,3 +22,9 @@ public class UserManagerMock
     }
 }
 
+public interface IUserStoreMock<TUser>
+    : IUserStore<TUser>
+    , IUserPasswordStore<TUser>
+    where TUser : IdentityUser
+{
+}
