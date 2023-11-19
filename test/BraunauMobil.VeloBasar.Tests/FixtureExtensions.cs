@@ -5,6 +5,16 @@ namespace BraunauMobil.VeloBasar.Tests
 {
     public static class FixtureExtensions
     {
+        public static IPostprocessComposer<AcceptSessionEntity> BuildAcceptSessionEntity(this Fixture fixture)
+        {
+            ArgumentNullException.ThrowIfNull(fixture);
+
+            return fixture.Build<AcceptSessionEntity>()
+                .Without(_ => _.Id)
+                .Without(_ => _.BasarId)
+                .Without(_ => _.SellerId);
+        }
+
         public static IPostprocessComposer<FileDataEntity> BuildFileDataEntity(this Fixture fixture)
         {
             ArgumentNullException.ThrowIfNull(fixture);
@@ -18,6 +28,9 @@ namespace BraunauMobil.VeloBasar.Tests
             ArgumentNullException.ThrowIfNull(fixture);
 
             return fixture.Build<ProductEntity>()
+                .Without(_ => _.Id)
+                .Without(_ => _.BrandId)
+                .Without(_ => _.TypeId)
                 .Without(_ => _.Session)
                 .Without(_ => _.SessionId);
         }
