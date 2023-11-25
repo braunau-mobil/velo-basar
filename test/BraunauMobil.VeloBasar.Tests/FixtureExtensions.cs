@@ -76,7 +76,8 @@ namespace BraunauMobil.VeloBasar.Tests
 
             return fixture.Build<TransactionEntity>()
                 .Without(_ => _.ParentTransaction)
-                .Without(_ => _.ParentTransactionId);
+                .Without(_ => _.ParentTransactionId)
+                .Without(_ => _.DocumentId);
         }
 
         public static IPaginatedList<T> CreatePaginatedList<T>(this Fixture fixture)
