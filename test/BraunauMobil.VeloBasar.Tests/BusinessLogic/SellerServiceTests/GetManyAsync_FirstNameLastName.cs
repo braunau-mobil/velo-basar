@@ -127,6 +127,7 @@ public class GetManyAsync_FirstNameLastName
     private IPostprocessComposer<SellerEntity> BuildSeller()
     {
         return _fixture.Build<SellerEntity>()
-            .Without(_ => _.Id);
+            .Without(_ => _.Id)
+            .Without(_ => _.CountryId);
     }
 }
