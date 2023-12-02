@@ -17,6 +17,7 @@ public sealed class EmptySqliteDbFixture
 
         DbContextOptions<VeloDbContext> options = new DbContextOptionsBuilder<VeloDbContext>()
             .UseSqlite(_connection)
+            .EnableSensitiveDataLogging()
             .Options;
 
         using (VeloDbContext context = new(Clock.Object, options))

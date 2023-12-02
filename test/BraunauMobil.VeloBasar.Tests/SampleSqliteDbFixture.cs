@@ -19,6 +19,7 @@ public sealed class SampleSqliteDbFixture
 
         DbContextOptions<VeloDbContext> options = new DbContextOptionsBuilder<VeloDbContext>()
             .UseSqlite($"DataSource={_databaseFileName}")
+            .EnableSensitiveDataLogging()
             .Options;
 
         Db = new(Clock.Object, options);
