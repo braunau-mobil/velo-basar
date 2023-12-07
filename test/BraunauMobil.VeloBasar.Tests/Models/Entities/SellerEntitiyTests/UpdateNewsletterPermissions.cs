@@ -1,4 +1,4 @@
-﻿namespace BraunauMobil.VeloBasar.Tests.Models.Entities.SellerTests;
+﻿namespace BraunauMobil.VeloBasar.Tests.Models.Entities.SellerEntityTests;
 
 public class UpdateNewsletterPermissions
 {

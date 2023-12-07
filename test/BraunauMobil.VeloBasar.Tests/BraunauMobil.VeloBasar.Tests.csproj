@@ -18,69 +18,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Data\**" />
-    <Compile Remove="ExtensionMethodsTests\**" />
-    <Compile Remove="IbanAttributeTests\**" />
-    <Compile Remove="JsonUtilsTests\**" />
-    <Compile Remove="Logic\**" />
-    <Compile Remove="Models\Base\**" />
-    <Compile Remove="Models\ChangeInfoTests\**" />
-    <Compile Remove="Models\Entities\SellerTests\**" />
-    <Compile Remove="Models\ExtensionMethodsTests\**" />
-    <Compile Remove="Models\PaginationModelTests\**" />
-    <Compile Remove="Models\ProductsTransactionTests\**" />
-    <Compile Remove="Printing\**" />
-    <Compile Remove="Rendering\**" />
-    <EmbeddedResource Remove="Data\**" />
-    <EmbeddedResource Remove="ExtensionMethodsTests\**" />
-    <EmbeddedResource Remove="IbanAttributeTests\**" />
-    <EmbeddedResource Remove="JsonUtilsTests\**" />
-    <EmbeddedResource Remove="Logic\**" />
-    <EmbeddedResource Remove="Models\Base\**" />
-    <EmbeddedResource Remove="Models\ChangeInfoTests\**" />
-    <EmbeddedResource Remove="Models\Entities\SellerTests\**" />
-    <EmbeddedResource Remove="Models\ExtensionMethodsTests\**" />
-    <EmbeddedResource Remove="Models\PaginationModelTests\**" />
-    <EmbeddedResource Remove="Models\ProductsTransactionTests\**" />
-    <EmbeddedResource Remove="Printing\**" />
-    <EmbeddedResource Remove="Rendering\**" />
-    <None Remove="Data\**" />
-    <None Remove="ExtensionMethodsTests\**" />
-    <None Remove="IbanAttributeTests\**" />
-    <None Remove="JsonUtilsTests\**" />
-    <None Remove="Logic\**" />
-    <None Remove="Models\Base\**" />
-    <None Remove="Models\ChangeInfoTests\**" />
-    <None Remove="Models\Entities\SellerTests\**" />
-    <None Remove="Models\ExtensionMethodsTests\**" />
-    <None Remove="Models\PaginationModelTests\**" />
-    <None Remove="Models\ProductsTransactionTests\**" />
-    <None Remove="Printing\**" />
-    <None Remove="Rendering\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Remove="AutoVeloDataAttribute.cs" />
-    <Compile Remove="DateAssert.cs" />
-    <Compile Remove="GlobalSuppressions.cs" />
-    <Compile Remove="ModelAssert.cs" />
-    <Compile Remove="Models\Entities\ProductEntityTests\GetInfoText.cs" />
-    <Compile Remove="Models\Entities\ProductEntityTests\IsEmtpy.cs" />
-    <Compile Remove="Models\Entities\ProductEntityTests\IsGone.cs" />
-    <Compile Remove="PdfAssert.cs" />
-    <Compile Remove="TestBase.cs" />
-    <Compile Remove="TestUtils.cs" />
-    <Compile Remove="TestWithServicesAndDb.cs" />
-    <Compile Remove="TestWithSqliteDb.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Include="Models\ChangeInfoTests\Ctor.cs" />
-    <Compile Include="Models\Entities\SellerTests\UpdateNewsletterPermissions.cs" />
-    <Compile Include="Models\ExtensionMethodsTests\SumPrice.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="AutoFixture.Xunit2" Version="4.17.0" />
     <PackageReference Include="FluentAssertions" Version="6.9.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.4.1" />
@@ -105,9 +42,5 @@
     <None Update="VeloBasarTest.db">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Data\" />
   </ItemGroup>
 </Project>
