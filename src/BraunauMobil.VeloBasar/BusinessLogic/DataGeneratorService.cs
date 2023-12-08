@@ -129,15 +129,8 @@ public sealed class DataGeneratorService
             UpdatedAt = _clock.GetCurrentDateTime(),
         };
 
-    public BrandEntity NextBrand()
-        => new()
-        {
-            Id = Random.Next(),
-            CreatedAt = _clock.GetCurrentDateTime(),
-            Name = $"Basar #{Random.Next()}",
-            State = ObjectState.Enabled,
-            UpdatedAt = _clock.GetCurrentDateTime(),
-        };
+    public string NextBrand()
+        => Random.GetRandomElement(Names.BrandNames);
 
     public CountryEntity NextCountry()
         => new()
@@ -150,7 +143,7 @@ public sealed class DataGeneratorService
             UpdatedAt = _clock.GetCurrentDateTime(),
         };
 
-    public ProductEntity NextProduct(BrandEntity brand, ProductTypeEntity productType, AcceptSessionEntity session)
+    public ProductEntity NextProduct(string brand, ProductTypeEntity productType, AcceptSessionEntity session)
     {
         ArgumentNullException.ThrowIfNull(session);
 
@@ -354,7 +347,7 @@ public sealed class DataGeneratorService
     }
 
     private ProductEntity NextProduct(AcceptSessionEntity session)
-        => NextProduct(Random.GetRandomElement(_db.Brands), Random.GetRandomElement(_db.ProductTypes), session);
+        => NextProduct(NextBrand(), Random.GetRandomElement(_db.ProductTypes), session);
 
     private string NextPhoneNumber()
     {

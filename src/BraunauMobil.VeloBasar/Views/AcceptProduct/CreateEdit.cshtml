@@ -12,7 +12,7 @@
             @VeloHtml.HiddenInput(nameof(Model.Entity.SessionId), Model.Entity.SessionId)
             <div class="row">
                 <div class="col-2">@VeloHtml.SelectField(nameof(Model.Entity.TypeId), Model.Entity.TypeId, await SelectLists.ProductTypesAsync(), Localizer[VeloTexts.ProductType], autoFocus: true)</div>
-                <div class="col-2">@VeloHtml.SelectField(nameof(Model.Entity.BrandId), Model.Entity.BrandId, await SelectLists.BrandsAsync(), Localizer[VeloTexts.Brand])</div>
+                <div class="col-2">@VeloHtml.DataListField(nameof(Model.Entity.Brand), Model.Entity.Brand, await SelectLists.BrandsAsync(), Localizer[VeloTexts.Brand])</div>
                 <div class="col-3">@VeloHtml.TextInputField(nameof(Model.Entity.Color), Model.Entity.Color, Localizer[VeloTexts.Color])</div>
                 <div class="col-4">@VeloHtml.TextInputField(nameof(Model.Entity.FrameNumber), Model.Entity.FrameNumber, Localizer[VeloTexts.FrameNumber])</div>
             </div>

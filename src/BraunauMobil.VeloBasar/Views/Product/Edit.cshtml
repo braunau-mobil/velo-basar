@@ -9,7 +9,7 @@
         @VeloHtml.TitleCardHeader()
         <div class="card-body">
             @VeloHtml.SelectField(nameof(Model.TypeId), Model.TypeId, await SelectLists.ProductTypesAsync(), Localizer[VeloTexts.ProductType], autoFocus: true)
-            @VeloHtml.SelectField(nameof(Model.BrandId), Model.BrandId, await SelectLists.BrandsAsync(), Localizer[VeloTexts.Brand])
+            @VeloHtml.DataListField(nameof(Model.Brand), Model.Brand, await SelectLists.BrandsAsync(), Localizer[VeloTexts.Brand])
             @VeloHtml.TextInputField(nameof(Model.Description), Model.Description, Localizer[VeloTexts.Description])
             @VeloHtml.TextInputField(nameof(Model.Color), Model.Color, Localizer[VeloTexts.Color])
             @VeloHtml.TextInputField(nameof(Model.FrameNumber), Model.FrameNumber, Localizer[VeloTexts.FrameNumber])

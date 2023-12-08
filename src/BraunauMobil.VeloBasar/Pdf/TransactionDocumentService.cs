@@ -341,7 +341,7 @@ public sealed class TransactionDocumentService
     private static string GetInfoText(ProductEntity product)
     {
         StringBuilder sb = new();
-        sb.Append(product.Brand.Name).Append(" - ").AppendLine(product.Type.Name);
+        sb.Append(product.Brand).Append(" - ").AppendLine(product.Type.Name);
         sb.Append(product.Description);
         if (!string.IsNullOrEmpty(product.Color)
             || !string.IsNullOrEmpty(product.FrameNumber))

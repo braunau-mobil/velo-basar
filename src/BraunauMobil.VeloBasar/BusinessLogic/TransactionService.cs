@@ -216,7 +216,6 @@ public sealed class TransactionService
     private async Task<TransactionEntity> CreateNewAsync(TransactionType type, int basarId, IEnumerable<int> productIds, string? notes = null, int? sellerId = null, TransactionEntity? parent = null)
     {
         IReadOnlyList<ProductEntity> products = await _db.Products
-            .Include(product => product.Brand)
             .Include(product => product.Type)
             .Include(product => product.Session)
                 .ThenInclude(session => session.Seller)

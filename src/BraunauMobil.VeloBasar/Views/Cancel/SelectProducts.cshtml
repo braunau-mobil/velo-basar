@@ -19,8 +19,8 @@
                         {
                             c.For((index, item) =>
                             {
-                                TagBuilder checkBox = VeloHtml.CheckBox($"{nameof(SelectProductsModel.Products)}[{index}].{nameof(SelectModel<ProductEntity>.IsSelected)}", item.IsSelected);
-                                TagBuilder idInput = VeloHtml.HiddenInput($"{nameof(SelectProductsModel.Products)}[{index}].{nameof(SelectModel<ProductEntity>.Value)}.{nameof(ProductEntity.Id)}", item.Value.Id);
+                                IInputBuilder checkBox = VeloHtml.CheckBox($"{nameof(SelectProductsModel.Products)}[{index}].{nameof(SelectModel<ProductEntity>.IsSelected)}", item.IsSelected);
+                                IInputBuilder idInput = VeloHtml.HiddenInput($"{nameof(SelectProductsModel.Products)}[{index}].{nameof(SelectModel<ProductEntity>.Value)}.{nameof(ProductEntity.Id)}", item.Value.Id);
 
                                 HtmlContentBuilder tags = new();
                                 tags.AppendHtml(checkBox);

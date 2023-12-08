@@ -41,7 +41,6 @@ public sealed class SellerService
             .ToArrayAsync();
         IReadOnlyList<ProductEntity> products = await _db.Products
             .WhereBasarAndSeller(basarId, sellerId)
-            .Include(product => product.Brand)
             .Include(product => product.Type) 
             .Include(product => product.Session)
             .ToArrayAsync();
@@ -63,7 +62,6 @@ public sealed class SellerService
     public async Task<FileDataEntity> GetLabelsAsync(int basarId, int sellerId)
     {
         IEnumerable<ProductEntity> products = await _db.Products
-            .Include(product => product.Brand)
             .Include(product => product.Type)
             .Include(product => product.Session)
                 .ThenInclude(session => session.Basar)

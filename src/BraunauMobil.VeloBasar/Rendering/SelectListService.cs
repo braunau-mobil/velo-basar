@@ -22,21 +22,27 @@ public sealed class SelectListService
     public SelectList AcceptStates(bool includeAll = false)
         => EnumSelectList<AcceptSessionState>(includeAll, VeloTexts.Singular);
 
-    public async Task<SelectList> BrandsAsync(bool includeAll = false)
+    public async Task<ISet<string?>> BrandsAsync()
     {
-        List<Tuple<int?, string>> items = new();
+        string[] brands = await _db.Products.Brands().ToArrayAsync();
+        return new HashSet<string?>(brands);
+    }
+
+    public async Task<SelectList> BrandsForSelectionAsync(bool includeAll = false)
+    {
+        List<Tuple<string?, string>> items = new();
         if (includeAll)
         {
-            items.Add(new Tuple<int?, string>(null, Localizer[VeloTexts.AllBrand]));
+            items.Add(new Tuple<string?, string>(null, Localizer[VeloTexts.AllBrand]));
         }
-        items.AddRange(await _db.Brands.WhereEnabled().DefaultOrder().Select(b => new Tuple<int?, string>(b.Id, b.Name)).ToArrayAsync());
+        items.AddRange(await _db.Products.Brands().Select(b => new Tuple<string?, string>(b, b)).ToArrayAsync());
         return new SelectList(items, "Item1", "Item2");
     }
 
     public async Task<SelectList> CountriesAsync()
     {
         List<Tuple<int?, string>> items = new();
-        items.AddRange(await _db.Countries.WhereEnabled().DefaultOrder().Select(b => new Tuple<int?, string>(b.Id, b.Name)).ToArrayAsync());
+        items.AddRange(await _db.Countries.WhereEnabled().DefaultOrder().Select(c => new Tuple<int?, string>(c.Id, c.Name)).ToArrayAsync());
         return new SelectList(items, "Item1", "Item2");
     }
 
@@ -50,7 +56,7 @@ public sealed class SelectListService
         {
             items.Add(new Tuple<int?, string>(null, Localizer[VeloTexts.AllProductTypes]));
         }
-        items.AddRange(await _db.ProductTypes.WhereEnabled().DefaultOrder().Select(b => new Tuple<int?, string>(b.Id, b.Name)).ToArrayAsync());
+        items.AddRange(await _db.ProductTypes.WhereEnabled().DefaultOrder().Select(p => new Tuple<int?, string>(p.Id, p.Name)).ToArrayAsync());
         return new SelectList(items, "Item1", "Item2");
     }
 

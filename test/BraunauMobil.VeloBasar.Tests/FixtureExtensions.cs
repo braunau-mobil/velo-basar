@@ -29,7 +29,6 @@ public static class FixtureExtensions
 
         return fixture.Build<ProductEntity>()
             .Without(_ => _.Id)
-            .Without(_ => _.BrandId)
             .Without(_ => _.TypeId)
             .Without(_ => _.Session)
             .Without(_ => _.SessionId);

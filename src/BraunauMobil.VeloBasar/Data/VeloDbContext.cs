@@ -24,8 +24,6 @@ public sealed class VeloDbContext
 
     public DbSet<BasarEntity> Basars => Set<BasarEntity>();
 
-    public DbSet<BrandEntity> Brands => Set<BrandEntity>();
-
     public DbSet<CountryEntity> Countries => Set<CountryEntity>();
 
     public DbSet<FileDataEntity> Files => Set<FileDataEntity>();

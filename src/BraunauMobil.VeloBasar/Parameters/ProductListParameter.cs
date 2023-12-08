@@ -15,7 +15,7 @@ public sealed class ProductListParameter
 
         StorageState = other.StorageState;
         ValueState = other.ValueState;
-        BrandId = other.BrandId;
+        Brand = other.Brand;
         ProductTypeId = other.ProductTypeId;
     }
 
@@ -23,7 +23,7 @@ public sealed class ProductListParameter
 
     public ValueState? ValueState { get; set; }
 
-    public int? BrandId { get; set; }
+    public string? Brand { get; set; }
 
     public int? ProductTypeId { get; set; }
 

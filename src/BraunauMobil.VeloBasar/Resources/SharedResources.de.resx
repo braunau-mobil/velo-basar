@@ -216,9 +216,6 @@
   <data name="VeloBasar_Brand" xml:space="preserve">
     <value>Marke</value>
   </data>
-  <data name="VeloBasar_BrandList" xml:space="preserve">
-    <value>Marken</value>
-  </data>
   <data name="VeloBasar_CalculateChangeMoney" xml:space="preserve">
     <value>Wechselgeld berechnen</value>
   </data>
@@ -276,9 +273,6 @@
   <data name="VeloBasar_CreateBasar" xml:space="preserve">
     <value>Basar erstellen</value>
   </data>
-  <data name="VeloBasar_CreateBrand" xml:space="preserve">
-    <value>Marke hinzufügen</value>
-  </data>
   <data name="VeloBasar_CreateCountry" xml:space="preserve">
     <value>Land hinzufügen</value>
   </data>
@@ -318,9 +312,6 @@
   <data name="VeloBasar_EditBasar" xml:space="preserve">
     <value>Basar bearbeiten</value>
   </data>
-  <data name="VeloBasar_EditBrand" xml:space="preserve">
-    <value>Marke bearbeiten</value>
-  </data>
   <data name="VeloBasar_EditCountry" xml:space="preserve">
     <value>Land bearbeiten</value>
   </data>
@@ -359,9 +350,6 @@
   </data>
   <data name="VeloBasar_FrameNumberLabel" xml:space="preserve">
     <value>Rahmennummer: {0}</value>
-  </data>
-  <data name="VeloBasar_GenerateBrands" xml:space="preserve">
-    <value>Beispiel Marken generieren</value>
   </data>
   <data name="VeloBasar_GenerateCountries" xml:space="preserve">
     <value>Beispiel Länder generieren</value>
@@ -535,7 +523,7 @@
     <value>Bitte eine Admin E-Mail Adresse angeben.</value>
   </data>
   <data name="VeloBasar_PleaseEnterBrand" xml:space="preserve">
-    <value>Bitte eine Marke auswählen.</value>
+    <value>Bitte eine Marke eingeben.</value>
   </data>
   <data name="VeloBasar_PleaseEnterCity" xml:space="preserve">
     <value>Bitte eine Stadt eingeben.</value>

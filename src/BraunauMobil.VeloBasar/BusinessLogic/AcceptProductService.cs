@@ -60,7 +60,6 @@ public sealed class AcceptProductService
     public async Task<AcceptProductModel> GetAsync(int productId)
     {
         ProductEntity product = await _db.Products
-            .Include(product => product.Brand)
             .Include(product => product.Type)
             .FirstByIdAsync(productId);
 
@@ -97,8 +96,6 @@ public sealed class AcceptProductService
 
     private async Task<AcceptSessionEntity> GetSession(int id)
         => await _db.AcceptSessions
-            .Include(session => session.Products)
-                .ThenInclude(product => product.Brand)
             .Include(session => session.Products)
                 .ThenInclude(product => product.Type)
             .FirstByIdAsync(id);

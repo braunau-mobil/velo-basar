@@ -71,7 +71,7 @@ public sealed class ProductLabelService
                 .SetBorderBottom(new SolidBorder(2)));
 
         Paragraph info = new Paragraph()
-            .Add(_pdf.GetRegularText($"{product.Brand.Name} - {product.Type.Name}").SetBold())
+            .Add(_pdf.GetRegularText($"{product.Brand} - {product.Type.Name}").SetBold())
             .Add(Environment.NewLine)
             .Add(_pdf.GetRegularText(product.Description.Truncate(_printSettings.MaxDescriptionLength)));
 

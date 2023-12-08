@@ -24,9 +24,7 @@ public sealed class ProductEntity
 
     public string? Color { get; set; }
 
-    public int BrandId { get; set; }
-
-    public BrandEntity Brand { get; set; }
+    public string Brand { get; set; }
 
     public string Description { get; set; }
 
@@ -145,8 +143,8 @@ public sealed class ProductEntityValidator
     {
         ArgumentNullException.ThrowIfNull(localizer);
 
-        RuleFor(seller => seller.BrandId)
-            .NotEqual(0)
+        RuleFor(product => product.Brand)
+            .NotEmpty()
             .WithMessage(localizer[VeloTexts.PleaseEnterBrand]);
 
         RuleFor(seller => seller.TypeId)

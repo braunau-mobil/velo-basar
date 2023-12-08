@@ -4,6 +4,15 @@ namespace BraunauMobil.VeloBasar.Data;
 
 public static class ProductExtensions
 {
+    public static IQueryable<string> Brands(this IQueryable<ProductEntity> products)
+    {
+        ArgumentNullException.ThrowIfNull(products);
+
+        return products.Select(p => p.Brand)
+            .Distinct()
+            .OrderBy(_ => _);
+    }
+
     public static async Task<int> GetBasarIdAsync(this IQueryable<ProductEntity> products, int productId)
     {
         ArgumentNullException.ThrowIfNull(products);
@@ -12,7 +21,7 @@ public static class ProductExtensions
             .Where(product => product.Id == productId)
             .Select(product => product.Session.BasarId)
             .SingleAsync();
-    }
+    }    
 
     public static async Task<IReadOnlyList<ProductEntity>> GetForBasarAsync(this IQueryable<ProductEntity> products, int basarId)
     {
@@ -20,7 +29,6 @@ public static class ProductExtensions
 
         return await products
             .Include(p => p.Type)
-            .Include(p => p.Brand)
             .Where(p => p.Session.BasarId == basarId)
             .ToArrayAsync();
     }
@@ -31,7 +39,6 @@ public static class ProductExtensions
 
         return await products
             .Include(p => p.Type)
-            .Include(p => p.Brand)
             .Where(p => p.Session.BasarId == basarId && p.Session.SellerId == sellerId)
             .ToArrayAsync();
     }
@@ -51,7 +58,6 @@ public static class ProductExtensions
         ArgumentNullException.ThrowIfNull(products);
 
         return products
-            .Include(product => product.Brand)
             .Include(product => product.Type)
             .Include(product => product.Session)
                 .ThenInclude(session => session.Basar)

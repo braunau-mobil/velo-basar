@@ -1,5 +1,4 @@
-﻿
-using BraunauMobil.VeloBasar.Rendering;
+﻿using BraunauMobil.VeloBasar.Rendering;
 
 namespace BraunauMobil.VeloBasar.Routing;
 
@@ -14,8 +13,6 @@ public interface IVeloRouter
     IAdminRouter Admin { get; }
 
     ICrudRouter<BasarEntity> Basar { get; }
-    
-    ICrudRouter<BrandEntity> Brand { get; }
 
     ICancelRouter Cancel { get; }
 

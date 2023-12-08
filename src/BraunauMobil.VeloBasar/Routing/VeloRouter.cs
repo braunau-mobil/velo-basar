@@ -11,14 +11,13 @@ public sealed partial class VeloRouter
     , IVeloRouter
 {
     public VeloRouter(LinkGenerator linkGenerator
-        , IAcceptProductRouter acceptProduct, IAcceptSessionRouter acceptSession, IAdminRouter admin, ICrudRouter<BasarEntity> basar, ICrudRouter<BrandEntity> brand, ICancelRouter cancel, ICartRouter cart, ICrudRouter<CountryEntity> country, IDevRouter dev, IAcceptanceLabelsRouter labels, IProductRouter products, ICrudRouter<ProductTypeEntity> productType, ISellerRouter seller, ISetupRouter setup, ITransactionRouter transactions)
+        , IAcceptProductRouter acceptProduct, IAcceptSessionRouter acceptSession, IAdminRouter admin, ICrudRouter<BasarEntity> basar, ICancelRouter cancel, ICartRouter cart, ICrudRouter<CountryEntity> country, IDevRouter dev, IAcceptanceLabelsRouter labels, IProductRouter products, ICrudRouter<ProductTypeEntity> productType, ISellerRouter seller, ISetupRouter setup, ITransactionRouter transactions)
         : base(linkGenerator)
     {
         AcceptProduct = acceptProduct ?? throw new ArgumentNullException(nameof(acceptProduct));
         AcceptSession = acceptSession ?? throw new ArgumentNullException(nameof(acceptSession));
         Admin = admin ?? throw new ArgumentNullException(nameof(admin));
         Basar = basar ?? throw new ArgumentNullException(nameof(basar)); 
-        Brand = brand ?? throw new ArgumentNullException(nameof(brand));
         Cancel = cancel ?? throw new ArgumentNullException(nameof(cancel));
         Cart = cart ?? throw new ArgumentNullException(nameof(cart));
         Country = country ?? throw new ArgumentNullException(nameof(country));
@@ -38,8 +37,6 @@ public sealed partial class VeloRouter
     public IAdminRouter Admin { get; }
 
     public ICrudRouter<BasarEntity> Basar { get; }
-
-    public ICrudRouter<BrandEntity> Brand { get; }
 
     public ICancelRouter Cancel { get; }
 

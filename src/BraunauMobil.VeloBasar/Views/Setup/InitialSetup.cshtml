@@ -13,7 +13,6 @@
         <div class="card-body">
             @VeloHtml.EmailInputField(nameof(Model.AdminUserEMail), Model.AdminUserEMail, Localizer[VeloTexts.AdminUserEMail], autoFocus: true)
             @VeloHtml.CheckBoxField(nameof(Model.GenerateCountries), Model.GenerateCountries, Localizer[VeloTexts.GenerateCountries])
-            @VeloHtml.CheckBoxField(nameof(Model.GenerateBrands), Model.GenerateBrands, Localizer[VeloTexts.GenerateBrands])
             @VeloHtml.CheckBoxField(nameof(Model.GenerateProductTypes), Model.GenerateProductTypes, Localizer[VeloTexts.GenerateProductTypes])
             @VeloHtml.CheckBoxField(nameof(Model.GenerateZipCodes), Model.GenerateZipCodes, Localizer[VeloTexts.GenerateZipCodes])
         </div>

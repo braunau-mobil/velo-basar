@@ -161,5 +161,5 @@ public sealed class WordPressStatusPushService
     }
 
     private static string ProductInfo(ProductEntity product)
-        => $"{product.Brand.Name} - {product.Type.Name}<br/>{product.Description} - {product.Price:C}";
+        => $"{product.Brand} - {product.Type.Name}<br/>{product.Description} - {product.Price:C}";
 }

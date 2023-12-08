@@ -213,9 +213,6 @@
   <data name="VeloBasar_Brand" xml:space="preserve">
     <value>Brands</value>
   </data>
-  <data name="VeloBasar_BrandList" xml:space="preserve">
-    <value>Brands</value>
-  </data>
   <data name="VeloBasar_CalculateChangeMoney" xml:space="preserve">
     <value>Calculate change</value>
   </data>
@@ -273,9 +270,6 @@
   <data name="VeloBasar_CreateBasar" xml:space="preserve">
     <value>Create Bazaar</value>
   </data>
-  <data name="VeloBasar_CreateBrand" xml:space="preserve">
-    <value>Create Brand</value>
-  </data>
   <data name="VeloBasar_CreateCountry" xml:space="preserve">
     <value>Create Country</value>
   </data>
@@ -315,9 +309,6 @@
   <data name="VeloBasar_EditBasar" xml:space="preserve">
     <value>Edit Bazaar</value>
   </data>
-  <data name="VeloBasar_EditBrand" xml:space="preserve">
-    <value>Edit Brand</value>
-  </data>
   <data name="VeloBasar_EditCountry" xml:space="preserve">
     <value>Edit Country</value>
   </data>
@@ -356,9 +347,6 @@
   </data>
   <data name="VeloBasar_FrameNumberLabel" xml:space="preserve">
     <value>Frame number: {0}</value>
-  </data>
-  <data name="VeloBasar_GenerateBrands" xml:space="preserve">
-    <value>Generate sample brands</value>
   </data>
   <data name="VeloBasar_GenerateCountries" xml:space="preserve">
     <value>Generate sample countries</value>
@@ -532,7 +520,7 @@
     <value>Please provide an admin email address.</value>
   </data>
   <data name="VeloBasar_PleaseEnterBrand" xml:space="preserve">
-    <value>Please select a brand.</value>
+    <value>Please enter a brand.</value>
   </data>
   <data name="VeloBasar_PleaseEnterCity" xml:space="preserve">
     <value>Please enter a city.</value>

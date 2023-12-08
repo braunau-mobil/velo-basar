@@ -40,7 +40,7 @@ public class List
         parameter.SearchString = productId.ToString();
         ProductService.Setup(_ => _.ExistsForBasarAsync(activeBasarId, productId))
             .ReturnsAsync(false);
-        ProductService.Setup(_ => _.GetManyAsync(parameter.PageSize!.Value, parameter.PageIndex, activeBasarId, parameter.SearchString, parameter.StorageState, parameter.ValueState, parameter.BrandId, parameter.ProductTypeId))
+        ProductService.Setup(_ => _.GetManyAsync(parameter.PageSize!.Value, parameter.PageIndex, activeBasarId, parameter.SearchString, parameter.StorageState, parameter.ValueState, parameter.Brand, parameter.ProductTypeId))
             .ReturnsAsync(list);
 
         //  Act
@@ -52,7 +52,7 @@ public class List
         view.ViewData.ModelState.IsValid.Should().BeTrue();
 
         ProductService.Verify(_ => _.ExistsForBasarAsync(activeBasarId, productId), Times.Once());
-        ProductService.Verify(_ => _.GetManyAsync(parameter.PageSize!.Value, parameter.PageIndex, activeBasarId, parameter.SearchString, parameter.StorageState, parameter.ValueState, parameter.BrandId, parameter.ProductTypeId), Times.Once());
+        ProductService.Verify(_ => _.GetManyAsync(parameter.PageSize!.Value, parameter.PageIndex, activeBasarId, parameter.SearchString, parameter.StorageState, parameter.ValueState, parameter.Brand, parameter.ProductTypeId), Times.Once());
         VerifyNoOtherCalls();
     }
 
@@ -62,7 +62,7 @@ public class List
     {
         //  Arrange
         IPaginatedList<ProductEntity> list = Fixture.CreatePaginatedList<ProductEntity>();
-        ProductService.Setup(_ => _.GetManyAsync(parameter.PageSize!.Value, parameter.PageIndex, activeBasarId, parameter.SearchString, parameter.StorageState, parameter.ValueState, parameter.BrandId, parameter.ProductTypeId))
+        ProductService.Setup(_ => _.GetManyAsync(parameter.PageSize!.Value, parameter.PageIndex, activeBasarId, parameter.SearchString, parameter.StorageState, parameter.ValueState, parameter.Brand, parameter.ProductTypeId))
             .ReturnsAsync(list);
 
         //  Act
@@ -73,7 +73,7 @@ public class List
         view.Model.Should().BeOfType<ListModel<ProductEntity, ProductListParameter>>();
         view.ViewData.ModelState.IsValid.Should().BeTrue();
 
-        ProductService.Verify(_ => _.GetManyAsync(parameter.PageSize!.Value, parameter.PageIndex, activeBasarId, parameter.SearchString, parameter.StorageState, parameter.ValueState, parameter.BrandId, parameter.ProductTypeId), Times.Once());
+        ProductService.Verify(_ => _.GetManyAsync(parameter.PageSize!.Value, parameter.PageIndex, activeBasarId, parameter.SearchString, parameter.StorageState, parameter.ValueState, parameter.Brand, parameter.ProductTypeId), Times.Once());
         VerifyNoOtherCalls();
     }
 }

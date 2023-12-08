@@ -89,7 +89,6 @@ public class Program
         {
             BasarCount = 1,
             FirstBasarDate = new DateTime(2063, 04, 05),
-            GenerateBrands = true,
             GenerateCountries = true,
             GenerateProductTypes = true,
             GenerateZipCodes = true,

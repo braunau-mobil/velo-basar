@@ -63,8 +63,6 @@ public sealed class AcceptSessionService
             .Include(s => s.Basar)
             .Include(s => s.Products)
             .Include(s => s.Products)
-                .ThenInclude(p => p.Brand)
-            .Include(s => s.Products)
                 .ThenInclude(p => p.Type)
             .FirstByIdAsync(id);
 

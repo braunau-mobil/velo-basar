@@ -7,18 +7,16 @@ public class UpdateAsync
 {
 	[Theory]
 	[AutoData]
-	public async Task ProductIsAttachedAndUpdated(ProductEntity productToInsert, BrandEntity brand, ProductTypeEntity productType, ProductEntity productToUpdate)
+	public async Task ProductIsAttachedAndUpdated(ProductEntity productToInsert, string brand, ProductTypeEntity productType, ProductEntity productToUpdate)
 	{
 		//	Arrange
 		Db.Products.Add(productToInsert);
-		Db.Brands.Add(brand);
 		Db.ProductTypes.Add(productType);
 		await Db.SaveChangesAsync();
 		Db.ChangeTracker.Clear();
 
 		productToUpdate.Id = productToInsert.Id;
-		productToUpdate.BrandId = brand.Id;
-		productToUpdate.Brand = null!;
+		productToUpdate.Brand = brand;
 		productToUpdate.TypeId = productType.Id;
 		productToUpdate.Type = null!;
 		productToUpdate.SessionId = productToInsert.SessionId;
@@ -42,8 +40,7 @@ public class UpdateAsync
         Db.ChangeTracker.Clear();
 
         updated.Id = initial.Id;
-        updated.BrandId = initial.BrandId;
-        updated.Brand = null!;
+        updated.Brand = initial.Brand;
         updated.TypeId = initial.TypeId;
         updated.Type = null!;
         updated.SessionId = initial.SessionId;

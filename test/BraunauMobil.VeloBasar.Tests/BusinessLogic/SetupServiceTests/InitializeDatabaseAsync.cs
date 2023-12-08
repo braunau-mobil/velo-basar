@@ -21,36 +21,6 @@ public class InitializeDatabaseAsync
         //  Arrange
         Db.AcceptSessions.Should().BeEmpty();
         Db.Basars.Should().BeEmpty();
-        Db.Brands.Should().BeEmpty();
-        Db.Countries.Should().BeEmpty();
-        Db.Files.Should().BeEmpty();
-        Db.Numbers.Should().BeEmpty();
-        Db.Products.Should().BeEmpty();
-        Db.ProductToTransaction.Should().BeEmpty();
-        Db.ProductTypes.Should().BeEmpty();
-        Db.Sellers.Should().BeEmpty();
-        Db.Transactions.Should().BeEmpty();
-        Db.ZipCodes.Should().BeEmpty();
-    }
-
-    [Theory]
-    [AutoData]
-    public async Task GenerateBrands_ShouldGenerateBrands(MailAddress adminUserEmail)
-    {
-        //  Arrange
-        InitializationConfiguration config = new()
-        {
-            AdminUserEMail = adminUserEmail.ToString(),
-            GenerateBrands = true
-        };
-
-        //  Act
-        await Sut.InitializeDatabaseAsync(config);
-
-        //  Arrange
-        Db.AcceptSessions.Should().BeEmpty();
-        Db.Basars.Should().BeEmpty();
-        Db.Brands.Should().NotBeEmpty();
         Db.Countries.Should().BeEmpty();
         Db.Files.Should().BeEmpty();
         Db.Numbers.Should().BeEmpty();
@@ -79,7 +49,6 @@ public class InitializeDatabaseAsync
         //  Arrange
         Db.AcceptSessions.Should().BeEmpty();
         Db.Basars.Should().BeEmpty();
-        Db.Brands.Should().BeEmpty();
         Db.Countries.Should().NotBeEmpty();
         Db.Files.Should().BeEmpty();
         Db.Numbers.Should().BeEmpty();
@@ -108,7 +77,6 @@ public class InitializeDatabaseAsync
         //  Arrange
         Db.AcceptSessions.Should().BeEmpty();
         Db.Basars.Should().BeEmpty();
-        Db.Brands.Should().BeEmpty();
         Db.Countries.Should().BeEmpty();
         Db.Files.Should().BeEmpty();
         Db.Numbers.Should().BeEmpty();
@@ -138,7 +106,6 @@ public class InitializeDatabaseAsync
         //  Arrange
         Db.AcceptSessions.Should().BeEmpty();
         Db.Basars.Should().BeEmpty();
-        Db.Brands.Should().BeEmpty();
         Db.Countries.Should().NotBeEmpty();
         Db.Files.Should().BeEmpty();
         Db.Numbers.Should().BeEmpty();

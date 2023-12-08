@@ -10,8 +10,6 @@ public class InitializationConfiguration
     
     public bool GenerateCountries { get; set; }
     
-    public bool GenerateBrands { get; set; }
-    
     public bool GenerateProductTypes { get; set; }
     
     public bool GenerateZipCodes { get; set; }

@@ -10,11 +10,11 @@ public interface IDataGeneratorService
 
     BasarEntity NextBasar();
 
-    BrandEntity NextBrand();
+    string NextBrand();
 
     CountryEntity NextCountry();
 
-    ProductEntity NextProduct(BrandEntity brand, ProductTypeEntity productType, AcceptSessionEntity session);
+    ProductEntity NextProduct(string brand, ProductTypeEntity productType, AcceptSessionEntity session);
     
     ProductTypeEntity NextProductType();
 

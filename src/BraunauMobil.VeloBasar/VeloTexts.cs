@@ -60,7 +60,6 @@ public static class VeloTexts
     public const string BasarDetails = $"{Prefix}{nameof(BasarDetails)}";
     public const string BasarList = $"{Prefix}{nameof(BasarList)}";
     public const string Brand = $"{Prefix}{nameof(Brand)}";
-    public const string BrandList = $"{Prefix}{nameof(BrandList)}";
     public const string CalculateChangeMoney = $"{Prefix}{nameof(CalculateChangeMoney)}";
     public const string Cancel = $"{Prefix}{nameof(Cancel)}";
     public const string Cancellate = $"{Prefix}{nameof(Cancellate)}";
@@ -83,7 +82,6 @@ public static class VeloTexts
     public const string Country = $"{Prefix}{nameof(Country)}";
     public const string CountryList = $"{Prefix}{nameof(CountryList)}";
     public const string CreateBasar = $"{Prefix}{nameof(CreateBasar)}";
-    public const string CreateBrand = $"{Prefix}{nameof(CreateBrand)}";
     public const string CreateCountry = $"{Prefix}{nameof(CreateCountry)}";
     public const string CreatedAt = $"{Prefix}{nameof(CreatedAt)}";
     public const string CreateProductType = $"{Prefix}{nameof(CreateProductType)}";
@@ -100,7 +98,6 @@ public static class VeloTexts
     public const string DoUnlock = $"{Prefix}{nameof(DoUnlock)}";
     public const string Edit = $"{Prefix}{nameof(Edit)}";
     public const string EditBasar = $"{Prefix}{nameof(EditBasar)}";
-    public const string EditBrand = $"{Prefix}{nameof(EditBrand)}";
     public const string EditCountry = $"{Prefix}{nameof(EditCountry)}";
     public const string EditProduct = $"{Prefix}{nameof(EditProduct)}";
     public const string EditProductType = $"{Prefix}{nameof(EditProductType)}";
@@ -115,7 +112,6 @@ public static class VeloTexts
     public const string FirstNameIsTooLong = $"{Prefix}{nameof(FirstNameIsTooLong)}";
     public const string FrameNumber = $"{Prefix}{nameof(FrameNumber)}";
     public const string FrameNumberLabel = $"{Prefix}{nameof(FrameNumberLabel)}";
-    public const string GenerateBrands = $"{Prefix}{nameof(GenerateBrands)}";
     public const string GenerateCountries = $"{Prefix}{nameof(GenerateCountries)}";
     public const string GenerateCountriesMustBeActiveForGeneratingZipCodes = $"{Prefix}{nameof(GenerateCountriesMustBeActiveForGeneratingZipCodes)}";
     public const string GenerateProductTypes = $"{Prefix}{nameof(GenerateProductTypes)}";

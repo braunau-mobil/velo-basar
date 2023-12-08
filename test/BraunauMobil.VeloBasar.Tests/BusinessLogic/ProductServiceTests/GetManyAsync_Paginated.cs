@@ -5,12 +5,12 @@ public class GetManyAsync_Paginated
 {
     [Theory]
     [AutoData]
-    public async Task EmptyDatabase_ReturnsEmptyList(int pageSize, int pageIndex, int basarId, string searchString, StorageState storageState, ValueState valueState, int brandId, int productTypeId)
+    public async Task EmptyDatabase_ReturnsEmptyList(int pageSize, int pageIndex, int basarId, string searchString, StorageState storageState, ValueState valueState, string brand, int productTypeId)
     {
         //  Arrange
 
         //  Act
-        IReadOnlyCollection<ProductEntity> products = await Sut.GetManyAsync(pageSize, pageIndex, basarId, searchString, storageState, valueState, brandId, productTypeId);
+        IReadOnlyCollection<ProductEntity> products = await Sut.GetManyAsync(pageSize, pageIndex, basarId, searchString, storageState, valueState, brand, productTypeId);
 
         //  Assert
         products.Should().BeEmpty();
@@ -81,17 +81,16 @@ public class GetManyAsync_Paginated
 
     [Theory]
     [AutoData]
-    public async Task ProductsExist_ReturnsAllWithSameBrandId(BasarEntity basar, ProductEntity[] products, BrandEntity brand)
+    public async Task ProductsExist_ReturnsAllWithSameBrand(BasarEntity basar, ProductEntity[] products, string brand)
     {
         //  Arrange
-        Db.Brands.Add(brand);
         await InsertProductsAsync(basar, products, product =>
         {
             product.Brand = brand;
         });
 
         //  Act
-        IReadOnlyCollection<ProductEntity> result = await Sut.GetManyAsync(int.MaxValue, 0, basar.Id, string.Empty, null, null, brand.Id, null);
+        IReadOnlyCollection<ProductEntity> result = await Sut.GetManyAsync(int.MaxValue, 0, basar.Id, string.Empty, null, null, brand, null);
 
         //  Assert
         result.Should().BeEquivalentTo(products);
@@ -121,10 +120,9 @@ public class GetManyAsync_Paginated
 
     [Theory]
     [AutoData]
-    public async Task ProductsExist_ReturnsAllWithSame(BasarEntity basar, ProductEntity[] products, StorageState storageState, ValueState valueState, BrandEntity brand, ProductTypeEntity productType)
+    public async Task ProductsExist_ReturnsAllWithSame(BasarEntity basar, ProductEntity[] products, StorageState storageState, ValueState valueState, string brand, ProductTypeEntity productType)
     {
         //  Arrange
-        Db.Brands.Add(brand);
         Db.ProductTypes.Add(productType);
         await InsertProductsAsync(basar, products, product =>
         {
@@ -135,7 +133,7 @@ public class GetManyAsync_Paginated
         });
 
         //  Act
-        IReadOnlyCollection<ProductEntity> result = await Sut.GetManyAsync(int.MaxValue, 0, basar.Id, string.Empty, storageState, valueState, brand.Id, productType.Id);
+        IReadOnlyCollection<ProductEntity> result = await Sut.GetManyAsync(int.MaxValue, 0, basar.Id, string.Empty, storageState, valueState, brand, productType.Id);
 
         //  Assert
         result.Should().BeEquivalentTo(products);

@@ -64,7 +64,7 @@ public sealed class ProductController
             }
         }
 
-        IPaginatedList<ProductEntity> items = await _productService.GetManyAsync(parameter.PageSize.Value, parameter.PageIndex, activeBasarId, parameter.SearchString, parameter.StorageState, parameter.ValueState, parameter.BrandId, parameter.ProductTypeId);
+        IPaginatedList<ProductEntity> items = await _productService.GetManyAsync(parameter.PageSize.Value, parameter.PageIndex, activeBasarId, parameter.SearchString, parameter.StorageState, parameter.ValueState, parameter.Brand, parameter.ProductTypeId);
         ListModel<ProductEntity, ProductListParameter> model = new(items, parameter);
         return View(model);
     }

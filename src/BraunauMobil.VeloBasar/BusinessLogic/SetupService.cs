@@ -57,11 +57,6 @@ public sealed class SetupService
             await _db.SaveChangesAsync();
         }
 
-        if (config.GenerateBrands)
-        {
-            GenerateBrands();
-        }
-
         if (config.GenerateProductTypes)
         {
             GenerateProductTypes();
@@ -75,17 +70,6 @@ public sealed class SetupService
         await _db.SaveChangesAsync();
     }
 
-    private void GenerateBrands()
-    {
-        foreach (string brandName in Names.BrandNames)
-        {
-            _db.Brands.Add(new BrandEntity
-            {
-                Name = brandName,
-                State = ObjectState.Enabled
-            });
-        }
-    }
     private void GenerateProductTypes()
     {
         foreach (string productTypeName in Names.ProductTypeNames)

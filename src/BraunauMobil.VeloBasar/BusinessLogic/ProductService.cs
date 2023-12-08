@@ -58,7 +58,6 @@ public sealed class ProductService
     public async Task<FileDataEntity> GetLabelAsync(int productId)
     {
         ProductEntity product = await _db.Products
-            .Include(product => product.Brand)
             .Include(product => product.Type)
             .Include(product => product.Session)
                 .ThenInclude(session => session.Basar)
@@ -72,7 +71,6 @@ public sealed class ProductService
     public async Task<IReadOnlyList<ProductEntity>> GetManyAsync(IList<int> ids)
     {
         IReadOnlyList<ProductEntity> items = await _db.Products
-            .Include(product => product.Brand)
             .Include(product => product.Type)
             .Include(product => product.Session)
             .Where(product => ids.Contains(product.Id))
@@ -80,10 +78,9 @@ public sealed class ProductService
         return items.OrderBy(product => ids.IndexOf(product.Id)).ToArray();
     }
 
-    public async Task<IPaginatedList<ProductEntity>> GetManyAsync(int pageSize, int pageIndex, int activeBasarId, string searchString, StorageState? storageState, ValueState? valueState, int? brandId, int? productTypeId)
+    public async Task<IPaginatedList<ProductEntity>> GetManyAsync(int pageSize, int pageIndex, int activeBasarId, string searchString, StorageState? storageState, ValueState? valueState, string? brand, int? productTypeId)
     {
         IQueryable<ProductEntity> iq = _db.Products
-            .Include(product => product.Brand)
             .Include(product => product.Type)
             .Include(product => product.Session)
             .Where(product => product.Session.BasarId == activeBasarId);
@@ -102,9 +99,9 @@ public sealed class ProductService
             iq = iq.Where(product => product.ValueState == valueState.Value);
         }
 
-        if (brandId != null)
+        if (brand is not null)
         {
-            iq = iq.Where(product => product.BrandId == brandId.Value);
+            iq = iq.Where(product => product.Brand == brand);
         }
 
         if (productTypeId != null)
@@ -153,14 +150,14 @@ public sealed class ProductService
     {
         if (_db.IsPostgreSQL())
         {
-            return p => EF.Functions.ILike(p.Brand.Name, $"%{searchString}%")
+            return p => EF.Functions.ILike(p.Brand, $"%{searchString}%")
             || (p.Color != null && EF.Functions.ILike(p.Color, $"%{searchString}%"))
             || EF.Functions.ILike(p.Description, $"%{searchString}%")
             || (p.FrameNumber != null && EF.Functions.ILike(p.FrameNumber, $"%{searchString}%"))
             || (p.TireSize != null && EF.Functions.ILike(p.TireSize, $"%{searchString}%"))
             || EF.Functions.ILike(p.Type.Name, $"%{searchString}%");
         }
-        return p => EF.Functions.Like(p.Brand.Name, $"%{searchString}%")
+        return p => EF.Functions.Like(p.Brand, $"%{searchString}%")
             || (p.Color != null && EF.Functions.Like(p.Color, $"%{searchString}%"))
             || EF.Functions.Like(p.Description, $"%{searchString}%")
             || (p.FrameNumber != null && EF.Functions.Like(p.FrameNumber, $"%{searchString}%"))

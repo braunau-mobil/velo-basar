@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Localization;
-
 using Xan.AspNetCore.Rendering;
 
 namespace BraunauMobil.VeloBasar.Rendering;
@@ -152,7 +151,7 @@ public sealed class DefaultVeloHtmlFactory
             builder.IdColumn(item => getProduct(item).Id);
         }
         builder
-            .Column(c => c.PercentWidth(10).BreakText().Title(Localizer[VeloTexts.Brand]).For(item => getProduct(item).Brand.Name))
+            .Column(c => c.PercentWidth(10).BreakText().Title(Localizer[VeloTexts.Brand]).For(item => getProduct(item).Brand))
             .Column(c => c.PercentWidth(10).BreakText().Title(Localizer[VeloTexts.Type]).For(item => getProduct(item).Type.Name))
             .Column(c => c.PercentWidth(20).BreakText().Title(Localizer[VeloTexts.Color]).For(item => getProduct(item).Color))
             .Column(c => c.PercentWidth(10).Title(Localizer[VeloTexts.FrameNumber]).For(item => getProduct(item).FrameNumber))

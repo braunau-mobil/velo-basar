@@ -6,7 +6,9 @@ public interface ISelectListService
 {
     SelectList AcceptStates(bool includeAll = false);
 
-    Task<SelectList> BrandsAsync(bool includeAll = false);
+    Task<ISet<string?>> BrandsAsync();
+
+    Task<SelectList> BrandsForSelectionAsync(bool includeAll = false);
 
     Task<SelectList> CountriesAsync();
 

@@ -16,7 +16,7 @@ public interface IProductService
 
     Task<IReadOnlyList<ProductEntity>> GetManyAsync(IList<int> ids);
 
-    Task<IPaginatedList<ProductEntity>> GetManyAsync(int pageSize, int pageIndex, int activeBasarId, string searchString, StorageState? storageState, ValueState? valueState, int? brandId, int? productTypeId);
+    Task<IPaginatedList<ProductEntity>> GetManyAsync(int pageSize, int pageIndex, int activeBasarId, string searchString, StorageState? storageState, ValueState? valueState, string? brand, int? productTypeId);
 
     Task LockAsync(int id, string notes);
 

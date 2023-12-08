@@ -21,17 +21,16 @@ public class CreateAsync
 
     [Theory]
     [AutoData]
-    public async Task ValidProduct_CreatesProductAndReloadsItsRelations(BrandEntity brand, ProductTypeEntity productType, AcceptSessionEntity acceptSession, ProductEntity product)
+    public async Task ValidProduct_CreatesProductAndReloadsItsRelations(string brand, ProductTypeEntity productType, AcceptSessionEntity acceptSession, ProductEntity product)
     {
         //  Arrange
-        Db.Brands.Add(brand);
         Db.ProductTypes.Add(productType);
         Db.AcceptSessions.Add(acceptSession);
 
         await Db.SaveChangesAsync();
 
         product.Brand = null!;
-        product.BrandId = brand.Id;
+        product.Brand = brand;
         product.Session = null!;
         product.SessionId = acceptSession.Id;
         product.Type = null!;

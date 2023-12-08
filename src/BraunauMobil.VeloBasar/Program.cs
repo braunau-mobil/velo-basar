@@ -57,7 +57,8 @@ public static class Program
         app.MapControllerRoute(
             name: "default",
             pattern: "{controller}/{action}",
-            defaults: new { controller = MvcHelper.ControllerName<HomeController>(), action = nameof(HomeController.Index) });
+            defaults: new { controller = MvcHelper.ControllerName<HomeController>(), action = nameof(HomeController.Index) }
+        );
 
         using (IServiceScope scope = app.Services.CreateScope())
         {
@@ -142,7 +143,6 @@ public static class Program
         services.AddCrud(options =>
         {
             options.AddController<BasarEntity, BasarCrudService, BasarCrudModelFactory>(true);
-            options.AddController<BrandEntity, BrandCrudService, BrandCrudModelFactory>(true);
             options.AddController<CountryEntity, CountryCrudService, CountryCrudModelFactory>(true);
             options.AddController<ProductTypeEntity, ProductTypeCrudService, ProductTypeCrudModelFactory>(true);
         });
