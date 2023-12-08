@@ -4,6 +4,8 @@ using BraunauMobil.VeloBasar.Parameters;
 using BraunauMobil.VeloBasar.Routing;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
+using Org.BouncyCastle.Asn1.Cms;
+using Org.BouncyCastle.Pkcs;
 using Xan.Extensions.Collections.Generic;
 
 namespace BraunauMobil.VeloBasar.Controllers;
@@ -125,5 +127,16 @@ public sealed class SellerController
     {
         int settlementId = await _sellerService.SettleAsync(activeBasarId, id);
         return Redirect(_router.Transaction.ToSucess(settlementId));
+    }
+
+    protected override IActionResult RedirectToOrigin(SellerEntity entity, string? origin)
+    {
+        ArgumentNullException.ThrowIfNull(entity);
+
+        if (origin == "details")
+        {
+            return Redirect(_router.Seller.ToDetails(entity.Id));
+        }
+        return base.RedirectToOrigin(entity, origin);
     }
 }

@@ -49,7 +49,7 @@
         {
             <a class="btn btn-outline-primary" href="@Router.Seller.ToLabels(Model.Entity.Id)" target="_blank">@Localizer[VeloTexts.PrintLabels]</a>            
         }
-        <a class="btn btn-primary" href="@Router.Seller.ToEdit(Model.Entity.Id)">@Localizer[VeloTexts.Edit]</a>
+        <a class="btn btn-primary" href="@Router.Seller.ToEdit(Model.Entity.Id, origin: "details")">@Localizer[VeloTexts.Edit]</a>
     </div>
 </div>
 
