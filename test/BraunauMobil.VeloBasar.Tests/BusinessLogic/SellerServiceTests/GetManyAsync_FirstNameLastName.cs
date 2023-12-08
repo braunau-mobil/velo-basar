@@ -1,6 +1,4 @@
-﻿using AutoFixture.Dsl;
-
-namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.SellerServiceTests;
+﻿namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.SellerServiceTests;
 
 public class GetManyAsync_FirstNameLastName
     : TestBase<EmptySqliteDbFixture>
@@ -39,17 +37,16 @@ public class GetManyAsync_FirstNameLastName
     public async Task MatchFirstName_ShouldReturnMatchedSllers()
     {
         //  Arrange
-        Fixture fixture = new();
-        IEnumerable<SellerEntity> otherSellers = BuildSeller().CreateMany();
+        IEnumerable<SellerEntity> otherSellers = _fixture.BuildSeller().CreateMany();
         Db.Sellers.AddRange(otherSellers);
 
-        SellerEntity aragog = fixture.Build<SellerEntity>()
+        SellerEntity aragog = _fixture.BuildSeller()
             .With(_ => _.FirstName, "Aragog")
             .Create();
-        SellerEntity aragorn = fixture.Build<SellerEntity>()
+        SellerEntity aragorn = _fixture.BuildSeller()
             .With(_ => _.LastName, "Aragorn")
             .Create();
-        SellerEntity aragogAragorn = fixture.Build<SellerEntity>()
+        SellerEntity aragogAragorn = _fixture.BuildSeller()
             .With(_ => _.FirstName, "Aragog")
             .With(_ => _.LastName, "Aragorn")
             .Create();
@@ -69,17 +66,16 @@ public class GetManyAsync_FirstNameLastName
     public async Task MatchLastName_ShouldReturnMatchedSllers()
     {
         //  Arrange
-        Fixture fixture = new();
-        IEnumerable<SellerEntity> otherSellers = BuildSeller().CreateMany();
+        IEnumerable<SellerEntity> otherSellers = _fixture.BuildSeller().CreateMany();
         Db.Sellers.AddRange(otherSellers);
 
-        SellerEntity aragog = BuildSeller()
+        SellerEntity aragog = _fixture.BuildSeller()
             .With(_ => _.FirstName, "Aragog")
             .Create();
-        SellerEntity aragorn = BuildSeller()
+        SellerEntity aragorn = _fixture.BuildSeller()
             .With(_ => _.LastName, "Aragorn")
             .Create();
-        SellerEntity aragogAragorn = BuildSeller()
+        SellerEntity aragogAragorn = _fixture.BuildSeller()
             .With(_ => _.FirstName, "Aragog")
             .With(_ => _.LastName, "Aragorn")
             .Create();
@@ -99,17 +95,16 @@ public class GetManyAsync_FirstNameLastName
     public async Task MatchBoth_ShouldReturnMatchedSllers()
     {
         //  Arrange
-        Fixture fixture = new();
-        IEnumerable<SellerEntity> otherSellers = BuildSeller().CreateMany();
+        IEnumerable<SellerEntity> otherSellers = _fixture.BuildSeller().CreateMany();
         Db.Sellers.AddRange(otherSellers);
 
-        SellerEntity aragog = fixture.Build<SellerEntity>()
+        SellerEntity aragog = _fixture.BuildSeller()
             .With(_ => _.FirstName, "Aragog")
             .Create();
-        SellerEntity aragorn = fixture.Build<SellerEntity>()
+        SellerEntity aragorn = _fixture.BuildSeller()
             .With(_ => _.LastName, "Aragorn")
             .Create();
-        SellerEntity aragogAragorn = fixture.Build<SellerEntity>()
+        SellerEntity aragogAragorn = _fixture.BuildSeller()
             .With(_ => _.FirstName, "Aragog")
             .With(_ => _.LastName, "Aragorn")
             .Create();
@@ -122,12 +117,5 @@ public class GetManyAsync_FirstNameLastName
         //  Assert
         result.Should().HaveCount(1);
         result.Any(_ => _.Id == aragogAragorn.Id).Should().BeTrue();
-    }
-
-    private IPostprocessComposer<SellerEntity> BuildSeller()
-    {
-        return _fixture.Build<SellerEntity>()
-            .Without(_ => _.Id)
-            .Without(_ => _.CountryId);
     }
 }

@@ -51,7 +51,7 @@ public class GetSellerCountAsync
     {
         //  Arrange
         CountryEntity country = _fixture.Create<CountryEntity>();
-        IEnumerable<SellerEntity> sellers = _fixture.Build<SellerEntity>()
+        IEnumerable<SellerEntity> sellers = _fixture.BuildSeller()
             .With(_ => _.Country, country)
             .With(_ => _.CountryId, country.Id)
             .CreateMany();

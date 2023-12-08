@@ -52,6 +52,15 @@ public static class FixtureExtensions
             .With(_ => _.TransactionId, transaction.Id);
     }
 
+    public static IPostprocessComposer<SellerEntity> BuildSeller(this Fixture fixture)
+    {
+        ArgumentNullException.ThrowIfNull(fixture);
+
+        return fixture.Build<SellerEntity>()
+            .Without(_ => _.Id)
+            .Without(_ => _.CountryId);
+    }
+
     public static IPostprocessComposer<SelectSaleModel> BuildSelectSaleModel(this Fixture fixture)
     {
         ArgumentNullException.ThrowIfNull(fixture);

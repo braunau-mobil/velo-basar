@@ -48,7 +48,7 @@ public class GetSettledSellerCountAsync
     {
         //  Arrange
         CountryEntity country = _fixture.Create<CountryEntity>();
-        IEnumerable<SellerEntity> settledSellers = _fixture.Build<SellerEntity>()
+        IEnumerable<SellerEntity> settledSellers = _fixture.BuildSeller()
             .With(_ => _.Country, country)
             .With(_ => _.CountryId, country.Id)
             .With(_ => _.ValueState, ValueState.Settled)
@@ -66,7 +66,7 @@ public class GetSettledSellerCountAsync
             Db.Sellers.Add(seller);
         }
 
-        IEnumerable<SellerEntity> unSettledSellers = _fixture.Build<SellerEntity>()
+        IEnumerable<SellerEntity> unSettledSellers = _fixture.BuildSeller()
             .With(_ => _.Country, country)
             .With(_ => _.CountryId, country.Id)
             .With(_ => _.ValueState, ValueState.NotSettled)

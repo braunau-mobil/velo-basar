@@ -129,7 +129,7 @@ public class GetManyAsync_Paginated
 
     private IPostprocessComposer<SellerEntity> BuildSeller()
     {
-        return _fixture.Build<SellerEntity>()
+        return _fixture.BuildSeller()
             .Without(_ => _.Id);
     }
 }
