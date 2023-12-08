@@ -70,9 +70,6 @@ public sealed class TransactionDocumentService
             _pdf.AddSubtitle(doc, _settings.Acceptance.SubTitle);
 
             AddProductTable(doc, acceptance.Products.GetProducts(), _localizer[VeloTexts.Price], includeDonationHint: true);
-
-            AddSignature(doc, _settings.Acceptance.SignatureText, acceptance);
-
             
             if (_settings.Acceptance.StatusLinkFormat != null)
             {
@@ -89,7 +86,7 @@ public sealed class TransactionDocumentService
                     .Add(qrImage)
                     .Add(statusLink)
                     .SetKeepTogether(true)
-                    .SetHorizontalAlignment(HorizontalAlignment.CENTER)
+                    .SetHorizontalAlignment(HorizontalAlignment.LEFT)
                     .SetTextAlignment(TextAlignment.CENTER)
                     .SetBorderRadius(new BorderRadius(5))
                     .SetBorder(new SolidBorder(2))
@@ -100,6 +97,8 @@ public sealed class TransactionDocumentService
 
                 doc.Add(barcodeAndLink);
             }
+
+            AddSignature(doc, _settings.Acceptance.SignatureText, acceptance);
         });
     }
 
@@ -162,9 +161,7 @@ public sealed class TransactionDocumentService
             }
 
             doc.Add(_pdf.GetSpacer(5));
-            doc.Add(_pdf.GetRegularParagraph(_settings.Settlement.ConfirmationText));
-
-            AddSignature(doc, _settings.Settlement.SignatureText, settlement);
+            doc.Add(_pdf.GetRegularParagraph(_settings.Settlement.ConfirmationText));            
 
             if (settlement.NeedsBankingQrCodeOnDocument)
             {
@@ -184,7 +181,7 @@ public sealed class TransactionDocumentService
                     .Add(Environment.NewLine)
                     .Add(_pdf.GetRegularParagraph(settlement.Seller.IBAN.ToPrettyIBAN()))
                     .SetKeepTogether(true)
-                    .SetHorizontalAlignment(HorizontalAlignment.CENTER)
+                    .SetHorizontalAlignment(HorizontalAlignment.LEFT)
                     .SetTextAlignment(TextAlignment.CENTER)
                     .SetBorderRadius(new BorderRadius(5))
                     .SetBorder(new SolidBorder(2))
@@ -195,6 +192,8 @@ public sealed class TransactionDocumentService
 
                 doc.Add(barcode);
             }
+
+            AddSignature(doc, _settings.Settlement.SignatureText, settlement);
         });
     }
 
@@ -472,12 +471,17 @@ public sealed class TransactionDocumentService
             locationAndDateString = _localizer[VeloTexts.AtLocationAndDateAndTime, transaction.Basar.Location, transaction.TimeStamp];
         }
         Text locationAndDate = new Text(locationAndDateString)
+           
             .SetFontSize(_pdf.SmallFontSize);
 
         Paragraph p = new Paragraph()
             .Add(signature)
             .Add(Environment.NewLine)
-            .Add(locationAndDate);
+            .Add(locationAndDate)
+            .SetKeepTogether(true)
+            .SetMarginTop(25)
+            .SetTextAlignment(TextAlignment.RIGHT)
+            .SetHorizontalAlignment(HorizontalAlignment.RIGHT);
         doc.Add(p);
     }
 
