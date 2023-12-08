@@ -226,13 +226,7 @@ public sealed class DataGeneratorService
                 continue;
             }
 
-            IReadOnlyList<int> productIds = await _db.Products
-                .Include(product => product.Session)
-                .WhereBasarAndSeller(basarId, sellerId.Value)
-                .Select(product => product.Id)
-                .ToArrayAsync();
-
-            await _transactionService.SettleAsync(basarId, sellerId.Value, productIds);
+            await _sellerService.SettleAsync(basarId, sellerId.Value);
         }
     }
 
