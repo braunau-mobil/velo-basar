@@ -166,11 +166,11 @@ public sealed class TransactionDocumentService
 
             AddSignature(doc, _settings.Settlement.SignatureText, settlement);
 
-            if (!string.IsNullOrEmpty(settlement.Seller.IBAN))
+            if (settlement.NeedsBankingQrCodeOnDocument)
             {
                 decimal amount = settlement.GetPayoutTotalWithoutCommission();
                 string text = string.Format(CultureInfo.InvariantCulture, _settings.Settlement.BankTransactionTextFormat, settlement.Basar.Name);
-                string epQrCode = GetEpQrCode(settlement.Seller.EffectiveBankAccountHolder, settlement.Seller.IBAN, amount, text);
+                string epQrCode = GetEpQrCode(settlement.Seller.EffectiveBankAccountHolder, settlement.Seller.IBAN!, amount, text);
 
                 float length = _settings.QrCodeLengthMillimeters.ToUnit();
                 BarcodeQRCode qrCode = new(epQrCode);

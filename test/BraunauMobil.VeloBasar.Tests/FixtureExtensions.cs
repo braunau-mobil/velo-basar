@@ -96,7 +96,7 @@ public static class FixtureExtensions
     }
 
     public static void ExcludeEnumValues<TEnum>(this IFixture fixture, params TEnum[] valuesToExclude)
-    where TEnum : struct, Enum
+        where TEnum : struct, Enum
     {
         ArgumentNullException.ThrowIfNull(fixture);
         ArgumentNullException.ThrowIfNull(valuesToExclude);

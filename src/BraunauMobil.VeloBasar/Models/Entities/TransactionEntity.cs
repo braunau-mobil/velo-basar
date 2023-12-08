@@ -64,6 +64,16 @@ public sealed class TransactionEntity
             || Type == TransactionType.Settlement;
     }
 
+    public bool NeedsBankingQrCodeOnDocument
+    {
+        get
+        {
+            return Type == TransactionType.Settlement
+                && !string.IsNullOrEmpty(Seller.IBAN)
+                && Products.Any(pt => pt.Product.StorageState == StorageState.Sold);
+        }
+    }
+
     public decimal GetPayoutTotal()
         => Products.GetPayoutProducts().SumPrice();
 
