@@ -945,4 +945,7 @@
   <data name="VeloBasar_SellersForNewsletter" xml:space="preserve">
     <value>Verkäufer mit Newsletter</value>
   </data>
+  <data name="VeloBasar_DonateIfNotSoldOnProductTable" xml:space="preserve">
+    <value>Spenden, falls nicht verkauft.</value>
+  </data>
 </root>

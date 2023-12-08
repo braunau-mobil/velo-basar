@@ -95,6 +95,7 @@ public static class VeloTexts
     public const string DoLock = $"{Prefix}{nameof(DoLock)}";
     public const string Donateable = $"{Prefix}{nameof(Donateable)}";
     public const string DonateIfNotSold = $"{Prefix}{nameof(DonateIfNotSold)}";
+    public const string DonateIfNotSoldOnProductTable = $"{Prefix}{nameof(DonateIfNotSoldOnProductTable)}";
     public const string DoUnlock = $"{Prefix}{nameof(DoUnlock)}";
     public const string Edit = $"{Prefix}{nameof(Edit)}";
     public const string EditBasar = $"{Prefix}{nameof(EditBasar)}";

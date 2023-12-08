@@ -69,7 +69,7 @@ public sealed class TransactionDocumentService
             _pdf.AddTitle(doc, string.Format(CultureInfo.CurrentCulture, _settings.Acceptance.TitleFormat, acceptance.Basar.Name, acceptance.Number));
             _pdf.AddSubtitle(doc, _settings.Acceptance.SubTitle);
 
-            AddProductTable(doc, acceptance.Products.GetProducts(), _localizer[VeloTexts.Price]);
+            AddProductTable(doc, acceptance.Products.GetProducts(), _localizer[VeloTexts.Price], includeDonationHint: true);
 
             AddSignature(doc, _settings.Acceptance.SignatureText, acceptance);
 
@@ -226,7 +226,7 @@ public sealed class TransactionDocumentService
         });
     }
 
-    private void AddProductTable(Document doc, IEnumerable<ProductEntity> products, string priceColumnTitle, bool printSellerInfo = false, string? sellerInfoText = null)
+    private void AddProductTable(Document doc, IEnumerable<ProductEntity> products, string priceColumnTitle, bool printSellerInfo = false, string? sellerInfoText = null, bool includeDonationHint = false)
     {
         ProductEntity[] productsArray = products.ToArray();
 
@@ -295,7 +295,7 @@ public sealed class TransactionDocumentService
                 .SetBorderRight(null)
                 .Add(id);
 
-            Paragraph productInfo = new(GetInfoText(product));
+            Paragraph productInfo = new(GetInfoText(product, includeDonationHint));
             Cell productInfoCell = new Cell()
                 .SetBorderLeft(null)
                 .SetBorderRight(null)
@@ -338,7 +338,7 @@ public sealed class TransactionDocumentService
         doc.Add(productsTable);
     }
 
-    private static string GetInfoText(ProductEntity product)
+    private string GetInfoText(ProductEntity product, bool includeDonationHint = false)
     {
         StringBuilder sb = new();
         sb.Append(product.Brand).Append(" - ").AppendLine(product.Type.Name);
@@ -357,6 +357,11 @@ public sealed class TransactionDocumentService
                 sb.Append(' ')
                     .Append(product.FrameNumber);
             }
+        }
+        if (includeDonationHint && product.DonateIfNotSold)
+        {
+            sb.AppendLine();
+            sb.AppendLine(_localizer[VeloTexts.DonateIfNotSoldOnProductTable]);
         }
         return sb.ToString();
     }

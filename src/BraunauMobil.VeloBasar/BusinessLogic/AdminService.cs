@@ -45,6 +45,9 @@ public partial class AdminService
             NextProduct(basar, seller, StorageState.Available, ValueState.NotSettled),
             NextProduct(basar, seller, StorageState.Available, ValueState.NotSettled)
         };
+        products[0].DonateIfNotSold = true;
+        products[1].DonateIfNotSold = false;
+        products[2].DonateIfNotSold = false;
 
         TransactionEntity transaction = NextTransaction(TransactionType.Acceptance, basar, seller, products);
         return await CreateTransactionDocumentAsync(transaction);
