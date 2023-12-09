@@ -29,7 +29,7 @@ public static class JsonUtils
         return JsonConvert.SerializeObject(config);
     }
 
-    public static string GetLineConfig(IReadOnlyList<ChartDataPoint> points, string label)
+    public static string GetLineConfig(IReadOnlyList<ChartDataPoint> points, string label, bool showLine)
     {
         ArgumentNullException.ThrowIfNull(points);
         ArgumentNullException.ThrowIfNull(label);
@@ -54,7 +54,8 @@ public static class JsonUtils
                         fill = false,
                         data = points.Select(p => p.Value),
                         backgroundColor = color,
-                        borderColor = color
+                        borderColor = color,
+                        showLine = showLine
                     }
                 }
             }

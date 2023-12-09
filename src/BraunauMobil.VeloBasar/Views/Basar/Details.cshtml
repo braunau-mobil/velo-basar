@@ -100,8 +100,8 @@
             renderData('AcceptedProductTypesByAmountChartArea', @Html.Raw(JsonUtils.GetDonutConfig(Model.AcceptedProductTypesByAmount)));
             renderData('SoldProductTypesByCountChartArea', @Html.Raw(JsonUtils.GetDonutConfig(Model.SoldProductTypesByCount)));
             renderData('SoldProductTypesByAmountChartArea', @Html.Raw(JsonUtils.GetDonutConfig(Model.SoldProductTypesByAmount)));
-            renderData('PriceDistributionChartArea', @Html.Raw(JsonUtils.GetLineConfig(Model.PriceDistribution, Localizer[VeloTexts.PriceDistribution])));
-            renderData('SaleDistributionChartArea', @Html.Raw(JsonUtils.GetLineConfig(Model.SaleDistribution, Localizer[VeloTexts.SaleDistribution])));
+            renderData('PriceDistributionChartArea', @Html.Raw(JsonUtils.GetLineConfig(Model.PriceDistribution, Localizer[VeloTexts.PriceDistribution], true)));
+            renderData('SaleDistributionChartArea', @Html.Raw(JsonUtils.GetLineConfig(Model.SaleDistribution, Localizer[VeloTexts.SaleDistribution], false)));
         };
     </script>
 }
