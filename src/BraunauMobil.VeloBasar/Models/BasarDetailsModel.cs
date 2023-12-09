@@ -2,12 +2,13 @@
 
 public sealed class BasarDetailsModel
 {
-    public BasarDetailsModel(BasarEntity entity)
+    public BasarDetailsModel(BasarEntity entity, BasarSettlementStatus settlementStatus)
     {
         Entity = entity ?? throw new ArgumentNullException(nameof(entity));
+        SettlementStatus = settlementStatus ?? throw new ArgumentNullException(nameof(settlementStatus));
     }
 
-    public BasarEntity Entity { get; init; }
+    public BasarEntity Entity { get; }
 
     public int AcceptanceCount { get; init; }
 
@@ -29,9 +30,7 @@ public sealed class BasarDetailsModel
 
     public IReadOnlyList<ChartDataPoint> SaleDistribution { get; init; } = Array.Empty<ChartDataPoint>();
 
-    public int SellerCount { get; init; }
-
-    public int SettlementPercentage { get; init; }
+    public BasarSettlementStatus SettlementStatus { get; }
 
     public decimal SoldProductsAmount { get; init; }
 

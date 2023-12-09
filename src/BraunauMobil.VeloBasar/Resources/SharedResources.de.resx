@@ -951,4 +951,13 @@
   <data name="VeloBasar_PushSellerStatus" xml:space="preserve">
     <value>Push Status</value>
   </data>
+  <data name="VeloBasar_Overall" xml:space="preserve">
+    <value>Gesamt</value>
+  </data>
+  <data name="VeloBasar_SellersThatMayBeSettledOnSite" xml:space="preserve">
+    <value>Verkäufer, die ihr Geld überwiesen bekommen könnten</value>
+  </data>
+  <data name="VeloBasar_SellerThatMustBeSettledOnSite" xml:space="preserve">
+    <value>Verkäufer, die noch vorbeikommen müssen</value>
+  </data>
 </root>

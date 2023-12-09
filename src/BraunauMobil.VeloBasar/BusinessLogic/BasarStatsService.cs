@@ -1,5 +1,6 @@
 using BraunauMobil.VeloBasar.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using System.Globalization;
 using Xan.Extensions;
 
@@ -125,30 +126,63 @@ public class BasarStatsService
             .ToArray();
     }
 
-    public async Task<int> GetSellerCountAsync(int basarId)
-        => await _db.Transactions.AsNoTracking()
-            .ForBasar(basarId, TransactionType.Acceptance)
-            .Select(t => t.SellerId)
-            .Distinct()
-            .CountAsync();
-
-    public async Task<int> GetSettledSellerCountAsync(int basarId)
-        => await _db.Transactions.AsNoTracking()
-            .Include(transaction => transaction.Seller)
-            .ForBasar(basarId, TransactionType.Acceptance)
-            .Where(transaction => transaction.Seller != null && transaction.Seller.ValueState == ValueState.Settled)
-            .Select(t => t.SellerId)
-            .Distinct()
-            .CountAsync();
-
-    public int GetSettlementPercentage(int sellerCount, int settledSellerCount)
+    public async Task<BasarSettlementStatus> GetSettlementStatusAsync(int basarId)
     {
-        if (sellerCount == 0)
+        var products = await _db.Products
+            .Include(p => p.Session)
+                .ThenInclude(s => s.Seller)
+            .Where(p => p.Session.BasarId == basarId)
+            .Select(p => new
+            {
+                ProductState = p.StorageState,
+                Seller = new
+                {
+                    p.Session.SellerId,
+                    p.Session.Seller.ValueState,
+                    p.Session.Seller.IBAN
+                }
+            })
+            .AsNoTracking()
+            .ToArrayAsync();
+
+        int overallCount = 0;
+        int overallSettledCount = 0;
+        int mayBeCount = 0;
+        int mayBeSettledCount = 0;
+        int mustBeCount = 0;
+        int mustBeSettledCount = 0;
+        foreach (var group in products.GroupBy(p => p.Seller))
         {
-            return 0;
+            if (group.Key.IBAN is not null && group.All(x => x.ProductState == StorageState.Sold))
+            {
+                mayBeCount++;
+                if (group.Key.ValueState == ValueState.Settled)
+                {
+                    mayBeSettledCount++;
+                }
+            }
+            else
+            {
+                mustBeCount++;
+                if (group.Key.ValueState == ValueState.Settled)
+                {
+                    mustBeSettledCount++;
+                }
+            }
+
+            overallCount++;
+            if (group.Key.ValueState == ValueState.Settled)
+            {
+                overallSettledCount++;
+            }
         }
 
-        return (int)((double)settledSellerCount / sellerCount * 100.0);
+        return new BasarSettlementStatus(
+            overallCount > 0,
+            new SellerGroupSettlementStatus(overallCount, overallSettledCount),
+            new SellerGroupSettlementStatus(mustBeCount, mustBeSettledCount),
+            new SellerGroupSettlementStatus(mayBeCount, mayBeSettledCount)
+        );
     }
 
     public async Task<IReadOnlyList<Tuple<TimeOnly, decimal>>> GetSoldProductTimestampsAndPricesAsync(int basarId)

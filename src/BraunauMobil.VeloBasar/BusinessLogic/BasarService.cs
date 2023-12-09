@@ -41,13 +41,12 @@ public sealed class BasarService
         BasarEntity basar = await _db.Basars.AsNoTracking()
             .FirstByIdAsync(id);
 
-        int sellerCount = await _statsService.GetSellerCountAsync(id);
-        int settledSellerCount = await _statsService.GetSettledSellerCountAsync(id);
+        BasarSettlementStatus settlementStatus = await _statsService.GetSettlementStatusAsync(id);
 
         IReadOnlyList<ProductEntity> acceptedProducts = await _statsService.GetAcceptedProductsAsync(id);
         IReadOnlyList<Tuple<TimeOnly, decimal>> soldProductTimestampsAndPrices = await _statsService.GetSoldProductTimestampsAndPricesAsync(id);
 
-        return new BasarDetailsModel(basar)
+        return new BasarDetailsModel(basar, settlementStatus)
         {
             AcceptanceCount = await _statsService.GetAcceptanceCountAsync(id),
             AcceptedProductsAmount = _statsService.GetAcceptedProductsAmount(acceptedProducts),
@@ -59,8 +58,6 @@ public sealed class BasarService
             PriceDistribution = _statsService.GetPriceDistribution(acceptedProducts),
             SaleCount = await _statsService.GetSaleCountAsync(id),
             SaleDistribution = _statsService.GetSaleDistribution(soldProductTimestampsAndPrices),
-            SettlementPercentage = _statsService.GetSettlementPercentage(sellerCount, settledSellerCount),
-            SellerCount = sellerCount,
             SoldProductsAmount = _statsService.GetSoldProductsAmount(acceptedProducts),
             SoldProductsCount = _statsService.GetSoldProductsCount(acceptedProducts),
             SoldProductTypesByAmount = _statsService.GetSoldProductTypesWithAmount(acceptedProducts),

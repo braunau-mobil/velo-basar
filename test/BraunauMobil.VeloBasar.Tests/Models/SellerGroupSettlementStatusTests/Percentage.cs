@@ -1,7 +1,6 @@
-﻿namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.BasarStatsServiceTests;
+﻿namespace BraunauMobil.VeloBasar.Tests.Models.SellerGroupSettlementStatusTests;
 
-public class GetSettlementPercentage
-    : TestBase<EmptySqliteDbFixture>
+public class Percentage
 {
     [Theory]
     [InlineData(0, 0, 0)]
@@ -11,13 +10,12 @@ public class GetSettlementPercentage
     public void ReturnsPercentage(int sellerCount, int settledSellerCount, int expectedPercentage)
     {
         //  Arrange
+        SellerGroupSettlementStatus sut = new (sellerCount, settledSellerCount);
 
         //  Act
-        int actualPercentage = Sut.GetSettlementPercentage(sellerCount, settledSellerCount);
+        int actualPercentage = sut.Percentage;
 
         //  Assert
         Assert.Equal(expectedPercentage, actualPercentage);
-
-        VerifyNoOtherCalls();
     }
 }

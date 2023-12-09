@@ -5,7 +5,7 @@ public sealed class GetDetailsAsync
 {    
     [Theory]
     [AutoData]
-    public async Task ValuesShouldBeCorrect(BasarDetailsModel details, ProductEntity[] acceptedProducts, Tuple<TimeOnly, decimal>[] transactionsAndTotals, int settledSellerCount)
+    public async Task ValuesShouldBeCorrect(BasarDetailsModel details, ProductEntity[] acceptedProducts, Tuple<TimeOnly, decimal>[] transactionsAndTotals)
     {
         //  Arrange
         Db.Basars.Add(details.Entity);
@@ -16,8 +16,8 @@ public sealed class GetDetailsAsync
             .ReturnsAsync(details.AcceptanceCount);
         StatsService.Setup(_ => _.GetSaleCountAsync(basarId))
             .ReturnsAsync(details.SaleCount);
-        StatsService.Setup(_ => _.GetSellerCountAsync(basarId))
-            .ReturnsAsync(details.SellerCount);
+        StatsService.Setup(_ => _.GetSettlementStatusAsync(basarId))
+            .ReturnsAsync(details.SettlementStatus);
         StatsService.Setup(_ => _.GetAcceptedProductsAsync(basarId))
             .ReturnsAsync(acceptedProducts);
         StatsService.Setup(_ => _.GetSoldProductTimestampsAndPricesAsync(basarId))
@@ -38,10 +38,6 @@ public sealed class GetDetailsAsync
             .Returns(details.PriceDistribution);
         StatsService.Setup(_ => _.GetSaleDistribution(transactionsAndTotals))
             .Returns(details.SaleDistribution);
-        StatsService.Setup(_ => _.GetSettledSellerCountAsync(basarId))
-            .ReturnsAsync(settledSellerCount);
-        StatsService.Setup(_ => _.GetSettlementPercentage(details.SellerCount, settledSellerCount))
-            .Returns(details.SettlementPercentage);
         StatsService.Setup(_ => _.GetSoldProductsAmount(acceptedProducts))
             .Returns(details.SoldProductsAmount);
         StatsService.Setup(_ => _.GetSoldProductsCount(acceptedProducts))
@@ -61,7 +57,7 @@ public sealed class GetDetailsAsync
         result.Entity.Should().BeEquivalentTo(details.Entity);
         StatsService.Verify(_ => _.GetAcceptanceCountAsync(basarId), Times.Once);
         StatsService.Verify(_ => _.GetSaleCountAsync(basarId), Times.Once);
-        StatsService.Verify(_ => _.GetSellerCountAsync(basarId), Times.Once);
+        StatsService.Verify(_ => _.GetSettlementStatusAsync(basarId), Times.Once);
         StatsService.Verify(_ => _.GetAcceptedProductsAsync(basarId), Times.Once);
         StatsService.Verify(_ => _.GetSoldProductTimestampsAndPricesAsync(basarId), Times.Once);
         StatsService.Verify(_ => _.GetAcceptedProductsAmount(acceptedProducts), Times.Once);
@@ -72,8 +68,6 @@ public sealed class GetDetailsAsync
         StatsService.Verify(_ => _.GetLockedProductsCount(acceptedProducts), Times.Once);
         StatsService.Verify(_ => _.GetPriceDistribution(acceptedProducts), Times.Once);
         StatsService.Verify(_ => _.GetSaleDistribution(transactionsAndTotals), Times.Once);
-        StatsService.Verify(_ => _.GetSettledSellerCountAsync(basarId), Times.Once);
-        StatsService.Verify(_ => _.GetSettlementPercentage(details.SellerCount, settledSellerCount), Times.Once);
         StatsService.Verify(_ => _.GetSoldProductsAmount(acceptedProducts), Times.Once);
         StatsService.Verify(_ => _.GetSoldProductsCount(acceptedProducts), Times.Once);
         StatsService.Verify(_ => _.GetSoldProductTypesWithAmount(acceptedProducts), Times.Once);
