@@ -12,10 +12,10 @@ namespace BraunauMobil.VeloBasar.Tests.Extensions.JsonUtilsTests
             ChartDataPoint[] points = Array.Empty<ChartDataPoint>();
 
             //  Act
-            string result = JsonUtils.GetLineConfig(points, "Label");
+            string result = JsonUtils.GetLineConfig(points, "Label", true);
 
             //  Assert
-            result.Should().Be("""{"type":"line","data":{"labels":[],"datasets":[{"label":"Label","fill":false,"data":[],"backgroundColor":"rgb(0, 0, 0)","borderColor":"rgb(0, 0, 0)"}]}}""");
+            result.Should().Be("""{"type":"line","data":{"labels":[],"datasets":[{"label":"Label","fill":false,"data":[],"backgroundColor":"rgb(0, 0, 0)","borderColor":"rgb(0, 0, 0)","showLine":true}]}}""");
         }
 
         [Fact]
@@ -29,10 +29,10 @@ namespace BraunauMobil.VeloBasar.Tests.Extensions.JsonUtilsTests
             };
 
             //  Act
-            string result = JsonUtils.GetLineConfig(points, "Label");
+            string result = JsonUtils.GetLineConfig(points, "Label", true);
 
             //  Assert
-            result.Should().Be("""{"type":"line","data":{"labels":["Label1","Label2"],"datasets":[{"label":"Label","fill":false,"data":[1.0,2.0],"backgroundColor":"rgb(22, 33, 44)","borderColor":"rgb(22, 33, 44)"}]}}""");
+            result.Should().Be("""{"type":"line","data":{"labels":["Label1","Label2"],"datasets":[{"label":"Label","fill":false,"data":[1.0,2.0],"backgroundColor":"rgb(22, 33, 44)","borderColor":"rgb(22, 33, 44)","showLine":true}]}}""");
         }
     }
 }
