@@ -28,6 +28,8 @@ public class AcceptAsync
             .ReturnsAsync(number);
         Clock.Setup(_ => _.GetCurrentDateTime())
             .Returns(timestamp);
+        StatusPushService.Setup(_ => _.IsEnabled)
+            .Returns(true);
 
         //  Act
         int id = await Sut.AcceptAsync(basar.Id, seller.Id, products.Ids());
@@ -55,7 +57,8 @@ public class AcceptAsync
         }
             
         NumberService.Verify(_ => _.NextNumberAsync(basar.Id, TransactionType.Acceptance), Times.Once);
-        StatusPushService.Verify(_ => _.PushAwayAsync(It.Is<TransactionEntity>(_ => _.Id == transaction.Id)), Times.Once);
+        StatusPushService.Verify(_ => _.IsEnabled, Times.Once);
+        StatusPushService.Verify(_ => _.PushSellerAsync(basar.Id, seller.Id), Times.Once);
         VerifyNoOtherCalls();
     }
 

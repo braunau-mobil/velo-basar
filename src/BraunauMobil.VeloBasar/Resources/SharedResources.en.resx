@@ -948,4 +948,7 @@
   <data name="VeloBasar_DonateIfNotSoldOnProductTable" xml:space="preserve">
     <value>Donate, if not sold.</value>
   </data>
+  <data name="VeloBasar_PushSellerStatus" xml:space="preserve">
+    <value>Push status</value>
+  </data>
 </root>

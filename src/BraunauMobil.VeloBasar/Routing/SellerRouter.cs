@@ -36,4 +36,7 @@ public sealed class SellerRouter
 
     public string ToSettle(int id)
         => GetUriByAction(nameof(SellerController.Settle), new { id });
+
+    public string ToTriggerStatusPush(int id)
+        => GetUriByAction(nameof(SellerController.TriggerStatusPush), new { id });
 }

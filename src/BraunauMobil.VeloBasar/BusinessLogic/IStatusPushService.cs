@@ -2,5 +2,7 @@
 
 public interface IStatusPushService
 {
-    Task PushAwayAsync(TransactionEntity transaction);
+    bool IsEnabled { get; }
+
+    Task PushSellerAsync(int basarId, int sellerId);
 }

@@ -45,6 +45,10 @@
         {
             <a class="btn btn-secondary" href="@Router.Seller.ToSettle(Model.Entity.Id)">@Localizer[VeloTexts.Settle]</a>
         }
+        @if (Model.CanPushStatus)
+        {
+            <a class="btn btn-secondary" href="@Router.Seller.ToTriggerStatusPush(Model.Entity.Id)">@Localizer[VeloTexts.PushSellerStatus]</a>
+        }
         @if (Model.Procucts.Any())
         {
             <a class="btn btn-outline-primary" href="@Router.Seller.ToLabels(Model.Entity.Id)" target="_blank">@Localizer[VeloTexts.PrintLabels]</a>            

@@ -127,6 +127,13 @@ public sealed class SellerController
         return Redirect(_router.Transaction.ToSucess(settlementId));
     }
 
+    public async Task<IActionResult> TriggerStatusPush(int activeBasarId, int id)
+    {
+        await _sellerService.TriggerStatusPushAsync(activeBasarId, id);
+
+        return RedirectToReferer();
+    }
+
     protected override IActionResult RedirectToOrigin(SellerEntity entity, string? origin)
     {
         ArgumentNullException.ThrowIfNull(entity);

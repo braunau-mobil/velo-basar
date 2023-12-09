@@ -27,6 +27,8 @@ public class CheckoutAsync
             .Returns(timestamp);
         NumberService.Setup(_ => _.NextNumberAsync(basar.Id, TransactionType.Sale))
             .ReturnsAsync(number);
+        StatusPushService.Setup(_ => _.IsEnabled)
+            .Returns(true);
 
         //  Act
         int result = await Sut.CheckoutAsync(basar.Id, products.Ids());
@@ -54,7 +56,8 @@ public class CheckoutAsync
         }
 
         NumberService.Verify(_ => _.NextNumberAsync(basar.Id, TransactionType.Sale), Times.Once);
-        StatusPushService.Verify(_ => _.PushAwayAsync(It.Is<TransactionEntity>(_ => _.Id == saleFromDb.Id)), Times.Once);
+        StatusPushService.Verify(_ => _.IsEnabled, Times.Once);
+        StatusPushService.Verify(_ => _.PushSellerAsync(basar.Id, session.SellerId), Times.Once);
         VerifyNoOtherCalls();
     }
 }

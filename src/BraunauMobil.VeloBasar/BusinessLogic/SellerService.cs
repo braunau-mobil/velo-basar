@@ -16,13 +16,15 @@ public sealed class SellerService
     private readonly VeloDbContext _db;
     private readonly ITransactionService _transactionService;
     private readonly IProductLabelService _productLabelService;
+    private readonly IStatusPushService _statusPushService;
 
-    public SellerService(ITransactionService transactionService, IProductLabelService productLabelService, ITokenProvider tokenProvider, IClock clock, VeloDbContext db)
+    public SellerService(ITransactionService transactionService, IProductLabelService productLabelService, IStatusPushService statusPushService, ITokenProvider tokenProvider, IClock clock, VeloDbContext db)
         : base(tokenProvider, clock, db)
     {
         _db = db ?? throw new ArgumentNullException(nameof(db));
         _transactionService = transactionService ?? throw new ArgumentNullException(nameof(transactionService));
         _productLabelService = productLabelService ?? throw new ArgumentNullException(nameof(productLabelService));
+        _statusPushService = statusPushService ?? throw new ArgumentNullException(nameof(statusPushService));
     }
 
     public async Task<bool> ExistsAsync(int id)
@@ -49,6 +51,7 @@ public sealed class SellerService
 
         return new (seller)
         {
+            CanPushStatus = _statusPushService.IsEnabled,
             Transactions = transactions,
             Procucts = products,
             AcceptedProductCount = products.Count,
@@ -114,6 +117,11 @@ public sealed class SellerService
         await _db.SaveChangesAsync();
 
         return settlemenId;
+    }
+
+    public async Task TriggerStatusPushAsync(int basarId, int sellerId)
+    {
+        await _statusPushService.PushSellerAsync(basarId, sellerId);
     }
 
     private Expression<Func<SellerEntity, bool>> SellerSearch(string searchString)

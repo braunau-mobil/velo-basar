@@ -9,7 +9,7 @@ public class TestBase<TDbFixture>
 {
     public TestBase()
     {
-        Sut = new SellerService(TransactionService.Object, ProductLabelService.Object, TokenProvider.Object, Clock.Object, Db);
+        Sut = new SellerService(TransactionService.Object, ProductLabelService.Object, StatusPushService.Object, TokenProvider.Object, Clock.Object, Db);
     }
 
     public void VerifyNoOtherCalls()
@@ -17,11 +17,14 @@ public class TestBase<TDbFixture>
         ProductLabelService.VerifyNoOtherCalls();
         TokenProvider.VerifyNoOtherCalls();
         TransactionService.VerifyNoOtherCalls();
+        StatusPushService.VerifyNoOtherCalls();
     }
     
     public SellerService Sut { get; }
 
     public Mock<IProductLabelService> ProductLabelService { get; } = new();
+
+    public Mock<IStatusPushService> StatusPushService { get; } = new();
 
     public Mock<ITokenProvider> TokenProvider { get; } = new ();
 

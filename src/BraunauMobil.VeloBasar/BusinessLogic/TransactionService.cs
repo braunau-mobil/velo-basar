@@ -263,9 +263,12 @@ public sealed class TransactionService
         _db.Transactions.Add(transaction);
         await _db.SaveChangesAsync();
 
-        if (transaction.NeedsStatusPush)
+        if (transaction.NeedsStatusPush && _statusPushService.IsEnabled)
         {
-            await _statusPushService.PushAwayAsync(transaction);
+            foreach (int sellerId in transaction.Products.GetProducts().Select(p => p.Session.SellerId).Distinct().Where(sellerId => sellerId != 0))
+            {
+                await _statusPushService.PushSellerAsync(transaction.BasarId, sellerId);
+            }
         }
 
         return transaction.Id;

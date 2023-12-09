@@ -9,6 +9,8 @@ public sealed class SellerDetailsModel
 
     public SellerEntity Entity { get; init; }
 
+    public bool CanPushStatus { get; init; }
+
     public int AcceptedProductCount { get; init; }
 
     public int SoldProductCount { get; init; }

@@ -8,6 +8,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Net.Http;
 using System.Text;
 using System.Threading;
+using Xan.AspNetCore.EntityFrameworkCore;
 using Xan.Extensions.Tasks;
 
 namespace BraunauMobil.VeloBasar.BusinessLogic;
@@ -37,33 +38,19 @@ public sealed class WordPressStatusPushService
         _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
     }
 
-    public async Task PushAwayAsync(TransactionEntity transaction)
+    public bool IsEnabled { get => _settings.Enabled; }
+
+    public async Task PushSellerAsync(int basarId, int sellerId)
     {
-        ArgumentNullException.ThrowIfNull(transaction);
-
-        if (!_settings.Enabled)
+        SellerEntity seller = await _db.Sellers.FirstByIdAsync(sellerId);
+        if (seller.Token is null)
         {
-            return;
+            throw new InvalidOperationException($"Seller with ID {seller.Id} does not have a token.");
         }
 
-        BasarEntity basar = transaction.Basar;
+        string html = await GetStatesList(basarId, seller.Id);
 
-        foreach (IGrouping<SellerEntity, ProductEntity> group in transaction.Products.GetProducts().GroupBy(p => p.Session.Seller))
-        {
-            SellerEntity seller = group.Key;
-            if (seller == null)
-            {
-                continue;
-            }
-            if (seller.Token == null)
-            {
-                throw new InvalidOperationException($"Seller with ID {seller.Id} does not have a token.");
-            }
-
-            string html = await GetStatesList(transaction.Basar.Id, seller.Id);
-
-            _taskQueue.QueueBackgroundWorkItem(async token => await PostStatusAsync(seller.Token, html, token));
-        }
+        _taskQueue.QueueBackgroundWorkItem(async token => await PostStatusAsync(seller.Token, html, token));
     }
 
     private async Task<string> GetStatesList(int basarId, int sellerId)

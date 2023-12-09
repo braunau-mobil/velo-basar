@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BraunauMobil.VeloBasar", "s
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BraunauMobil.VeloBasar.Tests", "test\BraunauMobil.VeloBasar.Tests\BraunauMobil.VeloBasar.Tests.csproj", "{88141CEE-1788-4AD6-96E6-2F30FFDF2843}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BraunauMobil.VeloBasar.DataGenerator", "test\BraunauMobil.VeloBasar.DataGenerator\BraunauMobil.VeloBasar.DataGenerator.csproj", "{4F4A648F-A253-48B4-8E7E-9CD51EEB39FA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BraunauMobil.VeloBasar.DataGenerator", "test\BraunauMobil.VeloBasar.DataGenerator\BraunauMobil.VeloBasar.DataGenerator.csproj", "{4F4A648F-A253-48B4-8E7E-9CD51EEB39FA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BraunauMobil.VeloBasar.StatusPushTestServer", "test\BraunauMobil.VeloBasar.StatusPushTestServer\BraunauMobil.VeloBasar.StatusPushTestServer.csproj", "{4D4402FE-60B7-43ED-9277-337D0433E867}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{4F4A648F-A253-48B4-8E7E-9CD51EEB39FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4F4A648F-A253-48B4-8E7E-9CD51EEB39FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4F4A648F-A253-48B4-8E7E-9CD51EEB39FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D4402FE-60B7-43ED-9277-337D0433E867}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D4402FE-60B7-43ED-9277-337D0433E867}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D4402FE-60B7-43ED-9277-337D0433E867}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D4402FE-60B7-43ED-9277-337D0433E867}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

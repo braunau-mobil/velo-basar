@@ -18,4 +18,6 @@ public interface ISellerRouter
     string ToLabels(int id);
 
     string ToSettle(int id);
+
+    string ToTriggerStatusPush(int id);
 }

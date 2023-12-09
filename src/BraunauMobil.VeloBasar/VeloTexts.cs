@@ -216,6 +216,7 @@ public static class VeloTexts
     public const string ProductType = $"{Prefix}{nameof(ProductType)}";
     public const string ProductTypeList = $"{Prefix}{nameof(ProductTypeList)}";
     public const string ProductWasSettled = $"{Prefix}{nameof(ProductWasSettled)}";
+    public const string PushSellerStatus = $"{Prefix}{nameof(PushSellerStatus)}";
     public const string RememberMe = $"{Prefix}{nameof(RememberMe)}";
     public const string Reset = $"{Prefix}{nameof(Reset)}";
     public const string ReturnMoney = $"{Prefix}{nameof(ReturnMoney)}";

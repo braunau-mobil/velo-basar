@@ -1,13 +1,14 @@
 ﻿using BraunauMobil.VeloBasar.BusinessLogic;
-using BraunauMobil.VeloBasar.Models.Entities;
 
 namespace BraunauMobil.VeloBasar.DataGenerator.Mockups;
 
 public class StatusPushServiceMock
     : IStatusPushService
 {
-    public Task PushAwayAsync(TransactionEntity transaction)
+    public bool IsEnabled => true;
+
+    public async Task PushSellerAsync(int basarId, int sellerId)
     {
-        return Task.CompletedTask;
+        await Task.CompletedTask;
     }
 }

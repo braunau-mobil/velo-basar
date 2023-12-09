@@ -16,4 +16,6 @@ public interface ISellerService
     Task<IPaginatedList<SellerEntity>> GetManyAsync(int pageSize, int pageIndex, string? searchString = null, ObjectState? objectState = null, ValueState? valueState = null);
 
     Task<int> SettleAsync(int basarId, int sellerId);
+
+    Task TriggerStatusPushAsync(int basarId, int sellerId);
 }

@@ -40,6 +40,8 @@ public class CancelAsync
             .ReturnsAsync(number);
         TransactionDocumentService.Setup(_ => _.CreateAsync(It.Is<TransactionEntity>(_ => _.Type == TransactionType.Sale)))
             .ReturnsAsync(document);
+        StatusPushService.Setup(_ => _.IsEnabled)
+            .Returns(true);
 
         //  Act
         int result = await Sut.CancelAsync(basar.Id, sale.Id, products.Take(1).Ids());
@@ -87,7 +89,8 @@ public class CancelAsync
         }
 
         NumberService.Verify(_ => _.NextNumberAsync(basar.Id, TransactionType.Cancellation), Times.Once);
-        StatusPushService.Verify(_ => _.PushAwayAsync(It.Is<TransactionEntity>(_ => _.Id == cancellationFromDb.Id)), Times.Once);
+        StatusPushService.Verify(_ => _.IsEnabled, Times.Once);
+        StatusPushService.Verify(_ => _.PushSellerAsync(basar.Id, session.SellerId), Times.Once);
         TransactionDocumentService.Verify(_ => _.CreateAsync(It.Is<TransactionEntity>(_ => _.Type == TransactionType.Sale)), Times.Once());
         VerifyNoOtherCalls();
     }
@@ -127,6 +130,8 @@ public class CancelAsync
             .ReturnsAsync(number);
         TransactionDocumentService.Setup(_ => _.CreateAsync(It.Is<TransactionEntity>(_ => _.Type == TransactionType.Sale)))
             .ReturnsAsync(document);
+        StatusPushService.Setup(_ => _.IsEnabled)
+            .Returns(true);
 
         //  Act
         int result = await Sut.CancelAsync(basar.Id, sale.Id, products.Take(1).Ids());
@@ -174,7 +179,8 @@ public class CancelAsync
         }
 
         NumberService.Verify(_ => _.NextNumberAsync(basar.Id, TransactionType.Cancellation), Times.Once);
-        StatusPushService.Verify(_ => _.PushAwayAsync(It.Is<TransactionEntity>(_ => _.Id == cancellationFromDb.Id)), Times.Once);
+        StatusPushService.Verify(_ => _.IsEnabled, Times.Once);
+        StatusPushService.Verify(_ => _.PushSellerAsync(basar.Id, session.SellerId), Times.Once);
         TransactionDocumentService.Verify(_ => _.CreateAsync(It.Is<TransactionEntity>(_ => _.Type == TransactionType.Sale)), Times.Once());
         VerifyNoOtherCalls();
     }
