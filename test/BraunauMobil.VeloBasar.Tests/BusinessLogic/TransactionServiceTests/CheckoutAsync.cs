@@ -60,4 +60,35 @@ public class CheckoutAsync
         StatusPushService.Verify(_ => _.PushSellerAsync(basar.Id, session.SellerId), Times.Once);
         VerifyNoOtherCalls();
     }
+
+    [Theory]
+    [AutoData]
+    public async Task LockedProduct_MustNotBeSold(BasarEntity basar)
+    {
+        // Arrange
+        AcceptSessionEntity session = Fixture.BuildAcceptSessionEntity()
+            .With(_ => _.Basar, basar)
+            .Create();
+        ProductEntity product1 = Fixture.BuildProductEntity()
+            .With(_ => _.StorageState, StorageState.Locked)
+            .With(_ => _.ValueState, ValueState.NotSettled)
+            .With(_ => _.Session, session)
+            .Create();
+        Db.Products.Add(product1);
+        ProductEntity product2 = Fixture.BuildProductEntity()
+            .With(_ => _.StorageState, StorageState.Available)
+            .With(_ => _.ValueState, ValueState.NotSettled)
+            .With(_ => _.Session, session)
+            .Create();
+        Db.Products.Add(product2);
+        await Db.SaveChangesAsync();
+
+        //  Act
+        Func<Task<int>> act = async () => await Sut.CheckoutAsync(basar.Id, new [] { product1.Id, product2.Id } );
+
+        //  Assert
+        await act.Should().ThrowAsync<InvalidOperationException>();
+
+        VerifyNoOtherCalls();
+    }
 }

@@ -220,7 +220,7 @@ public sealed class TransactionService
             .Include(product => product.Session)
                 .ThenInclude(session => session.Seller)
             .GetManyAsync(productIds);
-        if (productIds.Any() && !products.Any(product => product.IsAllowed(type)))
+        if (!products.All(product => product.IsAllowed(type)))
         {
             throw new InvalidOperationException($"Transaction {type} is not allowed.");
         }
