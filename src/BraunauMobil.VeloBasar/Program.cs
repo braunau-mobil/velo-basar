@@ -14,7 +14,6 @@ using BraunauMobil.VeloBasar.BusinessLogic;
 using BraunauMobil.VeloBasar.Crud;
 using BraunauMobil.VeloBasar.Controllers;
 using Xan.AspNetCore.Mvc;
-using System.Net.Http;
 using Xan.Extensions;
 using FluentValidation;
 using Xan.Extensions.Tasks;
@@ -101,14 +100,7 @@ public static class Program
                 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
             })
             .AddHttpContextAccessor()
-            .AddSingleton<HttpClient>(sp =>
-            {
-                SocketsHttpHandler socketsHandler = new()
-                {
-                    PooledConnectionLifetime = TimeSpan.FromMinutes(2)
-                };
-                return new HttpClient(socketsHandler);
-            })
+            .AddHttpClient()
             .AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>()
             .AddSingleton<IClock, SystemClock>()
             .AddBusinessLogic()

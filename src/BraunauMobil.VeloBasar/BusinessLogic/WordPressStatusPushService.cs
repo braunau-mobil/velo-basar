@@ -22,11 +22,11 @@ public sealed class WordPressStatusPushService
     private readonly WordPressStatusPushSettings _settings;
     private readonly IBackgroundTaskQueue _taskQueue;
     private readonly VeloDbContext _db;
-    private readonly HttpClient _httpClient;
+    private readonly IHttpClientFactory _httpClientFactory;
     private readonly IStringLocalizer<SharedResources> _localizer;
 
     public WordPressStatusPushService(IOptions<WordPressStatusPushSettings>
-        settings, IStringLocalizer<SharedResources> localizer, IBackgroundTaskQueue taskQueue, ILogger<WordPressStatusPushService> logger, VeloDbContext db, HttpClient httpClient)
+        settings, IStringLocalizer<SharedResources> localizer, IBackgroundTaskQueue taskQueue, ILogger<WordPressStatusPushService> logger, VeloDbContext db, IHttpClientFactory httpClientFactory)
     {
         ArgumentNullException.ThrowIfNull(settings);
 
@@ -35,7 +35,7 @@ public sealed class WordPressStatusPushService
         _taskQueue = taskQueue ?? throw new ArgumentNullException(nameof(taskQueue));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _db = db ?? throw new ArgumentNullException(nameof(db));
-        _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+        _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
     }
 
     public bool IsEnabled { get => _settings.Enabled; }
@@ -128,7 +128,8 @@ public sealed class WordPressStatusPushService
                 throw new InvalidOperationException($"{nameof(_settings.EndpointUrl)} not set in configuration.");
             }
 
-            using HttpResponseMessage response = await _httpClient.PostAsync(new Uri(_settings.EndpointUrl), body);
+            using HttpClient httpClient = _httpClientFactory.CreateClient();
+            using HttpResponseMessage response = await httpClient.PostAsync(new Uri(_settings.EndpointUrl), body);
             response.EnsureSuccessStatusCode();
             return true;
         }
