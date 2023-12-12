@@ -9,3 +9,4 @@ global using AutoFixture.Xunit2;
 global using BraunauMobil.VeloBasar.Models;
 global using BraunauMobil.VeloBasar.Models.Entities;
 global using FluentAssertions;
+global using FluentAssertions.Execution;

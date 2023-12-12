@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Http;
 using BraunauMobil.VeloBasar.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
@@ -112,65 +111,16 @@ public static class Program
             .AddScoped<DatabaseMigrator>()
             .AddScoped<SellerCrudModelFactory>()
             .AddValidatorsFromAssemblyContaining<SellerSearchModelValidator>()
-
             .AddHostedService<QueuedHostedService>();
 
-        services
-            .AddOptions<ApplicationSettings>()
-                .Bind(configuration.GetSection(nameof(ApplicationSettings)))
-                .ValidateDataAnnotations();        
-        services
-            .AddOptions<PrintSettings>()
-                .Bind(configuration.GetSection(nameof(PrintSettings)))
-                .ValidateDataAnnotations();
-        services
-            .AddOptions<WordPressStatusPushSettings>()
-                .Bind(configuration.GetSection(nameof(WordPressStatusPushSettings)))
-                .ValidateDataAnnotations();
-        services
-            .AddOptions<ExportSettings>()
-                .Bind(configuration.GetSection(nameof(ExportSettings)))
-                .ValidateDataAnnotations();
-
-        services.AddCrud(options =>
-        {
-            options.AddController<BasarEntity, BasarCrudService, BasarCrudModelFactory>(true);
-            options.AddController<CountryEntity, CountryCrudService, CountryCrudModelFactory>(true);
-            options.AddController<ProductTypeEntity, ProductTypeCrudService, ProductTypeCrudModelFactory>(true);
-        });
+        services.AddVeloOptions(configuration);
+        services.AddVeloCrud();
 
         PageSizeCookie.Options.MaxAge = TimeSpan.FromDays(2);
 
         services
-            .Configure<CookiePolicyOptions>(options =>
-            {
-                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-                options.CheckConsentNeeded = context => false;
-                options.MinimumSameSitePolicy = SameSiteMode.None;
-            })
-            .Configure<IdentityOptions>(options =>
-            {
-                // Password settings.
-                options.Password.RequireDigit = false;
-                options.Password.RequireLowercase = false;
-                options.Password.RequireNonAlphanumeric = false;
-                options.Password.RequireUppercase = false;
-                options.Password.RequiredLength = 1;
-                options.Password.RequiredUniqueChars = 1;
-
-                // Lockout settings.
-                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
-                options.Lockout.MaxFailedAccessAttempts = 5;
-                options.Lockout.AllowedForNewUsers = true;
-
-                // User settings.
-                options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
-                options.User.RequireUniqueEmail = true;
-            })
-            .ConfigureApplicationCookie(options =>
-            {
-                options.LoginPath = "/security/login";
-                options.LogoutPath = "/security/logout";
-            });
+            .ConfigureVeloCookies()
+            .ConfigureVeloIdentity()
+        ;
     }
 }
