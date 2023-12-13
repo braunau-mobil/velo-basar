@@ -3,13 +3,13 @@ using BraunauMobil.VeloBasar.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace BraunauMobil.VeloBasar.Tests.IntegrationTests;
+namespace BraunauMobil.VeloBasar.Tests.IntegrationTests.SetupTests;
 
-public class SetupTests
+public class InitalSetup
     : TestBase
 {
     [Fact]
-    public async void InitalSetup_GenerateAll()
+    public async void GenerateAll()
     {
         //  Act
         InitializationConfiguration configuration = Do<SetupController, InitializationConfiguration>(controller =>
@@ -46,13 +46,13 @@ public class SetupTests
     }
 
     [Fact]
-    public async void InitalSetup_GenerateNone()
+    public async void GenerateNone()
     {
         //  Act
         InitializationConfiguration configuration = Do<SetupController, InitializationConfiguration>(controller =>
         {
             IActionResult result = controller.InitialSetup();
-            
+
             ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
             view.ViewName.Should().BeNull();
             return view.Model.Should().BeOfType<InitializationConfiguration>().Subject;
@@ -66,8 +66,8 @@ public class SetupTests
         await Do<SetupController>(async controller =>
         {
             IActionResult result = await controller.InitialSetupConfirmed(configuration);
-            
-            RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;            
+
+            RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
             redirect.Url.Should().Be("//action=Index&controller=Home");
         });
 
@@ -83,13 +83,13 @@ public class SetupTests
     }
 
     [Fact]
-    public async void InitalSetup_GenerateZipCodesIsCheckedButGenerateCountriesNot()
+    public async void GenerateZipCodesIsCheckedButGenerateCountriesNot()
     {
         //  Act
         InitializationConfiguration configuration = Do<SetupController, InitializationConfiguration>(controller =>
         {
             IActionResult result = controller.InitialSetup();
-            
+
             ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
             view.ViewName.Should().BeNull();
             return view.Model.Should().BeOfType<InitializationConfiguration>().Subject;
@@ -103,7 +103,7 @@ public class SetupTests
         await Do<SetupController>(async controller =>
         {
             IActionResult result = await controller.InitialSetupConfirmed(configuration);
-            
+
             ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
             view.ViewData.ModelState.IsValid.Should().BeFalse();
             view.ViewData.ModelState.Should().ContainKey(nameof(InitializationConfiguration.GenerateZipCodes));
@@ -112,7 +112,7 @@ public class SetupTests
     }
 
     [Fact]
-    public async void InitalSetup_NoAdminEMail()
+    public async void NoAdminEMail()
     {
         //  Act
         InitializationConfiguration configuration = Do<SetupController, InitializationConfiguration>(controller =>

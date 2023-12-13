@@ -2,6 +2,7 @@
 using BraunauMobil.VeloBasar.Controllers;
 using BraunauMobil.VeloBasar.Data;
 using BraunauMobil.VeloBasar.Filters;
+using BraunauMobil.VeloBasar.Rendering;
 using BraunauMobil.VeloBasar.Routing;
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;
@@ -30,7 +31,6 @@ public class TestBase
             options.Filters.Add<ActiveBasarEntityFilter>();
         })
         .AddApplicationPart(typeof(HomeController).Assembly)
-        .AddControllersAsServices()
         .AddViewLocalization(options =>
         {
             options.ResourcesPath = "Resources";
@@ -49,6 +49,7 @@ public class TestBase
                     .EnableSensitiveDataLogging();
             })
             .AddScoped<LinkGenerator, MockLinkGenerator>()
+            .AddVeloRendering()
             .AddVeloRouting()
             .AddBusinessLogic()
             .AddSingleton<DatabaseMigrator>()
@@ -84,36 +85,24 @@ public class TestBase
     protected void Do<TController>(Action<TController> what)
         where TController : Controller
     {
-        using IServiceScope scope = Services.CreateScope();
-        TController controller = scope.CreateController<TController>();
-
-        what(controller);
+        Services.Do(what);
     }
 
     protected async Task Do<TController>(Func<TController, Task> what)
         where TController : Controller
     {
-        using IServiceScope scope = Services.CreateScope();
-        TController controller = scope.CreateController<TController>();
-
-        await what(controller);
+        await Services.Do(what);
     }
 
     protected TResult Do<TController, TResult>(Func<TController, TResult> what)
         where TController : Controller
     {
-        using IServiceScope scope = Services.CreateScope();
-        TController controller = scope.CreateController<TController>();
-
-        return what(controller);
+        return Services.Do(what);
     }
 
     protected async Task<TResult> Do<TController, TResult>(Func<TController, Task<TResult>> what)
         where TController : Controller
     {
-        using IServiceScope scope = Services.CreateScope();
-        TController controller = scope.CreateController<TController>();
-
-        return await what(controller);
+        return await Services.Do(what);
     }
 }

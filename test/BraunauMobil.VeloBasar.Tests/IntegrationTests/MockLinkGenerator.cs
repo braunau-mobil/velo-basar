@@ -32,16 +32,17 @@ public class MockLinkGenerator
         StringBuilder sb = new ();
         foreach (KeyValuePair<string, object?> pair in values)
         {
+            if (pair.Value is null)
+            {
+                continue;
+            }
+
             if (sb.Length > 0)
             {
                 sb.Append('&');
             }
 
-            sb.Append(pair.Key);
-            if (pair.Value is not null)
-            {
-                sb.Append($"={pair.Value}");
-            }
+            sb.Append($"{pair.Key}={pair.Value}");
         }
         return sb.ToString();
     }
