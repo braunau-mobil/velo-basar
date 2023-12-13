@@ -6,7 +6,6 @@ using BraunauMobil.VeloBasar.Rendering;
 using BraunauMobil.VeloBasar.Routing;
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
@@ -80,29 +79,5 @@ public class TestBase
     {
         _connection.Dispose(); 
         GC.SuppressFinalize(this);
-    }
-
-    protected void Do<TController>(Action<TController> what)
-        where TController : Controller
-    {
-        Services.Do(what);
-    }
-
-    protected async Task Do<TController>(Func<TController, Task> what)
-        where TController : Controller
-    {
-        await Services.Do(what);
-    }
-
-    protected TResult Do<TController, TResult>(Func<TController, TResult> what)
-        where TController : Controller
-    {
-        return Services.Do(what);
-    }
-
-    protected async Task<TResult> Do<TController, TResult>(Func<TController, Task<TResult>> what)
-        where TController : Controller
-    {
-        return await Services.Do(what);
     }
 }

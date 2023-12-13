@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using BraunauMobil.VeloBasar.Data;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,6 +9,19 @@ namespace BraunauMobil.VeloBasar.Tests.IntegrationTests;
 
 public static class Extensions
 {
+    public static void AssertDb(this IServiceProvider services, Action<VeloDbContext> what)
+    {
+        ArgumentNullException.ThrowIfNull(services);
+        ArgumentNullException.ThrowIfNull(what);
+
+        using IServiceScope scope = services.CreateScope();
+        VeloDbContext db = scope.ServiceProvider.GetRequiredService<VeloDbContext>();
+        using (new AssertionScope())
+        {
+            what(db);
+        }
+    }
+
     public static void Do<TController>(this IServiceProvider services,  Action<TController> what)
         where TController : Controller
     {
