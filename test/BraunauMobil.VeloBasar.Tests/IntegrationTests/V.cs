@@ -1,28 +1,27 @@
-﻿namespace BraunauMobil.VeloBasar.Tests.IntegrationTests;
+﻿using Microsoft.AspNetCore.Identity;
 
+namespace BraunauMobil.VeloBasar.Tests.IntegrationTests;
+
+#nullable disable
 public static class V
 {
-    public const string AdminUserEMail = "dev@xaka.eu";
+    public static IdentityUser AdminUser { get; set; }
 
-    public static class FirstBasar
-    {
-        public const string Name = "1. Basar";
-        public const int ProductCommissionPercentage = 10;
-        public const decimal ProductCommission = 0.1m;
-        public static readonly DateTime Date = new(2063, 04, 05);
-        public const string Location = "Braunau";
-    }
+    public static BasarEntity FirstBasar { get; set; }
 
     public static class Countries
     {
-        public const string Austria = "Österreich";
+        public static CountryEntity Austria { get; set; }
+        public static CountryEntity Germany { get; set; }
     }
+
     public static class ProductTypes
     {
-        public const string SteelSteed = "Stahlross";
+        public static ProductTypeEntity Stahlross { get; set; }
     }
-    public static class ZipCodes
+
+    public static class Sellers
     {
-        public const string Braunau = "5280";
+        public static SellerEntity Frodo { get; set; }
     }
 }

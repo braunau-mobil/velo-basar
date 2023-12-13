@@ -75,6 +75,13 @@ public static class Extensions
     {
         ArgumentNullException.ThrowIfNull(scope);
 
+        HttpContext httpContext = new DefaultHttpContext()
+        {
+            RequestServices = scope.ServiceProvider
+        };
+        IHttpContextAccessor httpContextAccessor = scope.ServiceProvider.GetRequiredService<IHttpContextAccessor>();
+        httpContextAccessor.HttpContext = httpContext;
+
         IControllerFactory controllerFactory = scope.ServiceProvider.GetRequiredService<IControllerFactory>();
         object controller = controllerFactory.CreateController(new ControllerContext
         {
@@ -82,10 +89,7 @@ public static class Extensions
             {
                 ControllerTypeInfo = typeof(TController).GetTypeInfo()
             },
-            HttpContext = new DefaultHttpContext()
-            {
-                RequestServices = scope.ServiceProvider
-            }
+            HttpContext = httpContext
         });
 
         return (TController)controller;

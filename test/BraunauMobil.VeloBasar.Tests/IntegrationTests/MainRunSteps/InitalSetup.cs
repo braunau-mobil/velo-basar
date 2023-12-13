@@ -1,10 +1,13 @@
 ﻿using BraunauMobil.VeloBasar.Controllers;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BraunauMobil.VeloBasar.Tests.IntegrationTests.MainRunSteps;
 
 public static class InitalSetup
 {
+    private const string _adminUserEMail = "dev@shirenet.at";
+
     public static async Task Run(IServiceProvider services)
     {
         ArgumentNullException.ThrowIfNull(services);
@@ -20,9 +23,6 @@ public static class InitalSetup
 
         //  No Admin EMail
         configuration.AdminUserEMail = "";
-        configuration.GenerateCountries = false;
-        configuration.GenerateProductTypes = false;
-        configuration.GenerateZipCodes = false;
 
         await services.Do<SetupController>(async controller =>
         {
@@ -43,7 +43,7 @@ public static class InitalSetup
         });
 
         //  Invalid Generation config
-        configuration.AdminUserEMail = V.AdminUserEMail;
+        configuration.AdminUserEMail = _adminUserEMail;
         configuration.GenerateCountries = false;
         configuration.GenerateProductTypes = true;
         configuration.GenerateZipCodes = true;
@@ -67,10 +67,7 @@ public static class InitalSetup
         });
 
         //  Valid config
-        configuration.AdminUserEMail = V.AdminUserEMail;
         configuration.GenerateCountries = true;
-        configuration.GenerateProductTypes = true;
-        configuration.GenerateZipCodes = true;
 
         await services.Do<SetupController>(async controller =>
         {
@@ -82,10 +79,14 @@ public static class InitalSetup
 
         services.AssertDb(db =>
         {
-            db.Users.Should().Contain(user => user.UserName == V.AdminUserEMail);
-            db.Countries.Should().Contain(country => country.Name == V.Countries.Austria);
-            db.ZipCodes.Should().Contain(zipCode => zipCode.Zip == V.ZipCodes.Braunau);
-            db.ProductTypes.Should().Contain(productType => productType.Name == V.ProductTypes.SteelSteed);
+            V.AdminUser = db.Users.Should().Contain(user => user.UserName == _adminUserEMail).Subject;
+
+            V.Countries.Austria = db.Countries.AsNoTracking().Should().Contain(x => x.Name == "Österreich").Subject;
+            V.Countries.Germany = db.Countries.AsNoTracking().Should().Contain(x => x.Name == "Deutschland").Subject;    
+
+            db.ZipCodes.AsNoTracking().Should().Contain(zipCode => zipCode.Zip == "5280");
+
+            V.ProductTypes.Stahlross = db.ProductTypes.AsNoTracking().Should().Contain(x => x.Name == "Stahlross").Subject;
         });
     }
 }

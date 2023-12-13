@@ -5,9 +5,14 @@ namespace BraunauMobil.VeloBasar.Tests.IntegrationTests.MainRunSteps;
 
 public static class BasarCreation
 {
+    private const string _basarName = "1. Fahrradbasar";
+    private const string _basarLocation = "Braunau am Inn";
+    private const int _productCommissionPercentage = 10;
+    private static readonly DateTime _basarDate = new (2063, 04, 05);
+
     public static async Task Run(IServiceProvider services)
     {
-        ArgumentNullException.ThrowIfNull(nameof(services));
+        ArgumentNullException.ThrowIfNull(services);
 
         //  Leave defaults
         BasarEntity basar = await services.Do<CrudController<BasarEntity>, BasarEntity>(async controller =>
@@ -40,9 +45,9 @@ public static class BasarCreation
 
         //  Name is empty
         basar.Name = "";
-        basar.ProductCommissionPercentage = V.FirstBasar.ProductCommissionPercentage;
-        basar.Date = V.FirstBasar.Date;
-        basar.Location = V.FirstBasar.Location;
+        basar.ProductCommissionPercentage = _productCommissionPercentage;
+        basar.Date = _basarDate;
+        basar.Location = _basarLocation;
 
         await services.Do<CrudController<BasarEntity>>(async controller =>
         {
@@ -62,10 +67,8 @@ public static class BasarCreation
         });
 
         //  ProductCommissionPercentage is out of range
-        basar.Name = V.FirstBasar.Name;
-        basar.ProductCommissionPercentage = V.FirstBasar.ProductCommissionPercentage * 100;
-        basar.Date = V.FirstBasar.Date;
-        basar.Location = V.FirstBasar.Location;
+        basar.Name = _basarName;
+        basar.ProductCommissionPercentage = 1000;
 
         await services.Do<CrudController<BasarEntity>>(async controller =>
         {
@@ -85,10 +88,7 @@ public static class BasarCreation
         });
 
         //  Valid basar
-        basar.Name = V.FirstBasar.Name;
-        basar.ProductCommissionPercentage = V.FirstBasar.ProductCommissionPercentage;
-        basar.Date = V.FirstBasar.Date;
-        basar.Location = V.FirstBasar.Location;
+        basar.ProductCommissionPercentage = _productCommissionPercentage;
 
         await services.Do<CrudController<BasarEntity>>(async controller =>
         {
@@ -101,10 +101,10 @@ public static class BasarCreation
         //  Assert
         services.AssertDb(db =>
         {
-            BasarEntity actualBasar = db.Basars.Should().ContainSingle(basar => basar.Name == V.FirstBasar.Name).Subject;
-            actualBasar.ProductCommission.Should().Be(V.FirstBasar.ProductCommission);
-            actualBasar.Date.Should().Be(V.FirstBasar.Date);
-            actualBasar.Location.Should().Be(V.FirstBasar.Location);
+            V.FirstBasar = db.Basars.Should().ContainSingle(basar => basar.Name == _basarName).Subject;
+            V.FirstBasar.ProductCommissionPercentage.Should().Be(_productCommissionPercentage);
+            V.FirstBasar.Date.Should().Be(_basarDate);
+            V.FirstBasar.Location.Should().Be(_basarLocation);
         });
     }
 }

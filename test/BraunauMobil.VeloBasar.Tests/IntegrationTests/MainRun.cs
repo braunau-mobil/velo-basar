@@ -8,12 +8,8 @@ public class MainRun
     [Fact]
     public async Task Run()
     {
-        await InitDatabase();
-    }
-
-    private async Task InitDatabase()
-    {
         await InitalSetup.Run(Services);
         await BasarCreation.Run(Services);
+        await AcceptSellers.Run(Services);
     }   
 }
