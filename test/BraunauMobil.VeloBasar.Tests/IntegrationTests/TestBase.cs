@@ -28,6 +28,7 @@ namespace BraunauMobil.VeloBasar.Tests.IntegrationTests;
 public class TestBase
     : IDisposable
 {
+    private const string _connectionString = "DataSource=:memory:";
     private readonly SqliteConnection _connection;
     private readonly WebApplication _app;
 
@@ -36,7 +37,7 @@ public class TestBase
         WebApplicationBuilder builder = WebApplication.CreateBuilder();
         builder.Logging.AddConsole();
 
-        _connection = new SqliteConnection("DataSource=:memory:");
+        _connection = new SqliteConnection(_connectionString);
         ConfigureServices(builder.Services, builder.Configuration);
 
         WebApplication app = builder.Build();
@@ -58,8 +59,8 @@ public class TestBase
             ILogger<SharedResources> logger = scope.ServiceProvider.GetRequiredService<ILogger<SharedResources>>();
             VeloTexts.CheckIfAllIsTranslated(logger);
 
-            DatabaseMigrator migrator = scope.ServiceProvider.GetRequiredService<DatabaseMigrator>();
-            migrator.Migrate();
+            VeloDbContext db = scope.ServiceProvider.GetRequiredService<VeloDbContext>();
+            db.Database.EnsureCreated();
         }
 
         _app = app;

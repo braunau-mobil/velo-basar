@@ -17,7 +17,7 @@ public static class AcceptSellers
 
             RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
             redirect.Url.Should().Be("//action=CreateForAcceptance&controller=Seller");
-        });        
+        });
 
         SellerCreateForAcceptanceModel createModel = await services.Do<SellerController, SellerCreateForAcceptanceModel>(async controller =>
         {
@@ -26,6 +26,7 @@ public static class AcceptSellers
 
             ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
             view.ViewName.Should().BeNull();
+            view.ViewData.ModelState.IsValid.Should().BeTrue();
             return view.Model.Should().BeOfType<SellerCreateForAcceptanceModel>().Subject;
         });
 
@@ -55,7 +56,60 @@ public static class AcceptSellers
             V.Sellers.Frodo = frodo;
         });
 
-        //  Accept products
-        //  @todo
+        //  Start accept session
+        await services.Do<AcceptSessionController>(async controller =>
+        {
+            IActionResult result = await controller.StartForSeller(V.Sellers.Frodo.Id, V.FirstBasar.Id);
+
+            RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
+            redirect.Url.Should().Be("//sessionId=1&action=Create&controller=AcceptProduct");
+        });
+
+        int acceptSessionId = 0;
+        services.AssertDb(db =>
+        {
+            AcceptSessionEntity session = db.AcceptSessions.AsNoTracking().Should().Contain(s => s.SellerId == V.Sellers.Frodo.Id && s.BasarId == V.FirstBasar.Id).Subject;
+            acceptSessionId = session.Id;
+        });
+
+        await AcceptProducts(services, acceptSessionId);
+    }
+    private static async Task AcceptProducts(IServiceProvider services, int acceptSessionId)
+    {
+        await AcceptStahlross(services, acceptSessionId);
+    }
+
+    private static async Task AcceptStahlross(IServiceProvider services, int acceptSessionId)
+    {
+        AcceptProductModel stahlross = await services.Do<AcceptProductController, AcceptProductModel>(async controller =>
+        {
+            IActionResult result = await controller.Create(acceptSessionId);
+
+            ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
+            view.ViewName.Should().Be("CreateEdit");
+            view.ViewData.ModelState.IsValid.Should().BeTrue();
+            return view.Model.Should().BeOfType<AcceptProductModel>().Subject;
+        });
+
+        stahlross.Entity.TypeId = V.ProductTypes.Stahlross.Id;
+        stahlross.Entity.Brand = "Simplon";
+        stahlross.Entity.Color = "Schwarz";
+        stahlross.Entity.FrameNumber = "1234567890";
+        stahlross.Entity.Description = "Gepäckträger, Korb";
+        stahlross.Entity.TireSize = "26";
+        stahlross.Entity.Price = 120;
+
+        await services.Do<AcceptProductController>(async controller =>
+        {
+            IActionResult result = await controller.Create(stahlross.Entity);
+
+            RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
+            redirect.Url.Should().Be("//sessionId=1&action=Create&controller=AcceptProduct");
+        });
+
+        services.AssertDb(db =>
+        {
+            V.Products.FirstBasar.Frodo.Stahlross = db.Products.AsNoTracking().Should().Contain(p => p.SessionId == acceptSessionId && p.Price == 120).Subject;
+        });
     }
 }

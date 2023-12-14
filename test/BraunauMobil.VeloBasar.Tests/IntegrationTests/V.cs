@@ -24,4 +24,15 @@ public static class V
     {
         public static SellerEntity Frodo { get; set; }
     }
+
+    public static class Products
+    {
+        public static class FirstBasar
+        {
+            public static class Frodo
+            {
+                public static ProductEntity Stahlross { get; set; }
+            }
+        }
+    }
 }

@@ -21,6 +21,7 @@ public static class BasarCreation
 
             ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
             view.ViewName.Should().Be("CrudCreate");
+            view.ViewData.ModelState.IsValid.Should().BeTrue();
             CrudModel<BasarEntity> crudModel = view.Model.Should().BeOfType<CrudModel<BasarEntity>>().Subject;
             crudModel.Entity.Should().NotBeNull();
             return crudModel.Entity;

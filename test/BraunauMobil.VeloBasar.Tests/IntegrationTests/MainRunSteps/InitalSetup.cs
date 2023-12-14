@@ -82,7 +82,7 @@ public static class InitalSetup
             V.AdminUser = db.Users.Should().Contain(user => user.UserName == _adminUserEMail).Subject;
 
             V.Countries.Austria = db.Countries.AsNoTracking().Should().Contain(x => x.Name == "Österreich").Subject;
-            V.Countries.Germany = db.Countries.AsNoTracking().Should().Contain(x => x.Name == "Deutschland").Subject;    
+            V.Countries.Germany = db.Countries.AsNoTracking().Should().Contain(x => x.Name == "Deutschland").Subject;
 
             db.ZipCodes.AsNoTracking().Should().Contain(zipCode => zipCode.Zip == "5280");
 
