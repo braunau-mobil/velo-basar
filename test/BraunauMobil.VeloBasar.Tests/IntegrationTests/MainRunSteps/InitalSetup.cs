@@ -8,11 +8,11 @@ public static class InitalSetup
 {
     private const string _adminUserEMail = "dev@shirenet.at";
 
-    public static async Task Run(IServiceProvider services)
+    public static async Task Run(TestContext context)
     {
-        ArgumentNullException.ThrowIfNull(services);
+        ArgumentNullException.ThrowIfNull(context);
 
-        InitializationConfiguration configuration = services.Do<SetupController, InitializationConfiguration>(controller =>
+        InitializationConfiguration configuration = context.Do<SetupController, InitializationConfiguration>(controller =>
         {
             IActionResult result = controller.InitialSetup();
 
@@ -24,7 +24,7 @@ public static class InitalSetup
         //  No Admin EMail
         configuration.AdminUserEMail = "";
 
-        await services.Do<SetupController>(async controller =>
+        await context.Do<SetupController>(async controller =>
         {
             IActionResult result = await controller.InitialSetupConfirmed(configuration);
 
@@ -34,7 +34,7 @@ public static class InitalSetup
             view.Model.Should().Be(configuration);
         });
 
-        services.AssertDb(db =>
+        context.AssertDb(db =>
         {
             db.Users.Should().BeEmpty();
             db.Countries.Should().BeEmpty();
@@ -48,7 +48,7 @@ public static class InitalSetup
         configuration.GenerateProductTypes = true;
         configuration.GenerateZipCodes = true;
 
-        await services.Do<SetupController>(async controller =>
+        await context.Do<SetupController>(async controller =>
         {
             IActionResult result = await controller.InitialSetupConfirmed(configuration);
 
@@ -58,7 +58,7 @@ public static class InitalSetup
             view.Model.Should().Be(configuration);
         });
 
-        services.AssertDb(db =>
+        context.AssertDb(db =>
         {
             db.Users.Should().BeEmpty();
             db.Countries.Should().BeEmpty();
@@ -69,7 +69,7 @@ public static class InitalSetup
         //  Valid config
         configuration.GenerateCountries = true;
 
-        await services.Do<SetupController>(async controller =>
+        await context.Do<SetupController>(async controller =>
         {
             IActionResult result = await controller.InitialSetupConfirmed(configuration);
 
@@ -77,7 +77,7 @@ public static class InitalSetup
             redirect.Url.Should().Be("//action=Index&controller=Home");
         });
 
-        services.AssertDb(db =>
+        context.AssertDb(db =>
         {
             V.AdminUser = db.Users.Should().Contain(user => user.UserName == _adminUserEMail).Subject;
 

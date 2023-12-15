@@ -6,12 +6,12 @@ namespace BraunauMobil.VeloBasar.Tests.IntegrationTests.MainRunSteps;
 
 public static class AcceptSellers
 {
-    public static async Task Run(IServiceProvider services)
+    public static async Task Run(TestContext context)
     {
-        ArgumentNullException.ThrowIfNull(services);
+        ArgumentNullException.ThrowIfNull(context);
 
         //  Create seller
-        await services.Do<AcceptSessionController>(async controller =>
+        await context.Do<AcceptSessionController>(async controller =>
         {
             IActionResult result = await controller.Start(V.FirstBasar.Id);
 
@@ -19,7 +19,7 @@ public static class AcceptSellers
             redirect.Url.Should().Be("//action=CreateForAcceptance&controller=Seller");
         });
 
-        SellerCreateForAcceptanceModel createModel = await services.Do<SellerController, SellerCreateForAcceptanceModel>(async controller =>
+        SellerCreateForAcceptanceModel createModel = await context.Do<SellerController, SellerCreateForAcceptanceModel>(async controller =>
         {
             int? sellerId = null;
             IActionResult result = await controller.CreateForAcceptance(sellerId);
@@ -42,7 +42,7 @@ public static class AcceptSellers
         createModel.Seller.IBAN = "AT036616345714985792";
         createModel.Seller.BankAccountHolder = "Ing. Frodo Beutlin";
 
-        await services.Do<SellerController>(async controller =>
+        await context.Do<SellerController>(async controller =>
         {
             IActionResult result = await controller.CreateForAcceptance(createModel.Seller);
 
@@ -50,14 +50,14 @@ public static class AcceptSellers
             redirect.Url.Should().Be("//sellerId=1&action=StartForSeller&controller=AcceptSession");
         });
 
-        services.AssertDb(db =>
+        context.AssertDb(db =>
         {
             SellerEntity frodo = db.Sellers.AsNoTracking().Should().Contain(s => s.FirstName == "Frodo" && s.LastName == "Beutlin").Subject;
             V.Sellers.Frodo = frodo;
         });
 
         //  Start accept session
-        await services.Do<AcceptSessionController>(async controller =>
+        await context.Do<AcceptSessionController>(async controller =>
         {
             IActionResult result = await controller.StartForSeller(V.Sellers.Frodo.Id, V.FirstBasar.Id);
 
@@ -66,22 +66,80 @@ public static class AcceptSellers
         });
 
         int acceptSessionId = 0;
-        services.AssertDb(db =>
+        context.AssertDb(db =>
         {
             AcceptSessionEntity session = db.AcceptSessions.AsNoTracking().Should().Contain(s => s.SellerId == V.Sellers.Frodo.Id && s.BasarId == V.FirstBasar.Id).Subject;
             acceptSessionId = session.Id;
         });
 
-        await AcceptProducts(services, acceptSessionId);
+        await EnterProducts(context, acceptSessionId);
+
+        //  Finish accept session
+        await context.Do<AcceptSessionController>(async controller =>
+        {
+            IActionResult result = await controller.Submit(acceptSessionId);
+
+            RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
+            redirect.Url.Should().Be("//id=1&action=Success&controller=Transaction");
+        });
+
+        TransactionEntity acceptance = context.AssertDb(db =>
+        {
+            TransactionEntity acceptance = db.Transactions
+                .Include(t => t.Products)
+                .AsNoTracking().Should().Contain(t => t.SellerId == V.Sellers.Frodo.Id && t.Type == TransactionType.Acceptance).Subject;
+            acceptance.BasarId.Should().Be(V.FirstBasar.Id);
+            acceptance.CanCancel.Should().BeFalse();
+            acceptance.CanHasDocument.Should().BeTrue();
+            acceptance.Change.Should().BeNull();
+            acceptance.ChildTransactions.Should().BeEmpty();
+            acceptance.DocumentId.Should().BeNull();
+            acceptance.HasDocument.Should().BeFalse();
+            acceptance.NeedsBankingQrCodeOnDocument.Should().BeFalse();
+            acceptance.NeedsStatusPush.Should().BeTrue();
+            acceptance.Notes.Should().BeNull();
+            acceptance.Number.Should().Be(1);
+            acceptance.ParentTransaction.Should().BeNull();
+            foreach (ProductToTransactionEntity productToTransactionEntity in acceptance.Products)
+            {
+                ProductEntity product = db.Products.AsNoTracking().Should().Contain(p => p.Id == productToTransactionEntity.ProductId).Subject;
+                product.StorageState.Should().Be(StorageState.Available);
+                product.ValueState.Should().Be(ValueState.NotSettled);
+            }
+            acceptance.TimeStamp.Should().Be(context.Clock.GetCurrentDateTime());
+            acceptance.SellerId.Should().Be(V.Sellers.Frodo.Id);    
+            acceptance.Type.Should().Be(TransactionType.Acceptance);
+
+            db.Files.AsNoTracking().Should().BeEmpty();
+
+            return acceptance;
+        });
+
+        await context.Do<TransactionController>(async controller =>
+        {
+            IActionResult result = await controller.Success(acceptance.Id);
+
+            ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
+            view.ViewName.Should().BeNull();
+            view.ViewData.ModelState.IsValid.Should().BeTrue();
+            TransactionSuccessModel model =view.Model.Should().BeOfType<TransactionSuccessModel>().Subject;
+
+            model.AmountGiven.Should().Be(0);
+            model.Entity.Should().NotBeNull();
+            model.Entity.Id.Should().Be(acceptance.Id);
+            model.OpenDocument.Should().BeTrue();
+            model.ShowAmountInput.Should().BeFalse();
+            model.ShowChange.Should().BeFalse();
+        });
     }
-    private static async Task AcceptProducts(IServiceProvider services, int acceptSessionId)
+    private static async Task EnterProducts(TestContext context, int acceptSessionId)
     {
-        await AcceptStahlross(services, acceptSessionId);
+        await AcceptStahlross(context, acceptSessionId);
     }
 
-    private static async Task AcceptStahlross(IServiceProvider services, int acceptSessionId)
+    private static async Task AcceptStahlross(TestContext context, int acceptSessionId)
     {
-        AcceptProductModel stahlross = await services.Do<AcceptProductController, AcceptProductModel>(async controller =>
+        AcceptProductModel stahlross = await context.Do<AcceptProductController, AcceptProductModel>(async controller =>
         {
             IActionResult result = await controller.Create(acceptSessionId);
 
@@ -99,7 +157,7 @@ public static class AcceptSellers
         stahlross.Entity.TireSize = "26";
         stahlross.Entity.Price = 120;
 
-        await services.Do<AcceptProductController>(async controller =>
+        await context.Do<AcceptProductController>(async controller =>
         {
             IActionResult result = await controller.Create(stahlross.Entity);
 
@@ -107,9 +165,16 @@ public static class AcceptSellers
             redirect.Url.Should().Be("//sessionId=1&action=Create&controller=AcceptProduct");
         });
 
-        services.AssertDb(db =>
+        context.AssertDb(db =>
         {
             V.Products.FirstBasar.Frodo.Stahlross = db.Products.AsNoTracking().Should().Contain(p => p.SessionId == acceptSessionId && p.Price == 120).Subject;
+
+            V.Products.FirstBasar.Frodo.Stahlross.Brand.Should().Be("Simplon");
+            V.Products.FirstBasar.Frodo.Stahlross.Color.Should().Be("Schwarz");
+            V.Products.FirstBasar.Frodo.Stahlross.FrameNumber.Should().Be("1234567890");
+            V.Products.FirstBasar.Frodo.Stahlross.Description.Should().Be("Gepäckträger, Korb");
+            V.Products.FirstBasar.Frodo.Stahlross.TireSize.Should().Be("26");
+            V.Products.FirstBasar.Frodo.Stahlross.Price.Should().Be(120);
         });
     }
 }

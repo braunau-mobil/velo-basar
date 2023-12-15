@@ -2,14 +2,22 @@
 
 namespace BraunauMobil.VeloBasar.Tests.IntegrationTests;
 
-public class MainRun
-    : TestBase
+public sealed class MainRun
+    : IDisposable
 {
+    private readonly TestContext _context = new ();
+
+    public void Dispose()
+    {
+        _context.Dispose();
+        GC.SuppressFinalize(this);
+    }
+
     [Fact]
     public async Task Run()
     {
-        await InitalSetup.Run(Services);
-        await BasarCreation.Run(Services);
-        await AcceptSellers.Run(Services);
+        await InitalSetup.Run(_context);
+        await BasarCreation.Run(_context);
+        await AcceptSellers.Run(_context);
     }   
 }

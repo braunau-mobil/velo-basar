@@ -10,12 +10,12 @@ public static class BasarCreation
     private const int _productCommissionPercentage = 10;
     private static readonly DateTime _basarDate = new (2063, 04, 05);
 
-    public static async Task Run(IServiceProvider services)
+    public static async Task Run(TestContext context)
     {
-        ArgumentNullException.ThrowIfNull(services);
+        ArgumentNullException.ThrowIfNull(context);
 
         //  Leave defaults
-        BasarEntity basar = await services.Do<CrudController<BasarEntity>, BasarEntity>(async controller =>
+        BasarEntity basar = await context.Do<CrudController<BasarEntity>, BasarEntity>(async controller =>
         {
             IActionResult result = await controller.Create();
 
@@ -27,7 +27,7 @@ public static class BasarCreation
             return crudModel.Entity;
         });
 
-        await services.Do<CrudController<BasarEntity>>(async controller =>
+        await context.Do<CrudController<BasarEntity>>(async controller =>
         {
             IActionResult result = await controller.Create(basar);
 
@@ -39,7 +39,7 @@ public static class BasarCreation
             crudModel.Entity.Should().Be(basar);
         });
 
-        services.AssertDb(db =>
+        context.AssertDb(db =>
         {
             db.Basars.Should().BeEmpty();
         });
@@ -50,7 +50,7 @@ public static class BasarCreation
         basar.Date = _basarDate;
         basar.Location = _basarLocation;
 
-        await services.Do<CrudController<BasarEntity>>(async controller =>
+        await context.Do<CrudController<BasarEntity>>(async controller =>
         {
             IActionResult result = await controller.Create(basar);
 
@@ -62,7 +62,7 @@ public static class BasarCreation
             crudModel.Entity.Should().Be(basar);
         });
 
-        services.AssertDb(db =>
+        context.AssertDb(db =>
         {
             db.Basars.Should().BeEmpty();
         });
@@ -71,7 +71,7 @@ public static class BasarCreation
         basar.Name = _basarName;
         basar.ProductCommissionPercentage = 1000;
 
-        await services.Do<CrudController<BasarEntity>>(async controller =>
+        await context.Do<CrudController<BasarEntity>>(async controller =>
         {
             IActionResult result = await controller.Create(basar);
 
@@ -83,7 +83,7 @@ public static class BasarCreation
             crudModel.Entity.Should().Be(basar);
         });
 
-        services.AssertDb(db =>
+        context.AssertDb(db =>
         {
             db.Basars.Should().BeEmpty();
         });
@@ -91,7 +91,7 @@ public static class BasarCreation
         //  Valid basar
         basar.ProductCommissionPercentage = _productCommissionPercentage;
 
-        await services.Do<CrudController<BasarEntity>>(async controller =>
+        await context.Do<CrudController<BasarEntity>>(async controller =>
         {
             IActionResult result = await controller.Create(basar);
 
@@ -100,7 +100,7 @@ public static class BasarCreation
         });
 
         //  Assert
-        services.AssertDb(db =>
+        context.AssertDb(db =>
         {
             V.FirstBasar = db.Basars.Should().ContainSingle(basar => basar.Name == _basarName).Subject;
             V.FirstBasar.ProductCommissionPercentage.Should().Be(_productCommissionPercentage);

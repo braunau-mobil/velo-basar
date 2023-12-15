@@ -10,6 +10,7 @@ using BraunauMobil.VeloBasar.Routing;
 using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
@@ -25,14 +26,13 @@ using Xan.Extensions.Tasks;
 
 namespace BraunauMobil.VeloBasar.Tests.IntegrationTests;
 
-public class TestBase
-    : IDisposable
+public sealed class TestContext
 {
     private const string _connectionString = "DataSource=:memory:";
     private readonly SqliteConnection _connection;
     private readonly WebApplication _app;
 
-    public TestBase()
+    public TestContext()
     {
         WebApplicationBuilder builder = WebApplication.CreateBuilder();
         builder.Logging.AddConsole();
@@ -117,13 +117,59 @@ public class TestBase
         ;
     }
 
-    protected MockClock Clock { get; } = new();
+    public MockClock Clock { get; } = new();
 
-    protected IServiceProvider Services { get => _app.Services; }
+    public IServiceProvider Services { get => _app.Services; }
 
-    public virtual void Dispose()
+    public void Dispose()
     {
         _connection.Dispose();
         GC.SuppressFinalize(this);
+    }
+
+    public void AssertDb(Action<VeloDbContext> what)
+    {
+        ArgumentNullException.ThrowIfNull(what);
+
+        Services.AssertDb(what);
+    }
+
+    public TResult AssertDb<TResult>(Func<VeloDbContext, TResult> what)
+    {
+        ArgumentNullException.ThrowIfNull(what);
+
+        return Services.AssertDb(what);
+    }
+
+    public void Do<TController>(Action<TController> what)
+        where TController : Controller
+    {
+        ArgumentNullException.ThrowIfNull(what);
+
+        Services.Do(what);
+    }
+
+    public async Task Do<TController>(Func<TController, Task> what)
+        where TController : Controller
+    {
+        ArgumentNullException.ThrowIfNull(what);
+
+        await Services.Do(what);
+    }
+
+    public TResult Do<TController, TResult>(Func<TController, TResult> what)
+        where TController : Controller
+    {
+        ArgumentNullException.ThrowIfNull(what);
+
+        return Services.Do(what);
+    }
+
+    public async Task<TResult> Do<TController, TResult>(Func<TController, Task<TResult>> what)
+        where TController : Controller
+    {
+        ArgumentNullException.ThrowIfNull(what);
+
+        return await Services.Do(what);
     }
 }

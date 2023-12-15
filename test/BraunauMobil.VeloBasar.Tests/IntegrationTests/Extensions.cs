@@ -22,6 +22,19 @@ public static class Extensions
         }
     }
 
+    public static TResult AssertDb<TResult>(this IServiceProvider services, Func<VeloDbContext, TResult> what)
+    {
+        ArgumentNullException.ThrowIfNull(services);
+        ArgumentNullException.ThrowIfNull(what);
+
+        using IServiceScope scope = services.CreateScope();
+        VeloDbContext db = scope.ServiceProvider.GetRequiredService<VeloDbContext>();
+        using (new AssertionScope())
+        {
+            return what(db);
+        }
+    }
+
     public static void Do<TController>(this IServiceProvider services,  Action<TController> what)
         where TController : Controller
     {
