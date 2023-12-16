@@ -10,7 +10,6 @@ using BraunauMobil.VeloBasar.Routing;
 using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
@@ -125,79 +124,5 @@ public sealed class TestContext
     {
         _connection.Dispose();
         GC.SuppressFinalize(this);
-    }
-
-    public void AssertDb(Action<VeloDbContext> what)
-    {
-        ArgumentNullException.ThrowIfNull(what);
-
-        Services.AssertDb(what);
-    }
-
-    public TResult AssertDb<TResult>(Func<VeloDbContext, TResult> what)
-    {
-        ArgumentNullException.ThrowIfNull(what);
-
-        return Services.AssertDb(what);
-    }
-
-    public async Task<ProductEntity> EnterProduct(int acceptSessionId, Action<AcceptProductModel> customize)
-    {
-        AcceptProductModel acceptProductModel = await Do<AcceptProductController, AcceptProductModel>(async controller =>
-        {
-            IActionResult result = await controller.Create(acceptSessionId);
-
-            ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
-            view.ViewName.Should().Be("CreateEdit");
-            view.ViewData.ModelState.IsValid.Should().BeTrue();
-            return view.Model.Should().BeOfType<AcceptProductModel>().Subject;
-        });
-
-        customize(acceptProductModel);
-
-        await Do<AcceptProductController>(async controller =>
-        {
-            IActionResult result = await controller.Create(acceptProductModel.Entity);
-
-            RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
-            redirect.Url.Should().Be($"//sessionId={acceptSessionId}&action=Create&controller=AcceptProduct");
-        });
-
-        return AssertDb(db =>
-        {
-            return db.Products.AsNoTracking().Should().Contain(p => p.SessionId == acceptSessionId && p.Price == acceptProductModel.Entity.Price).Subject;
-        });
-    }
-
-    public void Do<TController>(Action<TController> what)
-        where TController : Controller
-    {
-        ArgumentNullException.ThrowIfNull(what);
-
-        Services.Do(what);
-    }
-
-    public async Task Do<TController>(Func<TController, Task> what)
-        where TController : Controller
-    {
-        ArgumentNullException.ThrowIfNull(what);
-
-        await Services.Do(what);
-    }
-
-    public TResult Do<TController, TResult>(Func<TController, TResult> what)
-        where TController : Controller
-    {
-        ArgumentNullException.ThrowIfNull(what);
-
-        return Services.Do(what);
-    }
-
-    public async Task<TResult> Do<TController, TResult>(Func<TController, Task<TResult>> what)
-        where TController : Controller
-    {
-        ArgumentNullException.ThrowIfNull(what);
-
-        return await Services.Do(what);
     }
 }

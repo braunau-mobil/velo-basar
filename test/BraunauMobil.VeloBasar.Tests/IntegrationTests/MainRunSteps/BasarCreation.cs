@@ -3,19 +3,23 @@ using Xan.AspNetCore.Mvc.Crud;
 
 namespace BraunauMobil.VeloBasar.Tests.IntegrationTests.MainRunSteps;
 
-public static class BasarCreation
+public class BasarCreation
+    : TestStepBase
 {
     private const string _basarName = "1. Fahrradbasar";
     private const string _basarLocation = "Braunau am Inn";
     private const int _productCommissionPercentage = 10;
     private static readonly DateTime _basarDate = new (2063, 04, 05);
 
-    public static async Task Run(TestContext context)
+    public BasarCreation(TestContext testContext)
+        : base(testContext)
     {
-        ArgumentNullException.ThrowIfNull(context);
+    }
 
+    public override async Task Run()
+    {
         //  Leave defaults
-        BasarEntity basar = await context.Do<CrudController<BasarEntity>, BasarEntity>(async controller =>
+        BasarEntity basar = await Do<CrudController<BasarEntity>, BasarEntity>(async controller =>
         {
             IActionResult result = await controller.Create();
 
@@ -27,7 +31,7 @@ public static class BasarCreation
             return crudModel.Entity;
         });
 
-        await context.Do<CrudController<BasarEntity>>(async controller =>
+        await Do<CrudController<BasarEntity>>(async controller =>
         {
             IActionResult result = await controller.Create(basar);
 
@@ -39,7 +43,7 @@ public static class BasarCreation
             crudModel.Entity.Should().Be(basar);
         });
 
-        context.AssertDb(db =>
+        AssertDb(db =>
         {
             db.Basars.Should().BeEmpty();
         });
@@ -50,7 +54,7 @@ public static class BasarCreation
         basar.Date = _basarDate;
         basar.Location = _basarLocation;
 
-        await context.Do<CrudController<BasarEntity>>(async controller =>
+        await Do<CrudController<BasarEntity>>(async controller =>
         {
             IActionResult result = await controller.Create(basar);
 
@@ -62,7 +66,7 @@ public static class BasarCreation
             crudModel.Entity.Should().Be(basar);
         });
 
-        context.AssertDb(db =>
+        AssertDb(db =>
         {
             db.Basars.Should().BeEmpty();
         });
@@ -71,7 +75,7 @@ public static class BasarCreation
         basar.Name = _basarName;
         basar.ProductCommissionPercentage = 1000;
 
-        await context.Do<CrudController<BasarEntity>>(async controller =>
+        await Do<CrudController<BasarEntity>>(async controller =>
         {
             IActionResult result = await controller.Create(basar);
 
@@ -83,7 +87,7 @@ public static class BasarCreation
             crudModel.Entity.Should().Be(basar);
         });
 
-        context.AssertDb(db =>
+        AssertDb(db =>
         {
             db.Basars.Should().BeEmpty();
         });
@@ -91,7 +95,7 @@ public static class BasarCreation
         //  Valid basar
         basar.ProductCommissionPercentage = _productCommissionPercentage;
 
-        await context.Do<CrudController<BasarEntity>>(async controller =>
+        await Do<CrudController<BasarEntity>>(async controller =>
         {
             IActionResult result = await controller.Create(basar);
 
@@ -100,7 +104,7 @@ public static class BasarCreation
         });
 
         //  Assert
-        context.AssertDb(db =>
+        AssertDb(db =>
         {
             V.FirstBasar = db.Basars.Should().ContainSingle(basar => basar.Name == _basarName).Subject;
             V.FirstBasar.ProductCommissionPercentage.Should().Be(_productCommissionPercentage);

@@ -4,15 +4,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BraunauMobil.VeloBasar.Tests.IntegrationTests.MainRunSteps;
 
-public static class InitalSetup
+public class InitalSetup
+    : TestStepBase
 {
     private const string _adminUserEMail = "dev@shirenet.at";
 
-    public static async Task Run(TestContext context)
-    {
-        ArgumentNullException.ThrowIfNull(context);
+    public InitalSetup(TestContext testContext)
+        : base(testContext)
+    { }
 
-        InitializationConfiguration configuration = context.Do<SetupController, InitializationConfiguration>(controller =>
+    public override async Task Run()
+    {
+        InitializationConfiguration configuration = Do<SetupController, InitializationConfiguration>(controller =>
         {
             IActionResult result = controller.InitialSetup();
 
@@ -24,7 +27,7 @@ public static class InitalSetup
         //  No Admin EMail
         configuration.AdminUserEMail = "";
 
-        await context.Do<SetupController>(async controller =>
+        await Do<SetupController>(async controller =>
         {
             IActionResult result = await controller.InitialSetupConfirmed(configuration);
 
@@ -34,7 +37,7 @@ public static class InitalSetup
             view.Model.Should().Be(configuration);
         });
 
-        context.AssertDb(db =>
+        AssertDb(db =>
         {
             db.Users.Should().BeEmpty();
             db.Countries.Should().BeEmpty();
@@ -48,7 +51,7 @@ public static class InitalSetup
         configuration.GenerateProductTypes = true;
         configuration.GenerateZipCodes = true;
 
-        await context.Do<SetupController>(async controller =>
+        await Do<SetupController>(async controller =>
         {
             IActionResult result = await controller.InitialSetupConfirmed(configuration);
 
@@ -58,7 +61,7 @@ public static class InitalSetup
             view.Model.Should().Be(configuration);
         });
 
-        context.AssertDb(db =>
+        AssertDb(db =>
         {
             db.Users.Should().BeEmpty();
             db.Countries.Should().BeEmpty();
@@ -69,7 +72,7 @@ public static class InitalSetup
         //  Valid config
         configuration.GenerateCountries = true;
 
-        await context.Do<SetupController>(async controller =>
+        await Do<SetupController>(async controller =>
         {
             IActionResult result = await controller.InitialSetupConfirmed(configuration);
 
@@ -77,7 +80,7 @@ public static class InitalSetup
             redirect.Url.Should().Be("//action=Index&controller=Home");
         });
 
-        context.AssertDb(db =>
+        AssertDb(db =>
         {
             V.AdminUser = db.Users.Should().Contain(user => user.UserName == _adminUserEMail).Subject;
 
