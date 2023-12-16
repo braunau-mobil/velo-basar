@@ -83,7 +83,7 @@ public static class AcceptSellers
             redirect.Url.Should().Be("//id=1&action=Success&controller=Transaction");
         });
 
-        TransactionEntity acceptance = context.AssertDb(db =>
+        int acceptanceId = context.AssertDb(db =>
         {
             TransactionEntity acceptance = db.Transactions
                 .Include(t => t.Products)
@@ -100,36 +100,59 @@ public static class AcceptSellers
             acceptance.Notes.Should().BeNull();
             acceptance.Number.Should().Be(1);
             acceptance.ParentTransaction.Should().BeNull();
-            foreach (ProductToTransactionEntity productToTransactionEntity in acceptance.Products)
-            {
-                ProductEntity product = db.Products.AsNoTracking().Should().Contain(p => p.Id == productToTransactionEntity.ProductId).Subject;
-                product.StorageState.Should().Be(StorageState.Available);
-                product.ValueState.Should().Be(ValueState.NotSettled);
-            }
             acceptance.TimeStamp.Should().Be(context.Clock.GetCurrentDateTime());
             acceptance.SellerId.Should().Be(V.Sellers.Frodo.Id);    
             acceptance.Type.Should().Be(TransactionType.Acceptance);
+            
+            acceptance.Products.Should().HaveCount(1);
+            ProductToTransactionEntity stahlrossToAcceptance = acceptance.Products.Should().Contain(p => p.ProductId == V.Products.FirstBasar.Frodo.Stahlross.Id).Subject;
+            ProductEntity stahlross = db.Products.AsNoTracking().Should().Contain(p => p.Id == stahlrossToAcceptance.ProductId).Subject;
+            stahlross.StorageState.Should().Be(StorageState.Available);
+            stahlross.ValueState.Should().Be(ValueState.NotSettled);
 
             db.Files.AsNoTracking().Should().BeEmpty();
 
-            return acceptance;
+            return acceptance.Id;
         });
 
         await context.Do<TransactionController>(async controller =>
         {
-            IActionResult result = await controller.Success(acceptance.Id);
+            IActionResult result = await controller.Success(acceptanceId);
 
             ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
             view.ViewName.Should().BeNull();
             view.ViewData.ModelState.IsValid.Should().BeTrue();
-            TransactionSuccessModel model =view.Model.Should().BeOfType<TransactionSuccessModel>().Subject;
+            TransactionSuccessModel model = view.Model.Should().BeOfType<TransactionSuccessModel>().Subject;
 
             model.AmountGiven.Should().Be(0);
             model.Entity.Should().NotBeNull();
-            model.Entity.Id.Should().Be(acceptance.Id);
+            model.Entity.Id.Should().Be(acceptanceId);
             model.OpenDocument.Should().BeTrue();
             model.ShowAmountInput.Should().BeFalse();
             model.ShowChange.Should().BeFalse();
+        });
+
+        context.AssertDb(db =>
+        {
+            db.Files.AsNoTracking().Should().BeEmpty();
+        });
+
+        //  Download document
+        await context.Do<TransactionController>(async controller =>
+        {
+            IActionResult result = await controller.Document(acceptanceId);
+
+            FileContentResult file = result.Should().BeOfType<FileContentResult>().Subject;
+            file.ContentType.Should().Be("application/pdf");
+            file.FileDownloadName.Should().Be("2063-04-05T11:22:33_Acceptance-1.pdf");
+            file.FileContents.Should().NotBeNull();
+        });
+
+        context.AssertDb(db =>
+        {
+            TransactionEntity acceptance = db.Transactions.AsNoTracking().Should().Contain(f => f.Id == acceptanceId).Subject;
+
+            acceptance.DocumentId.Should().NotBeNull();
         });
     }
     private static async Task EnterProducts(TestContext context, int acceptSessionId)
