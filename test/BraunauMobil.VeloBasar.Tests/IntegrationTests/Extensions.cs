@@ -1,7 +1,9 @@
 ﻿using BraunauMobil.VeloBasar.Data;
+using FluentAssertions.Primitives;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
@@ -33,6 +35,29 @@ public static class Extensions
         {
             return what(db);
         }
+    }
+
+    public static void AssertProductStates(this VeloDbContext db, int productId, StorageState expectedStorageState, ValueState expectedValueState)
+    {
+        ArgumentNullException.ThrowIfNull(db);
+
+        ProductEntity stahlross = db.Products.AsNoTracking().Should().Contain(p => p.Id == productId).Subject;
+        stahlross.StorageState.Should().Be(expectedStorageState);
+        stahlross.ValueState.Should().Be(expectedValueState);
+    }
+
+    public static void ShouldBeLikeInserted(this ProductEntity product, AcceptProductModel acceptModel)
+    {
+        ArgumentNullException.ThrowIfNull(product);
+        ArgumentNullException.ThrowIfNull(acceptModel);
+
+        product.Brand.Should().Be(acceptModel.Entity.Brand);
+        product.Color.Should().Be(acceptModel.Entity.Color);
+        product.FrameNumber.Should().Be(acceptModel.Entity.FrameNumber);
+        product.Description.Should().Be(acceptModel.Entity.Description);
+        product.Price.Should().Be(acceptModel.Entity.Price);
+        product.TireSize.Should().Be(acceptModel.Entity.TireSize);
+        product.TypeId.Should().Be(acceptModel.Entity.TypeId);
     }
 
     public static void Do<TController>(this IServiceProvider services,  Action<TController> what)

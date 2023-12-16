@@ -17,6 +17,8 @@ public static class V
 
     public static class ProductTypes
     {
+        public static ProductTypeEntity Einrad { get; set; }
+        
         public static ProductTypeEntity Stahlross { get; set; }
     }
 
@@ -31,6 +33,8 @@ public static class V
         {
             public static class Frodo
             {
+                public static ProductEntity Einrad { get; set; }
+
                 public static ProductEntity Stahlross { get; set; }
             }
         }

@@ -104,11 +104,12 @@ public static class AcceptSellers
             acceptance.SellerId.Should().Be(V.Sellers.Frodo.Id);    
             acceptance.Type.Should().Be(TransactionType.Acceptance);
             
-            acceptance.Products.Should().HaveCount(1);
-            ProductToTransactionEntity stahlrossToAcceptance = acceptance.Products.Should().Contain(p => p.ProductId == V.Products.FirstBasar.Frodo.Stahlross.Id).Subject;
-            ProductEntity stahlross = db.Products.AsNoTracking().Should().Contain(p => p.Id == stahlrossToAcceptance.ProductId).Subject;
-            stahlross.StorageState.Should().Be(StorageState.Available);
-            stahlross.ValueState.Should().Be(ValueState.NotSettled);
+            acceptance.Products.Should().HaveCount(2);
+            acceptance.Products.Should().Contain(p => p.ProductId == V.Products.FirstBasar.Frodo.Stahlross.Id);
+            acceptance.Products.Should().Contain(p => p.ProductId == V.Products.FirstBasar.Frodo.Einrad.Id);
+
+            db.AssertProductStates(V.Products.FirstBasar.Frodo.Stahlross.Id, StorageState.Available, ValueState.NotSettled);
+            db.AssertProductStates(V.Products.FirstBasar.Frodo.Einrad.Id, StorageState.Available, ValueState.NotSettled);
 
             db.Files.AsNoTracking().Should().BeEmpty();
 
@@ -157,47 +158,36 @@ public static class AcceptSellers
     }
     private static async Task EnterProducts(TestContext context, int acceptSessionId)
     {
-        await AcceptStahlross(context, acceptSessionId);
-    }
-
-    private static async Task AcceptStahlross(TestContext context, int acceptSessionId)
-    {
-        AcceptProductModel stahlross = await context.Do<AcceptProductController, AcceptProductModel>(async controller =>
+        V.Products.FirstBasar.Frodo.Stahlross = await context.EnterProduct(acceptSessionId, model =>
         {
-            IActionResult result = await controller.Create(acceptSessionId);
+            model.CanAccept.Should().BeFalse();
+            model.SellerId.Should().Be(V.Sellers.Frodo.Id);
+            model.SessionId.Should().Be(acceptSessionId);
+            model.Products.Should().BeEmpty();
 
-            ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
-            view.ViewName.Should().Be("CreateEdit");
-            view.ViewData.ModelState.IsValid.Should().BeTrue();
-            return view.Model.Should().BeOfType<AcceptProductModel>().Subject;
+            model.Entity.TypeId = V.ProductTypes.Stahlross.Id;
+            model.Entity.Brand = "Simplon";
+            model.Entity.Color = "Schwarz";
+            model.Entity.FrameNumber = "1234567890";
+            model.Entity.Description = "Gepäckträger, Korb";
+            model.Entity.TireSize = "26";
+            model.Entity.Price = 120;
         });
 
-        stahlross.Entity.TypeId = V.ProductTypes.Stahlross.Id;
-        stahlross.Entity.Brand = "Simplon";
-        stahlross.Entity.Color = "Schwarz";
-        stahlross.Entity.FrameNumber = "1234567890";
-        stahlross.Entity.Description = "Gepäckträger, Korb";
-        stahlross.Entity.TireSize = "26";
-        stahlross.Entity.Price = 120;
-
-        await context.Do<AcceptProductController>(async controller =>
+        V.Products.FirstBasar.Frodo.Einrad = await context.EnterProduct(acceptSessionId, model =>
         {
-            IActionResult result = await controller.Create(stahlross.Entity);
+            model.CanAccept.Should().BeTrue();
+            model.SellerId.Should().Be(V.Sellers.Frodo.Id);
+            model.SessionId.Should().Be(acceptSessionId);
+            model.Products.Should().HaveCount(1);
 
-            RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
-            redirect.Url.Should().Be("//sessionId=1&action=Create&controller=AcceptProduct");
+            model.Entity.TypeId = V.ProductTypes.Einrad.Id;
+            model.Entity.Brand = "AJATA";
+            model.Entity.Color = "Rot";
+            model.Entity.FrameNumber = "qe340t9ni-0i4";
+            model.Entity.Description = "";
+            model.Entity.TireSize = "22";
+            model.Entity.Price = 40;
         });
-
-        context.AssertDb(db =>
-        {
-            V.Products.FirstBasar.Frodo.Stahlross = db.Products.AsNoTracking().Should().Contain(p => p.SessionId == acceptSessionId && p.Price == 120).Subject;
-
-            V.Products.FirstBasar.Frodo.Stahlross.Brand.Should().Be("Simplon");
-            V.Products.FirstBasar.Frodo.Stahlross.Color.Should().Be("Schwarz");
-            V.Products.FirstBasar.Frodo.Stahlross.FrameNumber.Should().Be("1234567890");
-            V.Products.FirstBasar.Frodo.Stahlross.Description.Should().Be("Gepäckträger, Korb");
-            V.Products.FirstBasar.Frodo.Stahlross.TireSize.Should().Be("26");
-            V.Products.FirstBasar.Frodo.Stahlross.Price.Should().Be(120);
-        });
-    }
+    }    
 }
