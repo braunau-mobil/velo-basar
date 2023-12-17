@@ -1,10 +1,18 @@
 ﻿using Xan.Extensions;
 
-namespace BraunauMobil.VeloBasar.Tests.IntegrationTests;
+namespace BraunauMobil.VeloBasar.Tests.Mockups;
 
-public class MockClock
+public class ClockMock
     : IClock
 {
+    public ClockMock()
+    { }
+
+    public ClockMock(DateTime now)
+    {
+        Now = new DateTimeOffset(now);
+    }
+
     public DateTimeOffset Now { get; set; }
 
     public DateOnly GetCurrentDate()

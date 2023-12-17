@@ -38,6 +38,8 @@ public sealed class CartController
         {
             cart.Add(model.ProductId);
             _cookie.SetCart(cart);
+
+            model.ProductId = 0;
         }
             
         model.Products = await _productService.GetManyAsync(cart);

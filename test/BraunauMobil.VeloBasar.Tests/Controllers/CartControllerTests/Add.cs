@@ -36,6 +36,7 @@ public class Add
     public async Task ValidCartModel_IsAddedToCookieAndReturnsView(CartModel cartModel, ProductEntity product, IReadOnlyList<ProductEntity> products)
     {
         //  Arrange
+        int productId = cartModel.ProductId;
         Mock<IList<int>> cartMock = new();
         Cookie.Setup(_ => _.GetCart())
             .Returns(cartMock.Object);
@@ -56,12 +57,13 @@ public class Add
         view.Model.Should().NotBeNull();
         view.Model.Should().Be(cartModel);
 
-        cartMock.Verify(_ => _.Add(cartModel.ProductId));
+        cartModel.ProductId.Should().Be(0);
+        cartMock.Verify(_ => _.Add(productId));
         cartMock.VerifyNoOtherCalls();
         Cookie.Verify(_ => _.GetCart(), Times.Once());
         Cookie.Verify(_ => _.SetCart(It.IsAny<IList<int>>()), Times.Once());
         ProductService.Verify(_ => _.GetManyAsync(cartMock.Object), Times.Once());
-        ProductService.Verify(_ => _.FindAsync(cartModel.ProductId), Times.Once());
+        ProductService.Verify(_ => _.FindAsync(productId), Times.Once());
         VerifyNoOtherCalls();
     }
 }

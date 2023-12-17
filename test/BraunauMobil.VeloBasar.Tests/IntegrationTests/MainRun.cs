@@ -21,5 +21,6 @@ public sealed class MainRun
         await new InitalSetup(_context).Run();
         await new BasarCreation(_context).Run();
         await new AcceptSellers(_context).Run();
+        await new SellProducts(_context).Run();
     }
 }

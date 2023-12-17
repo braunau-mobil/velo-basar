@@ -1,4 +1,6 @@
-﻿namespace BraunauMobil.VeloBasar.Tests.Models.Entities.SellerEntityTests;
+﻿using BraunauMobil.VeloBasar.Tests.Mockups;
+
+namespace BraunauMobil.VeloBasar.Tests.Models.Entities.SellerEntityTests;
 
 public class UpdateNewsletterPermissions
 {
@@ -13,7 +15,7 @@ public class UpdateNewsletterPermissions
             EMail = email
         };
 
-        seller.UpdateNewsletterPermissions(Mockups.Clock(newTimeStamp).Object);
+        seller.UpdateNewsletterPermissions(new ClockMock(newTimeStamp));
 
         seller.NewsletterPermissionTimesStamp.Should().Be(newTimeStamp);
         seller.HasNewsletterPermission.Should().BeTrue();
@@ -31,7 +33,7 @@ public class UpdateNewsletterPermissions
             EMail = email
         };
 
-        seller.UpdateNewsletterPermissions(Mockups.Clock(newTimeStamp).Object);
+        seller.UpdateNewsletterPermissions(new ClockMock(newTimeStamp));
 
         seller.HasNewsletterPermission.Should().BeFalse();
         seller.NewsletterPermissionTimesStamp.Should().Be(oldTimeStamp);

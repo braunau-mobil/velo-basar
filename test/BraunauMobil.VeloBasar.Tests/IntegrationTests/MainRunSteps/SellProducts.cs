@@ -22,7 +22,7 @@ public class SellProducts
             return view.ViewData.Model.Should().BeOfType<CartModel>().Subject;
         });
 
-        cart.ActiveBasarId.Should().Be(V.FirstBasar.Id);
+        cart.ActiveBasarId.Should().Be(0);
         cart.HasProducts.Should().BeFalse();
         cart.ProductId.Should().Be(0);
         cart.Products.Should().BeEmpty();
@@ -34,17 +34,27 @@ public class SellProducts
             IActionResult result = await controller.Add(cart);
 
             ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
-            view.ViewName.Should().BeNull();
+            view.ViewName.Should().Be("Index");
             view.ViewData.ModelState.IsValid.Should().BeTrue();
             view.ViewData.Model.Should().Be(cart);
         });
 
-        cart.ActiveBasarId.Should().Be(V.FirstBasar.Id);
+        cart.ActiveBasarId.Should().Be(0);
         cart.HasProducts.Should().BeTrue();
         cart.ProductId.Should().Be(0);
         cart.Products.Should().HaveCount(1);
         cart.Products.Should().Contain(p => p.Id == V.Products.FirstBasar.Frodo.Stahlross.Id);
 
-        //  @todo continue
+        await Do<CartController>(async controller =>
+        {
+            IActionResult result = await controller.Checkout(V.FirstBasar.Id);
+
+            RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
+            redirect.Url.Should().Be("//id=2&action=Success&controller=Transaction");
+        });
+        
+        //  @todo verify cart cookie is cleared
+        //  @todo verify product states
+        //  @todo verify transaction
     }
 }

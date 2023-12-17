@@ -1,6 +1,7 @@
 ﻿using BraunauMobil.VeloBasar.Data;
-using FluentAssertions.Primitives;
+using BraunauMobil.VeloBasar.Tests.Mockups;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.EntityFrameworkCore;
@@ -113,10 +114,15 @@ public static class Extensions
     {
         ArgumentNullException.ThrowIfNull(scope);
 
+        CookiesMock cookies = scope.ServiceProvider.GetRequiredService<CookiesMock>();
+
         HttpContext httpContext = new DefaultHttpContext()
         {
-            RequestServices = scope.ServiceProvider
+            RequestServices = scope.ServiceProvider,
         };
+        httpContext.Features.Set<IRequestCookiesFeature>(new RequestCookiesFeature(cookies));
+        httpContext.Features.Set<IResponseCookiesFeature>(new ResponseCookiesFeatureWrapper(cookies));
+
         IHttpContextAccessor httpContextAccessor = scope.ServiceProvider.GetRequiredService<IHttpContextAccessor>();
         httpContextAccessor.HttpContext = httpContext;
 

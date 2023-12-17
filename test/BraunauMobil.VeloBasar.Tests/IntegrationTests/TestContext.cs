@@ -7,6 +7,7 @@ using BraunauMobil.VeloBasar.Filters;
 using BraunauMobil.VeloBasar.Pdf;
 using BraunauMobil.VeloBasar.Rendering;
 using BraunauMobil.VeloBasar.Routing;
+using BraunauMobil.VeloBasar.Tests.Mockups;
 using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
@@ -96,7 +97,7 @@ public sealed class TestContext
             })
             .AddHttpContextAccessor()
             .AddHttpClient()
-            .AddScoped<LinkGenerator, MockLinkGenerator>()
+            .AddScoped<LinkGenerator, LinkGeneratorMock>()
             .AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>()
             .AddSingleton<IClock>(Clock)
             .AddBusinessLogic()
@@ -108,7 +109,8 @@ public sealed class TestContext
             .AddScoped<DatabaseMigrator>()
             .AddScoped<SellerCrudModelFactory>()
             .AddValidatorsFromAssemblyContaining<SellerSearchModelValidator>()
-            .AddHostedService<QueuedHostedService>();
+            .AddHostedService<QueuedHostedService>()
+            .AddSingleton<CookiesMock>();
 
         services.AddVeloOptions(configuration);
         services.AddVeloCrud();
@@ -121,7 +123,7 @@ public sealed class TestContext
         ;
     }
 
-    public MockClock Clock { get; } = new();
+    public ClockMock Clock { get; } = new();
 
     public IServiceProvider Services { get => _app.Services; }
 

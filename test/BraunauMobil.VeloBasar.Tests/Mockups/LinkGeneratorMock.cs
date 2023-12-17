@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Routing;
 using System.Text;
 
-namespace BraunauMobil.VeloBasar.Tests.IntegrationTests;
+namespace BraunauMobil.VeloBasar.Tests.Mockups;
 
-public class MockLinkGenerator
+public class LinkGeneratorMock
     : LinkGenerator
 {
     public override string? GetPathByAddress<TAddress>(HttpContext httpContext, TAddress address, RouteValueDictionary values, RouteValueDictionary? ambientValues = null, PathString? pathBase = null, FragmentString fragment = default, LinkOptions? options = null)
@@ -29,7 +29,7 @@ public class MockLinkGenerator
 
     private static string ToString(RouteValueDictionary values)
     {
-        StringBuilder sb = new ();
+        StringBuilder sb = new();
         foreach (KeyValuePair<string, object?> pair in values)
         {
             if (pair.Value is null)

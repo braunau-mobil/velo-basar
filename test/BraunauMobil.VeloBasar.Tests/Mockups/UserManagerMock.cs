@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace BraunauMobil.VeloBasar.Tests;
+namespace BraunauMobil.VeloBasar.Tests.Mockups;
 
 public class UserManagerMock
     : UserManager<IdentityUser>

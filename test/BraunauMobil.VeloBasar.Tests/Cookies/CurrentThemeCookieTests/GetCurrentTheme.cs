@@ -10,7 +10,7 @@ public class GetCurrentTheme
     [InlineData(null)]
     [InlineData("")]
     [AutoData]
-    public void ReturnsDefault(string cookieValue)
+    public void ReturnsDefault(string? cookieValue)
     {
         //  Arrange
         CurrentThemeCookie sut = new (HttpContextAccessor.Object);
