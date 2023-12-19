@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Xan.Extensions;
@@ -43,10 +44,17 @@ public class Program
     {
         ServiceCollection services = new();
         services
-          .AddDefaultIdentity<IdentityUser>()
-          .AddEntityFrameworkStores<VeloDbContext>();
+            .AddLogging(logging =>
+            {
+                logging
+                    .AddDebug()
+                    .AddConsole()
+                ;
+            })
+            .AddDefaultIdentity<IdentityUser>()
+            .AddEntityFrameworkStores<VeloDbContext>();            
         services
-          .AddDbContext<VeloDbContext>(dbOptionsAction);
+            .AddDbContext<VeloDbContext>(dbOptionsAction);
 
         services
             .AddBusinessLogic()
