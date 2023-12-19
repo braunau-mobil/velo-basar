@@ -6,30 +6,11 @@
 
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
-@inject IBasarService BasarService
 @inject IAppContext AppContext
-@inject IAcceptSessionService AcceptSessionService
-@inject IActiveAcceptSessionCookie ActiveAcceptSessionCookie
 @inject ICurrentThemeCookie CurrentThemeCookie
-
 @{
-    int? activeBasarId = await BasarService.GetActiveBasarIdAsync();
-    IHtmlContent basarInfo;
-    @if (activeBasarId.HasValue)
-    {
-        string basarName = await BasarService.GetBasarNameAsync(activeBasarId.Value);
-        basarInfo = new HtmlString(basarName);
-    }
-    else
-    {
-        basarInfo = @VeloHtml.Alert(MessageType.Warning, Localizer[VeloTexts.NoBasarActive]);
-    }
-
-    LocalizedString startAcceptSessionText = Localizer[VeloTexts.NewAcceptance];
-    if (await AcceptSessionService.IsSessionRunning(ActiveAcceptSessionCookie.GetActiveAcceptSessionId()))
-    {
-        startAcceptSessionText = Localizer[VeloTexts.ContinueAcceptSession];
-    }
+    BasarEntity? activeBasar = ViewData.GetActiveBasar();
+    int? activeSessionId = ViewData.GetActiveSessionId();
 }
 
 <!DOCTYPE html>
@@ -69,11 +50,29 @@
                         <ul class="list-unstyled mb-0 pb-3 pb-md-2 pe-lg-2 ">
                             <li class="py-2">
                                 <strong class="d-flex w-100 align-items-center fw-semibold">
-                                    @basarInfo
+                                    @if (activeBasar is null)
+                                    {
+                                        @VeloHtml.Alert(MessageType.Warning, Localizer[VeloTexts.NoBasarActive])
+                                    }
+                                    else
+                                    {
+                                        @activeBasar.Name
+                                    }
                                 </strong>
                                 <ul class="nav flex-column nav-pills">
                                     <li class="nav-item"><a class="nav-link" href="@Router.Basar.ToActiveBasarDetails()">@Localizer[VeloTexts.Overview]</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="@Router.AcceptSession.ToStart()">@startAcceptSessionText</a></li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="@Router.AcceptSession.ToStart()">
+                                            @if (activeSessionId is null)
+                                            {
+                                                @Localizer[VeloTexts.NewAcceptance]
+                                            }
+                                            else
+                                            {
+                                                @Localizer[VeloTexts.ContinueAcceptSession]
+                                            }
+                                        </a>
+                                    </li>
                                     <li class="nav-item"><a class="nav-link" href="@Router.AcceptanceLabels.ToSelect()">@Localizer[VeloTexts.PrintLabels]</a></li>
                                     <li class="nav-item"><a class="nav-link" href="@Router.Seller.ToList()">@Localizer[VeloTexts.SellerList]</a></li>
                                     <li class="nav-item"><a class="nav-link" href="@Router.Product.ToList()">@Localizer[VeloTexts.Products]</a></li>

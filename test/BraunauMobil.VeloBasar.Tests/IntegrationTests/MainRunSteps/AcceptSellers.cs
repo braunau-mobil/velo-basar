@@ -14,9 +14,9 @@ public class AcceptSellers
     public override async Task Run()
     {
         //  Create seller
-        await Do<AcceptSessionController>(async controller =>
+        Do<AcceptSessionController>(controller =>
         {
-            IActionResult result = await controller.Start(V.FirstBasar.Id);
+            IActionResult result = controller.Start(V.FirstBasar.Id);
 
             RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
             redirect.Url.Should().Be("//action=CreateForAcceptance&controller=Seller");

@@ -1,8 +1,9 @@
-﻿using BraunauMobil.VeloBasar.BusinessLogic;
-using BraunauMobil.VeloBasar.Data;
+﻿using BraunauMobil.VeloBasar.Data;
+using BraunauMobil.VeloBasar.Extensions;
 using BraunauMobil.VeloBasar.Routing;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.EntityFrameworkCore;
 
 namespace BraunauMobil.VeloBasar.Filters;
 
@@ -11,13 +12,11 @@ public sealed class ActiveBasarEntityFilter
 {
     private const string _activeBasarIdArgumentName = "activeBasarId";
 
-    private readonly IBasarService _basarService;
     private readonly IVeloRouter _router;
     private readonly VeloDbContext _db;
 
-    public ActiveBasarEntityFilter(IBasarService basarService, IVeloRouter router, VeloDbContext db)
+    public ActiveBasarEntityFilter(IVeloRouter router, VeloDbContext db)
     {
-        _basarService = basarService ?? throw new ArgumentNullException(nameof(basarService));
         _router = router ?? throw new ArgumentNullException(nameof(router));
         _db = db ?? throw new ArgumentNullException(nameof(db));
     }
@@ -34,13 +33,15 @@ public sealed class ActiveBasarEntityFilter
             return;
         }
 
-        int? activeBasarId = await _basarService.GetActiveBasarIdAsync();
+        BasarEntity? activeBasar = await _db.Basars.AsNoTracking()
+            .Where(b => b.State == ObjectState.Enabled)
+            .FirstOrDefaultAsync();
 
         if (context.ActionDescriptor.Parameters.Any(p => p.Name == _activeBasarIdArgumentName))
         {
-            if (activeBasarId.HasValue)
+            if (activeBasar is not null)
             {
-                context.ActionArguments[_activeBasarIdArgumentName] = activeBasarId;
+                context.ActionArguments[_activeBasarIdArgumentName] = activeBasar.Id;
             }
             else
             {
@@ -52,9 +53,9 @@ public sealed class ActiveBasarEntityFilter
         {
             foreach (IActiveBasarModel activeBasarModel in context.ActionArguments.Values.OfType<IActiveBasarModel>())
             {
-                if (activeBasarId.HasValue)
+                if (activeBasar is not null)
                 {
-                    activeBasarModel.ActiveBasarId = activeBasarId.Value;
+                    activeBasarModel.ActiveBasarId = activeBasar.Id;
                 }
                 else
                 {
@@ -62,6 +63,11 @@ public sealed class ActiveBasarEntityFilter
                     return;
                 }
             }
+        }
+
+        if (context.Controller is Controller controller)
+        {
+            controller.ViewData.SetActiveBasar(activeBasar);
         }
 
         await next();

@@ -1,5 +1,6 @@
 ﻿using BraunauMobil.VeloBasar.BusinessLogic;
 using BraunauMobil.VeloBasar.Cookies;
+using BraunauMobil.VeloBasar.Extensions;
 using BraunauMobil.VeloBasar.Parameters;
 using BraunauMobil.VeloBasar.Routing;
 using Microsoft.AspNetCore.Authorization;
@@ -54,11 +55,11 @@ public sealed class AcceptSessionController
         return View(model);
     }
 
-    public async Task<IActionResult> Start(int activeBasarId)
+    public IActionResult Start(int activeBasarId)
     {
         ArgumentNullException.ThrowIfNull(activeBasarId);
 
-        IActionResult? result = await RedirectToActiveSessionAsync();
+        IActionResult? result = RedirectToActiveSession();
         if (result != null)
         {
             return result;
@@ -71,7 +72,7 @@ public sealed class AcceptSessionController
     {
         ArgumentNullException.ThrowIfNull(activeBasarId);
 
-        IActionResult? result = await RedirectToActiveSessionAsync();
+        IActionResult? result = RedirectToActiveSession();
         if (result != null)
         {
             return result;
@@ -89,16 +90,12 @@ public sealed class AcceptSessionController
         return Redirect(_router.Transaction.ToSucess(acceptanceId));
     }
 
-    private async Task<IActionResult?> RedirectToActiveSessionAsync()
+    private IActionResult? RedirectToActiveSession()
     {
-        int? activeSessionId = _cookie.GetActiveAcceptSessionId();
+        int? activeSessionId = ViewData.GetActiveSessionId();
         if (activeSessionId.HasValue)
         {
-            if (await _acceptSessionService.IsSessionRunning(activeSessionId))
-            {
-                return Redirect(_router.AcceptProduct.ToCreate(activeSessionId.Value));
-            }
-            _cookie.ClearActiveAcceptSession();
+            return Redirect(_router.AcceptProduct.ToCreate(activeSessionId.Value));
         }
 
         return null;
