@@ -51,6 +51,8 @@ public sealed class WordPressStatusPushService
         string html = await GetStatesList(basarId, seller.Id);
 
         _taskQueue.QueueBackgroundWorkItem(async token => await PostStatusAsync(seller.Token, html, token));
+
+        _logger.LogInformation("Queued status push for basar {BasarId} and seller {SellerId}", basarId, sellerId);
     }
 
     private async Task<string> GetStatesList(int basarId, int sellerId)
@@ -131,6 +133,8 @@ public sealed class WordPressStatusPushService
             using HttpClient httpClient = _httpClientFactory.CreateClient();
             using HttpResponseMessage response = await httpClient.PostAsync(new Uri(_settings.EndpointUrl), body);
             response.EnsureSuccessStatusCode();
+
+            _logger.LogDebug("Successfully pushed status {Status}", saletext);
             return true;
         }
         catch (HttpRequestException ex)
