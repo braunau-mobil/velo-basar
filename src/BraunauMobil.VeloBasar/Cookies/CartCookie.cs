@@ -6,12 +6,21 @@ namespace BraunauMobil.VeloBasar.Cookies;
 public class CartCookie
     : ICartCookie
 {
-    private readonly HttpContext _httpContext;
+    private readonly IRequestCookieCollection _requestCookies;
+    private readonly IResponseCookies _responseCookies;
 
     public CartCookie(IHttpContextAccessor httpContextAccessor)
     {
         if (httpContextAccessor is null) throw new ArgumentNullException(nameof(httpContextAccessor));
-        _httpContext = httpContextAccessor.HttpContext ?? throw new ArgumentException(nameof(httpContextAccessor.HttpContext));
+        HttpContext httpContext = httpContextAccessor.HttpContext ?? throw new ArgumentException(nameof(httpContextAccessor.HttpContext));
+        _requestCookies = httpContext.Request.Cookies;
+        _responseCookies = httpContext.Response.Cookies;
+    }
+
+    public CartCookie(IRequestCookieCollection requestCookies, IResponseCookies responseCookies)
+    {
+        _requestCookies = requestCookies ?? throw new ArgumentNullException(nameof(requestCookies));
+        _responseCookies = responseCookies ?? throw new ArgumentNullException(nameof(responseCookies));
     }
 
     public string Key { get; } = "cart";
@@ -27,12 +36,12 @@ public class CartCookie
 
     public void ClearCart()
     {
-        _httpContext.Response.Cookies.Delete(Key, Options);
+        _responseCookies.Delete(Key, Options);
     }
 
     public IList<int> GetCart()
     {
-        string? json = _httpContext.Request.Cookies[Key];
+        string? json = _requestCookies[Key];
         if (json == null)
         {
             return new List<int>();
@@ -44,6 +53,6 @@ public class CartCookie
     public void SetCart(IList<int> cart)
     {
         string? json = JsonConvert.SerializeObject(cart);
-        _httpContext.Response.Cookies.Append(Key, json, Options);
+        _responseCookies.Append(Key, json, Options);
     }
 }

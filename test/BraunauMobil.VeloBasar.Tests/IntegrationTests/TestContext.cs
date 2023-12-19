@@ -10,6 +10,7 @@ using BraunauMobil.VeloBasar.Routing;
 using BraunauMobil.VeloBasar.Tests.Mockups;
 using FluentValidation;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Data.Sqlite;
@@ -110,7 +111,7 @@ public sealed class TestContext
             .AddScoped<SellerCrudModelFactory>()
             .AddValidatorsFromAssemblyContaining<SellerSearchModelValidator>()
             .AddHostedService<QueuedHostedService>()
-            .AddSingleton<CookiesMock>();
+            .AddSingleton(Cookies);
 
         services.AddVeloOptions(configuration);
         services.AddVeloCrud();
@@ -124,6 +125,8 @@ public sealed class TestContext
     }
 
     public ClockMock Clock { get; } = new();
+
+    public CookiesMock Cookies { get; } = new ();
 
     public IServiceProvider Services { get => _app.Services; }
 
