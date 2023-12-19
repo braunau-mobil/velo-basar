@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using BraunauMobil.VeloBasar.Data;
+using Microsoft.AspNetCore.Identity;
 
 namespace BraunauMobil.VeloBasar.Tests.IntegrationTests;
 
@@ -37,6 +38,24 @@ public static class V
 
                 public static ProductEntity Stahlross { get; set; }
             }
+
+            public static void AssertStorageStates(VeloDbContext db
+                , StorageState einrad
+                , StorageState stahlross
+                )
+            {
+                db.AssertProductStorageState(Frodo.Einrad.Id, einrad);
+                db.AssertProductStorageState(Frodo.Stahlross.Id, stahlross);
+            }
+
+            public static void AssertValueStates(VeloDbContext db
+                ,  ValueState einrad
+                , ValueState stahlross
+                )
+            {
+                db.AssertProductValueState(Frodo.Einrad.Id, einrad);
+                db.AssertProductValueState(Frodo.Stahlross.Id, stahlross);
+            }            
         }
     }
 }

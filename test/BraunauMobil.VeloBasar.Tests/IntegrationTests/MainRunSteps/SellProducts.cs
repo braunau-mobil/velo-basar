@@ -62,34 +62,33 @@ public class SellProducts
 
         int saleId = AssertDb(db =>
         {
-            TransactionEntity acceptance = db.Transactions
-                .Include(t => t.Products)
-                .AsNoTracking().Should().Contain(t => t.Number == 1 && t.Type == TransactionType.Sale).Subject;
-            acceptance.BasarId.Should().Be(V.FirstBasar.Id);
-            acceptance.CanCancel.Should().BeTrue();
-            acceptance.CanHasDocument.Should().BeTrue();
-            acceptance.Change.Should().BeNull();
-            acceptance.ChildTransactions.Should().BeEmpty();
-            acceptance.DocumentId.Should().BeNull();
-            acceptance.HasDocument.Should().BeFalse();
-            acceptance.NeedsBankingQrCodeOnDocument.Should().BeFalse();
-            acceptance.NeedsStatusPush.Should().BeTrue();
-            acceptance.Notes.Should().BeNull();
-            acceptance.Number.Should().Be(1);
-            acceptance.ParentTransaction.Should().BeNull();
-            acceptance.TimeStamp.Should().Be(Context.Clock.GetCurrentDateTime());
-            acceptance.SellerId.Should().BeNull();
-            acceptance.Type.Should().Be(TransactionType.Sale);
+            TransactionEntity transaction = db.AssertTransaction(V.FirstBasar.Id, TransactionType.Sale, 1);
+            transaction.BasarId.Should().Be(V.FirstBasar.Id);
+            transaction.CanCancel.Should().BeTrue();
+            transaction.CanHasDocument.Should().BeTrue();
+            transaction.Change.Should().BeNull();
+            transaction.ChildTransactions.Should().BeEmpty();
+            transaction.DocumentId.Should().BeNull();
+            transaction.HasDocument.Should().BeFalse();
+            transaction.NeedsBankingQrCodeOnDocument.Should().BeFalse();
+            transaction.NeedsStatusPush.Should().BeTrue();
+            transaction.Notes.Should().BeNull();
+            transaction.Number.Should().Be(1);
+            transaction.ParentTransaction.Should().BeNull();
+            transaction.TimeStamp.Should().Be(Context.Clock.GetCurrentDateTime());
+            transaction.SellerId.Should().BeNull();
+            transaction.Type.Should().Be(TransactionType.Sale);
 
-            acceptance.Products.Should().HaveCount(1);
-            acceptance.Products.Should().Contain(p => p.ProductId == V.Products.FirstBasar.Frodo.Stahlross.Id);
+            transaction.Products.Should().HaveCount(1);
+            transaction.Products.Should().Contain(p => p.ProductId == V.Products.FirstBasar.Frodo.Stahlross.Id);
 
-            db.AssertProductStates(V.Products.FirstBasar.Frodo.Stahlross.Id, StorageState.Sold, ValueState.NotSettled);
+            V.Products.FirstBasar.AssertStorageStates(db, StorageState.Available, StorageState.Sold);
+            V.Products.FirstBasar.AssertValueStates(db, ValueState.NotSettled, ValueState.NotSettled);
 
             db.Files.AsNoTracking().Should().HaveCount(1);
 
-            return acceptance.Id;
-        });
+            return transaction.Id;
+        });        
 
         await Do<TransactionController>(async controller =>
         {

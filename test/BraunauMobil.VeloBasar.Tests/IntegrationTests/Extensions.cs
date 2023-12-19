@@ -38,13 +38,39 @@ public static class Extensions
         }
     }
 
-    public static void AssertProductStates(this VeloDbContext db, int productId, StorageState expectedStorageState, ValueState expectedValueState)
+    public static ProductEntity AssertProduct(this VeloDbContext db, int productId)
     {
         ArgumentNullException.ThrowIfNull(db);
 
-        ProductEntity stahlross = db.Products.AsNoTracking().Should().Contain(p => p.Id == productId).Subject;
-        stahlross.StorageState.Should().Be(expectedStorageState);
-        stahlross.ValueState.Should().Be(expectedValueState);
+        return db.Products.AsNoTracking().Should().Contain(p => p.Id == productId).Subject;
+    }
+
+    public static void AssertProductStorageState(this VeloDbContext db, int productId, StorageState expectedStorageState)
+    {
+        ArgumentNullException.ThrowIfNull(db);
+
+        ProductEntity product = db.AssertProduct(productId);
+        product.StorageState.Should().Be(expectedStorageState);
+    }
+
+    public static void AssertProductValueState(this VeloDbContext db, int productId, ValueState expectedValueState)
+    {
+        ArgumentNullException.ThrowIfNull(db);
+
+        ProductEntity product = db.AssertProduct(productId);
+        product.ValueState.Should().Be(expectedValueState);
+    }
+
+    public static TransactionEntity AssertTransaction(this VeloDbContext db, int basarId, TransactionType type, int number)
+    {
+        ArgumentNullException.ThrowIfNull(db);
+
+        return db.Transactions
+            .Include(t => t.Seller)
+            .Include(t => t.Products)
+                .ThenInclude(pt => pt.Product)
+            .AsNoTracking()
+            .Should().Contain(t => t.BasarId == basarId && t.Type == type && t.Number == number).Subject;
     }
 
     public static void ShouldBeLikeInserted(this ProductEntity product, AcceptProductModel acceptModel)
