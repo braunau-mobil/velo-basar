@@ -3,19 +3,20 @@ using BraunauMobil.VeloBasar.Routing;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Localization;
+using Xan.AspNetCore.Parameter;
 using Xan.AspNetCore.Rendering;
 using Xan.Extensions.Collections.Generic;
 
 namespace BraunauMobil.VeloBasar.Crud;
 
 public sealed class BasarCrudModelFactory
-    : AbstractCrudModelFactory<BasarEntity>
+    : AbstractCrudModelFactory<BasarEntity, ListParameter, IBasarRouter>
 {
     private readonly IVeloHtmlFactory _html;
     private readonly IStringLocalizer<SharedResources> _localizer;
     private readonly ISelectListService _selectLists;
 
-    public BasarCrudModelFactory(IVeloHtmlFactory html, IStringLocalizer<SharedResources> localizer, ICrudRouter<BasarEntity> router, ISelectListService selectLists)
+    public BasarCrudModelFactory(IVeloHtmlFactory html, IStringLocalizer<SharedResources> localizer, IBasarRouter router, ISelectListService selectLists)
         : base(router)
     {
         _html = html ?? throw new ArgumentNullException(nameof(html));
@@ -29,7 +30,7 @@ public sealed class BasarCrudModelFactory
 
     protected override string ListTitle => _localizer[VeloTexts.BasarList];
 
-    protected override IHtmlContent CreateEditor(ViewContext viewContext, BasarEntity entity)
+    protected override async Task<IHtmlContent> CreateEditorAsync(ViewContext viewContext, BasarEntity entity)
     {
         ArgumentNullException.ThrowIfNull(viewContext);
         ArgumentNullException.ThrowIfNull(entity);
@@ -41,15 +42,16 @@ public sealed class BasarCrudModelFactory
         result.AppendHtml(_html.TextInputField(nameof(entity.Location), entity.Location, _localizer[VeloTexts.Location]));
         result.AppendHtml(_html.NumberInputField(nameof(entity.ProductCommissionPercentage), entity.ProductCommissionPercentage, _localizer[VeloTexts.ProductCommissionPercentage]));
         result.AppendHtml(_html.SelectField(nameof(entity.State), entity.State, _selectLists.States(), _localizer[VeloTexts.State]));
-        return result;
+        
+        return await Task.FromResult(result);
     }
     
-    protected override IHtmlContent CreateTable(ViewContext viewContext, IPaginatedList<CrudItemModel<BasarEntity>> model)
+    protected override async Task<IHtmlContent> CreateTableAsync(ViewContext viewContext, IPaginatedList<CrudItemModel<BasarEntity>> model)
     {
         ArgumentNullException.ThrowIfNull(viewContext);
         ArgumentNullException.ThrowIfNull(model);
 
-        return _html.Table(model)
+        IHtmlContent table = _html.Table(model)
             .IdColumn()
             .Column(c => c.PercentWidth(20).BreakText().Title(_localizer[VeloTexts.Date]).For(item => item.Entity.Date.ToHtmlDate()))
             .Column(c => c.PercentWidth(40).BreakText().Title(_localizer[VeloTexts.Name]).For(item => item.Entity.Name))
@@ -61,5 +63,7 @@ public sealed class BasarCrudModelFactory
             .EditLinkColumn(Router)
             .DeleteOrToggleStateLinkColumn(Router)
             .Build();
+
+        return await Task.FromResult(table);
     }
 }

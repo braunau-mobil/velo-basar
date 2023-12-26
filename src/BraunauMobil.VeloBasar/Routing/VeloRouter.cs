@@ -11,7 +11,7 @@ public sealed partial class VeloRouter
     , IVeloRouter
 {
     public VeloRouter(LinkGenerator linkGenerator
-        , IAcceptProductRouter acceptProduct, IAcceptSessionRouter acceptSession, IAdminRouter admin, ICrudRouter<BasarEntity> basar, ICancelRouter cancel, ICartRouter cart, ICrudRouter<CountryEntity> country, IDevRouter dev, IAcceptanceLabelsRouter labels, IProductRouter products, ICrudRouter<ProductTypeEntity> productType, ISellerRouter seller, ISetupRouter setup, ITransactionRouter transactions)
+        , IAcceptProductRouter acceptProduct, IAcceptSessionRouter acceptSession, IAdminRouter admin, IBasarRouter basar, ICancelRouter cancel, ICartRouter cart, ICountryRouter country, IDevRouter dev, IAcceptanceLabelsRouter labels, IProductRouter products, IProductTypeRouter productType, ISellerRouter seller, ISetupRouter setup, ITransactionRouter transactions)
         : base(linkGenerator)
     {
         AcceptProduct = acceptProduct ?? throw new ArgumentNullException(nameof(acceptProduct));
@@ -36,13 +36,13 @@ public sealed partial class VeloRouter
 
     public IAdminRouter Admin { get; }
 
-    public ICrudRouter<BasarEntity> Basar { get; }
+    public IBasarRouter Basar { get; }
 
     public ICancelRouter Cancel { get; }
 
     public ICartRouter Cart { get; }
 
-    public ICrudRouter<CountryEntity> Country { get; }
+    public ICountryRouter Country { get; }
 
     public IDevRouter Dev { get; }
 
@@ -50,7 +50,7 @@ public sealed partial class VeloRouter
 
     public IProductRouter Product { get; }
 
-    public ICrudRouter<ProductTypeEntity> ProductType { get; }
+    public IProductTypeRouter ProductType { get; }
 
     public ISellerRouter Seller { get; }
 

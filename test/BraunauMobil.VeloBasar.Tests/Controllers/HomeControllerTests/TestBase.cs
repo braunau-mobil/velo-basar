@@ -29,7 +29,7 @@ public class TestBase
     protected Mock<IAppContext> AppContext { get; } = new();
 
 
-    protected Mock<ICrudRouter<BasarEntity>> BasarRouter { get; } = new();
+    protected Mock<IBasarRouter> BasarRouter { get; } = new();
 
     protected Mock<ICurrentThemeCookie> CurrentThemeCookie { get; } = new ();
 

@@ -58,7 +58,6 @@ public class Program
 
         services
             .AddBusinessLogic()
-            .AddSingleton<BasarCrudService>()
             .AddSingleton<DataGeneratorService>()
             .AddSingleton<IClock, ClockMock>()
             .AddSingleton<IStatusPushService, StatusPushServiceMock>()

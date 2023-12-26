@@ -1,10 +1,12 @@
 ﻿using BraunauMobil.VeloBasar.Configuration;
 using BraunauMobil.VeloBasar.Crud;
+using BraunauMobil.VeloBasar.Parameters;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Xan.AspNetCore.Parameter;
 
 namespace BraunauMobil.VeloBasar;
 
@@ -14,12 +16,12 @@ public static class VeloServiceExtensions
     {
         ArgumentNullException.ThrowIfNull(services);
 
-        return services.AddCrud(options =>
-        {
-            options.AddController<BasarEntity, BasarCrudService, BasarCrudModelFactory>(true);
-            options.AddController<CountryEntity, CountryCrudService, CountryCrudModelFactory>(true);
-            options.AddController<ProductTypeEntity, ProductTypeCrudService, ProductTypeCrudModelFactory>(true);
-        });
+        return services
+            .AddScoped<ICrudModelFactory<BasarEntity, ListParameter>, BasarCrudModelFactory>()
+            .AddScoped<ICrudModelFactory<CountryEntity, ListParameter>, CountryCrudModelFactory>()
+            .AddScoped<ICrudModelFactory<ProductTypeEntity, ListParameter>, ProductTypeCrudModelFactory>()
+            .AddScoped<ICrudModelFactory<SellerEntity, SellerListParameter>, SellerCrudModelFactory>()
+            ;
     }
 
     public static IServiceCollection AddVeloOptions(this IServiceCollection services, ConfigurationManager configuration)

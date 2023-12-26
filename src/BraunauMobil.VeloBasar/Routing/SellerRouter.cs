@@ -1,5 +1,4 @@
 ﻿using BraunauMobil.VeloBasar.Controllers;
-using BraunauMobil.VeloBasar.Parameters;
 using Microsoft.AspNetCore.Routing;
 
 namespace BraunauMobil.VeloBasar.Routing;
@@ -23,13 +22,6 @@ public sealed class SellerRouter
 
     public string ToDetails(int id)
         => GetUriByAction(nameof(SellerController.Details), new { id });
-
-    public string ToList(SellerListParameter parameter)
-    {
-        ArgumentNullException.ThrowIfNull(parameter);
-
-        return GetUriByAction(nameof(SellerController.List), parameter);
-    }
 
     public string ToLabels(int id)
         => GetUriByAction(nameof(SellerController.Labels), new { id });

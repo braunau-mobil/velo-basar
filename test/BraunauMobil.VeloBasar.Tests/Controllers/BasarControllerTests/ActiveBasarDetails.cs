@@ -1,5 +1,4 @@
-﻿using BraunauMobil.VeloBasar.Controllers;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace BraunauMobil.VeloBasar.Tests.Controllers.BasarControllerTests;
 
@@ -11,7 +10,7 @@ public class ActiveBasarDetails
     public void RedirectsToBasarDetails(int activeBasarId, string url)
     {
         //  Arrange
-        BasarRouter.Setup(_ => _.GetUriByAction(nameof(BasarController.Details), It.IsAny<object>()))
+        BasarRouter.Setup(_ => _.ToDetails(activeBasarId))
             .Returns(url);
 
         //  Act
@@ -21,7 +20,7 @@ public class ActiveBasarDetails
         RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
         redirect.Url.Should().Be(url);
 
-        BasarRouter.Verify(_ => _.GetUriByAction(nameof(BasarController.Details), It.IsAny<object>()), Times.Once());
+        BasarRouter.Verify(_ => _.ToDetails(activeBasarId), Times.Once());
         VerifyNoOtherCalls();
     }
 }

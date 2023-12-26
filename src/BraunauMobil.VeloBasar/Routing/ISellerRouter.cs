@@ -1,9 +1,7 @@
-﻿using BraunauMobil.VeloBasar.Parameters;
-
-namespace BraunauMobil.VeloBasar.Routing;
+﻿namespace BraunauMobil.VeloBasar.Routing;
 
 public interface ISellerRouter
-    : ICrudRouter<SellerEntity>
+    : ICrudRouter
 {
     string ToCreateForAcceptance();
 
@@ -12,8 +10,6 @@ public interface ISellerRouter
     string ToSearchForAcceptance();
 
     string ToDetails(int id);
-
-    string ToList(SellerListParameter parameter);
 
     string ToLabels(int id);
 

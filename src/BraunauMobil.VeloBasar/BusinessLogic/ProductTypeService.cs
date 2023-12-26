@@ -1,15 +1,17 @@
 ﻿using BraunauMobil.VeloBasar.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using Xan.AspNetCore.Parameter;
 
-namespace BraunauMobil.VeloBasar.Crud;
+namespace BraunauMobil.VeloBasar.BusinessLogic;
 
-public sealed class ProductTypeCrudService
-    : AbstractCrudService<ProductTypeEntity>
+public sealed class ProductTypeService
+    : AbstractCrudService<ProductTypeEntity, ListParameter>
+    , IProductTypeService
 {
     private readonly VeloDbContext _db;
 
-    public ProductTypeCrudService(VeloDbContext db)
+    public ProductTypeService(VeloDbContext db)
         : base(db)
     {
         _db = db ?? throw new ArgumentNullException(nameof(db));
@@ -24,25 +26,25 @@ public sealed class ProductTypeCrudService
         return !await _db.Products.AnyAsync(p => p.TypeId == entity.Id);
     }
 
-    public override IQueryable<ProductTypeEntity> DefaultOrder(IQueryable<ProductTypeEntity> set)
+    protected override IQueryable<ProductTypeEntity> OrderByDefault(IQueryable<ProductTypeEntity> iq)
     {
-        ArgumentNullException.ThrowIfNull(set);
+        ArgumentNullException.ThrowIfNull(iq);
 
-        return set.DefaultOrder();
+        return _db.ProductTypes.OrderBy(c => c.Name);
     }
 
-    public override Expression<Func<ProductTypeEntity, bool>> Search(string searchString)
+    protected override Expression<Func<ProductTypeEntity, bool>> Search(string searchString)
     {
         ArgumentNullException.ThrowIfNull(searchString);
 
         if (int.TryParse(searchString, out int id))
         {
-            return b => b.Id == id;
+            return c => c.Id == id;
         }
         if (_db.IsPostgreSQL())
         {
-            return b => EF.Functions.ILike(b.Name, $"%{searchString}%");
+            return c => EF.Functions.ILike(c.Name, $"%{searchString}%");
         }
-        return b => EF.Functions.Like(b.Name, $"%{searchString}%");
+        return c => EF.Functions.Like(c.Name, $"%{searchString}%");
     }
 }

@@ -12,19 +12,19 @@ public interface IVeloRouter
 
     IAdminRouter Admin { get; }
 
-    ICrudRouter<BasarEntity> Basar { get; }
+    IBasarRouter Basar { get; }
 
     ICancelRouter Cancel { get; }
 
     ICartRouter Cart { get; }
 
-    ICrudRouter<CountryEntity> Country { get; }
+    ICountryRouter Country { get; }
 
     IDevRouter Dev { get; }    
 
     IProductRouter Product { get; }
 
-    ICrudRouter<ProductTypeEntity> ProductType { get; }
+    IProductTypeRouter ProductType { get; }
 
     ISellerRouter Seller { get; }
 

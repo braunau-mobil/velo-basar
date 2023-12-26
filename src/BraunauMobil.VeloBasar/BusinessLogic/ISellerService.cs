@@ -1,9 +1,9 @@
-﻿using Xan.Extensions.Collections.Generic;
+﻿using BraunauMobil.VeloBasar.Parameters;
 
 namespace BraunauMobil.VeloBasar.BusinessLogic;
 
 public interface ISellerService
-    : ICrudService<SellerEntity>
+    : ICrudService<SellerEntity, SellerListParameter>
 {
     Task<bool> ExistsAsync(int id);
 
@@ -11,9 +11,7 @@ public interface ISellerService
 
     Task<FileDataEntity> GetLabelsAsync(int basarId, int sellerId);
 
-    Task<IReadOnlyList<SellerEntity>> GetManyAsync(string firstName, string lastName);
-
-    Task<IPaginatedList<SellerEntity>> GetManyAsync(int pageSize, int pageIndex, string? searchString = null, ObjectState? objectState = null, ValueState? valueState = null);
+    Task<IReadOnlyList<SellerEntity>> GetManyAsync(string firstName, string lastName);    
 
     Task<int> SettleAsync(int basarId, int sellerId);
 

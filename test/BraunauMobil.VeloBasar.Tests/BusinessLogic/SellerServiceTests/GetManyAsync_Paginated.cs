@@ -1,5 +1,7 @@
 ﻿using AutoFixture.Dsl;
+using BraunauMobil.VeloBasar.Parameters;
 using Xan.AspNetCore.Models;
+using Xan.AspNetCore.Mvc.Crud;
 using Xan.Extensions.Collections.Generic;
 
 namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.SellerServiceTests;
@@ -11,12 +13,12 @@ public class GetManyAsync_Paginated
 
     [Theory]
     [AutoData]
-    public async Task NoSellers_ShouldReturnEmpty(int pageSize, int pageIndex, string searchString, ObjectState objectState, ValueState valueState)
+    public async Task NoSellers_ShouldReturnEmpty(SellerListParameter parameter)
     {
         //  Arrange
 
         //  Act
-        IPaginatedList<SellerEntity> result = await Sut.GetManyAsync(pageSize, pageIndex, searchString, objectState, valueState);
+        IPaginatedList<CrudItemModel<SellerEntity>> result = await Sut.GetManyAsync(parameter);
 
         //  Assert
         result.Should().BeEmpty();
@@ -24,14 +26,14 @@ public class GetManyAsync_Paginated
 
     [Theory]
     [AutoData]
-    public async Task NoSellerMatches_ShouldReturnEmpty(SellerEntity[] sellers, int pageSize, int pageIndex, string searchString, ObjectState objectState, ValueState valueState)
+    public async Task NoSellerMatches_ShouldReturnEmpty(SellerEntity[] sellers, SellerListParameter parameter)
     {
         //  Arrange
         Db.Sellers.AddRange(sellers);
         await Db.SaveChangesAsync();
 
         //  Act
-        IPaginatedList<SellerEntity> result = await Sut.GetManyAsync(pageSize, pageIndex, searchString, objectState, valueState);
+        IPaginatedList<CrudItemModel<SellerEntity>> result = await Sut.GetManyAsync(parameter);
 
         //  Assert
         result.Should().BeEmpty();
@@ -41,7 +43,11 @@ public class GetManyAsync_Paginated
     public async Task PaginationWorks()
     {
         //  Arrange
-        //int id = 1;
+        SellerListParameter parameter = new()
+        {
+            PageSize = 10,
+            PageIndex = 2
+        };
         SellerEntity[] sellers = BuildSeller()
             .CreateMany(100)
             .OrderBy(seller => seller.FirstName).ThenBy(seller => seller.LastName)
@@ -50,17 +56,23 @@ public class GetManyAsync_Paginated
         await Db.SaveChangesAsync();
 
         //  Act
-        IPaginatedList<SellerEntity> result = await Sut.GetManyAsync(10, 2);
+        IPaginatedList<CrudItemModel<SellerEntity>> result = await Sut.GetManyAsync(parameter);
 
         //  Assert
         result.Should().HaveCount(10);
-        result.Should().BeEquivalentTo(sellers.Skip(10).Take(10));
+        result.Select(model => model.Entity).Should().BeEquivalentTo(sellers.Skip(10).Take(10));
     }
 
     [Fact]
     public async Task SearchStringShouldMatchFields()
     {
         //  Arrange
+        SellerListParameter parameter = new()
+        {
+            PageSize = 10,
+            PageIndex = 1,
+            SearchString = "wxy"
+        };
         IEnumerable<SellerEntity> otherSellers = BuildSeller().CreateMany();
         Db.Sellers.AddRange(otherSellers);
         CountryEntity country = _fixture.Build<CountryEntity>().With(_ => _.Name, "uvwxyz").Create();
@@ -77,17 +89,23 @@ public class GetManyAsync_Paginated
         await Db.SaveChangesAsync();
 
         //  Act
-        IPaginatedList<SellerEntity> result = await Sut.GetManyAsync(10, 1, searchString: "wxy");
+        IPaginatedList<CrudItemModel<SellerEntity>> result = await Sut.GetManyAsync(parameter);
 
         //  Assert
-        result.Should().BeEquivalentTo(sellersToFind);
+        result.Select(model => model.Entity).Should().BeEquivalentTo(sellersToFind);
     }
 
     [Theory]
     [AutoData]
     public async Task ObjectStateShouldMatch(ObjectState objectState)
     {
-        //  Arrange        
+        //  Arrange
+        SellerListParameter parameter = new()
+        {
+            PageSize = 10,
+            PageIndex = 1,
+            State = objectState
+        };
         CountryEntity country = _fixture.Build<CountryEntity>().With(_ => _.Name, "uvwxyz").Create();
         SellerEntity[] sellersToFind = BuildSeller()
             .With(_ => _.State, objectState)
@@ -99,10 +117,10 @@ public class GetManyAsync_Paginated
         await Db.SaveChangesAsync();
 
         //  Act
-        IPaginatedList<SellerEntity> result = await Sut.GetManyAsync(10, 1, objectState: objectState);
+        IPaginatedList<CrudItemModel<SellerEntity>> result = await Sut.GetManyAsync(parameter);
 
         //  Assert
-        result.Should().BeEquivalentTo(sellersToFind);
+        result.Select(model => model.Entity).Should().BeEquivalentTo(sellersToFind);
     }
 
     [Theory]
@@ -110,6 +128,12 @@ public class GetManyAsync_Paginated
     public async Task ValueStateShouldMatch(ValueState valueState)
     {
         //  Arrange
+        SellerListParameter parameter = new()
+        {
+            PageSize = 10,
+            PageIndex = 1,
+            ValueState = valueState
+        };
         CountryEntity country = _fixture.Build<CountryEntity>().With(_ => _.Name, "uvwxyz").Create();
         SellerEntity[] sellersToFind = BuildSeller()
             .With(_ => _.ValueState, valueState)
@@ -121,10 +145,10 @@ public class GetManyAsync_Paginated
         await Db.SaveChangesAsync();
 
         //  Act
-        IPaginatedList<SellerEntity> result = await Sut.GetManyAsync(10, 1, valueState: valueState);
+        IPaginatedList<CrudItemModel<SellerEntity>> result = await Sut.GetManyAsync(parameter);
 
         //  Assert
-        result.Should().BeEquivalentTo(sellersToFind);
+        result.Select(model => model.Entity).Should().BeEquivalentTo(sellersToFind);
     }
 
     private IPostprocessComposer<SellerEntity> BuildSeller()

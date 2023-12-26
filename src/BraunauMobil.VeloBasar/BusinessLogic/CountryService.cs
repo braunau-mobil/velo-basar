@@ -1,15 +1,17 @@
 ﻿using BraunauMobil.VeloBasar.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using Xan.AspNetCore.Parameter;
 
-namespace BraunauMobil.VeloBasar.Crud;
+namespace BraunauMobil.VeloBasar.BusinessLogic;
 
-public sealed class CountryCrudService
-    : AbstractCrudService<CountryEntity>
+public sealed class CountryService
+    : AbstractCrudService<CountryEntity, ListParameter>
+    , ICountryService
 {
     private readonly VeloDbContext _db;
 
-    public CountryCrudService(VeloDbContext db)
+    public CountryService(VeloDbContext db)
         : base(db)
     {
         _db = db ?? throw new ArgumentNullException(nameof(db));
@@ -24,14 +26,14 @@ public sealed class CountryCrudService
         return !await _db.Sellers.AnyAsync(s => s.CountryId == entity.Id);
     }
 
-    public override IQueryable<CountryEntity> DefaultOrder(IQueryable<CountryEntity> set)
+    protected override IQueryable<CountryEntity> OrderByDefault(IQueryable<CountryEntity> iq)
     {
-        ArgumentNullException.ThrowIfNull(set);
+        ArgumentNullException.ThrowIfNull(iq);
 
-        return set.DefaultOrder();
+        return _db.Countries.OrderBy(country => country.Name);
     }
 
-    public override Expression<Func<CountryEntity, bool>> Search(string searchString)
+    protected override Expression<Func<CountryEntity, bool>> Search(string searchString)
     {
         ArgumentNullException.ThrowIfNull(searchString);
 

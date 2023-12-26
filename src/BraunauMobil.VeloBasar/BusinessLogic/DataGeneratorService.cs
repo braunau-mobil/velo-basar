@@ -1,6 +1,4 @@
-﻿using BraunauMobil.VeloBasar.Crud;
-using BraunauMobil.VeloBasar.Data;
-using BraunauMobil.VeloBasar.Extensions;
+﻿using BraunauMobil.VeloBasar.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.Text;
@@ -18,17 +16,17 @@ public sealed class DataGeneratorService
     private readonly IAcceptSessionService _acceptSessionService;
     private readonly IAcceptProductService _acceptProductService;
     private readonly ITransactionService _transactionService;
-    private readonly BasarCrudService _basarCrudService;
+    private readonly IBasarService _basarService;
     private readonly IClock _clock;
     private DataGeneratorConfiguration? _config;
     private Random? _random;
     private DateTime _timeStamp;
 
-    public DataGeneratorService(VeloDbContext db, ISetupService setupService, BasarCrudService basarCrudService, ISellerService sellerService, IAcceptSessionService acceptSessionService, IAcceptProductService acceptProductService, ITransactionService transactionService, IClock clock)
+    public DataGeneratorService(VeloDbContext db, ISetupService setupService, IBasarService basarCrudService, ISellerService sellerService, IAcceptSessionService acceptSessionService, IAcceptProductService acceptProductService, ITransactionService transactionService, IClock clock)
     {
         _db = db ?? throw new ArgumentNullException(nameof(db));
         _setupService = setupService ?? throw new ArgumentNullException(nameof(setupService));
-        _basarCrudService = basarCrudService ?? throw new ArgumentNullException(nameof(basarCrudService));
+        _basarService = basarCrudService ?? throw new ArgumentNullException(nameof(basarCrudService));
         _sellerService = sellerService ?? throw new ArgumentNullException(nameof(sellerService));
         _acceptSessionService = acceptSessionService ?? throw new ArgumentNullException(nameof(acceptSessionService));
         _acceptProductService = acceptProductService ?? throw new ArgumentNullException(nameof(acceptProductService));
@@ -194,7 +192,7 @@ public sealed class DataGeneratorService
         basar.Date = date;
         basar.Name = name;
         basar.Id = 0;
-        int basarId = await _basarCrudService.CreateAsync(basar);
+        int basarId = await _basarService.CreateAsync(basar);
 
         int sellerCount = Random.Next(Config.MinSellers, Config.MaxSellers + 1);
         for (int sellerNumber = 1; sellerNumber <= sellerCount; sellerNumber++)

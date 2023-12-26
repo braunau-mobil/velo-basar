@@ -1,6 +1,8 @@
 ﻿using BraunauMobil.VeloBasar.Parameters;
+using BraunauMobil.VeloBasar.Routing;
 using Microsoft.AspNetCore.Mvc;
 using Xan.AspNetCore.Models;
+using Xan.AspNetCore.Mvc.Crud;
 using Xan.Extensions.Collections.Generic;
 
 namespace BraunauMobil.VeloBasar.Tests.Controllers.SellerControllerTests;
@@ -36,11 +38,11 @@ public class List
     public async Task NotExistingSellerId_CallsGetManyAndReturnsView(SellerListParameter parameter, int sellerId)
     {
         //  Arrange
-        IPaginatedList<SellerEntity> list = Fixture.CreatePaginatedList<SellerEntity>();
+        IPaginatedList<CrudItemModel<SellerEntity>> list = Fixture.CreatePaginatedList<CrudItemModel<SellerEntity>>();
         parameter.SearchString = sellerId.ToString();
         SellerService.Setup(_ => _.ExistsAsync(sellerId))
             .ReturnsAsync(false);
-        SellerService.Setup(_ => _.GetManyAsync(parameter.PageSize!.Value, parameter.PageIndex, parameter.SearchString, parameter.State, parameter.ValueState))
+        SellerService.Setup(_ => _.GetManyAsync(parameter))
             .ReturnsAsync(list);
 
         //  Act
@@ -48,11 +50,11 @@ public class List
 
         //  Assert
         ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
-        view.Model.Should().BeOfType<ListModel<SellerEntity, SellerListParameter>>();
+        view.Model.Should().BeOfType<CrudListModel<SellerEntity, SellerListParameter, ISellerRouter>>();
         view.ViewData.ModelState.IsValid.Should().BeTrue();
 
         SellerService.Verify(_ => _.ExistsAsync(sellerId), Times.Once());
-        SellerService.Verify(_ => _.GetManyAsync(parameter.PageSize!.Value, parameter.PageIndex, parameter.SearchString, parameter.State, parameter.ValueState), Times.Once());
+        SellerService.Verify(_ => _.GetManyAsync(parameter), Times.Once());
         VerifyNoOtherCalls();
     }
 
@@ -61,8 +63,8 @@ public class List
     public async Task CallsGetManyAndReturnsView(SellerListParameter parameter)
     {
         //  Arrange
-        IPaginatedList<SellerEntity> list = Fixture.CreatePaginatedList<SellerEntity>();
-        SellerService.Setup(_ => _.GetManyAsync(parameter.PageSize!.Value, parameter.PageIndex, parameter.SearchString, parameter.State, parameter.ValueState))
+        IPaginatedList<CrudItemModel<SellerEntity>> list = Fixture.CreatePaginatedList<CrudItemModel<SellerEntity>>();
+        SellerService.Setup(_ => _.GetManyAsync(parameter))
             .ReturnsAsync(list);
 
         //  Act
@@ -70,10 +72,10 @@ public class List
 
         //  Assert
         ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
-        view.Model.Should().BeOfType<ListModel<SellerEntity, SellerListParameter>>();
+        view.Model.Should().BeOfType<CrudListModel<SellerEntity, SellerListParameter, ISellerRouter>>();
         view.ViewData.ModelState.IsValid.Should().BeTrue();
 
-        SellerService.Verify(_ => _.GetManyAsync(parameter.PageSize!.Value, parameter.PageIndex, parameter.SearchString, parameter.State, parameter.ValueState), Times.Once());
+        SellerService.Verify(_ => _.GetManyAsync(parameter), Times.Once());
         VerifyNoOtherCalls();
     }
 }

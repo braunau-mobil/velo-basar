@@ -1,5 +1,4 @@
-﻿using BraunauMobil.VeloBasar.Controllers;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace BraunauMobil.VeloBasar.Tests.Controllers.HomeControllerTests;
 
@@ -35,7 +34,7 @@ public class Index
         //  Arrange
         AppContext.Setup(_ => _.IsDatabaseInitialized())
             .Returns(true);
-        BasarRouter.Setup(_ => _.GetUriByAction(nameof(BasarController.ActiveBasarDetails), null))
+        BasarRouter.Setup(_ => _.ToActiveBasarDetails())
             .Returns(url);
 
         //  Act
@@ -46,7 +45,7 @@ public class Index
         redirect.Url.Should().Be(url);
 
         AppContext.Verify(_ => _.IsDatabaseInitialized(), Times.Once());
-        BasarRouter.Verify(_ => _.GetUriByAction(nameof(BasarController.ActiveBasarDetails), null), Times.Once());
+        BasarRouter.Verify(_ => _.ToActiveBasarDetails(), Times.Once());
         VerifyNoOtherCalls();
     }
 }

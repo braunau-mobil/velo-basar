@@ -4,12 +4,11 @@ using BraunauMobil.VeloBasar.Parameters;
 using BraunauMobil.VeloBasar.Routing;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
-using Xan.Extensions.Collections.Generic;
 
 namespace BraunauMobil.VeloBasar.Controllers;
 
 public sealed class SellerController
-    : AbstractCrudController<SellerEntity, SellerListParameter>
+    : AbstractCrudController<SellerEntity, SellerListParameter, ISellerRouter, ISellerService>
 {
     private readonly ISellerService _sellerService;
     private readonly IVeloRouter _router;
@@ -90,9 +89,7 @@ public sealed class SellerController
             }
         }
 
-        IPaginatedList<SellerEntity> items = await _sellerService.GetManyAsync(parameter.PageSize.Value, parameter.PageIndex, parameter.SearchString, parameter.State, parameter.ValueState);
-        ListModel<SellerEntity, SellerListParameter> model = new(items, parameter);
-        return View(model);
+        return await base.List(parameter);
     }
 
     [HttpPost]

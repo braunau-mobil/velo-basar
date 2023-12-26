@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using BraunauMobil.VeloBasar.Controllers;
+using Microsoft.AspNetCore.Mvc;
 using Xan.AspNetCore.Mvc.Crud;
 
 namespace BraunauMobil.VeloBasar.Tests.IntegrationTests.MainRunSteps;
@@ -19,7 +20,7 @@ public class BasarCreation
     public override async Task Run()
     {
         //  Leave defaults
-        BasarEntity basar = await Do<CrudController<BasarEntity>, BasarEntity>(async controller =>
+        BasarEntity basar = await Do<BasarController, BasarEntity>(async controller =>
         {
             IActionResult result = await controller.Create();
 
@@ -31,7 +32,7 @@ public class BasarCreation
             return crudModel.Entity;
         });
 
-        await Do<CrudController<BasarEntity>>(async controller =>
+        await Do<BasarController>(async controller =>
         {
             IActionResult result = await controller.Create(basar);
 
@@ -54,7 +55,7 @@ public class BasarCreation
         basar.Date = _basarDate;
         basar.Location = _basarLocation;
 
-        await Do<CrudController<BasarEntity>>(async controller =>
+        await Do<BasarController>(async controller =>
         {
             IActionResult result = await controller.Create(basar);
 
@@ -75,7 +76,7 @@ public class BasarCreation
         basar.Name = _basarName;
         basar.ProductCommissionPercentage = 1000;
 
-        await Do<CrudController<BasarEntity>>(async controller =>
+        await Do<BasarController>(async controller =>
         {
             IActionResult result = await controller.Create(basar);
 
@@ -95,7 +96,7 @@ public class BasarCreation
         //  Valid basar
         basar.ProductCommissionPercentage = _productCommissionPercentage;
 
-        await Do<CrudController<BasarEntity>>(async controller =>
+        await Do<BasarController>(async controller =>
         {
             IActionResult result = await controller.Create(basar);
 

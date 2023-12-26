@@ -1,7 +1,7 @@
-﻿@model ListModel<SellerEntity, SellerListParameter>
+﻿@model CrudListModel<SellerEntity, SellerListParameter, ISellerRouter>
 @inject ISelectListService SelectLists
 @{
-    ViewData.SetTitle(Localizer[VeloTexts.SellerList]);
+    ViewData.SetTitle(Localizer[Model.ListTitle]);    
 }
 
 <form method="get">
@@ -20,10 +20,7 @@
             </div>            
         </div>
         <div class="card-body p-0">
-            @(VeloHtml.SellersTable(Model)
-                .Column(c => c.ForLink(item => Router.Seller.ToDetails(item.Id), Localizer[VeloTexts.Details]))
-                .Column(c => c.ForLink(item => Router.Seller.ToEdit(item.Id), Localizer[VeloTexts.Edit]))
-                .Build())
+            @await Model.TableAsync(ViewContext)
         </div>
         <div class="card-footer">
             <vc:pagination items="@Model" current-parameter="@Model.Parameter" to-list="@Router.Seller.ToList"></vc:pagination>

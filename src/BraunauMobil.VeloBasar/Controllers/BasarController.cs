@@ -1,27 +1,39 @@
 ﻿using BraunauMobil.VeloBasar.BusinessLogic;
 using BraunauMobil.VeloBasar.Routing;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
+using Xan.AspNetCore.Parameter;
 
 namespace BraunauMobil.VeloBasar.Controllers;
 
 public sealed class BasarController
-    : AbstractVeloController
+    : AbstractCrudController<BasarEntity, ListParameter, IBasarRouter, IBasarService>
 {
-    private readonly IBasarService _service;
-    private readonly IVeloRouter _router;
-
-    public BasarController(IBasarService service, IVeloRouter router)
+    public BasarController(IBasarService service, IBasarRouter router, ICrudModelFactory<BasarEntity, ListParameter> modelFactory, IValidator<BasarEntity> validator)
+        : base(service, router, modelFactory, validator)
     {
-        _service = service ?? throw new ArgumentNullException(nameof(service));
-        _router = router ?? throw new ArgumentNullException(nameof(router));
     }
 
     public IActionResult ActiveBasarDetails(int activeBasarId)
-        => Redirect(_router.Basar.ToDetails(activeBasarId));
+        => Redirect(Router.ToDetails(activeBasarId));
 
     public async Task<IActionResult> Details(int id)
     {
-        BasarDetailsModel model = await _service.GetDetailsAsync(id);
+        BasarDetailsModel model = await Service.GetDetailsAsync(id);
         return View(model);
+    }
+
+
+    public override async Task<IActionResult> List(ListParameter parameter)
+    {
+        ArgumentNullException.ThrowIfNull(parameter);
+        ArgumentNullException.ThrowIfNull(parameter.PageSize);
+
+        if (int.TryParse(parameter.SearchString, out int basarId))
+        {
+            return await Task.FromResult(Redirect(Router.ToDetails(basarId)));
+        }
+
+        return await base.List(parameter);
     }
 }

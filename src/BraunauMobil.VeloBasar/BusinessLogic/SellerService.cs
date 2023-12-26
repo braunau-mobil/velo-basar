@@ -1,5 +1,5 @@
-﻿using BraunauMobil.VeloBasar.Crud;
-using BraunauMobil.VeloBasar.Data;
+﻿using BraunauMobil.VeloBasar.Data;
+using BraunauMobil.VeloBasar.Parameters;
 using BraunauMobil.VeloBasar.Pdf;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
@@ -10,21 +10,48 @@ using Xan.Extensions.Collections.Generic;
 namespace BraunauMobil.VeloBasar.BusinessLogic;
 
 public sealed class SellerService
-    : SellerCrudService
+    : AbstractCrudService<SellerEntity, SellerListParameter>
     , ISellerService
 {
     private readonly VeloDbContext _db;
     private readonly ITransactionService _transactionService;
     private readonly IProductLabelService _productLabelService;
     private readonly IStatusPushService _statusPushService;
+    private readonly IClock _clock;
+    private readonly ITokenProvider _tokenProvider;
 
     public SellerService(ITransactionService transactionService, IProductLabelService productLabelService, IStatusPushService statusPushService, ITokenProvider tokenProvider, IClock clock, VeloDbContext db)
-        : base(tokenProvider, clock, db)
+        : base(db)
     {
         _db = db ?? throw new ArgumentNullException(nameof(db));
         _transactionService = transactionService ?? throw new ArgumentNullException(nameof(transactionService));
         _productLabelService = productLabelService ?? throw new ArgumentNullException(nameof(productLabelService));
         _statusPushService = statusPushService ?? throw new ArgumentNullException(nameof(statusPushService));
+        _clock = clock ?? throw new ArgumentNullException(nameof(clock));
+        _tokenProvider = tokenProvider ?? throw new ArgumentNullException(nameof(tokenProvider));
+    }
+
+    public override DbSet<SellerEntity> Set => _db.Sellers;
+
+    public async override Task<bool> CanDeleteAsync(SellerEntity entity)
+    {
+        ArgumentNullException.ThrowIfNull(entity);
+
+        return !await _db.Products.AnyAsync(p => p.TypeId == entity.Id);
+    }
+
+    public async override Task<int> CreateAsync(SellerEntity entity)
+    {
+        ArgumentNullException.ThrowIfNull(entity);
+
+        entity.TrimIBAN();
+        entity.UpdateNewsletterPermissions(_clock);
+        int id = await base.CreateAsync(entity);
+
+        entity.Token = _tokenProvider.CreateToken(entity);
+        await _db.SaveChangesAsync();
+
+        return id;
     }
 
     public async Task<bool> ExistsAsync(int id)
@@ -85,25 +112,29 @@ public sealed class SellerService
             .ToArrayAsync();
     }
 
-    public async Task<IPaginatedList<SellerEntity>> GetManyAsync(int pageSize, int pageIndex, string? searchString = null, ObjectState? objectState = null, ValueState? valueState = null)
+    public override async Task<IPaginatedList<CrudItemModel<SellerEntity>>> GetManyAsync(SellerListParameter parameter)
     {
-        IQueryable<SellerEntity> iq = _db.Sellers.Include(seller => seller.Country);
-        if (!string.IsNullOrEmpty(searchString))
-        {
-            iq = iq.Where(SellerSearch(searchString));
-        }
-        if (valueState.HasValue)
-        {
-            iq = iq.Where(seller => seller.ValueState == valueState.Value);
-        }
-        if (objectState.HasValue)
-        {
-            iq = iq.Where(seller => seller.State == objectState.Value);
-        }
+        ArgumentNullException.ThrowIfNull(parameter);
+        ArgumentNullException.ThrowIfNull(parameter.PageSize);
 
-        return await iq
-            .DefaultOrder()
-            .AsPaginatedAsync(pageSize, pageIndex);
+        IQueryable<SellerEntity> iq = _db.Sellers.Include(seller => seller.Country);
+        if (!string.IsNullOrEmpty(parameter.SearchString))
+        {
+            iq = iq.Where(Search(parameter.SearchString));
+        }
+        if (parameter.State.HasValue)
+        {
+            iq = iq.Where(basar => basar.State == parameter.State.Value);
+        }
+        if (parameter.ValueState.HasValue)
+        {
+            iq = iq.Where(seller => seller.ValueState == parameter.ValueState.Value);
+        }
+        iq = OrderByDefault(iq);
+
+        IPaginatedList<CrudItemModel<SellerEntity>> items = await iq
+            .AsPaginatedAsync(parameter.PageSize.Value, parameter.PageIndex, CreateItemModelAsync);
+        return items;
     }
 
     public async Task<int> SettleAsync(int basarId, int sellerId)
@@ -124,7 +155,23 @@ public sealed class SellerService
         await _statusPushService.PushSellerAsync(basarId, sellerId);
     }
 
-    private Expression<Func<SellerEntity, bool>> SellerSearch(string searchString)
+    public override Task UpdateAsync(SellerEntity entity)
+    {
+        ArgumentNullException.ThrowIfNull(entity);
+
+        entity.TrimIBAN();
+        entity.UpdateNewsletterPermissions(_clock);
+        return base.UpdateAsync(entity);
+    }
+
+    protected override IQueryable<SellerEntity> OrderByDefault(IQueryable<SellerEntity> iq)
+    {
+        ArgumentNullException.ThrowIfNull(iq);
+
+        return iq.DefaultOrder();
+    }
+
+    protected override Expression<Func<SellerEntity, bool>> Search(string searchString)
     {
         if (_db.IsPostgreSQL())
         {

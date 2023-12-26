@@ -1,5 +1,6 @@
 ﻿using BraunauMobil.VeloBasar.BusinessLogic;
 using BraunauMobil.VeloBasar.Controllers;
+using BraunauMobil.VeloBasar.Rendering;
 using BraunauMobil.VeloBasar.Routing;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Localization;
@@ -10,7 +11,7 @@ public class TestBase
 {
     public TestBase()
     {
-        Sut = new (SellerService.Object, new SellerSearchModelValidator(Localizer), Router.Object, SellerRouter.Object, new Crud.SellerCrudModelFactory(Localizer, Mock.Of<IHtmlHelper>()), new SellerEntityValidator(Localizer));
+        Sut = new (SellerService.Object, new SellerSearchModelValidator(Localizer), Router.Object, SellerRouter.Object, new Crud.SellerCrudModelFactory(Localizer, Mock.Of<IHtmlHelper>(), SellerRouter.Object, new Mock<IVeloHtmlFactory>().Object), new SellerEntityValidator(Localizer));
 
         Router.Setup(_ => _.AcceptSession)
             .Returns(AcceptSessionRouter.Object);
