@@ -960,4 +960,7 @@
   <data name="VeloBasar_SellerThatMustBeSettledOnSite" xml:space="preserve">
     <value>Sellers, that must come by</value>
   </data>
+  <data name="VeloBasar_PermissionTimestampGreaterOrEqualThan" xml:space="preserve">
+    <value>Permission Timstamp greater or equal than:</value>
+  </data>
 </root>

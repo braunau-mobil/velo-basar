@@ -5,17 +5,25 @@ namespace BraunauMobil.VeloBasar.Tests.Controllers.AdminControllerTests;
 public class Export
     : TestBase
 {
-    [Fact]
-    public void ReturnsView()
+    [Theory]
+    [AutoData]
+    public void ReturnsView(DateTime dateTime)
     {
         //  Arrange
+        Clock.Now = dateTime;
 
         //  Act
         IActionResult result = Sut.Export();
 
         //  Assert
-        ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
-        view.ViewData.ModelState.IsValid.Should().BeTrue();
+        using(new AssertionScope())
+        {
+            ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
+            view.ViewData.ModelState.IsValid.Should().BeTrue();
+
+            ExportModel model = view.Model.Should().BeOfType<ExportModel>().Subject;
+            model.MinPermissionDate.Should().Be(DateOnly.FromDateTime(dateTime.Date));
+        }
 
         VerifyNoOtherCalls();
     }

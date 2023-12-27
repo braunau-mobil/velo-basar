@@ -103,7 +103,7 @@ public partial class AdminService
         return await CreateTransactionDocumentAsync(transaction);
     }
 
-    public async Task<FileDataEntity> ExportSellersForNewsletterAsCsvAsync()
+    public async Task<FileDataEntity> ExportSellersForNewsletterAsCsvAsync(DateTime? minPermissionTimestamp)
     {
         Encoding encoding = Encoding.GetEncoding(_exportSettings.EncodingName);
         CsvConfiguration csvConfig = new (CultureInfo.InvariantCulture)
@@ -114,11 +114,17 @@ public partial class AdminService
             Quote = _exportSettings.QuoteChar
         };
 
-        SellerEntity[] sellers = await _db.Sellers
+        IQueryable<SellerEntity> iq = _db.Sellers
             .Include(seller => seller.Country)
+            .AsNoTracking()
             .OrderBy(seller => seller.NewsletterPermissionTimesStamp)
-            .Where(seller => seller.HasNewsletterPermission)
-            .ToArrayAsync();
+            .Where(seller => seller.HasNewsletterPermission);
+        if (minPermissionTimestamp.HasValue)
+        {
+            iq = iq.Where(seller => seller.NewsletterPermissionTimesStamp >= minPermissionTimestamp);
+        }
+
+        SellerEntity[] sellers = await iq.ToArrayAsync();
 
         using MemoryStream memoryStream = new();
         using StreamWriter streamWriter = new(memoryStream, encoding);

@@ -28,9 +28,6 @@ public sealed class AdminRouter
     public string ToExport()
         => GetUriByAction(nameof(AdminController.Export));
 
-    public string ToExportSellersForNewsletter()
-        => GetUriByAction(nameof(AdminController.ExportSellersForNewsletter));
-
     public string ToPrintTest()
         => GetUriByAction(nameof(AdminController.PrintTest));
 }

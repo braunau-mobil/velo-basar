@@ -10,5 +10,5 @@ public interface IAdminService
 
     Task<FileDataEntity> CreateSampleSettlementDocumentAsync();
 
-    Task<FileDataEntity> ExportSellersForNewsletterAsCsvAsync();
+    Task<FileDataEntity> ExportSellersForNewsletterAsCsvAsync(DateTime? minPermissionTimestamp);
 }

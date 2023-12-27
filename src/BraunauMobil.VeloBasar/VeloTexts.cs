@@ -170,6 +170,7 @@ public static class VeloTexts
     public const string PageNumberFromOverall = $"{Prefix}{nameof(PageNumberFromOverall)}";
     public const string ParentTransaction = $"{Prefix}{nameof(ParentTransaction)}";
     public const string Password = $"{Prefix}{nameof(Password)}";
+    public const string PermissionTimestampGreaterOrEqualThan = $"{Prefix}{nameof(PermissionTimestampGreaterOrEqualThan)}";
     public const string PhoneNumber = $"{Prefix}{nameof(PhoneNumber)}";
     public const string PhoneNumberIsTooLong = $"{Prefix}{nameof(PhoneNumberIsTooLong)}";
     public const string PickedUp = $"{Prefix}{nameof(PickedUp)}";

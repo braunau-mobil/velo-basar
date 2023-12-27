@@ -12,7 +12,5 @@ public interface IAdminRouter
 
     string ToExport();
 
-    string ToExportSellersForNewsletter();
-
     string ToPrintTest();
 }

@@ -1,6 +1,7 @@
 ﻿using BraunauMobil.VeloBasar.BusinessLogic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Xan.Extensions;
 
 namespace BraunauMobil.VeloBasar.Controllers;
 
@@ -8,10 +9,12 @@ public sealed class AdminController
     : AbstractVeloController
 {
     private readonly IAdminService _adminService;
+    private readonly IClock _clock;
 
-    public AdminController(IAdminService adminService)
+    public AdminController(IAdminService adminService, IClock clock)
     {
         _adminService = adminService ?? throw new ArgumentNullException(nameof(adminService));
+        _clock = clock ?? throw new ArgumentNullException(nameof(clock));
     }
 
     [Authorize]
@@ -44,12 +47,26 @@ public sealed class AdminController
 
     [Authorize]
     public IActionResult Export()
-        => View();
+    {
+        ExportModel model = new()
+        {
+            MinPermissionDate = _clock.GetCurrentDate()
+        };
+        return View(model);
+    }
 
     [Authorize]
-    public async Task<IActionResult> ExportSellersForNewsletter()
+    public async Task<IActionResult> ExportSellersForNewsletter(ExportModel model)
     {
-        FileDataEntity fileData = await _adminService.ExportSellersForNewsletterAsCsvAsync();
+        ArgumentNullException.ThrowIfNull(model);
+
+        DateTime? minPermissionTimestamp = null;
+        if (model.UseMinPermissionDate)
+        {
+            minPermissionTimestamp = model.MinPermissionDate.ToDateTime(TimeOnly.MinValue);
+        }
+
+        FileDataEntity fileData = await _adminService.ExportSellersForNewsletterAsCsvAsync(minPermissionTimestamp);
         return File(fileData.Data, fileData.ContentType, fileData.FileName);
     }
 
