@@ -21,8 +21,11 @@ public class List
         IActionResult result = await Sut.List(parameter, activeBasarId);
 
         //  Assert
-        RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
-        redirect.Url.Should().Be(url);
+        using (new AssertionScope())
+        {
+            RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
+            redirect.Url.Should().Be(url);
+        }
 
         A.CallTo(() => ProductService.ExistsForBasarAsync(activeBasarId, productId)).MustHaveHappenedOnceExactly();
         A.CallTo(() => ProductRouter.ToDetails(productId)).MustHaveHappenedOnceExactly();
@@ -42,9 +45,12 @@ public class List
         IActionResult result = await Sut.List(parameter, activeBasarId);
 
         //  Assert
-        ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
-        view.Model.Should().BeOfType<ListModel<ProductEntity, ProductListParameter>>();
-        view.ViewData.ModelState.IsValid.Should().BeTrue();
+        using (new AssertionScope())
+        {
+            ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
+            view.Model.Should().BeOfType<ListModel<ProductEntity, ProductListParameter>>();
+            view.ViewData.ModelState.IsValid.Should().BeTrue();
+        }
 
         A.CallTo(() => ProductService.ExistsForBasarAsync(activeBasarId, productId)).MustHaveHappenedOnceExactly();
         A.CallTo(() => ProductService.GetManyAsync(parameter.PageSize!.Value, parameter.PageIndex, activeBasarId, parameter.SearchString, parameter.StorageState, parameter.ValueState, parameter.Brand, parameter.ProductTypeId)).MustHaveHappenedOnceExactly();
@@ -62,9 +68,12 @@ public class List
         IActionResult result = await Sut.List(parameter, activeBasarId);
 
         //  Assert
-        ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
-        view.Model.Should().BeOfType<ListModel<ProductEntity, ProductListParameter>>();
-        view.ViewData.ModelState.IsValid.Should().BeTrue();
+        using (new AssertionScope())
+        {
+            ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
+            view.Model.Should().BeOfType<ListModel<ProductEntity, ProductListParameter>>();
+            view.ViewData.ModelState.IsValid.Should().BeTrue();
+        }
 
         A.CallTo(() => ProductService.GetManyAsync(parameter.PageSize!.Value, parameter.PageIndex, activeBasarId, parameter.SearchString, parameter.StorageState, parameter.ValueState, parameter.Brand, parameter.ProductTypeId)).MustHaveHappenedOnceExactly();
     }

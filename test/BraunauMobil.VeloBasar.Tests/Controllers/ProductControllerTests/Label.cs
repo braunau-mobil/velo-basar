@@ -17,10 +17,13 @@ public class Label
         IActionResult result = await Sut.Label(productId);
 
         //  Assert
-        FileContentResult fileContent = result.Should().BeOfType<FileContentResult>().Subject;
-        fileContent.ContentType.Should().Be(fileData.ContentType);
-        fileContent.FileDownloadName.Should().Be(fileData.FileName);
-        fileContent.FileContents.Should().BeEquivalentTo(fileData.Data);
+        using (new AssertionScope())
+        {
+            FileContentResult fileContent = result.Should().BeOfType<FileContentResult>().Subject;
+            fileContent.ContentType.Should().Be(fileData.ContentType);
+            fileContent.FileDownloadName.Should().Be(fileData.FileName);
+            fileContent.FileContents.Should().BeEquivalentTo(fileData.Data);
+        }
 
         A.CallTo(() => ProductService.GetLabelAsync(productId)).MustHaveHappenedOnceExactly();
     }

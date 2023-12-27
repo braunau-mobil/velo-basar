@@ -17,20 +17,23 @@ public class Ctor
         int count005, int count002, int count001)
     {
         ChangeInfo changeInfo = new (amount);
-        Assert.Equal(count500, changeInfo.Denomination[500]);
-        Assert.Equal(count200, changeInfo.Denomination[200]);
-        Assert.Equal(count100, changeInfo.Denomination[100]);
-        Assert.Equal(count50, changeInfo.Denomination[50]);
-        Assert.Equal(count20, changeInfo.Denomination[20]);
-        Assert.Equal(count10, changeInfo.Denomination[10]);
-        Assert.Equal(count5, changeInfo.Denomination[5]);
-        Assert.Equal(count2, changeInfo.Denomination[2]);
-        Assert.Equal(count1, changeInfo.Denomination[1]);
-        Assert.Equal(count050, changeInfo.Denomination[0.5m]);
-        Assert.Equal(count020, changeInfo.Denomination[0.2m]);
-        Assert.Equal(count010, changeInfo.Denomination[0.1m]);
-        Assert.Equal(count005, changeInfo.Denomination[0.05m]);
-        Assert.Equal(count002, changeInfo.Denomination[0.02m]);
-        Assert.Equal(count001, changeInfo.Denomination[0.01m]);
+        using (new AssertionScope())
+        {
+            changeInfo.Denomination[500].Should().Be(count500);
+            changeInfo.Denomination[200].Should().Be(count200);
+            changeInfo.Denomination[100].Should().Be(count100);
+            changeInfo.Denomination[50].Should().Be(count50);
+            changeInfo.Denomination[20].Should().Be(count20);
+            changeInfo.Denomination[10].Should().Be(count10);
+            changeInfo.Denomination[5].Should().Be(count5);
+            changeInfo.Denomination[2].Should().Be(count2);
+            changeInfo.Denomination[1].Should().Be(count1);
+            changeInfo.Denomination[0.5m].Should().Be(count050);
+            changeInfo.Denomination[0.2m].Should().Be(count020);
+            changeInfo.Denomination[0.1m].Should().Be(count010);
+            changeInfo.Denomination[0.05m].Should().Be(count005);
+            changeInfo.Denomination[0.02m].Should().Be(count002);
+            changeInfo.Denomination[0.01m].Should().Be(count001);
+        }
     }
 }

@@ -31,10 +31,13 @@ public class List
         IActionResult result = await Sut.List(parameter, activeBasarId);
 
         //  Assert
-        result.Should().NotBeNull();
-        ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
-        view.Model.Should().BeOfType<ListModel<AcceptSessionEntity, AcceptSessionListParameter>>();
-        view.ViewData.ModelState.IsValid.Should().BeTrue();
+        using (new AssertionScope())
+        {
+            result.Should().NotBeNull();
+            ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
+            view.Model.Should().BeOfType<ListModel<AcceptSessionEntity, AcceptSessionListParameter>>();
+            view.ViewData.ModelState.IsValid.Should().BeTrue();
+        }
 
         A.CallTo(() => AcceptSessionService.GetAllAsync(parameter.PageSize.Value, parameter.PageIndex, activeBasarId, parameter.AcceptSessionState)).MustHaveHappenedOnceExactly();
     }

@@ -12,7 +12,7 @@ public class ProductCommissionPercentage
         {
             ProductCommission = productCommision
         };
-        Assert.Equal(exptectedPercentage, sut.ProductCommissionPercentage);
+        sut.ProductCommissionPercentage.Should().Be(exptectedPercentage);
     }
 
     [Theory]
@@ -25,6 +25,6 @@ public class ProductCommissionPercentage
         {
             ProductCommissionPercentage = valueToSet
         };
-        Assert.Equal(exptectedCommision, sut.ProductCommission);
+        sut.ProductCommission.Should().Be(exptectedCommision);
     }
 }

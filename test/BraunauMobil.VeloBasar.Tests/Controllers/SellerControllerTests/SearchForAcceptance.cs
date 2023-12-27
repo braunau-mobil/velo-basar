@@ -16,16 +16,19 @@ public class SearchForAcceptance
         IActionResult result = await Sut.SearchForAcceptance(searchModel);
 
         //  Assert
-        ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
-        view.ViewName.Should().Be(nameof(SellerController.CreateForAcceptance));
-        view.ViewData.ModelState.IsValid.Should().BeFalse();
+        using (new AssertionScope())
+        {
+            ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
+            view.ViewName.Should().Be(nameof(SellerController.CreateForAcceptance));
+            view.ViewData.ModelState.IsValid.Should().BeFalse();
         
-        SellerCreateForAcceptanceModel model = view.Model.Should().BeOfType<SellerCreateForAcceptanceModel>().Subject;
-        model.FoundSellers.Should().BeEmpty();
-        model.HasSearched.Should().BeTrue();
-        model.Seller.Should().NotBeNull();
-        model.Seller.FirstName.Should().Be(searchModel.FirstName);
-        model.Seller.LastName.Should().Be(searchModel.LastName);
+            SellerCreateForAcceptanceModel model = view.Model.Should().BeOfType<SellerCreateForAcceptanceModel>().Subject;
+            model.FoundSellers.Should().BeEmpty();
+            model.HasSearched.Should().BeTrue();
+            model.Seller.Should().NotBeNull();
+            model.Seller.FirstName.Should().Be(searchModel.FirstName);
+            model.Seller.LastName.Should().Be(searchModel.LastName);
+        }
     }
 
     [Theory]
@@ -39,16 +42,19 @@ public class SearchForAcceptance
         IActionResult result = await Sut.SearchForAcceptance(searchModel);
 
         //  Assert
-        ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
-        view.ViewName.Should().Be(nameof(SellerController.CreateForAcceptance));
-        view.ViewData.ModelState.IsValid.Should().BeTrue();
+        using (new AssertionScope())
+        {
+            ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
+            view.ViewName.Should().Be(nameof(SellerController.CreateForAcceptance));
+            view.ViewData.ModelState.IsValid.Should().BeTrue();
         
-        SellerCreateForAcceptanceModel model = view.Model.Should().BeOfType<SellerCreateForAcceptanceModel>().Subject;
-        model.FoundSellers.Should().BeEquivalentTo(sellers);
-        model.HasSearched.Should().BeTrue();
-        model.Seller.Should().NotBeNull();
-        model.Seller.FirstName.Should().Be(searchModel.FirstName);
-        model.Seller.LastName.Should().Be(searchModel.LastName);
+            SellerCreateForAcceptanceModel model = view.Model.Should().BeOfType<SellerCreateForAcceptanceModel>().Subject;
+            model.FoundSellers.Should().BeEquivalentTo(sellers);
+            model.HasSearched.Should().BeTrue();
+            model.Seller.Should().NotBeNull();
+            model.Seller.FirstName.Should().Be(searchModel.FirstName);
+            model.Seller.LastName.Should().Be(searchModel.LastName);
+        }
 
         A.CallTo(() => SellerService.GetManyAsync(searchModel.FirstName, searchModel.LastName)).MustHaveHappenedOnceExactly();
     }

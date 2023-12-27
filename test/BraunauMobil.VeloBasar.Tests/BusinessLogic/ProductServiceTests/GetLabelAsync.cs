@@ -28,11 +28,14 @@ public class GetLabelAsync
 
         //  Act
         FileDataEntity fileData = await Sut.GetLabelAsync(product.Id);
-        
+
         //  Assert
-        fileData.ContentType.Should().Be(FileDataEntity.PdfContentType);
-        fileData.Data.Should().BeEquivalentTo(labelData);
-        fileData.FileName.Should().Be("Product-1_Label.pdf");
+        using (new AssertionScope())
+        {
+            fileData.ContentType.Should().Be(FileDataEntity.PdfContentType);
+            fileData.Data.Should().BeEquivalentTo(labelData);
+            fileData.FileName.Should().Be("Product-1_Label.pdf");
+        }
         A.CallTo(() => ProductLabelService.CreateLabelAsync(product)).MustHaveHappenedOnceExactly();
     }
 }

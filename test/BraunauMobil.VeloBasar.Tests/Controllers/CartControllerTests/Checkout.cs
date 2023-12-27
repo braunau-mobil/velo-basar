@@ -17,8 +17,11 @@ public class Checkout
         IActionResult result = await Sut.Checkout(activeBasarId);
 
         //  Assert
-        StatusCodeResult statusCode = result.Should().BeOfType<StatusCodeResult>().Subject;
-        statusCode.StatusCode.Should().Be(StatusCodes.Status405MethodNotAllowed);
+        using (new AssertionScope())
+        {
+            StatusCodeResult statusCode = result.Should().BeOfType<StatusCodeResult>().Subject;
+            statusCode.StatusCode.Should().Be(StatusCodes.Status405MethodNotAllowed);
+        }
 
         A.CallTo(() => Cookie.GetCart()).MustHaveHappenedOnceExactly();
     }
@@ -37,8 +40,11 @@ public class Checkout
         IActionResult result = await Sut.Checkout(activeBasarId);
 
         //  Assert
-        RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
-        redirect.Url.Should().Be(url);
+        using (new AssertionScope())
+        {
+            RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
+            redirect.Url.Should().Be(url);
+        }
 
         A.CallTo(() => Cookie.GetCart()).MustHaveHappenedOnceExactly();
         A.CallTo(() => Cookie.ClearCart()).MustHaveHappenedOnceExactly();

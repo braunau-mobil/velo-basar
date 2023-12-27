@@ -28,9 +28,12 @@ public class List
 		//	Act
 		IActionResult result = await Sut.List(parameter, activeBasarId);
 
-		//	Assert
-		RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
-		redirect.Url.Should().Be(url);
+        //	Assert
+        using (new AssertionScope())
+        {
+            RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
+		    redirect.Url.Should().Be(url);
+        }
 
 		A.CallTo(() => Router.ToLogin()).MustHaveHappenedOnceExactly();
 	}
@@ -55,10 +58,13 @@ public class List
         //	Act
         IActionResult result = await Sut.List(parameter, activeBasarId);
 
-		//	Assert
-		ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
-		view.Model.Should().BeOfType<ListModel<TransactionEntity, TransactionListParameter>>();
-		view.ViewData.ModelState.IsValid.Should().BeTrue();
+        //	Assert
+        using (new AssertionScope())
+        {
+            ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
+		    view.Model.Should().BeOfType<ListModel<TransactionEntity, TransactionListParameter>>();
+		    view.ViewData.ModelState.IsValid.Should().BeTrue();
+        }
 
         A.CallTo(() => TransactionService.GetManyAsync(parameter.PageSize!.Value, parameter.PageIndex, activeBasarId, parameter.TransactionType, parameter.SearchString)).MustHaveHappenedOnceExactly();
     }
@@ -84,9 +90,12 @@ public class List
         IActionResult result = await Sut.List(parameter, activeBasarId);
 
         //	Assert
-        ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
-        view.Model.Should().BeOfType<ListModel<TransactionEntity, TransactionListParameter>>();
-        view.ViewData.ModelState.IsValid.Should().BeTrue();
+        using (new AssertionScope())
+        {
+            ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
+            view.Model.Should().BeOfType<ListModel<TransactionEntity, TransactionListParameter>>();
+            view.ViewData.ModelState.IsValid.Should().BeTrue();
+        }
 
         A.CallTo(() => TransactionService.GetManyAsync(parameter.PageSize!.Value, parameter.PageIndex, activeBasarId, parameter.TransactionType, parameter.SearchString)).MustHaveHappenedOnceExactly();
     }
@@ -112,9 +121,12 @@ public class List
         IActionResult result = await Sut.List(parameter, activeBasarId);
 
         //	Assert
-        ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
-        view.Model.Should().BeOfType<ListModel<TransactionEntity, TransactionListParameter>>();
-        view.ViewData.ModelState.IsValid.Should().BeTrue();
+        using (new AssertionScope())
+        {
+            ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
+            view.Model.Should().BeOfType<ListModel<TransactionEntity, TransactionListParameter>>();
+            view.ViewData.ModelState.IsValid.Should().BeTrue();
+        }
 
         A.CallTo(() => TransactionService.GetManyAsync(parameter.PageSize!.Value, parameter.PageIndex, activeBasarId, parameter.TransactionType, parameter.SearchString)).MustHaveHappenedOnceExactly();
     }

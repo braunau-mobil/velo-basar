@@ -17,8 +17,11 @@ public class Settle
         IActionResult result = await Sut.Settle(activeBasarId, sellerId);
 
         //  Assert
-        RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
-        redirect.Url.Should().Be(url);
+        using (new AssertionScope())
+        { 
+            RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
+            redirect.Url.Should().Be(url);
+        }
 
         A.CallTo(() => SellerService.SettleAsync(activeBasarId, sellerId)).MustHaveHappenedOnceExactly();
         A.CallTo(() => TransactionRouter.ToSucess(settlemendId)).MustHaveHappenedOnceExactly();

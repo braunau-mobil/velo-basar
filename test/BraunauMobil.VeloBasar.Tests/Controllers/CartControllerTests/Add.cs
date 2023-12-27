@@ -18,11 +18,14 @@ public class Add
         IActionResult result = await Sut.Add(cartModel);
 
         // Assert
-        ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
-        view.ViewData.ModelState.IsValid.Should().BeFalse();
+        using (new AssertionScope())
+        {
+            ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
+            view.ViewData.ModelState.IsValid.Should().BeFalse();
 
-        view.Model.Should().NotBeNull();
-        view.Model.Should().Be(cartModel);
+            view.Model.Should().NotBeNull();
+            view.Model.Should().Be(cartModel);
+        }
 
         A.CallTo(() => Cookie.GetCart()).MustHaveHappenedOnceExactly();
         A.CallTo(() => ProductService.GetManyAsync(cart)).MustHaveHappenedOnceExactly();
@@ -47,17 +50,20 @@ public class Add
         IActionResult result = await Sut.Add(cartModel);
 
         // Assert
-        ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
-        view.ViewData.ModelState.IsValid.Should().BeTrue();
+        using (new AssertionScope())
+        {
+            ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
+            view.ViewData.ModelState.IsValid.Should().BeTrue();
 
-        view.Model.Should().NotBeNull();
-        view.Model.Should().Be(cartModel);
+            view.Model.Should().NotBeNull();
+            view.Model.Should().Be(cartModel);
+            cartModel.ProductId.Should().Be(0);
+            cart.Should().ContainSingle(x => x == productId);
+        }
 
-        cartModel.ProductId.Should().Be(0);
         A.CallTo(() => Cookie.GetCart()).MustHaveHappenedOnceExactly();
         A.CallTo(() => Cookie.SetCart(cart)).MustHaveHappenedOnceExactly();
         A.CallTo(() => ProductService.GetManyAsync(cart)).MustHaveHappenedOnceExactly();
         A.CallTo(() => ProductService.FindAsync(productId)).MustHaveHappenedOnceExactly();
-        cart.Should().ContainSingle(x => x == productId);
     }
 }

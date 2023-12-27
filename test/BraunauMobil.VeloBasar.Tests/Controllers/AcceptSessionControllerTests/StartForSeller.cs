@@ -20,9 +20,12 @@ public class StartForSeller
         //  Act
         IActionResult result = await Sut.StartForSeller(sellerId, activeBasarId);
 
-        //  Act & Assert
-        RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
-        redirect.Url.Should().Be(url);
+        //  Assert
+        using (new AssertionScope())
+        {
+            RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
+            redirect.Url.Should().Be(url);
+        }
         
         A.CallTo(() => Cookie.SetActiveAcceptSession(entity)).MustHaveHappenedOnceExactly();
         A.CallTo(() => AcceptProductRouter.ToCreate(sessionId)).MustHaveHappenedOnceExactly();
@@ -41,9 +44,12 @@ public class StartForSeller
         //  Act
         IActionResult result = await Sut.StartForSeller(sellerId, activeBasarId);
 
-        //  Act & Assert
-        RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
-        redirect.Url.Should().Be(url);
+        //  Assert
+        using (new AssertionScope())
+        {
+            RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
+            redirect.Url.Should().Be(url);
+        }
 
         A.CallTo(() => AcceptProductRouter.ToCreate(activeSessionId)).MustHaveHappenedOnceExactly();
     }

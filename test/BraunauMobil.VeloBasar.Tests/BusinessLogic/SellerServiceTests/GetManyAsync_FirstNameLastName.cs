@@ -57,9 +57,12 @@ public class GetManyAsync_FirstNameLastName
         IReadOnlyList<SellerEntity> result = await Sut.GetManyAsync("Arag", "");
 
         //  Assert
-        result.Should().HaveCount(2);
-        result.Any(_ => _.Id == aragog.Id).Should().BeTrue();
-        result.Any(_ => _.Id == aragogAragorn.Id).Should().BeTrue();
+        using (new AssertionScope())
+        {
+            result.Should().HaveCount(2);
+            result.Any(_ => _.Id == aragog.Id).Should().BeTrue();
+            result.Any(_ => _.Id == aragogAragorn.Id).Should().BeTrue();
+        }
     }
 
     [Fact]
@@ -86,9 +89,12 @@ public class GetManyAsync_FirstNameLastName
         IReadOnlyList<SellerEntity> result = await Sut.GetManyAsync("", "Arag");
 
         //  Assert
-        result.Should().HaveCount(2);
-        result.Any(_ => _.Id == aragorn.Id).Should().BeTrue();
-        result.Any(_ => _.Id == aragogAragorn.Id).Should().BeTrue();
+        using (new AssertionScope())
+        {
+            result.Should().HaveCount(2);
+            result.Any(_ => _.Id == aragorn.Id).Should().BeTrue();
+            result.Any(_ => _.Id == aragogAragorn.Id).Should().BeTrue();
+        }
     }
 
     [Fact]
@@ -115,7 +121,10 @@ public class GetManyAsync_FirstNameLastName
         IReadOnlyList<SellerEntity> result = await Sut.GetManyAsync("Arag", "Arag");
 
         //  Assert
-        result.Should().HaveCount(1);
-        result.Any(_ => _.Id == aragogAragorn.Id).Should().BeTrue();
+        using (new AssertionScope())
+        {
+            result.Should().HaveCount(1);
+            result.Any(_ => _.Id == aragogAragorn.Id).Should().BeTrue();
+        }
     }
 }

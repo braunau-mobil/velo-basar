@@ -25,10 +25,13 @@ public class ExportSellersForNewsletter
         IActionResult result = await Sut.ExportSellersForNewsletter(model);
 
         //  Assert
-        FileContentResult fileContent = result.Should().BeOfType<FileContentResult>().Subject;
-        fileContent.ContentType.Should().Be(fileData.ContentType);
-        fileContent.FileContents.Should().BeEquivalentTo(fileData.Data);
-        fileContent.FileDownloadName.Should().BeEquivalentTo(fileData.FileName);
+        using (new AssertionScope())
+        {
+            FileContentResult fileContent = result.Should().BeOfType<FileContentResult>().Subject;
+            fileContent.ContentType.Should().Be(fileData.ContentType);
+            fileContent.FileContents.Should().BeEquivalentTo(fileData.Data);
+            fileContent.FileDownloadName.Should().BeEquivalentTo(fileData.FileName);
+        }
 
         A.CallTo(() => AdminService.ExportSellersForNewsletterAsCsvAsync(null)).MustHaveHappenedOnceExactly();
     }
@@ -53,10 +56,13 @@ public class ExportSellersForNewsletter
         IActionResult result = await Sut.ExportSellersForNewsletter(model);
 
         //  Assert
-        FileContentResult fileContent = result.Should().BeOfType<FileContentResult>().Subject;
-        fileContent.ContentType.Should().Be(fileData.ContentType);
-        fileContent.FileContents.Should().BeEquivalentTo(fileData.Data);
-        fileContent.FileDownloadName.Should().BeEquivalentTo(fileData.FileName);
+        using (new AssertionScope())
+        {
+            FileContentResult fileContent = result.Should().BeOfType<FileContentResult>().Subject;
+            fileContent.ContentType.Should().Be(fileData.ContentType);
+            fileContent.FileContents.Should().BeEquivalentTo(fileData.Data);
+            fileContent.FileDownloadName.Should().BeEquivalentTo(fileData.FileName);
+        }
 
         A.CallTo(() => AdminService.ExportSellersForNewsletterAsCsvAsync(minPermissionTimestamp)).MustHaveHappenedOnceExactly();
     }

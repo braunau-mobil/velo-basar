@@ -50,10 +50,13 @@ public class UpdateAsync
         await Sut.UpdateAsync(updated);
 
         //  Assert
-        updated.Id.Should().Be(initial.Id);
-        updated.Brand.Should().BeEquivalentTo(initial.Brand);
-        updated.Type.Should().BeEquivalentTo(initial.Type);
-        updated.Session.Should().NotBeNull();
-        updated.Should().NotBeEquivalentTo(initial);
+        using (new AssertionScope())
+        {
+            updated.Id.Should().Be(initial.Id);
+            updated.Brand.Should().BeEquivalentTo(initial.Brand);
+            updated.Type.Should().BeEquivalentTo(initial.Type);
+            updated.Session.Should().NotBeNull();
+            updated.Should().NotBeEquivalentTo(initial);
+        }
     }
 }

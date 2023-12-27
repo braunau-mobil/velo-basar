@@ -17,9 +17,12 @@ public class Details
         IActionResult result = await Sut.Details(basarId);
 
         //  Assert
-        ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
-        view.Model.Should().Be(details);
-        view.ViewData.ModelState.IsValid.Should().BeTrue();
+        using (new AssertionScope())
+        {
+            ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
+            view.Model.Should().Be(details);
+            view.ViewData.ModelState.IsValid.Should().BeTrue();
+        }
 
         A.CallTo(() => BasarService.GetDetailsAsync(basarId)).MustHaveHappenedOnceExactly();
     }

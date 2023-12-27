@@ -20,9 +20,12 @@ public class Cancel
         IActionResult result = await Sut.Cancel(sessionId, returnToList);
 
         //  Assert
-        BadRequestObjectResult badRequest = result.Should().BeOfType<BadRequestObjectResult>().Subject;
-        badRequest.Value.Should().BeOfType<LocalizedString>();
-        badRequest.StatusCode.Should().Be(400);
+        using (new AssertionScope())
+        {
+            BadRequestObjectResult badRequest = result.Should().BeOfType<BadRequestObjectResult>().Subject;
+            badRequest.Value.Should().BeOfType<LocalizedString>();
+            badRequest.StatusCode.Should().Be(400);
+        }
 
         A.CallTo(() => AcceptSessionService.GetAsync(sessionId)).MustHaveHappenedOnceExactly();
     }
@@ -41,8 +44,11 @@ public class Cancel
         IActionResult result = await Sut.Cancel(sessionId, true);
 
         //  Assert
-        RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
-        redirect.Url.Should().Be(url);
+        using (new AssertionScope())
+        {
+            RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
+            redirect.Url.Should().Be(url);
+        }
 
         A.CallTo(() => Cookie.ClearActiveAcceptSession()).MustHaveHappenedOnceExactly();
         A.CallTo(() => AcceptSessionRouter.ToList()).MustHaveHappenedOnceExactly();
@@ -64,8 +70,11 @@ public class Cancel
         IActionResult result = await Sut.Cancel(sessionId, false);
 
         //  Assert
-        RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
-        redirect.Url.Should().Be(url);
+        using (new AssertionScope())
+        {
+            RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
+            redirect.Url.Should().Be(url);
+        }
 
         A.CallTo(() => Cookie.ClearActiveAcceptSession()).MustHaveHappenedOnceExactly();
         A.CallTo(() => SellerRouter.ToDetails(sellerId)).MustHaveHappenedOnceExactly();

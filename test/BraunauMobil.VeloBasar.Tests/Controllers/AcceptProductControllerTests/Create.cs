@@ -17,10 +17,13 @@ public class Create
         IActionResult result = await Sut.Create(sessionId);
 
         //  Assert
-        ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
-        view.Model.Should().Be(model);
-        view.ViewName.Should().Be("CreateEdit");
-        view.ViewData.ModelState.IsValid.Should().BeTrue();
+        using (new AssertionScope())
+        {
+            ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
+            view.Model.Should().Be(model);
+            view.ViewName.Should().Be("CreateEdit");
+            view.ViewData.ModelState.IsValid.Should().BeTrue();
+        }
 
         A.CallTo(() => AcceptProductService.CreateNewAsync(sessionId)).MustHaveHappenedOnceExactly();
     }
@@ -39,8 +42,11 @@ public class Create
         IActionResult result = await Sut.Create(entity);
 
         //  Assert
-        RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
-        redirect.Url.Should().Be(url);
+        using (new AssertionScope())
+        {
+            RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
+            redirect.Url.Should().Be(url);
+        }
 
         A.CallTo(() => AcceptProductService.CreateAsync(entity)).MustHaveHappenedOnceExactly();
         A.CallTo(() => Router.AcceptProduct).MustHaveHappenedOnceExactly();
@@ -63,10 +69,13 @@ public class Create
         IActionResult result = await Sut.Create(entity);
 
         //  Assert
-        ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
-        view.Model.Should().Be(acceptProductModel);
-        view.ViewData.ModelState.IsValid.Should().BeFalse();
-        view.ViewName.Should().Be("CreateEdit");
+        using (new AssertionScope())
+        {
+            ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
+            view.Model.Should().Be(acceptProductModel);
+            view.ViewData.ModelState.IsValid.Should().BeFalse();
+            view.ViewName.Should().Be("CreateEdit");
+        }
 
         A.CallTo(() => AcceptProductService.GetAsync(sessionId, entity)).MustHaveHappenedOnceExactly();
     }

@@ -28,11 +28,14 @@ public class GetDetailsAsync
         ProductDetailsModel model = await Sut.GetDetailsAsync(product.Session.BasarId, product.Id);
 
         //  Assert
-        model.Entity.Should().BeEquivalentTo(product);
-        model.Transactions.Should().BeEmpty();
-        model.CanLock.Should().BeFalse();
-        model.CanSetAsLost.Should().BeFalse();
-        model.CanUnlock.Should().BeFalse();
+        using (new AssertionScope())
+        {
+            model.Entity.Should().BeEquivalentTo(product);
+            model.Transactions.Should().BeEmpty();
+            model.CanLock.Should().BeFalse();
+            model.CanSetAsLost.Should().BeFalse();
+            model.CanUnlock.Should().BeFalse();
+        }
     }
 
     [Theory]
@@ -61,10 +64,13 @@ public class GetDetailsAsync
         ProductDetailsModel model = await Sut.GetDetailsAsync(product.Session.BasarId, product.Id);
 
         //  Assert
-        model.Entity.Should().BeEquivalentTo(product);
-        model.Transactions.Should().ContainEquivalentOf(transaction);
-        model.CanLock.Should().BeFalse();
-        model.CanSetAsLost.Should().BeFalse();
-        model.CanUnlock.Should().BeFalse();
+        using (new AssertionScope())
+        {
+            model.Entity.Should().BeEquivalentTo(product);
+            model.Transactions.Should().ContainEquivalentOf(transaction);
+            model.CanLock.Should().BeFalse();
+            model.CanSetAsLost.Should().BeFalse();
+            model.CanUnlock.Should().BeFalse();
+        }
     }
 }

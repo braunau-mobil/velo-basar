@@ -18,12 +18,15 @@ public class Index
         IActionResult result = await Sut.Index();
 
         //  Assert
-        ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
-        view.ViewData.ModelState.IsValid.Should().BeTrue();
-        CartModel model = view.Model.Should().BeOfType<CartModel>().Subject;
-        model.Products.Should().BeEquivalentTo(products);
-        model.ActiveBasarId.Should().Be(0);
-        model.ProductId.Should().Be(0);
+        using (new AssertionScope())
+        {
+            ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
+            view.ViewData.ModelState.IsValid.Should().BeTrue();
+            CartModel model = view.Model.Should().BeOfType<CartModel>().Subject;
+            model.Products.Should().BeEquivalentTo(products);
+            model.ActiveBasarId.Should().Be(0);
+            model.ProductId.Should().Be(0);
+        }
 
         A.CallTo(() => Cookie.GetCart()).MustHaveHappenedOnceExactly();
         A.CallTo(() => ProductService.GetManyAsync(cart)).MustHaveHappenedOnceExactly();

@@ -1,8 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BraunauMobil.VeloBasar.Tests.Controllers.SetupControllerTests;
 
@@ -18,8 +14,11 @@ public class InitialSetup
         IActionResult result = Sut.InitialSetup();
 
         //  Assert
-        ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
-        view.Model.Should().BeOfType<InitializationConfiguration>();
-        view.ViewData.ModelState.IsValid.Should().BeTrue();
+        using (new AssertionScope())
+        {
+            ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
+            view.Model.Should().BeOfType<InitializationConfiguration>();
+            view.ViewData.ModelState.IsValid.Should().BeTrue();
+        }
     }
 }

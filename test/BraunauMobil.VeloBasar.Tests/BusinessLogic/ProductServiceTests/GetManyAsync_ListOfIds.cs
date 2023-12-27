@@ -50,9 +50,12 @@ public class GetManyAsync_ListOfIds
         IReadOnlyCollection<ProductEntity> products = await Sut.GetManyAsync(ids);
 
         //  Assert
-        products.Should().HaveCount(3);
-        products.Should().ContainEquivalentOf(p1);
-        products.Should().ContainEquivalentOf(p2);
-        products.Should().ContainEquivalentOf(p3);
+        using (new AssertionScope())
+        {
+            products.Should().HaveCount(3);
+            products.Should().ContainEquivalentOf(p1);
+            products.Should().ContainEquivalentOf(p2);
+            products.Should().ContainEquivalentOf(p3);
+        }
     }
 }

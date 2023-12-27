@@ -17,12 +17,15 @@ public class Download
         IActionResult result = await Sut.Download(id);
 
         // Assert
-        result.Should().NotBeNull();
+        using (new AssertionScope())
+        {
+            result.Should().NotBeNull();
         
-        FileContentResult fileContent = result.Should().BeOfType<FileContentResult>().Subject;
-        fileContent.ContentType.Should().Be(fileData.ContentType);
-        fileContent.FileContents.Should().BeEquivalentTo(fileData.Data);
-        fileContent.FileDownloadName.Should().Be(fileData.FileName);
+            FileContentResult fileContent = result.Should().BeOfType<FileContentResult>().Subject;
+            fileContent.ContentType.Should().Be(fileData.ContentType);
+            fileContent.FileContents.Should().BeEquivalentTo(fileData.Data);
+            fileContent.FileDownloadName.Should().Be(fileData.FileName);
+        }
 
         A.CallTo(() => TransactionService.GetAcceptanceLabelsAsync(id)).MustHaveHappenedOnceExactly();
     }

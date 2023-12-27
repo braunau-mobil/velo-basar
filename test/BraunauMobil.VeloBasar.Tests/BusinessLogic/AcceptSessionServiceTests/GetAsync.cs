@@ -28,7 +28,10 @@ public class GetAsync
         AcceptSessionEntity result = await Sut.GetAsync(session.Id);
 
         // Assert
-        result.Should().NotBeNull();
-        result.Should().Be(session);
+        using (new AssertionScope())
+        {
+            result.Should().NotBeNull();
+            result.Should().Be(session);
+        }
     }
 }

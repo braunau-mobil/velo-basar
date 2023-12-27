@@ -13,13 +13,16 @@ public class Select
         IActionResult result = Sut.Select();
 
         // Assert
-        result.Should().NotBeNull();
+        using (new AssertionScope())
+        {
+            result.Should().NotBeNull();
         
-        ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
-        view.ViewData.ModelState.IsValid.Should().BeTrue();
+            ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
+            view.ViewData.ModelState.IsValid.Should().BeTrue();
 
-        view.Model.Should().NotBeNull();
-        view.Model.Should().BeOfType<AcceptanceLabelsModel>();
+            view.Model.Should().NotBeNull();
+            view.Model.Should().BeOfType<AcceptanceLabelsModel>();
+        }
     }
 
     [Fact]
@@ -36,13 +39,16 @@ public class Select
         IActionResult result = await Sut.Select(model);
 
         // Assert
-        ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
-        view.ViewData.ModelState.IsValid.Should().BeTrue();
+        using (new AssertionScope())
+        {
+            ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
+            view.ViewData.ModelState.IsValid.Should().BeTrue();
 
-        view.Model.Should().Be(model);
+            view.Model.Should().Be(model);
 
-        model.OpenDocument.Should().BeTrue();
-        model.Id.Should().Be(transaction.Id);
+            model.OpenDocument.Should().BeTrue();
+            model.Id.Should().Be(transaction.Id);
+        }
 
         A.CallTo(() => TransactionService.FindAsync(model.ActiveBasarId, TransactionType.Acceptance, model.Number)).MustHaveHappenedOnceExactly();
     }
@@ -63,16 +69,19 @@ public class Select
         IActionResult result = await Sut.Select(model);
 
         // Assert
-        ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
-        view.ViewData.ModelState.IsValid.Should().BeFalse();
+        using (new AssertionScope())
+        {
+            ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
+            view.ViewData.ModelState.IsValid.Should().BeFalse();
 
-        view.Model.Should().NotBe(model);
+            view.Model.Should().NotBe(model);
 
-        AcceptanceLabelsModel resultModel = view.Model.Should().BeOfType<AcceptanceLabelsModel>().Subject;
-        resultModel.Number.Should().Be(model.Number);
-        resultModel.OpenDocument.Should().BeFalse();
-        resultModel.Id.Should().Be(0);
-        resultModel.ActiveBasarId.Should().Be(0);
+            AcceptanceLabelsModel resultModel = view.Model.Should().BeOfType<AcceptanceLabelsModel>().Subject;
+            resultModel.Number.Should().Be(model.Number);
+            resultModel.OpenDocument.Should().BeFalse();
+            resultModel.Id.Should().Be(0);
+            resultModel.ActiveBasarId.Should().Be(0);
+        }
 
         A.CallTo(() => TransactionService.FindAsync(model.ActiveBasarId, TransactionType.Acceptance, model.Number)).MustHaveHappenedOnceExactly();
         A.CallTo(() => Localizer[VeloTexts.NoAcceptanceFound, model.Number]).MustHaveHappenedOnceExactly();

@@ -15,11 +15,14 @@ public class GetAsync
         AcceptProductModel result = await Sut.GetAsync(product.Id);
 
         // Assert
-        result.Should().NotBeNull();
-        result.CanAccept.Should().BeTrue();
-        result.Entity.Should().BeEquivalentTo(product);
-        result.Entity.Brand.Should().NotBeNull();
-        result.Entity.Type.Should().NotBeNull();
+        using (new AssertionScope())
+        {
+            result.Should().NotBeNull();
+            result.CanAccept.Should().BeTrue();
+            result.Entity.Should().BeEquivalentTo(product);
+            result.Entity.Brand.Should().NotBeNull();
+            result.Entity.Type.Should().NotBeNull();
+        }
     }
 
     [Theory]
@@ -34,10 +37,13 @@ public class GetAsync
         AcceptProductModel result = await Sut.GetAsync(product.Session.Id, product);
 
         // Assert
-        result.Should().NotBeNull();
-        result.CanAccept.Should().BeTrue();
-        result.Entity.Should().Be(product);
-        result.Entity.Brand.Should().NotBeNull();
-        result.Entity.Type.Should().NotBeNull();
+        using (new AssertionScope())
+        {
+            result.Should().NotBeNull();
+            result.CanAccept.Should().BeTrue();
+            result.Entity.Should().Be(product);
+            result.Entity.Brand.Should().NotBeNull();
+            result.Entity.Type.Should().NotBeNull();
+        }
     }
 }

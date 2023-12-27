@@ -18,8 +18,11 @@ public class Cancel
         IActionResult result = await Sut.Cancel(id);
 
         //  Assert
-        RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
-        redirect.Url.Should().Be(url);
+        using (new AssertionScope())
+        {
+            RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
+            redirect.Url.Should().Be(url);
+        }
 
         A.CallTo(() => TransactionService.GetAsync(id)).MustHaveHappenedOnceExactly();
         A.CallTo(() => CancelRouter.ToSelectProducts(transaction.Id)).MustHaveHappenedOnceExactly();

@@ -19,17 +19,20 @@ public class InitializeDatabaseAsync
         await Sut.InitializeDatabaseAsync(config);
 
         //  Arrange
-        Db.AcceptSessions.Should().BeEmpty();
-        Db.Basars.Should().BeEmpty();
-        Db.Countries.Should().BeEmpty();
-        Db.Files.Should().BeEmpty();
-        Db.Numbers.Should().BeEmpty();
-        Db.Products.Should().BeEmpty();
-        Db.ProductToTransaction.Should().BeEmpty();
-        Db.ProductTypes.Should().BeEmpty();
-        Db.Sellers.Should().BeEmpty();
-        Db.Transactions.Should().BeEmpty();
-        Db.ZipCodes.Should().BeEmpty();
+        using (new AssertionScope())
+        {
+            Db.AcceptSessions.Should().BeEmpty();
+            Db.Basars.Should().BeEmpty();
+            Db.Countries.Should().BeEmpty();
+            Db.Files.Should().BeEmpty();
+            Db.Numbers.Should().BeEmpty();
+            Db.Products.Should().BeEmpty();
+            Db.ProductToTransaction.Should().BeEmpty();
+            Db.ProductTypes.Should().BeEmpty();
+            Db.Sellers.Should().BeEmpty();
+            Db.Transactions.Should().BeEmpty();
+            Db.ZipCodes.Should().BeEmpty();
+        }
     }
 
     [Theory]
@@ -47,17 +50,20 @@ public class InitializeDatabaseAsync
         await Sut.InitializeDatabaseAsync(config);
 
         //  Arrange
-        Db.AcceptSessions.Should().BeEmpty();
-        Db.Basars.Should().BeEmpty();
-        Db.Countries.Should().NotBeEmpty();
-        Db.Files.Should().BeEmpty();
-        Db.Numbers.Should().BeEmpty();
-        Db.Products.Should().BeEmpty();
-        Db.ProductToTransaction.Should().BeEmpty();
-        Db.ProductTypes.Should().BeEmpty();
-        Db.Sellers.Should().BeEmpty();
-        Db.Transactions.Should().BeEmpty();
-        Db.ZipCodes.Should().BeEmpty();
+        using (new AssertionScope())
+        {
+            Db.AcceptSessions.Should().BeEmpty();
+            Db.Basars.Should().BeEmpty();
+            Db.Countries.Should().NotBeEmpty();
+            Db.Files.Should().BeEmpty();
+            Db.Numbers.Should().BeEmpty();
+            Db.Products.Should().BeEmpty();
+            Db.ProductToTransaction.Should().BeEmpty();
+            Db.ProductTypes.Should().BeEmpty();
+            Db.Sellers.Should().BeEmpty();
+            Db.Transactions.Should().BeEmpty();
+            Db.ZipCodes.Should().BeEmpty();
+        }
     }
 
     [Theory]
@@ -75,17 +81,20 @@ public class InitializeDatabaseAsync
         await Sut.InitializeDatabaseAsync(config);
 
         //  Arrange
-        Db.AcceptSessions.Should().BeEmpty();
-        Db.Basars.Should().BeEmpty();
-        Db.Countries.Should().BeEmpty();
-        Db.Files.Should().BeEmpty();
-        Db.Numbers.Should().BeEmpty();
-        Db.Products.Should().BeEmpty();
-        Db.ProductToTransaction.Should().BeEmpty();
-        Db.ProductTypes.Should().NotBeEmpty();
-        Db.Sellers.Should().BeEmpty();
-        Db.Transactions.Should().BeEmpty();
-        Db.ZipCodes.Should().BeEmpty();
+        using (new AssertionScope())
+        {
+            Db.AcceptSessions.Should().BeEmpty();
+            Db.Basars.Should().BeEmpty();
+            Db.Countries.Should().BeEmpty();
+            Db.Files.Should().BeEmpty();
+            Db.Numbers.Should().BeEmpty();
+            Db.Products.Should().BeEmpty();
+            Db.ProductToTransaction.Should().BeEmpty();
+            Db.ProductTypes.Should().NotBeEmpty();
+            Db.Sellers.Should().BeEmpty();
+            Db.Transactions.Should().BeEmpty();
+            Db.ZipCodes.Should().BeEmpty();
+        }
     }
 
     [Theory]
@@ -104,16 +113,19 @@ public class InitializeDatabaseAsync
         await Sut.InitializeDatabaseAsync(config);
 
         //  Arrange
-        Db.AcceptSessions.Should().BeEmpty();
-        Db.Basars.Should().BeEmpty();
-        Db.Countries.Should().NotBeEmpty();
-        Db.Files.Should().BeEmpty();
-        Db.Numbers.Should().BeEmpty();
-        Db.Products.Should().BeEmpty();
-        Db.ProductToTransaction.Should().BeEmpty();
-        Db.ProductTypes.Should().BeEmpty();
-        Db.Sellers.Should().BeEmpty();
-        Db.Transactions.Should().BeEmpty();
-        Db.ZipCodes.Should().NotBeEmpty();
+        using (new AssertionScope())
+        {
+            Db.AcceptSessions.Should().BeEmpty();
+            Db.Basars.Should().BeEmpty();
+            Db.Countries.Should().NotBeEmpty();
+            Db.Files.Should().BeEmpty();
+            Db.Numbers.Should().BeEmpty();
+            Db.Products.Should().BeEmpty();
+            Db.ProductToTransaction.Should().BeEmpty();
+            Db.ProductTypes.Should().BeEmpty();
+            Db.Sellers.Should().BeEmpty();
+            Db.Transactions.Should().BeEmpty();
+            Db.ZipCodes.Should().NotBeEmpty();
+        }
     }
 }

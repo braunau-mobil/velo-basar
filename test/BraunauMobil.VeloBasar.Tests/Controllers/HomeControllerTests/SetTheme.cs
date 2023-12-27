@@ -23,8 +23,11 @@ public class SetTheme
         IActionResult result = Sut.SetTheme(theme);
 
         //  Assert
-        RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
-        redirect.Url.Should().Be(url);
+        using (new AssertionScope())
+        {
+            RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
+            redirect.Url.Should().Be(url);
+        }
 
         A.CallTo(() => CurrentThemeCookie.SetCurrentTheme(theme)).MustHaveHappenedOnceExactly();
     }

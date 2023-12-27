@@ -32,8 +32,11 @@ public class CartModelValidatorTests
         ValidationResult result = await _sut.ValidateAsync(cart);
 
         //  Assert
-        result.IsValid.Should().BeTrue();
-        result.Errors.Should().BeEmpty();
+        using (new AssertionScope())
+        {
+            result.IsValid.Should().BeTrue();
+            result.Errors.Should().BeEmpty();
+        }
         A.CallTo(() => _productService.FindAsync(product.Id)).MustHaveHappenedOnceExactly();
     }
 
@@ -53,8 +56,12 @@ public class CartModelValidatorTests
         ValidationResult result = await _sut.ValidateAsync(cart);
 
         //  Assert
-        result.IsValid.Should().BeFalse();
-        result.Errors.Should().HaveCount(1);
+        using (new AssertionScope())
+        {
+            result.IsValid.Should().BeFalse();
+            result.Errors.Should().HaveCount(1);
+        }
+
         A.CallTo(() => _productService.FindAsync(product.Id)).MustHaveHappenedOnceExactly();
     }
 
@@ -73,8 +80,12 @@ public class CartModelValidatorTests
         ValidationResult result = await _sut.ValidateAsync(cart);
 
         //  Assert
-        result.IsValid.Should().BeFalse();
-        result.Errors.Should().HaveCount(1);
+        using (new AssertionScope())
+        {
+            result.IsValid.Should().BeFalse();
+            result.Errors.Should().HaveCount(1);
+        }
+
         A.CallTo(() => _productService.FindAsync(product.Id)).MustHaveHappenedOnceExactly();
     }
 
@@ -97,8 +108,12 @@ public class CartModelValidatorTests
         ValidationResult result = await _sut.ValidateAsync(cart);
 
         //  Assert
-        result.IsValid.Should().BeFalse();
-        result.Errors.Should().HaveCount(1);
+        using (new AssertionScope())
+        {
+            result.IsValid.Should().BeFalse();
+            result.Errors.Should().HaveCount(1);
+        }
+
         A.CallTo(() => _productService.FindAsync(product.Id)).MustHaveHappenedOnceExactly();
         A.CallTo(() => _transactionService.GetLatestAsync(cart.ActiveBasarId, product.Id)).MustHaveHappenedOnceExactly();
     }
@@ -122,8 +137,12 @@ public class CartModelValidatorTests
         ValidationResult result = await _sut.ValidateAsync(cart);
 
         //  Assert
-        result.IsValid.Should().BeFalse();
-        result.Errors.Should().HaveCount(1);
+        using (new AssertionScope())
+        {
+            result.IsValid.Should().BeFalse();
+            result.Errors.Should().HaveCount(1);
+        }
+
         A.CallTo(() => _productService.FindAsync(product.Id)).MustHaveHappenedOnceExactly();
         A.CallTo(() => _transactionService.GetLatestAsync(cart.ActiveBasarId, product.Id)).MustHaveHappenedOnceExactly();
     }
@@ -151,8 +170,12 @@ public class CartModelValidatorTests
         ValidationResult result = await _sut.ValidateAsync(cart);
 
         //  Assert
-        result.IsValid.Should().BeFalse();
-        result.Errors.Should().HaveCount(1);
+        using (new AssertionScope())
+        {
+            result.IsValid.Should().BeFalse();
+            result.Errors.Should().HaveCount(1);
+        }
+
         A.CallTo(() => _productService.FindAsync(product.Id)).MustHaveHappenedOnceExactly();
         A.CallTo(() => _transactionService.GetLatestAsync(cart.ActiveBasarId, product.Id)).MustHaveHappenedOnceExactly();
         A.CallTo(() => _router.Transaction).MustHaveHappenedOnceExactly();
@@ -174,8 +197,12 @@ public class CartModelValidatorTests
         ValidationResult result = await _sut.ValidateAsync(cart);
 
         //  Assert
-        result.IsValid.Should().BeFalse();
-        result.Errors.Should().HaveCount(1);
+        using (new AssertionScope())
+        {
+            result.IsValid.Should().BeFalse();
+            result.Errors.Should().HaveCount(1);
+        }
+
         A.CallTo(() => _productService.FindAsync(product.Id)).MustHaveHappenedOnceExactly();
     }
 }

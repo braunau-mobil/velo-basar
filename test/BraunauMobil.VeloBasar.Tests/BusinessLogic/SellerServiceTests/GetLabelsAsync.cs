@@ -19,10 +19,13 @@ public class GetLabelsAsync
         FileDataEntity result = await Sut.GetLabelsAsync(basar.Id, seller.Id);
 
         //  Assert
-        result.Should().NotBeNull();
-        result.FileName.Should().Be($"Seller-{seller.Id}_ProductLabels.pdf");
-        result.Data.Should().BeSameAs(data);
-        result.ContentType.Should().Be("application/pdf");
+        using (new AssertionScope())
+        {
+            result.Should().NotBeNull();
+            result.FileName.Should().Be($"Seller-{seller.Id}_ProductLabels.pdf");
+            result.Data.Should().BeSameAs(data);
+            result.ContentType.Should().Be("application/pdf");
+        }
     }
 
     [Theory]
@@ -57,9 +60,12 @@ public class GetLabelsAsync
         FileDataEntity result = await Sut.GetLabelsAsync(basar.Id, seller.Id);
 
         //  Assert
-        result.Should().NotBeNull();
-        result.FileName.Should().Be($"Seller-{seller.Id}_ProductLabels.pdf");
-        result.Data.Should().BeSameAs(data);
-        result.ContentType.Should().Be("application/pdf");
+        using (new AssertionScope())
+        {
+            result.Should().NotBeNull();
+            result.FileName.Should().Be($"Seller-{seller.Id}_ProductLabels.pdf");
+            result.Data.Should().BeSameAs(data);
+            result.ContentType.Should().Be("application/pdf");
+        }
     }
 }

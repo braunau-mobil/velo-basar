@@ -16,9 +16,12 @@ public class CreateNewAsync
         AcceptProductModel result = await Sut.CreateNewAsync(acceptSession.Id);
 
         //  Assert
-        result.Should().NotBeNull();
-        result.Entity.Should().NotBeNull();
-        result.Entity.SessionId.Should().Be(acceptSession.Id);
+        using (new AssertionScope())
+        {
+            result.Should().NotBeNull();
+            result.Entity.Should().NotBeNull();
+            result.Entity.SessionId.Should().Be(acceptSession.Id);
+        }
     }
 
     [Theory]

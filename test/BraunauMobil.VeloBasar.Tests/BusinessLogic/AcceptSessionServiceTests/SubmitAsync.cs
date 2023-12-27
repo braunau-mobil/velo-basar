@@ -22,10 +22,13 @@ public class SubmitAsync
         int result= await Sut.SubmitAsync(session.Id);
 
         //  Assert
-        result.Should().Be(acceptanceId);
-        session.State.Should().Be(AcceptSessionState.Completed);
-        session.EndTimeStamp.Should().Be(endTimeStamp);
-        session.Seller.ValueState.Should().Be(ValueState.NotSettled);
+        using (new AssertionScope())
+        {
+            result.Should().Be(acceptanceId);
+            session.State.Should().Be(AcceptSessionState.Completed);
+            session.EndTimeStamp.Should().Be(endTimeStamp);
+            session.Seller.ValueState.Should().Be(ValueState.NotSettled);        
+        }
         A.CallTo(() => TransactionService.AcceptAsync(session.BasarId, session.SellerId, Enumerable.Empty<int>())).MustHaveHappenedOnceExactly();
     }
 }

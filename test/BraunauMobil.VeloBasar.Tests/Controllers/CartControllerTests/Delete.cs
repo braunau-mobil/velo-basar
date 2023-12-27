@@ -19,12 +19,15 @@ public class Delete
         IActionResult result = Sut.Delete(productId);
 
         //  Assert
-        RedirectToActionResult redirectToAction = result.Should().BeOfType<RedirectToActionResult>().Subject;
-        redirectToAction.ActionName.Should().Be(nameof(CartController.Index));
-        redirectToAction.ControllerName.Should().BeNull();
+        using (new AssertionScope())
+        {
+            RedirectToActionResult redirectToAction = result.Should().BeOfType<RedirectToActionResult>().Subject;
+            redirectToAction.ActionName.Should().Be(nameof(CartController.Index));
+            redirectToAction.ControllerName.Should().BeNull();
+            cart.Should().BeEmpty();
+        }
 
         A.CallTo(() => Cookie.GetCart()).MustHaveHappenedOnceExactly();
         A.CallTo(() => Cookie.SetCart(cart)).MustHaveHappenedOnceExactly();
-        cart.Should().BeEmpty();
     }
 }

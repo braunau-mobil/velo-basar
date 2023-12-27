@@ -17,10 +17,13 @@ public class Document
         IActionResult result = await Sut.Document(id);
 
         //  Assert
-        FileContentResult fileContent = result.Should().BeOfType<FileContentResult>().Subject;
-        fileContent.ContentType.Should().Be(fileData.ContentType);
-        fileContent.FileContents.Should().BeSameAs(fileData.Data);
-        fileContent.FileDownloadName.Should().Be(fileData.FileName);
+        using (new AssertionScope())
+        {
+            FileContentResult fileContent = result.Should().BeOfType<FileContentResult>().Subject;
+            fileContent.ContentType.Should().Be(fileData.ContentType);
+            fileContent.FileContents.Should().BeSameAs(fileData.Data);
+            fileContent.FileDownloadName.Should().Be(fileData.FileName);
+        }
 
         A.CallTo(() => TransactionService.GetDocumentAsync(id)).MustHaveHappenedOnceExactly();
     }

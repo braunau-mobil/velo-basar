@@ -53,11 +53,14 @@ public sealed class GetSaleDistribution
         IReadOnlyList<ChartDataPoint> result = Sut.GetSaleDistribution(transactionsAndTotals);
 
         //  Assert
-        result.Should().BeEquivalentTo(new[]
+        using (new AssertionScope())
         {
-            new ChartDataPoint(40, "11:22", primaryColor),
-            new ChartDataPoint(170, "23:44", primaryColor)
-        });
+            result.Should().BeEquivalentTo(new[]
+            {
+                new ChartDataPoint(40, "11:22", primaryColor),
+                new ChartDataPoint(170, "23:44", primaryColor)
+            });
+        }
 
         A.CallTo(() => ColorProvider.Primary).MustHaveHappenedTwiceExactly();
     }

@@ -14,11 +14,14 @@ public class SelectSale
         IActionResult result = Sut.SelectSale();
 
         // Assert
-        ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
-        view.ViewData.ModelState.IsValid.Should().BeTrue();
+        using (new AssertionScope())
+        {
+            ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
+            view.ViewData.ModelState.IsValid.Should().BeTrue();
 
-        view.Model.Should().NotBeNull();
-        view.Model.Should().BeOfType<SelectSaleModel>();
+            view.Model.Should().NotBeNull();
+            view.Model.Should().BeOfType<SelectSaleModel>();
+        }
     }
 
     [Theory]
@@ -40,8 +43,11 @@ public class SelectSale
         IActionResult result = await Sut.SelectSale(model);
 
         //  Assert
-        RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
-        redirect.Url.Should().Be(url);
+        using (new AssertionScope())
+        {
+            RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
+            redirect.Url.Should().Be(url);
+        }
 
         A.CallTo(() => TransactionService.FindAsync(model.ActiveBasarId, TransactionType.Sale, model.SaleNumber)).MustHaveHappenedOnceExactly();
         A.CallTo(() => CancelRouter.ToSelectProducts(sale.Id)).MustHaveHappenedOnceExactly();
@@ -65,11 +71,14 @@ public class SelectSale
         IActionResult result = await Sut.SelectSale(model);
 
         //  Assert
-        ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
-        view.ViewData.ModelState.IsValid.Should().BeFalse();
+        using (new AssertionScope())
+        {
+            ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
+            view.ViewData.ModelState.IsValid.Should().BeFalse();
 
-        view.Model.Should().NotBeNull();
-        view.Model.Should().Be(model);
+            view.Model.Should().NotBeNull();
+            view.Model.Should().Be(model);
+        }
 
         A.CallTo(() => TransactionService.FindAsync(model.ActiveBasarId, TransactionType.Sale, model.SaleNumber)).MustHaveHappenedOnceExactly();
     }

@@ -42,12 +42,15 @@ public class GetSoldProductTypesWithCount
         IReadOnlyCollection<ChartDataPoint> result = Sut.GetSoldProductTypesWithCount(products);
 
         //  Assert
-        result.Should().HaveCount(2);
-        result.Should().BeEquivalentTo(new []
+        using (new AssertionScope())
         {
-            new ChartDataPoint(2, typeA.Name, colorA),
-            new ChartDataPoint(3, typeB.Name, colorB)
-        });
+            result.Should().HaveCount(2);
+            result.Should().BeEquivalentTo(new []
+            {
+                new ChartDataPoint(2, typeA.Name, colorA),
+                new ChartDataPoint(3, typeB.Name, colorB)
+            });
+        }
 
         A.CallTo(() => ColorProvider[typeA.Name]).MustHaveHappenedOnceExactly();
         A.CallTo(() => ColorProvider[typeB.Name]).MustHaveHappenedOnceExactly();

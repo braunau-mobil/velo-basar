@@ -16,12 +16,15 @@ public class SelectProducts
         IActionResult result = await Sut.SelectProducts(id);
 
         //  Assert
-        ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
-        SelectProductsModel model = view.Model.Should().BeOfType<SelectProductsModel>().Subject;
-        model.TransactionId.Should().Be(id);
-        model.Products.Should().NotBeNull();
-        model.Products.Should().HaveCount(products.Count);
-        view.ViewData.ModelState.IsValid.Should().BeTrue();
+        using (new AssertionScope())
+        {
+            ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
+            SelectProductsModel model = view.Model.Should().BeOfType<SelectProductsModel>().Subject;
+            model.TransactionId.Should().Be(id);
+            model.Products.Should().NotBeNull();
+            model.Products.Should().HaveCount(products.Count);
+            view.ViewData.ModelState.IsValid.Should().BeTrue();
+        }
 
         A.CallTo(() => TransactionService.GetProductsToCancelAsync(id)).MustHaveHappenedOnceExactly();
     }
@@ -42,12 +45,15 @@ public class SelectProducts
         IActionResult result = await Sut.SelectProducts(inputModel);
 
         //  Assert
-        ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
-        view.ViewData.ModelState.IsValid.Should().BeFalse();
-        SelectProductsModel resultModel = view.Model.Should().BeOfType<SelectProductsModel>().Subject;
-        resultModel.TransactionId.Should().Be(id);
-        resultModel.Products.Should().NotBeNull();
-        resultModel.Products.Should().HaveCount(products.Count);
+        using (new AssertionScope())
+        {
+            ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
+            view.ViewData.ModelState.IsValid.Should().BeFalse();
+            SelectProductsModel resultModel = view.Model.Should().BeOfType<SelectProductsModel>().Subject;
+            resultModel.TransactionId.Should().Be(id);
+            resultModel.Products.Should().NotBeNull();
+            resultModel.Products.Should().HaveCount(products.Count);
+        }
 
         A.CallTo(() => TransactionService.GetProductsToCancelAsync(id)).MustHaveHappenedOnceExactly();
     }
@@ -71,8 +77,11 @@ public class SelectProducts
         IActionResult result = await Sut.SelectProducts(inputModel);
 
         //  Assert
-        RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
-        redirect.Url.Should().Be(url);
+        using (new AssertionScope())
+        {
+            RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
+            redirect.Url.Should().Be(url);
+        }
 
         A.CallTo(() => TransactionService.CancelAsync(activeBasarId, saleId, inputModel.SelectedProductIds())).MustHaveHappenedOnceExactly();
         A.CallTo(() => TransactionRouter.ToSucess(revertId)).MustHaveHappenedOnceExactly();

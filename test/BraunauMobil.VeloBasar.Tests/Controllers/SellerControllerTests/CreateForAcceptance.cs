@@ -17,10 +17,13 @@ public class CreateForAcceptance
 		IActionResult result = await Sut.CreateForAcceptance(id);
 
 		//	Assert
-		ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
-		view.ViewData.ModelState.IsValid.Should().BeTrue();
-		SellerCreateForAcceptanceModel model = view.Model.Should().BeOfType<SellerCreateForAcceptanceModel>().Subject;
-		model.Seller.Should().Be(seller);
+		using (new AssertionScope())
+		{
+			ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
+			view.ViewData.ModelState.IsValid.Should().BeTrue();
+			SellerCreateForAcceptanceModel model = view.Model.Should().BeOfType<SellerCreateForAcceptanceModel>().Subject;
+			model.Seller.Should().Be(seller);
+		}
 
 		A.CallTo(() => SellerService.CreateNewAsync()).MustHaveHappenedOnceExactly();
 	}
@@ -37,10 +40,13 @@ public class CreateForAcceptance
         IActionResult result = await Sut.CreateForAcceptance(id);
 
         //	Assert
-        ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
-        view.ViewData.ModelState.IsValid.Should().BeTrue();
-        SellerCreateForAcceptanceModel model = view.Model.Should().BeOfType<SellerCreateForAcceptanceModel>().Subject;
-        model.Seller.Should().Be(seller);
+        using (new AssertionScope())
+		{
+			ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
+			view.ViewData.ModelState.IsValid.Should().BeTrue();
+			SellerCreateForAcceptanceModel model = view.Model.Should().BeOfType<SellerCreateForAcceptanceModel>().Subject;
+			model.Seller.Should().Be(seller);
+		}
 
         A.CallTo(() => SellerService.GetAsync(id)).MustHaveHappenedOnceExactly();
     }
@@ -55,12 +61,14 @@ public class CreateForAcceptance
 		//	Act
 		IActionResult result = await Sut.CreateForAcceptance(seller);
 
-		//	Assert
-		ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
-		view.ViewData.ModelState.IsValid.Should().BeFalse();
-        SellerCreateForAcceptanceModel model = view.Model.Should().BeOfType<SellerCreateForAcceptanceModel>().Subject;
-		model.Seller.Should().Be(seller);
-
+        //	Assert
+        using (new AssertionScope())
+		{
+			ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
+			view.ViewData.ModelState.IsValid.Should().BeFalse();
+			SellerCreateForAcceptanceModel model = view.Model.Should().BeOfType<SellerCreateForAcceptanceModel>().Subject;
+			model.Seller.Should().Be(seller);
+		}
 	}
 
 	[Theory]
@@ -78,9 +86,12 @@ public class CreateForAcceptance
 		//	Act
 		IActionResult result = await Sut.CreateForAcceptance(seller);
 
-		//	Assert
-		RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
-		redirect.Url.Should().Be(url);
+        //	Assert
+        using (new AssertionScope())
+		{
+			RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
+			redirect.Url.Should().Be(url);
+		}
 
 		A.CallTo(() => AcceptSessionRouter.ToStartForSeller(seller.Id)).MustHaveHappenedOnceExactly();
 		A.CallTo(() => SellerService.UpdateAsync(seller)).MustHaveHappenedOnceExactly();
@@ -103,9 +114,12 @@ public class CreateForAcceptance
         //	Act
         IActionResult result = await Sut.CreateForAcceptance(seller);
 
-        //	Assert
-        RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
-        redirect.Url.Should().Be(url);
+		//	Assert
+		using (new AssertionScope())
+		{
+			RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
+			redirect.Url.Should().Be(url);
+		}
 
         A.CallTo(() => AcceptSessionRouter.ToStartForSeller(seller.Id)).MustHaveHappenedOnceExactly();
         A.CallTo(() => SellerService.CreateAsync(seller)).MustHaveHappenedOnceExactly();

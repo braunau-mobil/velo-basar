@@ -17,9 +17,12 @@ public class Edit
         IActionResult result = await Sut.Edit(productId);
 
         //  Assert
-        ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
-        view.Model.Should().Be(product);
-        view.ViewData.ModelState.IsValid.Should().BeTrue();
+        using (new AssertionScope())
+        {
+            ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
+            view.Model.Should().Be(product);
+            view.ViewData.ModelState.IsValid.Should().BeTrue();
+        }
 
         A.CallTo(() => ProductService.GetAsync(productId)).MustHaveHappenedOnceExactly();
     }
@@ -36,8 +39,11 @@ public class Edit
         IActionResult result = await Sut.Edit(product);
 
         //  Assert
-        RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
-        redirect.Url.Should().Be(url);
+        using (new AssertionScope())
+        {
+            RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
+            redirect.Url.Should().Be(url);
+        }
 
         A.CallTo(() => ProductService.UpdateAsync(product)).MustHaveHappenedOnceExactly();
         A.CallTo(() => ProductRouter.ToDetails(product.Id)).MustHaveHappenedOnceExactly();
@@ -54,9 +60,11 @@ public class Edit
         IActionResult result = await Sut.Edit(product);
 
         //  Assert
-        ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
-        view.Model.Should().Be(product);
-        view.ViewData.ModelState.IsValid.Should().BeFalse();
-
+        using (new AssertionScope())
+        {
+            ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
+            view.Model.Should().Be(product);
+            view.ViewData.ModelState.IsValid.Should().BeFalse();
+        }
     }
 }

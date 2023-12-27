@@ -15,10 +15,13 @@ public class Lock
         IActionResult result = Sut.Lock(productId);
 
         //  Assert
-        ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
-        ProductAnnotateModel annotateModel = view.Model.Should().BeOfType<ProductAnnotateModel>().Subject;
-        annotateModel.ProductId.Should().Be(productId);
-        view.ViewData.ModelState.IsValid.Should().BeTrue();
+        using (new AssertionScope())
+        {
+            ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
+            ProductAnnotateModel annotateModel = view.Model.Should().BeOfType<ProductAnnotateModel>().Subject;
+            annotateModel.ProductId.Should().Be(productId);
+            view.ViewData.ModelState.IsValid.Should().BeTrue();
+        }
     }
 
     [Theory]
@@ -33,8 +36,11 @@ public class Lock
         IActionResult result = await Sut.Lock(annotateModel);
 
         //  Assert
-        RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
-        redirect.Url.Should().Be(url);
+        using (new AssertionScope())
+        {
+            RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
+            redirect.Url.Should().Be(url);
+        }
 
         A.CallTo(() => ProductService.LockAsync(annotateModel.ProductId, annotateModel.Notes)).MustHaveHappenedOnceExactly();
         A.CallTo(() => ProductRouter.ToDetails(annotateModel.ProductId)).MustHaveHappenedOnceExactly();
@@ -51,8 +57,11 @@ public class Lock
         IActionResult result = await Sut.Lock(annotateModel);
 
         //  Assert
-        ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
-        view.Model.Should().Be(annotateModel);
-        view.ViewData.ModelState.IsValid.Should().BeFalse();
+        using (new AssertionScope())
+        {
+            ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
+            view.Model.Should().Be(annotateModel);
+            view.ViewData.ModelState.IsValid.Should().BeFalse();
+        }
     }
 }

@@ -16,9 +16,12 @@ public class Edit
         IActionResult result = await Sut.Edit(productId);
 
         //  Assert
-        ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
-        view.Model.Should().Be(model);
-        view.ViewData.ModelState.IsValid.Should().BeTrue();
+        using (new AssertionScope())
+        {
+            ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
+            view.Model.Should().Be(model);
+            view.ViewData.ModelState.IsValid.Should().BeTrue();
+        }
 
         A.CallTo(() => AcceptProductService.GetAsync(productId)).MustHaveHappenedOnceExactly();
     }
@@ -37,8 +40,11 @@ public class Edit
         IActionResult result = await Sut.Edit(entity);
 
         //  Assert
-        RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
-        redirect.Url.Should().Be(url);
+        using (new AssertionScope())
+        {
+            RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
+            redirect.Url.Should().Be(url);
+        }
 
         A.CallTo(() => AcceptProductService.UpdateAsync(entity)).MustHaveHappenedOnceExactly();
         A.CallTo(() => Router.AcceptProduct).MustHaveHappenedOnceExactly();
@@ -61,10 +67,13 @@ public class Edit
         IActionResult result = await Sut.Create(entity);
 
         //  Assert
-        ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
-        view.Model.Should().Be(acceptProductModel);
-        view.ViewData.ModelState.IsValid.Should().BeFalse();
-        view.ViewName.Should().Be("CreateEdit");
+        using (new AssertionScope())
+        {
+            ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
+            view.Model.Should().Be(acceptProductModel);
+            view.ViewData.ModelState.IsValid.Should().BeFalse();
+            view.ViewName.Should().Be("CreateEdit");
+        }
 
         A.CallTo(() => AcceptProductService.GetAsync(sessionId, entity)).MustHaveHappenedOnceExactly();
     }

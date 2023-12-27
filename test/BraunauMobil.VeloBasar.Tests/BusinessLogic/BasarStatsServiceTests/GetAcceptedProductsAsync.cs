@@ -44,9 +44,12 @@ public class GetAcceptedProductsAsync
         IReadOnlyCollection<ProductEntity> products = await Sut.GetAcceptedProductsAsync(session1.BasarId);
 
         //  Assert
-        products.Should().HaveCount(4);
-        products.Should().AllSatisfy(product => product.Session.BasarId.Should().Be(session1.BasarId));
-        products.Should().AllSatisfy(product => product.StorageState.Should().NotBe(StorageState.NotAccepted));
+        using (new AssertionScope())
+        {
+            products.Should().HaveCount(4);
+            products.Should().AllSatisfy(product => product.Session.BasarId.Should().Be(session1.BasarId));
+            products.Should().AllSatisfy(product => product.StorageState.Should().NotBe(StorageState.NotAccepted));
+        }
     }
 
     private void AddProduct(StorageState storageState, AcceptSessionEntity session)

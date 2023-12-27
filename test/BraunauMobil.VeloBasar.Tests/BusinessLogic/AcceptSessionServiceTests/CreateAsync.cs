@@ -30,12 +30,15 @@ public class CreateAsync
 		//	Act
 		AcceptSessionEntity acceptSession = await Sut.CreateAsync(basar.Id, seller.Id);
 
-		//	Assert
-		acceptSession.Should().NotBeNull();
-		acceptSession.StartTimeStamp.Should().Be(dateTime);
-		acceptSession.Seller.Should().Be(seller);
-		acceptSession.SellerId.Should().Be(seller.Id);
-		acceptSession.Basar.Should().Be(basar);
-		acceptSession.BasarId.Should().Be(basar.Id);
+        //	Assert
+        using (new AssertionScope())
+		{
+			acceptSession.Should().NotBeNull();
+			acceptSession.StartTimeStamp.Should().Be(dateTime);
+			acceptSession.Seller.Should().Be(seller);
+			acceptSession.SellerId.Should().Be(seller.Id);
+			acceptSession.Basar.Should().Be(basar);
+			acceptSession.BasarId.Should().Be(basar.Id);
+		}
 	}
 }

@@ -40,9 +40,12 @@ public class CreateAsync
         await Sut.CreateAsync(product);
 
         //  Assert
-        ProductEntity result = await Db.Products.FirstByIdAsync(product.Id);
-        result.Should().NotBeNull();
-        result.Brand.Should().BeEquivalentTo(brand);
-        result.Type.Should().BeEquivalentTo(productType);
+        using (new AssertionScope())
+        {
+            ProductEntity result = await Db.Products.FirstByIdAsync(product.Id);
+            result.Should().NotBeNull();
+            result.Brand.Should().BeEquivalentTo(brand);
+            result.Type.Should().BeEquivalentTo(productType);
+        }
     }
 }

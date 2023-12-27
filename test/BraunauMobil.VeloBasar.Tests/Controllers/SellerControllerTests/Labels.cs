@@ -17,10 +17,13 @@ public class Labels
         IActionResult result = await Sut.Labels(basarId, sellerId);
 
         //  Assert
-        FileContentResult fileContent = result.Should().BeOfType<FileContentResult>().Subject;
-        fileContent.ContentType.Should().Be(fileData.ContentType);
-        fileContent.FileContents.Should().BeEquivalentTo(fileData.Data);
-        fileContent.FileDownloadName.Should().Be(fileData.FileName);
+        using (new AssertionScope())
+        {
+            FileContentResult fileContent = result.Should().BeOfType<FileContentResult>().Subject;
+            fileContent.ContentType.Should().Be(fileData.ContentType);
+            fileContent.FileContents.Should().BeEquivalentTo(fileData.Data);
+            fileContent.FileDownloadName.Should().Be(fileData.FileName);
+        }
 
         A.CallTo(() => SellerService.GetLabelsAsync(basarId, sellerId)).MustHaveHappenedOnceExactly();
     }

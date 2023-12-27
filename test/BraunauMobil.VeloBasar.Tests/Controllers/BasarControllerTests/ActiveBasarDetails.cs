@@ -16,8 +16,11 @@ public class ActiveBasarDetails
         IActionResult result = Sut.ActiveBasarDetails(activeBasarId);
 
         //  Assert
-        RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
-        redirect.Url.Should().Be(url);
+        using (new AssertionScope())
+        {
+            RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
+            redirect.Url.Should().Be(url);
+        }
 
         A.CallTo(() => BasarRouter.ToDetails(activeBasarId)).MustHaveHappenedOnceExactly();
     }

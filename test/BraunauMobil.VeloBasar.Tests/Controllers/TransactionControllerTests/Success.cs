@@ -17,12 +17,15 @@ public class Success
         IActionResult result = await Sut.Success(id);
 
         //  Assert
-        ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
-        view.ViewData.ModelState.IsValid.Should().BeTrue();
+        using (new AssertionScope())
+        {
+            ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
+            view.ViewData.ModelState.IsValid.Should().BeTrue();
         
-        TransactionSuccessModel model = view.Model.Should().BeOfType<TransactionSuccessModel>().Subject;
-        model.Entity.Should().Be(transaction);
-        model.OpenDocument.Should().BeTrue();
+            TransactionSuccessModel model = view.Model.Should().BeOfType<TransactionSuccessModel>().Subject;
+            model.Entity.Should().Be(transaction);
+            model.OpenDocument.Should().BeTrue();
+        }
 
         A.CallTo(() => TransactionService.GetAsync(id)).MustHaveHappenedOnceExactly();
     }
@@ -39,13 +42,16 @@ public class Success
         IActionResult result = await Sut.Success(id, amountGiven);
 
         //  Assert
-        ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
-        view.ViewData.ModelState.IsValid.Should().BeFalse();
+        using (new AssertionScope())
+        {
+            ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
+            view.ViewData.ModelState.IsValid.Should().BeFalse();
 
-        TransactionSuccessModel model = view.Model.Should().BeOfType<TransactionSuccessModel>().Subject;
-        model.Entity.Should().Be(transaction);
-        model.OpenDocument.Should().BeFalse();
-        model.AmountGiven.Should().Be(amountGiven);
+            TransactionSuccessModel model = view.Model.Should().BeOfType<TransactionSuccessModel>().Subject;
+            model.Entity.Should().Be(transaction);
+            model.OpenDocument.Should().BeFalse();
+            model.AmountGiven.Should().Be(amountGiven);
+        }
 
         A.CallTo(() => TransactionService.GetAsync(id, amountGiven)).MustHaveHappenedOnceExactly();
     }
@@ -63,13 +69,16 @@ public class Success
         IActionResult result = await Sut.Success(id, amountGiven);
 
         //  Assert
-        ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
-        view.ViewData.ModelState.IsValid.Should().BeTrue();
+        using (new AssertionScope())
+        {
+            ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
+            view.ViewData.ModelState.IsValid.Should().BeTrue();
 
-        TransactionSuccessModel model = view.Model.Should().BeOfType<TransactionSuccessModel>().Subject;
-        model.Entity.Should().Be(transaction);
-        model.OpenDocument.Should().BeFalse();
-        model.AmountGiven.Should().Be(amountGiven);
+            TransactionSuccessModel model = view.Model.Should().BeOfType<TransactionSuccessModel>().Subject;
+            model.Entity.Should().Be(transaction);
+            model.OpenDocument.Should().BeFalse();
+            model.AmountGiven.Should().Be(amountGiven);
+        }
 
         A.CallTo(() => TransactionService.GetAsync(id, amountGiven)).MustHaveHappenedOnceExactly();
     }

@@ -22,8 +22,11 @@ public class NextNumberAsync
         int number3 = await sut.NextNumberAsync(basar.Id, transactionType);
 
         //  Assert
-        number1.Should().Be(1);
-        number2.Should().Be(number1 + 1);
-        number3.Should().Be(number2 + 1);
+        using (new AssertionScope())
+        {
+            number1.Should().Be(1);
+            number2.Should().Be(number1 + 1);
+            number3.Should().Be(number2 + 1);
+        }
     }
 }

@@ -30,9 +30,12 @@ public class DropDatabase
         IActionResult result = Sut.DropDatabase();
 
         //  Assert
-        ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
-        view.Model.Should().BeNull();
-        view.ViewData.ModelState.IsValid.Should().BeTrue();
+        using (new AssertionScope())
+        {
+            ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
+            view.Model.Should().BeNull();
+            view.ViewData.ModelState.IsValid.Should().BeTrue();
+        }
 
         A.CallTo(() => AppContext.DevToolsEnabled()).MustHaveHappenedOnceExactly();
     }

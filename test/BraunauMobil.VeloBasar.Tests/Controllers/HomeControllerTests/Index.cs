@@ -17,8 +17,11 @@ public class Index
         IActionResult result = Sut.Index();
 
         //  Assert
-        RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
-        redirect.Url.Should().Be(url);
+        using (new AssertionScope())
+        {
+            RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
+            redirect.Url.Should().Be(url);
+        }
         
         A.CallTo(() => AppContext.IsDatabaseInitialized()).MustHaveHappenedOnceExactly();
         A.CallTo(() => SetupRouter.ToInitialSetup()).MustHaveHappenedOnceExactly();
@@ -36,8 +39,11 @@ public class Index
         IActionResult result = Sut.Index();
 
         //  Assert
-        RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
-        redirect.Url.Should().Be(url);
+        using (new AssertionScope())
+        {
+            RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
+            redirect.Url.Should().Be(url);
+        }
 
         A.CallTo(() => AppContext.IsDatabaseInitialized()).MustHaveHappenedOnceExactly();
         A.CallTo(() => BasarRouter.ToActiveBasarDetails()).MustHaveHappenedOnceExactly();

@@ -16,9 +16,12 @@ public class Submit
         //  Act
         IActionResult result = await Sut.Submit(sessionId);
 
-        //  Act & Assert
-        RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
-        redirect.Url.Should().Be(url);
+        //  Assert
+        using (new AssertionScope())
+        {
+            RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
+            redirect.Url.Should().Be(url);
+        }
 
         A.CallTo(() => AcceptSessionService.SubmitAsync(sessionId)).MustHaveHappenedOnceExactly();
         A.CallTo(() => TransactionRouter.ToSucess(acceptanceId)).MustHaveHappenedOnceExactly();

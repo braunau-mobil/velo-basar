@@ -16,9 +16,12 @@ public class Start
         //  Act
         IActionResult result = Sut.Start(activeBasarId);
 
-        //  Act & Assert
-        RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
-        redirect.Url.Should().Be(url);
+        //  Assert
+        using (new AssertionScope())
+        {
+            RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
+            redirect.Url.Should().Be(url);
+        }
 
         A.CallTo(() => SellerRouter.ToCreateForAcceptance()).MustHaveHappenedOnceExactly();
     }
@@ -34,9 +37,12 @@ public class Start
         //  Act
         IActionResult result = Sut.Start(activeBasarId);
 
-        //  Act & Assert
-        RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
-        redirect.Url.Should().Be(url);
+        //  Assert
+        using (new AssertionScope())
+        {
+            RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
+            redirect.Url.Should().Be(url);
+        }
 
         A.CallTo(() => AcceptProductRouter.ToCreate(activeSessionId)).MustHaveHappenedOnceExactly();
     }

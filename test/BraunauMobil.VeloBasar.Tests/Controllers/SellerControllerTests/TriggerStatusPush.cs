@@ -22,8 +22,11 @@ public class TriggerStatusPush
         IActionResult result = await Sut.TriggerStatusPush(activeBasarId, sellerId);
 
         //  Assert
-        RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
-        redirect.Url.Should().Be(url);
+        using (new AssertionScope())
+        {
+            RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
+            redirect.Url.Should().Be(url);
+        }
 
         A.CallTo(() => SellerService.TriggerStatusPushAsync(activeBasarId, sellerId)).MustHaveHappenedOnceExactly();
     }

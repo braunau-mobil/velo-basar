@@ -23,9 +23,12 @@ public class InitialSetupConfirmed
         IActionResult result = await Sut.InitialSetupConfirmed(configuration);
 
         //  Assert
-        ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
-        view.Model.Should().Be(configuration);
-        view.ViewData.ModelState.IsValid.Should().BeFalse();
+        using (new AssertionScope())
+        {
+            ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
+            view.Model.Should().Be(configuration);
+            view.ViewData.ModelState.IsValid.Should().BeFalse();
+        }
     }
 
     [Theory]
@@ -47,8 +50,11 @@ public class InitialSetupConfirmed
         IActionResult result = await Sut.InitialSetupConfirmed(configuration);
 
         //  Assert
-        RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
-        redirect.Url.Should().Be(url);
+        using (new AssertionScope())
+        {
+            RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
+            redirect.Url.Should().Be(url);
+        }
 
         A.CallTo(() => SetupService.CreateDatabaseAsync()).MustHaveHappenedOnceExactly();
         A.CallTo(() => SetupService.InitializeDatabaseAsync(configuration)).MustHaveHappenedOnceExactly();

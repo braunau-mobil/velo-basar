@@ -31,8 +31,11 @@ public class DeleteCookies
         IActionResult result = Sut.DeleteCookies();
 
         //  Assert
-        ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
-        view.ViewData.ModelState.IsValid.Should().BeTrue();
+        using (new AssertionScope())
+        {
+            ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
+            view.ViewData.ModelState.IsValid.Should().BeTrue();
+        }
 
         A.CallTo(() => AppContext.DevToolsEnabled()).MustHaveHappenedOnceExactly();
     }
@@ -68,8 +71,11 @@ public class DeleteCookies
         IActionResult result = Sut.DeleteCookiesConfirmed();
 
         //  Assert
-        RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
-        redirect.Url.Should().Be(url);
+        using (new AssertionScope())
+        {
+            RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
+            redirect.Url.Should().Be(url);
+        }
 
         A.CallTo(() => AppContext.DevToolsEnabled()).MustHaveHappenedOnceExactly();
         A.CallTo(() => Router.ToHome()).MustHaveHappenedOnceExactly();

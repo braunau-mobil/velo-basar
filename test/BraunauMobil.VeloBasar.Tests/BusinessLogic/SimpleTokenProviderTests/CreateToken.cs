@@ -18,7 +18,10 @@ public class CreateToken
         string result = sut.CreateToken(seller);
 
         //  Assert
-        result.Should().NotBeNullOrWhiteSpace();
-        result.Should().Be("416229A7859");
+        using (new AssertionScope())
+        {
+            result.Should().NotBeNullOrWhiteSpace();
+            result.Should().Be("416229A7859");
+        }
     }
 }

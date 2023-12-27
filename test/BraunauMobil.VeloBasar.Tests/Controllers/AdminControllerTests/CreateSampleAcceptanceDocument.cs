@@ -16,10 +16,13 @@ public class CreateSampleAcceptanceDocument
         IActionResult result = await Sut.CreateSampleAcceptanceDocument();
 
         //  Assert
-        FileContentResult fileContent = result.Should().BeOfType<FileContentResult>().Subject;
-        fileContent.ContentType.Should().Be(fileData.ContentType);
-        fileContent.FileContents.Should().BeEquivalentTo(fileData.Data);
-        fileContent.FileDownloadName.Should().BeEquivalentTo(fileData.FileName);
+        using (new AssertionScope())
+        {
+            FileContentResult fileContent = result.Should().BeOfType<FileContentResult>().Subject;
+            fileContent.ContentType.Should().Be(fileData.ContentType);
+            fileContent.FileContents.Should().BeEquivalentTo(fileData.Data);
+            fileContent.FileDownloadName.Should().BeEquivalentTo(fileData.FileName);
+        }
 
         A.CallTo(() => AdminService.CreateSampleAcceptanceDocumentAsync()).MustHaveHappenedOnceExactly();
     }

@@ -33,8 +33,11 @@ public class DropDatabaseConfirmed
         IActionResult result = await Sut.DropDatabaseConfirmed();
 
         //  Assert
-        RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
-        redirect.Url.Should().Be(url);
+        using (new AssertionScope())
+        {
+            RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
+            redirect.Url.Should().Be(url);
+        }
 
         A.CallTo(() => AppContext.DevToolsEnabled()).MustHaveHappenedOnceExactly();
         A.CallTo(() => DataGeneratorService.DropDatabaseAsync()).MustHaveHappenedOnceExactly();

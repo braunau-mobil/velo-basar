@@ -22,8 +22,11 @@ public class List
         IActionResult result = await Sut.List(parameter);
 
         //  Assert
-        RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
-        redirect.Url.Should().Be(url);
+        using (new AssertionScope())
+        {
+            RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
+            redirect.Url.Should().Be(url);
+        }
 
         A.CallTo(() => SellerService.ExistsAsync(sellerId)).MustHaveHappenedOnceExactly();
         A.CallTo(() => SellerRouter.ToDetails(sellerId)).MustHaveHappenedOnceExactly();
@@ -43,9 +46,12 @@ public class List
         IActionResult result = await Sut.List(parameter);
 
         //  Assert
-        ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
-        view.Model.Should().BeOfType<CrudListModel<SellerEntity, SellerListParameter, ISellerRouter>>();
-        view.ViewData.ModelState.IsValid.Should().BeTrue();
+        using (new AssertionScope())
+        {
+            ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
+            view.Model.Should().BeOfType<CrudListModel<SellerEntity, SellerListParameter, ISellerRouter>>();
+            view.ViewData.ModelState.IsValid.Should().BeTrue();
+        }
 
         A.CallTo(() => SellerService.ExistsAsync(sellerId)).MustHaveHappenedOnceExactly();
         A.CallTo(() => SellerService.GetManyAsync(parameter)).MustHaveHappenedOnceExactly();
@@ -63,9 +69,12 @@ public class List
         IActionResult result = await Sut.List(parameter);
 
         //  Assert
-        ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
-        view.Model.Should().BeOfType<CrudListModel<SellerEntity, SellerListParameter, ISellerRouter>>();
-        view.ViewData.ModelState.IsValid.Should().BeTrue();
+        using (new AssertionScope())
+        {
+            ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
+            view.Model.Should().BeOfType<CrudListModel<SellerEntity, SellerListParameter, ISellerRouter>>();
+            view.ViewData.ModelState.IsValid.Should().BeTrue();
+        }
 
         A.CallTo(() => SellerService.GetManyAsync(parameter)).MustHaveHappenedOnceExactly();
     }
