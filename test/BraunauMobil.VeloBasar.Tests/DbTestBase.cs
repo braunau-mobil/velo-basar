@@ -1,5 +1,5 @@
 ﻿using BraunauMobil.VeloBasar.Data;
-using Xan.Extensions;
+using BraunauMobil.VeloBasar.Tests.Mockups;
 
 namespace BraunauMobil.VeloBasar.Tests;
 
@@ -17,5 +17,5 @@ public class DbTestBase<TDbFixture>
 
     public VeloDbContext Db { get => _dbFixture.Db; }
 
-    public Mock<IClock> Clock { get; } = new();
+    public ClockMock Clock { get => _dbFixture.Clock; }
 }

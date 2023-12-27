@@ -15,8 +15,7 @@ public class SubmitAsync
         await Db.SaveChangesAsync();
         TransactionService.Setup(_ => _.AcceptAsync(session.BasarId, session.SellerId, Enumerable.Empty<int>()))
             .ReturnsAsync(acceptanceId);
-        Clock.Setup(_ => _.GetCurrentDateTime())
-            .Returns(endTimeStamp);
+        Clock.Now = endTimeStamp;
 
 
         //  Act

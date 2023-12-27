@@ -1,7 +1,7 @@
 ﻿using BraunauMobil.VeloBasar.Data;
+using BraunauMobil.VeloBasar.Tests.Mockups;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
-using Xan.Extensions;
 
 namespace BraunauMobil.VeloBasar.Tests;
 
@@ -20,17 +20,17 @@ public sealed class EmptySqliteDbFixture
             .EnableSensitiveDataLogging()
             .Options;
 
-        using (VeloDbContext context = new(Clock.Object, options))
+        using (VeloDbContext context = new(Clock, options))
         {
             context.Database.EnsureCreated();
         }
 
-        Db = new(Clock.Object, options);
+        Db = new(Clock, options);
     }    
 
     public VeloDbContext Db { get; }
 
-    public Mock<IClock> Clock { get; } = new();
+    public ClockMock Clock { get; } = new();
 
     public void Dispose()
     {

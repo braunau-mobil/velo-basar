@@ -1,7 +1,7 @@
 ﻿using BraunauMobil.VeloBasar.Data;
+using BraunauMobil.VeloBasar.Tests.Mockups;
 using Microsoft.EntityFrameworkCore;
 using System.IO;
-using Xan.Extensions;
 
 namespace BraunauMobil.VeloBasar.Tests;
 
@@ -22,12 +22,12 @@ public sealed class SampleSqliteDbFixture
             .EnableSensitiveDataLogging()
             .Options;
 
-        Db = new(Clock.Object, options);
+        Db = new(Clock, options);
     }
 
     public VeloDbContext Db { get; }
 
-    public Mock<IClock> Clock { get; } = new();
+    public ClockMock Clock { get; } = new();
 
     public void Dispose()
     {

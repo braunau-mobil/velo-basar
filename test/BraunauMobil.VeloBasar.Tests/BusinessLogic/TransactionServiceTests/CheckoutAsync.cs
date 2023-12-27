@@ -23,8 +23,7 @@ public class CheckoutAsync
         Db.Products.AddRange(products);
         await Db.SaveChangesAsync();
 
-        Clock.Setup(_ => _.GetCurrentDateTime())
-            .Returns(timestamp);
+        Clock.Now = timestamp;
         NumberService.Setup(_ => _.NextNumberAsync(basar.Id, TransactionType.Sale))
             .ReturnsAsync(number);
         StatusPushService.Setup(_ => _.IsEnabled)

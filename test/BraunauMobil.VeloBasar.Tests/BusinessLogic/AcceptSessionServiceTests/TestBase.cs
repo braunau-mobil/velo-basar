@@ -8,7 +8,7 @@ public class TestBase<TDbFixture>
 {
     public TestBase()
     {
-        Sut = new AcceptSessionService(Db, TransactionService.Object, Clock.Object);
+        Sut = new AcceptSessionService(Db, TransactionService.Object, Clock);
     }
 
     public void VerifyNoOtherCalls()

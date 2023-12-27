@@ -26,8 +26,7 @@ public class AcceptAsync
 
         NumberService.Setup(_ => _.NextNumberAsync(basar.Id, TransactionType.Acceptance))
             .ReturnsAsync(number);
-        Clock.Setup(_ => _.GetCurrentDateTime())
-            .Returns(timestamp);
+        Clock.Now = timestamp;
         StatusPushService.Setup(_ => _.IsEnabled)
             .Returns(true);
 

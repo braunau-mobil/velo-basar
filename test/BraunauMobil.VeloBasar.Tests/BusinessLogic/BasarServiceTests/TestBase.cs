@@ -7,7 +7,7 @@ public class TestBase
 {
     public TestBase()
     {
-        Sut = new BasarService(Db, StatsService.Object, Helpers.CreateActualLocalizer(), Clock.Object);
+        Sut = new BasarService(Db, StatsService.Object, Helpers.CreateActualLocalizer(), Clock);
     }
 
     public void VerifyNoOtherCalls()

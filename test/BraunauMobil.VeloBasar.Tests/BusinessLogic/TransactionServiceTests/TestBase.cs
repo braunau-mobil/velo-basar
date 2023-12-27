@@ -10,7 +10,7 @@ public class TestBase<TDbFixture>
 {
     public TestBase()
     {
-        Sut = new TransactionService(NumberService.Object, TransactionDocumentService.Object, StatusPushService.Object, Db, ProductLabelService.Object, Clock.Object, Helpers.CreateActualLocalizer());
+        Sut = new TransactionService(NumberService.Object, TransactionDocumentService.Object, StatusPushService.Object, Db, ProductLabelService.Object, Clock, Helpers.CreateActualLocalizer());
     }
 
     public void VerifyNoOtherCalls()

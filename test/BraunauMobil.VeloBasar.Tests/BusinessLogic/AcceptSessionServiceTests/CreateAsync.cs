@@ -27,8 +27,7 @@ public class CreateAsync
 		Db.Sellers.Add(seller);
 		await Db.SaveChangesAsync();
 
-		Clock.Setup(_ => _.GetCurrentDateTime())
-			.Returns(dateTime);
+		Clock.Now = dateTime;
 
 		//	Act
 		AcceptSessionEntity acceptSession = await Sut.CreateAsync(basar.Id, seller.Id);

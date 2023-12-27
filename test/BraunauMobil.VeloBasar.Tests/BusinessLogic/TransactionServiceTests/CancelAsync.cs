@@ -34,8 +34,7 @@ public class CancelAsync
         Db.Transactions.Add(sale);
         await Db.SaveChangesAsync();
 
-        Clock.Setup(_ => _.GetCurrentDateTime())
-            .Returns(timestamp);
+        Clock.Now = timestamp;
         NumberService.Setup(_ => _.NextNumberAsync(basar.Id, TransactionType.Cancellation))
             .ReturnsAsync(number);
         TransactionDocumentService.Setup(_ => _.CreateAsync(It.Is<TransactionEntity>(_ => _.Type == TransactionType.Sale)))
@@ -124,8 +123,7 @@ public class CancelAsync
         Db.Files.Add(saleDocument);
         await Db.SaveChangesAsync();
 
-        Clock.Setup(_ => _.GetCurrentDateTime())
-            .Returns(timestamp);
+        Clock.Now = timestamp;
         NumberService.Setup(_ => _.NextNumberAsync(basar.Id, TransactionType.Cancellation))
             .ReturnsAsync(number);
         TransactionDocumentService.Setup(_ => _.CreateAsync(It.Is<TransactionEntity>(_ => _.Type == TransactionType.Sale)))

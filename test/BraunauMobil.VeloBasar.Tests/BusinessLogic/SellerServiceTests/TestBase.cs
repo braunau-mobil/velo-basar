@@ -9,7 +9,7 @@ public class TestBase<TDbFixture>
 {
     public TestBase()
     {
-        Sut = new SellerService(TransactionService.Object, ProductLabelService.Object, StatusPushService.Object, TokenProvider.Object, Clock.Object, Db);
+        Sut = new SellerService(TransactionService.Object, ProductLabelService.Object, StatusPushService.Object, TokenProvider.Object, Clock, Db);
     }
 
     public void VerifyNoOtherCalls()
