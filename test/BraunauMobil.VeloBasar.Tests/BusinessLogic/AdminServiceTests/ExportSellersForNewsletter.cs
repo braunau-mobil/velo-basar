@@ -7,7 +7,12 @@ public class ExportSellersForNewsletter
     : TestBase
 {
     private int _sellerNumber;
-    private CountryEntity _country = new CountryEntity { Name = "Austria", Iso3166Alpha3Code = "AUT" };
+    private CountryEntity _country = new (){ Name = "Austria", Iso3166Alpha3Code = "AUT" };
+
+    public ExportSellersForNewsletter()
+    {
+        ExportSettings.NewLine = "__";
+    }
 
     [Theory]
     [InlineData(null)]
@@ -20,8 +25,7 @@ public class ExportSellersForNewsletter
         FileDataEntity result = await Sut.ExportSellersForNewsletterAsCsvAsync(minPermissionTimestamp);
 
         //  Assert
-        AssertCsv(result, @"﻿Id;FirstName;LastName;Country;City;ZIP;Street;EMail;NewsletterPermissionTimesStamp;UpdatedAt;CreatedAt
-");
+        AssertCsv(result, @"﻿Id;FirstName;LastName;Country;City;ZIP;Street;EMail;NewsletterPermissionTimesStamp;UpdatedAt;CreatedAt__");
     }
 
     [Fact]
@@ -41,10 +45,9 @@ public class ExportSellersForNewsletter
         FileDataEntity result = await Sut.ExportSellersForNewsletterAsCsvAsync(null);
 
         //  Assert
-        AssertCsv(result, @"﻿Id;FirstName;LastName;Country;City;ZIP;Street;EMail;NewsletterPermissionTimesStamp;UpdatedAt;CreatedAt
-1;FirstName0;LastName0;Austria;City0;ZIP0;Street0;seller0@nope.abc;04/05/2062 11:22:33;12/31/2002 23:59:59;12/31/2002 23:59:59
-2;FirstName1;LastName1;Austria;City1;ZIP1;Street1;seller1@nope.abc;04/05/2064 11:22:33;12/31/2002 23:59:59;12/31/2002 23:59:59
-");
+        AssertCsv(result, @"﻿Id;FirstName;LastName;Country;City;ZIP;Street;EMail;NewsletterPermissionTimesStamp;UpdatedAt;CreatedAt__"+
+                           "1;FirstName0;LastName0;Austria;City0;ZIP0;Street0;seller0@nope.abc;04/05/2062 11:22:33;12/31/2002 23:59:59;12/31/2002 23:59:59__"+
+                           "2;FirstName1;LastName1;Austria;City1;ZIP1;Street1;seller1@nope.abc;04/05/2064 11:22:33;12/31/2002 23:59:59;12/31/2002 23:59:59__");
     }
 
     [Fact]
@@ -66,10 +69,9 @@ public class ExportSellersForNewsletter
         FileDataEntity result = await Sut.ExportSellersForNewsletterAsCsvAsync(new DateTime(2063, 04, 05, 11, 22, 33));
 
         //  Assert
-        AssertCsv(result, @"﻿Id;FirstName;LastName;Country;City;ZIP;Street;EMail;NewsletterPermissionTimesStamp;UpdatedAt;CreatedAt
-3;FirstName2;LastName2;Austria;City2;ZIP2;Street2;seller2@nope.abc;04/05/2063 11:22:33;12/31/2002 23:59:59;12/31/2002 23:59:59
-4;FirstName3;LastName3;Austria;City3;ZIP3;Street3;seller3@nope.abc;04/05/2064 11:22:33;12/31/2002 23:59:59;12/31/2002 23:59:59
-");
+        AssertCsv(result, @"﻿Id;FirstName;LastName;Country;City;ZIP;Street;EMail;NewsletterPermissionTimesStamp;UpdatedAt;CreatedAt__"+
+                           "3;FirstName2;LastName2;Austria;City2;ZIP2;Street2;seller2@nope.abc;04/05/2063 11:22:33;12/31/2002 23:59:59;12/31/2002 23:59:59__"+
+                           "4;FirstName3;LastName3;Austria;City3;ZIP3;Street3;seller3@nope.abc;04/05/2064 11:22:33;12/31/2002 23:59:59;12/31/2002 23:59:59__");
     }
 
     private SellerEntity CreateSeller(DateTime permissionTimestamp, bool hasPermission)
