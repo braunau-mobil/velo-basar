@@ -10,8 +10,7 @@ public class CreateSampleAcceptanceDocument
     {
         //  Arrange
         FileDataEntity fileData = Fixture.BuildFileDataEntity().Create();
-        AdminService.Setup(_ => _.CreateSampleAcceptanceDocumentAsync())
-            .ReturnsAsync(fileData);
+        A.CallTo(() => AdminService.CreateSampleAcceptanceDocumentAsync()).Returns(fileData);
 
         //  Act
         IActionResult result = await Sut.CreateSampleAcceptanceDocument();
@@ -22,7 +21,6 @@ public class CreateSampleAcceptanceDocument
         fileContent.FileContents.Should().BeEquivalentTo(fileData.Data);
         fileContent.FileDownloadName.Should().BeEquivalentTo(fileData.FileName);
 
-        AdminService.Verify(_ => _.CreateSampleAcceptanceDocumentAsync(), Times.Once);
-        VerifyNoOtherCalls();
+        A.CallTo(() => AdminService.CreateSampleAcceptanceDocumentAsync()).MustHaveHappenedOnceExactly();
     }
 }

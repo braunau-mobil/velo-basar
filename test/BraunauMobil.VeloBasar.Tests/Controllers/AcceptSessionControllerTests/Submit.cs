@@ -10,10 +10,8 @@ public class Submit
     public async Task CallsSubmit_And_RedirectsToSuccess(int sessionId, int acceptanceId, string url)
     {
         //  Arrange
-        AcceptSessionService.Setup(_ => _.SubmitAsync(sessionId))
-            .ReturnsAsync(acceptanceId);
-        TransactionRouter.Setup(_ => _.ToSucess(acceptanceId))
-            .Returns(url);
+        A.CallTo(() => AcceptSessionService.SubmitAsync(sessionId)).Returns(acceptanceId);
+        A.CallTo(() => TransactionRouter.ToSucess(acceptanceId)).Returns(url);
 
         //  Act
         IActionResult result = await Sut.Submit(sessionId);
@@ -21,9 +19,8 @@ public class Submit
         //  Act & Assert
         RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
         redirect.Url.Should().Be(url);
-        
-        AcceptSessionService.Verify(_ => _.SubmitAsync(sessionId), Times.Once());
-        TransactionRouter.Verify(_ => _.ToSucess(acceptanceId), Times.Once());
-        VerifyNoOtherCalls();
+
+        A.CallTo(() => AcceptSessionService.SubmitAsync(sessionId)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => TransactionRouter.ToSucess(acceptanceId)).MustHaveHappenedOnceExactly();
     }
 }

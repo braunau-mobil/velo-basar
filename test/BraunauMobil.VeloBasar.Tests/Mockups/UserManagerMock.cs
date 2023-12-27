@@ -9,15 +9,15 @@ public class UserManagerMock
 {
     public UserManagerMock()
         : base(
-            Mock.Of<IUserStoreMock<IdentityUser>>(),
-            Mock.Of<IOptions<IdentityOptions>>(),
-            Mock.Of<IPasswordHasher<IdentityUser>>(),
+            A.Fake<IUserStoreMock<IdentityUser>>(),
+            A.Fake<IOptions<IdentityOptions>>(),
+            A.Fake<IPasswordHasher<IdentityUser>>(),
             Enumerable.Empty<IUserValidator<IdentityUser>>(),
             Enumerable.Empty<IPasswordValidator<IdentityUser>>(),
-            Mock.Of<ILookupNormalizer>(),
+            A.Fake<ILookupNormalizer>(),
             new IdentityErrorDescriber(),
-            Mock.Of<IServiceProvider>(),
-            Mock.Of<ILogger<UserManager<IdentityUser>>>())
+            A.Fake<IServiceProvider>(),
+            A.Fake<ILogger<UserManager<IdentityUser>>>())
     {
     }
 }

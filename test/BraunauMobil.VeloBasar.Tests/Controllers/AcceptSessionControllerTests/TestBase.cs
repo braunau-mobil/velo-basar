@@ -10,47 +10,32 @@ namespace BraunauMobil.VeloBasar.Tests.Controllers.AcceptSessionControllerTests
     {
         public TestBase()
         {
-            Sut = new AcceptSessionController(AcceptSessionService.Object, Router.Object, Localizer, Cookie.Object);
+            Sut = new AcceptSessionController(AcceptSessionService, Router, Localizer, Cookie);
 
-            Router.Setup(_ => _.AcceptProduct)
-                .Returns(AcceptProductRouter.Object);
-            Router.Setup(_ => _.AcceptSession)
-                .Returns(AcceptSessionRouter.Object);
-            Router.Setup(_ => _.Seller)
-                .Returns(SellerRouter.Object);
-            Router.Setup(_ => _.Transaction)
-                .Returns(TransactionRouter.Object);
+            A.CallTo(() => Router.AcceptProduct).Returns(AcceptProductRouter);
+            A.CallTo(() => Router.AcceptSession).Returns(AcceptSessionRouter);
+            A.CallTo(() => Router.Seller).Returns(SellerRouter);
+            A.CallTo(() => Router.Transaction).Returns(TransactionRouter);
         }
 
-        public void VerifyNoOtherCalls()
-        {
-            AcceptProductRouter.VerifyNoOtherCalls();
-            AcceptSessionService.VerifyNoOtherCalls();
-            AcceptSessionRouter.VerifyNoOtherCalls();
-            Cookie.VerifyNoOtherCalls();
-            Router.VerifyNoOtherCalls();
-            SellerRouter.VerifyNoOtherCalls();
-            TransactionRouter.VerifyNoOtherCalls();
-        }
-
-        protected Mock<IAcceptProductRouter> AcceptProductRouter { get; } = new ();
+        protected IAcceptProductRouter AcceptProductRouter { get; } = X.StrictFake<IAcceptProductRouter>();
         
-        protected Mock<IAcceptSessionRouter> AcceptSessionRouter { get; } = new ();
+        protected IAcceptSessionRouter AcceptSessionRouter { get; } = X.StrictFake<IAcceptSessionRouter> ();
 
-        protected Mock<IAcceptSessionService> AcceptSessionService { get; } = new ();
+        protected IAcceptSessionService AcceptSessionService { get; } = X.StrictFake<IAcceptSessionService> ();
 
-        protected Mock<IActiveAcceptSessionCookie> Cookie { get; } = new ();
+        protected IActiveAcceptSessionCookie Cookie { get; } = X.StrictFake<IActiveAcceptSessionCookie> ();
 
         protected Fixture Fixture { get; } = new ();
 
         protected IStringLocalizer<SharedResources> Localizer { get; } = Helpers.CreateActualLocalizer();
         
-        protected Mock<IVeloRouter> Router { get; } = new ();
+        protected IVeloRouter Router { get; } = X.StrictFake<IVeloRouter> ();
 
-        protected Mock<ISellerRouter> SellerRouter { get; } = new();
+        protected ISellerRouter SellerRouter { get; } = X.StrictFake<ISellerRouter>();
 
         protected AcceptSessionController Sut { get; }
 
-        protected Mock<ITransactionRouter> TransactionRouter { get; } = new ();
+        protected ITransactionRouter TransactionRouter { get; } = X.StrictFake<ITransactionRouter> ();
     }
 }

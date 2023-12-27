@@ -32,8 +32,6 @@ public sealed class GetSaleDistribution
 
         //  Assert
         result.Should().BeEmpty();
-
-        VerifyNoOtherCalls();
     }
 
     [Theory]
@@ -41,8 +39,7 @@ public sealed class GetSaleDistribution
     public void ShouldGroupByHourAndMinuteAndSumValues(Color primaryColor)
     {
         //  Arrange
-        ColorProvider.Setup(_ => _.Primary)
-            .Returns(primaryColor);
+        A.CallTo(() => ColorProvider.Primary).Returns(primaryColor);
         var transactionsAndTotals = new []
         {
             CreateDataPoint(11, 22, 15),
@@ -62,8 +59,7 @@ public sealed class GetSaleDistribution
             new ChartDataPoint(170, "23:44", primaryColor)
         });
 
-        ColorProvider.Verify(_ => _.Primary, Times.Exactly(2));
-        VerifyNoOtherCalls();
+        A.CallTo(() => ColorProvider.Primary).MustHaveHappenedTwiceExactly();
     }
 
     private Tuple<TimeOnly, decimal> CreateDataPoint(int hour, int minute, decimal amount)

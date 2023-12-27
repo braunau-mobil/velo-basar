@@ -16,7 +16,5 @@ public class GetBasarNameAsync
 
         //  Assert
         result.Should().Be(basar.Name);
-
-        VerifyNoOtherCalls();
     }
 }

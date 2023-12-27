@@ -22,7 +22,5 @@ public class GetSoldProductTimestampsAndPricesAsync_SampleDb
             result[45].Should().BeEquivalentTo((new TimeOnly(07, 28, 00), 90.03M));
             result[71].Should().BeEquivalentTo((new TimeOnly(08, 57, 00), 101.78M));
         }
-
-        VerifyNoOtherCalls();
     }
 }

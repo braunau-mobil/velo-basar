@@ -11,9 +11,9 @@ public class Delete
     public void CallsRemoveAndReturnsRedirectToIndex(int productId)
     {
         //  Arrange
-        Mock<IList<int>> cartMock = new ();
-        Cookie.Setup(_ => _.GetCart())
-            .Returns(cartMock.Object);
+        List<int> cart = new();
+        A.CallTo(() => Cookie.GetCart()).Returns(cart);
+        A.CallTo(() => Cookie.SetCart(cart)).DoesNothing();
 
         //  Act
         IActionResult result = Sut.Delete(productId);
@@ -23,9 +23,8 @@ public class Delete
         redirectToAction.ActionName.Should().Be(nameof(CartController.Index));
         redirectToAction.ControllerName.Should().BeNull();
 
-        Cookie.Verify(_ => _.GetCart(), Times.Once());
-        Cookie.Verify(_ => _.SetCart(cartMock.Object), Times.Once());
-        cartMock.Verify(_ => _.Remove(productId), Times.Once());
-        VerifyNoOtherCalls();
+        A.CallTo(() => Cookie.GetCart()).MustHaveHappenedOnceExactly();
+        A.CallTo(() => Cookie.SetCart(cart)).MustHaveHappenedOnceExactly();
+        cart.Should().BeEmpty();
     }
 }

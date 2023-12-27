@@ -14,7 +14,5 @@ public class GetSoldProductTimestampsAndPricesAsync
 
         //  Assert
         result.Should().BeEmpty();
-
-        VerifyNoOtherCalls();
     }
 }

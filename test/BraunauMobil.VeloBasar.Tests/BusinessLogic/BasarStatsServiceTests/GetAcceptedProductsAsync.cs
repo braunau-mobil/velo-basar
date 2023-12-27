@@ -17,8 +17,6 @@ public class GetAcceptedProductsAsync
 
         //  Assert
         products.Should().BeEmpty();
-
-        VerifyNoOtherCalls();
     }
 
     [Theory]
@@ -59,7 +57,5 @@ public class GetAcceptedProductsAsync
             .Create();
 
         Db.Products.Add(product);
-
-        VerifyNoOtherCalls();
     }
 }

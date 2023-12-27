@@ -13,10 +13,9 @@ public class StartForSeller
         //  Arrange
         AcceptSessionEntity entity = Fixture.Create<AcceptSessionEntity>();
         entity.Id = sessionId;
-        AcceptProductRouter.Setup(_ => _.ToCreate(sessionId))
-            .Returns(url);
-        AcceptSessionService.Setup(_ => _.CreateAsync(activeBasarId, sellerId))
-            .ReturnsAsync(entity);
+        A.CallTo(() => AcceptProductRouter.ToCreate(sessionId)).Returns(url);
+        A.CallTo(() => AcceptSessionService.CreateAsync(activeBasarId, sellerId)).Returns(entity);
+        A.CallTo(() => Cookie.SetActiveAcceptSession(entity)).DoesNothing();
 
         //  Act
         IActionResult result = await Sut.StartForSeller(sellerId, activeBasarId);
@@ -25,10 +24,9 @@ public class StartForSeller
         RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
         redirect.Url.Should().Be(url);
         
-        Cookie.Verify(_ => _.SetActiveAcceptSession(entity), Times.Once());
-        AcceptProductRouter.Verify(_ => _.ToCreate(sessionId), Times.Once());
-        AcceptSessionService.Verify(_ => _.CreateAsync(activeBasarId, sellerId), Times.Once());
-        VerifyNoOtherCalls();
+        A.CallTo(() => Cookie.SetActiveAcceptSession(entity)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => AcceptProductRouter.ToCreate(sessionId)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => AcceptSessionService.CreateAsync(activeBasarId, sellerId)).MustHaveHappenedOnceExactly();
     }
 
     [Theory]
@@ -37,10 +35,8 @@ public class StartForSeller
     {
         //  Arrange
         Sut.ViewData.SetActiveSessionId(activeSessionId);
-        AcceptProductRouter.Setup(_ => _.ToCreate(activeSessionId))
-            .Returns(url);
-        AcceptSessionService.Setup(_ => _.IsSessionRunning(activeSessionId))
-            .ReturnsAsync(true);
+        A.CallTo(() => AcceptProductRouter.ToCreate(activeSessionId)).Returns(url);
+        A.CallTo(() => AcceptSessionService.IsSessionRunning(activeSessionId)).Returns(true);
 
         //  Act
         IActionResult result = await Sut.StartForSeller(sellerId, activeBasarId);
@@ -49,7 +45,6 @@ public class StartForSeller
         RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
         redirect.Url.Should().Be(url);
 
-        AcceptProductRouter.Verify(_ => _.ToCreate(activeSessionId), Times.Once());
-        VerifyNoOtherCalls();
+        A.CallTo(() => AcceptProductRouter.ToCreate(activeSessionId)).MustHaveHappenedOnceExactly();
     }
 }

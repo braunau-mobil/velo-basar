@@ -10,8 +10,7 @@ public class CreateSampleSettlementDocument
     {
         //  Arrange
         FileDataEntity fileData = Fixture.BuildFileDataEntity().Create();
-        AdminService.Setup(_ => _.CreateSampleSettlementDocumentAsync())
-            .ReturnsAsync(fileData);
+        A.CallTo(() => AdminService.CreateSampleSettlementDocumentAsync()).Returns(fileData);
 
         //  Act
         IActionResult result = await Sut.CreateSampleSettlementDocument();
@@ -22,7 +21,6 @@ public class CreateSampleSettlementDocument
         fileContent.FileContents.Should().BeEquivalentTo(fileData.Data);
         fileContent.FileDownloadName.Should().BeEquivalentTo(fileData.FileName);
 
-        AdminService.Verify(_ => _.CreateSampleSettlementDocumentAsync(), Times.Once);
-        VerifyNoOtherCalls();
+        A.CallTo(() => AdminService.CreateSampleSettlementDocumentAsync()).MustHaveHappenedOnceExactly();
     }
 }

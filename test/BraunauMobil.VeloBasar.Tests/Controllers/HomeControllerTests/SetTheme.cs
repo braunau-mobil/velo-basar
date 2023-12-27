@@ -17,6 +17,7 @@ public class SetTheme
             HttpContext = new DefaultHttpContext()
         };
         Sut.HttpContext.Request.Headers.Referer = url;
+        A.CallTo(() => CurrentThemeCookie.SetCurrentTheme(theme)).DoesNothing();
 
         //  Act
         IActionResult result = Sut.SetTheme(theme);
@@ -25,7 +26,6 @@ public class SetTheme
         RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
         redirect.Url.Should().Be(url);
 
-        CurrentThemeCookie.Verify(_ => _.SetCurrentTheme(theme), Times.Once());
-        VerifyNoOtherCalls();
+        A.CallTo(() => CurrentThemeCookie.SetCurrentTheme(theme)).MustHaveHappenedOnceExactly();
     }
 }

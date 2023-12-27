@@ -5,17 +5,18 @@ public class UnlockAsync
 {
     [Theory]
     [AutoData]
-    public async Task TransactionServiceUnlockAsyncIsCalled(ProductEntity product, string notes)
+    public async Task TransactionServiceUnlockAsyncIsCalled(ProductEntity product, string notes, int id)
     {
         //  Arrange
         Db.Products.Add(product);
         await Db.SaveChangesAsync();
 
+        A.CallTo(() => TransactionService.UnlockAsync(product.Session.BasarId, notes, product.Id)).Returns(id);
+
         //  Act
         await Sut.UnlockAsync(product.Id, notes);
 
         //  Assert
-        TransactionService.Verify(_ => _.UnlockAsync(product.Session.BasarId, notes, product.Id));
-        VerifyNoOtherCalls();
+        A.CallTo(() => TransactionService.UnlockAsync(product.Session.BasarId, notes, product.Id)).MustHaveHappenedOnceExactly();
     }
 }

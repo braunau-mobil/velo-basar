@@ -12,40 +12,23 @@ public sealed class GetDetailsAsync
         await Db.SaveChangesAsync();
         int basarId = details.Entity.Id;
         
-        StatsService.Setup(_ => _.GetAcceptanceCountAsync(basarId))
-            .ReturnsAsync(details.AcceptanceCount);
-        StatsService.Setup(_ => _.GetSaleCountAsync(basarId))
-            .ReturnsAsync(details.SaleCount);
-        StatsService.Setup(_ => _.GetSettlementStatusAsync(basarId))
-            .ReturnsAsync(details.SettlementStatus);
-        StatsService.Setup(_ => _.GetAcceptedProductsAsync(basarId))
-            .ReturnsAsync(acceptedProducts);
-        StatsService.Setup(_ => _.GetSoldProductTimestampsAndPricesAsync(basarId))
-            .ReturnsAsync(transactionsAndTotals);
-        StatsService.Setup(_ => _.GetAcceptedProductsAmount(acceptedProducts))
-            .Returns(details.AcceptedProductsAmount);
-        StatsService.Setup(_ => _.GetAcceptedProductsCount(acceptedProducts))
-            .Returns(details.AcceptedProductsCount);
-        StatsService.Setup(_ => _.GetAcceptedProductTypesWithAmount(acceptedProducts))
-            .Returns(details.AcceptedProductTypesByAmount);
-        StatsService.Setup(_ => _.GetAcceptedProductTypesWithCount(acceptedProducts))
-            .Returns(details.AcceptedProductTypesByCount);
-        StatsService.Setup(_ => _.GetLostProductsCount(acceptedProducts))
-            .Returns(details.LostProductsCount);
-        StatsService.Setup(_ => _.GetLockedProductsCount(acceptedProducts))
-            .Returns(details.LockedProductsCount);
-        StatsService.Setup(_ => _.GetPriceDistribution(acceptedProducts))
-            .Returns(details.PriceDistribution);
-        StatsService.Setup(_ => _.GetSaleDistribution(transactionsAndTotals))
-            .Returns(details.SaleDistribution);
-        StatsService.Setup(_ => _.GetSoldProductsAmount(acceptedProducts))
-            .Returns(details.SoldProductsAmount);
-        StatsService.Setup(_ => _.GetSoldProductsCount(acceptedProducts))
-            .Returns(details.SoldProductsCount);
-        StatsService.Setup(_ => _.GetSoldProductTypesWithAmount(acceptedProducts))
-            .Returns(details.SoldProductTypesByAmount);
-        StatsService.Setup(_ => _.GetSoldProductTypesWithCount(acceptedProducts))
-            .Returns(details.SoldProductTypesByCount);
+        A.CallTo(() => StatsService.GetAcceptanceCountAsync(basarId)).Returns(details.AcceptanceCount);
+        A.CallTo(() => StatsService.GetSaleCountAsync(basarId)).Returns(details.SaleCount);
+        A.CallTo(() => StatsService.GetSettlementStatusAsync(basarId)).Returns(details.SettlementStatus);
+        A.CallTo(() => StatsService.GetAcceptedProductsAsync(basarId)).Returns(acceptedProducts);
+        A.CallTo(() => StatsService.GetSoldProductTimestampsAndPricesAsync(basarId)).Returns(transactionsAndTotals);
+        A.CallTo(() => StatsService.GetAcceptedProductsAmount(acceptedProducts)).Returns(details.AcceptedProductsAmount);
+        A.CallTo(() => StatsService.GetAcceptedProductsCount(acceptedProducts)).Returns(details.AcceptedProductsCount);
+        A.CallTo(() => StatsService.GetAcceptedProductTypesWithAmount(acceptedProducts)).Returns(details.AcceptedProductTypesByAmount);
+        A.CallTo(() => StatsService.GetAcceptedProductTypesWithCount(acceptedProducts)).Returns(details.AcceptedProductTypesByCount);
+        A.CallTo(() => StatsService.GetLostProductsCount(acceptedProducts)).Returns(details.LostProductsCount);
+        A.CallTo(() => StatsService.GetLockedProductsCount(acceptedProducts)).Returns(details.LockedProductsCount);
+        A.CallTo(() => StatsService.GetPriceDistribution(acceptedProducts)).Returns(details.PriceDistribution);
+        A.CallTo(() => StatsService.GetSaleDistribution(transactionsAndTotals)).Returns(details.SaleDistribution);
+        A.CallTo(() => StatsService.GetSoldProductsAmount(acceptedProducts)).Returns(details.SoldProductsAmount);
+        A.CallTo(() => StatsService.GetSoldProductsCount(acceptedProducts)).Returns(details.SoldProductsCount);
+        A.CallTo(() => StatsService.GetSoldProductTypesWithAmount(acceptedProducts)).Returns(details.SoldProductTypesByAmount);
+        A.CallTo(() => StatsService.GetSoldProductTypesWithCount(acceptedProducts)).Returns(details.SoldProductTypesByCount);
 
         //  Act
         BasarDetailsModel result = await Sut.GetDetailsAsync(basarId);
@@ -55,24 +38,22 @@ public sealed class GetDetailsAsync
 
         // add verifications for all mocks
         result.Entity.Should().BeEquivalentTo(details.Entity);
-        StatsService.Verify(_ => _.GetAcceptanceCountAsync(basarId), Times.Once);
-        StatsService.Verify(_ => _.GetSaleCountAsync(basarId), Times.Once);
-        StatsService.Verify(_ => _.GetSettlementStatusAsync(basarId), Times.Once);
-        StatsService.Verify(_ => _.GetAcceptedProductsAsync(basarId), Times.Once);
-        StatsService.Verify(_ => _.GetSoldProductTimestampsAndPricesAsync(basarId), Times.Once);
-        StatsService.Verify(_ => _.GetAcceptedProductsAmount(acceptedProducts), Times.Once);
-        StatsService.Verify(_ => _.GetAcceptedProductsCount(acceptedProducts), Times.Once);
-        StatsService.Verify(_ => _.GetAcceptedProductTypesWithAmount(acceptedProducts), Times.Once);
-        StatsService.Verify(_ => _.GetAcceptedProductTypesWithCount(acceptedProducts), Times.Once);
-        StatsService.Verify(_ => _.GetLostProductsCount(acceptedProducts), Times.Once);
-        StatsService.Verify(_ => _.GetLockedProductsCount(acceptedProducts), Times.Once);
-        StatsService.Verify(_ => _.GetPriceDistribution(acceptedProducts), Times.Once);
-        StatsService.Verify(_ => _.GetSaleDistribution(transactionsAndTotals), Times.Once);
-        StatsService.Verify(_ => _.GetSoldProductsAmount(acceptedProducts), Times.Once);
-        StatsService.Verify(_ => _.GetSoldProductsCount(acceptedProducts), Times.Once);
-        StatsService.Verify(_ => _.GetSoldProductTypesWithAmount(acceptedProducts), Times.Once);
-        StatsService.Verify(_ => _.GetSoldProductTypesWithCount(acceptedProducts), Times.Once);
-
-        VerifyNoOtherCalls();
+        A.CallTo(() => StatsService.GetAcceptanceCountAsync(basarId)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => StatsService.GetSaleCountAsync(basarId)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => StatsService.GetSettlementStatusAsync(basarId)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => StatsService.GetAcceptedProductsAsync(basarId)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => StatsService.GetSoldProductTimestampsAndPricesAsync(basarId)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => StatsService.GetAcceptedProductsAmount(acceptedProducts)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => StatsService.GetAcceptedProductsCount(acceptedProducts)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => StatsService.GetAcceptedProductTypesWithAmount(acceptedProducts)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => StatsService.GetAcceptedProductTypesWithCount(acceptedProducts)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => StatsService.GetLostProductsCount(acceptedProducts)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => StatsService.GetLockedProductsCount(acceptedProducts)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => StatsService.GetPriceDistribution(acceptedProducts)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => StatsService.GetSaleDistribution(transactionsAndTotals)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => StatsService.GetSoldProductsAmount(acceptedProducts)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => StatsService.GetSoldProductsCount(acceptedProducts)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => StatsService.GetSoldProductTypesWithAmount(acceptedProducts)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => StatsService.GetSoldProductTypesWithCount(acceptedProducts)).MustHaveHappenedOnceExactly();
     }
 }

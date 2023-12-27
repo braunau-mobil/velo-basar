@@ -7,14 +7,10 @@ public class TestBase
 {
     public TestBase()
     {
-        Sut = new BasarService(Db, StatsService.Object, Helpers.CreateActualLocalizer(), Clock);
+        Sut = new BasarService(Db, StatsService, Helpers.CreateActualLocalizer(), Clock);
     }
 
-    public void VerifyNoOtherCalls()
-    {
-        StatsService.VerifyNoOtherCalls();
-    }
+    public IBasarStatsService StatsService { get; } = X.StrictFake<IBasarStatsService>();
 
-    public Mock<IBasarStatsService> StatsService { get; } = new();
     public BasarService Sut { get; set; }
 }

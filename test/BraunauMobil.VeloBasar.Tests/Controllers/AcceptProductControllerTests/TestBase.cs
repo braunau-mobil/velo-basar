@@ -10,28 +10,20 @@ public class TestBase
     public TestBase()
     {
         Validator = new (Localizer);
-        Sut = new AcceptProductController(AcceptProductService.Object, Router.Object, Validator);
+        A.CallTo(() => Router.AcceptProduct).Returns(AcceptProductRouter);
 
-        Router.Setup(_ => _.AcceptProduct)
-            .Returns(AcceptProductRouter.Object);
+        Sut = new AcceptProductController(AcceptProductService, Router, Validator);
     }
 
-    public void VerifyNoOtherCalls()
-    {
-        AcceptProductService.VerifyNoOtherCalls();
-        AcceptProductRouter.VerifyNoOtherCalls();
-        Router.VerifyNoOtherCalls();
-    }
+    protected IAcceptProductRouter AcceptProductRouter { get; } = X.StrictFake<IAcceptProductRouter>();
 
-    protected Mock<IAcceptProductRouter> AcceptProductRouter { get; } = new ();
-
-    protected Mock<IAcceptProductService> AcceptProductService { get; } = new ();
+    protected IAcceptProductService AcceptProductService { get; } = X.StrictFake<IAcceptProductService>();
 
     protected Fixture Fixture { get; } = new ();
 
     protected IStringLocalizer<SharedResources> Localizer { get; } = Helpers.CreateActualLocalizer();
     
-    protected Mock<IVeloRouter> Router { get; } = new ();
+    protected IVeloRouter Router { get; } = X.StrictFake<IVeloRouter>();
     
     protected AcceptProductController Sut { get; }
 

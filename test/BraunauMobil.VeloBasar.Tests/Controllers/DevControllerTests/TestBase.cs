@@ -9,23 +9,16 @@ public class TestBase
 {
     public TestBase()
     {
-        Sut = new DevController(AppContext.Object, DataGeneratorService.Object, new UserManagerMock(), Router.Object);
+        Sut = new DevController(AppContext, DataGeneratorService, new UserManagerMock(), Router);
     }
 
-    public void VerifyNoOtherCalls()
-    {
-        AppContext.VerifyNoOtherCalls();
-        DataGeneratorService.VerifyNoOtherCalls();
-        Router.VerifyNoOtherCalls();
-    }
+    protected IAppContext AppContext { get; } = X.StrictFake<IAppContext>();
 
-    protected Mock<IAppContext> AppContext { get; } = new();
-
-    protected Mock<IDataGeneratorService> DataGeneratorService { get; } = new();
+    protected IDataGeneratorService DataGeneratorService { get; } = X.StrictFake<IDataGeneratorService>();
 
     protected Fixture Fixture { get; } = new ();
 
-    protected Mock<IVeloRouter> Router { get; } = new();
+    protected IVeloRouter Router { get; } = X.StrictFake<IVeloRouter>();
 
     protected DevController Sut { get; }
 

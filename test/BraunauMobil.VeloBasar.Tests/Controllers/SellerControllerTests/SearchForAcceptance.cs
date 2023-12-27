@@ -26,8 +26,6 @@ public class SearchForAcceptance
         model.Seller.Should().NotBeNull();
         model.Seller.FirstName.Should().Be(searchModel.FirstName);
         model.Seller.LastName.Should().Be(searchModel.LastName);
-
-        VerifyNoOtherCalls();
     }
 
     [Theory]
@@ -35,8 +33,7 @@ public class SearchForAcceptance
     public async Task ValidModel_CallsGetManyAsyncAndReturnsView(SellerSearchModel searchModel, IReadOnlyList<SellerEntity> sellers)
     {
         //  Arrange
-        SellerService.Setup(_ => _.GetManyAsync(searchModel.FirstName, searchModel.LastName))
-            .ReturnsAsync(sellers);
+        A.CallTo(() => SellerService.GetManyAsync(searchModel.FirstName, searchModel.LastName)).Returns(sellers);
 
         //  Act
         IActionResult result = await Sut.SearchForAcceptance(searchModel);
@@ -53,7 +50,6 @@ public class SearchForAcceptance
         model.Seller.FirstName.Should().Be(searchModel.FirstName);
         model.Seller.LastName.Should().Be(searchModel.LastName);
 
-        SellerService.Verify(_ => _.GetManyAsync(searchModel.FirstName, searchModel.LastName), Times.Once);
-        VerifyNoOtherCalls();
+        A.CallTo(() => SellerService.GetManyAsync(searchModel.FirstName, searchModel.LastName)).MustHaveHappenedOnceExactly();
     }
 }

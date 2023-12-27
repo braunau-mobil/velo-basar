@@ -11,10 +11,8 @@ public class Index
     public async Task CreatesNewCartModelAndReturnsView(IList<int> cart, IReadOnlyList<ProductEntity> products)
     {
         //  Arrange
-        Cookie.Setup(_ => _.GetCart())
-            .Returns(cart);
-        ProductService.Setup(_ => _.GetManyAsync(cart))
-            .ReturnsAsync(products);
+        A.CallTo(() => Cookie.GetCart()).Returns(cart);
+        A.CallTo(() => ProductService.GetManyAsync(cart)).Returns(products);
 
         //  Act
         IActionResult result = await Sut.Index();
@@ -27,8 +25,7 @@ public class Index
         model.ActiveBasarId.Should().Be(0);
         model.ProductId.Should().Be(0);
 
-        Cookie.Verify(_ => _.GetCart(), Times.Once());
-        ProductService.Verify(_ => _.GetManyAsync(cart), Times.Once());
-        VerifyNoOtherCalls();
+        A.CallTo(() => Cookie.GetCart()).MustHaveHappenedOnceExactly();
+        A.CallTo(() => ProductService.GetManyAsync(cart)).MustHaveHappenedOnceExactly();
     }
 }

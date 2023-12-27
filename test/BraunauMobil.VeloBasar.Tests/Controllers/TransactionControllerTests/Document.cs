@@ -11,8 +11,7 @@ public class Document
     {
         //  Arrange
         FileDataEntity fileData = Fixture.BuildFileDataEntity().Create();
-        TransactionService.Setup(_ => _.GetDocumentAsync(id))
-            .ReturnsAsync(fileData);
+        A.CallTo(() => TransactionService.GetDocumentAsync(id)).Returns(fileData);
 
         //  Act
         IActionResult result = await Sut.Document(id);
@@ -23,7 +22,6 @@ public class Document
         fileContent.FileContents.Should().BeSameAs(fileData.Data);
         fileContent.FileDownloadName.Should().Be(fileData.FileName);
 
-        TransactionService.Verify(_ => _.GetDocumentAsync(id), Times.Once());
-        VerifyNoOtherCalls();
+        A.CallTo(() => TransactionService.GetDocumentAsync(id)).MustHaveHappenedOnceExactly();
     }
 }

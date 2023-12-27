@@ -10,26 +10,18 @@ public class TestBase<TDbFixture>
 {
     public TestBase()
     {
-        Sut = new TransactionService(NumberService.Object, TransactionDocumentService.Object, StatusPushService.Object, Db, ProductLabelService.Object, Clock, Helpers.CreateActualLocalizer());
-    }
-
-    public void VerifyNoOtherCalls()
-    {
-        NumberService.VerifyNoOtherCalls();
-        ProductLabelService.VerifyNoOtherCalls();
-        StatusPushService.VerifyNoOtherCalls();
-        TransactionDocumentService.VerifyNoOtherCalls();
+        Sut = new TransactionService(NumberService, TransactionDocumentService, StatusPushService, Db, ProductLabelService, Clock, Helpers.CreateActualLocalizer());
     }
     
     public Fixture Fixture { get; } = new();
 
-    public Mock<INumberService> NumberService { get; } = new();
+    public INumberService NumberService { get; } = X.StrictFake<INumberService>();
     
     public TransactionService Sut { get; }
 
-    public Mock<IProductLabelService> ProductLabelService { get; } = new();
+    public IProductLabelService ProductLabelService { get; } = X.StrictFake<IProductLabelService>();
 
-    public Mock<IStatusPushService> StatusPushService { get; } = new();
+    public IStatusPushService StatusPushService { get; } = X.StrictFake<IStatusPushService>();
 
-    public Mock<ITransactionDocumentService> TransactionDocumentService { get; } = new();
+    public ITransactionDocumentService TransactionDocumentService { get; } = X.StrictFake<ITransactionDocumentService>();
 }

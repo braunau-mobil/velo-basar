@@ -9,22 +9,16 @@ public class TestBase
 {
     public TestBase()
     {
-        Sut = new (SetupService.Object, Router.Object, new InitializationConfigurationValidator(Localizer));
-    }
-
-    public void VerifyNoOtherCalls()
-    {
-        SetupService.VerifyNoOtherCalls();
-        Router.VerifyNoOtherCalls();
+        Sut = new (SetupService, Router, new InitializationConfigurationValidator(Localizer));
     }
 
     protected Fixture Fixture { get; } = new ();
 
     protected IStringLocalizer<SharedResources> Localizer { get; } = Helpers.CreateActualLocalizer();
 
-    protected Mock<IVeloRouter> Router { get; } = new();
+    protected IVeloRouter Router { get; } = X.StrictFake<IVeloRouter>();
 
     protected SetupController Sut { get; }
 
-    protected Mock<ISetupService> SetupService { get; } = new();
+    protected ISetupService SetupService { get; } = X.StrictFake<ISetupService>();
 }

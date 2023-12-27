@@ -6,21 +6,14 @@ namespace BraunauMobil.VeloBasar.Tests.Models;
 
 public class CartModelValidatorTests
 {
-    private readonly Mock<IProductService> _productService = new();
-    private readonly Mock<ITransactionService> _transactionService = new();
-    private readonly Mock<IVeloRouter> _router = new();
+    private readonly IProductService _productService = X.StrictFake<IProductService>();
+    private readonly ITransactionService _transactionService = X.StrictFake<ITransactionService>();
+    private readonly IVeloRouter _router = X.StrictFake<IVeloRouter>();
     private readonly CartModelValidator _sut;
 
     public CartModelValidatorTests()
     {
-        _sut = new CartModelValidator(_productService.Object, _transactionService.Object, _router.Object, Helpers.CreateActualLocalizer());
-    }
-
-    private void VerifyNoOtherCalls()
-    {
-        _productService.VerifyNoOtherCalls();
-        _transactionService.VerifyNoOtherCalls();
-        _router.VerifyNoOtherCalls();
+        _sut = new CartModelValidator(_productService, _transactionService, _router, Helpers.CreateActualLocalizer());
     }
 
     [Theory]
@@ -33,8 +26,7 @@ public class CartModelValidatorTests
         product.StorageState = StorageState.Available;
         product.ValueState = ValueState.NotSettled;
 
-        _productService.Setup(s => s.FindAsync(product.Id))
-            .ReturnsAsync(product);
+        A.CallTo(() => _productService.FindAsync(product.Id)).Returns(product);
 
         //  Act
         ValidationResult result = await _sut.ValidateAsync(cart);
@@ -42,9 +34,7 @@ public class CartModelValidatorTests
         //  Assert
         result.IsValid.Should().BeTrue();
         result.Errors.Should().BeEmpty();
-        _productService.Verify(s => s.FindAsync(product.Id), Times.Once());
-
-        VerifyNoOtherCalls();
+        A.CallTo(() => _productService.FindAsync(product.Id)).MustHaveHappenedOnceExactly();
     }
 
     [Theory]
@@ -57,15 +47,15 @@ public class CartModelValidatorTests
         product.StorageState = StorageState.Available;
         product.ValueState = ValueState.NotSettled;
 
+        A.CallTo(() => _productService.FindAsync(product.Id)).Returns((ProductEntity?)null);
+
         //  Act
         ValidationResult result = await _sut.ValidateAsync(cart);
 
         //  Assert
         result.IsValid.Should().BeFalse();
         result.Errors.Should().HaveCount(1);
-        _productService.Verify(s => s.FindAsync(product.Id), Times.Once());
-
-        VerifyNoOtherCalls();
+        A.CallTo(() => _productService.FindAsync(product.Id)).MustHaveHappenedOnceExactly();
     }
 
     [Theory]
@@ -77,8 +67,7 @@ public class CartModelValidatorTests
 
         product.StorageState = StorageState.NotAccepted;
         product.ValueState = ValueState.Settled;
-        _productService.Setup(s => s.FindAsync(product.Id))
-            .ReturnsAsync(product);
+        A.CallTo(() => _productService.FindAsync(product.Id)).Returns(product);
 
         //  Act
         ValidationResult result = await _sut.ValidateAsync(cart);
@@ -86,9 +75,7 @@ public class CartModelValidatorTests
         //  Assert
         result.IsValid.Should().BeFalse();
         result.Errors.Should().HaveCount(1);
-        _productService.Verify(s => s.FindAsync(product.Id), Times.Once());
-
-        VerifyNoOtherCalls();
+        A.CallTo(() => _productService.FindAsync(product.Id)).MustHaveHappenedOnceExactly();
     }
 
     [Theory]
@@ -100,13 +87,11 @@ public class CartModelValidatorTests
 
         product.StorageState = StorageState.Lost;
         product.ValueState = ValueState.NotSettled;
-        _productService.Setup(s => s.FindAsync(product.Id))
-            .ReturnsAsync(product);
+        A.CallTo(() => _productService.FindAsync(product.Id)).Returns(product);
 
         Fixture fixture = new();
         TransactionEntity transaction = fixture.BuildTransaction().Create();
-        _transactionService.Setup(_ => _.GetLatestAsync(cart.ActiveBasarId, product.Id))
-            .ReturnsAsync(transaction);
+        A.CallTo(() => _transactionService.GetLatestAsync(cart.ActiveBasarId, product.Id)).Returns(transaction);
 
         //  Act
         ValidationResult result = await _sut.ValidateAsync(cart);
@@ -114,10 +99,8 @@ public class CartModelValidatorTests
         //  Assert
         result.IsValid.Should().BeFalse();
         result.Errors.Should().HaveCount(1);
-        _productService.Verify(s => s.FindAsync(product.Id), Times.Once());
-        _transactionService.Verify(s => s.GetLatestAsync(cart.ActiveBasarId, product.Id), Times.Once());
-
-        VerifyNoOtherCalls();
+        A.CallTo(() => _productService.FindAsync(product.Id)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => _transactionService.GetLatestAsync(cart.ActiveBasarId, product.Id)).MustHaveHappenedOnceExactly();
     }
 
     [Theory]
@@ -129,13 +112,11 @@ public class CartModelValidatorTests
 
         product.StorageState = StorageState.Locked;
         product.ValueState = ValueState.NotSettled;
-        _productService.Setup(s => s.FindAsync(product.Id))
-            .ReturnsAsync(product);
+        A.CallTo(() => _productService.FindAsync(product.Id)).Returns(product);
 
         Fixture fixture = new();
         TransactionEntity transaction = fixture.BuildTransaction().Create();
-        _transactionService.Setup(_ => _.GetLatestAsync(cart.ActiveBasarId, product.Id))
-            .ReturnsAsync(transaction);
+        A.CallTo(() => _transactionService.GetLatestAsync(cart.ActiveBasarId, product.Id)).Returns(transaction);
 
         //  Act
         ValidationResult result = await _sut.ValidateAsync(cart);
@@ -143,10 +124,8 @@ public class CartModelValidatorTests
         //  Assert
         result.IsValid.Should().BeFalse();
         result.Errors.Should().HaveCount(1);
-        _productService.Verify(s => s.FindAsync(product.Id), Times.Once());
-        _transactionService.Verify(s => s.GetLatestAsync(cart.ActiveBasarId, product.Id), Times.Once());
-
-        VerifyNoOtherCalls();
+        A.CallTo(() => _productService.FindAsync(product.Id)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => _transactionService.GetLatestAsync(cart.ActiveBasarId, product.Id)).MustHaveHappenedOnceExactly();
     }
 
     [Theory]
@@ -158,16 +137,15 @@ public class CartModelValidatorTests
 
         product.StorageState = StorageState.Sold;
         product.ValueState = ValueState.NotSettled;
-        _productService.Setup(s => s.FindAsync(product.Id))
-            .ReturnsAsync(product);
+        A.CallTo(() => _productService.FindAsync(product.Id)).Returns(product);
 
         Fixture fixture = new();
         TransactionEntity transaction = fixture.BuildTransaction().Create();
-        _transactionService.Setup(_ => _.GetLatestAsync(cart.ActiveBasarId, product.Id))
-            .ReturnsAsync(transaction);
+        A.CallTo(() => _transactionService.GetLatestAsync(cart.ActiveBasarId, product.Id)).Returns(transaction);
 
-        _router.Setup(r => r.Transaction.ToDetails(transaction.Id))
-            .Returns(url);
+        ITransactionRouter transactionRouter = X.StrictFake<ITransactionRouter>();
+        A.CallTo(() => _router.Transaction).Returns(transactionRouter);
+        A.CallTo(() => transactionRouter.ToDetails(transaction.Id)).Returns(url);
 
         //  Act
         ValidationResult result = await _sut.ValidateAsync(cart);
@@ -175,11 +153,10 @@ public class CartModelValidatorTests
         //  Assert
         result.IsValid.Should().BeFalse();
         result.Errors.Should().HaveCount(1);
-        _productService.Verify(s => s.FindAsync(product.Id), Times.Once());
-        _transactionService.Verify(s => s.GetLatestAsync(cart.ActiveBasarId, product.Id), Times.Once());
-        _router.Verify(r => r.Transaction.ToDetails(transaction.Id), Times.Once());
-
-        VerifyNoOtherCalls();
+        A.CallTo(() => _productService.FindAsync(product.Id)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => _transactionService.GetLatestAsync(cart.ActiveBasarId, product.Id)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => _router.Transaction).MustHaveHappenedOnceExactly();
+        A.CallTo(() => _router.Transaction.ToDetails(transaction.Id)).MustHaveHappenedOnceExactly();
     }
 
     [Theory]
@@ -191,8 +168,7 @@ public class CartModelValidatorTests
 
         product.StorageState = StorageState.NotAccepted;
         product.ValueState = ValueState.NotSettled;
-        _productService.Setup(s => s.FindAsync(product.Id))
-            .ReturnsAsync(product);
+        A.CallTo(() => _productService.FindAsync(product.Id)).Returns(product);
 
         //  Act
         ValidationResult result = await _sut.ValidateAsync(cart);
@@ -200,8 +176,6 @@ public class CartModelValidatorTests
         //  Assert
         result.IsValid.Should().BeFalse();
         result.Errors.Should().HaveCount(1);
-        _productService.Verify(s => s.FindAsync(product.Id), Times.Once());
-
-        VerifyNoOtherCalls();
+        A.CallTo(() => _productService.FindAsync(product.Id)).MustHaveHappenedOnceExactly();
     }
 }

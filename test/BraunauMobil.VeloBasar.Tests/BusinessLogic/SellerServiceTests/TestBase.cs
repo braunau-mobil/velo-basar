@@ -9,24 +9,16 @@ public class TestBase<TDbFixture>
 {
     public TestBase()
     {
-        Sut = new SellerService(TransactionService.Object, ProductLabelService.Object, StatusPushService.Object, TokenProvider.Object, Clock, Db);
-    }
-
-    public void VerifyNoOtherCalls()
-    {
-        ProductLabelService.VerifyNoOtherCalls();
-        TokenProvider.VerifyNoOtherCalls();
-        TransactionService.VerifyNoOtherCalls();
-        StatusPushService.VerifyNoOtherCalls();
+        Sut = new SellerService(TransactionService, ProductLabelService, StatusPushService, TokenProvider, Clock, Db);
     }
     
     public SellerService Sut { get; }
 
-    public Mock<IProductLabelService> ProductLabelService { get; } = new();
+    public IProductLabelService ProductLabelService { get; } = X.StrictFake<IProductLabelService>();
 
-    public Mock<IStatusPushService> StatusPushService { get; } = new();
+    public IStatusPushService StatusPushService { get; } = X.StrictFake<IStatusPushService>();
 
-    public Mock<ITokenProvider> TokenProvider { get; } = new ();
+    public ITokenProvider TokenProvider { get; } = X.StrictFake<ITokenProvider>();
 
-    public Mock<ITransactionService> TransactionService { get; } = new();
+    public ITransactionService TransactionService { get; } = X.StrictFake<ITransactionService>();
 }

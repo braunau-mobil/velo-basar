@@ -11,31 +11,22 @@ public class TestBase
 {
     public TestBase()
     {
-        Sut = new BasarController(BasarService.Object, BasarRouter.Object, ModelFactory.Object, Validator.Object);
-
-        Router.Setup(_ => _.Basar)
-            .Returns(BasarRouter.Object);
+        A.CallTo(() => Router.Basar).Returns(BasarRouter);
+        
+        Sut = new BasarController(BasarService, BasarRouter, ModelFactory, Validator);
     }
 
-    public void VerifyNoOtherCalls()
-    {
-        BasarService.VerifyNoOtherCalls();
-        BasarRouter.VerifyNoOtherCalls();
-        ModelFactory.VerifyNoOtherCalls();
-        Validator.VerifyNoOtherCalls();
-    }
+    protected IBasarRouter BasarRouter { get; } = X.StrictFake<IBasarRouter>();
 
-    protected Mock<IBasarRouter> BasarRouter { get; } = new();
-
-    protected Mock<IBasarService> BasarService { get; } = new ();
+    protected IBasarService BasarService { get; } = X.StrictFake<IBasarService> ();
 
     protected Fixture Fixture { get; } = new ();
 
-    protected Mock<ICrudModelFactory<BasarEntity, ListParameter>> ModelFactory { get; } = new();
+    protected ICrudModelFactory<BasarEntity, ListParameter> ModelFactory { get; } = X.StrictFake<ICrudModelFactory<BasarEntity, ListParameter>>();
 
-    protected Mock<IVeloRouter> Router { get; } = new();
+    protected IVeloRouter Router { get; } = X.StrictFake<IVeloRouter>();
 
     protected BasarController Sut { get; }
 
-    protected Mock<IValidator<BasarEntity>> Validator { get; } = new();
+    protected IValidator<BasarEntity> Validator { get; } = X.StrictFake<IValidator<BasarEntity>>();
 }

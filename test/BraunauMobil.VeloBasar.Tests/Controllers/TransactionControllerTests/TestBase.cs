@@ -10,29 +10,22 @@ public class TestBase
 {
     public TestBase()
     {
-        Sut = new (TransactionService.Object, Router.Object, SignInManager, new TransactionSuccessModelValidator(Localizer));
+        A.CallTo(() => Router.Cancel).Returns(CancelRouter);
 
-        Router.Setup(_ => _.Cancel)
-            .Returns(CancelRouter.Object);
+        Sut = new (TransactionService, Router, SignInManager, new TransactionSuccessModelValidator(Localizer));        
     }
 
-    public void VerifyNoOtherCalls()
-    {
-        CancelRouter.VerifyNoOtherCalls();
-        TransactionService.VerifyNoOtherCalls();
-    }
-
-    protected Mock<ICancelRouter> CancelRouter { get; } = new ();
+    protected ICancelRouter CancelRouter { get; } = X.StrictFake<ICancelRouter>();
 
     protected Fixture Fixture { get; } = new ();
 
     protected IStringLocalizer<SharedResources> Localizer { get; } = Helpers.CreateActualLocalizer();
 
-    protected Mock<IVeloRouter> Router { get; } = new();
+    protected IVeloRouter Router { get; } = X.StrictFake<IVeloRouter>();
 
     protected SignInManagerMock SignInManager { get; } = new ();
 
     protected TransactionController Sut { get; }
 
-    protected Mock<ITransactionService> TransactionService { get; } = new();
+    protected ITransactionService TransactionService { get; } = X.StrictFake<ITransactionService>();
 }

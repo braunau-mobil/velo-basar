@@ -9,34 +9,25 @@ public class TestBase
 	{
 		FeatureCollection features = new();
 
-		Mock<IResponseCookiesFeature> responseCookiesFeature = new();
-        responseCookiesFeature.Setup(_ => _.Cookies)
-            .Returns(ResponseCookies.Object);
-        features[typeof(IResponseCookiesFeature)] = responseCookiesFeature.Object;
+		IResponseCookiesFeature responseCookiesFeature = X.StrictFake<IResponseCookiesFeature>();
+        A.CallTo(() => responseCookiesFeature.Cookies).Returns(ResponseCookies);
+        features[typeof(IResponseCookiesFeature)] = responseCookiesFeature;
 
-		Mock<IRequestCookiesFeature> requestCookiesFeature = new();
-		requestCookiesFeature.Setup(_ => _.Cookies)
-			.Returns(RequestCookies.Object);
-		features[typeof(IRequestCookiesFeature)] = requestCookiesFeature.Object;
+		IRequestCookiesFeature requestCookiesFeature = X.StrictFake<IRequestCookiesFeature>();
+		A.CallTo(() => requestCookiesFeature.Cookies).Returns(RequestCookies);
+		features[typeof(IRequestCookiesFeature)] = requestCookiesFeature;
 
 		HttpContext = new DefaultHttpContext(features);
 
-		HttpContextAccessor.Setup(_ => _.HttpContext)
-			.Returns(HttpContext);
+		A.CallTo(() => HttpContextAccessor.HttpContext).Returns(HttpContext);
     }
 
-	public void VerifyNoOtherCalls()
-	{
-		RequestCookies.VerifyNoOtherCalls();
-		ResponseCookies.VerifyNoOtherCalls();
-	}
+	public IRequestCookieCollection RequestCookies { get; } = X.StrictFake<IRequestCookieCollection>();
 
-	public Mock<IRequestCookieCollection> RequestCookies { get; } = new();
-
-	public Mock<IResponseCookies> ResponseCookies { get; } = new();
+	public IResponseCookies ResponseCookies { get; } = X.StrictFake<IResponseCookies>();
 
 	public DefaultHttpContext HttpContext { get; }
 
-    public Mock<IHttpContextAccessor> HttpContextAccessor { get; } = new ();
+    public IHttpContextAccessor HttpContextAccessor { get; } = X.StrictFake<IHttpContextAccessor>();
 }
 

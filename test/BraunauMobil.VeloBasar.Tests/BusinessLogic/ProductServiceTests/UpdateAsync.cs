@@ -20,7 +20,5 @@ public class UpdateAsync
         //  Assert
         ProductEntity updatedProduct = await Db.Products.FirstByIdAsync(product.Id);
         updatedProduct.Should().BeEquivalentTo(product);
-
-        VerifyNoOtherCalls();
     }
 }

@@ -13,17 +13,15 @@ public class GetCurrentTheme
     public void ReturnsDefault(string? cookieValue)
     {
         //  Arrange
-        CurrentThemeCookie sut = new (HttpContextAccessor.Object);
-        RequestCookies.SetupGet(_ => _[sut.Key])
-            .Returns(cookieValue);
+        CurrentThemeCookie sut = new (HttpContextAccessor);
+        A.CallTo(() => RequestCookies[sut.Key]).Returns(cookieValue);
 
         //  Act
         Theme theme = sut.GetCurrentTheme();
 
         //  Asert
         theme.Should().Be(Theme.DefaultLight);
-        RequestCookies.Verify(_ => _[sut.Key], Times.Once());
-        VerifyNoOtherCalls();
+        A.CallTo(() => RequestCookies[sut.Key]).MustHaveHappenedOnceExactly();
     }
 
     [Theory]
@@ -31,16 +29,14 @@ public class GetCurrentTheme
     public void ReturnsTheme(string cookieValue)
     {
         //  Arrange
-        CurrentThemeCookie sut = new(HttpContextAccessor.Object);
-        RequestCookies.SetupGet(_ => _[sut.Key])
-            .Returns(cookieValue);
+        CurrentThemeCookie sut = new(HttpContextAccessor);
+        A.CallTo(() => RequestCookies[sut.Key]).Returns(cookieValue);
 
         //  Act
         Theme theme = sut.GetCurrentTheme();
 
         //  Asert
         theme.Should().Be(Theme.Brutal);
-        RequestCookies.Verify(_ => _[sut.Key], Times.Once());
-        VerifyNoOtherCalls();
+        A.CallTo(() => RequestCookies[sut.Key]).MustHaveHappenedOnceExactly();
     }
 }

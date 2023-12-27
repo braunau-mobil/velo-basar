@@ -11,8 +11,7 @@ public class Create
     {
         //  Arrange
         AcceptProductModel model = Fixture.Create<AcceptProductModel>();
-        AcceptProductService.Setup(_ => _.CreateNewAsync(sessionId))
-            .ReturnsAsync(model);
+        A.CallTo(() => AcceptProductService.CreateNewAsync(sessionId)).Returns(model);
 
         //  Act
         IActionResult result = await Sut.Create(sessionId);
@@ -23,8 +22,7 @@ public class Create
         view.ViewName.Should().Be("CreateEdit");
         view.ViewData.ModelState.IsValid.Should().BeTrue();
 
-        AcceptProductService.Verify(_ => _.CreateNewAsync(sessionId));
-        VerifyNoOtherCalls();
+        A.CallTo(() => AcceptProductService.CreateNewAsync(sessionId)).MustHaveHappenedOnceExactly();
     }
 
     [Theory]
@@ -34,8 +32,8 @@ public class Create
         //  Arrange
         ProductEntity entity = Fixture.Create<ProductEntity>();
         entity.SessionId = sessionId;
-        AcceptProductRouter.Setup(_ => _.ToCreate(sessionId))
-            .Returns(url);
+        A.CallTo(() => AcceptProductRouter.ToCreate(sessionId)).Returns(url);
+        A.CallTo(() => AcceptProductService.CreateAsync(entity)).DoesNothing();
 
         //  Act
         IActionResult result = await Sut.Create(entity);
@@ -44,10 +42,9 @@ public class Create
         RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
         redirect.Url.Should().Be(url);
 
-        AcceptProductService.Verify(_ => _.CreateAsync(entity), Times.Once());
-        Router.Verify(_ => _.AcceptProduct, Times.Once());
-        AcceptProductRouter.Verify(_ => _.ToCreate(sessionId));
-        VerifyNoOtherCalls();
+        A.CallTo(() => AcceptProductService.CreateAsync(entity)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => Router.AcceptProduct).MustHaveHappenedOnceExactly();
+        A.CallTo(() => AcceptProductRouter.ToCreate(sessionId));
     }
 
     [Theory]
@@ -59,10 +56,8 @@ public class Create
         entity.Price = 0;
         entity.SessionId = sessionId;
         AcceptProductModel acceptProductModel = Fixture.Create<AcceptProductModel>();
-        AcceptProductService.Setup(_ => _.GetAsync(sessionId, entity))
-            .ReturnsAsync(acceptProductModel);
-        AcceptProductRouter.Setup(_ => _.ToCreate(sessionId))
-            .Returns(url);
+        A.CallTo(() => AcceptProductService.GetAsync(sessionId, entity)).Returns(acceptProductModel);
+        A.CallTo(() => AcceptProductRouter.ToCreate(sessionId)).Returns(url);
 
         //  Act
         IActionResult result = await Sut.Create(entity);
@@ -73,7 +68,6 @@ public class Create
         view.ViewData.ModelState.IsValid.Should().BeFalse();
         view.ViewName.Should().Be("CreateEdit");
 
-        AcceptProductService.Verify(_ => _.GetAsync(sessionId, entity), Times.Once);
-        VerifyNoOtherCalls();
+        A.CallTo(() => AcceptProductService.GetAsync(sessionId, entity)).MustHaveHappenedOnceExactly();
     }
 }

@@ -19,8 +19,6 @@ public class SelectSale
 
         view.Model.Should().NotBeNull();
         view.Model.Should().BeOfType<SelectSaleModel>();
-
-        VerifyNoOtherCalls();
     }
 
     [Theory]
@@ -35,10 +33,8 @@ public class SelectSale
         productToTransaction.Product.StorageState = StorageState.Sold;
         sale.Products.Add(productToTransaction);
 
-        TransactionService.Setup(_ => _.FindAsync(model.ActiveBasarId, TransactionType.Sale, model.SaleNumber))
-            .ReturnsAsync(sale);
-        CancelRouter.Setup(_ => _.ToSelectProducts(sale.Id))
-            .Returns(url);
+        A.CallTo(() => TransactionService.FindAsync(model.ActiveBasarId, TransactionType.Sale, model.SaleNumber)).Returns(sale);
+        A.CallTo(() => CancelRouter.ToSelectProducts(sale.Id)).Returns(url);
 
         //  Act
         IActionResult result = await Sut.SelectSale(model);
@@ -47,9 +43,8 @@ public class SelectSale
         RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
         redirect.Url.Should().Be(url);
 
-        TransactionService.Verify(_ => _.FindAsync(model.ActiveBasarId, TransactionType.Sale, model.SaleNumber), Times.Once());
-        CancelRouter.Verify(_ => _.ToSelectProducts(sale.Id), Times.Once());
-        VerifyNoOtherCalls();
+        A.CallTo(() => TransactionService.FindAsync(model.ActiveBasarId, TransactionType.Sale, model.SaleNumber)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => CancelRouter.ToSelectProducts(sale.Id)).MustHaveHappenedOnceExactly();
     }
 
     [Fact]
@@ -64,8 +59,7 @@ public class SelectSale
         productToTransaction.Product.StorageState = StorageState.Available;
         sale.Products.Add(productToTransaction);
 
-        TransactionService.Setup(_ => _.FindAsync(model.ActiveBasarId, TransactionType.Sale, model.SaleNumber))
-            .ReturnsAsync(sale);
+        A.CallTo(() => TransactionService.FindAsync(model.ActiveBasarId, TransactionType.Sale, model.SaleNumber)).Returns(sale);
 
         //  Act
         IActionResult result = await Sut.SelectSale(model);
@@ -77,7 +71,6 @@ public class SelectSale
         view.Model.Should().NotBeNull();
         view.Model.Should().Be(model);
 
-        TransactionService.Verify(_ => _.FindAsync(model.ActiveBasarId, TransactionType.Sale, model.SaleNumber), Times.Once());
-        VerifyNoOtherCalls();
+        A.CallTo(() => TransactionService.FindAsync(model.ActiveBasarId, TransactionType.Sale, model.SaleNumber)).MustHaveHappenedOnceExactly();
     }
 }

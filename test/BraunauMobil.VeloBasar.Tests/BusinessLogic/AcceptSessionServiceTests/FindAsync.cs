@@ -14,8 +14,6 @@ public class FindAsync
 
         //  Assert
         foundSession.Should().BeNull();
-
-        VerifyNoOtherCalls();
     }
 
 
@@ -32,7 +30,5 @@ public class FindAsync
 
         // Assert
         foundSession.Should().Be(session);
-
-        VerifyNoOtherCalls();
     }
 }

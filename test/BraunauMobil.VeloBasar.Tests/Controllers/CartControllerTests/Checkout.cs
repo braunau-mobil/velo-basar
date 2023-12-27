@@ -11,8 +11,7 @@ public class Checkout
     public async Task EmptyCart_ReturnsNotAllowed(int activeBasarId)
     {
         //  Arrange
-        Cookie.Setup(_ => _.GetCart())
-            .Returns(new List<int>());
+        A.CallTo(() => Cookie.GetCart()).Returns(new List<int>());
 
         //  Act
         IActionResult result = await Sut.Checkout(activeBasarId);
@@ -21,8 +20,7 @@ public class Checkout
         StatusCodeResult statusCode = result.Should().BeOfType<StatusCodeResult>().Subject;
         statusCode.StatusCode.Should().Be(StatusCodes.Status405MethodNotAllowed);
 
-        Cookie.Verify(_ => _.GetCart(), Times.Once());
-        VerifyNoOtherCalls();
+        A.CallTo(() => Cookie.GetCart()).MustHaveHappenedOnceExactly();
     }
 
     [Theory]
@@ -30,12 +28,10 @@ public class Checkout
     public async Task ProductsInCart_CallsCheckoutAndReturnsTransactionSuccess(int activeBasarId, IList<int> cart, int saleId, string url)
     {
         //  Arrange
-        Cookie.Setup(_ => _.GetCart())
-            .Returns(cart);
-        TransactionService.Setup(_ => _.CheckoutAsync(activeBasarId, cart))
-            .ReturnsAsync(saleId);
-        TransactionRouter.Setup(_ => _.ToSucess(saleId))
-            .Returns(url);
+        A.CallTo(() => Cookie.GetCart()).Returns(cart);
+        A.CallTo(() => TransactionService.CheckoutAsync(activeBasarId, cart)).Returns(saleId);
+        A.CallTo(() => TransactionRouter.ToSucess(saleId)).Returns(url);
+        A.CallTo(() => Cookie.ClearCart()).DoesNothing();
 
         //  Act
         IActionResult result = await Sut.Checkout(activeBasarId);
@@ -44,10 +40,9 @@ public class Checkout
         RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
         redirect.Url.Should().Be(url);
 
-        Cookie.Verify(_ => _.GetCart(), Times.Once());
-        Cookie.Verify(_ => _.ClearCart(), Times.Once());
-        TransactionService.Verify(_ => _.CheckoutAsync(activeBasarId, cart), Times.Once());
-        TransactionRouter.Verify(_ => _.ToSucess(saleId), Times.Once());
-        VerifyNoOtherCalls();
+        A.CallTo(() => Cookie.GetCart()).MustHaveHappenedOnceExactly();
+        A.CallTo(() => Cookie.ClearCart()).MustHaveHappenedOnceExactly();
+        A.CallTo(() => TransactionService.CheckoutAsync(activeBasarId, cart)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => TransactionRouter.ToSucess(saleId)).MustHaveHappenedOnceExactly();
     }
 }

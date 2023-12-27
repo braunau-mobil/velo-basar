@@ -9,17 +9,15 @@ public class DropDatabaseConfirmed
     public async Task DevToolsNotEnabled_ReturnsUnauthorized()
     {
         //  Arrange
-        AppContext.Setup(_ => _.DevToolsEnabled())
-            .Returns(false);
+        A.CallTo(() => AppContext.DevToolsEnabled()).Returns(false);
 
         //  Act
         IActionResult result = await Sut.DropDatabaseConfirmed();
 
         //  Assert
         UnauthorizedResult unauthorized = result.Should().BeOfType<UnauthorizedResult>().Subject;
-        
-        AppContext.Verify(_ => _.DevToolsEnabled(), Times.Once());
-        VerifyNoOtherCalls();
+
+        A.CallTo(() => AppContext.DevToolsEnabled()).MustHaveHappenedOnceExactly();
     }
 
     [Theory]
@@ -27,10 +25,9 @@ public class DropDatabaseConfirmed
     public async Task DevToolsEnabled_CallsDropDatabaseAndReturnsRedirectToHome(string url)
     {
         //  Arrange
-        AppContext.Setup(_ => _.DevToolsEnabled())
-            .Returns(true);
-        Router.Setup(_ => _.ToHome())
-            .Returns(url);
+        A.CallTo(() => AppContext.DevToolsEnabled()).Returns(true);
+        A.CallTo(() => DataGeneratorService.DropDatabaseAsync()).DoesNothing();
+        A.CallTo(() => Router.ToHome()).Returns(url);
 
         //  Act
         IActionResult result = await Sut.DropDatabaseConfirmed();
@@ -39,9 +36,8 @@ public class DropDatabaseConfirmed
         RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
         redirect.Url.Should().Be(url);
 
-        AppContext.Verify(_ => _.DevToolsEnabled(), Times.Once());
-        DataGeneratorService.Verify(_ => _.DropDatabaseAsync(), Times.Once());
-        Router.Verify(_ => _.ToHome(), Times.Once());
-        VerifyNoOtherCalls();
+        A.CallTo(() => AppContext.DevToolsEnabled()).MustHaveHappenedOnceExactly();
+        A.CallTo(() => DataGeneratorService.DropDatabaseAsync()).MustHaveHappenedOnceExactly();
+        A.CallTo(() => Router.ToHome()).MustHaveHappenedOnceExactly();
     }
 }

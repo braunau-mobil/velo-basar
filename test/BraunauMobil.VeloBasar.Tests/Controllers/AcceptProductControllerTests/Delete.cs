@@ -10,8 +10,8 @@ public class Delete
     public async Task CallsDelete_And_ReturnsRedirectoToCreate(int sessionId, int productId, string url)
     {
         //  Arrange
-        AcceptProductRouter.Setup(_ => _.ToCreate(sessionId))
-            .Returns(url);
+        A.CallTo(() => AcceptProductRouter.ToCreate(sessionId)).Returns(url);
+        A.CallTo(() => AcceptProductService.DeleteAsync(productId)).DoesNothing();
 
         //  Act
         IActionResult result = await Sut.Delete(sessionId, productId);
@@ -20,8 +20,7 @@ public class Delete
         RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
         redirect.Url.Should().Be(url);
 
-        AcceptProductService.Verify(_ => _.DeleteAsync(productId), Times.Once);
-        AcceptProductRouter.Verify(_ => _.ToCreate(sessionId), Times.Once);
-        VerifyNoOtherCalls();
+        A.CallTo(() => AcceptProductService.DeleteAsync(productId)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => AcceptProductRouter.ToCreate(sessionId)).MustHaveHappenedOnceExactly();
     }
 }

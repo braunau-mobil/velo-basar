@@ -40,8 +40,6 @@ public class FindAsync
         {
             foundTransation.Should().BeEquivalentTo(transaction);
         }
-
-        VerifyNoOtherCalls();
     }
 
     [Theory]
@@ -74,8 +72,6 @@ public class FindAsync
 
         //  Assert
         foundTransation.Should().BeNull();
-
-        VerifyNoOtherCalls();
     }
 
     [Theory]
@@ -89,7 +85,5 @@ public class FindAsync
 
         //  Assert
         foundTransation.Should().BeNull();
-
-        VerifyNoOtherCalls();
     }
 }

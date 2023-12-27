@@ -10,8 +10,7 @@ public class ActiveBasarDetails
     public void RedirectsToBasarDetails(int activeBasarId, string url)
     {
         //  Arrange
-        BasarRouter.Setup(_ => _.ToDetails(activeBasarId))
-            .Returns(url);
+        A.CallTo(() => BasarRouter.ToDetails(activeBasarId)).Returns(url);
 
         //  Act
         IActionResult result = Sut.ActiveBasarDetails(activeBasarId);
@@ -20,7 +19,6 @@ public class ActiveBasarDetails
         RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
         redirect.Url.Should().Be(url);
 
-        BasarRouter.Verify(_ => _.ToDetails(activeBasarId), Times.Once());
-        VerifyNoOtherCalls();
+        A.CallTo(() => BasarRouter.ToDetails(activeBasarId)).MustHaveHappenedOnceExactly();
     }
 }

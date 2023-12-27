@@ -12,17 +12,15 @@ public class GetActiveAcceptSessionId
     public void ReturnsNull(string? cookieValue)
 	{
 		//	Arrange
-		ActiveAcceptSessionCookie sut = new(HttpContextAccessor.Object);
-		RequestCookies.SetupGet(_ => _[sut.Key])
-			.Returns(cookieValue);
+		ActiveAcceptSessionCookie sut = new(HttpContextAccessor);
+        A.CallTo(() => RequestCookies[sut.Key]).Returns(cookieValue);
 
 		//	Act
 		int? result = sut.GetActiveAcceptSessionId();
 
 		//	Assert
 		result.Should().BeNull();
-		RequestCookies.VerifyGet(_ => _[sut.Key], Times.Once());
-		VerifyNoOtherCalls();
+        A.CallTo(() => RequestCookies[sut.Key]).MustHaveHappenedOnceExactly();
 	}
 
     [Theory]
@@ -30,17 +28,15 @@ public class GetActiveAcceptSessionId
     public void ReturnsId(string? cookieValue)
     {
         //	Arrange
-        ActiveAcceptSessionCookie sut = new(HttpContextAccessor.Object);
-        RequestCookies.SetupGet(_ => _[sut.Key])
-            .Returns(cookieValue);
+        ActiveAcceptSessionCookie sut = new(HttpContextAccessor);
+        A.CallTo(() => RequestCookies[sut.Key]).Returns(cookieValue);
 
         //	Act
         int? result = sut.GetActiveAcceptSessionId();
 
         //	Assert
         result.Should().Be(123);
-        RequestCookies.VerifyGet(_ => _[sut.Key], Times.Once());
-        VerifyNoOtherCalls();
+        A.CallTo(() => RequestCookies[sut.Key]).MustHaveHappenedOnceExactly();
     }
 }
 

@@ -11,37 +11,26 @@ public class TestBase
 {
     public TestBase()
     {
-        Sut = new (SellerService.Object, new SellerSearchModelValidator(Localizer), Router.Object, SellerRouter.Object, new Crud.SellerCrudModelFactory(Localizer, Mock.Of<IHtmlHelper>(), SellerRouter.Object, new Mock<IVeloHtmlFactory>().Object), new SellerEntityValidator(Localizer));
+        A.CallTo(() => Router.AcceptSession).Returns(AcceptSessionRouter);
+        A.CallTo(() => Router.Seller).Returns(SellerRouter);
+        A.CallTo(() => Router.Transaction).Returns(TransactionRouter);
 
-        Router.Setup(_ => _.AcceptSession)
-            .Returns(AcceptSessionRouter.Object);
-        Router.Setup(_ => _.Seller)
-            .Returns(SellerRouter.Object);
-        Router.Setup(_ => _.Transaction)
-            .Returns(TransactionRouter.Object);
+        Sut = new(SellerService, new SellerSearchModelValidator(Localizer), Router, SellerRouter, new Crud.SellerCrudModelFactory(Localizer, X.StrictFake<IHtmlHelper>(), SellerRouter, X.StrictFake<IVeloHtmlFactory>()), new SellerEntityValidator(Localizer));
     }
 
-    public void VerifyNoOtherCalls()
-    {
-        AcceptSessionRouter.VerifyNoOtherCalls();
-        SellerRouter.VerifyNoOtherCalls();
-        SellerService.VerifyNoOtherCalls();
-        TransactionRouter.VerifyNoOtherCalls();
-    }
-
-    protected Mock<IAcceptSessionRouter> AcceptSessionRouter { get; } = new();
+    protected IAcceptSessionRouter AcceptSessionRouter { get; } = X.StrictFake<IAcceptSessionRouter>();
 
     protected Fixture Fixture { get; } = new ();
 
     protected IStringLocalizer<SharedResources> Localizer { get; } = Helpers.CreateActualLocalizer();
 
-    protected Mock<IVeloRouter> Router { get; } = new();
+    protected IVeloRouter Router { get; } = X.StrictFake<IVeloRouter>();
 
     protected SellerController Sut { get; }
 
-    protected Mock<ISellerRouter> SellerRouter { get; } = new();
+    protected ISellerRouter SellerRouter { get; } = X.StrictFake<ISellerRouter>();
 
-    protected Mock<ISellerService> SellerService { get; } = new();
+    protected ISellerService SellerService { get; } = X.StrictFake<ISellerService>();
 
-    protected Mock<ITransactionRouter> TransactionRouter { get; } = new();
+    protected ITransactionRouter TransactionRouter { get; } = X.StrictFake<ITransactionRouter>();
 }

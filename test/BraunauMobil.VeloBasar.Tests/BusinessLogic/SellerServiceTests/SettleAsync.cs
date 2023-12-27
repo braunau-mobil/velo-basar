@@ -14,8 +14,7 @@ public class SettleAsync
         Db.Sellers.Add(seller);
         await Db.SaveChangesAsync();
 
-        TransactionService.Setup(_ => _.SettleAsync(basarId, seller.Id, productIds))
-            .ReturnsAsync(settlemendId);
+        A.CallTo(() => TransactionService.SettleAsync(basarId, seller.Id, productIds)).Returns(settlemendId);
 
         //  Act
         int result = await Sut.SettleAsync(basarId, seller.Id);
@@ -23,10 +22,9 @@ public class SettleAsync
         //  Assert
         result.Should().Be(settlemendId);
 
-        TransactionService.Verify(_ => _.SettleAsync(basarId, seller.Id, productIds), Times.Once);
+        A.CallTo(() => TransactionService.SettleAsync(basarId, seller.Id, productIds)).MustHaveHappenedOnceExactly();
         SellerEntity sellerInDb = await Db.Sellers.FirstByIdAsync(seller.Id);
         sellerInDb.ValueState.Should().Be(ValueState.Settled);
-        VerifyNoOtherCalls();
     }
 
     [Theory]
@@ -46,8 +44,7 @@ public class SettleAsync
         Db.Products.AddRange(products);
         await Db.SaveChangesAsync();
 
-        TransactionService.Setup(_ => _.SettleAsync(basar.Id, seller.Id, It.IsAny<IEnumerable<int>>()))
-            .ReturnsAsync(settlemendId);
+        A.CallTo(() => TransactionService.SettleAsync(basar.Id, seller.Id, A<IEnumerable<int>>._)).Returns(settlemendId);
 
         //  Act
         int result = await Sut.SettleAsync(basar.Id, seller.Id);
@@ -55,9 +52,8 @@ public class SettleAsync
         //  Assert
         result.Should().Be(settlemendId);
 
-        TransactionService.Verify(_ => _.SettleAsync(basar.Id, seller.Id, It.IsAny<IEnumerable<int>>()), Times.Once);
+        A.CallTo(() => TransactionService.SettleAsync(basar.Id, seller.Id, A<IEnumerable<int>>._)).MustHaveHappenedOnceExactly();
         SellerEntity sellerInDb = await Db.Sellers.FirstByIdAsync(seller.Id);
         sellerInDb.ValueState.Should().Be(ValueState.Settled);
-        VerifyNoOtherCalls();
     }
 }

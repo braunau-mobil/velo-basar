@@ -14,8 +14,6 @@ public class CreateAsync
 
         //  Assert
         await act.Should().ThrowAsync<InvalidOperationException>();
-
-        VerifyNoOtherCalls();
     }
 
     [Theory]
@@ -39,7 +37,5 @@ public class CreateAsync
 		acceptSession.SellerId.Should().Be(seller.Id);
 		acceptSession.Basar.Should().Be(basar);
 		acceptSession.BasarId.Should().Be(basar.Id);
-
-		VerifyNoOtherCalls();
 	}
 }

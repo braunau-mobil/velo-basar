@@ -1,5 +1,4 @@
-﻿using FluentAssertions.Execution;
-using Xan.AspNetCore.EntityFrameworkCore;
+﻿using Xan.AspNetCore.EntityFrameworkCore;
 using Xan.AspNetCore.Mvc.Abstractions;
 
 namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.TransactionServiceTests;
@@ -24,11 +23,10 @@ public class AcceptAsync
         Db.Products.AddRange(products);
         await Db.SaveChangesAsync();
 
-        NumberService.Setup(_ => _.NextNumberAsync(basar.Id, TransactionType.Acceptance))
-            .ReturnsAsync(number);
+        A.CallTo(() => NumberService.NextNumberAsync(basar.Id, TransactionType.Acceptance)).Returns(number);
         Clock.Now = timestamp;
-        StatusPushService.Setup(_ => _.IsEnabled)
-            .Returns(true);
+        A.CallTo(() => StatusPushService.IsEnabled).Returns(true);
+        A.CallTo(() => StatusPushService.PushSellerAsync(basar.Id, seller.Id)).DoesNothing();
 
         //  Act
         int id = await Sut.AcceptAsync(basar.Id, seller.Id, products.Ids());
@@ -55,10 +53,9 @@ public class AcceptAsync
             transaction.TimeStamp.Should().Be(timestamp);
         }
             
-        NumberService.Verify(_ => _.NextNumberAsync(basar.Id, TransactionType.Acceptance), Times.Once);
-        StatusPushService.Verify(_ => _.IsEnabled, Times.Once);
-        StatusPushService.Verify(_ => _.PushSellerAsync(basar.Id, seller.Id), Times.Once);
-        VerifyNoOtherCalls();
+        A.CallTo(() => NumberService.NextNumberAsync(basar.Id, TransactionType.Acceptance)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => StatusPushService.IsEnabled).MustHaveHappenedOnceExactly();
+        A.CallTo(() => StatusPushService.PushSellerAsync(basar.Id, seller.Id)).MustHaveHappenedOnceExactly();
     }
 
     [Theory]
@@ -83,7 +80,5 @@ public class AcceptAsync
 
         //  Assert
         await act.Should().ThrowAsync<InvalidOperationException>();
-
-        VerifyNoOtherCalls();
     }
 }

@@ -1,7 +1,6 @@
 ﻿using BraunauMobil.VeloBasar.Parameters;
 using BraunauMobil.VeloBasar.Routing;
 using Microsoft.AspNetCore.Mvc;
-using Xan.AspNetCore.Models;
 using Xan.AspNetCore.Mvc.Crud;
 using Xan.Extensions.Collections.Generic;
 
@@ -16,10 +15,8 @@ public class List
     {
         //  Arrange
         parameter.SearchString = sellerId.ToString();
-        SellerService.Setup(_ => _.ExistsAsync(sellerId))
-            .ReturnsAsync(true);
-        SellerRouter.Setup(_ => _.ToDetails(sellerId))
-            .Returns(url);
+        A.CallTo(() => SellerService.ExistsAsync(sellerId)).Returns(true);
+        A.CallTo(() => SellerRouter.ToDetails(sellerId)).Returns(url);
 
         //  Act
         IActionResult result = await Sut.List(parameter);
@@ -28,9 +25,8 @@ public class List
         RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
         redirect.Url.Should().Be(url);
 
-        SellerService.Verify(_ => _.ExistsAsync(sellerId), Times.Once());
-        SellerRouter.Verify(_ => _.ToDetails(sellerId), Times.Once());
-        VerifyNoOtherCalls();
+        A.CallTo(() => SellerService.ExistsAsync(sellerId)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => SellerRouter.ToDetails(sellerId)).MustHaveHappenedOnceExactly();
     }
 
     [Theory]
@@ -40,10 +36,8 @@ public class List
         //  Arrange
         IPaginatedList<CrudItemModel<SellerEntity>> list = Fixture.CreatePaginatedList<CrudItemModel<SellerEntity>>();
         parameter.SearchString = sellerId.ToString();
-        SellerService.Setup(_ => _.ExistsAsync(sellerId))
-            .ReturnsAsync(false);
-        SellerService.Setup(_ => _.GetManyAsync(parameter))
-            .ReturnsAsync(list);
+        A.CallTo(() => SellerService.ExistsAsync(sellerId)).Returns(false);
+        A.CallTo(() => SellerService.GetManyAsync(parameter)).Returns(list);
 
         //  Act
         IActionResult result = await Sut.List(parameter);
@@ -53,9 +47,8 @@ public class List
         view.Model.Should().BeOfType<CrudListModel<SellerEntity, SellerListParameter, ISellerRouter>>();
         view.ViewData.ModelState.IsValid.Should().BeTrue();
 
-        SellerService.Verify(_ => _.ExistsAsync(sellerId), Times.Once());
-        SellerService.Verify(_ => _.GetManyAsync(parameter), Times.Once());
-        VerifyNoOtherCalls();
+        A.CallTo(() => SellerService.ExistsAsync(sellerId)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => SellerService.GetManyAsync(parameter)).MustHaveHappenedOnceExactly();
     }
 
     [Theory]
@@ -64,8 +57,7 @@ public class List
     {
         //  Arrange
         IPaginatedList<CrudItemModel<SellerEntity>> list = Fixture.CreatePaginatedList<CrudItemModel<SellerEntity>>();
-        SellerService.Setup(_ => _.GetManyAsync(parameter))
-            .ReturnsAsync(list);
+        A.CallTo(() => SellerService.GetManyAsync(parameter)).Returns(list);
 
         //  Act
         IActionResult result = await Sut.List(parameter);
@@ -75,7 +67,6 @@ public class List
         view.Model.Should().BeOfType<CrudListModel<SellerEntity, SellerListParameter, ISellerRouter>>();
         view.ViewData.ModelState.IsValid.Should().BeTrue();
 
-        SellerService.Verify(_ => _.GetManyAsync(parameter), Times.Once());
-        VerifyNoOtherCalls();
+        A.CallTo(() => SellerService.GetManyAsync(parameter)).MustHaveHappenedOnceExactly();
     }
 }

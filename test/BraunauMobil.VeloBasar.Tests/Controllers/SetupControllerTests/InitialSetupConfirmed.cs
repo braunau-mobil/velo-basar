@@ -26,8 +26,6 @@ public class InitialSetupConfirmed
         ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
         view.Model.Should().Be(configuration);
         view.ViewData.ModelState.IsValid.Should().BeFalse();
-
-        VerifyNoOtherCalls();
     }
 
     [Theory]
@@ -35,8 +33,9 @@ public class InitialSetupConfirmed
     public async Task ValidModel_CallsCreateDatabaseAndInitializeDatabaseAndReturnsRedirecToHome(InitializationConfiguration configuration, string url)
     {
         //  Arrange
-        Router.Setup(_ => _.ToHome())
-            .Returns(url);
+        A.CallTo(() => SetupService.CreateDatabaseAsync()).DoesNothing();
+        A.CallTo(() => SetupService.InitializeDatabaseAsync(configuration)).DoesNothing();
+        A.CallTo(() => Router.ToHome()).Returns(url);
         Sut.ControllerContext = new ControllerContext
         {
             HttpContext = new DefaultHttpContext
@@ -51,9 +50,8 @@ public class InitialSetupConfirmed
         RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
         redirect.Url.Should().Be(url);
 
-        SetupService.Verify(_ => _.CreateDatabaseAsync(), Times.Once());
-        SetupService.Verify(_ => _.InitializeDatabaseAsync(configuration), Times.Once());
-        Router.Verify(_ => _.ToHome(), Times.Once);
-        VerifyNoOtherCalls();
+        A.CallTo(() => SetupService.CreateDatabaseAsync()).MustHaveHappenedOnceExactly();
+        A.CallTo(() => SetupService.InitializeDatabaseAsync(configuration)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => Router.ToHome()).MustHaveHappenedOnceExactly();
     }
 }

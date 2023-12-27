@@ -10,8 +10,7 @@ public class CreateSampleLabels
     {
         //  Arrange
         FileDataEntity fileData = Fixture.BuildFileDataEntity().Create();
-        AdminService.Setup(_ => _.CreateSampleLabelsAsync())
-            .ReturnsAsync(fileData);
+        A.CallTo(() => AdminService.CreateSampleLabelsAsync()).Returns(fileData);
 
         //  Act
         IActionResult result = await Sut.CreateSampleLabels();
@@ -22,7 +21,6 @@ public class CreateSampleLabels
         fileContent.FileContents.Should().BeEquivalentTo(fileData.Data);
         fileContent.FileDownloadName.Should().BeEquivalentTo(fileData.FileName);
 
-        AdminService.Verify(_ => _.CreateSampleLabelsAsync(), Times.Once);
-        VerifyNoOtherCalls();
+        A.CallTo(() => AdminService.CreateSampleLabelsAsync()).MustHaveHappenedOnceExactly();
     }
 }

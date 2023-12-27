@@ -14,8 +14,6 @@ public class ExistsAsync
 
         //  Assert
         result.Should().BeFalse();
-
-        VerifyNoOtherCalls();
     }
 
     [Theory]
@@ -31,7 +29,5 @@ public class ExistsAsync
 
         //  Assert
         result.Should().BeTrue();
-
-        VerifyNoOtherCalls();
     }
 }

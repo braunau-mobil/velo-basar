@@ -24,7 +24,5 @@ public class Export
             ExportModel model = view.Model.Should().BeOfType<ExportModel>().Subject;
             model.MinPermissionDate.Should().Be(DateOnly.FromDateTime(dateTime.Date));
         }
-
-        VerifyNoOtherCalls();
     }
 }

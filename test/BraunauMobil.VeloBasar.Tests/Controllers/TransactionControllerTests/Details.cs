@@ -11,8 +11,7 @@ public class Details
     {
         //  Arrange
         TransactionEntity transaction = Fixture.BuildTransaction().Create();
-        TransactionService.Setup(_ => _.GetAsync(id))
-            .ReturnsAsync(transaction);
+        A.CallTo(() => TransactionService.GetAsync(id)).Returns(transaction);
 
         //  Act
         IActionResult result = await Sut.Details(id);
@@ -22,7 +21,6 @@ public class Details
         view.Model.Should().Be(transaction);
         view.ViewData.ModelState.IsValid.Should().BeTrue();
 
-        TransactionService.Verify(_ => _.GetAsync(id), Times.Once);
-        VerifyNoOtherCalls();
+        A.CallTo(() => TransactionService.GetAsync(id)).MustHaveHappenedOnceExactly();
     }
 }

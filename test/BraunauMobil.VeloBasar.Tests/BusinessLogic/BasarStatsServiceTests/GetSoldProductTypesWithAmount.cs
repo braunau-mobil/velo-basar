@@ -18,8 +18,6 @@ public class GetSoldProductTypesWithAmount
 
         // Assert
         result.Should().BeEmpty();
-
-        VerifyNoOtherCalls();
     }
 
     [Theory]
@@ -27,10 +25,8 @@ public class GetSoldProductTypesWithAmount
     public void Products_ShouldFilterSoldAndGroupByTypeAndSumPrices(ProductTypeEntity typeA, ProductTypeEntity typeB, Color colorA, Color colorB)
     {
         //  Arrange
-        ColorProvider.SetupGet(_ => _[typeA.Name])
-            .Returns(colorA);
-        ColorProvider.SetupGet(_ => _[typeB.Name])
-            .Returns(colorB);
+        A.CallTo(() => ColorProvider[typeA.Name]).Returns(colorA);
+        A.CallTo(() => ColorProvider[typeB.Name]).Returns(colorB);
         ProductEntity[] products = new[]
         {
             CreateProduct(typeA, StorageState.Sold, 15),
@@ -53,9 +49,8 @@ public class GetSoldProductTypesWithAmount
             new ChartDataPoint(125, typeB.Name, colorB)
         });
 
-        ColorProvider.VerifyGet(_ => _[typeA.Name], Times.Once());
-        ColorProvider.VerifyGet(_ => _[typeB.Name], Times.Once());
-        VerifyNoOtherCalls();
+        A.CallTo(() => ColorProvider[typeA.Name]).MustHaveHappenedOnceExactly();
+        A.CallTo(() => ColorProvider[typeB.Name]).MustHaveHappenedOnceExactly();
     }
 
     private ProductEntity CreateProduct(ProductTypeEntity type, StorageState storageState, decimal price)

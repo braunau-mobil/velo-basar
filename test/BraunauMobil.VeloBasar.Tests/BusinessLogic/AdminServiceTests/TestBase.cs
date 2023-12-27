@@ -1,7 +1,6 @@
 ﻿using BraunauMobil.VeloBasar.BusinessLogic;
 using BraunauMobil.VeloBasar.Configuration;
 using BraunauMobil.VeloBasar.Pdf;
-using FakeItEasy;
 using Microsoft.Extensions.Options;
 
 namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.AdminServiceTests;
@@ -11,7 +10,7 @@ public class TestBase
 {
     public TestBase()
     {
-        IOptions<ExportSettings> exportOptions = A.Fake<IOptions<ExportSettings>>();
+        IOptions<ExportSettings> exportOptions = X.StrictFake<IOptions<ExportSettings>>();
         A.CallTo(() => exportOptions.Value).Returns(ExportSettings);
 
         A.CallTo(() => DataGeneratorService.Contextualize(A<DataGeneratorConfiguration>._)).DoesNothing();
@@ -21,11 +20,11 @@ public class TestBase
 
     protected ExportSettings ExportSettings { get; } = new ExportSettings();
 
-    protected IDataGeneratorService DataGeneratorService { get; } = A.Fake<IDataGeneratorService>();
+    protected IDataGeneratorService DataGeneratorService { get; } = X.StrictFake<IDataGeneratorService>();
 
-    protected IProductLabelService ProductLabelService { get; } = A.Fake<IProductLabelService>();
+    protected IProductLabelService ProductLabelService { get; } = X.StrictFake<IProductLabelService>();
 
     protected AdminService Sut { get; }
 
-    protected ITransactionDocumentService TransactionDocumentService { get; } = A.Fake<ITransactionDocumentService>();
+    protected ITransactionDocumentService TransactionDocumentService { get; } = X.StrictFake<ITransactionDocumentService>();
 }

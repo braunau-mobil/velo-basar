@@ -11,8 +11,7 @@ public class Edit
     {
         //  Arrange
         ProductDetailsModel model = Fixture.BuildProductDetailsModel().Create();
-        ProductService.Setup(_ => _.GetAsync(productId))
-            .ReturnsAsync(product);
+        A.CallTo(() => ProductService.GetAsync(productId)).Returns(product);
 
         //  Act
         IActionResult result = await Sut.Edit(productId);
@@ -22,8 +21,7 @@ public class Edit
         view.Model.Should().Be(product);
         view.ViewData.ModelState.IsValid.Should().BeTrue();
 
-        ProductService.Verify(_ => _.GetAsync(productId), Times.Once());
-        VerifyNoOtherCalls();
+        A.CallTo(() => ProductService.GetAsync(productId)).MustHaveHappenedOnceExactly();
     }
 
     [Theory]
@@ -31,8 +29,8 @@ public class Edit
     public async Task ValidModel_CallsUpdateAndReturnsRedirectToDetails(ProductEntity product, string url)
     {
         //  Arrage
-        ProductRouter.Setup(_ => _.ToDetails(product.Id))
-            .Returns(url);
+        A.CallTo(() => ProductService.UpdateAsync(product)).DoesNothing();
+        A.CallTo(() => ProductRouter.ToDetails(product.Id)).Returns(url);
 
         //  Act
         IActionResult result = await Sut.Edit(product);
@@ -41,9 +39,8 @@ public class Edit
         RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
         redirect.Url.Should().Be(url);
 
-        ProductService.Verify(_ => _.UpdateAsync(product), Times.Once());
-        ProductRouter.Verify(_ => _.ToDetails(product.Id), Times.Once());
-        VerifyNoOtherCalls();
+        A.CallTo(() => ProductService.UpdateAsync(product)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => ProductRouter.ToDetails(product.Id)).MustHaveHappenedOnceExactly();
     }
 
     [Theory]
@@ -61,6 +58,5 @@ public class Edit
         view.Model.Should().Be(product);
         view.ViewData.ModelState.IsValid.Should().BeFalse();
 
-        VerifyNoOtherCalls();
     }
 }

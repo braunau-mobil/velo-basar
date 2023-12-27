@@ -9,16 +9,14 @@ public class UnlockAllUsers
     public async Task DevToolsNotEnabled_ReturnsUnauthorized()
     {
         //  Arrange
-        AppContext.Setup(_ => _.DevToolsEnabled())
-            .Returns(false);
+        A.CallTo(() => AppContext.DevToolsEnabled()).Returns(false);
 
         //  Act
         IActionResult result = await Sut.UnlockAllUsers();
 
         //  Assert
         UnauthorizedResult unauthorized = result.Should().BeOfType<UnauthorizedResult>().Subject;
-        
-        AppContext.Verify(_ => _.DevToolsEnabled(), Times.Once());
-        VerifyNoOtherCalls();
+
+        A.CallTo(() => AppContext.DevToolsEnabled()).MustHaveHappenedOnceExactly();
     }
 }

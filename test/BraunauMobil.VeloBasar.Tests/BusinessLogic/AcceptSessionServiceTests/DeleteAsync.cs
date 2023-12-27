@@ -14,8 +14,6 @@ public class DeleteAsync
 
         //  Assert
         await act.Should().ThrowAsync<InvalidOperationException>();
-
-        VerifyNoOtherCalls();
     }
 
 
@@ -32,7 +30,5 @@ public class DeleteAsync
 
         // Assert
         Db.AcceptSessions.Should().BeEmpty();
-
-        VerifyNoOtherCalls();
     }
 }

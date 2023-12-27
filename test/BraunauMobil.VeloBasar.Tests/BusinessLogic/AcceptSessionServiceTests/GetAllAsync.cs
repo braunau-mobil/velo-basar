@@ -20,8 +20,6 @@ public class GetAllAsync
 
         //  Assert
         sessions.Should().BeEmpty();
-
-        VerifyNoOtherCalls();
     }
 
     [Theory]
@@ -44,8 +42,6 @@ public class GetAllAsync
         // Assert
         foundSessions.Should().HaveCount(_pageSize);
         foundSessions.TotalItemCount.Should().Be(_pageSize);
-
-        VerifyNoOtherCalls();
     }
 
     [Theory]
@@ -74,7 +70,5 @@ public class GetAllAsync
 
         // Assert
         foundSessions.TotalItemCount.Should().Be(uncompletedSessions.Count());
-
-        VerifyNoOtherCalls();
     }
 }

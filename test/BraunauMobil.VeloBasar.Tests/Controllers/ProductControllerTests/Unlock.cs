@@ -19,8 +19,6 @@ public class UnLock
         ProductAnnotateModel annotateModel = view.Model.Should().BeOfType<ProductAnnotateModel>().Subject;
         annotateModel.ProductId.Should().Be(productId);
         view.ViewData.ModelState.IsValid.Should().BeTrue();
-
-        VerifyNoOtherCalls();
     }
 
     [Theory]
@@ -28,8 +26,8 @@ public class UnLock
     public async Task ValidModel_CallsUnLockAndReturnsRedirectToDetails(ProductAnnotateModel annotateModel, string url)
     {
         //  Arrage
-        ProductRouter.Setup(_ => _.ToDetails(annotateModel.ProductId))
-            .Returns(url);
+        A.CallTo(() => ProductRouter.ToDetails(annotateModel.ProductId)).Returns(url);
+        A.CallTo(() => ProductService.UnlockAsync(annotateModel.ProductId, annotateModel.Notes)).DoesNothing();
 
         //  Act
         IActionResult result = await Sut.UnLock(annotateModel);
@@ -38,9 +36,8 @@ public class UnLock
         RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
         redirect.Url.Should().Be(url);
 
-        ProductService.Verify(_ => _.UnlockAsync(annotateModel.ProductId, annotateModel.Notes), Times.Once());
-        ProductRouter.Verify(_ => _.ToDetails(annotateModel.ProductId), Times.Once());
-        VerifyNoOtherCalls();
+        A.CallTo(() => ProductService.UnlockAsync(annotateModel.ProductId, annotateModel.Notes)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => ProductRouter.ToDetails(annotateModel.ProductId)).MustHaveHappenedOnceExactly();
     }
 
     [Theory]
@@ -57,7 +54,5 @@ public class UnLock
         ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
         view.Model.Should().Be(annotateModel);
         view.ViewData.ModelState.IsValid.Should().BeFalse();
-
-        VerifyNoOtherCalls();
     }
 }

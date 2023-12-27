@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace BraunauMobil.VeloBasar.Tests.Controllers.SellerControllerTests;
 
@@ -12,8 +11,7 @@ public class CreateForAcceptance
 	{
 		//	Arrange
 		int? id = null;
-		SellerService.Setup(_ => _.CreateNewAsync())
-			.ReturnsAsync(seller);
+		A.CallTo(() => SellerService.CreateNewAsync()).Returns(seller);
 
 		//	Act
 		IActionResult result = await Sut.CreateForAcceptance(id);
@@ -24,8 +22,7 @@ public class CreateForAcceptance
 		SellerCreateForAcceptanceModel model = view.Model.Should().BeOfType<SellerCreateForAcceptanceModel>().Subject;
 		model.Seller.Should().Be(seller);
 
-		SellerService.Verify(_ => _.CreateNewAsync(), Times.Once());
-		VerifyNoOtherCalls();
+		A.CallTo(() => SellerService.CreateNewAsync()).MustHaveHappenedOnceExactly();
 	}
 
 
@@ -34,8 +31,7 @@ public class CreateForAcceptance
     public async Task WithId_CallsGetAsyncAndReturnsView(int id, SellerEntity seller)
     {
         //	Arrange
-        SellerService.Setup(_ => _.GetAsync(id))
-            .ReturnsAsync(seller);
+        A.CallTo(() => SellerService.GetAsync(id)).Returns(seller);
 
         //	Act
         IActionResult result = await Sut.CreateForAcceptance(id);
@@ -46,8 +42,7 @@ public class CreateForAcceptance
         SellerCreateForAcceptanceModel model = view.Model.Should().BeOfType<SellerCreateForAcceptanceModel>().Subject;
         model.Seller.Should().Be(seller);
 
-        SellerService.Verify(_ => _.GetAsync(id), Times.Once());
-        VerifyNoOtherCalls();
+        A.CallTo(() => SellerService.GetAsync(id)).MustHaveHappenedOnceExactly();
     }
 
 	[Theory]
@@ -66,7 +61,6 @@ public class CreateForAcceptance
         SellerCreateForAcceptanceModel model = view.Model.Should().BeOfType<SellerCreateForAcceptanceModel>().Subject;
 		model.Seller.Should().Be(seller);
 
-		VerifyNoOtherCalls();
 	}
 
 	[Theory]
@@ -78,9 +72,8 @@ public class CreateForAcceptance
 		seller.HasNewsletterPermission = false;
 		seller.EMail = null;
 		seller.PhoneNumber = "123";
-		SellerService.Setup(_ => _.UpdateAsync(seller));
-		AcceptSessionRouter.Setup(_ => _.ToStartForSeller(seller.Id))
-			.Returns(url);
+		A.CallTo(() => SellerService.UpdateAsync(seller)).DoesNothing();
+		A.CallTo(() => AcceptSessionRouter.ToStartForSeller(seller.Id)).Returns(url);
 
 		//	Act
 		IActionResult result = await Sut.CreateForAcceptance(seller);
@@ -89,14 +82,13 @@ public class CreateForAcceptance
 		RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
 		redirect.Url.Should().Be(url);
 
-		AcceptSessionRouter.Verify(_ => _.ToStartForSeller(seller.Id), Times.Once());
-		SellerService.Verify(_ => _.UpdateAsync(seller), Times.Once());
-		VerifyNoOtherCalls();
+		A.CallTo(() => AcceptSessionRouter.ToStartForSeller(seller.Id)).MustHaveHappenedOnceExactly();
+		A.CallTo(() => SellerService.UpdateAsync(seller)).MustHaveHappenedOnceExactly();
 	}
 
     [Theory]
     [AutoData]
-    public async Task WithValidModelThatNotExists_CallsCreateAndReturnsRedirectToStartSession(SellerEntity seller, string url)
+    public async Task WithValidModelThatNotExists_CallsCreateAndReturnsRedirectToStartSession(SellerEntity seller, string url, int id)
     {
         //	Arrange
 		seller.Id = 0;
@@ -104,9 +96,9 @@ public class CreateForAcceptance
         seller.HasNewsletterPermission = false;
         seller.EMail = null;
         seller.PhoneNumber = "123";
-        SellerService.Setup(_ => _.CreateAsync(seller));
-        AcceptSessionRouter.Setup(_ => _.ToStartForSeller(seller.Id))
-            .Returns(url);
+        A.CallTo(() => SellerService.CreateAsync(seller)).Returns(id);
+		A.CallTo(() => AcceptSessionRouter.ToStartForSeller(seller.Id)).Returns(url);
+
 
         //	Act
         IActionResult result = await Sut.CreateForAcceptance(seller);
@@ -115,8 +107,7 @@ public class CreateForAcceptance
         RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
         redirect.Url.Should().Be(url);
 
-        AcceptSessionRouter.Verify(_ => _.ToStartForSeller(seller.Id), Times.Once());
-        SellerService.Verify(_ => _.CreateAsync(seller), Times.Once());
-        VerifyNoOtherCalls();
+        A.CallTo(() => AcceptSessionRouter.ToStartForSeller(seller.Id)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => SellerService.CreateAsync(seller)).MustHaveHappenedOnceExactly();
     }
 }

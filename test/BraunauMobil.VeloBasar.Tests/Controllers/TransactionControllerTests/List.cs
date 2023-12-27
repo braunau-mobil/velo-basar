@@ -23,8 +23,7 @@ public class List
 		};
 		parameter.TransactionType = TransactionType.Acceptance;
 		SignInManager.IsSignedInMock = principal => false;
-		Router.Setup(_ => _.ToLogin())
-			.Returns(url);
+		A.CallTo(() => Router.ToLogin()).Returns(url);
 
 		//	Act
 		IActionResult result = await Sut.List(parameter, activeBasarId);
@@ -33,8 +32,7 @@ public class List
 		RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
 		redirect.Url.Should().Be(url);
 
-		Router.Verify(_ => _.ToLogin(), Times.Once());
-		VerifyNoOtherCalls();
+		A.CallTo(() => Router.ToLogin()).MustHaveHappenedOnceExactly();
 	}
 
     [Theory]
@@ -52,8 +50,7 @@ public class List
         };
         parameter.TransactionType = TransactionType.Acceptance;
 		SignInManager.IsSignedInMock = principal => true;
-		TransactionService.Setup(_ => _.GetManyAsync(parameter.PageSize!.Value, parameter.PageIndex, activeBasarId, parameter.TransactionType, parameter.SearchString))
-			.ReturnsAsync(Fixture.CreatePaginatedList(transactions.ToList()));
+		A.CallTo(() => TransactionService.GetManyAsync(parameter.PageSize!.Value, parameter.PageIndex, activeBasarId, parameter.TransactionType, parameter.SearchString)).Returns(Fixture.CreatePaginatedList(transactions.ToList()));
 
         //	Act
         IActionResult result = await Sut.List(parameter, activeBasarId);
@@ -63,8 +60,7 @@ public class List
 		view.Model.Should().BeOfType<ListModel<TransactionEntity, TransactionListParameter>>();
 		view.ViewData.ModelState.IsValid.Should().BeTrue();
 
-        TransactionService.Verify(_ => _.GetManyAsync(parameter.PageSize!.Value, parameter.PageIndex, activeBasarId, parameter.TransactionType, parameter.SearchString), Times.Once());
-        VerifyNoOtherCalls();
+        A.CallTo(() => TransactionService.GetManyAsync(parameter.PageSize!.Value, parameter.PageIndex, activeBasarId, parameter.TransactionType, parameter.SearchString)).MustHaveHappenedOnceExactly();
     }
 
     [Theory]
@@ -82,8 +78,7 @@ public class List
         };
         parameter.TransactionType = TransactionType.Sale;
         SignInManager.IsSignedInMock = principal => true;
-        TransactionService.Setup(_ => _.GetManyAsync(parameter.PageSize!.Value, parameter.PageIndex, activeBasarId, parameter.TransactionType, parameter.SearchString))
-            .ReturnsAsync(Fixture.CreatePaginatedList(transactions.ToList()));
+        A.CallTo(() => TransactionService.GetManyAsync(parameter.PageSize!.Value, parameter.PageIndex, activeBasarId, parameter.TransactionType, parameter.SearchString)).Returns(Fixture.CreatePaginatedList(transactions.ToList()));
 
         //	Act
         IActionResult result = await Sut.List(parameter, activeBasarId);
@@ -93,8 +88,7 @@ public class List
         view.Model.Should().BeOfType<ListModel<TransactionEntity, TransactionListParameter>>();
         view.ViewData.ModelState.IsValid.Should().BeTrue();
 
-        TransactionService.Verify(_ => _.GetManyAsync(parameter.PageSize!.Value, parameter.PageIndex, activeBasarId, parameter.TransactionType, parameter.SearchString), Times.Once());
-        VerifyNoOtherCalls();
+        A.CallTo(() => TransactionService.GetManyAsync(parameter.PageSize!.Value, parameter.PageIndex, activeBasarId, parameter.TransactionType, parameter.SearchString)).MustHaveHappenedOnceExactly();
     }
 
     [Theory]
@@ -112,8 +106,7 @@ public class List
         };
         parameter.TransactionType = TransactionType.Sale;
         SignInManager.IsSignedInMock = principal => false;
-        TransactionService.Setup(_ => _.GetManyAsync(parameter.PageSize!.Value, parameter.PageIndex, activeBasarId, parameter.TransactionType, parameter.SearchString))
-            .ReturnsAsync(Fixture.CreatePaginatedList(transactions.ToList()));
+        A.CallTo(() => TransactionService.GetManyAsync(parameter.PageSize!.Value, parameter.PageIndex, activeBasarId, parameter.TransactionType, parameter.SearchString)).Returns(Fixture.CreatePaginatedList(transactions.ToList()));
 
         //	Act
         IActionResult result = await Sut.List(parameter, activeBasarId);
@@ -123,8 +116,7 @@ public class List
         view.Model.Should().BeOfType<ListModel<TransactionEntity, TransactionListParameter>>();
         view.ViewData.ModelState.IsValid.Should().BeTrue();
 
-        TransactionService.Verify(_ => _.GetManyAsync(parameter.PageSize!.Value, parameter.PageIndex, activeBasarId, parameter.TransactionType, parameter.SearchString), Times.Once());
-        VerifyNoOtherCalls();
+        A.CallTo(() => TransactionService.GetManyAsync(parameter.PageSize!.Value, parameter.PageIndex, activeBasarId, parameter.TransactionType, parameter.SearchString)).MustHaveHappenedOnceExactly();
     }
 }
 

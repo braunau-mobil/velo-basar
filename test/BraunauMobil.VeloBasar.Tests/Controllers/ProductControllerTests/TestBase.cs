@@ -1,6 +1,5 @@
 ﻿using BraunauMobil.VeloBasar.BusinessLogic;
 using BraunauMobil.VeloBasar.Controllers;
-using BraunauMobil.VeloBasar.Cookies;
 using BraunauMobil.VeloBasar.Routing;
 using Microsoft.Extensions.Localization;
 
@@ -12,31 +11,25 @@ public class TestBase
     {
         ProductAnnotateModelValidator = new (Localizer);
         ProductEntityValidator = new(Localizer);
-        Sut = new (Router.Object, ProductService.Object, ProductAnnotateModelValidator, ProductEntityValidator);
 
-        Router.Setup(_ => _.Product)
-            .Returns(ProductRouter.Object);
-    }
+        A.CallTo(() => Router.Product).Returns(ProductRouter);
 
-    public void VerifyNoOtherCalls()
-    {
-        ProductService.VerifyNoOtherCalls();
-        ProductRouter.VerifyNoOtherCalls();
+        Sut = new (Router, ProductService, ProductAnnotateModelValidator, ProductEntityValidator);        
     }
 
     protected Fixture Fixture { get; } = new ();
 
     protected IStringLocalizer<SharedResources> Localizer { get; } = Helpers.CreateActualLocalizer();
 
-    protected Mock<IProductService> ProductService { get; } = new ();
+    protected IProductService ProductService { get; } = X.StrictFake<IProductService>();
 
     protected ProductAnnotateModelValidator ProductAnnotateModelValidator { get; }
 
     protected ProductEntityValidator ProductEntityValidator { get; }
 
-    protected Mock<IVeloRouter> Router { get; } = new();
+    protected IVeloRouter Router { get; } = X.StrictFake<IVeloRouter>();
 
     protected ProductController Sut { get; }
 
-    protected Mock<IProductRouter> ProductRouter { get; } = new();
+    protected IProductRouter ProductRouter { get; } = X.StrictFake<IProductRouter>();
 }

@@ -15,8 +15,6 @@ public class GetActiveBasarIdAsync
 
         //  Assert
         id.Should().BeNull();
-
-        VerifyNoOtherCalls();
     }
 
     [Fact]
@@ -35,8 +33,6 @@ public class GetActiveBasarIdAsync
 
         //  Assert
         id.Should().BeNull();
-
-        VerifyNoOtherCalls();
     }
 
     [Fact]
@@ -59,7 +55,5 @@ public class GetActiveBasarIdAsync
 
         //  Assert
         id.Should().Be(enabledBasar.Id);
-
-        VerifyNoOtherCalls();
     }
 }

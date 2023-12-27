@@ -8,15 +8,10 @@ public class TestBase<TDbFixture>
 {
     public TestBase()
     {
-        Sut = new BasarStatsService(ColorProvider.Object, Db);
+        Sut = new BasarStatsService(ColorProvider, Db);
     }
 
-    public void VerifyNoOtherCalls()
-    {
-        ColorProvider.VerifyNoOtherCalls();
-    }
-
-    public Mock<IColorProvider> ColorProvider { get; } = new();
+    public IColorProvider ColorProvider { get; } = X.StrictFake<IColorProvider>();
 
     public BasarStatsService Sut { get; }
 }

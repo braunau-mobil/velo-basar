@@ -2,7 +2,6 @@
 using BraunauMobil.VeloBasar.Cookies;
 using BraunauMobil.VeloBasar.Routing;
 using Microsoft.Extensions.Logging;
-using Xan.AspNetCore.Mvc.Crud;
 
 namespace BraunauMobil.VeloBasar.Tests.Controllers.HomeControllerTests;
 
@@ -10,34 +9,24 @@ public class TestBase
 {
     public TestBase()
     {
-        Router.Setup(_ => _.Basar)
-            .Returns(BasarRouter.Object);
-        Router.Setup(_ => _.Setup)
-            .Returns(SetupRouter.Object);
+        A.CallTo(() => Router.Basar).Returns(BasarRouter);
+        A.CallTo(() => Router.Setup).Returns(SetupRouter);
 
-        Sut = new HomeController(AppContext.Object, Router.Object, Mock.Of<ILogger<HomeController>>(), CurrentThemeCookie.Object);
+        Sut = new HomeController(AppContext, Router, A.Fake<ILogger<HomeController>>(), CurrentThemeCookie);
     }
 
-    public void VerifyNoOtherCalls()
-    {
-        AppContext.VerifyNoOtherCalls();
-        BasarRouter.VerifyNoOtherCalls();
-        CurrentThemeCookie.VerifyNoOtherCalls();
-        SetupRouter.VerifyNoOtherCalls();
-    }
-
-    protected Mock<IAppContext> AppContext { get; } = new();
+    protected IAppContext AppContext { get; } = X.StrictFake<IAppContext>();
 
 
-    protected Mock<IBasarRouter> BasarRouter { get; } = new();
+    protected IBasarRouter BasarRouter { get; } = X.StrictFake<IBasarRouter>();
 
-    protected Mock<ICurrentThemeCookie> CurrentThemeCookie { get; } = new ();
+    protected ICurrentThemeCookie CurrentThemeCookie { get; } = X.StrictFake<ICurrentThemeCookie>();
 
     protected Fixture Fixture { get; } = new ();
 
-    protected Mock<IVeloRouter> Router { get; } = new();
+    protected IVeloRouter Router { get; } = X.StrictFake<IVeloRouter>();
 
-    protected Mock<ISetupRouter> SetupRouter { get; } = new ();
+    protected ISetupRouter SetupRouter { get; } = X.StrictFake<ISetupRouter>();
 
     protected HomeController Sut { get; }
 

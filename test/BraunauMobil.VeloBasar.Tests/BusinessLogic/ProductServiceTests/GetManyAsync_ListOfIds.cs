@@ -14,8 +14,6 @@ public class GetManyAsync_ListOfIds
 
         //  Assert
         products.Should().BeEmpty();
-
-        VerifyNoOtherCalls();
     }
 
     [Theory]
@@ -31,8 +29,6 @@ public class GetManyAsync_ListOfIds
 
         //  Assert
         result.Should().BeEmpty();
-
-        VerifyNoOtherCalls();
     }
 
     [Theory]
@@ -58,7 +54,5 @@ public class GetManyAsync_ListOfIds
         products.Should().ContainEquivalentOf(p1);
         products.Should().ContainEquivalentOf(p2);
         products.Should().ContainEquivalentOf(p3);
-
-        VerifyNoOtherCalls();
     }
 }

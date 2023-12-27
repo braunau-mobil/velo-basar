@@ -8,15 +8,10 @@ public class TestBase
 {
     public TestBase()
     {
-        Sut = new AdminController(AdminService.Object, Clock);
+        Sut = new AdminController(AdminService, Clock);
     }
 
-    public void VerifyNoOtherCalls()
-    {
-        AdminService.VerifyNoOtherCalls();
-    }
-
-    protected Mock<IAdminService> AdminService { get; } = new ();
+    protected IAdminService AdminService { get; } = X.StrictFake<IAdminService>();
 
     protected ClockMock Clock { get; } = new();
 

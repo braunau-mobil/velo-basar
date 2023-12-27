@@ -14,8 +14,6 @@ public class GetDetailsAsync
 
         //  Assert
         await act.Should().ThrowAsync<InvalidOperationException>();
-
-        VerifyNoOtherCalls();
     }
 
     [Theory]
@@ -35,8 +33,6 @@ public class GetDetailsAsync
         model.CanLock.Should().BeFalse();
         model.CanSetAsLost.Should().BeFalse();
         model.CanUnlock.Should().BeFalse();
-
-        VerifyNoOtherCalls();
     }
 
     [Theory]
@@ -70,7 +66,5 @@ public class GetDetailsAsync
         model.CanLock.Should().BeFalse();
         model.CanSetAsLost.Should().BeFalse();
         model.CanUnlock.Should().BeFalse();
-
-        VerifyNoOtherCalls();
     }
 }

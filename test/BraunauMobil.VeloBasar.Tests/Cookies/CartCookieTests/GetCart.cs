@@ -12,17 +12,15 @@ public class GetCart
     public void ReturnsEmptyList(string? cookieValue)
 	{
 		//	Arrange
-		CartCookie sut = new(HttpContextAccessor.Object);
-		RequestCookies.SetupGet(_ => _[sut.Key])
-			.Returns(cookieValue);
+		CartCookie sut = new(HttpContextAccessor);
+		A.CallTo(() => RequestCookies[sut.Key]).Returns(cookieValue);
 
 		//	Act
 		IList<int> result = sut.GetCart();
 
         //	Assert
         result.Should().BeEmpty();
-		RequestCookies.VerifyGet(_ => _[sut.Key], Times.Once());
-		VerifyNoOtherCalls();
+        A.CallTo(() => RequestCookies[sut.Key]).MustHaveHappenedOnceExactly();
 	}
 
     [Theory]
@@ -31,17 +29,15 @@ public class GetCart
     {
         //	Arrange
         string cookieValue = JsonSerializer.Serialize(input);
-        CartCookie sut = new(HttpContextAccessor.Object);
-        RequestCookies.SetupGet(_ => _[sut.Key])
-            .Returns(cookieValue);
+        CartCookie sut = new(HttpContextAccessor);
+        A.CallTo(() => RequestCookies[sut.Key]).Returns(cookieValue);
 
         //	Act
         IList<int> result = sut.GetCart();
 
         //	Assert
         result.Should().BeEquivalentTo(input);
-        RequestCookies.VerifyGet(_ => _[sut.Key], Times.Once());
-        VerifyNoOtherCalls();
+        A.CallTo(() => RequestCookies[sut.Key]).MustHaveHappenedOnceExactly();
     }
 }
 

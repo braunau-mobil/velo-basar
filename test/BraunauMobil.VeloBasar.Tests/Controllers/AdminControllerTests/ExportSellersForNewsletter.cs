@@ -19,8 +19,7 @@ public class ExportSellersForNewsletter
         };
 
         FileDataEntity fileData = Fixture.BuildFileDataEntity().Create();
-        AdminService.Setup(_ => _.ExportSellersForNewsletterAsCsvAsync(null))
-            .ReturnsAsync(fileData);
+        A.CallTo(() => AdminService.ExportSellersForNewsletterAsCsvAsync(null)).Returns(fileData);
 
         //  Act
         IActionResult result = await Sut.ExportSellersForNewsletter(model);
@@ -31,8 +30,7 @@ public class ExportSellersForNewsletter
         fileContent.FileContents.Should().BeEquivalentTo(fileData.Data);
         fileContent.FileDownloadName.Should().BeEquivalentTo(fileData.FileName);
 
-        AdminService.Verify(_ => _.ExportSellersForNewsletterAsCsvAsync(null), Times.Once);
-        VerifyNoOtherCalls();
+        A.CallTo(() => AdminService.ExportSellersForNewsletterAsCsvAsync(null)).MustHaveHappenedOnceExactly();
     }
 
     [Theory]
@@ -49,8 +47,7 @@ public class ExportSellersForNewsletter
         };
         
         FileDataEntity fileData = Fixture.BuildFileDataEntity().Create();
-        AdminService.Setup(_ => _.ExportSellersForNewsletterAsCsvAsync(minPermissionTimestamp))
-            .ReturnsAsync(fileData);
+        A.CallTo(() => AdminService.ExportSellersForNewsletterAsCsvAsync(minPermissionTimestamp)).Returns(fileData);
 
         //  Act
         IActionResult result = await Sut.ExportSellersForNewsletter(model);
@@ -61,7 +58,6 @@ public class ExportSellersForNewsletter
         fileContent.FileContents.Should().BeEquivalentTo(fileData.Data);
         fileContent.FileDownloadName.Should().BeEquivalentTo(fileData.FileName);
 
-        AdminService.Verify(_ => _.ExportSellersForNewsletterAsCsvAsync(minPermissionTimestamp), Times.Once);
-        VerifyNoOtherCalls();
+        A.CallTo(() => AdminService.ExportSellersForNewsletterAsCsvAsync(minPermissionTimestamp)).MustHaveHappenedOnceExactly();
     }
 }

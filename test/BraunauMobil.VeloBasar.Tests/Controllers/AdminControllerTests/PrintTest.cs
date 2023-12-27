@@ -16,7 +16,5 @@ public class PrintTest
         //  Assert
         ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
         view.ViewData.ModelState.IsValid.Should().BeTrue();
-
-        VerifyNoOtherCalls();
     }
 }

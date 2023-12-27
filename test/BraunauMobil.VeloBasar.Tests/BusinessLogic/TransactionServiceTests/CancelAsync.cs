@@ -1,5 +1,4 @@
-﻿using FluentAssertions.Execution;
-using Xan.AspNetCore.EntityFrameworkCore;
+﻿using Xan.AspNetCore.EntityFrameworkCore;
 using Xan.AspNetCore.Mvc.Abstractions;
 
 namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.TransactionServiceTests;
@@ -35,12 +34,10 @@ public class CancelAsync
         await Db.SaveChangesAsync();
 
         Clock.Now = timestamp;
-        NumberService.Setup(_ => _.NextNumberAsync(basar.Id, TransactionType.Cancellation))
-            .ReturnsAsync(number);
-        TransactionDocumentService.Setup(_ => _.CreateAsync(It.Is<TransactionEntity>(_ => _.Type == TransactionType.Sale)))
-            .ReturnsAsync(document);
-        StatusPushService.Setup(_ => _.IsEnabled)
-            .Returns(true);
+        A.CallTo(() => NumberService.NextNumberAsync(basar.Id, TransactionType.Cancellation)).Returns(number);
+        A.CallTo(() => TransactionDocumentService.CreateAsync(A<TransactionEntity>.That.Matches(_ => _.Type == TransactionType.Sale))).Returns(document);
+        A.CallTo(() => StatusPushService.IsEnabled).Returns(true);
+        A.CallTo(() => StatusPushService.PushSellerAsync(basar.Id, session.SellerId)).DoesNothing();
 
         //  Act
         int result = await Sut.CancelAsync(basar.Id, sale.Id, products.Take(1).Ids());
@@ -87,11 +84,10 @@ public class CancelAsync
             saleFromDb.TimeStamp.Should().Be(sale.TimeStamp);
         }
 
-        NumberService.Verify(_ => _.NextNumberAsync(basar.Id, TransactionType.Cancellation), Times.Once);
-        StatusPushService.Verify(_ => _.IsEnabled, Times.Once);
-        StatusPushService.Verify(_ => _.PushSellerAsync(basar.Id, session.SellerId), Times.Once);
-        TransactionDocumentService.Verify(_ => _.CreateAsync(It.Is<TransactionEntity>(_ => _.Type == TransactionType.Sale)), Times.Once());
-        VerifyNoOtherCalls();
+        A.CallTo(() => NumberService.NextNumberAsync(basar.Id, TransactionType.Cancellation)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => StatusPushService.IsEnabled).MustHaveHappenedOnceExactly();
+        A.CallTo(() => StatusPushService.PushSellerAsync(basar.Id, session.SellerId)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => TransactionDocumentService.CreateAsync(A<TransactionEntity>.That.Matches(_ => _.Type == TransactionType.Sale))).MustHaveHappenedOnceExactly();
     }
 
     [Theory]
@@ -124,12 +120,10 @@ public class CancelAsync
         await Db.SaveChangesAsync();
 
         Clock.Now = timestamp;
-        NumberService.Setup(_ => _.NextNumberAsync(basar.Id, TransactionType.Cancellation))
-            .ReturnsAsync(number);
-        TransactionDocumentService.Setup(_ => _.CreateAsync(It.Is<TransactionEntity>(_ => _.Type == TransactionType.Sale)))
-            .ReturnsAsync(document);
-        StatusPushService.Setup(_ => _.IsEnabled)
-            .Returns(true);
+        A.CallTo(() => NumberService.NextNumberAsync(basar.Id, TransactionType.Cancellation)).Returns(number);
+        A.CallTo(() => TransactionDocumentService.CreateAsync(A<TransactionEntity>.That.Matches(_ => _.Type == TransactionType.Sale))).Returns(document);
+        A.CallTo(() => StatusPushService.IsEnabled).Returns(true);
+        A.CallTo(() => StatusPushService.PushSellerAsync(basar.Id, session.SellerId)).DoesNothing();
 
         //  Act
         int result = await Sut.CancelAsync(basar.Id, sale.Id, products.Take(1).Ids());
@@ -176,10 +170,9 @@ public class CancelAsync
             saleFromDb.TimeStamp.Should().Be(sale.TimeStamp);
         }
 
-        NumberService.Verify(_ => _.NextNumberAsync(basar.Id, TransactionType.Cancellation), Times.Once);
-        StatusPushService.Verify(_ => _.IsEnabled, Times.Once);
-        StatusPushService.Verify(_ => _.PushSellerAsync(basar.Id, session.SellerId), Times.Once);
-        TransactionDocumentService.Verify(_ => _.CreateAsync(It.Is<TransactionEntity>(_ => _.Type == TransactionType.Sale)), Times.Once());
-        VerifyNoOtherCalls();
+        A.CallTo(() => NumberService.NextNumberAsync(basar.Id, TransactionType.Cancellation)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => StatusPushService.IsEnabled).MustHaveHappenedOnceExactly();
+        A.CallTo(() => StatusPushService.PushSellerAsync(basar.Id, session.SellerId)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => TransactionDocumentService.CreateAsync(A<TransactionEntity>.That.Matches(_ => _.Type == TransactionType.Sale))).MustHaveHappenedOnceExactly();
     }
 }

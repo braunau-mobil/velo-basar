@@ -14,8 +14,6 @@ public class GetLostProductsCount
 
         //  Assert
         result.Should().Be(0);
-
-        VerifyNoOtherCalls();
     }
 
     [Fact]
@@ -40,7 +38,5 @@ public class GetLostProductsCount
 
         //  Assert
         result.Should().Be(lockedProducts.Count());
-
-        VerifyNoOtherCalls();
     }
 }

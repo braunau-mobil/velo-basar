@@ -13,8 +13,6 @@ public class IsSessionRunning
 
         //  Assert
         isRunning.Should().BeFalse();
-
-        VerifyNoOtherCalls();
     }
 
     [Theory]
@@ -28,8 +26,6 @@ public class IsSessionRunning
 
         //  Assert
         isRunning.Should().BeFalse();
-
-        VerifyNoOtherCalls();
     }
 
     [Theory]
@@ -46,8 +42,6 @@ public class IsSessionRunning
 
         //  Assert
         isRunning.Should().BeFalse();
-
-        VerifyNoOtherCalls();
     }
 
     [Theory]
@@ -64,7 +58,5 @@ public class IsSessionRunning
 
         //  Assert
         isRunning.Should().BeTrue();
-
-        VerifyNoOtherCalls();
     }
 }

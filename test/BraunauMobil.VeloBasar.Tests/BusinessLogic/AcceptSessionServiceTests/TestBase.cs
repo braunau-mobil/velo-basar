@@ -8,15 +8,10 @@ public class TestBase<TDbFixture>
 {
     public TestBase()
     {
-        Sut = new AcceptSessionService(Db, TransactionService.Object, Clock);
-    }
-
-    public void VerifyNoOtherCalls()
-    {
-        TransactionService.VerifyNoOtherCalls();
+        Sut = new AcceptSessionService(Db, TransactionService, Clock);
     }
     
     public AcceptSessionService Sut { get; }
 
-    public Mock<ITransactionService> TransactionService { get; } = new();
+    public ITransactionService TransactionService { get; } = X.StrictFake<ITransactionService>();
 }

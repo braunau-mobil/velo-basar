@@ -11,12 +11,13 @@ public class SetCurrentTheme
     public void CallsAppend(Theme theme)
     {
         //  Arrange
-        CurrentThemeCookie sut = new (HttpContextAccessor.Object);
+        CurrentThemeCookie sut = new (HttpContextAccessor);
+        A.CallTo(() => ResponseCookies.Append(sut.Key, $"{theme}", sut.Options)).DoesNothing();
 
         //  Act
         sut.SetCurrentTheme(theme);
 
         //  Asert
-        ResponseCookies.Verify(_ => _.Append(sut.Key, $"{theme}", sut.Options), Times.Once());
+        A.CallTo(() => ResponseCookies.Append(sut.Key, $"{theme}", sut.Options)).MustHaveHappenedOnceExactly();
     }
 }

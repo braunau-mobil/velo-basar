@@ -11,28 +11,19 @@ public class TestBase
     {
         SelectSaleValidator = new(Localizer);
         SelectProductsValidator = new(Localizer);
-        Sut = new CancelController(Router.Object, TransactionService.Object, SelectSaleValidator, SelectProductsValidator);
+        A.CallTo(() => Router.Cancel).Returns(CancelRouter);
+        A.CallTo(() => Router.Transaction).Returns(TransactionRouter);
 
-        Router.Setup(_ => _.Cancel)
-            .Returns(CancelRouter.Object);
-        Router.Setup(_ => _.Transaction)
-            .Returns(TransactionRouter.Object);
+        Sut = new CancelController(Router, TransactionService, SelectSaleValidator, SelectProductsValidator);        
     }
 
-    public void VerifyNoOtherCalls()
-    {
-        CancelRouter.VerifyNoOtherCalls();
-        TransactionRouter.VerifyNoOtherCalls();
-        TransactionService.VerifyNoOtherCalls();
-    }
-
-    protected Mock<ICancelRouter> CancelRouter { get; } = new();
+    protected ICancelRouter CancelRouter { get; } = X.StrictFake<ICancelRouter>();
 
     protected Fixture Fixture { get; } = new ();
 
     protected IStringLocalizer<SharedResources> Localizer { get; } = Helpers.CreateActualLocalizer();
 
-    protected Mock<IVeloRouter> Router { get; } = new();
+    protected IVeloRouter Router { get; } = X.StrictFake<IVeloRouter>();
 
     protected CancelController Sut { get; }
 
@@ -40,8 +31,8 @@ public class TestBase
 
     protected SelectProductsModelValidator SelectProductsValidator { get; }
 
-    protected Mock<ITransactionRouter> TransactionRouter { get; } = new();
+    protected ITransactionRouter TransactionRouter { get; } = X.StrictFake<ITransactionRouter>();
 
-    protected Mock<ITransactionService> TransactionService { get; } = new ();
+    protected ITransactionService TransactionService { get; } = X.StrictFake<ITransactionService>();
 
 }

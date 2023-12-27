@@ -9,25 +9,22 @@ public class DropDatabase
     public void DevToolsNotEnabled_ReturnsUnauthorized()
     {
         //  Arrange
-        AppContext.Setup(_ => _.DevToolsEnabled())
-            .Returns(false);
+        A.CallTo(() => AppContext.DevToolsEnabled()).Returns(false);
 
         //  Act
         IActionResult result = Sut.DropDatabase();
 
         //  Assert
         UnauthorizedResult unauthorized = result.Should().BeOfType<UnauthorizedResult>().Subject;
-        
-        AppContext.Verify(_ => _.DevToolsEnabled(), Times.Once());
-        VerifyNoOtherCalls();
+
+        A.CallTo(() => AppContext.DevToolsEnabled()).MustHaveHappenedOnceExactly();
     }
 
     [Fact]
     public void DevToolsEnabled_ReturnsView()
     {
         //  Arrange
-        AppContext.Setup(_ => _.DevToolsEnabled())
-            .Returns(true);
+        A.CallTo(() => AppContext.DevToolsEnabled()).Returns(true);
 
         //  Act
         IActionResult result = Sut.DropDatabase();
@@ -37,7 +34,6 @@ public class DropDatabase
         view.Model.Should().BeNull();
         view.ViewData.ModelState.IsValid.Should().BeTrue();
 
-        AppContext.Verify(_ => _.DevToolsEnabled(), Times.Once());
-        VerifyNoOtherCalls();
+        A.CallTo(() => AppContext.DevToolsEnabled()).MustHaveHappenedOnceExactly();
     }
 }

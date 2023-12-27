@@ -14,8 +14,6 @@ public class ExistsForBasarAsync
 
         //  Assert
         result.Should().BeFalse();
-
-        VerifyNoOtherCalls();
     }
 
     [Theory]
@@ -31,8 +29,6 @@ public class ExistsForBasarAsync
 
         //  Assert
         result.Should().BeFalse();
-
-        VerifyNoOtherCalls();
     }
 
     [Theory]
@@ -48,7 +44,5 @@ public class ExistsForBasarAsync
 
         //  Assert
         result.Should().BeTrue();
-
-        VerifyNoOtherCalls();
     }
 }

@@ -10,10 +10,8 @@ public class Index
     public void DatabaseNotInitialized_ReturnsRedirectToInitialSetup(string url)
     {
         //  Arrange
-        AppContext.Setup(_ => _.IsDatabaseInitialized())
-            .Returns(false);
-        SetupRouter.Setup(_ => _.ToInitialSetup())
-            .Returns(url);
+        A.CallTo(() => AppContext.IsDatabaseInitialized()).Returns(false);
+        A.CallTo(() => SetupRouter.ToInitialSetup()).Returns(url);
 
         //  Act
         IActionResult result = Sut.Index();
@@ -22,9 +20,8 @@ public class Index
         RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
         redirect.Url.Should().Be(url);
         
-        AppContext.Verify(_ => _.IsDatabaseInitialized(), Times.Once());
-        SetupRouter.Verify(_ => _.ToInitialSetup(), Times.Once());
-        VerifyNoOtherCalls();
+        A.CallTo(() => AppContext.IsDatabaseInitialized()).MustHaveHappenedOnceExactly();
+        A.CallTo(() => SetupRouter.ToInitialSetup()).MustHaveHappenedOnceExactly();
     }
 
     [Theory]
@@ -32,10 +29,8 @@ public class Index
     public void DatabaseInitialized_ReturnsRedirectToActiveBasar(string url)
     {
         //  Arrange
-        AppContext.Setup(_ => _.IsDatabaseInitialized())
-            .Returns(true);
-        BasarRouter.Setup(_ => _.ToActiveBasarDetails())
-            .Returns(url);
+        A.CallTo(() => AppContext.IsDatabaseInitialized()).Returns(true);
+        A.CallTo(() => BasarRouter.ToActiveBasarDetails()).Returns(url);
 
         //  Act
         IActionResult result = Sut.Index();
@@ -44,8 +39,7 @@ public class Index
         RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
         redirect.Url.Should().Be(url);
 
-        AppContext.Verify(_ => _.IsDatabaseInitialized(), Times.Once());
-        BasarRouter.Verify(_ => _.ToActiveBasarDetails(), Times.Once());
-        VerifyNoOtherCalls();
+        A.CallTo(() => AppContext.IsDatabaseInitialized()).MustHaveHappenedOnceExactly();
+        A.CallTo(() => BasarRouter.ToActiveBasarDetails()).MustHaveHappenedOnceExactly();
     }
 }

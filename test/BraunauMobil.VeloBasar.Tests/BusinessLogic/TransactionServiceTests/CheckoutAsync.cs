@@ -1,5 +1,4 @@
-﻿using FluentAssertions.Execution;
-using Xan.AspNetCore.EntityFrameworkCore;
+﻿using Xan.AspNetCore.EntityFrameworkCore;
 using Xan.AspNetCore.Mvc.Abstractions;
 
 namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.TransactionServiceTests;
@@ -24,10 +23,9 @@ public class CheckoutAsync
         await Db.SaveChangesAsync();
 
         Clock.Now = timestamp;
-        NumberService.Setup(_ => _.NextNumberAsync(basar.Id, TransactionType.Sale))
-            .ReturnsAsync(number);
-        StatusPushService.Setup(_ => _.IsEnabled)
-            .Returns(true);
+        A.CallTo(() => NumberService.NextNumberAsync(basar.Id, TransactionType.Sale)).Returns(number);
+        A.CallTo(() => StatusPushService.IsEnabled).Returns(true);
+        A.CallTo(() => StatusPushService.PushSellerAsync(basar.Id, session.SellerId)).DoesNothing();
 
         //  Act
         int result = await Sut.CheckoutAsync(basar.Id, products.Ids());
@@ -54,10 +52,9 @@ public class CheckoutAsync
             saleFromDb.TimeStamp.Should().Be(timestamp);
         }
 
-        NumberService.Verify(_ => _.NextNumberAsync(basar.Id, TransactionType.Sale), Times.Once);
-        StatusPushService.Verify(_ => _.IsEnabled, Times.Once);
-        StatusPushService.Verify(_ => _.PushSellerAsync(basar.Id, session.SellerId), Times.Once);
-        VerifyNoOtherCalls();
+        A.CallTo(() => NumberService.NextNumberAsync(basar.Id, TransactionType.Sale)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => StatusPushService.IsEnabled).MustHaveHappenedOnceExactly();
+        A.CallTo(() => StatusPushService.PushSellerAsync(basar.Id, session.SellerId)).MustHaveHappenedOnceExactly();
     }
 
     [Theory]
@@ -87,7 +84,5 @@ public class CheckoutAsync
 
         //  Assert
         await act.Should().ThrowAsync<InvalidOperationException>();
-
-        VerifyNoOtherCalls();
     }
 }

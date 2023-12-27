@@ -20,8 +20,6 @@ public class Select
 
         view.Model.Should().NotBeNull();
         view.Model.Should().BeOfType<AcceptanceLabelsModel>();
-
-        VerifyNoOtherCalls();
     }
 
     [Fact]
@@ -32,8 +30,7 @@ public class Select
         model.OpenDocument = false;
 
         // Arrange
-        TransactionService.Setup(ts => ts.FindAsync(model.ActiveBasarId, TransactionType.Acceptance, model.Number))
-            .ReturnsAsync(transaction);
+        A.CallTo(() => TransactionService.FindAsync(model.ActiveBasarId, TransactionType.Acceptance, model.Number)).Returns(transaction);
 
         // Act
         IActionResult result = await Sut.Select(model);
@@ -47,8 +44,7 @@ public class Select
         model.OpenDocument.Should().BeTrue();
         model.Id.Should().Be(transaction.Id);
 
-        TransactionService.Verify(ts => ts.FindAsync(model.ActiveBasarId, TransactionType.Acceptance, model.Number), Times.Once);
-        VerifyNoOtherCalls();
+        A.CallTo(() => TransactionService.FindAsync(model.ActiveBasarId, TransactionType.Acceptance, model.Number)).MustHaveHappenedOnceExactly();
     }
 
     [Fact]
@@ -59,8 +55,9 @@ public class Select
         model.OpenDocument = false;
 
         // Arrange
-        Localizer.Setup(_ => _[VeloTexts.NoAcceptanceFound, model.Number])
-            .Returns(errorMessage);
+        A.CallTo(() => Localizer[VeloTexts.NoAcceptanceFound, model.Number]).Returns(errorMessage);
+        TransactionEntity? transaction = null;
+        A.CallTo(() => TransactionService.FindAsync(model.ActiveBasarId, TransactionType.Acceptance, model.Number)).Returns(transaction);
 
         // Act
         IActionResult result = await Sut.Select(model);
@@ -77,8 +74,7 @@ public class Select
         resultModel.Id.Should().Be(0);
         resultModel.ActiveBasarId.Should().Be(0);
 
-        TransactionService.Verify(_ => _.FindAsync(model.ActiveBasarId, TransactionType.Acceptance, model.Number), Times.Once);
-        Localizer.Verify(_ => _[VeloTexts.NoAcceptanceFound, model.Number], Times.Once);
-        VerifyNoOtherCalls();
+        A.CallTo(() => TransactionService.FindAsync(model.ActiveBasarId, TransactionType.Acceptance, model.Number)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => Localizer[VeloTexts.NoAcceptanceFound, model.Number]).MustHaveHappenedOnceExactly();
     }
 }

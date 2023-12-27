@@ -15,7 +15,8 @@ public class TriggerStatusPush
         {
             HttpContext = new DefaultHttpContext()
         };
-        Sut.Request.Headers.Referer = url;        
+        Sut.Request.Headers.Referer = url;
+        A.CallTo(() => SellerService.TriggerStatusPushAsync(activeBasarId, sellerId)).DoesNothing();
 
         //  Act
         IActionResult result = await Sut.TriggerStatusPush(activeBasarId, sellerId);
@@ -24,8 +25,6 @@ public class TriggerStatusPush
         RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
         redirect.Url.Should().Be(url);
 
-        SellerService.Verify(_ => _.TriggerStatusPushAsync(activeBasarId, sellerId), Times.Once);
-
-        VerifyNoOtherCalls();
+        A.CallTo(() => SellerService.TriggerStatusPushAsync(activeBasarId, sellerId)).MustHaveHappenedOnceExactly();
     }
 }

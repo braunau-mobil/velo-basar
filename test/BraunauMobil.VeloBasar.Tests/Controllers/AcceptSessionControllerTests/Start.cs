@@ -11,8 +11,7 @@ public class Start
     public void WitNoActiveSessionIdSet_CreatesNewSession_And_RedirectsToSellerCreateForAcceptance(int activeBasarId, string url)
     {
         //  Arrange
-        SellerRouter.Setup(_ => _.ToCreateForAcceptance())
-            .Returns(url);
+        A.CallTo(() => SellerRouter.ToCreateForAcceptance()).Returns(url);
 
         //  Act
         IActionResult result = Sut.Start(activeBasarId);
@@ -20,9 +19,8 @@ public class Start
         //  Act & Assert
         RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
         redirect.Url.Should().Be(url);
-        
-        SellerRouter.Verify(_ => _.ToCreateForAcceptance(), Times.Once());
-        VerifyNoOtherCalls();
+
+        A.CallTo(() => SellerRouter.ToCreateForAcceptance()).MustHaveHappenedOnceExactly();
     }
 
     [Theory]
@@ -31,8 +29,7 @@ public class Start
     {
         //  Arrange
         Sut.ViewData.SetActiveSessionId(activeSessionId);
-        AcceptProductRouter.Setup(_ => _.ToCreate(activeSessionId))
-            .Returns(url);
+        A.CallTo(() => AcceptProductRouter.ToCreate(activeSessionId)).Returns(url);
 
         //  Act
         IActionResult result = Sut.Start(activeBasarId);
@@ -41,7 +38,6 @@ public class Start
         RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
         redirect.Url.Should().Be(url);
 
-        AcceptProductRouter.Verify(_ => _.ToCreate(activeSessionId), Times.Once());
-        VerifyNoOtherCalls();
+        A.CallTo(() => AcceptProductRouter.ToCreate(activeSessionId)).MustHaveHappenedOnceExactly();
     }
 }

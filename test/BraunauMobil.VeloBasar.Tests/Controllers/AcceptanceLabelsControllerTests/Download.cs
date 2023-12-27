@@ -11,8 +11,7 @@ public class Download
     {
         // Arrange
         FileDataEntity fileData = Fixture.BuildFileDataEntity().Create();
-        TransactionService.Setup(ts => ts.GetAcceptanceLabelsAsync(id))
-            .ReturnsAsync(fileData);
+        A.CallTo(() => TransactionService.GetAcceptanceLabelsAsync(id)).Returns(fileData);
         
         // Act
         IActionResult result = await Sut.Download(id);
@@ -25,6 +24,6 @@ public class Download
         fileContent.FileContents.Should().BeEquivalentTo(fileData.Data);
         fileContent.FileDownloadName.Should().Be(fileData.FileName);
 
-        TransactionService.Verify(ts => ts.GetAcceptanceLabelsAsync(id), Times.Once);
+        A.CallTo(() => TransactionService.GetAcceptanceLabelsAsync(id)).MustHaveHappenedOnceExactly();
     }
 }

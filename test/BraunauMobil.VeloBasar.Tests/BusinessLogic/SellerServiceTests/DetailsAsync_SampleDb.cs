@@ -10,8 +10,7 @@ public class DetailsAsync_SampleDb
     public async Task DetailsAreCorrect(int basarId, int sellerId)
     {
         //  Arrange
-        StatusPushService.Setup(_ => _.IsEnabled)
-            .Returns(true);
+        A.CallTo(() => StatusPushService.IsEnabled).Returns(true);
 
         //  Act
         SellerDetailsModel model = await Sut.GetDetailsAsync(basarId, sellerId);
@@ -31,7 +30,6 @@ public class DetailsAsync_SampleDb
             model.Transactions.Should().HaveCount(4);
         }
 
-        StatusPushService.VerifyGet(_ => _.IsEnabled, Times.Once);
-        VerifyNoOtherCalls();
+        A.CallTo(() => StatusPushService.IsEnabled).MustHaveHappenedOnceExactly();
     }
 }

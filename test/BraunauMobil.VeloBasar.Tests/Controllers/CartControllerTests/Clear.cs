@@ -10,6 +10,7 @@ public class Clear
     public void CallsClearCartAndReturnsRedirectToIndex()
     {
         //  Arrange
+        A.CallTo(() => Cookie.ClearCart()).DoesNothing();
 
         //  Act
         IActionResult result = Sut.Clear();
@@ -19,7 +20,6 @@ public class Clear
         redirect.ActionName.Should().Be(nameof(CartController.Index));
         redirect.ControllerName.Should().BeNull();
 
-        Cookie.Verify(_ => _.ClearCart(), Times.Once());
-        VerifyNoOtherCalls();
+        A.CallTo(() => Cookie.ClearCart()).MustHaveHappenedOnceExactly();
     }
 }

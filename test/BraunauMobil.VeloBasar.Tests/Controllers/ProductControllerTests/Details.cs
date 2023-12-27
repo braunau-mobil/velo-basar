@@ -11,8 +11,7 @@ public class Details
     {
         //  Arrange
         ProductDetailsModel model = Fixture.BuildProductDetailsModel().Create();
-        ProductService.Setup(_ => _.GetDetailsAsync(activeBasarId, productId))
-            .ReturnsAsync(model);
+        A.CallTo(() => ProductService.GetDetailsAsync(activeBasarId, productId)).Returns(model);
 
         //  Act
         IActionResult result = await Sut.Details(activeBasarId, productId);
@@ -22,7 +21,6 @@ public class Details
         view.Model.Should().Be(model);
         view.ViewData.ModelState.IsValid.Should().BeTrue();
 
-        ProductService.Verify(_ => _.GetDetailsAsync(activeBasarId, productId), Times.Once());
-        VerifyNoOtherCalls();
+        A.CallTo(() => ProductService.GetDetailsAsync(activeBasarId, productId)).MustHaveHappenedOnceExactly();
     }
 }

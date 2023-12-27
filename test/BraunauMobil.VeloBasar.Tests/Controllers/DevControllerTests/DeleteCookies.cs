@@ -10,25 +10,22 @@ public class DeleteCookies
     public void NoParameters_DevToolsNotEnabled_ReturnsUnauthorized()
     {
         //  Arrange
-        AppContext.Setup(_ => _.DevToolsEnabled())
-            .Returns(false);
+        A.CallTo(() => AppContext.DevToolsEnabled()).Returns(false);
 
         //  Act
         IActionResult result = Sut.DeleteCookies();
 
         //  Assert
         UnauthorizedResult unauthorized = result.Should().BeOfType<UnauthorizedResult>().Subject;
-        
-        AppContext.Verify(_ => _.DevToolsEnabled(), Times.Once());
-        VerifyNoOtherCalls();
+
+        A.CallTo(() => AppContext.DevToolsEnabled()).MustHaveHappenedOnceExactly();
     }
 
     [Fact]
     public void NoParameters_DevToolsEnabled_ReturnsView()
     {
         //  Arrange
-        AppContext.Setup(_ => _.DevToolsEnabled())
-            .Returns(true);
+        A.CallTo(() => AppContext.DevToolsEnabled()).Returns(true);
 
         //  Act
         IActionResult result = Sut.DeleteCookies();
@@ -37,16 +34,14 @@ public class DeleteCookies
         ViewResult view = result.Should().BeOfType<ViewResult>().Subject;
         view.ViewData.ModelState.IsValid.Should().BeTrue();
 
-        AppContext.Verify(_ => _.DevToolsEnabled(), Times.Once());
-        VerifyNoOtherCalls();
+        A.CallTo(() => AppContext.DevToolsEnabled()).MustHaveHappenedOnceExactly();
     }
 
     [Fact]
     public void WithConfig_DevToolsNotEnabled_ReturnsUnauthorized()
     {
         //  Arrange
-        AppContext.Setup(_ => _.DevToolsEnabled())
-            .Returns(false);
+        A.CallTo(() => AppContext.DevToolsEnabled()).Returns(false);
 
         //  Act
         IActionResult result = Sut.DeleteCookiesConfirmed();
@@ -54,8 +49,7 @@ public class DeleteCookies
         //  Assert
         UnauthorizedResult unauthorized = result.Should().BeOfType<UnauthorizedResult>().Subject;
 
-        AppContext.Verify(_ => _.DevToolsEnabled(), Times.Once());
-        VerifyNoOtherCalls();
+        A.CallTo(() => AppContext.DevToolsEnabled()).MustHaveHappenedOnceExactly();
     }
 
     [Theory]
@@ -63,10 +57,8 @@ public class DeleteCookies
     public void WithConfig_DevToolsEnabled_ContextualizesServiceAndCallsGenerateAndClearsCookiesAndReturnsRedirectToHome(string url)
     {
         //  Arrange
-        AppContext.Setup(_ => _.DevToolsEnabled())
-            .Returns(true);
-        Router.Setup(_ => _.ToHome())
-            .Returns(url);
+        A.CallTo(() => AppContext.DevToolsEnabled()).Returns(true);
+        A.CallTo(() => Router.ToHome()).Returns(url);
         Sut.ControllerContext = new ControllerContext
         {
             HttpContext = new DefaultHttpContext()
@@ -79,8 +71,7 @@ public class DeleteCookies
         RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
         redirect.Url.Should().Be(url);
 
-        AppContext.Verify(_ => _.DevToolsEnabled(), Times.Once());
-        Router.Verify(_ => _.ToHome(), Times.Once());
-        VerifyNoOtherCalls();
+        A.CallTo(() => AppContext.DevToolsEnabled()).MustHaveHappenedOnceExactly();
+        A.CallTo(() => Router.ToHome()).MustHaveHappenedOnceExactly();
     }
 }

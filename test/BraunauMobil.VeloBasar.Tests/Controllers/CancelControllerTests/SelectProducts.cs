@@ -10,8 +10,7 @@ public class SelectProducts
     public async Task Id_ReturnsView(int id, IReadOnlyList<ProductEntity> products)
     {
         //  Arrange
-        TransactionService.Setup(_ => _.GetProductsToCancelAsync(id))
-            .ReturnsAsync(products);
+        A.CallTo(() => TransactionService.GetProductsToCancelAsync(id)).Returns(products);
 
         //  Act
         IActionResult result = await Sut.SelectProducts(id);
@@ -24,8 +23,7 @@ public class SelectProducts
         model.Products.Should().HaveCount(products.Count);
         view.ViewData.ModelState.IsValid.Should().BeTrue();
 
-        TransactionService.Verify(_ => _.GetProductsToCancelAsync(id), Times.Once());
-        VerifyNoOtherCalls();
+        A.CallTo(() => TransactionService.GetProductsToCancelAsync(id)).MustHaveHappenedOnceExactly();
     }
 
     [Theory]
@@ -38,8 +36,7 @@ public class SelectProducts
             TransactionId = id
         };
         inputModel.SetProducts(products);
-        TransactionService.Setup(_ => _.GetProductsToCancelAsync(id))
-            .ReturnsAsync(products);
+        A.CallTo(() => TransactionService.GetProductsToCancelAsync(id)).Returns(products);
 
         //  Act
         IActionResult result = await Sut.SelectProducts(inputModel);
@@ -52,8 +49,7 @@ public class SelectProducts
         resultModel.Products.Should().NotBeNull();
         resultModel.Products.Should().HaveCount(products.Count);
 
-        TransactionService.Verify(_ => _.GetProductsToCancelAsync(id), Times.Once());
-        VerifyNoOtherCalls();
+        A.CallTo(() => TransactionService.GetProductsToCancelAsync(id)).MustHaveHappenedOnceExactly();
     }
 
     [Theory]
@@ -68,10 +64,8 @@ public class SelectProducts
         };
         inputModel.SetProducts(products);
         inputModel.Products[0].IsSelected = true;
-        TransactionService.Setup(_ => _.CancelAsync(activeBasarId, saleId, inputModel.SelectedProductIds()))
-            .ReturnsAsync(revertId);
-        TransactionRouter.Setup(_ => _.ToSucess(revertId))
-            .Returns(url);
+        A.CallTo(() => TransactionService.CancelAsync(activeBasarId, saleId, inputModel.SelectedProductIds())).Returns(revertId);
+        A.CallTo(() => TransactionRouter.ToSucess(revertId)).Returns(url);
 
         //  Act
         IActionResult result = await Sut.SelectProducts(inputModel);
@@ -80,8 +74,7 @@ public class SelectProducts
         RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
         redirect.Url.Should().Be(url);
 
-        TransactionService.Verify(_ => _.CancelAsync(activeBasarId, saleId, inputModel.SelectedProductIds()), Times.Once());
-        TransactionRouter.Verify(_ => _.ToSucess(revertId), Times.Once());
-        VerifyNoOtherCalls();
+        A.CallTo(() => TransactionService.CancelAsync(activeBasarId, saleId, inputModel.SelectedProductIds())).MustHaveHappenedOnceExactly();
+        A.CallTo(() => TransactionRouter.ToSucess(revertId)).MustHaveHappenedOnceExactly();
     }
 }

@@ -9,14 +9,13 @@ public class ClearCart
 	public void CallsDelete()
 	{
 		//	Arrange
-		CartCookie sut = new (HttpContextAccessor.Object);
+		CartCookie sut = new (HttpContextAccessor);
+        A.CallTo(() => ResponseCookies.Delete(sut.Key, sut.Options)).DoesNothing();
 
-		//	Act
-		sut.ClearCart();
+        //	Act
+        sut.ClearCart();
 
-		//	Assert
-		ResponseCookies.Verify(_ => _.Delete(sut.Key, sut.Options));
-		VerifyNoOtherCalls();
+        //	Assert
+        A.CallTo(() => ResponseCookies.Delete(sut.Key, sut.Options)).MustHaveHappenedOnceExactly();
 	}
 }
-

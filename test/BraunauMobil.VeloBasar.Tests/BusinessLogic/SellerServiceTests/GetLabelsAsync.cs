@@ -12,9 +12,8 @@ public class GetLabelsAsync
         Db.Basars.Add(basar);
         Db.Sellers.Add(seller);
         await Db.SaveChangesAsync();
-        
-        ProductLabelService.Setup(_ => _.CreateLabelsAsync(It.IsAny<IEnumerable<ProductEntity>>()))
-            .ReturnsAsync(data);
+
+        A.CallTo(() => ProductLabelService.CreateLabelsAsync(A<IEnumerable<ProductEntity>>._)).Returns(data);
 
         //  Act
         FileDataEntity result = await Sut.GetLabelsAsync(basar.Id, seller.Id);
@@ -52,8 +51,7 @@ public class GetLabelsAsync
         Db.AcceptSessions.AddRange(sessions);
         await Db.SaveChangesAsync();
 
-        ProductLabelService.Setup(_ => _.CreateLabelsAsync(It.IsAny<IEnumerable<ProductEntity>>()))
-            .ReturnsAsync(data);
+        A.CallTo(() => ProductLabelService.CreateLabelsAsync(A<IEnumerable<ProductEntity>>._)).Returns(data);
 
         //  Act
         FileDataEntity result = await Sut.GetLabelsAsync(basar.Id, seller.Id);

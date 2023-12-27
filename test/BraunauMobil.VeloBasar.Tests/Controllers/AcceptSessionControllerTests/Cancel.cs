@@ -1,5 +1,4 @@
-﻿using BraunauMobil.VeloBasar.Cookies;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 
 namespace BraunauMobil.VeloBasar.Tests.Controllers.AcceptSessionControllerTests;
@@ -15,8 +14,7 @@ public class Cancel
         int sessionId = Fixture.Create<int>();
 
         //  Arrange
-        AcceptSessionService.Setup(_ => _.GetAsync(sessionId))
-            .ReturnsAsync(new AcceptSessionEntity { EndTimeStamp = Fixture.Create<DateTime>() });
+        A.CallTo(() => AcceptSessionService.GetAsync(sessionId)).Returns(new AcceptSessionEntity { EndTimeStamp = Fixture.Create<DateTime>() });
 
         //  Act
         IActionResult result = await Sut.Cancel(sessionId, returnToList);
@@ -26,8 +24,7 @@ public class Cancel
         badRequest.Value.Should().BeOfType<LocalizedString>();
         badRequest.StatusCode.Should().Be(400);
 
-        AcceptSessionService.Verify(_ => _.GetAsync(sessionId), Times.Once());
-        VerifyNoOtherCalls();
+        A.CallTo(() => AcceptSessionService.GetAsync(sessionId)).MustHaveHappenedOnceExactly();
     }
 
     [Theory]
@@ -35,10 +32,10 @@ public class Cancel
     public async Task WithIdAndReturnToList_CallsDeleteClearsCookie_AndReturnsRedirectToList(int sessionId, string url)
     {
         //  Arrange
-        AcceptSessionService.Setup(_ => _.GetAsync(sessionId))
-            .ReturnsAsync(new AcceptSessionEntity { Id = sessionId, EndTimeStamp = null });
-        AcceptSessionRouter.Setup(_ => _.ToList())
-            .Returns(url);
+        A.CallTo(() => AcceptSessionService.GetAsync(sessionId)).Returns(new AcceptSessionEntity { Id = sessionId, EndTimeStamp = null });
+        A.CallTo(() => AcceptSessionRouter.ToList()).Returns(url);
+        A.CallTo(() => AcceptSessionService.DeleteAsync(sessionId)).DoesNothing();
+        A.CallTo(() => Cookie.ClearActiveAcceptSession()).DoesNothing();
 
         //  Act
         IActionResult result = await Sut.Cancel(sessionId, true);
@@ -47,11 +44,10 @@ public class Cancel
         RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
         redirect.Url.Should().Be(url);
 
-        Cookie.Verify(_ => _.ClearActiveAcceptSession(), Times.Once());
-        AcceptSessionRouter.Verify(_ => _.ToList(), Times.Once());
-        AcceptSessionService.Verify(_ => _.GetAsync(sessionId), Times.Once());
-        AcceptSessionService.Verify(_ => _.DeleteAsync(sessionId), Times.Once());
-        VerifyNoOtherCalls();
+        A.CallTo(() => Cookie.ClearActiveAcceptSession()).MustHaveHappenedOnceExactly();
+        A.CallTo(() => AcceptSessionRouter.ToList()).MustHaveHappenedOnceExactly();
+        A.CallTo(() => AcceptSessionService.GetAsync(sessionId)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => AcceptSessionService.DeleteAsync(sessionId)).MustHaveHappenedOnceExactly();
     }
 
     [Theory]
@@ -59,10 +55,10 @@ public class Cancel
     public async Task WithId_CallsDeleteClearsCookie_AndReturnsRedirectToSellerDetails(int sessionId, int sellerId, string url)
     {
         //  Arrange
-        AcceptSessionService.Setup(_ => _.GetAsync(sessionId))
-            .ReturnsAsync(new AcceptSessionEntity { Id = sessionId, SellerId = sellerId, EndTimeStamp = null });
-        SellerRouter.Setup(_ => _.ToDetails(sellerId))
-            .Returns(url);
+        A.CallTo(() => AcceptSessionService.GetAsync(sessionId)).Returns(new AcceptSessionEntity { Id = sessionId, SellerId = sellerId, EndTimeStamp = null });
+        A.CallTo(() => SellerRouter.ToDetails(sellerId)).Returns(url);
+        A.CallTo(() => AcceptSessionService.DeleteAsync(sessionId)).DoesNothing();
+        A.CallTo(() => Cookie.ClearActiveAcceptSession()).DoesNothing();
 
         //  Act
         IActionResult result = await Sut.Cancel(sessionId, false);
@@ -71,10 +67,9 @@ public class Cancel
         RedirectResult redirect = result.Should().BeOfType<RedirectResult>().Subject;
         redirect.Url.Should().Be(url);
 
-        Cookie.Verify(_ => _.ClearActiveAcceptSession(), Times.Once());
-        SellerRouter.Verify(_ => _.ToDetails(sellerId), Times.Once());
-        AcceptSessionService.Verify(_ => _.GetAsync(sessionId), Times.Once());
-        AcceptSessionService.Verify(_ => _.DeleteAsync(sessionId), Times.Once());
-        VerifyNoOtherCalls();
+        A.CallTo(() => Cookie.ClearActiveAcceptSession()).MustHaveHappenedOnceExactly();
+        A.CallTo(() => SellerRouter.ToDetails(sellerId)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => AcceptSessionService.GetAsync(sessionId)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => AcceptSessionService.DeleteAsync(sessionId)).MustHaveHappenedOnceExactly();
     }
 }

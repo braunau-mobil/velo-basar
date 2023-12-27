@@ -13,12 +13,12 @@ public class SignInManagerMock
     public SignInManagerMock()
         : base(
             new UserManagerMock(),
-            Mock.Of<IHttpContextAccessor>(),
-            Mock.Of<IUserClaimsPrincipalFactory<IdentityUser>>(),
-            Mock.Of<IOptions<IdentityOptions>>(),
-            Mock.Of<ILogger<SignInManager<IdentityUser>>>(),
-            Mock.Of<IAuthenticationSchemeProvider>(),
-            Mock.Of<IUserConfirmation<IdentityUser>>())
+            A.Fake<IHttpContextAccessor>(),
+            A.Fake<IUserClaimsPrincipalFactory<IdentityUser>>(),
+            A.Fake<IOptions<IdentityOptions>>(),
+            A.Fake<ILogger<SignInManager<IdentityUser>>>(),
+            A.Fake<IAuthenticationSchemeProvider>(),
+            A.Fake<IUserConfirmation<IdentityUser>>())
     {
     }
 

@@ -11,8 +11,7 @@ public class Labels
     {
         //  Arrange
         FileDataEntity fileData = Fixture.BuildFileDataEntity().Create();
-        SellerService.Setup(_ => _.GetLabelsAsync(basarId, sellerId))
-            .ReturnsAsync(fileData);
+        A.CallTo(() => SellerService.GetLabelsAsync(basarId, sellerId)).Returns(fileData);
 
         //  Act
         IActionResult result = await Sut.Labels(basarId, sellerId);
@@ -23,7 +22,6 @@ public class Labels
         fileContent.FileContents.Should().BeEquivalentTo(fileData.Data);
         fileContent.FileDownloadName.Should().Be(fileData.FileName);
 
-        SellerService.Verify(_ => _.GetLabelsAsync(basarId, sellerId), Times.Once());
-        VerifyNoOtherCalls();
+        A.CallTo(() => SellerService.GetLabelsAsync(basarId, sellerId)).MustHaveHappenedOnceExactly();
     }
 }

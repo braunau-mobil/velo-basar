@@ -14,8 +14,6 @@ public class GetManyAsync_Paginated
 
         //  Assert
         products.Should().BeEmpty();
-
-        VerifyNoOtherCalls();
     }
 
     [Theory]
@@ -37,8 +35,6 @@ public class GetManyAsync_Paginated
 
         //  Assert
         result.Should().BeEquivalentTo(products);
-
-        VerifyNoOtherCalls();
     }
 
     [Theory]
@@ -56,8 +52,6 @@ public class GetManyAsync_Paginated
 
         //  Assert
         result.Should().BeEquivalentTo(products);
-
-        VerifyNoOtherCalls();
     }
 
     [Theory]
@@ -75,8 +69,6 @@ public class GetManyAsync_Paginated
 
         //  Assert
         result.Should().BeEquivalentTo(products);
-
-        VerifyNoOtherCalls();
     }
 
     [Theory]
@@ -94,8 +86,6 @@ public class GetManyAsync_Paginated
 
         //  Assert
         result.Should().BeEquivalentTo(products);
-
-        VerifyNoOtherCalls();
     }
 
     [Theory]
@@ -114,8 +104,6 @@ public class GetManyAsync_Paginated
 
         //  Assert
         result.Should().BeEquivalentTo(products);
-
-        VerifyNoOtherCalls();
     }
 
     [Theory]
@@ -137,8 +125,6 @@ public class GetManyAsync_Paginated
 
         //  Assert
         result.Should().BeEquivalentTo(products);
-
-        VerifyNoOtherCalls();
     }
 
     private async Task InsertProductsAsync(BasarEntity basar, ProductEntity[] products, Action<ProductEntity> adjustProduct)

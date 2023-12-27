@@ -31,8 +31,6 @@ public class GetPriceDistribution
 
         // Assert
         result.Should().BeEmpty();
-
-        VerifyNoOtherCalls();
     }
 
     [Theory]
@@ -40,8 +38,7 @@ public class GetPriceDistribution
     public void Products_ShouldReturnDistribution(Color primaryColor)
     {
         // Arrange
-        ColorProvider.Setup(_ => _.Primary)
-            .Returns(primaryColor);
+        A.CallTo(() => ColorProvider.Primary).Returns(primaryColor);
         ProductEntity[] products = new[]
         {
             CreateProduct(0),
@@ -67,8 +64,7 @@ public class GetPriceDistribution
             new ChartDataPoint(1, "€ 1.000,00", primaryColor),
         });
 
-        ColorProvider.Verify(_ => _.Primary, Times.Exactly(4));
-        VerifyNoOtherCalls();
+        A.CallTo(() => ColorProvider.Primary).MustHaveHappened(4, Times.Exactly);
     }
 
     [Theory]
@@ -76,8 +72,7 @@ public class GetPriceDistribution
     public void ProductsWithPricesLowerThan10_ShouldReturnDistribution(Color primaryColor)
     {
         // Arrange
-        ColorProvider.Setup(_ => _.Primary)
-            .Returns(primaryColor);
+        A.CallTo(() => ColorProvider.Primary).Returns(primaryColor);
         ProductEntity[] products = new[]
         {
             CreateProduct(0),
@@ -95,8 +90,7 @@ public class GetPriceDistribution
             new ChartDataPoint(4, "€ 5,00", primaryColor),
         });
 
-        ColorProvider.Verify(_ => _.Primary, Times.Exactly(1));
-        VerifyNoOtherCalls();
+        A.CallTo(() => ColorProvider.Primary).MustHaveHappenedOnceExactly();
     }
 
     private ProductEntity CreateProduct(decimal price)

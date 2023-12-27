@@ -16,8 +16,6 @@ public class List
 
         //  Act & Assert
         await Assert.ThrowsAsync<ArgumentNullException>(async () => await Sut.List(parameter, activeBasarId));
-        
-        VerifyNoOtherCalls();
     }
 
     [Theory]
@@ -27,8 +25,7 @@ public class List
         ArgumentNullException.ThrowIfNull(parameter.PageSize);
 
         //  Arrange
-        AcceptSessionService.Setup(_ => _.GetAllAsync(parameter.PageSize.Value, parameter.PageIndex, activeBasarId, parameter.AcceptSessionState))
-            .ReturnsAsync(Helpers.EmptyPaginatedList<AcceptSessionEntity>());
+        A.CallTo(() => AcceptSessionService.GetAllAsync(parameter.PageSize.Value, parameter.PageIndex, activeBasarId, parameter.AcceptSessionState)).Returns(Helpers.EmptyPaginatedList<AcceptSessionEntity>());
 
         //  Act
         IActionResult result = await Sut.List(parameter, activeBasarId);
@@ -39,7 +36,6 @@ public class List
         view.Model.Should().BeOfType<ListModel<AcceptSessionEntity, AcceptSessionListParameter>>();
         view.ViewData.ModelState.IsValid.Should().BeTrue();
 
-        AcceptSessionService.Verify(_ => _.GetAllAsync(parameter.PageSize.Value, parameter.PageIndex, activeBasarId, parameter.AcceptSessionState), Times.Once());
-        VerifyNoOtherCalls();
+        A.CallTo(() => AcceptSessionService.GetAllAsync(parameter.PageSize.Value, parameter.PageIndex, activeBasarId, parameter.AcceptSessionState)).MustHaveHappenedOnceExactly();
     }
 }

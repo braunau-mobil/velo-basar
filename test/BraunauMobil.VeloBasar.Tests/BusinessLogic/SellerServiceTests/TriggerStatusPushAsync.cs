@@ -8,13 +8,12 @@ public class TriggerStatusPushAsync
     public async void CallsStatusPushService(int basarId, int sellerId)
     {
         //  Arrange
+        A.CallTo(() => StatusPushService.PushSellerAsync(basarId, sellerId)).DoesNothing();
 
         //  Act
         await Sut.TriggerStatusPushAsync(basarId, sellerId);
 
         //  Assert
-        StatusPushService.Verify(_ => _.PushSellerAsync(basarId, sellerId), Times.Once);
-
-        VerifyNoOtherCalls();
+        A.CallTo(() => StatusPushService.PushSellerAsync(basarId, sellerId)).MustHaveHappenedOnceExactly();
     }
 }

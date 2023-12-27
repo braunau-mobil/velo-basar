@@ -14,8 +14,6 @@ public class GetLabelAsync
 
         //  Assert
         act.Should().ThrowAsync<InvalidOperationException>();
-
-        VerifyNoOtherCalls();
     }
 
     [Theory]
@@ -26,8 +24,7 @@ public class GetLabelAsync
         product.Id = 1;
         Db.Products.Add(product);
         await Db.SaveChangesAsync();
-        ProductLabelService.Setup(_ => _.CreateLabelAsync(product))
-            .ReturnsAsync(labelData);
+        A.CallTo(() => ProductLabelService.CreateLabelAsync(product)).Returns(labelData);
 
         //  Act
         FileDataEntity fileData = await Sut.GetLabelAsync(product.Id);
@@ -36,7 +33,6 @@ public class GetLabelAsync
         fileData.ContentType.Should().Be(FileDataEntity.PdfContentType);
         fileData.Data.Should().BeEquivalentTo(labelData);
         fileData.FileName.Should().Be("Product-1_Label.pdf");
-        ProductLabelService.Verify(_ => _.CreateLabelAsync(product), Times.Once());
-        VerifyNoOtherCalls();
+        A.CallTo(() => ProductLabelService.CreateLabelAsync(product)).MustHaveHappenedOnceExactly();
     }
 }

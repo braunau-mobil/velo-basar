@@ -14,8 +14,6 @@ public class GetAsync
 
         //  Assert
         await act.Should().ThrowAsync<InvalidOperationException>();
-
-        VerifyNoOtherCalls();
     }
 
     [Theory]
@@ -31,7 +29,5 @@ public class GetAsync
 
         //  Assert
         foundProduct.Should().BeEquivalentTo(product);
-
-        VerifyNoOtherCalls();
     }
 }

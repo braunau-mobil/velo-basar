@@ -9,14 +9,14 @@ public class ClearActiveAcceptSession
 	public void CallsDelete()
 	{
 		//	Arrange
-		ActiveAcceptSessionCookie sut = new (HttpContextAccessor.Object);
+		ActiveAcceptSessionCookie sut = new (HttpContextAccessor);
+        A.CallTo(() => ResponseCookies.Delete(sut.Key, sut.Options)).DoesNothing();
 
-		//	Act
-		sut.ClearActiveAcceptSession();
+        //	Act
+        sut.ClearActiveAcceptSession();
 
-		//	Assert
-		ResponseCookies.Verify(_ => _.Delete(sut.Key, sut.Options));
-		VerifyNoOtherCalls();
+        //	Assert
+        A.CallTo(() => ResponseCookies.Delete(sut.Key, sut.Options)).MustHaveHappenedOnceExactly();
 	}
 }
 

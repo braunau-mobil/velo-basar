@@ -10,41 +10,31 @@ public class TestBase
 {
     public TestBase()
     {
-        Validator = new(ProductService.Object, TransactionService.Object, Router.Object, Localizer);
-        Sut = new CartController(ProductService.Object, TransactionService.Object, Router.Object, Validator, Cookie.Object);
+        Validator = new(ProductService, TransactionService, Router, Localizer);
 
-        Router.Setup(_ => _.Cancel)
-            .Returns(CancelRouter.Object);
-        Router.Setup(_ => _.Transaction)
-            .Returns(TransactionRouter.Object);
+        A.CallTo(() => Router.Cancel).Returns(CancelRouter);
+        A.CallTo(() => Router.Transaction).Returns(TransactionRouter);
+
+        Sut = new CartController(ProductService, TransactionService, Router, Validator, Cookie);        
     }
 
-    public void VerifyNoOtherCalls()
-    {
-        CancelRouter.VerifyNoOtherCalls();
-        Cookie.VerifyNoOtherCalls();
-        ProductService.VerifyNoOtherCalls();
-        TransactionRouter.VerifyNoOtherCalls();
-        TransactionService.VerifyNoOtherCalls();
-    }
+    protected ICancelRouter CancelRouter { get; } = X.StrictFake<ICancelRouter>();
 
-    protected Mock<ICancelRouter> CancelRouter { get; } = new();
-
-    protected Mock<ICartCookie> Cookie { get; } = new();
+    protected ICartCookie Cookie { get; } = X.StrictFake<ICartCookie>();
 
     protected Fixture Fixture { get; } = new ();
 
     protected IStringLocalizer<SharedResources> Localizer { get; } = Helpers.CreateActualLocalizer();
 
-    protected Mock<IProductService> ProductService { get; } = new ();
+    protected IProductService ProductService { get; } = X.StrictFake<IProductService>();
 
-    protected Mock<IVeloRouter> Router { get; } = new();
+    protected IVeloRouter Router { get; } = X.StrictFake<IVeloRouter>();
 
     protected CartController Sut { get; }
 
-    protected Mock<ITransactionRouter> TransactionRouter { get; } = new();
+    protected ITransactionRouter TransactionRouter { get; } = X.StrictFake<ITransactionRouter>();
 
-    protected Mock<ITransactionService> TransactionService { get; } = new ();
+    protected ITransactionService TransactionService { get; } = X.StrictFake<ITransactionService>();
     
     protected CartModelValidator Validator { get; }
 

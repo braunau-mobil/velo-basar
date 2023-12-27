@@ -11,8 +11,7 @@ public class Success
     {
         //  Arrange
         TransactionEntity transaction = Fixture.BuildTransaction().Create();
-        TransactionService.Setup(_ => _.GetAsync(id))
-            .ReturnsAsync(transaction);
+        A.CallTo(() => TransactionService.GetAsync(id)).Returns(transaction);
 
         //  Act
         IActionResult result = await Sut.Success(id);
@@ -25,8 +24,7 @@ public class Success
         model.Entity.Should().Be(transaction);
         model.OpenDocument.Should().BeTrue();
 
-        TransactionService.Verify(_ => _.GetAsync(id), Times.Once);
-        VerifyNoOtherCalls();
+        A.CallTo(() => TransactionService.GetAsync(id)).MustHaveHappenedOnceExactly();
     }
 
     [Theory]
@@ -35,8 +33,7 @@ public class Success
     {
         //  Arrange
         TransactionEntity transaction = Fixture.BuildTransaction().Create();
-        TransactionService.Setup(_ => _.GetAsync(id, amountGiven))
-            .ReturnsAsync(transaction);
+        A.CallTo(() => TransactionService.GetAsync(id, amountGiven)).Returns(transaction);
 
         //  Act
         IActionResult result = await Sut.Success(id, amountGiven);
@@ -50,8 +47,7 @@ public class Success
         model.OpenDocument.Should().BeFalse();
         model.AmountGiven.Should().Be(amountGiven);
 
-        TransactionService.Verify(_ => _.GetAsync(id, amountGiven), Times.Once);
-        VerifyNoOtherCalls();
+        A.CallTo(() => TransactionService.GetAsync(id, amountGiven)).MustHaveHappenedOnceExactly();
     }
 
     [Theory]
@@ -61,8 +57,7 @@ public class Success
         //  Arrange
         TransactionEntity transaction = Fixture.BuildTransaction().Create();
         transaction.Change = new ChangeInfo(amountGiven);
-        TransactionService.Setup(_ => _.GetAsync(id, amountGiven))
-            .ReturnsAsync(transaction);
+        A.CallTo(() => TransactionService.GetAsync(id, amountGiven)).Returns(transaction);
 
         //  Act
         IActionResult result = await Sut.Success(id, amountGiven);
@@ -76,7 +71,6 @@ public class Success
         model.OpenDocument.Should().BeFalse();
         model.AmountGiven.Should().Be(amountGiven);
 
-        TransactionService.Verify(_ => _.GetAsync(id, amountGiven), Times.Once);
-        VerifyNoOtherCalls();
+        A.CallTo(() => TransactionService.GetAsync(id, amountGiven)).MustHaveHappenedOnceExactly();
     }
 }

@@ -9,18 +9,12 @@ public class TestBase<TDbFixture>
 {
     public TestBase()
     {
-        Sut = new ProductService(Db, ProductLabelService.Object, TransactionService.Object);
-    }
-
-    public void VerifyNoOtherCalls()
-    {
-        ProductLabelService.VerifyNoOtherCalls();
-        TransactionService.VerifyNoOtherCalls();
+        Sut = new ProductService(Db, ProductLabelService, TransactionService);
     }
     
     public ProductService Sut { get; }
 
-    public Mock<IProductLabelService> ProductLabelService { get; } = new();
+    public IProductLabelService ProductLabelService { get; } = X.StrictFake<IProductLabelService>();
 
-    public Mock<ITransactionService> TransactionService { get; } = new();
+    public ITransactionService TransactionService { get; } = X.StrictFake<ITransactionService>();
 }

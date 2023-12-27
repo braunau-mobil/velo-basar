@@ -16,8 +16,6 @@ public class GetAcceptanceCountAsync
 
         //  Assert
         count.Should().Be(0);
-
-        VerifyNoOtherCalls();
     }
 
     [Theory]
@@ -34,8 +32,6 @@ public class GetAcceptanceCountAsync
 
         //  Assert
         count.Should().Be(0);
-
-        VerifyNoOtherCalls();
     }
 
     [Theory]
@@ -61,7 +57,5 @@ public class GetAcceptanceCountAsync
 
         //  Assert
         count.Should().Be(basarAcceptances.Count());
-
-        VerifyNoOtherCalls();
     }
 }

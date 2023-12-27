@@ -12,13 +12,13 @@ public class SetCart
     {
         //	Arrange
         string json = JsonSerializer.Serialize(cart);
-        CartCookie sut = new (HttpContextAccessor.Object);
+        CartCookie sut = new (HttpContextAccessor);
+        A.CallTo(() => ResponseCookies.Append(sut.Key, json, sut.Options)).DoesNothing();
 
         //	Act
         sut.SetCart(cart);
 
         //	Assert
-        ResponseCookies.Verify(_ => _.Append(sut.Key, json, sut.Options));
-        VerifyNoOtherCalls();
+        A.CallTo(() => ResponseCookies.Append(sut.Key, json, sut.Options)).MustHaveHappenedOnceExactly();
     }
 }

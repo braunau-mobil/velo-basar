@@ -10,14 +10,14 @@ public class SetActiveAcceptSession
 	public void CallsAppend(AcceptSessionEntity acceptSession)
 	{
 		//	Arrange
-		ActiveAcceptSessionCookie sut = new (HttpContextAccessor.Object);
+		ActiveAcceptSessionCookie sut = new (HttpContextAccessor);
+        A.CallTo(() => ResponseCookies.Append(sut.Key, acceptSession.Id.ToString(), sut.Options)).DoesNothing();
 
-		//	Act
-		sut.SetActiveAcceptSession(acceptSession);
+        //	Act
+        sut.SetActiveAcceptSession(acceptSession);
 
-		//	Assert
-		ResponseCookies.Verify(_ => _.Append(sut.Key, acceptSession.Id.ToString(), sut.Options));
-		VerifyNoOtherCalls();
+        //	Assert
+        A.CallTo(() => ResponseCookies.Append(sut.Key, acceptSession.Id.ToString(), sut.Options)).MustHaveHappenedOnceExactly();
 	}
 }
 
