@@ -20,7 +20,7 @@ public class IHtmlContentAssertions
 
     protected override string Identifier => "IHtmlContent";
 
-    public AndConstraint<IHtmlContentAssertions> Html(string expectedHtml)
+    public AndConstraint<IHtmlContentAssertions> BeHtml(string expectedHtml)
     {
         using StringWriter writer = new();
         Subject.WriteTo(writer, HtmlEncoder.Default);

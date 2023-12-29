@@ -15,7 +15,7 @@ public class Alert
         TagBuilder actual = Sut.Alert(MessageType.Danger, "text");
 
         // Assert
-        actual.Should().Html("""<div class="alert alert-danger" role="alert"><p>text</p></div>""");
+        actual.Should().BeHtml("""<div class="alert alert-danger" role="alert"><p>text</p></div>""");
     }
 
     [Fact]
@@ -27,6 +27,6 @@ public class Alert
         TagBuilder actual = Sut.Alert(MessageType.Danger, "title", "text");
 
         // Assert
-        actual.Should().Html("""<div class="alert alert-danger" role="alert"><h4 class="alert-heading">title</h4><p>text</p></div>""");
+        actual.Should().BeHtml("""<div class="alert alert-danger" role="alert"><h4 class="alert-heading">title</h4><p>text</p></div>""");
     }
 }

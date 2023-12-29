@@ -14,6 +14,6 @@ public class Badge
         TagBuilder actual = Sut.Badge(VeloBasar.Rendering.BadgeType.Primary);
 
         // Assert
-        actual.Should().Html("""<span class="badge rounded-pill text-bg-primary"></span>""");
+        actual.Should().BeHtml("""<span class="badge rounded-pill text-bg-primary"></span>""");
     }
 }
