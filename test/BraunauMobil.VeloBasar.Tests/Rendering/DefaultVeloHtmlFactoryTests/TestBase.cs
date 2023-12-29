@@ -1,6 +1,6 @@
 ﻿using BraunauMobil.VeloBasar.Rendering;
 using BraunauMobil.VeloBasar.Routing;
-using Microsoft.Extensions.Localization;
+using BraunauMobil.VeloBasar.Tests.Mockups;
 
 namespace BraunauMobil.VeloBasar.Tests.Rendering.DefaultVeloHtmlFactoryTests;
 
@@ -8,10 +8,8 @@ public class TestBase
 {
     public TestBase()
     {
-        Sut = new(Router, Localizer);
+        Sut = new(Router, new StringLocalizerMock<SharedResources>());
     }
-
-    public IStringLocalizer<SharedResources> Localizer { get; } = X.StrictFake<IStringLocalizer<SharedResources>>();
 
     public IVeloRouter Router { get; } = X.StrictFake<IVeloRouter>();
 
