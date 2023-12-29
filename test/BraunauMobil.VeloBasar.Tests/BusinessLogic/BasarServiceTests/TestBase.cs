@@ -7,7 +7,7 @@ public class TestBase
 {
     public TestBase()
     {
-        Sut = new BasarService(Db, StatsService, Helpers.CreateActualLocalizer(), Clock);
+        Sut = new BasarService(Db, StatsService, new StringLocalizerMock<SharedResources>(), Clock);
     }
 
     public IBasarStatsService StatsService { get; } = X.StrictFake<IBasarStatsService>();

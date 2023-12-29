@@ -1,6 +1,5 @@
 ﻿using BraunauMobil.VeloBasar.Controllers;
 using BraunauMobil.VeloBasar.Cookies;
-using BraunauMobil.VeloBasar.Tests.Mockups;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;

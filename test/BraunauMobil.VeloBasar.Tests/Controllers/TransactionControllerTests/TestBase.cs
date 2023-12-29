@@ -1,7 +1,6 @@
 ﻿using BraunauMobil.VeloBasar.BusinessLogic;
 using BraunauMobil.VeloBasar.Controllers;
 using BraunauMobil.VeloBasar.Routing;
-using BraunauMobil.VeloBasar.Tests.Mockups;
 using Microsoft.Extensions.Localization;
 
 namespace BraunauMobil.VeloBasar.Tests.Controllers.TransactionControllerTests;
@@ -19,7 +18,7 @@ public class TestBase
 
     protected Fixture Fixture { get; } = new ();
 
-    protected IStringLocalizer<SharedResources> Localizer { get; } = Helpers.CreateActualLocalizer();
+    protected IStringLocalizer<SharedResources> Localizer { get; } = new StringLocalizerMock<SharedResources>();
 
     protected IVeloRouter Router { get; } = X.StrictFake<IVeloRouter>();
 

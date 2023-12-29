@@ -1,6 +1,4 @@
-﻿using BraunauMobil.VeloBasar.Tests.Mockups;
-
-namespace BraunauMobil.VeloBasar.Tests.Models.Entities.SellerEntityTests;
+﻿namespace BraunauMobil.VeloBasar.Tests.Models.Entities.SellerEntityTests;
 
 public class UpdateNewsletterPermissions
 {

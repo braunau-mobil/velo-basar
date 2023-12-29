@@ -1,6 +1,5 @@
 ﻿using BraunauMobil.VeloBasar.BusinessLogic;
 using BraunauMobil.VeloBasar.Controllers;
-using BraunauMobil.VeloBasar.Tests.Mockups;
 
 namespace BraunauMobil.VeloBasar.Tests.Controllers.AdminControllerTests;
 

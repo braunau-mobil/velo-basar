@@ -7,7 +7,6 @@ using BraunauMobil.VeloBasar.Filters;
 using BraunauMobil.VeloBasar.Pdf;
 using BraunauMobil.VeloBasar.Rendering;
 using BraunauMobil.VeloBasar.Routing;
-using BraunauMobil.VeloBasar.Tests.Mockups;
 using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;

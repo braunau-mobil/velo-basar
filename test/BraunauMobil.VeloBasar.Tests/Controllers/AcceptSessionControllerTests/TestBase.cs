@@ -28,7 +28,7 @@ namespace BraunauMobil.VeloBasar.Tests.Controllers.AcceptSessionControllerTests
 
         protected Fixture Fixture { get; } = new ();
 
-        protected IStringLocalizer<SharedResources> Localizer { get; } = Helpers.CreateActualLocalizer();
+        protected IStringLocalizer<SharedResources> Localizer { get; } = new StringLocalizerMock<SharedResources>();
         
         protected IVeloRouter Router { get; } = X.StrictFake<IVeloRouter> ();
 

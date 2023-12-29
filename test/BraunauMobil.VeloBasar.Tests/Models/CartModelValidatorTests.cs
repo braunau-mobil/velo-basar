@@ -13,7 +13,7 @@ public class CartModelValidatorTests
 
     public CartModelValidatorTests()
     {
-        _sut = new CartModelValidator(_productService, _transactionService, _router, Helpers.CreateActualLocalizer());
+        _sut = new CartModelValidator(_productService, _transactionService, _router, new StringLocalizerMock<SharedResources>());
     }
 
     [Theory]

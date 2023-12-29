@@ -10,7 +10,7 @@ public class TestBase<TDbFixture>
 {
     public TestBase()
     {
-        Sut = new TransactionService(NumberService, TransactionDocumentService, StatusPushService, Db, ProductLabelService, Clock, Helpers.CreateActualLocalizer());
+        Sut = new TransactionService(NumberService, TransactionDocumentService, StatusPushService, Db, ProductLabelService, Clock, new StringLocalizerMock<SharedResources>());
     }
     
     public Fixture Fixture { get; } = new();

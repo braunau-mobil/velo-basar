@@ -17,7 +17,16 @@ public class StringLocalizerMock<T>
     }
 
     public LocalizedString this[string name, params object[] arguments]
-        => throw new NotImplementedException();
+    {
+        get
+        {
+            ArgumentNullException.ThrowIfNull(name);
+            ArgumentNullException.ThrowIfNull(arguments);
+
+            string value = $"{name}_{string.Join('_', arguments)}";
+            return new(name, value);
+        }
+    }
 
     public IEnumerable<LocalizedString> GetAllStrings(bool includeParentCultures)
         => throw new NotImplementedException();

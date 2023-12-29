@@ -19,7 +19,7 @@ public class TestBase
 
     protected Fixture Fixture { get; } = new ();
 
-    protected IStringLocalizer<SharedResources> Localizer { get; } = Helpers.CreateActualLocalizer();
+    protected IStringLocalizer<SharedResources> Localizer { get; } = new StringLocalizerMock<SharedResources>();
 
     protected IProductService ProductService { get; } = X.StrictFake<IProductService>();
 
