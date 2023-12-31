@@ -64,7 +64,7 @@ public sealed class SetupService
 
         if (config.GenerateZipCodes)
         {
-            _db.ZipCodes.AddRange(new ZipCollection(await _db.Countries.ToListAsync())); ;
+            _db.ZipCodes.AddRange(new ZipCollection(await _db.Countries.ToListAsync()));
         }
 
         await _db.SaveChangesAsync();
