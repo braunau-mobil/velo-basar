@@ -4,12 +4,7 @@ namespace BraunauMobil.VeloBasar.Tests.Routing;
 
 public class AcceptanceLabelsRouterTests
 {
-    private readonly AcceptanceLabelsRouter _sut;
-
-    public AcceptanceLabelsRouterTests()
-    {
-        _sut = new AcceptanceLabelsRouter(new LinkGeneratorMock());
-    }
+    private readonly AcceptanceLabelsRouter _sut = new(new LinkGeneratorMock());
 
     [Fact]
     public void ToDownload()

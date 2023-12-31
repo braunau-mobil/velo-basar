@@ -5,11 +5,11 @@ using Xan.AspNetCore.Mvc.Routing;
 
 namespace BraunauMobil.VeloBasar.Routing;
 
-public sealed class AcceptProductsRouter
+public sealed class AcceptProductRouter
     : ControllerRouter
     , IAcceptProductRouter
 {
-    public AcceptProductsRouter(LinkGenerator linkGenerator)
+    public AcceptProductRouter(LinkGenerator linkGenerator)
         : base(MvcHelper.ControllerName<AcceptProductController>(), linkGenerator)
     { }
 

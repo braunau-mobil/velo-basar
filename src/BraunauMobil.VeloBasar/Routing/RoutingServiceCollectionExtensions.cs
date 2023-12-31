@@ -9,7 +9,7 @@ public static class RoutingServiceCollectionExtensions
         ArgumentNullException.ThrowIfNull(sc);
 
         return sc
-            .AddSingleton<IAcceptProductRouter, AcceptProductsRouter>()
+            .AddSingleton<IAcceptProductRouter, AcceptProductRouter>()
             .AddSingleton<IAcceptSessionRouter, AcceptSessionRouter>()
             .AddSingleton<IAdminRouter, AdminRouter>()
             .AddSingleton<IBasarRouter, BasarRouter>()
