@@ -2,7 +2,7 @@
 
 namespace BraunauMobil.VeloBasar.Rendering;
 
-public static class ServiceCollectionExtensions
+public static class RenderingServiceCollectionExtensions
 {
     public static IServiceCollection AddVeloRendering(this IServiceCollection sc)
     {
