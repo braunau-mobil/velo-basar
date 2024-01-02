@@ -9,6 +9,7 @@ public sealed class TransactionListParameter
     { }
 
     public TransactionListParameter(TransactionListParameter other)
+        : base(other)
     {
         ArgumentNullException.ThrowIfNull(other);
 

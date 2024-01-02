@@ -1,4 +1,5 @@
 ﻿using BraunauMobil.VeloBasar.Controllers;
+using BraunauMobil.VeloBasar.Parameters;
 using Microsoft.AspNetCore.Routing;
 using Xan.AspNetCore.Mvc;
 using Xan.AspNetCore.Mvc.Routing;
@@ -25,13 +26,13 @@ public sealed class AcceptSessionRouter
     }
 
     public string ToList()
-        => ToList(new ListParameter());
+        => ToList(new AcceptSessionListParameter() { AcceptSessionState = AcceptSessionState.Uncompleted });
 
     public string ToList(int pageIndex)
-        => ToList(new ListParameter { PageIndex = pageIndex });
+        => ToList(new AcceptSessionListParameter { PageIndex = pageIndex, AcceptSessionState = AcceptSessionState.Uncompleted });
 
     public string ToList(int? pageSize, int pageIndex)
-        => ToList(new ListParameter { PageIndex = pageIndex, PageSize = pageSize });
+        => ToList(new AcceptSessionListParameter { PageIndex = pageIndex, PageSize = pageSize, AcceptSessionState = AcceptSessionState.Uncompleted });
 
     public string ToList(ListParameter parameter)
     {

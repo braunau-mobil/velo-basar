@@ -9,13 +9,14 @@ public sealed class AcceptSessionListParameter
     { }
 
     public AcceptSessionListParameter(AcceptSessionListParameter other)
+        : base(other)
     {
         ArgumentNullException.ThrowIfNull(other);
 
         AcceptSessionState = other.AcceptSessionState;
     }
 
-    public AcceptSessionState? AcceptSessionState { get; set; } = Models.AcceptSessionState.Uncompleted;
+    public AcceptSessionState? AcceptSessionState { get; set; }
 
     protected override ListParameter Clone()
         => new AcceptSessionListParameter(this);

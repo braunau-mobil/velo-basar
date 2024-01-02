@@ -47,12 +47,13 @@ public sealed class AcceptSessionService
     {
         IQueryable<AcceptSessionEntity> iq = _db.AcceptSessions
             .Include(session => session.Products)
+            .OrderBy(session => session.StartTimeStamp)
+                .ThenBy(session => session.Id)
             .Where(session => session.BasarId == basarId);
         if (state.HasValue)
         {
             iq = iq.Where(session => session.State == state.Value);
         }
-        iq = iq.OrderBy(session => session.StartTimeStamp);
 
         return await iq.AsPaginatedAsync(pageSize, pageIndex);
     }

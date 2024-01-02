@@ -25,7 +25,7 @@ public sealed class TransactionRouter
         => GetUriByAction(nameof(TransactionController.Document), new { id });
 
     public string ToList(int? pageSize, int pageIndex)
-    => ToList(new ListParameter { PageIndex = pageIndex, PageSize = pageSize });
+    => ToList(new TransactionListParameter { PageIndex = pageIndex, PageSize = pageSize });
 
     public string ToList()
         => ToList(new TransactionListParameter());
