@@ -15,6 +15,14 @@ public static class FixtureExtensions
             .Without(_ => _.SellerId);
     }
 
+    public static IPostprocessComposer<BasarEntity> BuildBasar(this Fixture fixture)
+    {
+        ArgumentNullException.ThrowIfNull(fixture);
+
+        return fixture.Build<BasarEntity>()
+            .Without(_ => _.Id);
+    }
+
     public static IPostprocessComposer<FileDataEntity> BuildFileDataEntity(this Fixture fixture)
     {
         ArgumentNullException.ThrowIfNull(fixture);

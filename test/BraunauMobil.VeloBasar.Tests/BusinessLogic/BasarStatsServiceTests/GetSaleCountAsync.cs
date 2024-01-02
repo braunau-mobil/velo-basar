@@ -18,11 +18,11 @@ public class GetSaleCountAsync
         count.Should().Be(0);
     }
 
-    [Theory]
-    [AutoData]
-    public async Task BasarHasNoTransactions_ShouldReturnZero(BasarEntity basar)
+    [Fact]
+    public async Task BasarHasNoTransactions_ShouldReturnZero()
     {
         //  Arrange
+        BasarEntity basar = _fixture.BuildBasar().Create();
         Db.Basars.Add(basar);
         IEnumerable<TransactionEntity> otherTransactions = _fixture.BuildTransaction().CreateMany();
         Db.Transactions.AddRange(otherTransactions);
