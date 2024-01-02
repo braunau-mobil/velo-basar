@@ -12,7 +12,7 @@ public class TestBase
         Sut = new (SetupService, Router, new InitializationConfigurationValidator(Localizer));
     }
 
-    protected Fixture Fixture { get; } = new ();
+    protected VeloFixture Fixture { get; } = new ();
 
     protected IStringLocalizer<SharedResources> Localizer { get; } = new StringLocalizerMock<SharedResources>();
 

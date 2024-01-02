@@ -7,7 +7,7 @@ public class SetCurrentTheme
     : TestBase
 {
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public void CallsAppend(Theme theme)
     {
         //  Arrange

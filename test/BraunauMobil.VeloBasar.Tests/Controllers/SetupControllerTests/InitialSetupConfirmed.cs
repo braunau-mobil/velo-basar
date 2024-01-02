@@ -7,7 +7,7 @@ public class InitialSetupConfirmed
     : TestBase
 {
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task InvalidModel_ReturnsView(InitializationConfiguration configuration)
     {
         //  Arrange
@@ -32,7 +32,7 @@ public class InitialSetupConfirmed
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task ValidModel_CallsCreateDatabaseAndInitializeDatabaseAndReturnsRedirecToHome(InitializationConfiguration configuration, string url)
     {
         //  Arrange

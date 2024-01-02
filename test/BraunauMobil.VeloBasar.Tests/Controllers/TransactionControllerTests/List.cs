@@ -10,7 +10,7 @@ public class List
 	: TestBase
 {
 	[Theory]
-	[AutoData]
+	[VeloAutoData]
 	public async Task NotSaleAndNotSignedIn_ReturnsRedirectToLogin(TransactionListParameter parameter,int activeBasarId, string url)
 	{
 		//	Arrange
@@ -39,11 +39,11 @@ public class List
 	}
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task NotSaleAndSignedIn_CallsGetManyAndReturnsView(TransactionListParameter parameter, int activeBasarId)
     {
 		//	Arrange
-		IEnumerable<TransactionEntity> transactions = Fixture.BuildTransaction().CreateMany();
+		IEnumerable<TransactionEntity> transactions = Fixture.CreateMany<TransactionEntity>();
         Sut.ControllerContext = new ControllerContext
         {
             HttpContext = new DefaultHttpContext
@@ -70,11 +70,11 @@ public class List
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task SaleAndSignedIn_CallsGetManyAndReturnsView(TransactionListParameter parameter, int activeBasarId)
     {
         //	Arrange
-        IEnumerable<TransactionEntity> transactions = Fixture.BuildTransaction().CreateMany();
+        IEnumerable<TransactionEntity> transactions = Fixture.CreateMany<TransactionEntity>();
         Sut.ControllerContext = new ControllerContext
         {
             HttpContext = new DefaultHttpContext
@@ -101,11 +101,11 @@ public class List
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task SaleAndNotSignedIn_CallsGetManyAndReturnsView(TransactionListParameter parameter, int activeBasarId)
     {
         //	Arrange
-        IEnumerable<TransactionEntity> transactions = Fixture.BuildTransaction().CreateMany();
+        IEnumerable<TransactionEntity> transactions = Fixture.CreateMany<TransactionEntity>();
         Sut.ControllerContext = new ControllerContext
         {
             HttpContext = new DefaultHttpContext

@@ -31,7 +31,7 @@ public class Cancel
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task WithIdAndReturnToList_CallsDeleteClearsCookie_AndReturnsRedirectToList(int sessionId, string url)
     {
         //  Arrange
@@ -57,7 +57,7 @@ public class Cancel
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task WithId_CallsDeleteClearsCookie_AndReturnsRedirectToSellerDetails(int sessionId, int sellerId, string url)
     {
         //  Arrange

@@ -4,7 +4,7 @@ public class SubmitAsync
     : TestBase<EmptySqliteDbFixture>
 {
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task SessionIsCompletedAndAcceptIsCalled(AcceptSessionEntity session, DateTime endTimeStamp, int acceptanceId)
     {
         // Arrange

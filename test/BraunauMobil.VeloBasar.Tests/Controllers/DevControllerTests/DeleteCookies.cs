@@ -56,7 +56,7 @@ public class DeleteCookies
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public void WithConfig_DevToolsEnabled_ContextualizesServiceAndCallsGenerateAndClearsCookiesAndReturnsRedirectToHome(string url)
     {
         //  Arrange

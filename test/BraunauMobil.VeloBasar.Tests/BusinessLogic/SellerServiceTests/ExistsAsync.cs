@@ -4,7 +4,7 @@ public class ExistsAsync
     : TestBase<EmptySqliteDbFixture>
 {
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task DoesNotExist_ReturnsFalse(int sellerId)
     {
         //  Arrange
@@ -17,7 +17,7 @@ public class ExistsAsync
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task Exists_ReturnsTrue(SellerEntity seller)
     {
         //  Arrange

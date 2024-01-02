@@ -20,14 +20,14 @@ public class GetLockedProductsCount
     public void Products_ReturnsSumOfAcceptedProducts()
     {
         //  Arrange
-        Fixture fixture = new();
-        IEnumerable<ProductEntity> lockedProducts = fixture.BuildProductEntity()
+        VeloFixture fixture = new();
+        IEnumerable<ProductEntity> lockedProducts = fixture.BuildProduct()
             .With(_ => _.StorageState, StorageState.Locked)
             .With(_ => _.Price, 1)
             .CreateMany();        
 
         fixture.ExcludeEnumValues(StorageState.Locked);
-        IEnumerable<ProductEntity> notSoldProducts = fixture.BuildProductEntity()
+        IEnumerable<ProductEntity> notSoldProducts = fixture.BuildProduct()
             .CreateMany();
         
         List<ProductEntity> products = new (lockedProducts);

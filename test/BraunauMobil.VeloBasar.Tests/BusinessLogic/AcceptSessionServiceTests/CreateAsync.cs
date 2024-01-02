@@ -4,7 +4,7 @@ public class CreateAsync
 	: TestBase<EmptySqliteDbFixture>
 {
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task InvaliBasarAndSellerId_ThrowsInvalidOperationException(int basarId, int sellerId)
     {
         //  Arrange
@@ -17,7 +17,7 @@ public class CreateAsync
     }
 
     [Theory]
-	[AutoData]
+	[VeloAutoData]
 	public async Task AcceptSessionIsCreatedAndInserted(BasarEntity basar, SellerEntity seller, DateTime dateTime)
 	{
 		//	Arrange

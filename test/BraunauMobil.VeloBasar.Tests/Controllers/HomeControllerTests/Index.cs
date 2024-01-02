@@ -6,7 +6,7 @@ public class Index
     : TestBase
 { 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public void DatabaseNotInitialized_ReturnsRedirectToInitialSetup(string url)
     {
         //  Arrange
@@ -28,7 +28,7 @@ public class Index
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public void DatabaseInitialized_ReturnsRedirectToActiveBasar(string url)
     {
         //  Arrange

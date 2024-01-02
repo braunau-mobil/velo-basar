@@ -5,7 +5,7 @@ namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.SimpleTokenProviderTests;
 public class CreateToken
 {
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public void ShouldReturnFirstNameIdLastNameAsHex(SellerEntity seller)
     {
         //  Arrange

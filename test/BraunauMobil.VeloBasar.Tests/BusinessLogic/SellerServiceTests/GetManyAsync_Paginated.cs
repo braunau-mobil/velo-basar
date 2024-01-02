@@ -1,5 +1,4 @@
-﻿using AutoFixture.Dsl;
-using BraunauMobil.VeloBasar.Parameters;
+﻿using BraunauMobil.VeloBasar.Parameters;
 using Xan.AspNetCore.Models;
 using Xan.AspNetCore.Mvc.Crud;
 using Xan.Extensions.Collections.Generic;
@@ -9,10 +8,10 @@ namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.SellerServiceTests;
 public class GetManyAsync_Paginated
     : TestBase<EmptySqliteDbFixture>
 {
-    private readonly Fixture _fixture = new();
+    private readonly VeloFixture _fixture = new();
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task NoSellers_ShouldReturnEmpty(SellerListParameter parameter)
     {
         //  Arrange
@@ -25,7 +24,7 @@ public class GetManyAsync_Paginated
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task NoSellerMatches_ShouldReturnEmpty(SellerEntity[] sellers, SellerListParameter parameter)
     {
         //  Arrange
@@ -48,8 +47,7 @@ public class GetManyAsync_Paginated
             PageSize = 10,
             PageIndex = 2
         };
-        SellerEntity[] sellers = BuildSeller()
-            .CreateMany(100)
+        SellerEntity[] sellers = _fixture.CreateMany<SellerEntity>(100)
             .OrderBy(seller => seller.FirstName).ThenBy(seller => seller.LastName)
             .ToArray();
         Db.Sellers.AddRange(sellers);
@@ -73,17 +71,17 @@ public class GetManyAsync_Paginated
             PageIndex = 1,
             SearchString = "wxy"
         };
-        IEnumerable<SellerEntity> otherSellers = BuildSeller().CreateMany();
+        IEnumerable<SellerEntity> otherSellers = _fixture.CreateMany<SellerEntity>();
         Db.Sellers.AddRange(otherSellers);
-        CountryEntity country = _fixture.Build<CountryEntity>().With(_ => _.Name, "uvwxyz").Create();
+        CountryEntity country = _fixture.BuildCountry().With(_ => _.Name, "uvwxyz").Create();
         SellerEntity[] sellersToFind = new[]
         {
-            BuildSeller().With(_ => _.FirstName, "uvwxyz").Create(),
-            BuildSeller().With(_ => _.LastName, "uvwxyz").Create(),
-            BuildSeller().With(_ => _.Street, "uvwxyz").Create(),
-            BuildSeller().With(_ => _.City, "uvwxyz").Create(),
-            BuildSeller().With(_ => _.Country, country).Create(),
-            BuildSeller().With(_ => _.BankAccountHolder, "uvwxyz").Create(),
+            _fixture.BuildSeller().With(_ => _.FirstName, "uvwxyz").Create(),
+            _fixture.BuildSeller().With(_ => _.LastName, "uvwxyz").Create(),
+            _fixture.BuildSeller().With(_ => _.Street, "uvwxyz").Create(),
+            _fixture.BuildSeller().With(_ => _.City, "uvwxyz").Create(),
+            _fixture.BuildSeller().With(_ => _.Country, country).Create(),
+            _fixture.BuildSeller().With(_ => _.BankAccountHolder, "uvwxyz").Create(),
         };
         Db.Sellers.AddRange(sellersToFind);
         await Db.SaveChangesAsync();
@@ -96,7 +94,7 @@ public class GetManyAsync_Paginated
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task ObjectStateShouldMatch(ObjectState objectState)
     {
         //  Arrange
@@ -106,13 +104,13 @@ public class GetManyAsync_Paginated
             PageIndex = 1,
             State = objectState
         };
-        CountryEntity country = _fixture.Build<CountryEntity>().With(_ => _.Name, "uvwxyz").Create();
-        SellerEntity[] sellersToFind = BuildSeller()
+        CountryEntity country = _fixture.BuildCountry().With(_ => _.Name, "uvwxyz").Create();
+        SellerEntity[] sellersToFind = _fixture.BuildSeller()
             .With(_ => _.State, objectState)
             .CreateMany().ToArray();
         Db.Sellers.AddRange(sellersToFind);
         _fixture.ExcludeEnumValues(objectState);
-        IEnumerable<SellerEntity> otherSellers = BuildSeller().CreateMany();
+        IEnumerable<SellerEntity> otherSellers = _fixture.CreateMany<SellerEntity>();
         Db.Sellers.AddRange(otherSellers);
         await Db.SaveChangesAsync();
 
@@ -124,7 +122,7 @@ public class GetManyAsync_Paginated
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task ValueStateShouldMatch(ValueState valueState)
     {
         //  Arrange
@@ -134,13 +132,13 @@ public class GetManyAsync_Paginated
             PageIndex = 1,
             ValueState = valueState
         };
-        CountryEntity country = _fixture.Build<CountryEntity>().With(_ => _.Name, "uvwxyz").Create();
-        SellerEntity[] sellersToFind = BuildSeller()
+        CountryEntity country = _fixture.BuildCountry().With(_ => _.Name, "uvwxyz").Create();
+        SellerEntity[] sellersToFind = _fixture.BuildSeller()
             .With(_ => _.ValueState, valueState)
             .CreateMany().ToArray();
         Db.Sellers.AddRange(sellersToFind);
         _fixture.ExcludeEnumValues(valueState);
-        IEnumerable<SellerEntity> otherSellers = BuildSeller().CreateMany();
+        IEnumerable<SellerEntity> otherSellers = _fixture.CreateMany<SellerEntity>();
         Db.Sellers.AddRange(otherSellers);
         await Db.SaveChangesAsync();
 
@@ -149,11 +147,5 @@ public class GetManyAsync_Paginated
 
         //  Assert
         result.Select(model => model.Entity).Should().BeEquivalentTo(sellersToFind);
-    }
-
-    private IPostprocessComposer<SellerEntity> BuildSeller()
-    {
-        return _fixture.BuildSeller()
-            .Without(_ => _.Id);
     }
 }

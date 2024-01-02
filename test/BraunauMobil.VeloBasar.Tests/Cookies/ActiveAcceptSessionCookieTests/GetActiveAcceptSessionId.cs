@@ -8,7 +8,7 @@ public class GetActiveAcceptSessionId
 	[Theory]
 	[InlineData(null)]
     [InlineData("")]
-	[AutoData]
+	[VeloAutoData]
     public void ReturnsNull(string? cookieValue)
 	{
 		//	Arrange

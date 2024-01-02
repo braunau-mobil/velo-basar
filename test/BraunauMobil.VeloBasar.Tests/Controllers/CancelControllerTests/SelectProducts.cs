@@ -6,7 +6,7 @@ public class SelectProducts
     : TestBase
 {
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task Id_ReturnsView(int id, IReadOnlyList<ProductEntity> products)
     {
         //  Arrange
@@ -30,7 +30,7 @@ public class SelectProducts
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task NoProductSelected_ReturnsViewWithErrors(int id, IReadOnlyList<ProductEntity> products)
     {
         //  Arrange
@@ -59,7 +59,7 @@ public class SelectProducts
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task OneProductSelected_CallsCancelAndReturnsRedirectToTransactionSuccess(int activeBasarId, int saleId, int revertId, IReadOnlyList<ProductEntity> products, string url)
     {
         //  Arrange

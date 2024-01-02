@@ -19,7 +19,7 @@ public class DevToolsEnabled
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     [InlineData("Staging")]
     [InlineData("Production")]
     public void AreNotEnabled(string environmentName)

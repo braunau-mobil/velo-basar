@@ -4,7 +4,7 @@ public class TriggerStatusPushAsync
     : TestBase<EmptySqliteDbFixture>
 {
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async void CallsStatusPushService(int basarId, int sellerId)
     {
         //  Arrange

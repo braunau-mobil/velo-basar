@@ -3,16 +3,16 @@
 public class BrandsAsync
     : TestBase
 {
-    private readonly Fixture _fixture = new();
+    private readonly VeloFixture _fixture = new();
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task ShouldReturnAllBrandsFromProducts(AcceptSessionEntity session, string[] brands)
     {
         //  Arrange
         foreach (string brand in brands)
         {
-            Db.Products.AddRange(_fixture.BuildProductEntity()
+            Db.Products.AddRange(_fixture.BuildProduct()
                 .With(p => p.Brand, brand)
                 .With(p => p.Session, session)
                 .CreateMany());

@@ -4,10 +4,10 @@ namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.BasarStatsServiceTests;
 public class GetAcceptedProductsAsync
     : TestBase<EmptySqliteDbFixture>
 {
-    private readonly Fixture _fixture = new();
+    private readonly VeloFixture _fixture = new();
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task NoProductsAtAll_ShouldReturnEmpty(int basarId)
     {
         //  Arrange
@@ -20,7 +20,7 @@ public class GetAcceptedProductsAsync
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task BasarHasAcceptedProducts_ShouldReturnProducts(AcceptSessionEntity session1, AcceptSessionEntity session2)
     {
         //  Arrange
@@ -54,7 +54,7 @@ public class GetAcceptedProductsAsync
 
     private void AddProduct(StorageState storageState, AcceptSessionEntity session)
     {
-        ProductEntity product = _fixture.Build<ProductEntity>()
+        ProductEntity product = _fixture.BuildProduct()
             .With(_ => _.StorageState, storageState)
             .With(_ => _.Session, session)
             .Create();

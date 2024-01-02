@@ -15,7 +15,7 @@ public class TestBase
 
     protected IDataGeneratorService DataGeneratorService { get; } = X.StrictFake<IDataGeneratorService>();
 
-    protected Fixture Fixture { get; } = new ();
+    protected VeloFixture Fixture { get; } = new ();
 
     protected IVeloRouter Router { get; } = X.StrictFake<IVeloRouter>();
 

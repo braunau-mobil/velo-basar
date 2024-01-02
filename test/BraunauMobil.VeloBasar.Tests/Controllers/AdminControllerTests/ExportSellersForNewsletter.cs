@@ -6,7 +6,7 @@ public class ExportSellersForNewsletter
     : TestBase
 {
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task DoNotUseDate_CallsExportSellersForNewsletterAsync_AndReturnsFileData(DateTime timestamp)
     {
         //  Arrange
@@ -18,7 +18,7 @@ public class ExportSellersForNewsletter
             MinPermissionDate = minPermissionDate
         };
 
-        FileDataEntity fileData = Fixture.BuildFileDataEntity().Create();
+        FileDataEntity fileData = Fixture.Create<FileDataEntity>();
         A.CallTo(() => AdminService.ExportSellersForNewsletterAsCsvAsync(null)).Returns(fileData);
 
         //  Act
@@ -37,7 +37,7 @@ public class ExportSellersForNewsletter
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task UseDate_CallsExportSellersForNewsletterAsync_AndReturnsFileData(DateTime timestamp)
     {
         //  Arrange
@@ -49,7 +49,7 @@ public class ExportSellersForNewsletter
             MinPermissionDate = minPermissionDate
         };
         
-        FileDataEntity fileData = Fixture.BuildFileDataEntity().Create();
+        FileDataEntity fileData = Fixture.Create<FileDataEntity>();
         A.CallTo(() => AdminService.ExportSellersForNewsletterAsCsvAsync(minPermissionTimestamp)).Returns(fileData);
 
         //  Act

@@ -6,7 +6,7 @@ namespace BraunauMobil.VeloBasar.Tests.Rendering.SelectListServiceTests;
 public class CountriesAsync
     : TestBase
 {
-    private readonly Fixture _fixture = new();
+    private readonly VeloFixture _fixture = new();
     private readonly List<Action<SelectListItem>> _elementInspectors = new();
 
     [Fact]
@@ -54,7 +54,7 @@ public class CountriesAsync
 
     private CountryEntity CreateCountryType(string isoCode, ObjectState state)
     {
-        CountryEntity country = _fixture.Build<CountryEntity>()
+        CountryEntity country = _fixture.BuildCountry()
             .With(_ => _.State, state)
             .With(_ => _.Iso3166Alpha3Code, isoCode)
             .Create();

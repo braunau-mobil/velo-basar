@@ -26,7 +26,7 @@ namespace BraunauMobil.VeloBasar.Tests.Controllers.AcceptSessionControllerTests
 
         protected IActiveAcceptSessionCookie Cookie { get; } = X.StrictFake<IActiveAcceptSessionCookie> ();
 
-        protected Fixture Fixture { get; } = new ();
+        protected VeloFixture Fixture { get; } = new ();
 
         protected IStringLocalizer<SharedResources> Localizer { get; } = new StringLocalizerMock<SharedResources>();
         

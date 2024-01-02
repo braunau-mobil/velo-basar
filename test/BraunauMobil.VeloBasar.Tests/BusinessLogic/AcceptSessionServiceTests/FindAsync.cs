@@ -4,7 +4,7 @@ public class FindAsync
     : TestBase<EmptySqliteDbFixture>
 {
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task NonExistentSession_ReturnsNull(int sessionId)
     {
         //  Arrange
@@ -18,7 +18,7 @@ public class FindAsync
 
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task SessionIsFound(AcceptSessionEntity session)
     {
         // Arrange

@@ -4,7 +4,7 @@ public class GetSoldProductTimestampsAndPricesAsync
     : TestBase<EmptySqliteDbFixture>
 {
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task NoSalesAtAll_ShouldReturnEmpty(int basarId)
     {
         //  Arrange

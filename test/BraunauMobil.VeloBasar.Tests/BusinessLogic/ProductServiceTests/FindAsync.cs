@@ -4,7 +4,7 @@ public class FindAsync
     : TestBase<EmptySqliteDbFixture>
 {
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task EmptyDatabase_ReturnsNull(int productId)
     {
         //  Arrange
@@ -17,7 +17,7 @@ public class FindAsync
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task ProductExists_ReturnsProduct(ProductEntity product)
     {
         //  Arrange

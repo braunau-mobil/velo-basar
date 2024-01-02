@@ -6,7 +6,7 @@ public class UpdateAsync
     : TestBase<EmptySqliteDbFixture>
 {
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task ProductGetsUpdated(ProductEntity product, string newDescription)
     {
         //  Arrange

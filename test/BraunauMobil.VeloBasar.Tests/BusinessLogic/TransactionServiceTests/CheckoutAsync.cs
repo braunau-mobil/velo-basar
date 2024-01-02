@@ -7,14 +7,12 @@ public class CheckoutAsync
     : TestBase<EmptySqliteDbFixture>
 {
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task CreatesSaleTransactionWithoutDocument(BasarEntity basar, DateTime timestamp, int number)
     {
         // Arrange
-        AcceptSessionEntity session = Fixture.BuildAcceptSessionEntity()
-            .With(_ => _.Basar, basar)
-            .Create();
-        ProductEntity[] products = Fixture.BuildProductEntity()
+        AcceptSessionEntity session = Fixture.BuildAcceptSession(basar).Create();
+        ProductEntity[] products = Fixture.BuildProduct()
             .With(_ => _.StorageState, StorageState.Available)
             .With(_ => _.ValueState, ValueState.NotSettled)
             .With(_ => _.Session, session)
@@ -58,20 +56,19 @@ public class CheckoutAsync
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task LockedProduct_MustNotBeSold(BasarEntity basar)
     {
         // Arrange
-        AcceptSessionEntity session = Fixture.BuildAcceptSessionEntity()
-            .With(_ => _.Basar, basar)
+        AcceptSessionEntity session = Fixture.BuildAcceptSession(basar)
             .Create();
-        ProductEntity product1 = Fixture.BuildProductEntity()
+        ProductEntity product1 = Fixture.BuildProduct()
             .With(_ => _.StorageState, StorageState.Locked)
             .With(_ => _.ValueState, ValueState.NotSettled)
             .With(_ => _.Session, session)
             .Create();
         Db.Products.Add(product1);
-        ProductEntity product2 = Fixture.BuildProductEntity()
+        ProductEntity product2 = Fixture.BuildProduct()
             .With(_ => _.StorageState, StorageState.Available)
             .With(_ => _.ValueState, ValueState.NotSettled)
             .With(_ => _.Session, session)

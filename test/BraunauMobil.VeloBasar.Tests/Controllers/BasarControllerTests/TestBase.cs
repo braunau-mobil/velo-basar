@@ -20,7 +20,7 @@ public class TestBase
 
     protected IBasarService BasarService { get; } = X.StrictFake<IBasarService> ();
 
-    protected Fixture Fixture { get; } = new ();
+    protected VeloFixture Fixture { get; } = new ();
 
     protected ICrudModelFactory<BasarEntity, ListParameter> ModelFactory { get; } = X.StrictFake<ICrudModelFactory<BasarEntity, ListParameter>>();
 

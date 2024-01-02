@@ -6,7 +6,7 @@ public class SearchForAcceptance
     : TestBase
 {
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task InvalidModel_ReturnsViewWithEmptyList(SellerSearchModel searchModel)
     {
         //  Arrange
@@ -32,7 +32,7 @@ public class SearchForAcceptance
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task ValidModel_CallsGetManyAsyncAndReturnsView(SellerSearchModel searchModel, IReadOnlyList<SellerEntity> sellers)
     {
         //  Arrange

@@ -6,7 +6,7 @@ public class Lost
     : TestBase
 {
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public void WithId_ReturnsView(int productId)
     {
         //  Arrange
@@ -25,7 +25,7 @@ public class Lost
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task ValidModel_CallsSetLostAndReturnsRedirectToDetails(ProductAnnotateModel annotateModel, string url)
     {
         //  Arrage
@@ -47,7 +47,7 @@ public class Lost
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task InvalidModel_ReturnsView(ProductAnnotateModel annotateModel)
     {
         //  Arrage

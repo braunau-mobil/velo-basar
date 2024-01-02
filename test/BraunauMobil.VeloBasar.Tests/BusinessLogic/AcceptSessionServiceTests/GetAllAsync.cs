@@ -7,10 +7,10 @@ public class GetAllAsync
 {
     private const int _pageSize = 5;
 
-    private readonly Fixture _fixture = new Fixture();
+    private readonly VeloFixture _fixture = new ();
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task NoSessions_ReturnsEmpty(int basarId, int pageIndex)
     {
         //  Arrange
@@ -23,15 +23,13 @@ public class GetAllAsync
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task OnlyOnePage(BasarEntity basar)
     {
         // Arrange
         Db.Basars.Add(basar);
         await Db.SaveChangesAsync();
-        IEnumerable<AcceptSessionEntity> sessions = _fixture.Build<AcceptSessionEntity>()
-            .With(s => s.Basar, basar)
-            .With(s => s.BasarId, basar.Id)
+        IEnumerable<AcceptSessionEntity> sessions = _fixture.BuildAcceptSession(basar)
             .CreateMany(_pageSize);
         Db.AcceptSessions.AddRange(sessions);
         await Db.SaveChangesAsync();
@@ -45,21 +43,17 @@ public class GetAllAsync
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task Uncompleted(BasarEntity basar)
     {
         // Arrange
         Db.Basars.Add(basar);
         await Db.SaveChangesAsync();
-        IEnumerable<AcceptSessionEntity> uncompletedSessions = _fixture.Build<AcceptSessionEntity>()
-            .With(s => s.Basar, basar)
-            .With(s => s.BasarId, basar.Id)
+        IEnumerable<AcceptSessionEntity> uncompletedSessions = _fixture.BuildAcceptSession(basar)
             .With(s => s.State, AcceptSessionState.Uncompleted)
             .CreateMany(_pageSize);
         Db.AcceptSessions.AddRange(uncompletedSessions);
-        IEnumerable<AcceptSessionEntity> completedSessions = _fixture.Build<AcceptSessionEntity>()
-            .With(s => s.Basar, basar)
-            .With(s => s.BasarId, basar.Id)
+        IEnumerable<AcceptSessionEntity> completedSessions = _fixture.BuildAcceptSession(basar)
             .With(s => s.State, AcceptSessionState.Completed)
             .CreateMany(_pageSize);
         Db.AcceptSessions.AddRange(completedSessions);

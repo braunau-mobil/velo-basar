@@ -7,7 +7,7 @@ public class Start
     : TestBase
 {
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public void WitNoActiveSessionIdSet_CreatesNewSession_And_RedirectsToSellerCreateForAcceptance(int activeBasarId, string url)
     {
         //  Arrange
@@ -27,7 +27,7 @@ public class Start
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public void WitRunningActiveSessionIdSet_RedirectsToAcceptProductCreate(int activeBasarId, int activeSessionId, string url)
     {
         //  Arrange

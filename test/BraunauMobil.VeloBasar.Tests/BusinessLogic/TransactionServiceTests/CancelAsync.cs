@@ -7,23 +7,22 @@ public class CancelAsync
     : TestBase<EmptySqliteDbFixture>
 {
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task OneProductSaleDoesNotHaveDocumentYet_ShouldRemoveProductFromSaleAndCreateCancellationAndGenerateSaleDocument(BasarEntity basar, DateTime timestamp, int number, byte[] document)
     {
         // Arrange
-        AcceptSessionEntity session = Fixture.BuildAcceptSessionEntity().Create();
-        ProductEntity[] products = Fixture.BuildProductEntity()
+        AcceptSessionEntity session = Fixture.Create<AcceptSessionEntity>();
+        ProductEntity[] products = Fixture.BuildProduct()
             .With(_ => _.StorageState, StorageState.NotAccepted)
             .With(_ => _.ValueState, ValueState.NotSettled)
             .With(_ => _.Session, session)
             .CreateMany().ToArray();
         Db.Products.AddRange(products);
 
-        TransactionEntity sale = Fixture.BuildTransaction()
+        TransactionEntity sale = Fixture.BuildTransaction(basar)
             .Without(_ => _.Seller)
             .Without(_ => _.SellerId)
             .With(_ => _.Type, TransactionType.Sale)
-            .With(_ => _.Basar, basar)
             .Create();
         foreach (ProductEntity product in products)
         {
@@ -91,24 +90,23 @@ public class CancelAsync
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task OneProductSaleDoesHaveDocument_ShouldRemoveProductFromSaleAndCreateCancellationAndUpdateSaleDocument(BasarEntity basar, DateTime timestamp, int number, byte[] document, FileDataEntity saleDocument)
     {
         // Arrange
-        AcceptSessionEntity session = Fixture.BuildAcceptSessionEntity().Create();
-        ProductEntity[] products = Fixture.BuildProductEntity()
+        AcceptSessionEntity session = Fixture.Create<AcceptSessionEntity>();
+        ProductEntity[] products = Fixture.BuildProduct()
             .With(_ => _.StorageState, StorageState.NotAccepted)
             .With(_ => _.ValueState, ValueState.NotSettled)
             .With(_ => _.Session, session)
             .CreateMany().ToArray();
         Db.Products.AddRange(products);
 
-        TransactionEntity sale = Fixture.BuildTransaction()
+        TransactionEntity sale = Fixture.BuildTransaction(basar)
             .Without(_ => _.Seller)
             .Without(_ => _.SellerId)
             .With(_ => _.Type, TransactionType.Sale)
             .With(_ => _.DocumentId, saleDocument.Id)
-            .With(_ => _.Basar, basar)
             .Create();
         foreach (ProductEntity product in products)
         {

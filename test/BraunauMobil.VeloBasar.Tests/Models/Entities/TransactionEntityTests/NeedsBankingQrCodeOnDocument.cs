@@ -2,16 +2,16 @@
 
 public class NeedsBankingQrCodeOnDocument
 {
-    private readonly Fixture _fixture = new ();
+    private readonly VeloFixture _fixture = new ();
 
     [Theory]
-    [InlineAutoData(TransactionType.Acceptance)]
-    [InlineAutoData(TransactionType.Cancellation)]
-    [InlineAutoData(TransactionType.Lock)]
-    [InlineAutoData(TransactionType.Sale)]
-    [InlineAutoData(TransactionType.SetLost)]
-    [InlineAutoData(TransactionType.Settlement)]
-    [InlineAutoData(TransactionType.Unlock)]
+    [VeloInlineAutoData(TransactionType.Acceptance)]
+    [VeloInlineAutoData(TransactionType.Cancellation)]
+    [VeloInlineAutoData(TransactionType.Lock)]
+    [VeloInlineAutoData(TransactionType.Sale)]
+    [VeloInlineAutoData(TransactionType.SetLost)]
+    [VeloInlineAutoData(TransactionType.Settlement)]
+    [VeloInlineAutoData(TransactionType.Unlock)]
     [InlineData(null, TransactionType.Acceptance)]
     [InlineData(null, TransactionType.Cancellation)]
     [InlineData(null, TransactionType.Lock)]
@@ -36,13 +36,13 @@ public class NeedsBankingQrCodeOnDocument
     }
 
     [Theory]
-    [InlineAutoData(TransactionType.Acceptance)]
-    [InlineAutoData(TransactionType.Cancellation)]
-    [InlineAutoData(TransactionType.Lock)]
-    [InlineAutoData(TransactionType.Sale)]
-    [InlineAutoData(TransactionType.SetLost)]
-    [InlineAutoData(TransactionType.Settlement)]
-    [InlineAutoData(TransactionType.Unlock)]
+    [VeloInlineAutoData(TransactionType.Acceptance)]
+    [VeloInlineAutoData(TransactionType.Cancellation)]
+    [VeloInlineAutoData(TransactionType.Lock)]
+    [VeloInlineAutoData(TransactionType.Sale)]
+    [VeloInlineAutoData(TransactionType.SetLost)]
+    [VeloInlineAutoData(TransactionType.Settlement)]
+    [VeloInlineAutoData(TransactionType.Unlock)]
     [InlineData(null, TransactionType.Acceptance)]
     [InlineData(null, TransactionType.Cancellation)]
     [InlineData(null, TransactionType.Lock)]
@@ -67,13 +67,13 @@ public class NeedsBankingQrCodeOnDocument
     }
 
     [Theory]
-    [InlineAutoData(TransactionType.Acceptance)]
-    [InlineAutoData(TransactionType.Cancellation)]
-    [InlineAutoData(TransactionType.Lock)]
-    [InlineAutoData(TransactionType.Sale)]
-    [InlineAutoData(TransactionType.SetLost)]
-    [InlineAutoData(TransactionType.Settlement)]
-    [InlineAutoData(TransactionType.Unlock)]
+    [VeloInlineAutoData(TransactionType.Acceptance)]
+    [VeloInlineAutoData(TransactionType.Cancellation)]
+    [VeloInlineAutoData(TransactionType.Lock)]
+    [VeloInlineAutoData(TransactionType.Sale)]
+    [VeloInlineAutoData(TransactionType.SetLost)]
+    [VeloInlineAutoData(TransactionType.Settlement)]
+    [VeloInlineAutoData(TransactionType.Unlock)]
     public void SoldProducts_NoSellerIBAN_ShouldBeFalse(TransactionType transactionType)
     {
         //  Arrange
@@ -96,12 +96,12 @@ public class NeedsBankingQrCodeOnDocument
     }
 
     [Theory]
-    [InlineAutoData(TransactionType.Acceptance)]
-    [InlineAutoData(TransactionType.Cancellation)]
-    [InlineAutoData(TransactionType.Lock)]
-    [InlineAutoData(TransactionType.Sale)]
-    [InlineAutoData(TransactionType.SetLost)]
-    [InlineAutoData(TransactionType.Unlock)]
+    [VeloInlineAutoData(TransactionType.Acceptance)]
+    [VeloInlineAutoData(TransactionType.Cancellation)]
+    [VeloInlineAutoData(TransactionType.Lock)]
+    [VeloInlineAutoData(TransactionType.Sale)]
+    [VeloInlineAutoData(TransactionType.SetLost)]
+    [VeloInlineAutoData(TransactionType.Unlock)]
     public void SoldProducts_SellerIBAN_ShouldBeFalse(TransactionType transactionType)
     {
         //  Arrange
@@ -121,7 +121,7 @@ public class NeedsBankingQrCodeOnDocument
     }
 
     [Theory]
-    [InlineAutoData(TransactionType.Settlement)]
+    [VeloInlineAutoData(TransactionType.Settlement)]
     public void SoldProducts_SellerIBAN_ShouldBeTrue(TransactionType transactionType)
     {
         //  Arrange
@@ -142,7 +142,7 @@ public class NeedsBankingQrCodeOnDocument
 
     private void AddSoldProducts(TransactionEntity transaction)
     {
-        IEnumerable<ProductEntity> soldProducts = _fixture.BuildProductEntity()
+        IEnumerable<ProductEntity> soldProducts = _fixture.BuildProduct()
             .With(_ => _.StorageState, StorageState.Sold)
             .With(_ => _.ValueState, ValueState.NotSettled)
             .CreateMany();

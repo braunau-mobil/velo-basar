@@ -7,15 +7,14 @@ public class AcceptAsync
     : TestBase<EmptySqliteDbFixture>
 {
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task ShouldCreateAcceptance(BasarEntity basar, SellerEntity seller, int number, DateTime timestamp)
     {
         //  Arrange
-        AcceptSessionEntity session = Fixture.BuildAcceptSessionEntity()
-            .With(_ => _.Basar, basar)
+        AcceptSessionEntity session = Fixture.BuildAcceptSession(basar)
             .With(_ => _.Seller, seller)
             .Create();
-        ProductEntity[] products = Fixture.BuildProductEntity()
+        ProductEntity[] products = Fixture.BuildProduct()
             .With(_ => _.Session, session)
             .With(_ => _.StorageState, StorageState.NotAccepted)
             .With(_ => _.ValueState, ValueState.NotSettled)
@@ -59,15 +58,14 @@ public class AcceptAsync
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task NotAllowedProduct_ShouldThrow(BasarEntity basar, SellerEntity seller)
     {
         //  Arrange
-        AcceptSessionEntity session = Fixture.BuildAcceptSessionEntity()
-            .With(_ => _.Basar, basar)
+        AcceptSessionEntity session = Fixture.BuildAcceptSession(basar)
             .With(_ => _.Seller, seller)
             .Create();
-        ProductEntity[] products = Fixture.BuildProductEntity()
+        ProductEntity[] products = Fixture.BuildProduct()
             .With(_ => _.Session, session)
             .With(_ => _.StorageState, StorageState.Available)
             .With(_ => _.ValueState, ValueState.NotSettled)

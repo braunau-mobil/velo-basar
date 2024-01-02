@@ -24,7 +24,7 @@ public class GetCart
 	}
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public void ReturnsId(List<int> input)
     {
         //	Arrange

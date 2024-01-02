@@ -6,7 +6,7 @@ public class Delete
     : TestBase
 {
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task CallsDelete_And_ReturnsRedirectoToCreate(int sessionId, int productId, string url)
     {
         //  Arrange

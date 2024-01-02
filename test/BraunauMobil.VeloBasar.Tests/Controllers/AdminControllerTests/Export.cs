@@ -6,7 +6,7 @@ public class Export
     : TestBase
 {
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public void ReturnsView(DateTime dateTime)
     {
         //  Arrange

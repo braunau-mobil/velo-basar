@@ -4,7 +4,7 @@ public class GetBasarNameAsync
     : TestBase
 {
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task ShouldReturnName(BasarEntity basar)
     {
         //  Arrange

@@ -8,7 +8,7 @@ public class List
     : TestBase
 {
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task WithPageSizeNull_ThrowsArgumentNullException(AcceptSessionListParameter parameter, int activeBasarId)
     {
         //  Arrange
@@ -19,7 +19,7 @@ public class List
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task CallsGetAll_And_ReturnsView(AcceptSessionListParameter parameter, int activeBasarId)
     {
         ArgumentNullException.ThrowIfNull(parameter.PageSize);

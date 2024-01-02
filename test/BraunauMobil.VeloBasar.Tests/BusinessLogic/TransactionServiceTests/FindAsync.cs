@@ -6,22 +6,19 @@ public class FindAsync
     : TestBase<EmptySqliteDbFixture>
 {
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task Existing_ReturnsTransactionIncludingAllRelations(BasarEntity basar)
     {
         // Arrange
-        AcceptSessionEntity session = Fixture.BuildAcceptSessionEntity()
-            .With(_ => _.Basar, basar)
-            .Create();
-        ProductEntity[] products = Fixture.BuildProductEntity()
+        AcceptSessionEntity session = Fixture.BuildAcceptSession(basar).Create();
+        ProductEntity[] products = Fixture.BuildProduct()
             .With(_ => _.StorageState, StorageState.Available)
             .With(_ => _.ValueState, ValueState.NotSettled)
             .With(_ => _.Session, session)
             .CreateMany().ToArray();
         Db.Products.AddRange(products);
 
-        TransactionEntity transaction = Fixture.BuildTransaction()
-            .With(_ => _.Basar, basar)
+        TransactionEntity transaction = Fixture.BuildTransaction(basar)
             .Create();
         foreach (ProductEntity product in products)
         {
@@ -43,22 +40,19 @@ public class FindAsync
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task Existing_SearchOther_ReturnsNull(BasarEntity basar)
     {
         // Arrange
-        AcceptSessionEntity session = Fixture.BuildAcceptSessionEntity()
-            .With(_ => _.Basar, basar)
-            .Create();
-        ProductEntity[] products = Fixture.BuildProductEntity()
+        AcceptSessionEntity session = Fixture.BuildAcceptSession(basar).Create();
+        ProductEntity[] products = Fixture.BuildProduct()
             .With(_ => _.StorageState, StorageState.Available)
             .With(_ => _.ValueState, ValueState.NotSettled)
             .With(_ => _.Session, session)
             .CreateMany().ToArray();
         Db.Products.AddRange(products);
 
-        TransactionEntity transaction = Fixture.BuildTransaction()
-            .With(_ => _.Basar, basar)
+        TransactionEntity transaction = Fixture.BuildTransaction(basar)
             .Create();
         foreach (ProductEntity product in products)
         {
@@ -75,7 +69,7 @@ public class FindAsync
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task EmptyTable_ReturnsNull(int basarId, TransactionType transactionType, int number)
     {
         // Arrange

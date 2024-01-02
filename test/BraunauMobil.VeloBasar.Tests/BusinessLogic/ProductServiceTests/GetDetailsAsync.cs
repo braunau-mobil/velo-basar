@@ -4,7 +4,7 @@ public class GetDetailsAsync
     : TestBase<EmptySqliteDbFixture>
 {
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task EmptyDatabase_Throws(int basarId, int productId)
     {
         //  Arrange
@@ -17,7 +17,7 @@ public class GetDetailsAsync
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task ProductExistsWithNoTransactions_ReturnsDetailsModel(ProductEntity product)
     {
         //  Arrange
@@ -39,7 +39,7 @@ public class GetDetailsAsync
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task ProductAndTransactionsExist_ReturnsDetailsModel(ProductEntity product)
     {
         //  Arrange

@@ -4,7 +4,7 @@ public class DeleteAsync
     : TestBase<EmptySqliteDbFixture>
 {
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task ProductIsDeleted(ProductEntity product)
     {
         // Arrange

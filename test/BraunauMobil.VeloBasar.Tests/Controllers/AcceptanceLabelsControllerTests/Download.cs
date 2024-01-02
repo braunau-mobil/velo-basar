@@ -6,11 +6,11 @@ public class Download
     : TestBase
 {
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task ValidId_ReturnsFileContent(int id)
     {
         // Arrange
-        FileDataEntity fileData = Fixture.BuildFileDataEntity().Create();
+        FileDataEntity fileData = Fixture.Create<FileDataEntity>();
         A.CallTo(() => TransactionService.GetAcceptanceLabelsAsync(id)).Returns(fileData);
         
         // Act

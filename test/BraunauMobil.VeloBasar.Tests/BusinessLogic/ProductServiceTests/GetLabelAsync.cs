@@ -4,7 +4,7 @@ public class GetLabelAsync
     : TestBase<EmptySqliteDbFixture>
 {
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public void EmptyDatabase_Throws(int productId)
     {
         //  Arrange
@@ -17,7 +17,7 @@ public class GetLabelAsync
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async void ProductExists_ReturnsLabelDataAsPdf(ProductEntity product, byte[] labelData)
     {
         //  Arrange

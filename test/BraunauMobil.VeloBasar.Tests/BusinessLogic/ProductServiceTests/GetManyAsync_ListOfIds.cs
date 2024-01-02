@@ -4,7 +4,7 @@ public class GetManyAsync_ListOfIds
     : TestBase<EmptySqliteDbFixture>
 {
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task EmptyDatabase_ReturnsEmptyList(int[] productIds)
     {
         //  Arrange
@@ -17,7 +17,7 @@ public class GetManyAsync_ListOfIds
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task ProductExists_EmptyIdList_ReturnsEmptyList(ProductEntity[] products)
     {
         //  Arrange
@@ -32,7 +32,7 @@ public class GetManyAsync_ListOfIds
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task ProductExists_ReturnsListOfProducts(ProductEntity p1, ProductEntity p2, ProductEntity p3, int productIdThatDoesNotExist)
     {
         //  Arrange

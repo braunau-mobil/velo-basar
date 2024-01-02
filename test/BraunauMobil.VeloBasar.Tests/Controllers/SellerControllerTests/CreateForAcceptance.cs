@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoFixture.Xunit2;
+using Microsoft.AspNetCore.Mvc;
 
 namespace BraunauMobil.VeloBasar.Tests.Controllers.SellerControllerTests;
 
@@ -6,7 +7,7 @@ public class CreateForAcceptance
 	: TestBase
 {
 	[Theory]
-	[AutoData]
+	[VeloAutoData]
 	public async Task NoId_CallsCreateNewAndReturnsView(SellerEntity seller)
 	{
 		//	Arrange
@@ -30,7 +31,7 @@ public class CreateForAcceptance
 
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task WithId_CallsGetAsyncAndReturnsView(int id, SellerEntity seller)
     {
         //	Arrange
@@ -52,7 +53,7 @@ public class CreateForAcceptance
     }
 
 	[Theory]
-	[AutoData]
+	[VeloAutoData]
 	public async Task WithInvalidModel_ReturnsView(SellerEntity seller)
 	{
 		//	Arrange

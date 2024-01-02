@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoFixture.Xunit2;
+using Microsoft.AspNetCore.Mvc;
 
 namespace BraunauMobil.VeloBasar.Tests.Controllers.ProductControllerTests;
 
@@ -6,11 +7,11 @@ public class Edit
     : TestBase
 {
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task WithId_GetIsCalledAndReturnsView(int productId, ProductEntity product)
     {
         //  Arrange
-        ProductDetailsModel model = Fixture.BuildProductDetailsModel().Create();
+        ProductDetailsModel model = Fixture.Create<ProductDetailsModel>();
         A.CallTo(() => ProductService.GetAsync(productId)).Returns(product);
 
         //  Act
@@ -50,7 +51,7 @@ public class Edit
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task InvalidModel_ReturnsView(ProductEntity product)
     {
         //  Arrage

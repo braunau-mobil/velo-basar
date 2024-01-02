@@ -9,7 +9,7 @@ public class GetCurrentTheme
     [Theory]
     [InlineData(null)]
     [InlineData("")]
-    [AutoData]
+    [VeloAutoData]
     public void ReturnsDefault(string? cookieValue)
     {
         //  Arrange

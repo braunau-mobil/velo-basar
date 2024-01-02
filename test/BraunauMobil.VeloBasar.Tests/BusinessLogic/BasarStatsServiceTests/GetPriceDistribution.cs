@@ -7,7 +7,7 @@ public class GetPriceDistribution
     : TestBase<EmptySqliteDbFixture>
 {
     private readonly CultureInfo _initialCultureInfo = CultureInfo.CurrentCulture;
-    private readonly Fixture _fixture = new();
+    private readonly VeloFixture _fixture = new();
 
     public GetPriceDistribution()
     {
@@ -34,7 +34,7 @@ public class GetPriceDistribution
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public void Products_ShouldReturnDistribution(Color primaryColor)
     {
         // Arrange
@@ -68,7 +68,7 @@ public class GetPriceDistribution
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public void ProductsWithPricesLowerThan10_ShouldReturnDistribution(Color primaryColor)
     {
         // Arrange
@@ -94,7 +94,7 @@ public class GetPriceDistribution
     }
 
     private ProductEntity CreateProduct(decimal price)
-        => _fixture.Build<ProductEntity>()
+        => _fixture.BuildProduct()
             .With(_ => _.Price, price)
             .Create();
 }

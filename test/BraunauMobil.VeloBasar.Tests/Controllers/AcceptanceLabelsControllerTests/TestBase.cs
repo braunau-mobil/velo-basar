@@ -13,7 +13,7 @@ public class TestBase
 
     protected IStringLocalizer<SharedResources> Localizer { get; } = X.StrictFake<IStringLocalizer<SharedResources>>();
 
-    protected Fixture Fixture { get; } = new ();
+    protected VeloFixture Fixture { get; } = new ();
 
     protected ITransactionService TransactionService { get; } = X.StrictFake<ITransactionService>();
 

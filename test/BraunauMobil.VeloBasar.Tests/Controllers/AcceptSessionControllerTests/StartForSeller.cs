@@ -7,7 +7,7 @@ public class StartForSeller
     : TestBase
 {
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task WitNoActiveSessionIdSet_CreatesNewSession_SetsAsActiveSession_And_RedirectsToAcceptProductCreate(int sellerId, int activeBasarId, int sessionId, string url)
     {
         //  Arrange
@@ -33,7 +33,7 @@ public class StartForSeller
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task WitActiveSessionIdSet_RedirectsToAcceptProductCreate(int sellerId, int activeBasarId, int activeSessionId, string url)
     {
         //  Arrange

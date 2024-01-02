@@ -7,7 +7,7 @@ public sealed class GetSaleDistribution
     : TestBase<EmptySqliteDbFixture>
 {
     private readonly CultureInfo _initialCultureInfo = CultureInfo.CurrentCulture;
-    private readonly Fixture _fixture = new();
+    private readonly VeloFixture _fixture = new();
 
     public GetSaleDistribution()
     {
@@ -35,7 +35,7 @@ public sealed class GetSaleDistribution
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public void ShouldGroupByHourAndMinuteAndSumValues(Color primaryColor)
     {
         //  Arrange

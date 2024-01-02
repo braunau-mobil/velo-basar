@@ -8,7 +8,7 @@ public class SetTheme
     : TestBase
 { 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public void SetsThemeAndRedirectsToReferer(Theme theme, string url)
     {
         //  Arrange

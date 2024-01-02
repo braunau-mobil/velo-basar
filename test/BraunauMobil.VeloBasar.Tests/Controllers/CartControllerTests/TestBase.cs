@@ -22,7 +22,7 @@ public class TestBase
 
     protected ICartCookie Cookie { get; } = X.StrictFake<ICartCookie>();
 
-    protected Fixture Fixture { get; } = new ();
+    protected VeloFixture Fixture { get; } = new ();
 
     protected IStringLocalizer<SharedResources> Localizer { get; } = new StringLocalizerMock<SharedResources>();
 

@@ -7,7 +7,7 @@ public class Index
     : TestBase
 {
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task CreatesNewCartModelAndReturnsView(IList<int> cart, IReadOnlyList<ProductEntity> products)
     {
         //  Arrange

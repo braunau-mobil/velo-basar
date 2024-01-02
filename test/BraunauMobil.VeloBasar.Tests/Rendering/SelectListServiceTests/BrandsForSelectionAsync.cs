@@ -5,18 +5,18 @@ namespace BraunauMobil.VeloBasar.Tests.Rendering.SelectListServiceTests;
 public class BrandsForSelectionAsync
     : TestBase
 {
-    private readonly Fixture _fixture = new();
+    private readonly VeloFixture _fixture = new();
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task Default_ShouldReturnAllBrandsFromProducts(AcceptSessionEntity session, string brand1, string brand2)
     {
         //  Arrange
-        Db.Products.AddRange(_fixture.BuildProductEntity()
+        Db.Products.AddRange(_fixture.BuildProduct()
             .With(p => p.Brand, brand2)
             .With(p => p.Session, session)
             .CreateMany());
-        Db.Products.AddRange(_fixture.BuildProductEntity()
+        Db.Products.AddRange(_fixture.BuildProduct()
             .With(p => p.Brand, brand1)
             .With(p => p.Session, session)
             .CreateMany());
@@ -47,15 +47,15 @@ public class BrandsForSelectionAsync
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task IncludeAll_ShouldReturnAllBrandsFromProductsIncludingAllItem(AcceptSessionEntity session, string brand1, string brand2)
     {
         //  Arrange
-        Db.Products.AddRange(_fixture.BuildProductEntity()
+        Db.Products.AddRange(_fixture.BuildProduct()
             .With(p => p.Brand, brand2)
             .With(p => p.Session, session)
             .CreateMany());
-        Db.Products.AddRange(_fixture.BuildProductEntity()
+        Db.Products.AddRange(_fixture.BuildProduct()
             .With(p => p.Brand, brand1)
             .With(p => p.Session, session)
             .CreateMany());

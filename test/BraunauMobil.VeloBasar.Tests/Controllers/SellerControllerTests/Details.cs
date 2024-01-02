@@ -6,11 +6,13 @@ public class Details
     : TestBase
 {
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task ReturnsView(int activeBasarId, int sellerId)
     {
         //  Arrange
-        SellerDetailsModel model = Fixture.BuildSellerDetailsModel().Create();
+        SellerDetailsModel model = Fixture.Build<SellerDetailsModel>()
+             .With(_ => _.Transactions, Fixture.BuildTransaction().CreateMany().ToList())
+             .Create();
         A.CallTo(() => SellerService.GetDetailsAsync(activeBasarId, sellerId)).Returns(model);
 
         //  Act

@@ -3,10 +3,10 @@
 public class GetAcceptanceCountAsync
     : TestBase<EmptySqliteDbFixture>
 {
-    private readonly Fixture _fixture = new();
+    private readonly VeloFixture _fixture = new();
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task NoTransactionsAtAll_ShouldReturnZero(int basarId)
     {
         //  Arrange
@@ -19,11 +19,11 @@ public class GetAcceptanceCountAsync
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task BasarHasNoTransactions_ShouldReturnZero(BasarEntity basar)
     {
         //  Arrange
-        IEnumerable<TransactionEntity> otherTransactions = _fixture.BuildTransaction().CreateMany();
+        IEnumerable<TransactionEntity> otherTransactions = _fixture.CreateMany<TransactionEntity>();
         Db.Transactions.AddRange(otherTransactions);
         await Db.SaveChangesAsync();
 
@@ -35,19 +35,18 @@ public class GetAcceptanceCountAsync
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task BasarHasTransactions_ShouldReturnCount(BasarEntity basar, BasarEntity otherBasar)
     {
         //  Arrange
         IEnumerable<TransactionEntity> basarAcceptances = _fixture
-            .BuildTransaction()
-            .WithBasar(basar)
+            .BuildTransaction(basar)
             .With(_ => _.Type, TransactionType.Acceptance)
             .CreateMany();
         Db.Transactions.AddRange(basarAcceptances);
 
-        IEnumerable<TransactionEntity> otherTransactions = _fixture.BuildTransaction()
-            .WithBasar(otherBasar)
+        IEnumerable<TransactionEntity> otherTransactions = _fixture
+            .BuildTransaction(otherBasar)
             .CreateMany();
         Db.Transactions.AddRange(otherTransactions);
         await Db.SaveChangesAsync();

@@ -6,11 +6,11 @@ public class Cancel
     : TestBase
 {
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task ReturnsRedirectToSelectProducts(int id, string url)
     {
         //  Arrange
-        TransactionEntity transaction = Fixture.BuildTransaction().Create();
+        TransactionEntity transaction = Fixture.Create<TransactionEntity>();
         A.CallTo(() => TransactionService.GetAsync(id)).Returns(transaction);
         A.CallTo(() => CancelRouter.ToSelectProducts(transaction.Id)).Returns(url);
 

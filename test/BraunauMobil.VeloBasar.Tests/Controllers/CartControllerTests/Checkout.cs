@@ -7,7 +7,7 @@ public class Checkout
     : TestBase
 {
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task EmptyCart_ReturnsNotAllowed(int activeBasarId)
     {
         //  Arrange
@@ -27,7 +27,7 @@ public class Checkout
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task ProductsInCart_CallsCheckoutAndReturnsTransactionSuccess(int activeBasarId, IList<int> cart, int saleId, string url)
     {
         //  Arrange

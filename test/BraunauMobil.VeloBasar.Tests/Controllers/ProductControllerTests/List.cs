@@ -9,7 +9,7 @@ public class List
     : TestBase
 {
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task ExistingProductId_ReturnsRedirectToDetails(ProductListParameter parameter, int productId, int activeBasarId, string url)
     {
         //  Arrange
@@ -32,7 +32,7 @@ public class List
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task NotExistingProductId_CallsGetManyAndReturnsView(ProductListParameter parameter, int productId, int activeBasarId)
     {
         //  Arrange
@@ -57,7 +57,7 @@ public class List
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task CallsGetManyAndReturnsView(ProductListParameter parameter, int activeBasarId)
     {
         //  Arrange

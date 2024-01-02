@@ -4,7 +4,7 @@ public class GetAsync
     : TestBase<EmptySqliteDbFixture>
 {
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task WithId_ProductIsReturnedAndRelationsAreLoaded(ProductEntity product)
     {
         // Arrange
@@ -26,7 +26,7 @@ public class GetAsync
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task WithSessionIdAndProduct_SessionIsLoadedAndProductIsReturned(ProductEntity product)
     {
         // Arrange

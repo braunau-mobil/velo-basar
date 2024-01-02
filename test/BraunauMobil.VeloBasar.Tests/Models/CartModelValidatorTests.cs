@@ -17,7 +17,7 @@ public class CartModelValidatorTests
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task ProductIsAllowedForCart(CartModel cart, ProductEntity product)
     {
         //  Arrange
@@ -41,7 +41,7 @@ public class CartModelValidatorTests
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task ProductIsNotFound(CartModel cart, ProductEntity product)
     {
         //  Arrange
@@ -66,7 +66,7 @@ public class CartModelValidatorTests
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task ProductIsSettled(CartModel cart, ProductEntity product)
     {
         //  Arrange
@@ -90,7 +90,7 @@ public class CartModelValidatorTests
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task ProductIsLost(CartModel cart, ProductEntity product)
     {
         //  Arrange
@@ -100,8 +100,8 @@ public class CartModelValidatorTests
         product.ValueState = ValueState.NotSettled;
         A.CallTo(() => _productService.FindAsync(product.Id)).Returns(product);
 
-        Fixture fixture = new();
-        TransactionEntity transaction = fixture.BuildTransaction().Create();
+        VeloFixture fixture = new();
+        TransactionEntity transaction = fixture.Create<TransactionEntity>();
         A.CallTo(() => _transactionService.GetLatestAsync(cart.ActiveBasarId, product.Id)).Returns(transaction);
 
         //  Act
@@ -119,7 +119,7 @@ public class CartModelValidatorTests
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task ProductIsLocked(CartModel cart, ProductEntity product)
     {
         //  Arrange
@@ -129,8 +129,8 @@ public class CartModelValidatorTests
         product.ValueState = ValueState.NotSettled;
         A.CallTo(() => _productService.FindAsync(product.Id)).Returns(product);
 
-        Fixture fixture = new();
-        TransactionEntity transaction = fixture.BuildTransaction().Create();
+        VeloFixture fixture = new();
+        TransactionEntity transaction = fixture.Create<TransactionEntity>();
         A.CallTo(() => _transactionService.GetLatestAsync(cart.ActiveBasarId, product.Id)).Returns(transaction);
 
         //  Act
@@ -148,7 +148,7 @@ public class CartModelValidatorTests
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task ProductIsSold(CartModel cart, ProductEntity product, string url)
     {
         //  Arrange
@@ -158,8 +158,8 @@ public class CartModelValidatorTests
         product.ValueState = ValueState.NotSettled;
         A.CallTo(() => _productService.FindAsync(product.Id)).Returns(product);
 
-        Fixture fixture = new();
-        TransactionEntity transaction = fixture.BuildTransaction().Create();
+        VeloFixture fixture = new();
+        TransactionEntity transaction = fixture.Create<TransactionEntity>();
         A.CallTo(() => _transactionService.GetLatestAsync(cart.ActiveBasarId, product.Id)).Returns(transaction);
 
         ITransactionRouter transactionRouter = X.StrictFake<ITransactionRouter>();
@@ -183,7 +183,7 @@ public class CartModelValidatorTests
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task ProductIsNotAccepted(CartModel cart, ProductEntity product)
     {
         //  Arrange

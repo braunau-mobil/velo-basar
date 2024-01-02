@@ -9,7 +9,7 @@ public class CreateSampleSettlementDocument
     public async Task CallsCreateSampleSettlementDocumentAsync_AndReturnsFileData()
     {
         //  Arrange
-        FileDataEntity fileData = Fixture.BuildFileDataEntity().Create();
+        FileDataEntity fileData = Fixture.Create<FileDataEntity>();
         A.CallTo(() => AdminService.CreateSampleSettlementDocumentAsync()).Returns(fileData);
 
         //  Act

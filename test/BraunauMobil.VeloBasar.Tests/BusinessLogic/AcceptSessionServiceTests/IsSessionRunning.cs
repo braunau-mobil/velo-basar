@@ -16,7 +16,7 @@ public class IsSessionRunning
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task NonExistent_ReturnsFalse(int sessionId)
     {
         // Arrange
@@ -29,7 +29,7 @@ public class IsSessionRunning
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task EndTimeStampSet_ReturnsFalse(AcceptSessionEntity session, DateTime endTimeStamp)
     {
         // Arrange
@@ -45,7 +45,7 @@ public class IsSessionRunning
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task NoEndTimeStamp_ReturnsTrue(AcceptSessionEntity session)
     {
         // Arrange

@@ -6,7 +6,7 @@ public class SettleAsync
     : TestBase<EmptySqliteDbFixture>
 {
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task NoProducts_ShouldCreateTransactionAndSetSellerToSettled(int basarId, SellerEntity seller, int settlemendId)
     {
         //  Arrange
@@ -28,16 +28,15 @@ public class SettleAsync
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task Products_ShouldCreateTransactionAndSetSellerToSettled(BasarEntity basar, SellerEntity seller, int settlemendId)
     {
         //  Arrange
-        Fixture fixture = new();
-        AcceptSessionEntity session = fixture.BuildAcceptSessionEntity()
-            .With(_ => _.Basar, basar)
+        VeloFixture fixture = new();
+        AcceptSessionEntity session = fixture.BuildAcceptSession(basar)
             .With(_ => _.Seller, seller)
             .Create();
-        ProductEntity[] products = fixture.BuildProductEntity()
+        ProductEntity[] products = fixture.BuildProduct()
             .With(_ => _.Session, session)
             .Do(session.Products.Add)
             .CreateMany().ToArray();

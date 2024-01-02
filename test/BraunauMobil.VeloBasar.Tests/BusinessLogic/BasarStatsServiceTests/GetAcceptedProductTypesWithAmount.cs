@@ -5,7 +5,7 @@ namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.BasarStatsServiceTests;
 public class GetAcceptedProductTypesWithAmount
     : TestBase<EmptySqliteDbFixture>
 {
-    private readonly Fixture _fixture = new();
+    private readonly VeloFixture _fixture = new();
 
     [Fact]
     public void NoProducts_ShouldReturnEmptyList()
@@ -21,7 +21,7 @@ public class GetAcceptedProductTypesWithAmount
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public void Products_ShouldGroupByTypeAndSumPrices(ProductTypeEntity typeA, ProductTypeEntity typeB, Color colorA, Color colorB)
     {
         //  Arrange
@@ -55,7 +55,7 @@ public class GetAcceptedProductTypesWithAmount
     }
 
     private ProductEntity CreateProduct(ProductTypeEntity type, decimal price)
-        => _fixture.BuildProductEntity()
+        => _fixture.BuildProduct()
             .With(_ => _.Type, type)
             .With(_ => _.Price, price)
             .Create();

@@ -6,7 +6,7 @@ public class ProductDonateableBadge
     : TestBase
 {
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public void DoNotDonate_ShouldReturnEmptyHtmlString(ProductEntity product)
     {
         //  Arrange
@@ -20,7 +20,7 @@ public class ProductDonateableBadge
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public void DoDonate_ShouldReturnBadge(ProductEntity product)
     {
         //  Arrange

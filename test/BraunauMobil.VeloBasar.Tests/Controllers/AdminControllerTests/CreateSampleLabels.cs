@@ -9,7 +9,7 @@ public class CreateSampleLabels
     public async Task CallsCreateSampleLabelsAsync_AndReturnsFileData()
     {
         //  Arrange
-        FileDataEntity fileData = Fixture.BuildFileDataEntity().Create();
+        FileDataEntity fileData = Fixture.Create<FileDataEntity>();
         A.CallTo(() => AdminService.CreateSampleLabelsAsync()).Returns(fileData);
 
         //  Act

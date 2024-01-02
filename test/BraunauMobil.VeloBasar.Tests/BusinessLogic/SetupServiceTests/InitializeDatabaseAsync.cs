@@ -6,7 +6,7 @@ public class InitializeDatabaseAsync
     : TestBase
 {
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task GenerateNothing_ShouldNotGenerateAnything(MailAddress adminUserEmail)
     {
         //  Arrange
@@ -36,7 +36,7 @@ public class InitializeDatabaseAsync
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task GenerateCountries_ShouldGenerateCountries(MailAddress adminUserEmail)
     {
         //  Arrange
@@ -67,7 +67,7 @@ public class InitializeDatabaseAsync
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task GenerateProductTypes_ShouldGenerateProductTypes(MailAddress adminUserEmail)
     {
         //  Arrange
@@ -98,7 +98,7 @@ public class InitializeDatabaseAsync
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task GenerateZipCodes_ShouldGenerateZipCodesAndCountries(MailAddress adminUserEmail)
     {
         //  Arrange

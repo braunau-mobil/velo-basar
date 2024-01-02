@@ -4,7 +4,7 @@ public sealed class GetDetailsAsync
     : TestBase
 {    
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task ValuesShouldBeCorrect(BasarDetailsModel details, ProductEntity[] acceptedProducts, Tuple<TimeOnly, decimal>[] transactionsAndTotals)
     {
         //  Arrange

@@ -6,7 +6,7 @@ public class Details
     : TestBase
 {
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task CallsGetDetailsAsync_AndRedirectsToBasarDetails(int basarId)
     {
         //  Arrange

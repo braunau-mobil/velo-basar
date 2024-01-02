@@ -28,7 +28,7 @@ public class Select
     [Fact]
     public async Task ValidModel_ReturnsView()
     {
-        TransactionEntity transaction = Fixture.BuildTransaction().Create();
+        TransactionEntity transaction = Fixture.Create<TransactionEntity>();
         AcceptanceLabelsModel model = Fixture.Create<AcceptanceLabelsModel>();
         model.OpenDocument = false;
 

@@ -4,7 +4,7 @@ public class GetAsync
     : TestBase<EmptySqliteDbFixture>
 {
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task NotExistenet_ThrowsInvalidOperationException(int sessionId)
     {
         //  Arrange
@@ -17,7 +17,7 @@ public class GetAsync
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task IsReturnedAndRelationsAreLoaded(AcceptSessionEntity session)
     {
         // Arrange

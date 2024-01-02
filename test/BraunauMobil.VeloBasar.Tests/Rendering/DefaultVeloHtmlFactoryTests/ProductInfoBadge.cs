@@ -6,7 +6,7 @@ public class ProductInfoBadge
     : TestBase
 {
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public void ShouldReturnCorrectHtml(ProductEntity product)
     {
         //  Arrange

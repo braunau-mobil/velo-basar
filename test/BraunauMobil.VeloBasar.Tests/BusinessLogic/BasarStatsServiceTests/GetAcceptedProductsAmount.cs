@@ -20,13 +20,13 @@ public class GetAcceptedProductsAmount
     public void Products_ReturnsSumOfAcceptedProducts()
     {
         //  Arrange
-        Fixture fixture = new();
-        IEnumerable<ProductEntity> notAcceptedProducts = fixture.BuildProductEntity()
+        VeloFixture fixture = new();
+        IEnumerable<ProductEntity> notAcceptedProducts = fixture.BuildProduct()
             .With(_ => _.StorageState, StorageState.NotAccepted)
             .CreateMany();        
 
         fixture.ExcludeEnumValues(StorageState.NotAccepted);
-        IEnumerable<ProductEntity> acceptedProducts = fixture.BuildProductEntity()
+        IEnumerable<ProductEntity> acceptedProducts = fixture.BuildProduct()
             .With(_ => _.Price, 1)
             .CreateMany();
         

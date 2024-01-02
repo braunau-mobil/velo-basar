@@ -6,11 +6,11 @@ public class Labels
     : TestBase
 {
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task CallsGetLabelsAndReturnsFile(int basarId, int sellerId)
     {
         //  Arrange
-        FileDataEntity fileData = Fixture.BuildFileDataEntity().Create();
+        FileDataEntity fileData = Fixture.Create<FileDataEntity>();
         A.CallTo(() => SellerService.GetLabelsAsync(basarId, sellerId)).Returns(fileData);
 
         //  Act

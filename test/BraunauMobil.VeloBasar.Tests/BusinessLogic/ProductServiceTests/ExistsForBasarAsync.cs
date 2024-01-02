@@ -4,7 +4,7 @@ public class ExistsForBasarAsync
     : TestBase<EmptySqliteDbFixture>
 {
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task EmptyDatabase_ReturnsFalse(int basarId, int productId)
     {
         //  Arrange
@@ -17,7 +17,7 @@ public class ExistsForBasarAsync
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task BasarExistsButNoProducts_ReturnsFalse(BasarEntity basar, int productId)
     {
         //  Arrange
@@ -32,7 +32,7 @@ public class ExistsForBasarAsync
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task BasarAndProductExist_ReturnsTrue(ProductEntity product)
     {
         //  Arrange

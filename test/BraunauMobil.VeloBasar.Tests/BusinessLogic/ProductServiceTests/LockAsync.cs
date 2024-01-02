@@ -4,7 +4,7 @@ public class LockAsync
     : TestBase<EmptySqliteDbFixture>
 {
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task TransactionServiceLockAsyncIsCalled(ProductEntity product, string notes, int id)
     {
         //  Arrange

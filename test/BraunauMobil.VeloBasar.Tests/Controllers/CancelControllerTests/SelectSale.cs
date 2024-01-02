@@ -25,12 +25,12 @@ public class SelectSale
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task WithValidModel_CallsFindAsyncAndReturnsRedirectToSelectProducts(string url)
     {
         //  Arrange
-        SelectSaleModel model = Fixture.BuildSelectSaleModel().Create();
-        TransactionEntity sale = Fixture.BuildTransaction().Create();
+        SelectSaleModel model = Fixture.Create<SelectSaleModel>();
+        TransactionEntity sale = Fixture.Create<TransactionEntity>();
         ProductToTransactionEntity productToTransaction = Fixture.BuildProductToTransactionEntity(sale).Create();
         productToTransaction.Product.ValueState = ValueState.NotSettled;
         productToTransaction.Product.StorageState = StorageState.Sold;
@@ -57,8 +57,8 @@ public class SelectSale
     public async Task NoProductToCancel_ReturnsView()
     {
         //  Arrange
-        SelectSaleModel model = Fixture.BuildSelectSaleModel().Create();
-        TransactionEntity sale = Fixture.BuildTransaction().Create();
+        SelectSaleModel model = Fixture.Create<SelectSaleModel>();
+        TransactionEntity sale = Fixture.Create<TransactionEntity>();
         sale.Products.Clear();
         ProductToTransactionEntity productToTransaction = Fixture.BuildProductToTransactionEntity(sale).Create();
         productToTransaction.Product.ValueState = ValueState.NotSettled;

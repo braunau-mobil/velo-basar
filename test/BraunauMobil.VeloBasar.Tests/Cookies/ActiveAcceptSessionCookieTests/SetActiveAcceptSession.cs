@@ -6,7 +6,7 @@ public class SetActiveAcceptSession
     : TestBase
 {
     [Theory]
-	[AutoData]
+	[VeloAutoData]
 	public void CallsAppend(AcceptSessionEntity acceptSession)
 	{
 		//	Arrange

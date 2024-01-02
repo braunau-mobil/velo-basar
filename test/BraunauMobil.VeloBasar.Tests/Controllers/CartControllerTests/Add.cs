@@ -6,7 +6,7 @@ public class Add
     : TestBase
 {
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task InvalidCartModel_IsNotAddedToCookieAndReturnsView(CartModel cartModel, IList<int> cart, IReadOnlyList<ProductEntity> products)
     {
         //  Arrange
@@ -33,7 +33,7 @@ public class Add
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task ValidCartModel_IsAddedToCookieAndReturnsView(CartModel cartModel, ProductEntity product, IReadOnlyList<ProductEntity> products)
     {
         //  Arrange

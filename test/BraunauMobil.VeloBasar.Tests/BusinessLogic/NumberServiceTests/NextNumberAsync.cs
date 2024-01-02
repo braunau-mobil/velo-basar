@@ -6,7 +6,7 @@ public class NextNumberAsync
     : DbTestBase<EmptySqliteDbFixture>
 {
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task ReturnsGreaterNumber(BasarEntity basar, TransactionType transactionType)
     {
         //  Arrange

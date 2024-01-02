@@ -6,7 +6,7 @@ public class ActiveBasarDetails
     : TestBase
 {
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public void RedirectsToBasarDetails(int activeBasarId, string url)
     {
         //  Arrange

@@ -4,7 +4,7 @@ public class GetManyAsync_Paginated
     : TestBase<EmptySqliteDbFixture>
 {
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task EmptyDatabase_ReturnsEmptyList(int pageSize, int pageIndex, int basarId, string searchString, StorageState storageState, ValueState valueState, string brand, int productTypeId)
     {
         //  Arrange
@@ -17,7 +17,7 @@ public class GetManyAsync_Paginated
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task ProductsExist_ReturnsAll(BasarEntity basar, ProductEntity[] products)
     {
         //  Arrange
@@ -38,7 +38,7 @@ public class GetManyAsync_Paginated
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task ProductsExist_ReturnsAllWithSameStorageState(BasarEntity basar, ProductEntity[] products, StorageState storageState)
     {
         //  Arrange
@@ -55,7 +55,7 @@ public class GetManyAsync_Paginated
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task ProductsExist_ReturnsAllWithSameValueState(BasarEntity basar, ProductEntity[] products, ValueState valueState)
     {
         //  Arrange
@@ -72,7 +72,7 @@ public class GetManyAsync_Paginated
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task ProductsExist_ReturnsAllWithSameBrand(BasarEntity basar, ProductEntity[] products, string brand)
     {
         //  Arrange
@@ -89,7 +89,7 @@ public class GetManyAsync_Paginated
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task ProductsExist_ReturnsAllWithSameProductTypeId(BasarEntity basar, ProductEntity[] products, ProductTypeEntity productType)
     {
         //  Arrange
@@ -107,7 +107,7 @@ public class GetManyAsync_Paginated
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task ProductsExist_ReturnsAllWithSame(BasarEntity basar, ProductEntity[] products, StorageState storageState, ValueState valueState, string brand, ProductTypeEntity productType)
     {
         //  Arrange

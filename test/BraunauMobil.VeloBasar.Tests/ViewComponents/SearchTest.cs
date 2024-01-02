@@ -7,8 +7,8 @@ namespace BraunauMobil.VeloBasar.Tests.ViewComponents;
 public class SearchTest
 {
     [Theory]
-    [InlineAutoData(null)]
-    [AutoData]
+    [VeloInlineAutoData(null)]
+    [VeloAutoData]
     public void ShouldReturnSearchViewModel(string? searchString, string resetUrl)
     {
         //  Arrange

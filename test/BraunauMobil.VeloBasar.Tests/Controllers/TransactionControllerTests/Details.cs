@@ -6,11 +6,11 @@ public class Details
     : TestBase
 {
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task ReturnsView(int id)
     {
         //  Arrange
-        TransactionEntity transaction = Fixture.BuildTransaction().Create();
+        TransactionEntity transaction = Fixture.Create<TransactionEntity>();
         A.CallTo(() => TransactionService.GetAsync(id)).Returns(transaction);
 
         //  Act

@@ -6,7 +6,7 @@ public class Lock
     : TestBase
 {
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public void WithId_ReturnsView(int productId)
     {
         //  Arrange
@@ -25,7 +25,7 @@ public class Lock
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task ValidModel_CallsLockAndReturnsRedirectToDetails(ProductAnnotateModel annotateModel, string url)
     {
         //  Arrage
@@ -47,7 +47,7 @@ public class Lock
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task InvalidModel_ReturnsView(ProductAnnotateModel annotateModel)
     {
         //  Arrage

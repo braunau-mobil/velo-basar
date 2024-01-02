@@ -6,7 +6,7 @@ namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.ColorProviderTests;
 public class Indexer
 {
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public void ReturnsAlwaysTheSame(string value)
     {
         //  Arrange

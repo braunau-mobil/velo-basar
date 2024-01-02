@@ -4,7 +4,7 @@ public class CreateNewAsync
     : TestBase<EmptySqliteDbFixture>
 {
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task UncompletedSession_ReturnsNewAcceptProductModel(AcceptSessionEntity acceptSession)
     {
         //  Arrange
@@ -25,7 +25,7 @@ public class CreateNewAsync
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task CompletedSession_ThrowsInvalidOperationException(AcceptSessionEntity acceptSession)
     {
         //  Arrange

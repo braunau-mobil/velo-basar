@@ -7,7 +7,7 @@ public class SetCart
     : TestBase
 {
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public void CallsAppend(IList<int> cart)
     {
         //	Arrange

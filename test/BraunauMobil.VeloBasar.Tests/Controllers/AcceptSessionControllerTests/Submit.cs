@@ -6,7 +6,7 @@ public class Submit
     : TestBase
 {
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task CallsSubmit_And_RedirectsToSuccess(int sessionId, int acceptanceId, string url)
     {
         //  Arrange

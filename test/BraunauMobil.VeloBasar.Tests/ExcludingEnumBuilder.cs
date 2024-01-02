@@ -1,4 +1,5 @@
-﻿using AutoFixture.Kernel;
+﻿using AutoFixture;
+using AutoFixture.Kernel;
 
 namespace BraunauMobil.VeloBasar.Tests;
 

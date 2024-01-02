@@ -6,7 +6,7 @@ namespace BraunauMobil.VeloBasar.Tests.Rendering.SelectListServiceTests;
 public class ProductTypesAsync
     : TestBase
 {
-    private readonly Fixture _fixture = new();
+    private readonly VeloFixture _fixture = new();
     private readonly List<Action<SelectListItem>> _elementInspectors = new();
 
     [Fact]
@@ -75,7 +75,7 @@ public class ProductTypesAsync
 
     private ProductTypeEntity CreateProductType(string name, ObjectState state)
     {
-        ProductTypeEntity productType = _fixture.Build<ProductTypeEntity>()
+        ProductTypeEntity productType = _fixture.BuildProductType()
             .With(_ => _.State, state)
             .With(_ => _.Name, name)
             .Create();

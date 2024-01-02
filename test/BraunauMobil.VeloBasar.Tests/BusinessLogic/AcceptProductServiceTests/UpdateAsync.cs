@@ -6,7 +6,7 @@ public class UpdateAsync
 	: TestBase<EmptySqliteDbFixture>
 {
 	[Theory]
-	[AutoData]
+	[VeloAutoData]
 	public async Task ProductIsAttachedAndUpdated(ProductEntity productToInsert, string brand, ProductTypeEntity productType, ProductEntity productToUpdate)
 	{
 		//	Arrange
@@ -31,7 +31,7 @@ public class UpdateAsync
 	}
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task RelationsAreReloaded(ProductEntity initial, ProductEntity updated)
     {
         //  Arrange

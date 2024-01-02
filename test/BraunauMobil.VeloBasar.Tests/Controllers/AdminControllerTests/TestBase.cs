@@ -14,7 +14,7 @@ public class TestBase
 
     protected ClockMock Clock { get; } = new();
 
-    protected Fixture Fixture { get; } = new ();
+    protected VeloFixture Fixture { get; } = new ();
 
     protected AdminController Sut { get; }
 }

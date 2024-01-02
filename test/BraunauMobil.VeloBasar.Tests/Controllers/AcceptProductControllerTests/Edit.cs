@@ -6,7 +6,7 @@ public class Edit
     : TestBase
 {
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task WithId_CallsGet_And_ReturnsView(int productId)
     {
         AcceptProductModel model = Fixture.Create<AcceptProductModel>();
@@ -27,11 +27,11 @@ public class Edit
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task WithValidEntity_CallsUpdate_And_ReturnsRedirectToCreate(int sessionId, string url)
     {
         //  Arrange
-        ProductEntity entity = Fixture.Create<ProductEntity>();
+        ProductEntity entity = Fixture.Build<ProductEntity>().Create();
         entity.SessionId = sessionId;
         A.CallTo(() => AcceptProductRouter.ToCreate(sessionId)).Returns(url);
         A.CallTo(() => AcceptProductService.UpdateAsync(entity)).DoesNothing();
@@ -52,7 +52,7 @@ public class Edit
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task WithInvalidEntity_CallsGet_And_Returns_View(int sessionId, string url)
     {
         //  Arrange

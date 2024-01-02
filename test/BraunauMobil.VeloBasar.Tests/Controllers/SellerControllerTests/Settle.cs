@@ -6,7 +6,7 @@ public class Settle
     : TestBase
 {
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task CallsSettleAndReturnsRedirectoToTransactionSucess(int activeBasarId, int sellerId, int settlemendId, string url)
     {
         //  Arrange

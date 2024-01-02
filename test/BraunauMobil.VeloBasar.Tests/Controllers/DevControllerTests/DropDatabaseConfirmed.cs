@@ -21,7 +21,7 @@ public class DropDatabaseConfirmed
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task DevToolsEnabled_CallsDropDatabaseAndReturnsRedirectToHome(string url)
     {
         //  Arrange

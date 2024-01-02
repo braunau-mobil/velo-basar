@@ -16,7 +16,7 @@ public class ExportSellersForNewsletter
 
     [Theory]
     [InlineData(null)]
-    [AutoData]
+    [VeloAutoData]
     public async Task NoSellers_ReturnsCsvWithOnlyHeader(DateTime? minPermissionTimestamp)
     {
         //  Arrange

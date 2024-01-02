@@ -7,7 +7,7 @@ public class TriggerStatusPush
     : TestBase
 {
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task CallsTriggerStatusPushAndRedirectsToReferer(int activeBasarId, int sellerId, string url)
     {
         //  Arrange

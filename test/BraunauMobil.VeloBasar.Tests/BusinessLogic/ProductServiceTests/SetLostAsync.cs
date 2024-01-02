@@ -4,7 +4,7 @@ public class SetLostAsync
     : TestBase<EmptySqliteDbFixture>
 {
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task TransactionServiceSetLostAsyncIsCalled(ProductEntity product, string notes, int id)
     {
         //  Arrange

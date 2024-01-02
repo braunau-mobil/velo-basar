@@ -7,7 +7,7 @@ public class Delete
     : TestBase
 {
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public void CallsRemoveAndReturnsRedirectToIndex(int productId)
     {
         //  Arrange

@@ -9,7 +9,7 @@ public class CreateSampleAcceptanceDocument
     public async Task CallsCreateSampleAcceptanceDocumentAsync_AndReturnsFileData()
     {
         //  Arrange
-        FileDataEntity fileData = Fixture.BuildFileDataEntity().Create();
+        FileDataEntity fileData = Fixture.Create<FileDataEntity>();
         A.CallTo(() => AdminService.CreateSampleAcceptanceDocumentAsync()).Returns(fileData);
 
         //  Act

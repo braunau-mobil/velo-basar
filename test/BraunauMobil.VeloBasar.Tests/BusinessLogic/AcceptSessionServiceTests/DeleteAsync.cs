@@ -4,7 +4,7 @@ public class DeleteAsync
     : TestBase<EmptySqliteDbFixture>
 {
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task NonExistentSession_ThrowsInvalidOperationException(int sessionId)
     {
         //  Arrange
@@ -18,7 +18,7 @@ public class DeleteAsync
 
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task SessionIsDeleted(AcceptSessionEntity session)
     {
         // Arrange

@@ -6,11 +6,11 @@ public class Success
     : TestBase
 {
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task WithId_ReturnsView(int id)
     {
         //  Arrange
-        TransactionEntity transaction = Fixture.BuildTransaction().Create();
+        TransactionEntity transaction = Fixture.Create<TransactionEntity>();
         A.CallTo(() => TransactionService.GetAsync(id)).Returns(transaction);
 
         //  Act
@@ -31,11 +31,11 @@ public class Success
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task WithId_AndInvalidAmound_ReturnsView(int id, decimal amountGiven)
     {
         //  Arrange
-        TransactionEntity transaction = Fixture.BuildTransaction().Create();
+        TransactionEntity transaction = Fixture.Create< TransactionEntity>();
         A.CallTo(() => TransactionService.GetAsync(id, amountGiven)).Returns(transaction);
 
         //  Act
@@ -57,11 +57,11 @@ public class Success
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task WithId_AndValidAmound_ReturnsView(int id, decimal amountGiven)
     {
         //  Arrange
-        TransactionEntity transaction = Fixture.BuildTransaction().Create();
+        TransactionEntity transaction = Fixture.Create<TransactionEntity>();
         transaction.Change = new ChangeInfo(amountGiven);
         A.CallTo(() => TransactionService.GetAsync(id, amountGiven)).Returns(transaction);
 

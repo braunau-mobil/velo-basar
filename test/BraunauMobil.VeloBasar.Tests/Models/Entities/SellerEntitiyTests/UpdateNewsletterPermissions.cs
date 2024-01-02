@@ -3,7 +3,7 @@
 public class UpdateNewsletterPermissions
 {
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public void HasPermission(string email,  DateTime oldTimeStamp, DateTime newTimeStamp)
     {
         SellerEntity seller = new()
@@ -21,7 +21,7 @@ public class UpdateNewsletterPermissions
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public void HasNoPermission(string email, DateTime oldTimeStamp, DateTime newTimeStamp)
     {
         SellerEntity seller = new()

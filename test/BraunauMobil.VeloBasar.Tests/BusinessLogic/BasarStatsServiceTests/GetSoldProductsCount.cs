@@ -20,14 +20,14 @@ public class GetSoldProductsCount
     public void Products_ReturnsSumOfAcceptedProducts()
     {
         //  Arrange
-        Fixture fixture = new();
-        IEnumerable<ProductEntity> soldProducts = fixture.BuildProductEntity()
+        VeloFixture fixture = new();
+        IEnumerable<ProductEntity> soldProducts = fixture.BuildProduct()
             .With(_ => _.StorageState, StorageState.Sold)
             .With(_ => _.Price, 1)
             .CreateMany();        
 
         fixture.ExcludeEnumValues(StorageState.Sold);
-        IEnumerable<ProductEntity> notSoldProducts = fixture.BuildProductEntity()
+        IEnumerable<ProductEntity> notSoldProducts = fixture.BuildProduct()
             .CreateMany();
         
         List<ProductEntity> products = new (soldProducts);

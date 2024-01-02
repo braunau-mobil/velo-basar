@@ -13,7 +13,7 @@ public class TestBase<TDbFixture>
         Sut = new TransactionService(NumberService, TransactionDocumentService, StatusPushService, Db, ProductLabelService, Clock, new StringLocalizerMock<SharedResources>());
     }
     
-    public Fixture Fixture { get; } = new();
+    public VeloFixture Fixture { get; } = new();
 
     public INumberService NumberService { get; } = X.StrictFake<INumberService>();
     

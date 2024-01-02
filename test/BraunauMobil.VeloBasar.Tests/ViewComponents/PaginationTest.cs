@@ -10,7 +10,7 @@ namespace BraunauMobil.VeloBasar.Tests.ViewComponents;
 public class PaginationTest
 {
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public void ShouldReturnPaginationModel(ListParameter parameter)
     {
         //  Arrange

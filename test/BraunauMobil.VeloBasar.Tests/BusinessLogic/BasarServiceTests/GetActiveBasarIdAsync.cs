@@ -21,8 +21,8 @@ public class GetActiveBasarIdAsync
     public async Task NoEnabledBasar_ReturnsNull()
     {
         //  Arrange
-        Fixture fixture = new();
-        IEnumerable<BasarEntity> basars = fixture.Build<BasarEntity>()
+        VeloFixture fixture = new();
+        IEnumerable<BasarEntity> basars = fixture.BuildBasar()
             .With(_ => _.State, ObjectState.Disabled)
             .CreateMany();
         Db.Basars.AddRange(basars);
@@ -39,12 +39,12 @@ public class GetActiveBasarIdAsync
     public async Task EnabledBasar_ReturnsId()
     {
         //  Arrange
-        Fixture fixture = new();
-        IEnumerable<BasarEntity> basars = fixture.Build<BasarEntity>()
+        VeloFixture fixture = new();
+        IEnumerable<BasarEntity> basars = fixture.BuildBasar()
             .With(_ => _.State, ObjectState.Disabled)
             .CreateMany();
         Db.Basars.AddRange(basars);
-        BasarEntity enabledBasar = fixture.Build<BasarEntity>()
+        BasarEntity enabledBasar = fixture.BuildBasar()
             .With(_ => _.State, ObjectState.Enabled)
             .Create();
         Db.Basars.Add(enabledBasar);

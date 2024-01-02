@@ -3,10 +3,10 @@
 public class GetManyAsync_FirstNameLastName
     : TestBase<EmptySqliteDbFixture>
 {
-    private readonly Fixture _fixture = new();
+    private readonly VeloFixture _fixture = new();
     
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task NoSellers_ShouldReturnEmpty(string firstName, string lastName)
     {
         //  Arrange
@@ -19,7 +19,7 @@ public class GetManyAsync_FirstNameLastName
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task NoSellerMatches_ShouldReturnEmpty(SellerEntity[] sellers, string firstName, string lastName)
     {
         //  Arrange
@@ -37,7 +37,7 @@ public class GetManyAsync_FirstNameLastName
     public async Task MatchFirstName_ShouldReturnMatchedSllers()
     {
         //  Arrange
-        IEnumerable<SellerEntity> otherSellers = _fixture.BuildSeller().CreateMany();
+        IEnumerable<SellerEntity> otherSellers = _fixture.CreateMany<SellerEntity>();
         Db.Sellers.AddRange(otherSellers);
 
         SellerEntity aragog = _fixture.BuildSeller()
@@ -69,7 +69,7 @@ public class GetManyAsync_FirstNameLastName
     public async Task MatchLastName_ShouldReturnMatchedSllers()
     {
         //  Arrange
-        IEnumerable<SellerEntity> otherSellers = _fixture.BuildSeller().CreateMany();
+        IEnumerable<SellerEntity> otherSellers = _fixture.CreateMany<SellerEntity>();
         Db.Sellers.AddRange(otherSellers);
 
         SellerEntity aragog = _fixture.BuildSeller()
@@ -101,7 +101,7 @@ public class GetManyAsync_FirstNameLastName
     public async Task MatchBoth_ShouldReturnMatchedSllers()
     {
         //  Arrange
-        IEnumerable<SellerEntity> otherSellers = _fixture.BuildSeller().CreateMany();
+        IEnumerable<SellerEntity> otherSellers = _fixture.CreateMany<SellerEntity>();
         Db.Sellers.AddRange(otherSellers);
 
         SellerEntity aragog = _fixture.BuildSeller()

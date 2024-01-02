@@ -22,7 +22,7 @@ public class TestBase
 
     protected ICurrentThemeCookie CurrentThemeCookie { get; } = X.StrictFake<ICurrentThemeCookie>();
 
-    protected Fixture Fixture { get; } = new ();
+    protected VeloFixture Fixture { get; } = new ();
 
     protected IVeloRouter Router { get; } = X.StrictFake<IVeloRouter>();
 

@@ -6,7 +6,7 @@ public class CreateAsync
     : TestBase<EmptySqliteDbFixture>
 {
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task ProductWithoutSession_ThrowsInvalidOperationException(ProductEntity product)
     {
         //  Arrange
@@ -20,7 +20,7 @@ public class CreateAsync
     }
 
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task ValidProduct_CreatesProductAndReloadsItsRelations(string brand, ProductTypeEntity productType, AcceptSessionEntity acceptSession, ProductEntity product)
     {
         //  Arrange

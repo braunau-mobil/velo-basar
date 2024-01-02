@@ -19,7 +19,7 @@ public class TestBase
 
     protected ICancelRouter CancelRouter { get; } = X.StrictFake<ICancelRouter>();
 
-    protected Fixture Fixture { get; } = new ();
+    protected VeloFixture Fixture { get; } = new ();
 
     protected IStringLocalizer<SharedResources> Localizer { get; } = new StringLocalizerMock<SharedResources>();
 

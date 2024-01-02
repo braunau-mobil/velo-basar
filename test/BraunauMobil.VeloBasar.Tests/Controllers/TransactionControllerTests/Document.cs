@@ -6,11 +6,11 @@ public class Document
     : TestBase
 {
     [Theory]
-    [AutoData]
+    [VeloAutoData]
     public async Task ReturnsFileData(int id)
     {
         //  Arrange
-        FileDataEntity fileData = Fixture.BuildFileDataEntity().Create();
+        FileDataEntity fileData = Fixture.Create<FileDataEntity>();
         A.CallTo(() => TransactionService.GetDocumentAsync(id)).Returns(fileData);
 
         //  Act
