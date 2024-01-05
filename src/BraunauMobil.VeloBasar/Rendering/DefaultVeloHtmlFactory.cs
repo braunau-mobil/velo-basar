@@ -56,7 +56,7 @@ public sealed class DefaultVeloHtmlFactory
 
     public IHtmlContent ProductDonateableBadge(ProductEntity product)
     {
-        if (product == null) throw new ArgumentNullException(nameof(product));
+        ArgumentNullException.ThrowIfNull(product);
 
         if (product.DonateIfNotSold)
         {
@@ -70,7 +70,7 @@ public sealed class DefaultVeloHtmlFactory
 
     public IHtmlContent ProductInfoBadges(ProductEntity product)
     {
-        if (product == null) throw new ArgumentNullException(nameof(product));
+        ArgumentNullException.ThrowIfNull(product);
 
         HtmlContentBuilder badges = new();
         badges.AppendHtml(ProductStateBadge(product));
@@ -86,7 +86,7 @@ public sealed class DefaultVeloHtmlFactory
 
     public IHtmlContent ProductStateBadge(ProductEntity product)
     {
-        if (product == null) throw new ArgumentNullException(nameof(product));
+        ArgumentNullException.ThrowIfNull(product);
 
         string text;
         BadgeType type;

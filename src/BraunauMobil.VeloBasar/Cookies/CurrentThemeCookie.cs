@@ -10,7 +10,8 @@ public class CurrentThemeCookie
 
     public CurrentThemeCookie(IHttpContextAccessor httpContextAccessor)
     {
-        if (httpContextAccessor is null) throw new ArgumentNullException(nameof(httpContextAccessor));
+        ArgumentNullException.ThrowIfNull(httpContextAccessor);
+
         _httpContext = httpContextAccessor.HttpContext ?? throw new ArgumentException(nameof(httpContextAccessor.HttpContext));
     }
 

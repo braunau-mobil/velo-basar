@@ -34,7 +34,7 @@ public class AcceptSessionEntity
 
     public ICollection<ProductEntity> Products { get; } = new List<ProductEntity>();
 
-    public bool CanAccept() => Products.Any();
+    public bool CanAccept() => Products.Count > 0;
 
     public bool IsCompleted => EndTimeStamp.HasValue;
 

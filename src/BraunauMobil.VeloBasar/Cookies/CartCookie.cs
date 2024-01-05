@@ -11,7 +11,8 @@ public class CartCookie
 
     public CartCookie(IHttpContextAccessor httpContextAccessor)
     {
-        if (httpContextAccessor is null) throw new ArgumentNullException(nameof(httpContextAccessor));
+        ArgumentNullException.ThrowIfNull(httpContextAccessor);
+
         HttpContext httpContext = httpContextAccessor.HttpContext ?? throw new ArgumentException(nameof(httpContextAccessor.HttpContext));
         _requestCookies = httpContext.Request.Cookies;
         _responseCookies = httpContext.Response.Cookies;

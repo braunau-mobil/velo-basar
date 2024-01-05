@@ -34,7 +34,7 @@ public sealed class SecurityController
     [HttpPost]
     public async Task<IActionResult> Login(LoginModel model)
     {
-        if (model == null) throw new ArgumentNullException(nameof(model));
+        ArgumentNullException.ThrowIfNull(model);
 
         SetValidationResult(await _loginValidator.ValidateAsync(model));
 

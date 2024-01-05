@@ -17,9 +17,9 @@ public sealed class PdfGenerator
 
     public PdfGenerator()
     {
-        Green = iColor.MakeColor(ColorConstants.GREEN.GetColorSpace(), new float[] { 0f, 0.5f, 0f });
-        Orange = iColor.MakeColor(ColorConstants.GREEN.GetColorSpace(), new float[] { 1f, 0.5f, 0f });
-        Red = iColor.MakeColor(ColorConstants.GREEN.GetColorSpace(), new float[] { 1f, 0f, 0f });
+        Green = iColor.MakeColor(ColorConstants.GREEN.GetColorSpace(), [0f, 0.5f, 0f]);
+        Orange = iColor.MakeColor(ColorConstants.GREEN.GetColorSpace(), [1f, 0.5f, 0f]);
+        Red = iColor.MakeColor(ColorConstants.GREEN.GetColorSpace(), [1f, 0f, 0f]);
     }
 
     public int RegularFontSize { get => _regularFontSize; }
