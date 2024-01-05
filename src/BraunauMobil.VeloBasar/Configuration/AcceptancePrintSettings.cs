@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Globalization;
 
 namespace BraunauMobil.VeloBasar.Configuration;
 
@@ -14,17 +13,10 @@ public sealed class AcceptancePrintSettings
     public string SubTitle { get; set; }
 
     [Required]
-    public string TokenFormat { get; set; }
+    public string TokenTitle { get; set; }
 
     [Required]
     public string? StatusLinkFormat { get; set; }
 
     public override TransactionType TransactionType => TransactionType.Acceptance;
-
-    public string GetTokenText(SellerEntity seller)
-    {
-        ArgumentNullException.ThrowIfNull(seller);
-
-        return string.Format(CultureInfo.CurrentCulture, TokenFormat, seller.Token);
-    }
 }

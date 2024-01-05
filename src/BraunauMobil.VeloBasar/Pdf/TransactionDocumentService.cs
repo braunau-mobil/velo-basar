@@ -75,16 +75,27 @@ public sealed class TransactionDocumentService
             {
                 float length = _settings.QrCodeLengthMillimeters.ToUnit();
                 string statusLink = string.Format(CultureInfo.InvariantCulture, _settings.Acceptance.StatusLinkFormat, acceptance.Seller.Token);
-                string tokenText = _settings.Acceptance.GetTokenText(acceptance.Seller);
 
                 BarcodeQRCode qrCode = new(statusLink);
                 Image qrImage = new Image(qrCode.CreateFormXObject(pdfDoc))
                     .SetWidth(length)
-                    .SetHeight(length);
+                    .SetHeight(length)
+                    .SetMargins(0, 0, 0, 0);
 
-                Paragraph barcodeAndLink = _pdf.GetRegularParagraph(tokenText)
+                Paragraph tokenTitleParagraph = _pdf.GetMediumParagraph(_settings.Acceptance.TokenTitle)
+                    .SetMargin(0);
+
+                Paragraph tokenParagraph = _pdf.GetRegularParagraph(acceptance.Seller.Token)
+                    .SetMargin(0)
+                    .SetFontColor(_pdf.Red);
+
+                Paragraph statusLinkParagraph = _pdf.GetRegularParagraph(statusLink);
+
+                Div barcodeAndLink = new Div()
+                    .Add(tokenTitleParagraph)
+                    .Add(tokenParagraph)
                     .Add(qrImage)
-                    .Add(statusLink)
+                    .Add(statusLinkParagraph)
                     .SetKeepTogether(true)
                     .SetHorizontalAlignment(HorizontalAlignment.LEFT)
                     .SetTextAlignment(TextAlignment.CENTER)
