@@ -55,7 +55,7 @@ public static class JsonUtils
                         data = points.Select(p => p.Value),
                         backgroundColor = color,
                         borderColor = color,
-                        showLine = showLine
+                        showLine
                     }
                 }
             }
