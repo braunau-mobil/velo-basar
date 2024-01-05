@@ -18,13 +18,15 @@ public partial class AdminService
     private readonly IProductLabelService _productLabelService;
     private readonly ITransactionDocumentService _transactionDocumentService;
     private readonly IDataGeneratorService _dataGeneratorService;
+    private readonly ITokenProvider _tokenProvider;
     private readonly ExportSettings _exportSettings;
     private readonly VeloDbContext _db;
 
-    public AdminService(IProductLabelService productLabelService, ITransactionDocumentService transactionDocumentService, IDataGeneratorService dataGeneratorService, IOptions<ExportSettings> options, VeloDbContext db)
+    public AdminService(IProductLabelService productLabelService, ITransactionDocumentService transactionDocumentService, ITokenProvider tokenProvider, IDataGeneratorService dataGeneratorService, IOptions<ExportSettings> options, VeloDbContext db)
     {
         _productLabelService = productLabelService ?? throw new ArgumentNullException(nameof(productLabelService));
         _transactionDocumentService = transactionDocumentService ?? throw new ArgumentNullException(nameof(transactionDocumentService));
+        _tokenProvider = tokenProvider ?? throw new ArgumentNullException(nameof(tokenProvider));
         _dataGeneratorService = dataGeneratorService ?? throw new ArgumentNullException(nameof(dataGeneratorService));
         _dataGeneratorService.Contextualize(new DataGeneratorConfiguration());
 
@@ -37,7 +39,7 @@ public partial class AdminService
     public async Task<FileDataEntity> CreateSampleAcceptanceDocumentAsync()
     {
         CountryEntity country = _dataGeneratorService.NextCountry();
-        SellerEntity seller = _dataGeneratorService.NextSeller(country);
+        SellerEntity seller = NextSeller(country);
         BasarEntity basar = _dataGeneratorService.NextBasar();
         ProductEntity[] products = new[]
         {
@@ -56,7 +58,7 @@ public partial class AdminService
     public async Task<FileDataEntity> CreateSampleLabelsAsync()
     {
         CountryEntity country = _dataGeneratorService.NextCountry();
-        SellerEntity seller = _dataGeneratorService.NextSeller(country);
+        SellerEntity seller = NextSeller(country);
         BasarEntity basar = _dataGeneratorService.NextBasar();
         ProductEntity[] products = new[]
         {
@@ -71,7 +73,7 @@ public partial class AdminService
     public async Task<FileDataEntity> CreateSampleSaleDocumentAsync()
     {
         CountryEntity country = _dataGeneratorService.NextCountry();
-        SellerEntity seller = _dataGeneratorService.NextSeller(country);
+        SellerEntity seller = NextSeller(country);
         BasarEntity basar = _dataGeneratorService.NextBasar();
         ProductEntity[] products = new[]
         {
@@ -87,8 +89,7 @@ public partial class AdminService
     public async Task<FileDataEntity> CreateSampleSettlementDocumentAsync()
     {
         CountryEntity country = _dataGeneratorService.NextCountry();
-        SellerEntity seller = _dataGeneratorService.NextSeller(country);
-        seller.IBAN = "AT536616326924127723";
+        SellerEntity seller = NextSeller(country);        
 
         BasarEntity basar = _dataGeneratorService.NextBasar();
         ProductEntity[] products = new[]
@@ -194,5 +195,15 @@ public partial class AdminService
         }
 
         return transaction;
+    }
+
+    private SellerEntity NextSeller(CountryEntity country)
+    {
+        SellerEntity seller = _dataGeneratorService.NextSeller(country);
+        seller.Id = _random.Next();
+        seller.Token = _tokenProvider.CreateToken(seller);
+        seller.IBAN = "AT536616326924127723";
+
+        return seller;
     }
 }

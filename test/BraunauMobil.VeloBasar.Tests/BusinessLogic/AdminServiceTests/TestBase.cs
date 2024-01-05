@@ -15,7 +15,7 @@ public class TestBase
 
         A.CallTo(() => DataGeneratorService.Contextualize(A<DataGeneratorConfiguration>._)).DoesNothing();
 
-        Sut = new AdminService(ProductLabelService, TransactionDocumentService, DataGeneratorService, exportOptions, Db);
+        Sut = new AdminService(ProductLabelService, TransactionDocumentService, TokenProvider, DataGeneratorService, exportOptions, Db);
     }
 
     protected ExportSettings ExportSettings { get; } = new ExportSettings();
@@ -25,6 +25,8 @@ public class TestBase
     protected IProductLabelService ProductLabelService { get; } = X.StrictFake<IProductLabelService>();
 
     protected AdminService Sut { get; }
+
+    protected ITokenProvider TokenProvider { get; } = X.StrictFake<ITokenProvider>();
 
     protected ITransactionDocumentService TransactionDocumentService { get; } = X.StrictFake<ITransactionDocumentService>();
 }
