@@ -2,7 +2,7 @@
 
 namespace BraunauMobil.VeloBasar.Tests.Models.Entities.CountryEntityTests;
 
-public class CountryEntityValidatorTests
+public class CountryEntityValidatorTest
 {
     private readonly CountryEntityValidator _sut = new(new StringLocalizerMock<SharedResources>());
 

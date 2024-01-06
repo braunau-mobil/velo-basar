@@ -2,7 +2,7 @@
 
 namespace BraunauMobil.VeloBasar.Tests.Models.Entities.ProductEntityTests;
 
-public class ProductEntityValidatorTests
+public class ProductEntityValidatorTest
 {
     private readonly ProductEntityValidator _sut = new(new StringLocalizerMock<SharedResources>());
 

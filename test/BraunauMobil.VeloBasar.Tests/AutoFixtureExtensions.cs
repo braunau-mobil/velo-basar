@@ -2,6 +2,7 @@
 using AutoFixture.Xunit2;
 using Xan.AspNetCore.Mvc.Abstractions;
 using Xan.Extensions.Collections.Generic;
+using Xunit.Sdk;
 
 namespace BraunauMobil.VeloBasar.Tests;
 
@@ -141,6 +142,7 @@ public class VeloFixture
             .Without(_ => _.SellerId);
 }
 
+[DataDiscoverer("AutoFixture.Xunit2.NoPreDiscoveryDataDiscoverer", "AutoFixture.Xunit2")]
 public class VeloAutoDataAttribute
     : AutoDataAttribute
 {
@@ -150,6 +152,7 @@ public class VeloAutoDataAttribute
     }
 }
 
+[DataDiscoverer("AutoFixture.Xunit2.NoPreDiscoveryDataDiscoverer", "AutoFixture.Xunit2")]
 public class VeloInlineAutoDataAttribute
     : InlineAutoDataAttribute
 {

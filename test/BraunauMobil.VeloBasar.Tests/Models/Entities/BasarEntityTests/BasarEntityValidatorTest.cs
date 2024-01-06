@@ -2,7 +2,7 @@
 
 namespace BraunauMobil.VeloBasar.Tests.Models.Entities.BasarEntityTests;
 
-public class BasarEntityValidatorTests
+public class BasarEntityValidatorTest
 {
     private readonly BasarEntityValidator _sut = new(new StringLocalizerMock<SharedResources>());
 

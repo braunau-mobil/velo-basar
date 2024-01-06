@@ -88,31 +88,31 @@ public sealed class SellerEntityValidator
         ArgumentNullException.ThrowIfNull(localizer);
 
         RuleFor(seller => seller.FirstName)
-            .NotNull()
+            .NotEmpty()
             .WithMessage(localizer[VeloTexts.PleaseEnterFirstName])
             .MaximumLength(MaxNameLength)
             .WithMessage(localizer[VeloTexts.FirstNameIsTooLong, MaxNameLength]);
 
         RuleFor(seller => seller.LastName)
-            .NotNull()
+            .NotEmpty()
             .WithMessage(localizer[VeloTexts.PleaseEnterLastName])
             .MaximumLength(MaxNameLength)
             .WithMessage(localizer[VeloTexts.FirstNameIsTooLong, MaxNameLength]);
 
         RuleFor(seller => seller.Street)
-            .NotNull()
+            .NotEmpty()
             .WithMessage(localizer[VeloTexts.PleaseEnterStreet])
             .MaximumLength(MaxStreetLength)
             .WithMessage(localizer[VeloTexts.StreetIsTooLong, MaxStreetLength]);
 
         RuleFor(seller => seller.City)
-            .NotNull()
+            .NotEmpty()
             .WithMessage(localizer[VeloTexts.PleaseEnterCity])
             .MaximumLength(MaxCityLength)
             .WithMessage(localizer[VeloTexts.CityIsTooLong, MaxCityLength]);
 
         RuleFor(seller => seller.ZIP)
-            .NotNull()
+            .NotEmpty()
             .WithMessage(localizer[VeloTexts.PleaseEnterZIP]);
 
         RuleFor(seller => seller.CountryId)
@@ -120,7 +120,7 @@ public sealed class SellerEntityValidator
             .WithMessage(localizer[VeloTexts.PleaseEnterCountry]);
 
         RuleFor(seller => seller.PhoneNumber)
-            .NotNull()
+            .NotEmpty()
             .WithMessage(localizer[VeloTexts.PleaseEnterPhoneNumber])
             .MaximumLength(MaxPhoneNumberLength)
             .WithMessage(localizer[VeloTexts.PhoneNumberIsTooLong, MaxPhoneNumberLength]);
