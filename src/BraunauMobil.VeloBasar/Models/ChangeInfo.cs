@@ -60,7 +60,7 @@ public sealed class ChangeInfo
         Amount = amount;
         IsValid = true;
 
-        Dictionary<decimal, int> denomination = new ();
+        Dictionary<decimal, int> denomination = [];
         decimal remainingAmount = Amount;
         foreach (decimal nomination in _nominations.OrderByDescending(x => x).Distinct())
         {
