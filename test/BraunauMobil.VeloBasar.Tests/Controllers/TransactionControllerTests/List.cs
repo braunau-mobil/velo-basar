@@ -11,7 +11,7 @@ public class List
 {
 	[Theory]
 	[VeloAutoData]
-	public async Task NotSaleAndNotSignedIn_ReturnsRedirectToLogin(TransactionListParameter parameter,int activeBasarId, string url)
+	public async Task NotSaleAndNotSignedIn_ReturnsRedirectToLogin(TransactionListParameter parameter, string url)
 	{
 		//	Arrange
 		Sut.ControllerContext = new ControllerContext
@@ -26,7 +26,7 @@ public class List
 		A.CallTo(() => Router.ToLogin()).Returns(url);
 
 		//	Act
-		IActionResult result = await Sut.List(parameter, activeBasarId);
+		IActionResult result = await Sut.List(parameter);
 
         //	Assert
         using (new AssertionScope())
@@ -40,7 +40,7 @@ public class List
 
     [Theory]
     [VeloAutoData]
-    public async Task NotSaleAndSignedIn_CallsGetManyAndReturnsView(TransactionListParameter parameter, int activeBasarId)
+    public async Task NotSaleAndSignedIn_CallsGetManyAndReturnsView(TransactionListParameter parameter)
     {
 		//	Arrange
 		IEnumerable<TransactionEntity> transactions = Fixture.CreateMany<TransactionEntity>();
@@ -53,10 +53,10 @@ public class List
         };
         parameter.TransactionType = TransactionType.Acceptance;
 		SignInManager.IsSignedInMock = principal => true;
-		A.CallTo(() => TransactionService.GetManyAsync(parameter.PageSize!.Value, parameter.PageIndex, activeBasarId, parameter.TransactionType, parameter.SearchString)).Returns(Fixture.CreatePaginatedList(transactions.ToList()));
+		A.CallTo(() => TransactionService.GetManyAsync(parameter.PageSize!.Value, parameter.PageIndex, parameter.BasarId, parameter.TransactionType, parameter.SearchString)).Returns(Fixture.CreatePaginatedList(transactions.ToList()));
 
         //	Act
-        IActionResult result = await Sut.List(parameter, activeBasarId);
+        IActionResult result = await Sut.List(parameter);
 
         //	Assert
         using (new AssertionScope())
@@ -66,12 +66,12 @@ public class List
 		    view.ViewData.ModelState.IsValid.Should().BeTrue();
         }
 
-        A.CallTo(() => TransactionService.GetManyAsync(parameter.PageSize!.Value, parameter.PageIndex, activeBasarId, parameter.TransactionType, parameter.SearchString)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => TransactionService.GetManyAsync(parameter.PageSize!.Value, parameter.PageIndex, parameter.BasarId, parameter.TransactionType, parameter.SearchString)).MustHaveHappenedOnceExactly();
     }
 
     [Theory]
     [VeloAutoData]
-    public async Task SaleAndSignedIn_CallsGetManyAndReturnsView(TransactionListParameter parameter, int activeBasarId)
+    public async Task SaleAndSignedIn_CallsGetManyAndReturnsView(TransactionListParameter parameter)
     {
         //	Arrange
         IEnumerable<TransactionEntity> transactions = Fixture.CreateMany<TransactionEntity>();
@@ -84,10 +84,10 @@ public class List
         };
         parameter.TransactionType = TransactionType.Sale;
         SignInManager.IsSignedInMock = principal => true;
-        A.CallTo(() => TransactionService.GetManyAsync(parameter.PageSize!.Value, parameter.PageIndex, activeBasarId, parameter.TransactionType, parameter.SearchString)).Returns(Fixture.CreatePaginatedList(transactions.ToList()));
+        A.CallTo(() => TransactionService.GetManyAsync(parameter.PageSize!.Value, parameter.PageIndex, parameter.BasarId, parameter.TransactionType, parameter.SearchString)).Returns(Fixture.CreatePaginatedList(transactions.ToList()));
 
         //	Act
-        IActionResult result = await Sut.List(parameter, activeBasarId);
+        IActionResult result = await Sut.List(parameter);
 
         //	Assert
         using (new AssertionScope())
@@ -97,12 +97,12 @@ public class List
             view.ViewData.ModelState.IsValid.Should().BeTrue();
         }
 
-        A.CallTo(() => TransactionService.GetManyAsync(parameter.PageSize!.Value, parameter.PageIndex, activeBasarId, parameter.TransactionType, parameter.SearchString)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => TransactionService.GetManyAsync(parameter.PageSize!.Value, parameter.PageIndex, parameter.BasarId, parameter.TransactionType, parameter.SearchString)).MustHaveHappenedOnceExactly();
     }
 
     [Theory]
     [VeloAutoData]
-    public async Task SaleAndNotSignedIn_CallsGetManyAndReturnsView(TransactionListParameter parameter, int activeBasarId)
+    public async Task SaleAndNotSignedIn_CallsGetManyAndReturnsView(TransactionListParameter parameter)
     {
         //	Arrange
         IEnumerable<TransactionEntity> transactions = Fixture.CreateMany<TransactionEntity>();
@@ -115,10 +115,10 @@ public class List
         };
         parameter.TransactionType = TransactionType.Sale;
         SignInManager.IsSignedInMock = principal => false;
-        A.CallTo(() => TransactionService.GetManyAsync(parameter.PageSize!.Value, parameter.PageIndex, activeBasarId, parameter.TransactionType, parameter.SearchString)).Returns(Fixture.CreatePaginatedList(transactions.ToList()));
+        A.CallTo(() => TransactionService.GetManyAsync(parameter.PageSize!.Value, parameter.PageIndex, parameter.BasarId, parameter.TransactionType, parameter.SearchString)).Returns(Fixture.CreatePaginatedList(transactions.ToList()));
 
         //	Act
-        IActionResult result = await Sut.List(parameter, activeBasarId);
+        IActionResult result = await Sut.List(parameter);
 
         //	Assert
         using (new AssertionScope())
@@ -128,7 +128,7 @@ public class List
             view.ViewData.ModelState.IsValid.Should().BeTrue();
         }
 
-        A.CallTo(() => TransactionService.GetManyAsync(parameter.PageSize!.Value, parameter.PageIndex, activeBasarId, parameter.TransactionType, parameter.SearchString)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => TransactionService.GetManyAsync(parameter.PageSize!.Value, parameter.PageIndex, parameter.BasarId, parameter.TransactionType, parameter.SearchString)).MustHaveHappenedOnceExactly();
     }
 }
 

@@ -54,17 +54,17 @@ public sealed class CartModelValidator
         }
         else if (product.StorageState == StorageState.Lost)
         {
-            TransactionEntity transaction = await _transactionService.GetLatestAsync(context.InstanceToValidate.ActiveBasarId, product.Id);
+            TransactionEntity transaction = await _transactionService.GetLatestAsync(context.InstanceToValidate.BasarId, product.Id);
             context.AddFailure(_localizer[VeloTexts.ProductIsLost, transaction.Notes ?? ""]);
         }
         else if (product.StorageState == StorageState.Locked)
         {
-            TransactionEntity transaction = await _transactionService.GetLatestAsync(context.InstanceToValidate.ActiveBasarId, product.Id);
+            TransactionEntity transaction = await _transactionService.GetLatestAsync(context.InstanceToValidate.BasarId, product.Id);
             context.AddFailure(_localizer[VeloTexts.ProductIsLocked, transaction.Notes ?? ""]);
         }
         else if (product.StorageState == StorageState.Sold)
         {
-            TransactionEntity sale = await _transactionService.GetLatestAsync(context.InstanceToValidate.ActiveBasarId, product.Id);
+            TransactionEntity sale = await _transactionService.GetLatestAsync(context.InstanceToValidate.BasarId, product.Id);
             string saleUrl = _router.Transaction.ToDetails(sale.Id);
             context.AddFailure(_localizer[VeloTexts.ProductSold, saleUrl, sale.Number]);
         }

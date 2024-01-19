@@ -10,15 +10,15 @@ public class List
 {
     [Theory]
     [VeloAutoData]
-    public async Task ExistingProductId_ReturnsRedirectToDetails(ProductListParameter parameter, int productId, int activeBasarId, string url)
+    public async Task ExistingProductId_ReturnsRedirectToDetails(ProductListParameter parameter, int productId, string url)
     {
         //  Arrange
         parameter.SearchString = productId.ToString();
-        A.CallTo(() => ProductService.ExistsForBasarAsync(activeBasarId, productId)).Returns(true);
+        A.CallTo(() => ProductService.ExistsForBasarAsync(parameter.BasarId, productId)).Returns(true);
         A.CallTo(() => ProductRouter.ToDetails(productId)).Returns(url);
 
         //  Act
-        IActionResult result = await Sut.List(parameter, activeBasarId);
+        IActionResult result = await Sut.List(parameter);
 
         //  Assert
         using (new AssertionScope())
@@ -27,22 +27,22 @@ public class List
             redirect.Url.Should().Be(url);
         }
 
-        A.CallTo(() => ProductService.ExistsForBasarAsync(activeBasarId, productId)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => ProductService.ExistsForBasarAsync(parameter.BasarId, productId)).MustHaveHappenedOnceExactly();
         A.CallTo(() => ProductRouter.ToDetails(productId)).MustHaveHappenedOnceExactly();
     }
 
     [Theory]
     [VeloAutoData]
-    public async Task NotExistingProductId_CallsGetManyAndReturnsView(ProductListParameter parameter, int productId, int activeBasarId)
+    public async Task NotExistingProductId_CallsGetManyAndReturnsView(ProductListParameter parameter, int productId)
     {
         //  Arrange
         IPaginatedList<ProductEntity> list = Fixture.CreatePaginatedList<ProductEntity>();
         parameter.SearchString = productId.ToString();
-        A.CallTo(() => ProductService.ExistsForBasarAsync(activeBasarId, productId)).Returns(false);
-        A.CallTo(() => ProductService.GetManyAsync(parameter.PageSize!.Value, parameter.PageIndex, activeBasarId, parameter.SearchString, parameter.StorageState, parameter.ValueState, parameter.Brand, parameter.ProductTypeId)).Returns(list);
+        A.CallTo(() => ProductService.ExistsForBasarAsync(parameter.BasarId, productId)).Returns(false);
+        A.CallTo(() => ProductService.GetManyAsync(parameter.PageSize!.Value, parameter.PageIndex, parameter.BasarId, parameter.SearchString, parameter.StorageState, parameter.ValueState, parameter.Brand, parameter.ProductTypeId)).Returns(list);
 
         //  Act
-        IActionResult result = await Sut.List(parameter, activeBasarId);
+        IActionResult result = await Sut.List(parameter);
 
         //  Assert
         using (new AssertionScope())
@@ -52,20 +52,20 @@ public class List
             view.ViewData.ModelState.IsValid.Should().BeTrue();
         }
 
-        A.CallTo(() => ProductService.ExistsForBasarAsync(activeBasarId, productId)).MustHaveHappenedOnceExactly();
-        A.CallTo(() => ProductService.GetManyAsync(parameter.PageSize!.Value, parameter.PageIndex, activeBasarId, parameter.SearchString, parameter.StorageState, parameter.ValueState, parameter.Brand, parameter.ProductTypeId)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => ProductService.ExistsForBasarAsync(parameter.BasarId, productId)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => ProductService.GetManyAsync(parameter.PageSize!.Value, parameter.PageIndex, parameter.BasarId, parameter.SearchString, parameter.StorageState, parameter.ValueState, parameter.Brand, parameter.ProductTypeId)).MustHaveHappenedOnceExactly();
     }
 
     [Theory]
     [VeloAutoData]
-    public async Task CallsGetManyAndReturnsView(ProductListParameter parameter, int activeBasarId)
+    public async Task CallsGetManyAndReturnsView(ProductListParameter parameter)
     {
         //  Arrange
         IPaginatedList<ProductEntity> list = Fixture.CreatePaginatedList<ProductEntity>();
-        A.CallTo(() => ProductService.GetManyAsync(parameter.PageSize!.Value, parameter.PageIndex, activeBasarId, parameter.SearchString, parameter.StorageState, parameter.ValueState, parameter.Brand, parameter.ProductTypeId)).Returns(list);
+        A.CallTo(() => ProductService.GetManyAsync(parameter.PageSize!.Value, parameter.PageIndex, parameter.BasarId, parameter.SearchString, parameter.StorageState, parameter.ValueState, parameter.Brand, parameter.ProductTypeId)).Returns(list);
 
         //  Act
-        IActionResult result = await Sut.List(parameter, activeBasarId);
+        IActionResult result = await Sut.List(parameter);
 
         //  Assert
         using (new AssertionScope())
@@ -75,6 +75,6 @@ public class List
             view.ViewData.ModelState.IsValid.Should().BeTrue();
         }
 
-        A.CallTo(() => ProductService.GetManyAsync(parameter.PageSize!.Value, parameter.PageIndex, activeBasarId, parameter.SearchString, parameter.StorageState, parameter.ValueState, parameter.Brand, parameter.ProductTypeId)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => ProductService.GetManyAsync(parameter.PageSize!.Value, parameter.PageIndex, parameter.BasarId, parameter.SearchString, parameter.StorageState, parameter.ValueState, parameter.Brand, parameter.ProductTypeId)).MustHaveHappenedOnceExactly();
     }
 }

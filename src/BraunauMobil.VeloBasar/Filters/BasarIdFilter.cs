@@ -1,24 +1,23 @@
-﻿using BraunauMobil.VeloBasar.Data;
+﻿using BraunauMobil.VeloBasar.BusinessLogic;
 using BraunauMobil.VeloBasar.Extensions;
 using BraunauMobil.VeloBasar.Routing;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.EntityFrameworkCore;
 
 namespace BraunauMobil.VeloBasar.Filters;
 
 public sealed class ActiveBasarEntityFilter
     : IAsyncActionFilter
 {
-    private const string _activeBasarIdArgumentName = "activeBasarId";
+    private const string _basarIdArgumentName = "basarId";
 
     private readonly IVeloRouter _router;
-    private readonly VeloDbContext _db;
+    private readonly IBasarService _basarService;
 
-    public ActiveBasarEntityFilter(IVeloRouter router, VeloDbContext db)
+    public ActiveBasarEntityFilter(IVeloRouter router, IBasarService basarService)
     {
         _router = router ?? throw new ArgumentNullException(nameof(router));
-        _db = db ?? throw new ArgumentNullException(nameof(db));
+        _basarService = basarService ?? throw new ArgumentNullException(nameof(basarService));
     }
 
     public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
@@ -26,22 +25,21 @@ public sealed class ActiveBasarEntityFilter
         ArgumentNullException.ThrowIfNull(context);
         ArgumentNullException.ThrowIfNull(next);
 
-        //  check if we need initial setup
-        if (!_db.IsInitialized())
+        int? activeBasarId = await _basarService.GetActiveBasarIdAsync();
+        BasarEntity? activeBasar = null;
+        if (activeBasarId.HasValue)
         {
-            await next();
-            return;
+            activeBasar = await _basarService.GetAsync(activeBasarId.Value);
         }
 
-        BasarEntity? activeBasar = await _db.Basars.AsNoTracking()
-            .Where(b => b.State == ObjectState.Enabled)
-            .FirstOrDefaultAsync();
-
-        if (context.ActionDescriptor.Parameters.Any(p => p.Name == _activeBasarIdArgumentName))
+        if (context.ActionDescriptor.Parameters.Any(p => p.Name == _basarIdArgumentName))
         {
             if (activeBasar is not null)
             {
-                context.ActionArguments[_activeBasarIdArgumentName] = activeBasar.Id;
+                if (!context.ActionArguments.ContainsKey(_basarIdArgumentName))
+                {
+                    context.ActionArguments[_basarIdArgumentName] = activeBasar.Id;
+                }
             }
             else
             {
@@ -49,19 +47,20 @@ public sealed class ActiveBasarEntityFilter
                 return;
             }
         }
-        else
+
+        foreach (IHasBasarId activeBasarModel in context.ActionArguments.Values.OfType<IHasBasarId>())
         {
-            foreach (IActiveBasarModel activeBasarModel in context.ActionArguments.Values.OfType<IActiveBasarModel>())
+            if (activeBasar is not null)
             {
-                if (activeBasar is not null)
+                if (activeBasarModel.BasarId == 0)
                 {
-                    activeBasarModel.ActiveBasarId = activeBasar.Id;
+                    activeBasarModel.BasarId = activeBasar.Id;
                 }
-                else
-                {
-                    await RedirectToBasarList(context);
-                    return;
-                }
+            }
+            else
+            {
+                await RedirectToBasarList(context);
+                return;
             }
         }
 

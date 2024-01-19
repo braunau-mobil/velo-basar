@@ -1,7 +1,6 @@
 ﻿using BraunauMobil.VeloBasar.Controllers;
 using BraunauMobil.VeloBasar.Cookies;
 using BraunauMobil.VeloBasar.Routing;
-using Microsoft.Extensions.Logging;
 
 namespace BraunauMobil.VeloBasar.Tests.Controllers.HomeControllerTests;
 
@@ -12,10 +11,8 @@ public class TestBase
         A.CallTo(() => Router.Basar).Returns(BasarRouter);
         A.CallTo(() => Router.Setup).Returns(SetupRouter);
 
-        Sut = new HomeController(AppContext, Router, A.Fake<ILogger<HomeController>>(), CurrentThemeCookie);
+        Sut = new HomeController(Router, CurrentThemeCookie);
     }
-
-    protected IAppContext AppContext { get; } = X.StrictFake<IAppContext>();
 
 
     protected IBasarRouter BasarRouter { get; } = X.StrictFake<IBasarRouter>();

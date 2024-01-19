@@ -33,7 +33,7 @@ public class Select
         model.OpenDocument = false;
 
         // Arrange
-        A.CallTo(() => TransactionService.FindAsync(model.ActiveBasarId, TransactionType.Acceptance, model.Number)).Returns(transaction);
+        A.CallTo(() => TransactionService.FindAsync(model.BasarId, TransactionType.Acceptance, model.Number)).Returns(transaction);
 
         // Act
         IActionResult result = await Sut.Select(model);
@@ -50,7 +50,7 @@ public class Select
             model.Id.Should().Be(transaction.Id);
         }
 
-        A.CallTo(() => TransactionService.FindAsync(model.ActiveBasarId, TransactionType.Acceptance, model.Number)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => TransactionService.FindAsync(model.BasarId, TransactionType.Acceptance, model.Number)).MustHaveHappenedOnceExactly();
     }
 
     [Fact]
@@ -63,7 +63,7 @@ public class Select
         // Arrange
         A.CallTo(() => Localizer[VeloTexts.NoAcceptanceFound, model.Number]).Returns(errorMessage);
         TransactionEntity? transaction = null;
-        A.CallTo(() => TransactionService.FindAsync(model.ActiveBasarId, TransactionType.Acceptance, model.Number)).Returns(transaction);
+        A.CallTo(() => TransactionService.FindAsync(model.BasarId, TransactionType.Acceptance, model.Number)).Returns(transaction);
 
         // Act
         IActionResult result = await Sut.Select(model);
@@ -80,10 +80,10 @@ public class Select
             resultModel.Number.Should().Be(model.Number);
             resultModel.OpenDocument.Should().BeFalse();
             resultModel.Id.Should().Be(0);
-            resultModel.ActiveBasarId.Should().Be(0);
+            resultModel.BasarId.Should().Be(0);
         }
 
-        A.CallTo(() => TransactionService.FindAsync(model.ActiveBasarId, TransactionType.Acceptance, model.Number)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => TransactionService.FindAsync(model.BasarId, TransactionType.Acceptance, model.Number)).MustHaveHappenedOnceExactly();
         A.CallTo(() => Localizer[VeloTexts.NoAcceptanceFound, model.Number]).MustHaveHappenedOnceExactly();
     }
 }

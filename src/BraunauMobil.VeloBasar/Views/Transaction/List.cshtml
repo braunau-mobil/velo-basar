@@ -22,7 +22,10 @@
                 {
                     <div class="col"></div>
                     <div class="col-auto">
-                        @VeloHtml.Select(nameof(Model.Parameter.TransactionType), Model.Parameter.TransactionType, SelectLists.TransactionTypes(true), submitOnChange: true)
+                        <div class="input-group">
+                            @VeloHtml.Select(nameof(Parameters.ProductListParameter.BasarId), Model.Parameter.BasarId, await SelectLists.BasarsAsync(), submitOnChange: true)
+                            @VeloHtml.Select(nameof(Model.Parameter.TransactionType), Model.Parameter.TransactionType, SelectLists.TransactionTypes(true), submitOnChange: true)
+                        </div>
                     </div>
                 }
             </div>

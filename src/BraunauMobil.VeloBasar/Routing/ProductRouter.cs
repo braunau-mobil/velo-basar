@@ -16,7 +16,7 @@ public sealed class ProductRouter
     { }
 
     public string ToDetails(int id)
-        => GetUriByAction(nameof(ProductController.Details), new { productId = id });
+        => GetUriByAction(nameof(ProductController.Details), new { id });
 
     public string ToEdit(int id)
         => GetUriByAction(nameof(ProductController.Edit), new { id });

@@ -65,7 +65,7 @@ public class SelectProducts
         //  Arrange
         SelectProductsModel inputModel = new()
         {
-            ActiveBasarId = activeBasarId,
+            BasarId = activeBasarId,
             TransactionId = saleId
         };
         inputModel.SetProducts(products);

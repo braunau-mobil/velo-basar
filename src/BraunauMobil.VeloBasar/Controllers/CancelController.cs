@@ -31,7 +31,7 @@ public sealed class CancelController
     {
         ArgumentNullException.ThrowIfNull(model);
 
-        model.Sale = await _transactionService.FindAsync(model.ActiveBasarId, TransactionType.Sale, model.SaleNumber);
+        model.Sale = await _transactionService.FindAsync(model.BasarId, TransactionType.Sale, model.SaleNumber);
 
         SetValidationResult(await _selectSaleValidator.ValidateAsync(model));
         if (!ModelState.IsValid)
@@ -63,7 +63,7 @@ public sealed class CancelController
         if (ModelState.IsValid)
         {
             IEnumerable<int> selectedProductIds = model.SelectedProductIds();
-            int revertId = await _transactionService.CancelAsync(model.ActiveBasarId, model.TransactionId, selectedProductIds);
+            int revertId = await _transactionService.CancelAsync(model.BasarId, model.TransactionId, selectedProductIds);
             return Redirect(_router.Transaction.ToSucess(revertId));
         }
 

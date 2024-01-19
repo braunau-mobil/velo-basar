@@ -4,6 +4,7 @@ namespace BraunauMobil.VeloBasar.Parameters;
 
 public sealed class AcceptSessionListParameter
     : ListParameter
+    , IHasBasarId
 {
     public AcceptSessionListParameter()
     { }
@@ -14,9 +15,12 @@ public sealed class AcceptSessionListParameter
         ArgumentNullException.ThrowIfNull(other);
 
         AcceptSessionState = other.AcceptSessionState;
+        BasarId = other.BasarId;
     }
 
     public AcceptSessionState? AcceptSessionState { get; set; }
+    
+    public int BasarId { get; set; }
 
     protected override ListParameter Clone()
         => new AcceptSessionListParameter(this);

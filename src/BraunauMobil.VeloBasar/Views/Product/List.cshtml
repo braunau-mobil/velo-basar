@@ -14,6 +14,7 @@
                 <div class="col"></div>
                 <div class="col-auto">
                     <div class="input-group">
+                        @VeloHtml.Select(nameof(Parameters.ProductListParameter.BasarId), Model.Parameter.BasarId, await SelectLists.BasarsAsync(), submitOnChange: true)
                         @VeloHtml.Select(nameof(Parameters.ProductListParameter.StorageState), Model.Parameter.StorageState, SelectLists.StorageStates(true), submitOnChange: true)
                         @VeloHtml.Select(nameof(Parameters.ProductListParameter.ValueState), Model.Parameter.ValueState, SelectLists.ValueStates(true), submitOnChange: true)
                         @VeloHtml.Select(nameof(Parameters.ProductListParameter.Brand), Model.Parameter.Brand, await SelectLists.BrandsForSelectionAsync(true), submitOnChange: true)

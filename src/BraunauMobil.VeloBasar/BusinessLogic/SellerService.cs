@@ -78,6 +78,7 @@ public sealed class SellerService
 
         return new (seller)
         {
+            BasarId = basarId,
             CanPushStatus = _statusPushService.IsEnabled,
             Transactions = transactions,
             Procucts = products,

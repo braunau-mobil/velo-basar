@@ -66,7 +66,7 @@ public sealed class TransactionController
         return File(fileData.Data, fileData.ContentType, fileData.FileName);
     }
 
-    public async Task<IActionResult> List(TransactionListParameter parameter, int activeBasarId)
+    public async Task<IActionResult> List(TransactionListParameter parameter)
     {
         ArgumentNullException.ThrowIfNull(parameter);
         ArgumentNullException.ThrowIfNull(parameter.PageSize);
@@ -76,7 +76,7 @@ public sealed class TransactionController
             return Redirect(_router.ToLogin());
         }
 
-        IPaginatedList<TransactionEntity> items = await _transactionService.GetManyAsync(parameter.PageSize.Value, parameter.PageIndex, activeBasarId, parameter.TransactionType, parameter.SearchString);
+        IPaginatedList<TransactionEntity> items = await _transactionService.GetManyAsync(parameter.PageSize.Value, parameter.PageIndex, parameter.BasarId, parameter.TransactionType, parameter.SearchString);
         ListModel<TransactionEntity, TransactionListParameter> model = new (items, parameter);
         return View(model);
     }

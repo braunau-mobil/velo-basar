@@ -25,7 +25,7 @@ public class SellProducts
             return view.ViewData.Model.Should().BeOfType<CartModel>().Subject;
         });
 
-        cart.ActiveBasarId.Should().Be(0);
+        cart.BasarId.Should().Be(0);
         cart.HasProducts.Should().BeFalse();
         cart.ProductId.Should().Be(0);
         cart.Products.Should().BeEmpty();
@@ -42,7 +42,7 @@ public class SellProducts
             view.ViewData.Model.Should().Be(cart);
         });
 
-        cart.ActiveBasarId.Should().Be(0);
+        cart.BasarId.Should().Be(0);
         cart.HasProducts.Should().BeTrue();
         cart.ProductId.Should().Be(0);
         cart.Products.Should().HaveCount(1);

@@ -22,6 +22,15 @@ public sealed class SelectListService
     public SelectList AcceptStates(bool includeAll = false)
         => EnumSelectList<AcceptSessionState>(includeAll, VeloTexts.Singular);
 
+    public async Task<SelectList> BasarsAsync()
+    {
+        BasarEntity[] basars = await _db.Basars
+            .OrderBy(basar => basar.Name)
+            .ToArrayAsync();
+
+        return new SelectList(basars, nameof(BasarEntity.Id), nameof(BasarEntity.Name));
+    }
+
     public async Task<ISet<string?>> BrandsAsync()
     {
         string[] brands = await _db.Products.Brands().ToArrayAsync();

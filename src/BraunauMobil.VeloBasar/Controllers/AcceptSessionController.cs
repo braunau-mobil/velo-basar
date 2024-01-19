@@ -45,19 +45,19 @@ public sealed class AcceptSessionController
     }
 
     [Authorize]
-    public async Task<IActionResult> List(AcceptSessionListParameter parameter, int activeBasarId)
+    public async Task<IActionResult> List(AcceptSessionListParameter parameter)
     {
         ArgumentNullException.ThrowIfNull(parameter);
         ArgumentNullException.ThrowIfNull(parameter.PageSize);
 
-        IPaginatedList<AcceptSessionEntity> items = await _acceptSessionService.GetAllAsync(parameter.PageSize.Value, parameter.PageIndex, activeBasarId, parameter.AcceptSessionState);
+        IPaginatedList<AcceptSessionEntity> items = await _acceptSessionService.GetAllAsync(parameter.PageSize.Value, parameter.PageIndex, parameter.BasarId, parameter.AcceptSessionState);
         ListModel<AcceptSessionEntity, AcceptSessionListParameter> model = new(items, parameter);
         return View(model);
     }
 
-    public IActionResult Start(int activeBasarId)
+    public IActionResult Start(int basarId)
     {
-        ArgumentNullException.ThrowIfNull(activeBasarId);
+        ArgumentNullException.ThrowIfNull(basarId);
 
         IActionResult? result = RedirectToActiveSession();
         if (result != null)
@@ -68,9 +68,9 @@ public sealed class AcceptSessionController
         return Redirect(_router.Seller.ToCreateForAcceptance());
     }
 
-    public async Task<IActionResult> StartForSeller(int sellerId, int activeBasarId)
+    public async Task<IActionResult> StartForSeller(int sellerId, int basarId)
     {
-        ArgumentNullException.ThrowIfNull(activeBasarId);
+        ArgumentNullException.ThrowIfNull(basarId);
 
         IActionResult? result = RedirectToActiveSession();
         if (result != null)
@@ -78,7 +78,7 @@ public sealed class AcceptSessionController
             return result;
         }
 
-        AcceptSessionEntity acceptSession = await _acceptSessionService.CreateAsync(activeBasarId, sellerId);
+        AcceptSessionEntity acceptSession = await _acceptSessionService.CreateAsync(basarId, sellerId);
         _cookie.SetActiveAcceptSession(acceptSession);
 
         return Redirect(_router.AcceptProduct.ToCreate(acceptSession.Id));

@@ -25,13 +25,6 @@ public sealed class ActiveSessionIdFilter
         ArgumentNullException.ThrowIfNull(context);
         ArgumentNullException.ThrowIfNull(next);
 
-        //  check if we need initial setup
-        if (!_db.IsInitialized())
-        {
-            await next();
-            return;
-        }
-
         int? activeSessionId = _cookie.GetActiveAcceptSessionId();
         if (activeSessionId.HasValue)
         {

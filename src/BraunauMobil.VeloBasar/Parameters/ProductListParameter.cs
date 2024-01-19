@@ -4,6 +4,7 @@ namespace BraunauMobil.VeloBasar.Parameters;
 
 public sealed class ProductListParameter
     : ListParameter
+    , IHasBasarId
 {
     public ProductListParameter()
     { }
@@ -13,11 +14,14 @@ public sealed class ProductListParameter
     {
         ArgumentNullException.ThrowIfNull(other);
 
+        BasarId = other.BasarId;
         StorageState = other.StorageState;
         ValueState = other.ValueState;
         Brand = other.Brand;
         ProductTypeId = other.ProductTypeId;
     }
+
+    public int BasarId { get; set; }
 
     public StorageState? StorageState { get; set; }
 

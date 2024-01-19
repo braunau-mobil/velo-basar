@@ -7,14 +7,14 @@ public class Details
 {
     [Theory]
     [VeloAutoData]
-    public async Task CallsGetDetailsAndReturnsView(int activeBasarId, int productId)
+    public async Task CallsGetDetailsAndReturnsView(int productId)
     {
         //  Arrange
         ProductDetailsModel model = Fixture.Create<ProductDetailsModel>();
-        A.CallTo(() => ProductService.GetDetailsAsync(activeBasarId, productId)).Returns(model);
+        A.CallTo(() => ProductService.GetDetailsAsync(productId)).Returns(model);
 
         //  Act
-        IActionResult result = await Sut.Details(activeBasarId, productId);
+        IActionResult result = await Sut.Details(productId);
 
         //  Assert
         using (new AssertionScope())
@@ -24,6 +24,6 @@ public class Details
             view.ViewData.ModelState.IsValid.Should().BeTrue();
         }
 
-        A.CallTo(() => ProductService.GetDetailsAsync(activeBasarId, productId)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => ProductService.GetDetailsAsync(productId)).MustHaveHappenedOnceExactly();
     }
 }

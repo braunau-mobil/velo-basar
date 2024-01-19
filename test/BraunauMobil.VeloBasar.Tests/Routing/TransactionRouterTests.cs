@@ -54,13 +54,13 @@ public class TransactionRouterTests
         string actual = _sut.ToList();
 
         //  Assert
-        actual.Should().Be("//PageIndex=1&State=Enabled&action=List&controller=Transaction");
+        actual.Should().Be("//BasarId=0&PageIndex=1&State=Enabled&action=List&controller=Transaction");
     }
 
 
     [Theory]
-    [InlineData(null, 123, "//PageIndex=123&State=Enabled&action=List&controller=Transaction")]
-    [InlineData(444, 555, "//PageIndex=555&PageSize=444&State=Enabled&action=List&controller=Transaction")]
+    [InlineData(null, 123, "//BasarId=0&PageIndex=123&State=Enabled&action=List&controller=Transaction")]
+    [InlineData(444, 555, "//BasarId=0&PageIndex=555&PageSize=444&State=Enabled&action=List&controller=Transaction")]
     public void ToList_PageSize_PageIndex(int? pageSize, int pageIndex, string expectedResult)
     {
         //  Arrange
@@ -73,8 +73,8 @@ public class TransactionRouterTests
     }
 
     [Theory]
-    [InlineData(TransactionType.Acceptance, "//TransactionType=Acceptance&PageIndex=1&State=Enabled&action=List&controller=Transaction")]
-    [InlineData(TransactionType.Sale, "//TransactionType=Sale&PageIndex=1&State=Enabled&action=List&controller=Transaction")]
+    [InlineData(TransactionType.Acceptance, "//BasarId=0&TransactionType=Acceptance&PageIndex=1&State=Enabled&action=List&controller=Transaction")]
+    [InlineData(TransactionType.Sale, "//BasarId=0&TransactionType=Sale&PageIndex=1&State=Enabled&action=List&controller=Transaction")]
     public void ToList_TransactionType(TransactionType transactionType, string expectedResult)
     {
         //  Arrange
@@ -109,13 +109,14 @@ public class TransactionRouterTests
     }
 
     [Theory]
-    [InlineData(123, null, "", null, null, "//SearchString=&PageIndex=123&action=List&controller=Transaction")]
-    [InlineData(321, 777, "mySearch", ObjectState.Disabled, TransactionType.Acceptance, "//TransactionType=Acceptance&SearchString=mySearch&PageIndex=321&PageSize=777&State=Disabled&action=List&controller=Transaction")]
-    public void ToList_TransactionListParameter(int pageIndex, int? pageSize, string searchString, ObjectState? state, TransactionType? transactionType, string expectedResult)
+    [InlineData(333, 123, null, "", null, null, "//BasarId=333&SearchString=&PageIndex=123&action=List&controller=Transaction")]
+    [InlineData(777, 321, 777, "mySearch", ObjectState.Disabled, TransactionType.Acceptance, "//BasarId=777&TransactionType=Acceptance&SearchString=mySearch&PageIndex=321&PageSize=777&State=Disabled&action=List&controller=Transaction")]
+    public void ToList_TransactionListParameter(int basarId, int pageIndex, int? pageSize, string searchString, ObjectState? state, TransactionType? transactionType, string expectedResult)
     {
         //  Arrange
         TransactionListParameter parameter = new()
         {
+            BasarId = basarId,
             PageIndex = pageIndex,
             PageSize = pageSize,
             SearchString = searchString,

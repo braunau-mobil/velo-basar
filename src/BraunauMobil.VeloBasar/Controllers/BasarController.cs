@@ -14,8 +14,8 @@ public sealed class BasarController
     {
     }
 
-    public IActionResult ActiveBasarDetails(int activeBasarId)
-        => Redirect(Router.ToDetails(activeBasarId));
+    public IActionResult ActiveBasarDetails(int basarId)
+        => Redirect(Router.ToDetails(basarId));
 
     public async Task<IActionResult> Details(int id)
     {

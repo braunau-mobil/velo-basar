@@ -36,14 +36,14 @@ public sealed class ProductService
             .IncludeAll()
             .FirstByIdAsync(id);
 
-    public async Task<ProductDetailsModel> GetDetailsAsync(int activeBasarId, int productId)
+    public async Task<ProductDetailsModel> GetDetailsAsync(int id)
     {
         ProductEntity entity = await _db.Products
             .IncludeAll()
-            .FirstByIdAsync(productId);
+            .FirstByIdAsync(id);
 
         IReadOnlyList<TransactionEntity> transactions = await _db.Transactions
-            .WhereBasarAndProduct(activeBasarId, productId)
+            .Where(tx => tx.Products.Any(pt => pt.ProductId == id))
             .ToArrayAsync();
 
         return new ProductDetailsModel(entity)
@@ -78,12 +78,12 @@ public sealed class ProductService
         return items.OrderBy(product => ids.IndexOf(product.Id)).ToArray();
     }
 
-    public async Task<IPaginatedList<ProductEntity>> GetManyAsync(int pageSize, int pageIndex, int activeBasarId, string searchString, StorageState? storageState, ValueState? valueState, string? brand, int? productTypeId)
+    public async Task<IPaginatedList<ProductEntity>> GetManyAsync(int pageSize, int pageIndex, int basarId, string searchString, StorageState? storageState, ValueState? valueState, string? brand, int? productTypeId)
     {
         IQueryable<ProductEntity> iq = _db.Products
             .Include(product => product.Type)
             .Include(product => product.Session)
-            .Where(product => product.Session.BasarId == activeBasarId);
+            .Where(product => product.Session.BasarId == basarId);
 
         if (!string.IsNullOrEmpty(searchString))
         {

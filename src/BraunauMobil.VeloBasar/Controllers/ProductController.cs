@@ -23,9 +23,9 @@ public sealed class ProductController
         _productValidator = productValidator ?? throw new ArgumentNullException(nameof(productValidator));
     }
 
-    public async Task<IActionResult> Details(int activeBasarId, int productId)
+    public async Task<IActionResult> Details(int id)
     {
-        ProductDetailsModel model = await _productService.GetDetailsAsync(activeBasarId, productId);
+        ProductDetailsModel model = await _productService.GetDetailsAsync(id);
         return View(model);
     }
 
@@ -51,20 +51,20 @@ public sealed class ProductController
         return View(product);
     }
 
-    public async Task<IActionResult> List(ProductListParameter parameter, int activeBasarId)
+    public async Task<IActionResult> List(ProductListParameter parameter)
     {
         ArgumentNullException.ThrowIfNull(parameter);
         ArgumentNullException.ThrowIfNull(parameter.PageSize);
 
         if (int.TryParse(parameter.SearchString, out int id))
         {
-            if (await _productService.ExistsForBasarAsync(activeBasarId, id))
+            if (await _productService.ExistsForBasarAsync(parameter.BasarId, id))
             {
                 return Redirect(_router.Product.ToDetails(id));
             }
         }
 
-        IPaginatedList<ProductEntity> items = await _productService.GetManyAsync(parameter.PageSize.Value, parameter.PageIndex, activeBasarId, parameter.SearchString, parameter.StorageState, parameter.ValueState, parameter.Brand, parameter.ProductTypeId);
+        IPaginatedList<ProductEntity> items = await _productService.GetManyAsync(parameter.PageSize.Value, parameter.PageIndex, parameter.BasarId, parameter.SearchString, parameter.StorageState, parameter.ValueState, parameter.Brand, parameter.ProductTypeId);
         ListModel<ProductEntity, ProductListParameter> model = new(items, parameter);
         return View(model);
     }

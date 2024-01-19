@@ -64,15 +64,17 @@ public sealed class SellerController
         return View(model);
     }
 
-    public async Task<IActionResult> Details(int activeBasarId, int id)
+    public async Task<IActionResult> Details(SellerDetailsParameter parameter)
     {
-        SellerDetailsModel model = await _sellerService.GetDetailsAsync(activeBasarId, id);
+        ArgumentNullException.ThrowIfNull(parameter);
+
+        SellerDetailsModel model = await _sellerService.GetDetailsAsync(parameter.BasarId, parameter.Id);
         return View(model);
     }
 
-    public async Task<IActionResult> Labels(int activeBasarId, int id)
+    public async Task<IActionResult> Labels(int basarId, int id)
     {
-        FileDataEntity fileData = await _sellerService.GetLabelsAsync(activeBasarId, id);
+        FileDataEntity fileData = await _sellerService.GetLabelsAsync(basarId, id);
         return File(fileData.Data, fileData.ContentType, fileData.FileName);
     }
 
@@ -118,15 +120,15 @@ public sealed class SellerController
         return View(nameof(CreateForAcceptance), model);
     }
 
-    public async Task<IActionResult> Settle(int activeBasarId, int id)
+    public async Task<IActionResult> Settle(int basarId, int id)
     {
-        int settlementId = await _sellerService.SettleAsync(activeBasarId, id);
+        int settlementId = await _sellerService.SettleAsync(basarId, id);
         return Redirect(_router.Transaction.ToSucess(settlementId));
     }
 
-    public async Task<IActionResult> TriggerStatusPush(int activeBasarId, int id)
+    public async Task<IActionResult> TriggerStatusPush(int basarId, int id)
     {
-        await _sellerService.TriggerStatusPushAsync(activeBasarId, id);
+        await _sellerService.TriggerStatusPushAsync(basarId, id);
 
         return RedirectToReferer();
     }

@@ -2,73 +2,88 @@
 @{
     ViewData.SetTitle(Localizer[VeloTexts.SellerDetails, Model.Entity.Id, Model.Entity.FirstName, Model.Entity.LastName]);
 }
+@inject ISelectListService SelectLists
 
-<div class="card m-2">
-    <h4 class="card-header">
-        @Model.Entity.FirstName @Model.Entity.LastName
-        <small class="text-muted">@Localizer[VeloTexts.SellerId, Model.Entity.Id]</small>
-    </h4>
-    <div class="card-body">
-        <div class="row align-items-start">
-            <div class="col">
-                <partial name="_Properties.cshtml" model="Model.Entity" />
-            </div>
-            <div class="col">
-                <ul class="list-group">
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        @Localizer[VeloTexts.AcceptedProducts]
-                        <span class="badge rounded-pill text-bg-success">@Model.AcceptedProductCount</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        @Localizer[VeloTexts.SoldProductCount]
-                        <span class="badge rounded-pill text-bg-success">@Model.SoldProductCount</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        @Localizer[VeloTexts.NotSoldProductCount]
-                        <span class="badge rounded-pill text-bg-warning">@Model.NotSoldProductCount</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        @Localizer[VeloTexts.PickedUpProductCount]
-                        <span class="badge rounded-pill text-bg-secondary">@Model.PickedUpProductCount</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        @Localizer[VeloTexts.SettlementAmout]
-                        <span class="badge rounded-pill text-bg-primary">@Model.SettlementAmout.ToHtmlPrice()</span>
-                    </li>
-                </ul>
+<form method="get">
+    @VeloHtml.HiddenInput(nameof(Parameters.SellerDetailsParameter.Id), Model.Entity.Id)
+    <div class="card m-2">
+        <div class="card-header">
+            <div class="row align-items-center">
+                <h4 class="col m-0">
+                    @Model.Entity.FirstName @Model.Entity.LastName
+                    <small class="text-muted">@Localizer[VeloTexts.SellerId, Model.Entity.Id]</small>
+                </h4>
+                <div class="col"></div>
+                <div class="col-auto">
+                    <div class="input-group">
+                        @VeloHtml.Select(nameof(Parameters.SellerDetailsParameter.BasarId), Model.BasarId, await SelectLists.BasarsAsync(), submitOnChange: true)
+                    </div>
+                </div>
             </div>
         </div>
+        <div class="card-body">
+            <div class="row align-items-start">
+                <div class="col">
+                    <partial name="_Properties.cshtml" model="Model.Entity" />
+                </div>
+                <div class="col">
+                    <ul class="list-group">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            @Localizer[VeloTexts.AcceptedProducts]
+                            <span class="badge rounded-pill text-bg-success">@Model.AcceptedProductCount</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            @Localizer[VeloTexts.SoldProductCount]
+                            <span class="badge rounded-pill text-bg-success">@Model.SoldProductCount</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            @Localizer[VeloTexts.NotSoldProductCount]
+                            <span class="badge rounded-pill text-bg-warning">@Model.NotSoldProductCount</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            @Localizer[VeloTexts.PickedUpProductCount]
+                            <span class="badge rounded-pill text-bg-secondary">@Model.PickedUpProductCount</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            @Localizer[VeloTexts.SettlementAmout]
+                            <span class="badge rounded-pill text-bg-primary">@Model.SettlementAmout.ToHtmlPrice()</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <a class="btn btn-secondary" href="@Router.AcceptSession.ToStartForSeller(Model.Entity.Id)">@Localizer[VeloTexts.AcceptProducts]</a>
+            @if (Model.Entity.ValueState == ValueState.NotSettled)
+            {
+                <a class="btn btn-secondary" href="@Router.Seller.ToSettle(Model.Entity.Id)">@Localizer[VeloTexts.Settle]</a>
+            }
+            @if (Model.CanPushStatus)
+            {
+                <a class="btn btn-secondary" href="@Router.Seller.ToTriggerStatusPush(Model.Entity.Id)">@Localizer[VeloTexts.PushSellerStatus]</a>
+            }
+            @if (Model.Procucts.Any())
+            {
+                <a class="btn btn-outline-primary" href="@Router.Seller.ToLabels(Model.Entity.Id)" target="_blank">@Localizer[VeloTexts.PrintLabels]</a>            
+            }
+            <a class="btn btn-primary" href="@Router.Seller.ToEdit(Model.Entity.Id, origin: "details")">@Localizer[VeloTexts.Edit]</a>
+        </div>
     </div>
-    <div class="card-footer">
-        <a class="btn btn-secondary" href="@Router.AcceptSession.ToStartForSeller(Model.Entity.Id)">@Localizer[VeloTexts.AcceptProducts]</a>
-        @if (Model.Entity.ValueState == ValueState.NotSettled)
-        {
-            <a class="btn btn-secondary" href="@Router.Seller.ToSettle(Model.Entity.Id)">@Localizer[VeloTexts.Settle]</a>
-        }
-        @if (Model.CanPushStatus)
-        {
-            <a class="btn btn-secondary" href="@Router.Seller.ToTriggerStatusPush(Model.Entity.Id)">@Localizer[VeloTexts.PushSellerStatus]</a>
-        }
-        @if (Model.Procucts.Any())
-        {
-            <a class="btn btn-outline-primary" href="@Router.Seller.ToLabels(Model.Entity.Id)" target="_blank">@Localizer[VeloTexts.PrintLabels]</a>            
-        }
-        <a class="btn btn-primary" href="@Router.Seller.ToEdit(Model.Entity.Id, origin: "details")">@Localizer[VeloTexts.Edit]</a>
-    </div>
-</div>
 
-<div class="card m-2">
-    <div class="card-header">@Localizer[VeloTexts.Products]</div>
-    <div class="card-body p-0">
-        @(VeloHtml.ProductsTable(Model.Procucts, showId: true, showState: true)
-            .Column(c => c.ForLink(item => Router.Product.ToDetails(item.Id), Localizer[VeloTexts.Details]))
-            .Build())
+    <div class="card m-2">
+        <div class="card-header">@Localizer[VeloTexts.Products]</div>
+        <div class="card-body p-0">
+            @(VeloHtml.ProductsTable(Model.Procucts, showId: true, showState: true)
+                .Column(c => c.ForLink(item => Router.Product.ToDetails(item.Id), Localizer[VeloTexts.Details]))
+                .Build())
+        </div>
     </div>
-</div>
 
-<div class="card m-2">
-    <div class="card-header">@Localizer[VeloTexts.Transactions]</div>
-    <div class="card-body p-0">
-        @VeloHtml.TransactionsTable(Model.Transactions, showType: true, showProducts: true).Build()
+    <div class="card m-2">
+        <div class="card-header">@Localizer[VeloTexts.Transactions]</div>
+        <div class="card-body p-0">
+            @VeloHtml.TransactionsTable(Model.Transactions, showType: true, showProducts: true).Build()
+        </div>
     </div>
-</div>
+
+</form>

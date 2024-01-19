@@ -36,7 +36,7 @@ public class SelectSale
         productToTransaction.Product.StorageState = StorageState.Sold;
         sale.Products.Add(productToTransaction);
 
-        A.CallTo(() => TransactionService.FindAsync(model.ActiveBasarId, TransactionType.Sale, model.SaleNumber)).Returns(sale);
+        A.CallTo(() => TransactionService.FindAsync(model.BasarId, TransactionType.Sale, model.SaleNumber)).Returns(sale);
         A.CallTo(() => CancelRouter.ToSelectProducts(sale.Id)).Returns(url);
 
         //  Act
@@ -49,7 +49,7 @@ public class SelectSale
             redirect.Url.Should().Be(url);
         }
 
-        A.CallTo(() => TransactionService.FindAsync(model.ActiveBasarId, TransactionType.Sale, model.SaleNumber)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => TransactionService.FindAsync(model.BasarId, TransactionType.Sale, model.SaleNumber)).MustHaveHappenedOnceExactly();
         A.CallTo(() => CancelRouter.ToSelectProducts(sale.Id)).MustHaveHappenedOnceExactly();
     }
 
@@ -65,7 +65,7 @@ public class SelectSale
         productToTransaction.Product.StorageState = StorageState.Available;
         sale.Products.Add(productToTransaction);
 
-        A.CallTo(() => TransactionService.FindAsync(model.ActiveBasarId, TransactionType.Sale, model.SaleNumber)).Returns(sale);
+        A.CallTo(() => TransactionService.FindAsync(model.BasarId, TransactionType.Sale, model.SaleNumber)).Returns(sale);
 
         //  Act
         IActionResult result = await Sut.SelectSale(model);
@@ -80,6 +80,6 @@ public class SelectSale
             view.Model.Should().Be(model);
         }
 
-        A.CallTo(() => TransactionService.FindAsync(model.ActiveBasarId, TransactionType.Sale, model.SaleNumber)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => TransactionService.FindAsync(model.BasarId, TransactionType.Sale, model.SaleNumber)).MustHaveHappenedOnceExactly();
     }
 }

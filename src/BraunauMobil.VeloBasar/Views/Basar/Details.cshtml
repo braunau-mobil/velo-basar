@@ -3,8 +3,16 @@
 @{
     ViewData.SetTitle(Localizer[VeloTexts.BasarDetails]);
 }
+
 <div class="card m-2">
     <div class="card-header">
+        <div class="row align-items-center">
+            <h5 class="col text-start">@Model.Entity.Date.ToLongDateString()</h5>
+            <h4 class="col text-center">@Model.Entity.Name</h4>
+            <h5 class="col text-end">@Model.Entity.Location</h5>
+        </div>
+    </div>
+    <div class="card-body">
         <div class="row justify-content-evenly align-items-center">
             <h4 class="col-auto m-0">@Localizer[VeloTexts.AcceptancesCount, Model.AcceptanceCount]</h4>
             <h4 class="col-auto m-0">@Localizer[VeloTexts.SaleCount, Model.SaleCount]</h4>

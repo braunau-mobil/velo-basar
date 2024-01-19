@@ -46,9 +46,9 @@ public sealed class CartController
         return View(nameof(Index), model);        
     }
 
-    public async Task<IActionResult> Checkout(int activeBasarId)
+    public async Task<IActionResult> Checkout(int basarId)
     {
-        ArgumentNullException.ThrowIfNull(activeBasarId);
+        ArgumentNullException.ThrowIfNull(basarId);
 
         IList<int> cart = _cookie.GetCart();
         if (cart.Count <= 0)
@@ -56,7 +56,7 @@ public sealed class CartController
             return StatusCode(StatusCodes.Status405MethodNotAllowed);
         }
 
-        int saleId = await _transactionService.CheckoutAsync(activeBasarId, cart);
+        int saleId = await _transactionService.CheckoutAsync(basarId, cart);
         _cookie.ClearCart();
         return Redirect(_router.Transaction.ToSucess(saleId));
     }

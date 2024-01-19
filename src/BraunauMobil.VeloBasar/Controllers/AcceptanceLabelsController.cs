@@ -30,7 +30,7 @@ public sealed class AcceptanceLabelsController
     {
         ArgumentNullException.ThrowIfNull(model);
 
-        TransactionEntity? acceptance = await _transactionService.FindAsync(model.ActiveBasarId, TransactionType.Acceptance, model.Number);
+        TransactionEntity? acceptance = await _transactionService.FindAsync(model.BasarId, TransactionType.Acceptance, model.Number);
         if (acceptance == null)
         {
             ModelState.AddModelError(nameof(AcceptanceLabelsModel.Number), _localizer[VeloTexts.NoAcceptanceFound, model.Number]);

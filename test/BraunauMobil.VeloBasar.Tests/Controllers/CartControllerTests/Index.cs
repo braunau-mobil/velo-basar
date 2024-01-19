@@ -24,7 +24,7 @@ public class Index
             view.ViewData.ModelState.IsValid.Should().BeTrue();
             CartModel model = view.Model.Should().BeOfType<CartModel>().Subject;
             model.Products.Should().BeEquivalentTo(products);
-            model.ActiveBasarId.Should().Be(0);
+            model.BasarId.Should().Be(0);
             model.ProductId.Should().Be(0);
         }
 

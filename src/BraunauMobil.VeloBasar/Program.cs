@@ -78,6 +78,7 @@ public static class Program
         
         services.AddControllersWithViews(options =>
             {
+                options.Filters.Add<IsDatabaseInitializedFilter>();
                 options.Filters.Add<PageSizeFilter>();
                 options.Filters.Add<ActiveBasarEntityFilter>();
                 options.Filters.Add<ActiveSessionIdFilter>();

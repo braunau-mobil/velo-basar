@@ -60,14 +60,6 @@ public static class TransactionExtensions
             ;
     }
 
-    public static IQueryable<TransactionEntity> WhereBasarAndProduct(this IQueryable<TransactionEntity> transactions, int basarId, int productId)
-    {
-        ArgumentNullException.ThrowIfNull(transactions);
-
-        return transactions
-            .Where(tx => tx.BasarId == basarId && tx.Products.Any(pt => pt.ProductId == productId));
-    }
-
     public static IQueryable<TransactionEntity> WhereBasarAndSeller(this IQueryable<TransactionEntity> transactions, int basarId, int sellerId)
     {
         ArgumentNullException.ThrowIfNull(transactions);

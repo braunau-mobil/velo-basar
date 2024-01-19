@@ -5,12 +5,12 @@ public class GetDetailsAsync
 {
     [Theory]
     [VeloAutoData]
-    public async Task EmptyDatabase_Throws(int basarId, int productId)
+    public async Task EmptyDatabase_Throws( int productId)
     {
         //  Arrange
 
         //  Act
-        Func<Task> act = async () => await Sut.GetDetailsAsync(basarId, productId);
+        Func<Task> act = async () => await Sut.GetDetailsAsync(productId);
 
         //  Assert
         await act.Should().ThrowAsync<InvalidOperationException>();
@@ -25,7 +25,7 @@ public class GetDetailsAsync
         await Db.SaveChangesAsync();
 
         //  Act
-        ProductDetailsModel model = await Sut.GetDetailsAsync(product.Session.BasarId, product.Id);
+        ProductDetailsModel model = await Sut.GetDetailsAsync(product.Id);
 
         //  Assert
         using (new AssertionScope())
@@ -61,7 +61,7 @@ public class GetDetailsAsync
         await Db.SaveChangesAsync();
 
         //  Act
-        ProductDetailsModel model = await Sut.GetDetailsAsync(product.Session.BasarId, product.Id);
+        ProductDetailsModel model = await Sut.GetDetailsAsync(product.Id);
 
         //  Assert
         using (new AssertionScope())

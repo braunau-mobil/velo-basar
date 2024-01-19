@@ -10,13 +10,13 @@ public interface IProductService
 
     Task<ProductEntity> GetAsync(int id);
 
-    Task<ProductDetailsModel> GetDetailsAsync(int activeBasarId, int productId);
+    Task<ProductDetailsModel> GetDetailsAsync(int id);
 
     Task<FileDataEntity> GetLabelAsync(int productId);
 
     Task<IReadOnlyList<ProductEntity>> GetManyAsync(IList<int> ids);
 
-    Task<IPaginatedList<ProductEntity>> GetManyAsync(int pageSize, int pageIndex, int activeBasarId, string searchString, StorageState? storageState, ValueState? valueState, string? brand, int? productTypeId);
+    Task<IPaginatedList<ProductEntity>> GetManyAsync(int pageSize, int pageIndex, int basarId, string searchString, StorageState? storageState, ValueState? valueState, string? brand, int? productTypeId);
 
     Task LockAsync(int id, string notes);
 

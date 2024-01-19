@@ -1,7 +1,7 @@
 ﻿namespace BraunauMobil.VeloBasar.Models;
 
 public abstract class AbstractActiveBasarModel
-    : IActiveBasarModel
+    : IHasBasarId
 {
-    public int ActiveBasarId { get; set; }
+    public int BasarId { get; set; }
 }
