@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace BraunauMobil.VeloBasar.Filters;
 
-public sealed class ActiveBasarEntityFilter
+public sealed class BasarIdFilter
     : IAsyncActionFilter
 {
     private const string _basarIdArgumentName = "basarId";
@@ -14,7 +14,7 @@ public sealed class ActiveBasarEntityFilter
     private readonly IVeloRouter _router;
     private readonly IBasarService _basarService;
 
-    public ActiveBasarEntityFilter(IVeloRouter router, IBasarService basarService)
+    public BasarIdFilter(IVeloRouter router, IBasarService basarService)
     {
         _router = router ?? throw new ArgumentNullException(nameof(router));
         _basarService = basarService ?? throw new ArgumentNullException(nameof(basarService));

@@ -79,7 +79,7 @@ public sealed class TestContext
         services.AddControllersWithViews(options =>
         {
             options.Filters.Add<PageSizeFilter>();
-            options.Filters.Add<ActiveBasarEntityFilter>();
+            options.Filters.Add<BasarIdFilter>();
         })
             .AddApplicationPart(typeof(HomeController).Assembly)
             .AddViewLocalization(options =>

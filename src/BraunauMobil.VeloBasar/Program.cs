@@ -80,7 +80,7 @@ public static class Program
             {
                 options.Filters.Add<IsDatabaseInitializedFilter>();
                 options.Filters.Add<PageSizeFilter>();
-                options.Filters.Add<ActiveBasarEntityFilter>();
+                options.Filters.Add<BasarIdFilter>();
                 options.Filters.Add<ActiveSessionIdFilter>();
             })
             .AddViewLocalization(options =>

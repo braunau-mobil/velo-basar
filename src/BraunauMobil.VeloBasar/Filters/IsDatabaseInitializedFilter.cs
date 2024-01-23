@@ -10,9 +10,9 @@ public sealed class IsDatabaseInitializedFilter
 {
     private readonly ILogger<IsDatabaseInitializedFilter> _logger;
     private readonly IAppContext _appContext;
-    private readonly IVeloRouter _router;
+    private readonly ISetupRouter _router;
 
-    public IsDatabaseInitializedFilter(IAppContext appContext, IVeloRouter router, ILogger<IsDatabaseInitializedFilter> logger)
+    public IsDatabaseInitializedFilter(IAppContext appContext, ISetupRouter router, ILogger<IsDatabaseInitializedFilter> logger)
     {
         _appContext = appContext ?? throw new ArgumentNullException(nameof(appContext));
         _router = router ?? throw new ArgumentNullException(nameof(router));
@@ -33,7 +33,7 @@ public sealed class IsDatabaseInitializedFilter
             {
                 await context.Result.ExecuteResultAsync(context);
             }
-            context.Result = new RedirectResult(_router.Setup.ToInitialSetup());
+            context.Result = new RedirectResult(_router.ToInitialSetup());
         }
         else
         {
