@@ -157,14 +157,14 @@ public sealed class TransactionDocumentService
                 doc.Add(_pdf.GetSpacer(10));
             }
 
-            IEnumerable<ProductEntity> payoutProducts = products.GetProductsToPayout();
+            IEnumerable<ProductEntity> payoutProducts = settlement.Products.GetPayoutProducts();
             if (payoutProducts.Any())
             {
                 _pdf.AddSubtitle(doc, _settings.Settlement.SoldTitle);
                 AddProductTable(doc, payoutProducts, _localizer[VeloTexts.SellingPrice]);
             }
 
-            IEnumerable<ProductEntity> pickupProducts = products.GetProductsToPickup();
+            IEnumerable<ProductEntity> pickupProducts = settlement.Products.GetProductsToPickup();
             if (pickupProducts.Any())
             {
                 _pdf.AddSubtitle(doc, _settings.Settlement.NotSoldTitle);

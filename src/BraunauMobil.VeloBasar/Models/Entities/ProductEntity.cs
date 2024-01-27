@@ -132,6 +132,12 @@ public sealed class ProductEntity
             &&
             (StorageState == StorageState.Sold || StorageState == StorageState.Lost);
     }
+    public bool ShouldBePickedUp()
+    {
+        return ValueState == ValueState.Settled
+            &&
+            (StorageState == StorageState.Available || StorageState == StorageState.Locked);
+    }
 }
 
 public sealed class ProductEntityValidator
