@@ -9,12 +9,12 @@ namespace BraunauMobil.VeloBasar.Filters;
 public sealed class BasarIdFilter
     : IAsyncActionFilter
 {
-    private const string _basarIdArgumentName = "basarId";
+    public const string BasarIdArgumentName = "basarId";
 
-    private readonly IVeloRouter _router;
+    private readonly IBasarRouter _router;
     private readonly IBasarService _basarService;
 
-    public BasarIdFilter(IVeloRouter router, IBasarService basarService)
+    public BasarIdFilter(IBasarRouter router, IBasarService basarService)
     {
         _router = router ?? throw new ArgumentNullException(nameof(router));
         _basarService = basarService ?? throw new ArgumentNullException(nameof(basarService));
@@ -32,13 +32,13 @@ public sealed class BasarIdFilter
             activeBasar = await _basarService.GetAsync(activeBasarId.Value);
         }
 
-        if (context.ActionDescriptor.Parameters.Any(p => p.Name == _basarIdArgumentName))
+        if (context.ActionDescriptor.Parameters.Any(p => p.Name == BasarIdArgumentName))
         {
             if (activeBasar is not null)
             {
-                if (!context.ActionArguments.ContainsKey(_basarIdArgumentName))
+                if (!context.ActionArguments.ContainsKey(BasarIdArgumentName))
                 {
-                    context.ActionArguments[_basarIdArgumentName] = activeBasar.Id;
+                    context.ActionArguments[BasarIdArgumentName] = activeBasar.Id;
                 }
             }
             else
@@ -48,7 +48,7 @@ public sealed class BasarIdFilter
             }
         }
 
-        foreach (IHasBasarId activeBasarModel in context.ActionArguments.Values.OfType<IHasBasarId>())
+        foreach (IHasBasarId activeBasarModel in context.ActionArguments.Values.OfType<IHasBasarId>())  
         {
             if (activeBasar is not null)
             {
@@ -79,7 +79,7 @@ public sealed class BasarIdFilter
             await context.Result.ExecuteResultAsync(context);
         }
 
-        context.Result = new RedirectResult(_router.Basar.ToList());
+        context.Result = new RedirectResult(_router.ToList());
         return;
     }
 }
