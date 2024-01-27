@@ -21,10 +21,10 @@ public sealed class CartModelValidator
 {
     private readonly IProductService _productService;
     private readonly ITransactionService _transactionService;
-    private readonly IVeloRouter _router;
+    private readonly ITransactionRouter _router;
     private readonly IStringLocalizer<SharedResources> _localizer;
 
-    public CartModelValidator(IProductService productService, ITransactionService transactionService, IVeloRouter router, IStringLocalizer<SharedResources> localizer)
+    public CartModelValidator(IProductService productService, ITransactionService transactionService, ITransactionRouter router, IStringLocalizer<SharedResources> localizer)
     {
         _productService = productService ?? throw new ArgumentNullException(nameof(productService));
         _transactionService = transactionService ?? throw new ArgumentNullException(nameof(transactionService));
@@ -65,7 +65,7 @@ public sealed class CartModelValidator
         else if (product.StorageState == StorageState.Sold)
         {
             TransactionEntity sale = await _transactionService.GetLatestAsync(context.InstanceToValidate.BasarId, product.Id);
-            string saleUrl = _router.Transaction.ToDetails(sale.Id);
+            string saleUrl = _router.ToDetails(sale.Id);
             context.AddFailure(_localizer[VeloTexts.ProductSold, saleUrl, sale.Number]);
         }
         else if (product.StorageState == StorageState.NotAccepted)

@@ -1,14 +1,15 @@
 ﻿using BraunauMobil.VeloBasar.BusinessLogic;
 using BraunauMobil.VeloBasar.Routing;
+using BraunauMobil.VeloBasar.Tests;
 using FluentValidation.Results;
 
-namespace BraunauMobil.VeloBasar.Tests.Models;
+namespace BraunauMobil.VeloBasar.Tests.Models.CartModelTests;
 
 public class CartModelValidatorTests
 {
     private readonly IProductService _productService = X.StrictFake<IProductService>();
     private readonly ITransactionService _transactionService = X.StrictFake<ITransactionService>();
-    private readonly IVeloRouter _router = X.StrictFake<IVeloRouter>();
+    private readonly ITransactionRouter _router = X.StrictFake<ITransactionRouter>();
     private readonly CartModelValidator _sut;
 
     public CartModelValidatorTests()
@@ -161,10 +162,7 @@ public class CartModelValidatorTests
         VeloFixture fixture = new();
         TransactionEntity transaction = fixture.Create<TransactionEntity>();
         A.CallTo(() => _transactionService.GetLatestAsync(cart.BasarId, product.Id)).Returns(transaction);
-
-        ITransactionRouter transactionRouter = X.StrictFake<ITransactionRouter>();
-        A.CallTo(() => _router.Transaction).Returns(transactionRouter);
-        A.CallTo(() => transactionRouter.ToDetails(transaction.Id)).Returns(url);
+        A.CallTo(() => _router.ToDetails(transaction.Id)).Returns(url);
 
         //  Act
         ValidationResult result = await _sut.ValidateAsync(cart);
@@ -178,8 +176,7 @@ public class CartModelValidatorTests
 
         A.CallTo(() => _productService.FindAsync(product.Id)).MustHaveHappenedOnceExactly();
         A.CallTo(() => _transactionService.GetLatestAsync(cart.BasarId, product.Id)).MustHaveHappenedOnceExactly();
-        A.CallTo(() => _router.Transaction).MustHaveHappenedOnceExactly();
-        A.CallTo(() => _router.Transaction.ToDetails(transaction.Id)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => _router.ToDetails(transaction.Id)).MustHaveHappenedOnceExactly();
     }
 
     [Theory]

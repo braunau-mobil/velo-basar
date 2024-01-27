@@ -18,8 +18,11 @@ public class BasarEntityValidatorTest
         ValidationResult result = _sut.Validate(basar);
 
         //  Assert
-        result.IsValid.Should().BeFalse();
-        result.Errors.Should().ContainSingle(e => e.PropertyName == nameof(basar.Name));
+        using (new AssertionScope())
+        {
+            result.IsValid.Should().BeFalse();
+            result.Errors.Should().ContainSingle(e => e.PropertyName == nameof(basar.Name));
+        }
     }
 
     [Theory]
@@ -35,8 +38,11 @@ public class BasarEntityValidatorTest
         ValidationResult result = _sut.Validate(basar);
 
         //  Assert
-        result.IsValid.Should().BeFalse();
-        result.Errors.Should().ContainSingle(e => e.PropertyName == nameof(basar.ProductCommissionPercentage));
+        using (new AssertionScope())
+        {
+            result.IsValid.Should().BeFalse();
+            result.Errors.Should().ContainSingle(e => e.PropertyName == nameof(basar.ProductCommissionPercentage));
+        }
     }
 
     [Theory]
@@ -50,7 +56,10 @@ public class BasarEntityValidatorTest
         ValidationResult result = _sut.Validate(basar);
 
         //  Assert
-        result.IsValid.Should().BeTrue();
-        result.Errors.Should().BeEmpty();
+        using (new AssertionScope())
+        {
+            result.IsValid.Should().BeTrue();
+            result.Errors.Should().BeEmpty();
+        }
     }
 }

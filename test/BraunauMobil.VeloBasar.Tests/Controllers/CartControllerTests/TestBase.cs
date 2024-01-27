@@ -10,7 +10,7 @@ public class TestBase
 {
     public TestBase()
     {
-        Validator = new(ProductService, TransactionService, Router, Localizer);
+        Validator = new(ProductService, TransactionService, TransactionRouter, Localizer);
 
         A.CallTo(() => Router.Cancel).Returns(CancelRouter);
         A.CallTo(() => Router.Transaction).Returns(TransactionRouter);
