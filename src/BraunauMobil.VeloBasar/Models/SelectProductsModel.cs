@@ -11,7 +11,7 @@ public sealed class SelectProductsModel
 
     [SuppressMessage("Design", "CA1002:Do not expose generic lists")]
     [SuppressMessage("Usage", "CA2227:Collection properties should be read only")]
-    public List<SelectModel<ProductEntity>> Products { get; set; } = new List<SelectModel<ProductEntity>>();
+    public List<SelectModel<ProductEntity>> Products { get; set; } = [];
 
     public void SetProducts(IReadOnlyList<ProductEntity> products)
     {
