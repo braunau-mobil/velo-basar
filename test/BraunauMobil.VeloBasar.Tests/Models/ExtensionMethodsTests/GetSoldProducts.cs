@@ -15,9 +15,8 @@ public class GetSoldProducts
         result.Should().BeEmpty();
     }
 
-    [Theory]
-    [VeloAutoData]
-    public void ShouldReturnSettledProductsThatAreSoldOrLost(ProductEntity soldProduct1, ProductEntity soldProduct2)
+    [Fact]
+    public void ShouldReturnSettledProductsThatAreSoldOrLost()
     {
         //  Arrange
         VeloFixture fixture = new();
