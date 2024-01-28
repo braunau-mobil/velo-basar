@@ -3,7 +3,7 @@
 public class Defaults
 {
     [Fact]
-    public void CheckDefaultValues()
+    public void CheckDefaults()
     {
         //  Arrange
 

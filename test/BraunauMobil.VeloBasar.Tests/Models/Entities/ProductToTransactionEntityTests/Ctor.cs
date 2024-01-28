@@ -2,6 +2,24 @@
 
 public class Ctor
 {
+    [Fact]
+    public void CheckDefaults()
+    {
+        //  Arrange
+
+        //  Act
+        ProductToTransactionEntity sut = new();
+
+        //  Assert
+        using (new AssertionScope())
+        {
+            sut.Product.Should().BeNull();
+            sut.ProductId.Should().Be(0);
+            sut.Transaction.Should().BeNull();
+            sut.TransactionId.Should().Be(0);
+        }
+    }
+
     [Theory]
     [VeloAutoData]
     public void ShouldSetStateOfProduct(TransactionEntity transaction, ProductEntity product, int transactionId, int productId)

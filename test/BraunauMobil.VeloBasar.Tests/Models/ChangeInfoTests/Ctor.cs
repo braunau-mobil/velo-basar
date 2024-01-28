@@ -2,6 +2,24 @@
 
 public class Ctor
 {
+    [Fact]
+    public void CheckDefaults()
+    {
+        //  Arrange
+
+        //  Act
+        ChangeInfo sut = new();
+
+        //  Assert
+        using (new AssertionScope())
+        {
+            sut.Amount.Should().Be(0);
+            sut.Denomination.Should().BeEmpty();
+            sut.HasDenomination.Should().BeFalse();
+            sut.IsValid.Should().BeFalse();
+        }
+    }
+
     [Theory]
     [InlineData(87.99, 
         0, 0, 0, 

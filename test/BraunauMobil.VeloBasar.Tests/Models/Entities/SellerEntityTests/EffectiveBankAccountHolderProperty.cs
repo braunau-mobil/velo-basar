@@ -1,4 +1,4 @@
-﻿namespace BraunauMobil.VeloBasar.Tests.Models.Entities.SellerEntitiyTests;
+﻿namespace BraunauMobil.VeloBasar.Tests.Models.Entities.SellerEntityTests;
 
 public class EffectiveBankAccountHolderProperty
 {
