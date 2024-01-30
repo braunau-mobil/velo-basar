@@ -7,6 +7,8 @@ namespace BraunauMobil.VeloBasar.Rendering;
 public interface IVeloHtmlFactory
     : IBootstrapHtmlFactory
 {
+    TagBuilder Alert(MessageType type, IHtmlContent content);
+
     TagBuilder Alert(MessageType type, string text);
 
     TagBuilder Alert(MessageType type, string title, string text);

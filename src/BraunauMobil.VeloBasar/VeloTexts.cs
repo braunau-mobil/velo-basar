@@ -214,6 +214,7 @@ public static class VeloTexts
     public const string ProductNotAccepted = $"{Prefix}{nameof(ProductNotAccepted)}";
     public const string ProductNotFound = $"{Prefix}{nameof(ProductNotFound)}";
     public const string Products = $"{Prefix}{nameof(Products)}";
+    public const string ProductsValue = $"{Prefix}{nameof(ProductsValue)}";
     public const string ProductSold = $"{Prefix}{nameof(ProductSold)}";
     public const string ProductType = $"{Prefix}{nameof(ProductType)}";
     public const string ProductTypeList = $"{Prefix}{nameof(ProductTypeList)}";

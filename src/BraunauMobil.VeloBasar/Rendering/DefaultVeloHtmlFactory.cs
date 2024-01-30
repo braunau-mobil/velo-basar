@@ -15,7 +15,19 @@ public sealed class DefaultVeloHtmlFactory
     public DefaultVeloHtmlFactory(IVeloRouter router, IStringLocalizer<SharedResources> localizer)
         : base(localizer)
     {
-        _router = router ?? throw new ArgumentNullException(nameof(router));}
+        _router = router ?? throw new ArgumentNullException(nameof(router));
+    }
+
+    public TagBuilder Alert(MessageType type, IHtmlContent content)
+    {
+        TagBuilder div = Div();
+        div.AddCssClass("alert");
+        div.AddCssClass(type.ToCss());
+        div.Attributes.Add("role", "alert");
+        div.InnerHtml.SetHtmlContent(content);
+        return div;
+    }
+
 
     public TagBuilder Alert(MessageType type, string text)
     {
@@ -225,7 +237,7 @@ public sealed class DefaultVeloHtmlFactory
 
         if (showProducts)
         {
-            builder.Column(c => c.AutoWidth().Title(Localizer[VeloTexts.Sum]).Align(ColumnAlign.Right).ForPrice(item => item.GetProductsSum()));
+            builder.Column(c => c.AutoWidth().Title(Localizer[VeloTexts.ProductsValue]).Align(ColumnAlign.Right).ForPrice(item => item.GetProductsValue()));
         }
 
         builder
@@ -233,15 +245,5 @@ public sealed class DefaultVeloHtmlFactory
             .Column(c => c.AutoWidth().ForLink(item => _router.Transaction.ToDetails(item.Id), Localizer[VeloTexts.Details]));
 
         return builder;
-    }
-
-    private TagBuilder Alert(MessageType type, IHtmlContent content)
-    {
-        TagBuilder div = Div();
-        div.AddCssClass("alert");
-        div.AddCssClass(type.ToCss());
-        div.Attributes.Add("role", "alert");
-        div.InnerHtml.SetHtmlContent(content);
-        return div;
     }
 }

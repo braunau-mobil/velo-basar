@@ -59,7 +59,7 @@ public class TransactionsTable
             column => column.Title.Should().BeHtml("VeloBasar_TimeStamp"),
             column => column.Title.Should().BeHtml("VeloBasar_ProductCount"),
             column => column.Title.Should().BeHtml("VeloBasar_Notes"),
-            column => column.Title.Should().BeHtml("VeloBasar_Sum"),
+            column => column.Title.Should().BeHtml("VeloBasar_ProductsValue"),
             column => column.Title.Should().BeHtml(""),
             column => column.Title.Should().BeHtml("")
         );
@@ -81,7 +81,7 @@ public class TransactionsTable
             column => column.Title.Should().BeHtml("VeloBasar_Type"),
             column => column.Title.Should().BeHtml("VeloBasar_ProductCount"),
             column => column.Title.Should().BeHtml("VeloBasar_Notes"),
-            column => column.Title.Should().BeHtml("VeloBasar_Sum"),
+            column => column.Title.Should().BeHtml("VeloBasar_ProductsValue"),
             column => column.Title.Should().BeHtml(""),
             column => column.Title.Should().BeHtml("")
         );

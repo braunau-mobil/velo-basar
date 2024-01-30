@@ -35,9 +35,9 @@ public sealed class ChangeInfo
             case TransactionType.Unlock:
                 return new ChangeInfo();
             case TransactionType.Cancellation:
-                return new ChangeInfo(transaction.GetProductsSum());
+                return new ChangeInfo(transaction.GetProductsValue());
             case TransactionType.Settlement:
-                return new ChangeInfo(transaction.GetSoldTotal());
+                return new ChangeInfo(transaction.GetPayoutAmount());
             case TransactionType.Sale:
                 {
                     decimal sum = transaction.GetSoldProductsSum();

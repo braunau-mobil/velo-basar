@@ -24,7 +24,7 @@ public class CreateFor
 
     [Theory]
     [VeloAutoData]
-    public void Cancellation_ShouldReturnProductsSum(TransactionEntity transaction, ProductEntity product)
+    public void Cancellation_ShouldReturnProductsValue(TransactionEntity transaction, ProductEntity product)
     {
         //  Arrange
         transaction.Type = TransactionType.Cancellation;
@@ -37,7 +37,7 @@ public class CreateFor
         //  Assert
         using (new AssertionScope())
         {
-            changeInfo.Amount.Should().Be(transaction.GetProductsSum());
+            changeInfo.Amount.Should().Be(transaction.GetProductsValue());
             changeInfo.Denomination.Should().NotBeEmpty();
             changeInfo.HasDenomination.Should().BeTrue();
             changeInfo.IsValid.Should().BeTrue();
@@ -46,7 +46,7 @@ public class CreateFor
 
     [Theory]
     [VeloAutoData]
-    public void Settlement_ShouldReturnSoldTotal(TransactionEntity transaction, ProductEntity product1, ProductEntity product2)
+    public void Settlement_ShouldReturnPayoutAmount(TransactionEntity transaction, ProductEntity product1, ProductEntity product2)
     {
         //  Arrange
         transaction.Basar.ProductCommission = 0.1m;
@@ -62,7 +62,7 @@ public class CreateFor
         //  Assert
         using (new AssertionScope())
         {
-            changeInfo.Amount.Should().Be(transaction.GetSoldTotal());
+            changeInfo.Amount.Should().Be(transaction.GetPayoutAmount());
             changeInfo.Denomination.Should().NotBeEmpty();
             changeInfo.HasDenomination.Should().BeTrue();
             changeInfo.IsValid.Should().BeTrue();

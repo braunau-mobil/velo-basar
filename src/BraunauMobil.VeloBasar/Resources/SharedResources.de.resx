@@ -963,4 +963,7 @@
   <data name="VeloBasar_PermissionTimestampGreaterOrEqualThan" xml:space="preserve">
     <value>Erlaubnis-Zeitpunkt größer oder gleich:</value>
   </data>
+  <data name="VeloBasar_ProductsValue" xml:space="preserve">
+    <value>Artikelwert</value>
+  </data>
 </root>

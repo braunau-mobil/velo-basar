@@ -40,7 +40,8 @@ public sealed class TransactionEntity
 
     public bool CanCancel
     {
-        get => Type == TransactionType.Sale;
+        get => Type == TransactionType.Sale
+            && Products.GetProducts().Any(product => product.IsAllowed(TransactionType.Cancellation));
     }
 
     public bool CanHasDocument
@@ -73,21 +74,18 @@ public sealed class TransactionEntity
         get => Type == TransactionType.Acceptance;
     }
 
-    public decimal GetPayoutTotal()
+    public decimal GetPayoutAmountInclCommission()
         => Products.GetPayoutProducts().SumPrice();
 
-    public decimal GetPayoutCommissionTotal()
+    public decimal GetPayoutCommissionAmount()
         => Products.GetPayoutProducts().Sum(p => p.GetCommissionAmount(Basar));
 
-    public decimal GetPayoutTotalWithoutCommission()
-        => GetPayoutTotal() - GetPayoutCommissionTotal();
-
-    public decimal GetProductsSum()
-        => Products.Select(pt => pt.Product).SumPrice();
+    public decimal GetPayoutAmount()
+        => GetPayoutAmountInclCommission() - GetPayoutCommissionAmount();
 
     public decimal GetSoldProductsSum()
         => Products.GetSoldProducts().SumPrice();
 
-    public decimal GetSoldTotal()
-        => Products.GetSoldProducts().Sum(p => p.GetCommissionedPrice(Basar));
+    public decimal GetProductsValue()
+        => Products.GetProducts().SumPrice();
 }

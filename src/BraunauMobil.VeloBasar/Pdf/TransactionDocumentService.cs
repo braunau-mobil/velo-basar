@@ -153,7 +153,7 @@ public sealed class TransactionDocumentService
 
             if (products.Any(p => p.ShouldBePayedOut()))
             {
-                AddCommissionSummary(doc, settlement.GetPayoutTotal(), settlement.GetPayoutCommissionTotal(), settlement.GetPayoutTotalWithoutCommission(), settlement.Basar.ProductCommission);
+                AddCommissionSummary(doc, settlement.GetPayoutAmountInclCommission(), settlement.GetPayoutCommissionAmount(), settlement.GetPayoutAmount(), settlement.Basar.ProductCommission);
                 doc.Add(_pdf.GetSpacer(10));
             }
 
@@ -176,7 +176,7 @@ public sealed class TransactionDocumentService
 
             if (settlement.NeedsBankingQrCodeOnDocument)
             {
-                decimal amount = settlement.GetPayoutTotalWithoutCommission();
+                decimal amount = settlement.GetPayoutAmount();
                 string text = string.Format(CultureInfo.InvariantCulture, _settings.Settlement.BankTransactionTextFormat, settlement.Basar.Name);
                 string epQrCode = GetEpQrCode(settlement.Seller.EffectiveBankAccountHolder, settlement.Seller.IBAN!, amount, text);
 

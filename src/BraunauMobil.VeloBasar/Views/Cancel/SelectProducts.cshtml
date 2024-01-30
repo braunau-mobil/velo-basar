@@ -6,7 +6,10 @@
 
 <form method="post">
     <div class="m-2">
-        @VeloHtml.NonFieldValidationResults()
+        @if (!ViewContext.ModelState.IsValid)
+        {
+            @VeloHtml.Alert(MessageType.Danger, @VeloHtml.NonFieldValidationResults());            
+        }
     </div>
     @VeloHtml.HiddenInput(nameof(Model.TransactionId), Model.TransactionId)
 
