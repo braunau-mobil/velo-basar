@@ -20,7 +20,7 @@ public sealed class TransactionSuccessModel
 
     public TransactionEntity Entity { get; }
 
-    public decimal  AmountGiven { get; init; }
+    public decimal AmountGiven { get; init; }
 
     public int DocumentTransactionId { get; init; }
 
