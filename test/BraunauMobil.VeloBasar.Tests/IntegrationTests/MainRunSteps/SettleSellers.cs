@@ -30,7 +30,6 @@ public class SettleSellers
             transaction.Change.Should().BeNull();
             transaction.ChildTransactions.Should().BeEmpty();
             transaction.DocumentId.Should().BeNull();
-            transaction.HasDocument.Should().BeFalse();
             transaction.NeedsBankingQrCodeOnDocument.Should().BeTrue();
             transaction.NeedsStatusPush.Should().BeTrue();
             transaction.Notes.Should().BeNull();
@@ -39,6 +38,7 @@ public class SettleSellers
             transaction.TimeStamp.Should().Be(Context.Clock.GetCurrentDateTime());
             transaction.SellerId.Should().Be(V.Sellers.Frodo.Id);
             transaction.Type.Should().Be(TransactionType.Settlement);
+            transaction.UpdateDocumentOnDemand.Should().BeFalse();
 
             transaction.Products.Should().HaveCount(2);
             transaction.Products.Should().Contain(p => p.ProductId == V.Products.FirstBasar.Frodo.Stahlross.Id);

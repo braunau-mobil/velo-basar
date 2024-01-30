@@ -50,12 +50,6 @@ public sealed class TransactionEntity
             || Type == TransactionType.Settlement;
     }
 
-    public bool HasDocument
-    {
-        get => DocumentId.HasValue
-            && Type != TransactionType.Acceptance;
-    }
-
     public bool NeedsStatusPush
     {
         get => Type == TransactionType.Acceptance
@@ -72,6 +66,11 @@ public sealed class TransactionEntity
                 && !string.IsNullOrEmpty(Seller.IBAN)
                 && Products.Any(pt => pt.Product.StorageState == StorageState.Sold);
         }
+    }
+
+    public bool UpdateDocumentOnDemand
+    {
+        get => Type == TransactionType.Acceptance;
     }
 
     public decimal GetPayoutTotal()

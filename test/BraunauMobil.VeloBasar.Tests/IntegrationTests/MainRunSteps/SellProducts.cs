@@ -68,7 +68,6 @@ public class SellProducts
             transaction.Change.Should().BeNull();
             transaction.ChildTransactions.Should().BeEmpty();
             transaction.DocumentId.Should().BeNull();
-            transaction.HasDocument.Should().BeFalse();
             transaction.NeedsBankingQrCodeOnDocument.Should().BeFalse();
             transaction.NeedsStatusPush.Should().BeTrue();
             transaction.Notes.Should().BeNull();
@@ -77,6 +76,7 @@ public class SellProducts
             transaction.TimeStamp.Should().Be(Context.Clock.GetCurrentDateTime());
             transaction.SellerId.Should().BeNull();
             transaction.Type.Should().Be(TransactionType.Sale);
+            transaction.UpdateDocumentOnDemand.Should().BeFalse();
 
             transaction.Products.Should().HaveCount(1);
             transaction.Products.Should().Contain(p => p.ProductId == V.Products.FirstBasar.Frodo.Stahlross.Id);

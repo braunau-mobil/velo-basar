@@ -1,14 +1,14 @@
 ﻿namespace BraunauMobil.VeloBasar.Tests.Models.Entities.TransactionEntityTests;
 
-public class CanHasDocument
+public class CanCancel
 {
     [Theory]
-    [VeloInlineAutoData(TransactionType.Acceptance, true)]
+    [VeloInlineAutoData(TransactionType.Acceptance, false)]
     [VeloInlineAutoData(TransactionType.Cancellation, false)]
     [VeloInlineAutoData(TransactionType.Lock, false)]
     [VeloInlineAutoData(TransactionType.Sale, true)]
     [VeloInlineAutoData(TransactionType.SetLost, false)]
-    [VeloInlineAutoData(TransactionType.Settlement, true)]
+    [VeloInlineAutoData(TransactionType.Settlement, false)]
     [VeloInlineAutoData(TransactionType.Unlock, false)]
     public void ShouldBe(TransactionType type, bool expectedResult, TransactionEntity sut)
     {
@@ -16,7 +16,7 @@ public class CanHasDocument
         sut.Type = type;
 
         //  Act
-        bool result = sut.CanHasDocument;
+        bool result = sut.CanCancel;
 
         //  Assert
         result.Should().Be(expectedResult);

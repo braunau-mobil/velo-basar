@@ -56,7 +56,7 @@ public sealed class TransactionService
         if (sale.DocumentId.HasValue)
         {
             fileData = await _db.Files.FirstByIdAsync(sale.DocumentId.Value);
-            await UpdateFileDataAsync(fileData, sale);
+            await RegenerateDocument(fileData, sale);
         }
         else
         {
@@ -65,7 +65,7 @@ public sealed class TransactionService
                 ContentType = FileDataEntity.PdfContentType
             };
             _db.Files.Add(fileData);
-            await UpdateFileDataAsync(fileData, sale);
+            await RegenerateDocument(fileData, sale);
 
             sale.DocumentId = fileData.Id;
             await _db.SaveChangesAsync();
@@ -120,31 +120,26 @@ public sealed class TransactionService
             .IncludeAll()
             .FirstByIdAsync(id);
 
-        FileDataEntity? fileData = null;
+        FileDataEntity fileData;
         if (transaction.DocumentId.HasValue)
         {
             fileData = await _db.Files.FirstByIdAsync(transaction.DocumentId.Value);
-            if (transaction.HasDocument)
+            if (transaction.UpdateDocumentOnDemand)
             {
-                return fileData;
+                await RegenerateDocument(fileData, transaction);
             }
         }
-
-        if (fileData == null)
+        else
         {
             fileData = new FileDataEntity
             {
                 ContentType = FileDataEntity.PdfContentType
             };
             _db.Files.Add(fileData);
-            await UpdateFileDataAsync(fileData, transaction);
+            await RegenerateDocument(fileData, transaction);
 
             transaction.DocumentId = fileData.Id;
             await _db.SaveChangesAsync();
-        }
-        else
-        {
-            await UpdateFileDataAsync(fileData, transaction);
         }
 
         return fileData;
@@ -296,7 +291,7 @@ public sealed class TransactionService
     private string GetTransactionFileName(DateTime timeStamp, TransactionType type, int id, string suffix = "")
         => $"{timeStamp:s}_{_localizer[VeloTexts.Singular(type)]}-{id}{suffix}.pdf";
 
-    private async Task UpdateFileDataAsync(FileDataEntity toUpdate, TransactionEntity transaction)
+    private async Task RegenerateDocument(FileDataEntity toUpdate, TransactionEntity transaction)
     {
         toUpdate.FileName = GetTransactionFileName(transaction.TimeStamp, transaction.Type, transaction.Id);
         toUpdate.Data = await _transactionDocumentService.CreateAsync(transaction);
