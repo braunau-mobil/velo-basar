@@ -1,6 +1,5 @@
 ﻿using BraunauMobil.VeloBasar.Data;
 using BraunauMobil.VeloBasar.Parameters;
-using BraunauMobil.VeloBasar.Pdf;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using Xan.AspNetCore.EntityFrameworkCore;
@@ -15,17 +14,17 @@ public sealed class SellerService
 {
     private readonly VeloDbContext _db;
     private readonly ITransactionService _transactionService;
-    private readonly IProductLabelService _productLabelService;
+    private readonly IDocumentService _documentService;
     private readonly IStatusPushService _statusPushService;
     private readonly IClock _clock;
     private readonly ITokenProvider _tokenProvider;
 
-    public SellerService(ITransactionService transactionService, IProductLabelService productLabelService, IStatusPushService statusPushService, ITokenProvider tokenProvider, IClock clock, VeloDbContext db)
+    public SellerService(ITransactionService transactionService, IDocumentService documentService, IStatusPushService statusPushService, ITokenProvider tokenProvider, IClock clock, VeloDbContext db)
         : base(db)
     {
         _db = db ?? throw new ArgumentNullException(nameof(db));
         _transactionService = transactionService ?? throw new ArgumentNullException(nameof(transactionService));
-        _productLabelService = productLabelService ?? throw new ArgumentNullException(nameof(productLabelService));
+        _documentService = documentService ?? throw new ArgumentNullException(nameof(documentService));
         _statusPushService = statusPushService ?? throw new ArgumentNullException(nameof(statusPushService));
         _clock = clock ?? throw new ArgumentNullException(nameof(clock));
         _tokenProvider = tokenProvider ?? throw new ArgumentNullException(nameof(tokenProvider));
@@ -100,7 +99,7 @@ public sealed class SellerService
             .ToArrayAsync();
 
         string fileName = $"Seller-{sellerId}_ProductLabels.pdf";
-        byte[] data = await _productLabelService.CreateLabelsAsync(products);
+        byte[] data = await _documentService.CreateLabelsAsync(products);
         return FileDataEntity.Pdf(fileName, data);
     }
 

@@ -1,5 +1,4 @@
 ﻿using BraunauMobil.VeloBasar.BusinessLogic;
-using BraunauMobil.VeloBasar.Pdf;
 
 namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.SellerServiceTests;
 
@@ -9,12 +8,12 @@ public class TestBase<TDbFixture>
 {
     public TestBase()
     {
-        Sut = new SellerService(TransactionService, ProductLabelService, StatusPushService, TokenProvider, Clock, Db);
+        Sut = new SellerService(TransactionService, DocumentService, StatusPushService, TokenProvider, Clock, Db);
     }
     
+    public IDocumentService DocumentService { get; } = X.StrictFake<IDocumentService>();
+    
     public SellerService Sut { get; }
-
-    public IProductLabelService ProductLabelService { get; } = X.StrictFake<IProductLabelService>();
 
     public IStatusPushService StatusPushService { get; } = X.StrictFake<IStatusPushService>();
 

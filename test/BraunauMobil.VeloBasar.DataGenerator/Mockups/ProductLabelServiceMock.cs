@@ -1,31 +1,29 @@
-﻿using BraunauMobil.VeloBasar.Models.Entities;
+﻿using BraunauMobil.VeloBasar.Models.Documents;
 using BraunauMobil.VeloBasar.Pdf;
-using System.Globalization;
 using System.Text;
 
 namespace BraunauMobil.VeloBasar.DataGenerator.Mockups;
 
 public class ProductLabelServiceMock
-    : IProductLabelService
+    : IProductLabelGenerator
 {
-    public async Task<byte[]> CreateLabelAsync(ProductEntity product)
+    public async Task<byte[]> CreateLabelAsync(ProductLabelDocumentModel model)
     {
-        ArgumentNullException.ThrowIfNull(product);
+        ArgumentNullException.ThrowIfNull(model);
 
-        string idString = product.Id.ToString(CultureInfo.InvariantCulture);
-        byte[] bytes = Encoding.UTF8.GetBytes(idString);
+        byte[] bytes = Encoding.UTF8.GetBytes(model.Title);
 
         return await Task.FromResult(bytes);
     }
 
-    public async Task<byte[]> CreateLabelsAsync(IEnumerable<ProductEntity> products)
+    public async Task<byte[]> CreateLabelsAsync(IEnumerable<ProductLabelDocumentModel> models)
     {
-        ArgumentNullException.ThrowIfNull(products);
+        ArgumentNullException.ThrowIfNull(models);
 
         StringBuilder sb = new();
-        foreach (ProductEntity product in products)
+        foreach (ProductLabelDocumentModel model in models)
         {
-            sb.Append(product.Id);
+            sb.Append(model.Title);
         }
         byte[] bytes = Encoding.UTF8.GetBytes(sb.ToString());
         return await Task.FromResult(bytes);

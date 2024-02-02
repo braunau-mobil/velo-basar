@@ -11,13 +11,13 @@ public sealed class ProductService
     : IProductService
 {
     private readonly VeloDbContext _db;
-    private readonly IProductLabelService _productLabelService;
+    private readonly IDocumentService _documentService;
     private readonly ITransactionService _transactionService;
 
-    public ProductService(VeloDbContext db, IProductLabelService productLabelService, ITransactionService transactionService)
+    public ProductService(VeloDbContext db, IDocumentService documentService, ITransactionService transactionService)
     {
         _db = db ?? throw new ArgumentNullException(nameof(db));
-        _productLabelService = productLabelService ?? throw new ArgumentNullException(nameof(productLabelService));
+        _documentService = documentService ?? throw new ArgumentNullException(nameof(documentService));
         _transactionService = transactionService ?? throw new ArgumentNullException(nameof(transactionService));
     }
 
@@ -64,7 +64,7 @@ public sealed class ProductService
             .FirstByIdAsync(productId);
 
         string fileName = $"Product-{product.Id}_Label.pdf";
-        byte[] data = await _productLabelService.CreateLabelAsync(product);
+        byte[] data = await _documentService.CreateLabelAsync(product);
         return FileDataEntity.Pdf(fileName, data);
     }
 

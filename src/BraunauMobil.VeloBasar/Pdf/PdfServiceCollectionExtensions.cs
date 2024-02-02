@@ -10,8 +10,8 @@ public static class PdfServiceCollectionExtensions
 
         return sc
             .AddSingleton<PdfGenerator>()
-            .AddScoped<IProductLabelService, ProductLabelService>()
-            .AddScoped<ITransactionDocumentService, TransactionDocumentService>()
+            .AddScoped<IProductLabelGenerator, ItextProductLabelGenerator>()
+            .AddScoped<ITransactionDocumentGenerator, ItextTransactionDocumentGenerator>()
             ;
     }
 }

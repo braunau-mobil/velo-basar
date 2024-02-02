@@ -24,7 +24,7 @@ public class GetLabelAsync
         product.Id = 1;
         Db.Products.Add(product);
         await Db.SaveChangesAsync();
-        A.CallTo(() => ProductLabelService.CreateLabelAsync(product)).Returns(labelData);
+        A.CallTo(() => DocumentService.CreateLabelAsync(product)).Returns(labelData);
 
         //  Act
         FileDataEntity fileData = await Sut.GetLabelAsync(product.Id);
@@ -36,6 +36,6 @@ public class GetLabelAsync
             fileData.Data.Should().BeEquivalentTo(labelData);
             fileData.FileName.Should().Be("Product-1_Label.pdf");
         }
-        A.CallTo(() => ProductLabelService.CreateLabelAsync(product)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => DocumentService.CreateLabelAsync(product)).MustHaveHappenedOnceExactly();
     }
 }

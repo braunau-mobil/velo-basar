@@ -17,8 +17,8 @@ public class PdfServiceCollectionExtensionsTests
         //  Assert
         services.Should().SatisfyRespectively(
             X.CreateInspector<PdfGenerator, PdfGenerator>(ServiceLifetime.Singleton),
-            X.CreateInspector<IProductLabelService, ProductLabelService>(ServiceLifetime.Scoped),
-            X.CreateInspector<ITransactionDocumentService, TransactionDocumentService>(ServiceLifetime.Scoped)
+            X.CreateInspector<IProductLabelGenerator, ItextProductLabelGenerator>(ServiceLifetime.Scoped),
+            X.CreateInspector<ITransactionDocumentGenerator, ItextTransactionDocumentGenerator>(ServiceLifetime.Scoped)
             );
     }
 }

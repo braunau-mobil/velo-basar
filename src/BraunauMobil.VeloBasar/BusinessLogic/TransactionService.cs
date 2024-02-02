@@ -1,5 +1,4 @@
 ﻿using BraunauMobil.VeloBasar.Data;
-using BraunauMobil.VeloBasar.Pdf;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using System.Linq.Expressions;
@@ -13,20 +12,18 @@ public sealed class TransactionService
     : ITransactionService
 {
     private readonly INumberService _numberService;
-    private readonly ITransactionDocumentService _transactionDocumentService;
     private readonly IStatusPushService _statusPushService;
     private readonly VeloDbContext _db;
-    private readonly IProductLabelService _productLabelService;
+    private readonly IDocumentService _documentService;
     private readonly IClock _clock;
     private readonly IStringLocalizer<SharedResources> _localizer;
 
-    public TransactionService(INumberService numberService, ITransactionDocumentService transactionDocumentService, IStatusPushService statusPushService, VeloDbContext db, IProductLabelService productLabelService, IClock clock, IStringLocalizer<SharedResources> localizer)
+    public TransactionService(INumberService numberService, IStatusPushService statusPushService, VeloDbContext db, IDocumentService documentService, IClock clock, IStringLocalizer<SharedResources> localizer)
     {
         _numberService = numberService ?? throw new ArgumentNullException(nameof(numberService));
-        _transactionDocumentService = transactionDocumentService ?? throw new ArgumentNullException(nameof(transactionDocumentService));
         _statusPushService = statusPushService ?? throw new ArgumentNullException(nameof(statusPushService));
         _db = db ?? throw new ArgumentNullException(nameof(db));
-        _productLabelService = productLabelService ?? throw new ArgumentNullException(nameof(productLabelService));
+        _documentService = documentService ?? throw new ArgumentNullException(nameof(documentService));
         _clock = clock ?? throw new ArgumentNullException(nameof(clock));
         _localizer = localizer ?? throw new ArgumentNullException(nameof(localizer));
     }
@@ -98,7 +95,7 @@ public sealed class TransactionService
             .ToArrayAsync();
 
         string fileName = GetTransactionFileName(timeStamp, TransactionType.Acceptance, id, $"_{_localizer[VeloTexts.Labels]}");
-        byte[] data = await _productLabelService.CreateLabelsAsync(products);
+        byte[] data = await _documentService.CreateLabelsAsync(products);
         return FileDataEntity.Pdf(fileName, data);
     }
 
@@ -294,7 +291,7 @@ public sealed class TransactionService
     private async Task RegenerateDocument(FileDataEntity toUpdate, TransactionEntity transaction)
     {
         toUpdate.FileName = GetTransactionFileName(transaction.TimeStamp, transaction.Type, transaction.Id);
-        toUpdate.Data = await _transactionDocumentService.CreateAsync(transaction);
+        toUpdate.Data = await _documentService.CreateTransactionDocumentAsync(transaction);
         await _db.SaveChangesAsync();
     }
 }

@@ -1,5 +1,4 @@
 ﻿using BraunauMobil.VeloBasar.BusinessLogic;
-using BraunauMobil.VeloBasar.Crud;
 using BraunauMobil.VeloBasar.Data;
 using BraunauMobil.VeloBasar.DataGenerator.Mockups;
 using BraunauMobil.VeloBasar.Models;
@@ -62,8 +61,8 @@ public class Program
             .AddSingleton<IClock, ClockMock>()
             .AddSingleton<IStatusPushService, StatusPushServiceMock>()
             .AddSingleton(CreateActualLocalizer())
-            .AddSingleton<ITransactionDocumentService, TransactionDocumentServiceMock>()
-            .AddSingleton<IProductLabelService, ProductLabelServiceMock>()
+            .AddSingleton<ITransactionDocumentGenerator, TransactionDocumentServiceMock>()
+            .AddSingleton<IProductLabelGenerator, ProductLabelServiceMock>()
             .AddSingleton<IColorProvider, ColorProviderMock>()
         ;
 

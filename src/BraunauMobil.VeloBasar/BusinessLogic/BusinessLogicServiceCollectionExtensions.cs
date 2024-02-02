@@ -19,6 +19,8 @@ public static class BusinessLogicServiceCollectionExtensions
             .AddScoped<IColorProvider, ColorProvider>()
             .AddScoped<ICountryService, CountryService>()
             .AddScoped<IDataGeneratorService, DataGeneratorService>()
+            .AddScoped<IDocumentModelFactory, DocumentModelFactory>()
+            .AddScoped<IDocumentService, DocumentService>()
             .AddScoped<INumberService, NumberService>()
             .AddScoped<IProductService, ProductService>()
             .AddScoped<IProductTypeService, ProductTypeService>()
@@ -26,9 +28,8 @@ public static class BusinessLogicServiceCollectionExtensions
             .AddScoped<ISelectListService, SelectListService>()
             .AddScoped<ISellerService, SellerService>()
             .AddScoped<ISetupService, SetupService>()
-            .AddScoped<IProductLabelService, ProductLabelService>()
             .AddScoped<ITokenProvider, SimpleTokenProvider>()
-            .AddScoped<ITransactionDocumentService, TransactionDocumentService>()
+            .AddScoped<ITransactionDocumentGenerator, ItextTransactionDocumentGenerator>()
             .AddScoped<ITransactionService, TransactionService>()
             ;
     }
