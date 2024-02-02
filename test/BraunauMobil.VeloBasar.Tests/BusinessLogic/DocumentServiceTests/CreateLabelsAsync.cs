@@ -7,7 +7,7 @@ public class CreateLabelsAsync
 {
     [Theory]
     [VeloAutoData]
-    public async Task ShouldCallFactoryAndPassModelToGenerator(ProductEntity[] products, ProductLabelDocumentModel productLabelDocumentModel, byte[] data)
+    public async Task ShouldCallFactoryAndPassModelToGenerator(ProductEntity[] products, byte[] data)
     {
         //  Arrange
         A.CallTo(() => ProductLabelGenerator.CreateLabelsAsync(A<IEnumerable<ProductLabelDocumentModel>>.Ignored)).Returns(data);
