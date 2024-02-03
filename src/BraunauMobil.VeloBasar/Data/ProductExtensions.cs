@@ -23,16 +23,6 @@ public static class ProductExtensions
             .SingleAsync();
     }    
 
-    public static async Task<IReadOnlyList<ProductEntity>> GetForBasarAsync(this IQueryable<ProductEntity> products, int basarId)
-    {
-        ArgumentNullException.ThrowIfNull(products);
-
-        return await products
-            .Include(p => p.Type)
-            .Where(p => p.Session.BasarId == basarId)
-            .ToArrayAsync();
-    }
-
     public static async Task<IReadOnlyList<ProductEntity>> GetForSellerAsync(this IQueryable<ProductEntity> products, int basarId, int sellerId)
     {
         ArgumentNullException.ThrowIfNull(products);
