@@ -81,7 +81,7 @@ public sealed class TransactionService
     public async Task<TransactionEntity?> FindAsync(int basarId, TransactionType type, int number)
         => await _db.Transactions
             .IncludeAll()
-            .Where(basarId, type, number)
+            .WhereBasarAndTypeAndNumber(basarId, type, number)
             .FirstOrDefaultAsync();
 
     public async Task<FileDataEntity> GetAcceptanceLabelsAsync(int id)

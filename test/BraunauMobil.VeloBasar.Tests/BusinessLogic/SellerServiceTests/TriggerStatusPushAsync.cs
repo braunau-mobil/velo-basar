@@ -5,7 +5,7 @@ public class TriggerStatusPushAsync
 {
     [Theory]
     [VeloAutoData]
-    public async void CallsStatusPushService(int basarId, int sellerId)
+    public async Task CallsStatusPushService(int basarId, int sellerId)
     {
         //  Arrange
         A.CallTo(() => StatusPushService.PushSellerAsync(basarId, sellerId)).DoesNothing();

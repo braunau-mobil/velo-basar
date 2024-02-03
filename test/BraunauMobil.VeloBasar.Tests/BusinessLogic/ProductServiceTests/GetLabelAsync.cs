@@ -18,7 +18,7 @@ public class GetLabelAsync
 
     [Theory]
     [VeloAutoData]
-    public async void ProductExists_ReturnsLabelDataAsPdf(ProductEntity product, byte[] labelData)
+    public async Task ProductExists_ReturnsLabelDataAsPdf(ProductEntity product, byte[] labelData)
     {
         //  Arrange
         product.Id = 1;

@@ -5,14 +5,6 @@ namespace BraunauMobil.VeloBasar.Data;
 
 public static class TransactionExtensions
 {
-    public static IQueryable<TransactionEntity> ForBasar(this IQueryable<TransactionEntity> transactions, int basarId, TransactionType transactionType)
-    {
-        ArgumentNullException.ThrowIfNull(transactions);
-
-        return transactions
-            .Where(tx => tx.BasarId == basarId && tx.Type == transactionType);
-    }
-
     public static IQueryable<TransactionEntity> IncludeAll(this IQueryable<TransactionEntity> transactions)
     {
         ArgumentNullException.ThrowIfNull(transactions);
@@ -68,6 +60,14 @@ public static class TransactionExtensions
             .Where(tx => tx.BasarId == basarId && tx.SellerId == sellerId);
     }
 
+    public static IQueryable<TransactionEntity> WhereBasarAndType(this IQueryable<TransactionEntity> transactions, int basarId, TransactionType transactionType)
+    {
+        ArgumentNullException.ThrowIfNull(transactions);
+
+        return transactions
+            .Where(tx => tx.BasarId == basarId && tx.Type == transactionType);
+    }
+
     public static IQueryable<TransactionEntity> WhereBasarAndTypeAndSeller(this IQueryable<TransactionEntity> transactions, int basarId, TransactionType transactionType, int sellerId)
     {
         ArgumentNullException.ThrowIfNull(transactions);
@@ -76,7 +76,7 @@ public static class TransactionExtensions
             .Where(tx => tx.BasarId == basarId && tx.Type == transactionType && tx.SellerId == sellerId);
     }
 
-    public static IQueryable<TransactionEntity> Where(this IQueryable<TransactionEntity> transactions, int basarId, TransactionType type, int number)
+    public static IQueryable<TransactionEntity> WhereBasarAndTypeAndNumber(this IQueryable<TransactionEntity> transactions, int basarId, TransactionType type, int number)
     {
         ArgumentNullException.ThrowIfNull(transactions);
 

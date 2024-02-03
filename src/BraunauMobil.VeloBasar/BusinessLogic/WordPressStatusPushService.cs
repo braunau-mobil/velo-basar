@@ -57,7 +57,7 @@ public sealed class WordPressStatusPushService
 
     private async Task<string> GetStatesList(int basarId, int sellerId)
     {
-        IReadOnlyList<ProductEntity> products = await _db.Products.GetForSellerAsync(basarId, sellerId);
+        IReadOnlyList<ProductEntity> products = await _db.Products.GetForBasarAndSellerAsync(basarId, sellerId);
         Dictionary<string, IReadOnlyList<string>> statusMap = new()
         {
             {

@@ -20,7 +20,7 @@ public class BasarStatsService
 
     public async Task<int> GetAcceptanceCountAsync(int basarId)
         => await _db.Transactions.AsNoTracking()
-            .ForBasar(basarId, TransactionType.Acceptance)
+            .WhereBasarAndType(basarId, TransactionType.Acceptance)
             .CountAsync();
 
     public async Task<IReadOnlyList<ProductEntity>> GetAcceptedProductsAsync(int basarId)
@@ -114,7 +114,7 @@ public class BasarStatsService
 
     public async Task<int> GetSaleCountAsync(int basarId)
         => await _db.Transactions.AsNoTracking()
-            .ForBasar(basarId, TransactionType.Sale)
+            .WhereBasarAndType(basarId, TransactionType.Sale)
             .CountAsync();
 
     public IReadOnlyList<ChartDataPoint> GetSaleDistribution(IEnumerable<Tuple<TimeOnly, decimal>> transactionsAndTotals)

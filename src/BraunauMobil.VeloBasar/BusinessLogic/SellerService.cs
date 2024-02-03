@@ -139,7 +139,7 @@ public sealed class SellerService
 
     public async Task<int> SettleAsync(int basarId, int sellerId)
     {
-        IEnumerable<ProductEntity> sellersProducts = await _db.Products.GetForSellerAsync(basarId, sellerId);
+        IEnumerable<ProductEntity> sellersProducts = await _db.Products.GetForBasarAndSellerAsync(basarId, sellerId);
         IEnumerable<int> productIdsToSettle = sellersProducts.Where(p => p.IsAllowed(TransactionType.Settlement)).Ids();
 
         int settlemenId = await _transactionService.SettleAsync(basarId, sellerId, productIdsToSettle);

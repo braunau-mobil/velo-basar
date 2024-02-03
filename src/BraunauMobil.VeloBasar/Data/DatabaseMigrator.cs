@@ -3,27 +3,18 @@ using Microsoft.Extensions.Logging;
 
 namespace BraunauMobil.VeloBasar.Data;
 
-public sealed class DatabaseMigrator
+public sealed class DatabaseMigrator(VeloDbContext db, ILogger<DatabaseMigrator> logger)
 {
-    private readonly VeloDbContext _db;
-    private readonly ILogger<DatabaseMigrator> _logger;
-
-    public DatabaseMigrator(VeloDbContext db, ILogger<DatabaseMigrator> logger)
-    {
-        _db = db ?? throw new ArgumentNullException(nameof(db));
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-    }
-
     public void Migrate()
     {
-        _logger.LogInformation("Migrate database");
+        logger.LogInformation("Migrate database");
 
-        if (!_db.IsInitialized())
+        if (!db.IsInitialized())
         {
-            _logger.LogInformation("Database is not initialized, no need for migration");
+            logger.LogInformation("Database is not initialized, no need for migration");
             return;
         }
 
-        _db.Database.Migrate();
+        db.Database.Migrate();
     }
 }
