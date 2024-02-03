@@ -9,7 +9,7 @@ public sealed class ZipCollection
     : IEnumerable<ZipCodeEntity>
 {
     private readonly IReadOnlyList<CountryEntity> _countries;
-    private readonly List<ZipCodeEntity> _zipCodes = new ();
+    private readonly List<ZipCodeEntity> _zipCodes = [];
 
     public ZipCollection(IReadOnlyList<CountryEntity> countries)
     {
@@ -37,8 +37,8 @@ public sealed class ZipCollection
         }
 
         using StreamReader streamReader = new (stream, Encoding.UTF8);
-        List<ZipCodeEntity> result = new ();
-        HashSet<string> zips = new ();
+        List<ZipCodeEntity> result = [];
+        HashSet<string> zips = [];
 
         while (!streamReader.EndOfStream)
         {
