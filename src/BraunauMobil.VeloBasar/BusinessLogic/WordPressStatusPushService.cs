@@ -43,19 +43,14 @@ public sealed class WordPressStatusPushService
     public async Task PushSellerAsync(int basarId, int sellerId)
     {
         SellerEntity seller = await _db.Sellers.FirstByIdAsync(sellerId);
-        if (seller.Token is null)
-        {
-            throw new InvalidOperationException($"Seller with ID {seller.Id} does not have a token.");
-        }
-
-        string html = await GetStatesList(basarId, seller.Id);
+        string html = await GetStatesListAsync(basarId, seller.Id);
 
         _taskQueue.QueueBackgroundWorkItem(async token => await PostStatusAsync(seller.Token, html, token));
 
         _logger.LogInformation("Queued status push for basar {BasarId} and seller {SellerId}", basarId, sellerId);
     }
 
-    private async Task<string> GetStatesList(int basarId, int sellerId)
+    public async Task<string> GetStatesListAsync(int basarId, int sellerId)
     {
         IReadOnlyList<ProductEntity> products = await _db.Products.GetForBasarAndSellerAsync(basarId, sellerId);
         Dictionary<string, IReadOnlyList<string>> statusMap = new()
@@ -111,7 +106,7 @@ public sealed class WordPressStatusPushService
     }
 
     [SuppressMessage("Design", "CA1031:Do not catch general exception types")]
-    private async Task<bool> PostStatusAsync(string accessid, string saletext)
+    public async Task<bool> PostStatusAsync(string accessid, string saletext)
     {
         try
         {
