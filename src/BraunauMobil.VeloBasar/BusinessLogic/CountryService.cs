@@ -5,32 +5,24 @@ using Xan.AspNetCore.Parameter;
 
 namespace BraunauMobil.VeloBasar.BusinessLogic;
 
-public sealed class CountryService
-    : AbstractCrudService<CountryEntity, ListParameter>
+public sealed class CountryService(VeloDbContext db)
+    : AbstractCrudService<CountryEntity, ListParameter>(db)
     , ICountryService
 {
-    private readonly VeloDbContext _db;
-
-    public CountryService(VeloDbContext db)
-        : base(db)
-    {
-        _db = db ?? throw new ArgumentNullException(nameof(db));
-    }
-
-    public override DbSet<CountryEntity> Set => _db.Countries;
+    public override DbSet<CountryEntity> Set => db.Countries;
 
     public async override Task<bool> CanDeleteAsync(CountryEntity entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 
-        return !await _db.Sellers.AnyAsync(s => s.CountryId == entity.Id);
+        return !await db.Sellers.AnyAsync(s => s.CountryId == entity.Id);
     }
 
     protected override IQueryable<CountryEntity> OrderByDefault(IQueryable<CountryEntity> iq)
     {
         ArgumentNullException.ThrowIfNull(iq);
 
-        return _db.Countries.OrderBy(country => country.Name);
+        return db.Countries.OrderBy(country => country.Name);
     }
 
     protected override Expression<Func<CountryEntity, bool>> Search(string searchString)
@@ -41,7 +33,7 @@ public sealed class CountryService
         {
             return c => c.Id == id;
         }
-        if (_db.IsPostgreSQL())
+        if (db.IsPostgreSQL())
         {
             return c => EF.Functions.ILike(c.Name, $"%{searchString}%")
             || EF.Functions.ILike(c.Iso3166Alpha3Code, $"%{searchString}%");

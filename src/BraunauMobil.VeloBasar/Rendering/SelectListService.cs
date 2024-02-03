@@ -51,7 +51,7 @@ public sealed class SelectListService
     public async Task<SelectList> CountriesAsync()
     {
         List<Tuple<int?, string>> items = new();
-        items.AddRange(await _db.Countries.WhereEnabled().DefaultOrder().Select(c => new Tuple<int?, string>(c.Id, c.Name)).ToArrayAsync());
+        items.AddRange(await _db.Countries.WhereEnabled().OrderBy(country => country.Iso3166Alpha3Code).Select(c => new Tuple<int?, string>(c.Id, c.Name)).ToArrayAsync());
         return new SelectList(items, "Item1", "Item2");
     }
 
