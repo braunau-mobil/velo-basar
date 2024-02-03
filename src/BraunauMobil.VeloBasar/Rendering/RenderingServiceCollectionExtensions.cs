@@ -10,6 +10,7 @@ public static class RenderingServiceCollectionExtensions
 
         return sc
             .AddScoped<IVeloHtmlFactory, DefaultVeloHtmlFactory>()
+            .AddScoped<ISelectListService, SelectListService>()
             ;
     }
 }

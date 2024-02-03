@@ -1,6 +1,4 @@
-﻿using BraunauMobil.VeloBasar.Pdf;
-using BraunauMobil.VeloBasar.Rendering;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 
 namespace BraunauMobil.VeloBasar.BusinessLogic;
 
@@ -25,11 +23,9 @@ public static class BusinessLogicServiceCollectionExtensions
             .AddScoped<IProductService, ProductService>()
             .AddScoped<IProductTypeService, ProductTypeService>()
             .AddScoped<IStatusPushService, WordPressStatusPushService>()
-            .AddScoped<ISelectListService, SelectListService>()
             .AddScoped<ISellerService, SellerService>()
             .AddScoped<ISetupService, SetupService>()
             .AddScoped<ITokenProvider, SimpleTokenProvider>()
-            .AddScoped<ITransactionDocumentGenerator, ItextTransactionDocumentGenerator>()
             .AddScoped<ITransactionService, TransactionService>()
             ;
     }
