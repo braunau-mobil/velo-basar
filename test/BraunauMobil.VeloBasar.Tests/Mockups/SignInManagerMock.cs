@@ -32,4 +32,15 @@ public class SignInManagerMock
         }
         return base.IsSignedIn(principal);
     }
+
+    public SignInResult? PasswordSignInAsyncResult { get; set; }
+
+    public override async Task<SignInResult> PasswordSignInAsync(string userName, string password, bool isPersistent, bool lockoutOnFailure)
+    {
+        if (PasswordSignInAsyncResult is not null)
+        {
+            return await Task.FromResult(PasswordSignInAsyncResult);
+        }
+        return await base.PasswordSignInAsync(userName, password, isPersistent, lockoutOnFailure);
+    }
 }
