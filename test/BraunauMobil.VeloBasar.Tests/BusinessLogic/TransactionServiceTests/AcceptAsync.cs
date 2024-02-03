@@ -4,7 +4,7 @@ using Xan.AspNetCore.Mvc.Abstractions;
 namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.TransactionServiceTests;
 
 public class AcceptAsync
-    : TestBase<EmptySqliteDbFixture>
+    : TestBase
 {
     [Theory]
     [VeloAutoData]

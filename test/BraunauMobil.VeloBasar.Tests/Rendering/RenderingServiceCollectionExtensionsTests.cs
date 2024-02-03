@@ -16,7 +16,8 @@ public class RenderingServiceCollectionExtensionsTests
 
         //  Assert
         services.Should().SatisfyRespectively(
-            X.CreateInspector<IVeloHtmlFactory, DefaultVeloHtmlFactory>(ServiceLifetime.Scoped)
+            X.CreateInspector<IVeloHtmlFactory, DefaultVeloHtmlFactory>(ServiceLifetime.Scoped),
+            X.CreateInspector<ISelectListService, SelectListService>(ServiceLifetime.Scoped)
             );
     }
 }

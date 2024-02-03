@@ -4,6 +4,8 @@ namespace BraunauMobil.VeloBasar.Tests;
 
 public static class X
 {
+    public static DateTime FirstContactDay { get; } = new DateTime(2063, 04, 05, 11, 22, 33);
+
     public static Action<ServiceDescriptor> CreateInspector<TServiceType, TImplementationType>(ServiceLifetime lifetime)
         => item =>
         {

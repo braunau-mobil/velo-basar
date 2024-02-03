@@ -20,7 +20,7 @@ public interface ITransactionService
 
     Task<FileDataEntity> GetDocumentAsync(int id);
 
-    Task<TransactionEntity> GetLatestAsync(int basarId, int productId);
+    Task<TransactionEntity> GetLatestForProductAsync(int productId);
 
     Task<IPaginatedList<TransactionEntity>> GetManyAsync(int pageSize, int pageIndex, int basarId, TransactionType? type = null, string? searchString = null);
 

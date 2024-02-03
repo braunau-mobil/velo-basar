@@ -103,7 +103,7 @@ public class CartModelValidatorTests
 
         VeloFixture fixture = new();
         TransactionEntity transaction = fixture.Create<TransactionEntity>();
-        A.CallTo(() => _transactionService.GetLatestAsync(cart.BasarId, product.Id)).Returns(transaction);
+        A.CallTo(() => _transactionService.GetLatestForProductAsync(product.Id)).Returns(transaction);
 
         //  Act
         ValidationResult result = await _sut.ValidateAsync(cart);
@@ -116,7 +116,7 @@ public class CartModelValidatorTests
         }
 
         A.CallTo(() => _productService.FindAsync(product.Id)).MustHaveHappenedOnceExactly();
-        A.CallTo(() => _transactionService.GetLatestAsync(cart.BasarId, product.Id)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => _transactionService.GetLatestForProductAsync(product.Id)).MustHaveHappenedOnceExactly();
     }
 
     [Theory]
@@ -132,7 +132,7 @@ public class CartModelValidatorTests
 
         VeloFixture fixture = new();
         TransactionEntity transaction = fixture.Create<TransactionEntity>();
-        A.CallTo(() => _transactionService.GetLatestAsync(cart.BasarId, product.Id)).Returns(transaction);
+        A.CallTo(() => _transactionService.GetLatestForProductAsync(product.Id)).Returns(transaction);
 
         //  Act
         ValidationResult result = await _sut.ValidateAsync(cart);
@@ -145,7 +145,7 @@ public class CartModelValidatorTests
         }
 
         A.CallTo(() => _productService.FindAsync(product.Id)).MustHaveHappenedOnceExactly();
-        A.CallTo(() => _transactionService.GetLatestAsync(cart.BasarId, product.Id)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => _transactionService.GetLatestForProductAsync(product.Id)).MustHaveHappenedOnceExactly();
     }
 
     [Theory]
@@ -161,7 +161,7 @@ public class CartModelValidatorTests
 
         VeloFixture fixture = new();
         TransactionEntity transaction = fixture.Create<TransactionEntity>();
-        A.CallTo(() => _transactionService.GetLatestAsync(cart.BasarId, product.Id)).Returns(transaction);
+        A.CallTo(() => _transactionService.GetLatestForProductAsync(product.Id)).Returns(transaction);
         A.CallTo(() => _router.ToDetails(transaction.Id)).Returns(url);
 
         //  Act
@@ -175,7 +175,7 @@ public class CartModelValidatorTests
         }
 
         A.CallTo(() => _productService.FindAsync(product.Id)).MustHaveHappenedOnceExactly();
-        A.CallTo(() => _transactionService.GetLatestAsync(cart.BasarId, product.Id)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => _transactionService.GetLatestForProductAsync(product.Id)).MustHaveHappenedOnceExactly();
         A.CallTo(() => _router.ToDetails(transaction.Id)).MustHaveHappenedOnceExactly();
     }
 

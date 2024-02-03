@@ -1,9 +1,7 @@
-﻿using FluentAssertions.Execution;
-
-namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.TransactionServiceTests;
+﻿namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.TransactionServiceTests;
 
 public class FindAsync
-    : TestBase<EmptySqliteDbFixture>
+    : TestBase
 {
     [Theory]
     [VeloAutoData]

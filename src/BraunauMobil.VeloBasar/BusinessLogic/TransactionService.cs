@@ -142,7 +142,7 @@ public sealed class TransactionService
         return fileData;
     }
 
-    public async Task<TransactionEntity> GetLatestAsync(int basarId, int productId)
+    public async Task<TransactionEntity> GetLatestForProductAsync(int productId)
         => await _db.Transactions
             .IncludeAll()
             .Where(transaction => transaction.Products.Any(pt => pt.ProductId == productId))

@@ -2,9 +2,8 @@
 
 namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.TransactionServiceTests;
 
-public class TestBase<TDbFixture>
-    : DbTestBase<TDbFixture>
-    where TDbFixture : IDbFixture, new()
+public class TestBase
+    : DbTestBase<EmptySqliteDbFixture>
 {
     public TestBase()
     {
