@@ -6,20 +6,7 @@ namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.BasarStatsServiceTests;
 public sealed class GetSaleDistribution
     : TestBase<EmptySqliteDbFixture>
 {
-    private readonly CultureInfo _initialCultureInfo = CultureInfo.CurrentCulture;
     private readonly VeloFixture _fixture = new();
-
-    public GetSaleDistribution()
-    {
-        CultureInfo.CurrentCulture = new CultureInfo("de-AT");
-    }
-
-    public override void Dispose()
-    {
-        base.Dispose();
-
-        CultureInfo.CurrentCulture = _initialCultureInfo;
-    }
 
     [Fact]
     public void EmptyList_ShouldReturnEmpty()

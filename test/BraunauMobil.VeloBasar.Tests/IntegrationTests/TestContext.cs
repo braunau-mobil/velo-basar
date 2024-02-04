@@ -9,7 +9,6 @@ using BraunauMobil.VeloBasar.Rendering;
 using BraunauMobil.VeloBasar.Routing;
 using FluentValidation;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Data.Sqlite;
@@ -17,7 +16,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using System.Globalization;
 using Xan.AspNetCore;
 using Xan.AspNetCore.Http;
 using Xan.AspNetCore.Mvc;
@@ -29,7 +27,6 @@ namespace BraunauMobil.VeloBasar.Tests.IntegrationTests;
 
 public sealed class TestContext
 {
-    private readonly CultureInfo _initialCultureInfo = CultureInfo.CurrentCulture;
     private const string _connectionString = "DataSource=:memory:";
     private readonly SqliteConnection _connection;
     private readonly WebApplication _app;
@@ -66,8 +63,6 @@ public sealed class TestContext
         }
 
         _app = app;
-
-        CultureInfo.CurrentUICulture = new CultureInfo("en-US");
     }
 
     private void ConfigureServices(IServiceCollection services, ConfigurationManager configuration)
@@ -99,7 +94,7 @@ public sealed class TestContext
             .AddHttpClient()
             .AddScoped<LinkGenerator, LinkGeneratorMock>()
             .AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>()
-            .AddSingleton<IFormatProvider>(X.FormatProvider)
+            .AddSingleton(X.FormatProvider)
             .AddSingleton<IClock>(Clock)
             .AddBusinessLogic()
             .AddVeloCookies()
@@ -132,7 +127,6 @@ public sealed class TestContext
 
     public void Dispose()
     {
-        CultureInfo.CurrentUICulture = _initialCultureInfo;
         _connection.Dispose();
         GC.SuppressFinalize(this);
     }

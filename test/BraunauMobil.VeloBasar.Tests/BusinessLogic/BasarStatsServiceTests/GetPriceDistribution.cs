@@ -1,24 +1,11 @@
-﻿using System.Globalization;
-using Xan.Extensions;
+﻿using Xan.Extensions;
 
 namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.BasarStatsServiceTests;
 
 public class GetPriceDistribution
     : TestBase<EmptySqliteDbFixture>
 {
-    private readonly CultureInfo _initialCultureInfo = CultureInfo.CurrentCulture;
     private readonly VeloFixture _fixture = new();
-
-    public GetPriceDistribution()
-    {
-        CultureInfo.CurrentCulture = new CultureInfo("de-AT");
-    }
-
-    public override void Dispose()
-    {
-        CultureInfo.CurrentCulture = _initialCultureInfo;
-        base.Dispose();
-    }
 
     [Fact]
     public void EmptyList_ShouldReturnEmpty()
