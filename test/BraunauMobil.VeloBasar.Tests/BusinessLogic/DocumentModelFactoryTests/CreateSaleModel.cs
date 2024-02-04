@@ -2,26 +2,11 @@
 
 namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.DocumentModelFactoryTests;
 
-public class CreateAcceptanceModel
+public class CreateSaleModel
     : TestBase
 {
     [Fact]
-    public void NoSellerThrowsInvalidOperationException()
-    {
-        //  Arrange
-        TransactionEntity acceptance = Fixture.BuildTransaction()
-            .Without(transaction => transaction.Seller)
-            .Create();
-
-        //  Act
-        Action act = () => Sut.CreateAcceptanceModel(acceptance);
-
-        //  Assert
-        act.Should().Throw<InvalidOperationException>().WithMessage("Cannot create Acceptance Document without Seller");
-    }
-
-    [Fact]
-    public void NoStatusLink()
+    public void NoBanner()
     {
         //  Arrange
         Settings.Acceptance.SignatureText = "Unterschrift";
@@ -79,28 +64,22 @@ public class CreateAcceptanceModel
         acceptance.Products.Add(new ProductToTransactionEntity { Product = cityBike, Transaction = acceptance });
 
         //  Act
-        AcceptanceDocumentModel result = Sut.CreateAcceptanceModel(acceptance);
+        SaleDocumentModel result = Sut.CreateSaleModel(acceptance);
 
         //  Assert
-        AcceptanceDocumentModel expectedModel = new(
+        SaleDocumentModel expectedModel = new(
             Settings.Acceptance.TitleFormat,
             "Wasserau, 05.04.2063",
             "VeloBasar_PageNumberFromOverall",
             "  - powered by https://github.com/braunau-mobil/velo-basar",
             Settings.PageMargins,
             Settings.Acceptance.SubTitle,
-            @"Hamfast Gamdschie
-Beutelsend 4
-A457857 Hobbingen
-",
-            "VeloBasar_SellerIdShort_0",
             false,
             string.Empty,
-            Settings.Acceptance.TokenTitle,
-            seller.Token,
-            "Unterschrift ______________________________",
-            "VeloBasar_AtLocationAndDateAndTime_Wasserau_05.04.2063 13:22:33",
-            Settings.QrCodeLengthMillimeters,
+            string.Empty,
+            "website",
+            "hinttext",
+            "footertext",
             new ProductsTableDocumentModel(
                 "VeloBasar_Id",
                 "VeloBasar_ProductDescription",
@@ -121,7 +100,7 @@ A457857 Hobbingen
     }
 
     [Fact]
-    public void WithStatusLink()
+    public void WithBanner()
     {
         //  Arrange
         Settings.Acceptance.SignatureText = "Unterschrift";
