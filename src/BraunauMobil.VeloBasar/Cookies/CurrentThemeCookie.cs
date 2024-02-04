@@ -1,5 +1,6 @@
 ﻿using BraunauMobil.VeloBasar.Rendering;
 using Microsoft.AspNetCore.Http;
+using System.Globalization;
 
 namespace BraunauMobil.VeloBasar.Cookies;
 
@@ -38,6 +39,6 @@ public class CurrentThemeCookie
 
     public void SetCurrentTheme(Theme theme)
     {
-        _httpContext.Response.Cookies.Append(Key, $"{theme}", Options);
+        _httpContext.Response.Cookies.Append(Key, theme.ToString(), Options);
     }
 }

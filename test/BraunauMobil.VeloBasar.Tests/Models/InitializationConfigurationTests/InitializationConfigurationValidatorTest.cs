@@ -6,7 +6,7 @@ namespace BraunauMobil.VeloBasar.Tests.Models.InitializationConfigurationTests;
 
 public class InitializationConfigurationValidatorTest
 {
-    private readonly InitializationConfigurationValidator _sut = new(new StringLocalizerMock<SharedResources>());
+    private readonly InitializationConfigurationValidator _sut = new(X.StringLocalizer);
 
     [Theory]
     [VeloAutoData]

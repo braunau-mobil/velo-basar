@@ -11,11 +11,13 @@ public class BasarStatsService
 {
     private readonly IColorProvider _colorProvider;
     private readonly VeloDbContext _db;
+    private readonly IFormatProvider _formatProvider;
 
-    public BasarStatsService(IColorProvider colorProvider, VeloDbContext db)
+    public BasarStatsService(IColorProvider colorProvider, VeloDbContext db, IFormatProvider formatProvider)
     {
         _colorProvider = colorProvider ?? throw new ArgumentNullException(nameof(colorProvider));
         _db = db ?? throw new ArgumentNullException(nameof(db));
+        _formatProvider = formatProvider ?? throw new ArgumentNullException(nameof(formatProvider));
     }
 
     public async Task<int> GetAcceptanceCountAsync(int basarId)
@@ -94,7 +96,7 @@ public class BasarStatsService
             int count = productPrices.Count(price => price >= currentMin && price <= currentMax);
             if (count > 0)
             {
-                string label = $"{currentMax:C}";
+                string label = currentMax.ToString("C", _formatProvider);
                 Color color = _colorProvider.Primary;
                 data.Add(new ChartDataPoint(count, label, color));
             }
@@ -122,7 +124,7 @@ public class BasarStatsService
         ArgumentNullException.ThrowIfNull(transactionsAndTotals);
 
         return transactionsAndTotals.GroupBy(x => new TimeOnly(x.Item1.Hour, x.Item1.Minute))
-            .Select(g => new ChartDataPoint(g.Sum(x => x.Item2), g.Key.ToString("t", CultureInfo.CurrentCulture), _colorProvider.Primary))
+            .Select(g => new ChartDataPoint(g.Sum(x => x.Item2), g.Key.ToString("t", _formatProvider), _colorProvider.Primary))
             .ToArray();
     }
 

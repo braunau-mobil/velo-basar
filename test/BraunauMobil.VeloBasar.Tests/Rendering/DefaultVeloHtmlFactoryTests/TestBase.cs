@@ -7,7 +7,7 @@ public class TestBase
 {
     public TestBase()
     {
-        Sut = new(Router, new StringLocalizerMock<SharedResources>());
+        Sut = new(Router, X.StringLocalizer);
     }
 
     public IVeloRouter Router { get; } = X.StrictFake<IVeloRouter>();

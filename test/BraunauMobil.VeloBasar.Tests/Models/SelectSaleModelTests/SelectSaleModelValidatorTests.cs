@@ -5,7 +5,7 @@ namespace BraunauMobil.VeloBasar.Tests.Models.SelectSaleModelTests;
 
 public class SelectSaleModelValidatorTests
 {
-    private readonly SelectSaleModelValidator _sut = new(new StringLocalizerMock<SharedResources>());
+    private readonly SelectSaleModelValidator _sut = new(X.StringLocalizer);
 
     [Theory]
     [VeloAutoData]

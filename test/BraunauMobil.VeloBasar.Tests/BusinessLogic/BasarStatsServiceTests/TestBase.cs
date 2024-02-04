@@ -8,7 +8,7 @@ public class TestBase<TDbFixture>
 {
     public TestBase()
     {
-        Sut = new BasarStatsService(ColorProvider, Db);
+        Sut = new BasarStatsService(ColorProvider, Db, X.FormatProvider);
     }
 
     public IColorProvider ColorProvider { get; } = X.StrictFake<IColorProvider>();

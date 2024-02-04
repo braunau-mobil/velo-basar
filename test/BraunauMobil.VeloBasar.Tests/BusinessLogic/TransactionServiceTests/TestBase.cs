@@ -7,7 +7,7 @@ public class TestBase
 {
     public TestBase()
     {
-        Sut = new TransactionService(NumberService, StatusPushService, Db, DocumentService, Clock, new StringLocalizerMock<SharedResources>());
+        Sut = new TransactionService(NumberService, StatusPushService, Db, DocumentService, Clock, X.StringLocalizer, X.FormatProvider);
     }
 
     public IDocumentService DocumentService { get; } = X.StrictFake<IDocumentService>();

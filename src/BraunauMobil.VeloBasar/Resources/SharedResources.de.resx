@@ -966,4 +966,10 @@
   <data name="VeloBasar_ProductsValue" xml:space="preserve">
     <value>Artikelwert</value>
   </data>
+  <data name="VeloBasar_LabelFileName" xml:space="preserve">
+    <value>Artikel-{0}_Etikett.pdf</value>
+  </data>
+  <data name="VeloBasar_SellerLabelsFileName" xml:space="preserve">
+    <value>Verkäufer-{0}_ArtikelEtiketten.pdf</value>
+  </data>
 </root>

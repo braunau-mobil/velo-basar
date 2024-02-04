@@ -1,5 +1,5 @@
 ﻿using Newtonsoft.Json;
-
+using System.Globalization;
 using Xan.Extensions;
 
 namespace BraunauMobil.VeloBasar.Extensions;
@@ -64,5 +64,5 @@ public static class JsonUtils
     }
 
     public static string ToChartJsColor(Color c)
-        => $"rgb({c.R}, {c.G}, {c.B})";
+        => string.Create(CultureInfo.InvariantCulture, $"rgb({c.R}, {c.G}, {c.B})");
 }

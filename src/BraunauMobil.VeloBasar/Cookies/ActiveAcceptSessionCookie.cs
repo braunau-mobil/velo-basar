@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using System.Globalization;
 
 namespace BraunauMobil.VeloBasar.Cookies;
 
@@ -44,6 +45,6 @@ public class ActiveAcceptSessionCookie
     {
         ArgumentNullException.ThrowIfNull(session);
 
-        _httpContext.Response.Cookies.Append(Key, $"{session.Id}", Options);
+        _httpContext.Response.Cookies.Append(Key, session.Id.ToString(CultureInfo.InvariantCulture), Options);
     }
 }

@@ -4,7 +4,7 @@ namespace BraunauMobil.VeloBasar.Tests.Models.Entities.ProductEntityTests;
 
 public class ProductEntityValidatorTest
 {
-    private readonly ProductEntityValidator _sut = new(new StringLocalizerMock<SharedResources>());
+    private readonly ProductEntityValidator _sut = new(X.StringLocalizer);
 
     [Theory]
     [VeloAutoData]

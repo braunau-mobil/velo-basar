@@ -15,10 +15,12 @@ public class DocumentModelFactory
 
     private readonly IStringLocalizer<SharedResources> _localizer;
     private readonly PrintSettings _settings;
+    private readonly IFormatProvider _formatProvider;
 
-    public DocumentModelFactory(IStringLocalizer<SharedResources> localizer, IOptions<PrintSettings> options)
+    public DocumentModelFactory(IStringLocalizer<SharedResources> localizer, IOptions<PrintSettings> options, IFormatProvider formatProvider)
     {
         _localizer = localizer ?? throw new ArgumentNullException(nameof(localizer));
+        _formatProvider = formatProvider ?? throw new ArgumentNullException(nameof(formatProvider));
 
         ArgumentNullException.ThrowIfNull(options);
         _settings = options.Value;
@@ -44,7 +46,7 @@ public class DocumentModelFactory
         }
 
         return new AcceptanceDocumentModel(
-            string.Format(CultureInfo.CurrentCulture, _settings.Acceptance.TitleFormat, acceptance.Basar.Name, acceptance.Number),
+            string.Format(_formatProvider, _settings.Acceptance.TitleFormat, acceptance.Basar.Name, acceptance.Number),
             GetLocationAndDateText(acceptance.Basar),
             GetPageNumberFormat(),
             _poweredByText,
@@ -78,14 +80,14 @@ public class DocumentModelFactory
         }
 
         return new ProductLabelDocumentModel(
-            string.Format(CultureInfo.CurrentCulture, _settings.Label.TitleFormat, product.Session.Basar.Name),
+            string.Format(_formatProvider, _settings.Label.TitleFormat, product.Session.Basar.Name),
             $"{product.Brand} - {product.Type.Name}",
             product.Description.Truncate(_settings.Label.MaxDescriptionLength),
             product.Color,
             frameNumber,
             tireSize,
-            $"{product.Id}",
-            string.Format(CultureInfo.CurrentCulture, "{0:C}", product.Price));
+            string.Format(_formatProvider, "{0}", product.Id),
+            string.Format(_formatProvider, "{0:C}", product.Price));
     }
 
     public SaleDocumentModel CreateSaleModel(TransactionEntity sale)
@@ -103,7 +105,7 @@ public class DocumentModelFactory
         }
 
         return new SaleDocumentModel(
-            string.Format(CultureInfo.CurrentCulture, _settings.Sale.TitleFormat, sale.Basar.Name, sale.Number),
+            string.Format(_formatProvider, _settings.Sale.TitleFormat, sale.Basar.Name, sale.Number),
              GetLocationAndDateText(sale.Basar),
              GetPageNumberFormat(),
             _poweredByText,
@@ -153,9 +155,9 @@ public class DocumentModelFactory
                 $"{_localizer[VeloTexts.Cost]}:",
                 $"{_localizer[VeloTexts.TotalAmount]}:",
                 _localizer[VeloTexts.SalesCommision, commissionFactor, payoutAmountInclCommission],
-                string.Format(CultureInfo.CurrentCulture, "{0:C}", payoutAmountInclCommission),
-                string.Format(CultureInfo.CurrentCulture, "{0:C}", payoutCommissionAmount),
-                string.Format(CultureInfo.CurrentCulture, "{0:C}", payoutAmount)
+                string.Format(_formatProvider, "{0:C}", payoutAmountInclCommission),
+                string.Format(_formatProvider, "{0:C}", payoutCommissionAmount),
+                string.Format(_formatProvider, "{0:C}", payoutAmount)
                 );
         }
 
@@ -169,7 +171,7 @@ public class DocumentModelFactory
         string text = string.Format(CultureInfo.InvariantCulture, _settings.Settlement.BankTransactionTextFormat, settlement.Basar.Name);
 
         return new SettlementDocumentModel(
-            string.Format(CultureInfo.CurrentCulture, _settings.Settlement.TitleFormat, settlement.Basar.Name, settlement.Number),
+            string.Format(_formatProvider, _settings.Settlement.TitleFormat, settlement.Basar.Name, settlement.Number),
             GetLocationAndDateText(settlement.Basar),
             GetPageNumberFormat(),
             _poweredByText,
@@ -207,7 +209,7 @@ public class DocumentModelFactory
             priceColumnTitle,
             $"{_localizer[VeloTexts.Sum]}:",
             _localizer[VeloTexts.ProductCounter, rows.Length],
-            string.Format(CultureInfo.CurrentCulture, "{0:C}", products.SumPrice()),
+            string.Format(_formatProvider, "{0:C}", products.SumPrice()),
             sellerInfoText,
             rows);
     }
@@ -221,10 +223,10 @@ public class DocumentModelFactory
         }
 
         return new(
-            $"{product.Id}",
+            string.Format(_formatProvider, "{0}", product.Id),
             GetProductInfoText(product, includeDonationHint),
             product.TireSize ?? "",
-            string.Format(CultureInfo.CurrentCulture, "{0:C}", product.Price),
+            string.Format(_formatProvider, "{0:C}", product.Price),
             productSellerInfo
             );
     }
@@ -275,8 +277,8 @@ public class DocumentModelFactory
     private string GetPageNumberFormat()
         => _localizer[VeloTexts.PageNumberFromOverall];
 
-    private static string GetLocationAndDateText(BasarEntity basar)
-        => $"{basar.Location}, {basar.Date:d}";
+    private string GetLocationAndDateText(BasarEntity basar)
+        => string.Format(_formatProvider, "{0}, {1:d}", basar.Location, basar.Date);
 
     private static string GetBigAddressText(SellerEntity seller)
     {

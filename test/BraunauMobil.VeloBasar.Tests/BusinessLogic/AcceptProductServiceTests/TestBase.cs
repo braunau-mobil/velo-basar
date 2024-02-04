@@ -8,7 +8,7 @@ public class TestBase<TDbFixture>
 {
     public TestBase()
     {
-        Sut = new AcceptProductService(Db, new StringLocalizerMock<SharedResources>());
+        Sut = new AcceptProductService(Db, X.StringLocalizer);
     }
     
     public AcceptProductService Sut { get; }

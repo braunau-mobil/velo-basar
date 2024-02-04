@@ -1,6 +1,7 @@
 ﻿using BraunauMobil.VeloBasar.Data;
 using BraunauMobil.VeloBasar.Parameters;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 using System.Linq.Expressions;
 using Xan.AspNetCore.EntityFrameworkCore;
 using Xan.Extensions;
@@ -18,8 +19,9 @@ public sealed class SellerService
     private readonly IStatusPushService _statusPushService;
     private readonly IClock _clock;
     private readonly ITokenProvider _tokenProvider;
+    private readonly IStringLocalizer<SharedResources> _localizer;
 
-    public SellerService(ITransactionService transactionService, IDocumentService documentService, IStatusPushService statusPushService, ITokenProvider tokenProvider, IClock clock, VeloDbContext db)
+    public SellerService(ITransactionService transactionService, IDocumentService documentService, IStatusPushService statusPushService, ITokenProvider tokenProvider, IClock clock, VeloDbContext db, IStringLocalizer<SharedResources> localizer)
         : base(db)
     {
         _db = db ?? throw new ArgumentNullException(nameof(db));
@@ -28,6 +30,7 @@ public sealed class SellerService
         _statusPushService = statusPushService ?? throw new ArgumentNullException(nameof(statusPushService));
         _clock = clock ?? throw new ArgumentNullException(nameof(clock));
         _tokenProvider = tokenProvider ?? throw new ArgumentNullException(nameof(tokenProvider));
+        _localizer = localizer ?? throw new ArgumentNullException(nameof(localizer));
     }
 
     public override DbSet<SellerEntity> Set => _db.Sellers;
@@ -98,7 +101,7 @@ public sealed class SellerService
             .Where(product => product.Session.BasarId == basarId && product.Session.SellerId == sellerId)
             .ToArrayAsync();
 
-        string fileName = $"Seller-{sellerId}_ProductLabels.pdf";
+        string fileName = _localizer[VeloTexts.SellerLabelsFileName, sellerId];
         byte[] data = await _documentService.CreateLabelsAsync(products);
         return FileDataEntity.Pdf(fileName, data);
     }

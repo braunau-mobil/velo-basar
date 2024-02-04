@@ -12,7 +12,7 @@ public class TestBase
 {
     public TestBase()
     {
-        Sut = new WordPressStatusPushService(Options.Create(Settings), new StringLocalizerMock<SharedResources>(), BackgroundTaskQueue, A.Fake<ILogger<WordPressStatusPushService>>(), Db, HttpClientFactory);
+        Sut = new WordPressStatusPushService(Options.Create(Settings), X.StringLocalizer, BackgroundTaskQueue, A.Fake<ILogger<WordPressStatusPushService>>(), Db, HttpClientFactory, X.FormatProvider);
     }
 
     protected IBackgroundTaskQueue BackgroundTaskQueue { get; } = X.StrictFake<IBackgroundTaskQueue>();

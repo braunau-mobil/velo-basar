@@ -17,8 +17,9 @@ public sealed class TransactionService
     private readonly IDocumentService _documentService;
     private readonly IClock _clock;
     private readonly IStringLocalizer<SharedResources> _localizer;
+    private readonly IFormatProvider _formatProvider;
 
-    public TransactionService(INumberService numberService, IStatusPushService statusPushService, VeloDbContext db, IDocumentService documentService, IClock clock, IStringLocalizer<SharedResources> localizer)
+    public TransactionService(INumberService numberService, IStatusPushService statusPushService, VeloDbContext db, IDocumentService documentService, IClock clock, IStringLocalizer<SharedResources> localizer, IFormatProvider formatProvider)
     {
         _numberService = numberService ?? throw new ArgumentNullException(nameof(numberService));
         _statusPushService = statusPushService ?? throw new ArgumentNullException(nameof(statusPushService));
@@ -26,6 +27,7 @@ public sealed class TransactionService
         _documentService = documentService ?? throw new ArgumentNullException(nameof(documentService));
         _clock = clock ?? throw new ArgumentNullException(nameof(clock));
         _localizer = localizer ?? throw new ArgumentNullException(nameof(localizer));
+        _formatProvider = formatProvider ?? throw new ArgumentNullException(nameof(localizer));
     }
 
     public async Task<int> AcceptAsync(int basarId, int sellerId, IEnumerable<int> productIds)
@@ -286,7 +288,7 @@ public sealed class TransactionService
     }
 
     private string GetTransactionFileName(DateTime timeStamp, TransactionType type, int id, string suffix = "")
-        => $"{timeStamp:s}_{_localizer[VeloTexts.Singular(type)]}-{id}{suffix}.pdf";
+        => string.Create(_formatProvider ,$"{timeStamp:s}_{_localizer[VeloTexts.Singular(type)]}-{id}{suffix}.pdf");
 
     private async Task RegenerateDocument(FileDataEntity toUpdate, TransactionEntity transaction)
     {

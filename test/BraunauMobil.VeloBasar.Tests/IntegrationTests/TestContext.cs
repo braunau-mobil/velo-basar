@@ -99,6 +99,7 @@ public sealed class TestContext
             .AddHttpClient()
             .AddScoped<LinkGenerator, LinkGeneratorMock>()
             .AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>()
+            .AddSingleton<IFormatProvider>(X.FormatProvider)
             .AddSingleton<IClock>(Clock)
             .AddBusinessLogic()
             .AddVeloCookies()

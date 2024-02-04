@@ -10,7 +10,7 @@ public class TestBase
     {
         Settings = Fixture.Create<PrintSettings>();
 
-        Sut = new DocumentModelFactory(new StringLocalizerMock<SharedResources>(), Options.Create(Settings));
+        Sut = new DocumentModelFactory(X.StringLocalizer, Options.Create(Settings), X.FormatProvider);
     }
 
     protected VeloFixture Fixture { get; } = new();

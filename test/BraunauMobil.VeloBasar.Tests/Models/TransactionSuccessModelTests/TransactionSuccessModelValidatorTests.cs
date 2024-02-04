@@ -5,7 +5,7 @@ namespace BraunauMobil.VeloBasar.Tests.Models.TransactionSuccessModelTests;
 
 public class TransactionSuccessModelValidatorTests
 {
-    private readonly TransactionSuccessModelValidator _sut = new(new StringLocalizerMock<SharedResources>());
+    private readonly TransactionSuccessModelValidator _sut = new(X.StringLocalizer);
 
     [Theory]
     [VeloAutoData]

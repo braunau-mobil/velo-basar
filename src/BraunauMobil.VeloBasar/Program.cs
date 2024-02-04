@@ -42,7 +42,7 @@ public static class Program
         CultureInfo.DefaultThreadCurrentCulture = applicationCulture;
         CultureInfo.DefaultThreadCurrentUICulture = applicationCulture;
 
-        ConfigureServices(builder.Services, builder.Configuration);
+        ConfigureServices(builder.Services, builder.Configuration, applicationCulture);
 
         WebApplication app = builder.Build();
         app.UseDeveloperExceptionPage();
@@ -70,7 +70,7 @@ public static class Program
         app.Run();
     }    
 
-    private static void ConfigureServices(IServiceCollection services, ConfigurationManager configuration)
+    private static void ConfigureServices(IServiceCollection services, ConfigurationManager configuration, IFormatProvider formatProvider)
     {
         services
            .AddDefaultIdentity<IdentityUser>()
@@ -104,6 +104,7 @@ public static class Program
             .AddHttpClient()
             .AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>()
             .AddSingleton<IClock, SystemClock>()
+            .AddSingleton<IFormatProvider>(formatProvider)
             .AddBusinessLogic()
             .AddVeloCookies()
             .AddVeloRendering()

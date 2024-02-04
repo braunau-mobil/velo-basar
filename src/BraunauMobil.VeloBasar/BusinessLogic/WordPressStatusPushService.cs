@@ -24,9 +24,10 @@ public sealed class WordPressStatusPushService
     private readonly VeloDbContext _db;
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly IStringLocalizer<SharedResources> _localizer;
+    private readonly IFormatProvider _formatProvider;
 
     public WordPressStatusPushService(IOptions<WordPressStatusPushSettings>
-        settings, IStringLocalizer<SharedResources> localizer, IBackgroundTaskQueue taskQueue, ILogger<WordPressStatusPushService> logger, VeloDbContext db, IHttpClientFactory httpClientFactory)
+        settings, IStringLocalizer<SharedResources> localizer, IBackgroundTaskQueue taskQueue, ILogger<WordPressStatusPushService> logger, VeloDbContext db, IHttpClientFactory httpClientFactory, IFormatProvider formatProvider)
     {
         ArgumentNullException.ThrowIfNull(settings);
 
@@ -36,6 +37,7 @@ public sealed class WordPressStatusPushService
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _db = db ?? throw new ArgumentNullException(nameof(db));
         _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
+        _formatProvider = formatProvider ?? throw new ArgumentNullException(nameof(formatProvider));
     }
 
     public bool IsEnabled { get => _settings.Enabled; }
@@ -147,6 +149,6 @@ public sealed class WordPressStatusPushService
         return false;
     }
 
-    private static string ProductInfo(ProductEntity product)
-        => $"{product.Brand} - {product.Type.Name}<br/>{product.Description} - {product.Price:C}";
+    private string ProductInfo(ProductEntity product)
+        => string.Create(_formatProvider, $"{product.Brand} - {product.Type.Name}<br/>{product.Description} - {product.Price:C}");
 }

@@ -8,7 +8,7 @@ public class TestBase<TDbFixture>
 {
     public TestBase()
     {
-        Sut = new ProductService(Db, DocumentService, TransactionService);
+        Sut = new ProductService(Db, DocumentService, TransactionService, X.StringLocalizer);
     }
     
     public IDocumentService DocumentService { get; } = X.StrictFake<IDocumentService>();

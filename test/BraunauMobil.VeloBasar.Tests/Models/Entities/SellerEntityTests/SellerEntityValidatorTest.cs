@@ -4,7 +4,7 @@ namespace BraunauMobil.VeloBasar.Tests.Models.Entities.SellerEntityTests;
 
 public class SellerEntityValidatorTest
 {
-    private readonly SellerEntityValidator _sut = new(new StringLocalizerMock<SharedResources>());
+    private readonly SellerEntityValidator _sut = new(X.StringLocalizer);
 
     private static SellerEntity CreateValidSeller()
         => new ()

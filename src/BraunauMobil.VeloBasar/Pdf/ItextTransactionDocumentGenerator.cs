@@ -14,7 +14,7 @@ using iText.Layout.Properties;
 
 namespace BraunauMobil.VeloBasar.Pdf;
 
-public sealed class ItextTransactionDocumentGenerator(PdfGenerator pdf)
+public sealed class ItextTransactionDocumentGenerator(PdfGenerator pdf, IFormatProvider formatProvider)
     : ITransactionDocumentGenerator
 {
     public async Task<byte[]> CreateAcceptanceAsync(AcceptanceDocumentModel model)
@@ -174,7 +174,7 @@ public sealed class ItextTransactionDocumentGenerator(PdfGenerator pdf)
             pdfDoc.SetDefaultPageSize(pageSize: PageSize.A4);
             doc.SetFont(PdfFontFactory.CreateFont(StandardFonts.TIMES_ROMAN));
             doc.SetMargins(model.PageMargins.Top, model.PageMargins.Right, model.PageMargins.Bottom + PageFooterHandler.Height, model.PageMargins.Left);
-            pdfDoc.AddEventHandler(PdfDocumentEvent.END_PAGE, new PageFooterHandler(model.PageMargins, doc, model.PageNumberFormat, model.PoweredBy));
+            pdfDoc.AddEventHandler(PdfDocumentEvent.END_PAGE, new PageFooterHandler(model.PageMargins, doc, model.PageNumberFormat, model.PoweredBy, formatProvider));
 
             decorate(pdfDoc, doc);
         }));

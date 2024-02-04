@@ -126,6 +126,7 @@ public static class VeloTexts
     public const string IsActive = $"{Prefix}{nameof(IsActive)}";
     public const string Iso3166Alpha3Code = $"{Prefix}{nameof(Iso3166Alpha3Code)}";
     public const string Label = $"{Prefix}{nameof(Label)}";
+    public const string LabelFileName = $"{Prefix}{nameof(LabelFileName)}";
     public const string Labels = $"{Prefix}{nameof(Labels)}";
     public const string LastName = $"{Prefix}{nameof(LastName)}";
     public const string LastNameIsTooLong = $"{Prefix}{nameof(LastNameIsTooLong)}";
@@ -240,6 +241,7 @@ public static class VeloTexts
     public const string SellerDetails = $"{Prefix}{nameof(SellerDetails)}";
     public const string SellerId = $"{Prefix}{nameof(SellerId)}";
     public const string SellerIdShort = $"{Prefix}{nameof(SellerIdShort)}";
+    public const string SellerLabelsFileName = $"{Prefix}{nameof(SellerLabelsFileName)}";
     public const string SellerList = $"{Prefix}{nameof(SellerList)}";
     public const string SellerNotFound = $"{Prefix}{nameof(SellerNotFound)}";
     public const string SellersForNewsletter = $"{Prefix}{nameof(SellersForNewsletter)}";

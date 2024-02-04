@@ -2,8 +2,8 @@
 
 namespace BraunauMobil.VeloBasar.Tests.Mockups;
 
-public class StringLocalizerMock<T>
-    : IStringLocalizer<T>
+public class StringLocalizerMock
+    : IStringLocalizer<SharedResources>
 
 {
     public LocalizedString this[string name]

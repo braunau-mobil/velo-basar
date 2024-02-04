@@ -19,7 +19,7 @@ public class TestBase
 
     protected VeloFixture Fixture { get; } = new ();
 
-    protected IStringLocalizer<SharedResources> Localizer { get; } = new StringLocalizerMock<SharedResources>();
+    protected IStringLocalizer<SharedResources> Localizer { get; } = X.StringLocalizer;
 
     protected IProductService ProductService { get; } = X.StrictFake<IProductService>();
 

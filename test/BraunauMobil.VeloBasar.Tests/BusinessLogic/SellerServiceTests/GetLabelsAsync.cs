@@ -22,7 +22,7 @@ public class GetLabelsAsync
         using (new AssertionScope())
         {
             result.Should().NotBeNull();
-            result.FileName.Should().Be($"Seller-{seller.Id}_ProductLabels.pdf");
+            result.FileName.Should().Be($"VeloBasar_SellerLabelsFileName_{seller.Id}");
             result.Data.Should().BeSameAs(data);
             result.ContentType.Should().Be("application/pdf");
         }
@@ -61,7 +61,7 @@ public class GetLabelsAsync
         using (new AssertionScope())
         {
             result.Should().NotBeNull();
-            result.FileName.Should().Be($"Seller-{seller.Id}_ProductLabels.pdf");
+            result.FileName.Should().Be($"VeloBasar_SellerLabelsFileName_{seller.Id}");
             result.Data.Should().BeSameAs(data);
             result.ContentType.Should().Be("application/pdf");
         }

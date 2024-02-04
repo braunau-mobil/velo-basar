@@ -7,7 +7,7 @@ public class TestBase
 {
     public TestBase()
     {
-        Sut = new SelectListService(Db, new StringLocalizerMock<SharedResources>());
+        Sut = new SelectListService(Db, X.StringLocalizer);
     }
 
     public SelectListService Sut { get; }

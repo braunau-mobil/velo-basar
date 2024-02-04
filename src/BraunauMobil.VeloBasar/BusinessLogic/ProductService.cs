@@ -1,6 +1,6 @@
 ﻿using BraunauMobil.VeloBasar.Data;
-using BraunauMobil.VeloBasar.Pdf;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 using System.Linq.Expressions;
 using Xan.AspNetCore.EntityFrameworkCore;
 using Xan.Extensions.Collections.Generic;
@@ -13,12 +13,14 @@ public sealed class ProductService
     private readonly VeloDbContext _db;
     private readonly IDocumentService _documentService;
     private readonly ITransactionService _transactionService;
+    private readonly IStringLocalizer<SharedResources> _localizer;
 
-    public ProductService(VeloDbContext db, IDocumentService documentService, ITransactionService transactionService)
+    public ProductService(VeloDbContext db, IDocumentService documentService, ITransactionService transactionService, IStringLocalizer<SharedResources> localizer)
     {
         _db = db ?? throw new ArgumentNullException(nameof(db));
         _documentService = documentService ?? throw new ArgumentNullException(nameof(documentService));
         _transactionService = transactionService ?? throw new ArgumentNullException(nameof(transactionService));
+        _localizer = localizer ?? throw new ArgumentNullException(nameof(localizer));
     }
 
     public async Task<bool> ExistsForBasarAsync(int basarId, int productId)
@@ -63,7 +65,7 @@ public sealed class ProductService
                 .ThenInclude(session => session.Basar)
             .FirstByIdAsync(productId);
 
-        string fileName = $"Product-{product.Id}_Label.pdf";
+        string fileName = _localizer[VeloTexts.LabelFileName, product.Id];
         byte[] data = await _documentService.CreateLabelAsync(product);
         return FileDataEntity.Pdf(fileName, data);
     }
