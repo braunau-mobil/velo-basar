@@ -37,7 +37,7 @@ public class GetStatesList
         string result = await Sut.GetStatesListAsync(basar.Id, seller.Id);
 
         //  Assert
-        result.Should().Be("<h5>VeloBasar_Sold</h5>\r\n<ul>\r\n<li>sold_brand - sold_type<br/>sold_description - € 1,00</li>\r\n<li>lost_brand - lost_type<br/>lost_description - € 1,00</li>\r\n</ul>\r\n");
+        result.Should().Be("<h5>VeloBasar_Sold</h5>".Line("<ul>").Line("<li>sold_brand - sold_type<br/>sold_description - € 1,00</li>").Line("<li>lost_brand - lost_type<br/>lost_description - € 1,00</li>").Line("</ul>").Line(""));
     }
 
     [Theory]
@@ -59,7 +59,7 @@ public class GetStatesList
         string result = await Sut.GetStatesListAsync(basar.Id, seller.Id);
 
         //  Assert
-        result.Should().Be("<h5>VeloBasar_NotSold</h5>\r\n<ul>\r\n<li>available_brand - available_type<br/>available_description - € 1,00</li>\r\n<li>locked_brand - locked_type<br/>locked_description - € 1,00</li>\r\n</ul>\r\n");
+        result.Should().Be("<h5>VeloBasar_NotSold</h5>".Line("<ul>").Line("<li>available_brand - available_type<br/>available_description - € 1,00</li>").Line("<li>locked_brand - locked_type<br/>locked_description - € 1,00</li>").Line("</ul>").Line(""));
     }
 
     [Theory]
@@ -81,7 +81,7 @@ public class GetStatesList
         string result = await Sut.GetStatesListAsync(basar.Id, seller.Id);
 
         //  Assert
-        result.Should().Be("<h5>VeloBasar_Settled</h5>\r\n<ul>\r\n<li>lost_settled_brand - lost_settled_type<br/>lost_settled_description - € 1,00</li>\r\n</ul>\r\n<h5>VeloBasar_PickedUp</h5>\r\n<ul>\r\n<li>sold_settled_brand - sold_settled_type<br/>sold_settled_description - € 1,00</li>\r\n</ul>\r\n");
+        result.Should().Be("<h5>VeloBasar_Settled</h5>".Line("<ul>").Line("<li>lost_settled_brand - lost_settled_type<br/>lost_settled_description - € 1,00</li>").Line("</ul>").Line("<h5>VeloBasar_PickedUp</h5>").Line("<ul>").Line("<li>sold_settled_brand - sold_settled_type<br/>sold_settled_description - € 1,00</li>").Line("</ul>").Line(""));
     }
 
     [Theory]
@@ -103,7 +103,7 @@ public class GetStatesList
         string result = await Sut.GetStatesListAsync(basar.Id, seller.Id);
 
         //  Assert
-        result.Should().Be("<h5>VeloBasar_PickedUp</h5>\r\n<ul>\r\n<li>available_settled_brand - available_settled_type<br/>available_settled_description - € 1,00</li>\r\n<li>locked_settled_brand - locked_settled_type<br/>locked_settled_description - € 1,00</li>\r\n</ul>\r\n");
+        result.Should().Be("<h5>VeloBasar_PickedUp</h5>".Line("<ul>").Line("<li>available_settled_brand - available_settled_type<br/>available_settled_description - € 1,00</li>").Line("<li>locked_settled_brand - locked_settled_type<br/>locked_settled_description - € 1,00</li>").Line("</ul>").Line(""));
     }
 
     [Theory]
@@ -132,7 +132,7 @@ public class GetStatesList
         string result = await Sut.GetStatesListAsync(basar.Id, seller.Id);
 
         //  Assert
-        result.Should().Be("<h5>VeloBasar_Sold</h5>\r\n<ul>\r\n<li>sold_brand - sold_type<br/>sold_description - € 1,00</li>\r\n<li>lost_brand - lost_type<br/>lost_description - € 1,00</li>\r\n</ul>\r\n<h5>VeloBasar_NotSold</h5>\r\n<ul>\r\n<li>available_brand - available_type<br/>available_description - € 1,00</li>\r\n<li>locked_brand - locked_type<br/>locked_description - € 1,00</li>\r\n</ul>\r\n<h5>VeloBasar_Settled</h5>\r\n<ul>\r\n<li>lost_settled_brand - lost_settled_type<br/>lost_settled_description - € 1,00</li>\r\n</ul>\r\n<h5>VeloBasar_PickedUp</h5>\r\n<ul>\r\n<li>sold_settled_brand - sold_settled_type<br/>sold_settled_description - € 1,00</li>\r\n<li>available_settled_brand - available_settled_type<br/>available_settled_description - € 1,00</li>\r\n<li>locked_settled_brand - locked_settled_type<br/>locked_settled_description - € 1,00</li>\r\n</ul>\r\n");
+        result.Should().Be("<h5>VeloBasar_Sold</h5>".Line("<ul>").Line("<li>sold_brand - sold_type<br/>sold_description - € 1,00</li>").Line("<li>lost_brand - lost_type<br/>lost_description - € 1,00</li>").Line("</ul>").Line("<h5>VeloBasar_NotSold</h5>").Line("<ul>").Line("<li>available_brand - available_type<br/>available_description - € 1,00</li>").Line("<li>locked_brand - locked_type<br/>locked_description - € 1,00</li>").Line("</ul>").Line("<h5>VeloBasar_Settled</h5>").Line("<ul>").Line("<li>lost_settled_brand - lost_settled_type<br/>lost_settled_description - € 1,00</li>").Line("</ul>").Line("<h5>VeloBasar_PickedUp</h5>").Line("<ul>").Line("<li>sold_settled_brand - sold_settled_type<br/>sold_settled_description - € 1,00</li>").Line("<li>available_settled_brand - available_settled_type<br/>available_settled_description - € 1,00</li>").Line("<li>locked_settled_brand - locked_settled_type<br/>locked_settled_description - € 1,00</li>").Line("</ul>").Line(""));
     }
 
     private ProductEntity CreateProduct(string prefix, StorageState storageState, ValueState valueState)
