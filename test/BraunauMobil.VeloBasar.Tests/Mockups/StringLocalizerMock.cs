@@ -1,8 +1,9 @@
 ﻿using Microsoft.Extensions.Localization;
+using System.Text;
 
 namespace BraunauMobil.VeloBasar.Tests.Mockups;
 
-public class StringLocalizerMock
+public class StringLocalizerMock(IFormatProvider formatProvider)
     : IStringLocalizer<SharedResources>
 
 {
@@ -23,7 +24,18 @@ public class StringLocalizerMock
             ArgumentNullException.ThrowIfNull(name);
             ArgumentNullException.ThrowIfNull(arguments);
 
-            string value = $"{name}_{string.Join('_', arguments)}";
+            StringBuilder argsString = new();
+            foreach (object argument in arguments)
+            {
+                string argString = string.Format(formatProvider, "{0}", argument);
+                if (argsString.Length > 0)
+                {
+                    argsString.Append('_');
+                }
+                argsString.Append(argString);
+            }
+
+            string value = $"{name}_{argsString}";
             return new(name, value);
         }
     }

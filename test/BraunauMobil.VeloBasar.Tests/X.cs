@@ -10,7 +10,7 @@ public static class X
 
     public static IFormatProvider FormatProvider { get; } = CultureInfo.GetCultureInfo("de-AT");
 
-    public static IStringLocalizer<SharedResources> StringLocalizer { get; } = new StringLocalizerMock();
+    public static IStringLocalizer<SharedResources> StringLocalizer { get; } = new StringLocalizerMock(FormatProvider);
 
     public static Action<ServiceDescriptor> CreateInspector<TServiceType, TImplementationType>(ServiceLifetime lifetime)
         => item =>

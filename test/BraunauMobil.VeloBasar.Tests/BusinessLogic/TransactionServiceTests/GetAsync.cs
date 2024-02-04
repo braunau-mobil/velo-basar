@@ -34,7 +34,7 @@ public class GetAsync
         await Db.SaveChangesAsync();
 
         //  Act
-        TransactionEntity result = await Sut.GetAsync(toGet.Id);
+        TransactionEntity result = await Sut.GetAsync(toGet.Id, amountGiven);
 
         //  Assert
         using (new AssertionScope())
