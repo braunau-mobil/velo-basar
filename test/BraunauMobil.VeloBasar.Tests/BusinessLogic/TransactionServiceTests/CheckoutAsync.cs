@@ -48,6 +48,12 @@ public class CheckoutAsync
             saleFromDb.Seller.Should().BeNull();
             saleFromDb.SellerId.Should().BeNull();
             saleFromDb.TimeStamp.Should().Be(timestamp);
+            saleFromDb.Type.Should().Be(TransactionType.Sale);
+            saleFromDb.Products.Should().AllSatisfy(pt =>
+            {
+                pt.Product.StorageState.Should().Be(StorageState.Sold);
+                pt.Product.ValueState.Should().Be(ValueState.NotSettled);
+            });
         }
 
         A.CallTo(() => NumberService.NextNumberAsync(basar.Id, TransactionType.Sale)).MustHaveHappenedOnceExactly();
