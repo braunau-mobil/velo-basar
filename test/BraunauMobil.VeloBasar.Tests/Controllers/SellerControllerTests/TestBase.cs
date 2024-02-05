@@ -15,7 +15,7 @@ public class TestBase
         A.CallTo(() => Router.Seller).Returns(SellerRouter);
         A.CallTo(() => Router.Transaction).Returns(TransactionRouter);
 
-        Sut = new(SellerService, new SellerSearchModelValidator(Localizer), Router, SellerRouter, new Crud.SellerCrudModelFactory(Localizer, X.StrictFake<IHtmlHelper>(), SellerRouter, X.StrictFake<IVeloHtmlFactory>()), new SellerEntityValidator(Localizer));
+        Sut = new(SellerService, new SellerSearchModelValidator(Localizer), Router, SellerRouter, new SellerCrudModelFactory(Localizer, X.StrictFake<IHtmlHelper>(), SellerRouter, X.StrictFake<IVeloHtmlFactory>()), new SellerEntityValidator(Localizer));
     }
 
     protected IAcceptSessionRouter AcceptSessionRouter { get; } = X.StrictFake<IAcceptSessionRouter>();

@@ -1,5 +1,4 @@
-﻿using BraunauMobil.VeloBasar.Rendering;
-using BraunauMobil.VeloBasar.Routing;
+﻿using BraunauMobil.VeloBasar.Routing;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Localization;
@@ -7,7 +6,7 @@ using Xan.AspNetCore.Parameter;
 using Xan.AspNetCore.Rendering;
 using Xan.Extensions.Collections.Generic;
 
-namespace BraunauMobil.VeloBasar.Crud;
+namespace BraunauMobil.VeloBasar.Rendering;
 
 public sealed class BasarCrudModelFactory
     : AbstractCrudModelFactory<BasarEntity, ListParameter, IBasarRouter>
@@ -42,10 +41,10 @@ public sealed class BasarCrudModelFactory
         result.AppendHtml(_html.TextInputField(nameof(entity.Location), entity.Location, _localizer[VeloTexts.Location]));
         result.AppendHtml(_html.NumberInputField(nameof(entity.ProductCommissionPercentage), entity.ProductCommissionPercentage, _localizer[VeloTexts.ProductCommissionPercentage]));
         result.AppendHtml(_html.SelectField(nameof(entity.State), entity.State, _selectLists.States(), _localizer[VeloTexts.State]));
-        
+
         return await Task.FromResult(result);
     }
-    
+
     protected override async Task<IHtmlContent> CreateTableAsync(ViewContext viewContext, IPaginatedList<CrudItemModel<BasarEntity>> model)
     {
         ArgumentNullException.ThrowIfNull(viewContext);

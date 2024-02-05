@@ -1,7 +1,6 @@
 ﻿using BraunauMobil.VeloBasar.BusinessLogic;
 using BraunauMobil.VeloBasar.Controllers;
 using BraunauMobil.VeloBasar.Cookies;
-using BraunauMobil.VeloBasar.Crud;
 using BraunauMobil.VeloBasar.Data;
 using BraunauMobil.VeloBasar.Filters;
 using BraunauMobil.VeloBasar.Pdf;

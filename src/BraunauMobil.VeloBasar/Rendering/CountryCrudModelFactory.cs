@@ -1,5 +1,4 @@
-﻿using BraunauMobil.VeloBasar.Rendering;
-using BraunauMobil.VeloBasar.Routing;
+﻿using BraunauMobil.VeloBasar.Routing;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Localization;
@@ -7,7 +6,7 @@ using Xan.AspNetCore.Parameter;
 using Xan.AspNetCore.Rendering;
 using Xan.Extensions.Collections.Generic;
 
-namespace BraunauMobil.VeloBasar.Crud;
+namespace BraunauMobil.VeloBasar.Rendering;
 
 public sealed class CountryCrudModelFactory
     : AbstractCrudModelFactory<CountryEntity, ListParameter, ICountryRouter>
@@ -40,7 +39,7 @@ public sealed class CountryCrudModelFactory
         result.AppendHtml(_html.TextInputField(nameof(entity.Name), entity.Name, _localizer[VeloTexts.Name], autoFocus: true));
         result.AppendHtml(_html.TextInputField(nameof(entity.Iso3166Alpha3Code), entity.Iso3166Alpha3Code, _localizer[VeloTexts.Iso3166Alpha3Code]));
         result.AppendHtml(_html.SelectField(nameof(entity.State), entity.State, _selectLists.States(), _localizer[VeloTexts.State]));
-        
+
         return await Task.FromResult(result);
     }
 

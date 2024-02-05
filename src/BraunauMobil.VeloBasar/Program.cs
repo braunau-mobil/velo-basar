@@ -10,7 +10,6 @@ using BraunauMobil.VeloBasar.Configuration;
 using Microsoft.Extensions.Logging;
 using BraunauMobil.VeloBasar.Filters;
 using BraunauMobil.VeloBasar.BusinessLogic;
-using BraunauMobil.VeloBasar.Crud;
 using BraunauMobil.VeloBasar.Controllers;
 using Xan.AspNetCore.Mvc;
 using Xan.Extensions;

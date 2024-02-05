@@ -1,5 +1,4 @@
 ﻿using BraunauMobil.VeloBasar.Parameters;
-using BraunauMobil.VeloBasar.Rendering;
 using BraunauMobil.VeloBasar.Routing;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -8,7 +7,7 @@ using Microsoft.Extensions.Localization;
 using Xan.AspNetCore.Rendering;
 using Xan.Extensions.Collections.Generic;
 
-namespace BraunauMobil.VeloBasar.Crud;
+namespace BraunauMobil.VeloBasar.Rendering;
 
 public sealed class SellerCrudModelFactory
     : AbstractCrudModelFactory<SellerEntity, SellerListParameter, ISellerRouter>
