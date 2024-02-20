@@ -115,20 +115,11 @@ public sealed class BasarService
     {
         ArgumentNullException.ThrowIfNull(entity);
 
-        _db.Basars.Update(entity);
+        Set.Update(entity);
         if (entity.State == ObjectState.Enabled)
         {
-            await _db.Basars.ForEachAsync(basar =>
-            {
-                if (basar.Id == entity.Id)
-                {
-                    basar.State = ObjectState.Enabled;
-                }
-                else
-                {
-                    basar.State = ObjectState.Disabled;
-                }
-            });
+            await Set.Where(basar => basar != entity)
+                .ForEachAsync(basar => basar.State = ObjectState.Disabled);
         }
         await _db.SaveChangesAsync();
     }
