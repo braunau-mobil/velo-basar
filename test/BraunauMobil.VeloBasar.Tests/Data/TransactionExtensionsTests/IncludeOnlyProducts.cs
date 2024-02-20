@@ -4,7 +4,7 @@ using Xan.AspNetCore.EntityFrameworkCore;
 namespace BraunauMobil.VeloBasar.Tests.Data.TransactionExtensionsTests;
 
 public class IncludeOnlyProducts
-    : DbTestBase<EmptySqliteDbFixture>
+    : DbTestBase
 {
     [Theory]
     [VeloAutoData]

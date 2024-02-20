@@ -3,7 +3,7 @@
 namespace BraunauMobil.VeloBasar.Tests.Rendering.SelectListServiceTests;
 
 public class TestBase
-    : DbTestBase<EmptySqliteDbFixture>
+    : DbTestBase
 {
     public TestBase()
     {

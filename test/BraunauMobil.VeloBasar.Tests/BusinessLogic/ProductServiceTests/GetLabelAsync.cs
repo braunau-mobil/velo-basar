@@ -1,7 +1,7 @@
 ﻿namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.ProductServiceTests;
 
 public class GetLabelAsync
-    : TestBase<EmptySqliteDbFixture>
+    : TestBase
 {
     [Theory]
     [VeloAutoData]

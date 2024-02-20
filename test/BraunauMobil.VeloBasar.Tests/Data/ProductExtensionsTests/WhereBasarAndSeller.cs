@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 namespace BraunauMobil.VeloBasar.Tests.Data.ProductExtensionsTests;
 
 public class GetForSellerAsync
-    : DbTestBase<EmptySqliteDbFixture>
+    : DbTestBase
 {
     private readonly VeloFixture _fixture = new();
 

@@ -3,7 +3,7 @@
 namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.SellerServiceTests;
 
 public class SettleAsync
-    : TestBase<EmptySqliteDbFixture>
+    : TestBase
 {
     [Theory]
     [VeloAutoData]

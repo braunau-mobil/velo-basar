@@ -25,7 +25,7 @@ public class List
         ArgumentNullException.ThrowIfNull(parameter.PageSize);
 
         //  Arrange
-        A.CallTo(() => AcceptSessionService.GetAllAsync(parameter.PageSize.Value, parameter.PageIndex, parameter.BasarId, parameter.AcceptSessionState)).Returns(Helpers.EmptyPaginatedList<AcceptSessionEntity>());
+        A.CallTo(() => AcceptSessionService.GetAllAsync(parameter.PageSize.Value, parameter.PageIndex, parameter.BasarId, parameter.AcceptSessionState)).Returns(X.EmptyPaginatedList<AcceptSessionEntity>());
 
         //  Act
         IActionResult result = await Sut.List(parameter);

@@ -3,7 +3,7 @@
 namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.SetupServiceTests;
 
 public class TestBase
-    : DbTestBase<EmptySqliteDbFixture>
+    : DbTestBase
 {
     public TestBase()
     {

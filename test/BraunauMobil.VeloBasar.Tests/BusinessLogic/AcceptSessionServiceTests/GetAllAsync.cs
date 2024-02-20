@@ -3,7 +3,7 @@
 namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.AcceptSessionServiceTests;
 
 public class GetAllAsync
-    : TestBase<EmptySqliteDbFixture>
+    : TestBase
 {
     private const int _pageSize = 5;
 

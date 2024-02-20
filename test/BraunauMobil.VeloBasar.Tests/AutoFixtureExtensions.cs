@@ -95,6 +95,16 @@ public class VeloFixture
             .With(_ => _.BasarId, basar.Id);
     }
 
+    public IPostprocessComposer<TransactionEntity> BuildTransaction(BasarEntity basar, SellerEntity seller)
+    {
+        ArgumentNullException.ThrowIfNull(basar);
+        ArgumentNullException.ThrowIfNull(seller);
+
+        return BuildTransaction(basar)
+            .With(_ => _.Seller, seller)
+            .With(_ => _.SellerId, seller.Id);
+    }
+
     public void ExcludeEnumValues<TEnum>(params TEnum[] valuesToExclude)
         where TEnum : struct, Enum
     {

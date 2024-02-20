@@ -1,7 +1,7 @@
 ﻿namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.BasarStatsServiceTests;
 
 public class GetAcceptedProductsCount
-    : TestBase<EmptySqliteDbFixture>
+    : TestBase
 {
     [Fact]
     public void EmptyList_ReturnsZero()

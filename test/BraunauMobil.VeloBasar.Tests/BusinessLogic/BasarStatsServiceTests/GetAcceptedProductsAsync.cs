@@ -1,8 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
 namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.BasarStatsServiceTests;
+
 public class GetAcceptedProductsAsync
-    : TestBase<EmptySqliteDbFixture>
+    : TestBase
 {
     private readonly VeloFixture _fixture = new();
 

@@ -1,7 +1,7 @@
 ﻿namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.AcceptSessionServiceTests;
 
 public class IsSessionRunning
-    : TestBase<EmptySqliteDbFixture>
+    : TestBase
 {
     [Fact]
     public async Task Null_ReturnsFalse()

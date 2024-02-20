@@ -1,7 +1,7 @@
 ﻿namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.BasarStatsServiceTests;
 
 public class GetAcceptanceCountAsync
-    : TestBase<EmptySqliteDbFixture>
+    : TestBase
 {
     private readonly VeloFixture _fixture = new();
 

@@ -8,7 +8,7 @@ using Xan.Extensions.Tasks;
 namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.WordPressStatusPushServiceTests;
 
 public class TestBase
-    : DbTestBase<EmptySqliteDbFixture>
+    : DbTestBase
 {
     public TestBase()
     {

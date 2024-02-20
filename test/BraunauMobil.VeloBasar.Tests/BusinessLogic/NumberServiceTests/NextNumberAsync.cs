@@ -3,7 +3,7 @@
 namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.NumberServiceTests;
 
 public class NextNumberAsync
-    : DbTestBase<EmptySqliteDbFixture>
+    : DbTestBase
 {
     [Theory]
     [VeloAutoData]

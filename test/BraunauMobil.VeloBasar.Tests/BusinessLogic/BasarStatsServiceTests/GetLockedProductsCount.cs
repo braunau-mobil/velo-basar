@@ -1,7 +1,7 @@
 ﻿namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.BasarStatsServiceTests;
 
 public class GetLockedProductsCount
-    : TestBase<EmptySqliteDbFixture>
+    : TestBase
 {
     [Fact]
     public void EmptyList_ReturnsZero()

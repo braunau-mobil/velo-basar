@@ -3,7 +3,7 @@
 namespace BraunauMobil.VeloBasar.Tests.Data.NumberExtensionsTests;
 
 public class GetForBasarAsync
-    : DbTestBase<EmptySqliteDbFixture>
+    : DbTestBase
 {
     [Theory]
     [VeloAutoData]

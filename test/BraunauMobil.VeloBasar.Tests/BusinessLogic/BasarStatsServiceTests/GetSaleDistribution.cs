@@ -4,7 +4,7 @@ using Xan.Extensions;
 namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.BasarStatsServiceTests;
 
 public sealed class GetSaleDistribution
-    : TestBase<EmptySqliteDbFixture>
+    : TestBase
 {
     private readonly VeloFixture _fixture = new();
 

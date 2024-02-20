@@ -10,6 +10,7 @@ using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
+using System.Globalization;
 using Xan.Extensions;
 
 namespace BraunauMobil.VeloBasar.DataGenerator;
@@ -18,24 +19,19 @@ public class Program
 {
     public static async Task Main()
     {
-        await GenerateSqlite("DataSource=../../../../BraunauMobil.VeloBasar.Tests/VeloBasarTest.db");
-        await GeneratePostgres("User ID=postgres;Password=postgres;Host=localhost;Port=5432;Database=velobasar;Pooling=true;");
+        CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-US");
+        CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-US");
+
+
+        await GeneratePostgresAsync("User ID=postgres;Password=postgres;Host=localhost;Port=5432;Database=velobasar;Pooling=true;");
     }
 
-    private static async Task GeneratePostgres(string connectionString)
+    private static async Task GeneratePostgresAsync(string connectionString)
     {
         await GenerateAsync(options =>
         {
             options.UseNpgsql(connectionString);
             AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
-        });
-    }
-
-    private static async Task GenerateSqlite(string connectionString)
-    {
-        await GenerateAsync(options =>
-        {
-            options.UseSqlite(connectionString);
         });
     }
 
@@ -58,6 +54,7 @@ public class Program
         services
             .AddBusinessLogic()
             .AddSingleton<DataGeneratorService>()
+            .AddSingleton<IFormatProvider>(CultureInfo.DefaultThreadCurrentCulture!)
             .AddSingleton<IClock, ClockMock>()
             .AddSingleton<IStatusPushService, StatusPushServiceMock>()
             .AddSingleton(CreateActualLocalizer())

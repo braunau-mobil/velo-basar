@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Routing;
 namespace BraunauMobil.VeloBasar.Tests.Filters;
 
 public class ActiveSessionIdFilterTests
-    : DbTestBase<EmptySqliteDbFixture>
+    : DbTestBase
 {
     private readonly ActiveSessionIdFilter _sut;
     private readonly IActiveAcceptSessionCookie _activeAcceptSessionCookie;

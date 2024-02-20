@@ -3,7 +3,7 @@
 namespace BraunauMobil.VeloBasar.Tests.Data.TransactionExtensionsTests;
 
 public class GetTimestampAsync
-    : DbTestBase<EmptySqliteDbFixture>
+    : DbTestBase
 {
     [Theory]
     [VeloAutoData]

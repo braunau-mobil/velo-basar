@@ -5,7 +5,7 @@ using Microsoft.Extensions.Options;
 namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.AdminServiceTests;
 
 public class TestBase
-    : DbTestBase<EmptySqliteDbFixture>
+    : DbTestBase
 {
     public TestBase()
     {

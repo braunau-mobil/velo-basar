@@ -3,7 +3,7 @@
 namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.BasarStatsServiceTests;
 
 public class GetSoldProductTypesWithCount
-    : TestBase<EmptySqliteDbFixture>
+    : TestBase
 {
     private readonly VeloFixture _fixture = new();
 

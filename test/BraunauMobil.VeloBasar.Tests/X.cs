@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using System.Globalization;
+using Xan.Extensions.Collections.Generic;
 
 namespace BraunauMobil.VeloBasar.Tests;
 
@@ -31,4 +32,7 @@ public static class X
 
         return s + Environment.NewLine + nextLine;
     }
+
+    public static IPaginatedList<T> EmptyPaginatedList<T>()
+        => new PaginatedList<T>(new List<T>(), 0, 0, 0, 0);
 }

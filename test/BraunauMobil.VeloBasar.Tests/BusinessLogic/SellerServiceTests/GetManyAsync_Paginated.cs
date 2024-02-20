@@ -6,7 +6,7 @@ using Xan.Extensions.Collections.Generic;
 namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.SellerServiceTests;
 
 public class GetManyAsync_Paginated
-    : TestBase<EmptySqliteDbFixture>
+    : TestBase
 {
     private readonly VeloFixture _fixture = new();
 

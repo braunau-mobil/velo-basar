@@ -3,7 +3,7 @@
 namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.AcceptProductServiceTests;
 
 public class UpdateAsync
-	: TestBase<EmptySqliteDbFixture>
+	: TestBase
 {
 	[Theory]
 	[VeloAutoData]

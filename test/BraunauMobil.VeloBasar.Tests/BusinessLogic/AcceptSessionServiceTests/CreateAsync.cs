@@ -1,7 +1,7 @@
 ﻿namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.AcceptSessionServiceTests;
 
 public class CreateAsync
-	: TestBase<EmptySqliteDbFixture>
+	: TestBase
 {
     [Theory]
     [VeloAutoData]

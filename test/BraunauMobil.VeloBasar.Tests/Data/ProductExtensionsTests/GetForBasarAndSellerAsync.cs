@@ -3,7 +3,7 @@
 namespace BraunauMobil.VeloBasar.Tests.Data.ProductExtensionsTests;
 
 public class GetForBasarAndSellerAsync
-    : DbTestBase<EmptySqliteDbFixture>
+    : DbTestBase
 {
     private readonly VeloFixture _fixture = new();
 

@@ -87,7 +87,7 @@ public sealed class SellerService
             AcceptedProductCount = products.Count,
             SettlementAmout = soldProducts.Sum(p => p.GetCommissionedPrice(basar)),
             NotSoldProductCount = products.Where(p => p.StorageState != StorageState.Sold).Count(),
-            PickedUpProductCount = products.Where(p => p.StorageState == StorageState.Lost && p.ValueState == ValueState.Settled).Count(),
+            PickedUpProductCount = products.Where(p => p.StorageState == StorageState.Available && p.ValueState == ValueState.Settled).Count(),
             SoldProductCount = soldProducts.Count
         };
     }
