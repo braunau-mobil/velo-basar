@@ -371,7 +371,7 @@ public sealed class ItextTransactionDocumentGenerator(PdfGenerator pdf, IFormatP
             .SetBorderTop(new DoubleBorder(2))
             .SetSplitCharacters(new NoSplitCharacters())
             .SetTextAlignment(TextAlignment.RIGHT)
-            .Add(pdf.GetBigParagraph(model.PpayoutAmountText))
+            .Add(pdf.GetBigParagraph(model.PayoutAmountText))
                 .SetBold()
                 .SetFontColor(pdf.Orange);
 

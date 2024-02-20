@@ -40,4 +40,4 @@ public record SettlementCommisionSummaryModel(
     string CommissionPartText,
     string PayoutAmountInclCommissionText,
     string PayoutCommissionAmountText,
-    string PpayoutAmountText);
+    string PayoutAmountText);
