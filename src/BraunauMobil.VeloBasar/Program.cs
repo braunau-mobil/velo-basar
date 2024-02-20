@@ -26,7 +26,7 @@ namespace BraunauMobil.VeloBasar;
 
 public static class Program
 {
-    public static void Main(string[] args)
+    public static async Task Main(string[] args)
     {
         WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
         builder.Logging.AddConsole();
@@ -66,7 +66,7 @@ public static class Program
             migrator.Migrate();
         }
 
-        app.Run();
+        await app.RunAsync();
     }    
 
     private static void ConfigureServices(IServiceCollection services, ConfigurationManager configuration, IFormatProvider formatProvider)
