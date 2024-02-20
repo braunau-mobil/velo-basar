@@ -1,9 +1,10 @@
 ﻿using BraunauMobil.VeloBasar.BusinessLogic;
 using BraunauMobil.VeloBasar.Data;
+using BraunauMobil.VeloBasar.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Localization;
 
-namespace BraunauMobil.VeloBasar.Tests.IntegrationTests;
+namespace BraunauMobil.VeloBasar.IntegrationTests.Mockups;
 
 public class SetupServiceWrapper(VeloDbContext db, UserManager<IdentityUser> userManager, IStringLocalizer<SharedResources> localizer)
     : ISetupService
