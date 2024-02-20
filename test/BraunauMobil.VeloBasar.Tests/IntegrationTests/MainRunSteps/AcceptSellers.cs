@@ -168,7 +168,7 @@ public class AcceptSellers
             model.SessionId.Should().Be(acceptSessionId);
             model.Products.Should().BeEmpty();
 
-            model.Entity.TypeId = V.ProductTypes.Stahlross.Id;
+            model.Entity.TypeId = V.ProductTypes.SteelSteed.Id;
             model.Entity.Brand = "Simplon";
             model.Entity.Color = "Schwarz";
             model.Entity.FrameNumber = "1234567890";
@@ -184,7 +184,7 @@ public class AcceptSellers
             model.SessionId.Should().Be(acceptSessionId);
             model.Products.Should().HaveCount(1);
 
-            model.Entity.TypeId = V.ProductTypes.Einrad.Id;
+            model.Entity.TypeId = V.ProductTypes.Scooter.Id;
             model.Entity.Brand = "AJATA";
             model.Entity.Color = "Rot";
             model.Entity.FrameNumber = "qe340t9ni-0i4";

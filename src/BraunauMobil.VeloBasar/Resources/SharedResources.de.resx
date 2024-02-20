@@ -972,4 +972,28 @@
   <data name="VeloBasar_SellerLabelsFileName" xml:space="preserve">
     <value>Verkäufer-{0}_ArtikelEtiketten.pdf</value>
   </data>
+  <data name="VeloBasar_DefaultProductTypeChildrensBike" xml:space="preserve">
+    <value>Kinderrad</value>
+  </data>
+  <data name="VeloBasar_DefaultProductTypeEBike" xml:space="preserve">
+    <value>E-Bike</value>
+  </data>
+  <data name="VeloBasar_DefaultProductTypeMensCityBike" xml:space="preserve">
+    <value>City-Bike Herren</value>
+  </data>
+  <data name="VeloBasar_DefaultProductTypeRoadBike" xml:space="preserve">
+    <value>Rennrad</value>
+  </data>
+  <data name="VeloBasar_DefaultProductTypeScooter" xml:space="preserve">
+    <value>Roller</value>
+  </data>
+  <data name="VeloBasar_DefaultProductTypeSteelSteed" xml:space="preserve">
+    <value>Stahlross</value>
+  </data>
+  <data name="VeloBasar_DefaultProductTypeUnicycle" xml:space="preserve">
+    <value>Einrad</value>
+  </data>
+  <data name="VeloBasar_DefaultProductTypeWomansCityBike" xml:space="preserve">
+    <value>City-Bike Frauen</value>
+  </data>
 </root>

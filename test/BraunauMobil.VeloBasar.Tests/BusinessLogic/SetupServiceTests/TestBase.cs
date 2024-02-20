@@ -7,7 +7,7 @@ public class TestBase
 {
     public TestBase()
     {
-        Sut = new SetupService(Db, new UserManagerMock());
+        Sut = new SetupService(Db, new UserManagerMock(), X.StringLocalizer);
     }
 
     public SetupService Sut { get; }

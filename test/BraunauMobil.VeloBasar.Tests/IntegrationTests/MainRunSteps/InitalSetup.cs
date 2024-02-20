@@ -89,8 +89,8 @@ public class InitalSetup
 
             db.ZipCodes.AsNoTracking().Should().Contain(zipCode => zipCode.Zip == "5280");
 
-            V.ProductTypes.Einrad = db.ProductTypes.AsNoTracking().Should().Contain(x => x.Name == "Einrad").Subject;
-            V.ProductTypes.Stahlross = db.ProductTypes.AsNoTracking().Should().Contain(x => x.Name == "Stahlross").Subject;
+            V.ProductTypes.Scooter = db.ProductTypes.AsNoTracking().Should().Contain(x => x.Name == "Scooter").Subject;
+            V.ProductTypes.SteelSteed = db.ProductTypes.AsNoTracking().Should().Contain(x => x.Name == "Steel steed").Subject;
         });
     }
 }

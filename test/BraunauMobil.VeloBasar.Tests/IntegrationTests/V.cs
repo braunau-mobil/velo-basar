@@ -18,9 +18,9 @@ public static class V
 
     public static class ProductTypes
     {
-        public static ProductTypeEntity Einrad { get; set; }
+        public static ProductTypeEntity Scooter { get; set; }
         
-        public static ProductTypeEntity Stahlross { get; set; }
+        public static ProductTypeEntity SteelSteed { get; set; }
     }
 
     public static class Sellers

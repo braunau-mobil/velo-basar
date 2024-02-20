@@ -87,6 +87,14 @@ public static class VeloTexts
     public const string CreateProductType = $"{Prefix}{nameof(CreateProductType)}";
     public const string CreateSeller = $"{Prefix}{nameof(CreateSeller)}";
     public const string Date = $"{Prefix}{nameof(Date)}";
+    public const string DefaultProductTypeUnicycle = $"{Prefix}{nameof(DefaultProductTypeUnicycle)}";
+    public const string DefaultProductTypeRoadBike = $"{Prefix}{nameof(DefaultProductTypeRoadBike)}";
+    public const string DefaultProductTypeMensCityBike = $"{Prefix}{nameof(DefaultProductTypeMensCityBike)}";
+    public const string DefaultProductTypeWomansCityBike = $"{Prefix}{nameof(DefaultProductTypeWomansCityBike)}";
+    public const string DefaultProductTypeChildrensBike = $"{Prefix}{nameof(DefaultProductTypeChildrensBike)}";
+    public const string DefaultProductTypeScooter = $"{Prefix}{nameof(DefaultProductTypeScooter)}";
+    public const string DefaultProductTypeEBike = $"{Prefix}{nameof(DefaultProductTypeEBike)}";
+    public const string DefaultProductTypeSteelSteed = $"{Prefix}{nameof(DefaultProductTypeSteelSteed)}";
     public const string Delete = $"{Prefix}{nameof(Delete)}";
     public const string Description = $"{Prefix}{nameof(Description)}";
     public const string Details = $"{Prefix}{nameof(Details)}";

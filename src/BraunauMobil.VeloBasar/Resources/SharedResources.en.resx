@@ -972,4 +972,28 @@
   <data name="VeloBasar_SellerLabelsFileName" xml:space="preserve">
     <value>Seller-{0}_ProductLabels.pdf</value>
   </data>
+  <data name="VeloBasar_DefaultProductTypeChildrensBike" xml:space="preserve">
+    <value>Children's bike</value>
+  </data>
+  <data name="VeloBasar_DefaultProductTypeEBike" xml:space="preserve">
+    <value>E-bike</value>
+  </data>
+  <data name="VeloBasar_DefaultProductTypeMensCityBike" xml:space="preserve">
+    <value>Men's city bike</value>
+  </data>
+  <data name="VeloBasar_DefaultProductTypeRoadBike" xml:space="preserve">
+    <value>Road bike</value>
+  </data>
+  <data name="VeloBasar_DefaultProductTypeScooter" xml:space="preserve">
+    <value>Scooter</value>
+  </data>
+  <data name="VeloBasar_DefaultProductTypeSteelSteed" xml:space="preserve">
+    <value>Steel steed</value>
+  </data>
+  <data name="VeloBasar_DefaultProductTypeUnicycle" xml:space="preserve">
+    <value>Unicycle</value>
+  </data>
+  <data name="VeloBasar_DefaultProductTypeWomansCityBike" xml:space="preserve">
+    <value>Woman's city bike</value>
+  </data>
 </root>

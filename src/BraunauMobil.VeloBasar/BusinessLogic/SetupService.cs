@@ -1,30 +1,22 @@
 ﻿using BraunauMobil.VeloBasar.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 
 namespace BraunauMobil.VeloBasar.BusinessLogic;
 
-public sealed class SetupService
+public sealed class SetupService(VeloDbContext db, UserManager<IdentityUser> userManager, IStringLocalizer<SharedResources> localizer)
     : ISetupService
 {
-    private readonly VeloDbContext _db;
-    private readonly UserManager<IdentityUser> _userManager;
-
-    public SetupService(VeloDbContext db, UserManager<IdentityUser> userManager)
-    {
-        _db = db ?? throw new ArgumentNullException(nameof(db));
-        _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
-    }
-
     public async Task CreateDatabaseAsync()
     {
-        if (_db.IsSQLITE())
+        if (db.IsSQLITE())
         {
-            await _db.Database.EnsureCreatedAsync();
+            await db.Database.EnsureCreatedAsync();
         }
         else
         {
-            await _db.Database.MigrateAsync();
+            await db.Database.MigrateAsync();
         }
     }
 
@@ -38,23 +30,23 @@ public sealed class SetupService
             UserName = config.AdminUserEMail
         };
         
-        await _userManager.CreateAsync(adminUser, "root");
+        await userManager.CreateAsync(adminUser, "root");
 
         if (config.GenerateCountries)
         {
-            _db.Countries.Add(new CountryEntity
+            db.Countries.Add(new CountryEntity
             {
                 Iso3166Alpha3Code = "AUT",
                 Name = "Österreich",
                 State = ObjectState.Enabled
             });
-            _db.Countries.Add(new CountryEntity
+            db.Countries.Add(new CountryEntity
             {
                 Iso3166Alpha3Code = "GER",
                 Name = "Deutschland",
                 State = ObjectState.Enabled
             });
-            await _db.SaveChangesAsync();
+            await db.SaveChangesAsync();
         }
 
         if (config.GenerateProductTypes)
@@ -64,19 +56,31 @@ public sealed class SetupService
 
         if (config.GenerateZipCodes)
         {
-            _db.ZipCodes.AddRange(new ZipCollection(await _db.Countries.ToListAsync()));
+            db.ZipCodes.AddRange(new ZipCollection(await db.Countries.ToListAsync()));
         }
 
-        await _db.SaveChangesAsync();
+        await db.SaveChangesAsync();
     }
 
     private void GenerateProductTypes()
     {
-        foreach (string productTypeName in Names.ProductTypeNames)
+        string[] textIds =
+        [
+            VeloTexts.DefaultProductTypeUnicycle,
+            VeloTexts.DefaultProductTypeRoadBike,
+            VeloTexts.DefaultProductTypeMensCityBike,
+            VeloTexts.DefaultProductTypeWomansCityBike,
+            VeloTexts.DefaultProductTypeChildrensBike,
+            VeloTexts.DefaultProductTypeScooter,
+            VeloTexts.DefaultProductTypeEBike,
+            VeloTexts.DefaultProductTypeSteelSteed,
+        ];
+
+        foreach (string textId in textIds)
         {
-            _db.ProductTypes.Add(new ProductTypeEntity
+            db.ProductTypes.Add(new ProductTypeEntity
             {
-                Name = productTypeName,
+                Name = localizer[textId],
                 State = ObjectState.Enabled
             });
         }
