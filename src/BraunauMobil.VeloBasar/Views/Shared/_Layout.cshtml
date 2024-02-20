@@ -61,18 +61,7 @@
                                 </strong>
                                 <ul class="nav flex-column nav-pills">
                                     <li class="nav-item"><a class="nav-link" href="@Router.Basar.ToActiveBasarDetails()">@Localizer[VeloTexts.Overview]</a></li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="@Router.AcceptSession.ToStart()">
-                                            @if (activeSessionId is null)
-                                            {
-                                                @Localizer[VeloTexts.NewAcceptance]
-                                            }
-                                            else
-                                            {
-                                                @Localizer[VeloTexts.ContinueAcceptSession]
-                                            }
-                                        </a>
-                                    </li>
+                                    <li class="nav-item"><a class="nav-link" href="@Router.AcceptSession.ToStart()">@Localizer[VeloTexts.StartAcceptSession(activeSessionId)]</a></li>
                                     <li class="nav-item"><a class="nav-link" href="@Router.AcceptanceLabels.ToSelect()">@Localizer[VeloTexts.PrintLabels]</a></li>
                                     <li class="nav-item"><a class="nav-link" href="@Router.Seller.ToList()">@Localizer[VeloTexts.SellerList]</a></li>
                                     <li class="nav-item"><a class="nav-link" href="@Router.Product.ToList()">@Localizer[VeloTexts.Products]</a></li>

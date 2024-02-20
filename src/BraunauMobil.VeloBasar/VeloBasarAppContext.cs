@@ -27,5 +27,8 @@ public sealed class VeloBasarAppContext
 
     public bool DevToolsEnabled() => _env.IsDevelopment();
 
-    public bool IsDatabaseInitialized() => _db.IsInitialized();
+    public async Task<bool> NeedsInitialSetupAsync() => await _db.NeedsInitialSetupAsync();
+
+    public async Task<bool> NeedsMigrationAsync() => await _db.NeedsMigrationAsync();
+
 }

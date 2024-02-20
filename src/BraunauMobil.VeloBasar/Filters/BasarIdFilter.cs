@@ -6,30 +6,21 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace BraunauMobil.VeloBasar.Filters;
 
-public sealed class BasarIdFilter
-    : IAsyncActionFilter
+public sealed class BasarIdFilter(IBasarRouter router, IBasarService basarService)
+    : AbstractVeloActionFilter
 {
     public const string BasarIdArgumentName = "basarId";
 
-    private readonly IBasarRouter _router;
-    private readonly IBasarService _basarService;
-
-    public BasarIdFilter(IBasarRouter router, IBasarService basarService)
-    {
-        _router = router ?? throw new ArgumentNullException(nameof(router));
-        _basarService = basarService ?? throw new ArgumentNullException(nameof(basarService));
-    }
-
-    public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
+    protected override async Task ActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate nextDelegate)
     {
         ArgumentNullException.ThrowIfNull(context);
-        ArgumentNullException.ThrowIfNull(next);
+        ArgumentNullException.ThrowIfNull(nextDelegate);
 
-        int? activeBasarId = await _basarService.GetActiveBasarIdAsync();
+        int? activeBasarId = await basarService.GetActiveBasarIdAsync();
         BasarEntity? activeBasar = null;
         if (activeBasarId.HasValue)
         {
-            activeBasar = await _basarService.GetAsync(activeBasarId.Value);
+            activeBasar = await basarService.GetAsync(activeBasarId.Value);
         }
 
         if (context.ActionDescriptor.Parameters.Any(p => p.Name == BasarIdArgumentName))
@@ -69,7 +60,7 @@ public sealed class BasarIdFilter
             controller.ViewData.SetActiveBasar(activeBasar);
         }
 
-        await next();
+        await nextDelegate();
     }
 
     private async Task RedirectToBasarList(ActionExecutingContext context)
@@ -79,7 +70,7 @@ public sealed class BasarIdFilter
             await context.Result.ExecuteResultAsync(context);
         }
 
-        context.Result = new RedirectResult(_router.ToList());
+        context.Result = new RedirectResult(router.ToList());
         return;
     }
 }

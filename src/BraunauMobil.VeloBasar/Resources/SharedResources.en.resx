@@ -996,4 +996,13 @@
   <data name="VeloBasar_DefaultProductTypeWomansCityBike" xml:space="preserve">
     <value>Woman's city bike</value>
   </data>
+  <data name="VeloBasar_MigrateDatabase" xml:space="preserve">
+    <value>Migrate Database</value>
+  </data>
+  <data name="VeloBasar_MigrateDatabaseHint" xml:space="preserve">
+    <value>This can take a bit, so be patient. If it was succesful you will be redirected to the Index.</value>
+  </data>
+  <data name="VeloBasar_MigrateDatabaseText" xml:space="preserve">
+    <value>The database hast to be migrated. Click on OK to start.</value>
+  </data>
 </root>

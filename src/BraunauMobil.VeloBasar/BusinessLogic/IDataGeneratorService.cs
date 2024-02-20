@@ -4,6 +4,8 @@ public interface IDataGeneratorService
 {
     void Contextualize(DataGeneratorConfiguration config);
 
+    Task CreateDatabaseAsync();
+
     Task DropDatabaseAsync();
     
     Task GenerateAsync();

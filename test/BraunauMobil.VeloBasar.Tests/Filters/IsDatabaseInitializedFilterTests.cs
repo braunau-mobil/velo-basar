@@ -20,7 +20,7 @@ public class IsDatabaseInitializedFilterTests
 
     public IsDatabaseInitializedFilterTests()
     {
-        _sut = new(_appContext, _router, A.Fake<ILogger<IsDatabaseInitializedFilter>>());
+        _sut = new(A.Fake<ILogger<IsDatabaseInitializedFilter>>(), _appContext, _router);
 
         ActionContext actionContext = new(new DefaultHttpContext(), new RouteData(), new ActionDescriptor());
         IList<IFilterMetadata> filters = X.StrictFake<IList<IFilterMetadata>>();
@@ -35,10 +35,11 @@ public class IsDatabaseInitializedFilterTests
     }
 
     [Fact]
-    public async Task Initialized_ShouldNotRedirect()
+    public async Task Initialized_Migrated_ShouldNotRedirect()
     {
         //  Arrange
-        A.CallTo(() => _appContext.IsDatabaseInitialized()).Returns(true);
+        A.CallTo(() => _appContext.NeedsInitialSetupAsync()).Returns(false);
+        A.CallTo(() => _appContext.NeedsMigrationAsync()).Returns(false);
 
         //  Act
         await _sut.OnActionExecutionAsync(_executingContext, _actionExecutionDelegate);
@@ -46,7 +47,9 @@ public class IsDatabaseInitializedFilterTests
         //  Assert
         _executingContext.Result.Should().BeNull();
 
-        A.CallTo(() => _appContext.IsDatabaseInitialized()).MustHaveHappenedOnceExactly();
+        A.CallTo(() => _appContext.NeedsInitialSetupAsync()).MustHaveHappenedOnceExactly();
+        A.CallTo(() => _appContext.NeedsMigrationAsync()).MustHaveHappenedOnceExactly();
+        A.CallTo(() => _actionExecutionDelegate.Invoke()).MustHaveHappenedOnceExactly();
     }
 
     [Theory]
@@ -54,7 +57,7 @@ public class IsDatabaseInitializedFilterTests
     public async Task NotInitialized_ShouldRedirectToInitialSetup(string url)
     {
         //  Arrange
-        A.CallTo(() => _appContext.IsDatabaseInitialized()).Returns(false);
+        A.CallTo(() => _appContext.NeedsInitialSetupAsync()).Returns(true);
         A.CallTo(() => _router.ToInitialSetup()).Returns(url);
 
         //  Act
@@ -67,17 +70,19 @@ public class IsDatabaseInitializedFilterTests
             redirect.Url.Should().Be(url);
         }
         
-        A.CallTo(() => _appContext.IsDatabaseInitialized()).MustHaveHappenedOnceExactly();
+        A.CallTo(() => _appContext.NeedsInitialSetupAsync()).MustHaveHappenedOnceExactly();
         A.CallTo(() => _router.ToInitialSetup()).MustHaveHappenedOnceExactly();
+        A.CallTo(() => _actionExecutionDelegate.Invoke()).MustNotHaveHappened();
     }
 
     [Theory]
     [VeloAutoData]
-    public async Task NotInitializedResultAlreadySet_ShouldExecuteResultAndThenRedirectToInitialSetup(string url)
+    public async Task Initialized_NotMigrated_ShouldRedirectToMigrate(string url)
     {
         //  Arrange
-        A.CallTo(() => _appContext.IsDatabaseInitialized()).Returns(false);
-        A.CallTo(() => _router.ToInitialSetup()).Returns(url);
+        A.CallTo(() => _appContext.NeedsInitialSetupAsync()).Returns(false);
+        A.CallTo(() => _appContext.NeedsMigrationAsync()).Returns(true);
+        A.CallTo(() => _router.ToMigrateDatabase()).Returns(url);
 
         IActionResult result = X.StrictFake<IActionResult>();
         _executingContext.Result = result;
@@ -93,8 +98,9 @@ public class IsDatabaseInitializedFilterTests
             redirect.Url.Should().Be(url);
         }
 
-        A.CallTo(() => _appContext.IsDatabaseInitialized()).MustHaveHappenedOnceExactly();
-        A.CallTo(() => _router.ToInitialSetup()).MustHaveHappenedOnceExactly();
-        A.CallTo(() => result.ExecuteResultAsync(_executingContext)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => _appContext.NeedsInitialSetupAsync()).MustHaveHappenedOnceExactly();
+        A.CallTo(() => _appContext.NeedsInitialSetupAsync()).MustHaveHappenedOnceExactly();
+        A.CallTo(() => _router.ToMigrateDatabase()).MustHaveHappenedOnceExactly();
+        A.CallTo(() => _actionExecutionDelegate.Invoke()).MustNotHaveHappened();
     }
 }

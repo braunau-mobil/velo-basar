@@ -1,9 +1,13 @@
 ﻿using BraunauMobil.VeloBasar.Configuration;
+using BraunauMobil.VeloBasar.Data;
 using BraunauMobil.VeloBasar.Parameters;
 using BraunauMobil.VeloBasar.Rendering;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Xan.AspNetCore.Parameter;
@@ -72,24 +76,40 @@ public static class VeloServiceExtensions
         ArgumentNullException.ThrowIfNull(services);
 
         return services
-            .Configure<IdentityOptions>(options =>
-            {
-                // Password settings.
-                options.Password.RequireDigit = false;
-                options.Password.RequireLowercase = false;
-                options.Password.RequireNonAlphanumeric = false;
-                options.Password.RequireUppercase = false;
-                options.Password.RequiredLength = 1;
-                options.Password.RequiredUniqueChars = 1;
+            .Configure<IdentityOptions>(ConfigureVeloIdentity);
+    }
 
-                // Lockout settings.
-                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
-                options.Lockout.MaxFailedAccessAttempts = 5;
-                options.Lockout.AllowedForNewUsers = true;
+    public static void ConfigureVeloIdentity(IdentityOptions options)
+    {
+        ArgumentNullException.ThrowIfNull(options);
 
-                // User settings.
-                options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
-                options.User.RequireUniqueEmail = true;
-            });
+        // Password settings.
+        options.Password.RequireDigit = false;
+        options.Password.RequireLowercase = false;
+        options.Password.RequireNonAlphanumeric = false;
+        options.Password.RequireUppercase = false;
+        options.Password.RequiredLength = 1;
+        options.Password.RequiredUniqueChars = 1;
+
+        // Lockout settings.
+        options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+        options.Lockout.MaxFailedAccessAttempts = 5;
+        options.Lockout.AllowedForNewUsers = true;
+
+        // User settings.
+        options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+        options.User.RequireUniqueEmail = true;
+    }
+
+    public static void EnsureDatabaseCreated(this IServiceProvider services)
+    {
+        ArgumentNullException.ThrowIfNull(services);
+
+        VeloDbContext dbContext = services.GetRequiredService<VeloDbContext>();
+        if (dbContext.Database.GetService<IRelationalDatabaseCreator>().Exists())
+        {
+            return;
+        }
+        dbContext.CreateDatabaseAsync().Wait();
     }
 }

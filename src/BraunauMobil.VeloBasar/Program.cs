@@ -61,9 +61,8 @@ public static class Program
         {
             ILogger<SharedResources> logger = scope.ServiceProvider.GetRequiredService<ILogger<SharedResources>>();
             VeloTexts.CheckIfAllIsTranslated(logger);
-            
-            DatabaseMigrator migrator = scope.ServiceProvider.GetRequiredService<DatabaseMigrator>();
-            migrator.Migrate();
+
+            scope.ServiceProvider.EnsureDatabaseCreated();
         }
 
         await app.RunAsync();
@@ -110,7 +109,6 @@ public static class Program
             .AddVeloRouting()
             .AddPdf()
             .AddScoped<IAppContext, VeloBasarAppContext>()
-            .AddScoped<DatabaseMigrator>()
             .AddScoped<SellerCrudModelFactory>()
             .AddValidatorsFromAssemblyContaining<SellerSearchModelValidator>()
             .AddHostedService<QueuedHostedService>();

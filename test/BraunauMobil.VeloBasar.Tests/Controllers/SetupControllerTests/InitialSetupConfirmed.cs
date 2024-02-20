@@ -33,10 +33,10 @@ public class InitialSetupConfirmed
 
     [Theory]
     [VeloAutoData]
-    public async Task ValidModel_CallsCreateDatabaseAndInitializeDatabaseAndReturnsRedirecToHome(InitializationConfiguration configuration, string url)
+    public async Task ValidModel_CallsInitializeDatabaseAsyncAndReturnsRedirecToHome(InitializationConfiguration configuration, string url)
     {
         //  Arrange
-        A.CallTo(() => SetupService.CreateDatabaseAsync()).DoesNothing();
+        A.CallTo(() => SetupService.MigrateDatabaseAsync()).DoesNothing();
         A.CallTo(() => SetupService.InitializeDatabaseAsync(configuration)).DoesNothing();
         A.CallTo(() => Router.ToHome()).Returns(url);
         Sut.ControllerContext = new ControllerContext
@@ -56,7 +56,7 @@ public class InitialSetupConfirmed
             redirect.Url.Should().Be(url);
         }
 
-        A.CallTo(() => SetupService.CreateDatabaseAsync()).MustHaveHappenedOnceExactly();
+        A.CallTo(() => SetupService.MigrateDatabaseAsync()).MustHaveHappenedOnceExactly();
         A.CallTo(() => SetupService.InitializeDatabaseAsync(configuration)).MustHaveHappenedOnceExactly();
         A.CallTo(() => Router.ToHome()).MustHaveHappenedOnceExactly();
     }

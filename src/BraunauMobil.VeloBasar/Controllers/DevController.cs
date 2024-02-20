@@ -6,25 +6,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BraunauMobil.VeloBasar.Controllers;
 
-public sealed class DevController
+public sealed class DevController(IAppContext appContext, IDataGeneratorService generatorService, UserManager<IdentityUser> userManager, IVeloRouter router)
     : AbstractVeloController
 {
-    private readonly IAppContext _appContext;
-    private readonly IDataGeneratorService _generatorService;
-    private readonly UserManager<IdentityUser> _userManager;
-    private readonly IVeloRouter _router;
-
-    public DevController(IAppContext appContext, IDataGeneratorService dataGeneratorService, UserManager<IdentityUser> userManager, IVeloRouter router)
-    {
-        _appContext = appContext ?? throw new ArgumentNullException(nameof(appContext));
-        _generatorService = dataGeneratorService ?? throw new ArgumentNullException(nameof(dataGeneratorService));
-        _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
-        _router = router ?? throw new ArgumentNullException(nameof(router));
-    }
-
     public IActionResult DeleteCookies()
     {
-        if (!_appContext.DevToolsEnabled())
+        if (!appContext.DevToolsEnabled())
         {
             return Unauthorized();
         }
@@ -35,7 +22,7 @@ public sealed class DevController
     [ActionName(nameof(DeleteCookies))]
     public IActionResult DeleteCookiesConfirmed()
     {
-        if (!_appContext.DevToolsEnabled())
+        if (!appContext.DevToolsEnabled())
         {
             return Unauthorized();
         }
@@ -44,12 +31,12 @@ public sealed class DevController
             Response.Cookies.Delete(cookie);
         }
 
-        return Redirect(_router.ToHome());
+        return Redirect(router.ToHome());
     }
 
     public IActionResult DropDatabase()
     {
-        if (!_appContext.DevToolsEnabled())
+        if (!appContext.DevToolsEnabled())
         {
             return Unauthorized();
         }
@@ -60,27 +47,28 @@ public sealed class DevController
     [ActionName(nameof(DropDatabase))]
     public async Task<IActionResult> DropDatabaseConfirmed()
     {
-        if (!_appContext.DevToolsEnabled())
+        if (!appContext.DevToolsEnabled())
         {
             return Unauthorized();
         }
-        await _generatorService.DropDatabaseAsync();
+        await generatorService.DropDatabaseAsync();
+        await generatorService.CreateDatabaseAsync();
 
-        return Redirect(_router.ToHome());
+        return Redirect(router.ToHome());
     }
 
     public async Task<IActionResult> UnlockAllUsers()
     {
-        if (!_appContext.DevToolsEnabled())
+        if (!appContext.DevToolsEnabled())
         {
             return Unauthorized();
         }
 
-        foreach (IdentityUser user in await _userManager.Users.ToListAsync())
+        foreach (IdentityUser user in await userManager.Users.ToListAsync())
         {
-            await _userManager.SetLockoutEnabledAsync(user, false);
+            await userManager.SetLockoutEnabledAsync(user, false);
         }
 
-        return Redirect(_router.ToHome());
+        return Redirect(router.ToHome());
     }
 }

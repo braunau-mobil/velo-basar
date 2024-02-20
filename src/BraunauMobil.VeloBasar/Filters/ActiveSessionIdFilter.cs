@@ -8,37 +8,28 @@ using Xan.AspNetCore.EntityFrameworkCore;
 
 namespace BraunauMobil.VeloBasar.Filters;
 
-public sealed class ActiveSessionIdFilter
-    : IAsyncActionFilter
+public sealed class ActiveSessionIdFilter(IActiveAcceptSessionCookie cookie, VeloDbContext db)
+    : AbstractVeloActionFilter
 {
-    private readonly IActiveAcceptSessionCookie _cookie;
-    private readonly VeloDbContext _db;
-
-    public ActiveSessionIdFilter(IActiveAcceptSessionCookie cookie, VeloDbContext db)
-    {
-        _cookie = cookie ?? throw new ArgumentNullException(nameof(cookie));
-        _db = db ?? throw new ArgumentNullException(nameof(db));
-    }
-
-    public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
+    protected override async Task ActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate nextDelegate)
     {
         ArgumentNullException.ThrowIfNull(context);
-        ArgumentNullException.ThrowIfNull(next);
+        ArgumentNullException.ThrowIfNull(nextDelegate);
 
-        int? activeSessionId = _cookie.GetActiveAcceptSessionId();
+        int? activeSessionId = cookie.GetActiveAcceptSessionId();
         if (activeSessionId.HasValue)
         {
-            AcceptSessionEntity? acceptSession = await _db.AcceptSessions.AsNoTracking().FirstOrDefaultByIdAsync(activeSessionId.Value);
+            AcceptSessionEntity? acceptSession = await db.AcceptSessions.AsNoTracking().FirstOrDefaultByIdAsync(activeSessionId.Value);
             if (acceptSession != null && !acceptSession.IsCompleted && context.Controller is Controller controller)
             {
                 controller.ViewData.SetActiveSessionId(activeSessionId.Value);
             }
             else
             {
-                _cookie.ClearActiveAcceptSession();
+                cookie.ClearActiveAcceptSession();
             }
         }
 
-        await next();
+        await nextDelegate();
     }
 }

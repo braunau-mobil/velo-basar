@@ -9,7 +9,7 @@ using Xan.Extensions;
 namespace BraunauMobil.VeloBasar.BusinessLogic;
 
 public class DocumentModelFactory
-        : IDocumentModelFactory
+    : IDocumentModelFactory
 {
     private const string _poweredByText = "  - powered by https://github.com/braunau-mobil/velo-basar";
 

@@ -2,12 +2,14 @@
 using BraunauMobil.VeloBasar.Parameters;
 using BraunauMobil.VeloBasar.Routing;
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Xan.Extensions.Collections.Generic;
 
 namespace BraunauMobil.VeloBasar.Controllers;
 
+[Authorize]
 public sealed class TransactionController
     : AbstractVeloController
 {
@@ -66,6 +68,7 @@ public sealed class TransactionController
         return File(fileData.Data, fileData.ContentType, fileData.FileName);
     }
 
+    [AllowAnonymous]
     public async Task<IActionResult> List(TransactionListParameter parameter)
     {
         ArgumentNullException.ThrowIfNull(parameter);

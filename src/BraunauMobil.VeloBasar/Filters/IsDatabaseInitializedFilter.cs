@@ -5,39 +5,27 @@ using Microsoft.Extensions.Logging;
 
 namespace BraunauMobil.VeloBasar.Filters;
 
-public sealed class IsDatabaseInitializedFilter
-    : IAsyncActionFilter
+public sealed class IsDatabaseInitializedFilter(ILogger<IsDatabaseInitializedFilter> logger, IAppContext appContext, ISetupRouter router)
+    : AbstractVeloActionFilter
 {
-    private readonly ILogger<IsDatabaseInitializedFilter> _logger;
-    private readonly IAppContext _appContext;
-    private readonly ISetupRouter _router;
-
-    public IsDatabaseInitializedFilter(IAppContext appContext, ISetupRouter router, ILogger<IsDatabaseInitializedFilter> logger)
-    {
-        _appContext = appContext ?? throw new ArgumentNullException(nameof(appContext));
-        _router = router ?? throw new ArgumentNullException(nameof(router));
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-    }
-
-    public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
+    protected override async Task ActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate nextDelegate)
     {
         ArgumentNullException.ThrowIfNull(context);
-        ArgumentNullException.ThrowIfNull(next);
+        ArgumentNullException.ThrowIfNull(nextDelegate);
 
-        //  check if we need initial setup
-        if (!_appContext.IsDatabaseInitialized())
+        if (await appContext.NeedsInitialSetupAsync())
         {
-            _logger.LogInformation("DB not initialized");
-
-            if (context.Result != null)
-            {
-                await context.Result.ExecuteResultAsync(context);
-            }
-            context.Result = new RedirectResult(_router.ToInitialSetup());
+            logger.LogInformation("Redirecting to initial setup");
+            context.Result = new RedirectResult(router.ToInitialSetup());
+        }
+        else if (await appContext.NeedsMigrationAsync())
+        {
+            logger.LogInformation("Redirecting to migrate database");
+            context.Result = new RedirectResult(router.ToMigrateDatabase());
         }
         else
         {
-            await next();
+            await nextDelegate();
         }
     }
 }

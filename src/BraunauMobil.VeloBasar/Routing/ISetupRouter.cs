@@ -3,4 +3,6 @@
 public interface ISetupRouter
 {
     string ToInitialSetup();
+
+    string ToMigrateDatabase();
 }

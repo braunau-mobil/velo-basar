@@ -6,5 +6,7 @@ public interface IAppContext
 
     bool DevToolsEnabled();
 
-    bool IsDatabaseInitialized();
+    Task<bool> NeedsInitialSetupAsync();
+
+    Task<bool> NeedsMigrationAsync();
 }

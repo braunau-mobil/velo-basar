@@ -2,7 +2,7 @@
 
 public interface ISetupService
 {
-    Task CreateDatabaseAsync();
-    
     Task InitializeDatabaseAsync(InitializationConfiguration config);
+
+    Task MigrateDatabaseAsync();
 }

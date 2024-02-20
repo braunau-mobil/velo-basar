@@ -8,18 +8,6 @@ namespace BraunauMobil.VeloBasar.BusinessLogic;
 public sealed class SetupService(VeloDbContext db, UserManager<IdentityUser> userManager, IStringLocalizer<SharedResources> localizer)
     : ISetupService
 {
-    public async Task CreateDatabaseAsync()
-    {
-        if (db.IsSQLITE())
-        {
-            await db.Database.EnsureCreatedAsync();
-        }
-        else
-        {
-            await db.Database.MigrateAsync();
-        }
-    }
-
     public async Task InitializeDatabaseAsync(InitializationConfiguration config)
     {
         ArgumentNullException.ThrowIfNull(config);
@@ -60,6 +48,11 @@ public sealed class SetupService(VeloDbContext db, UserManager<IdentityUser> use
         }
 
         await db.SaveChangesAsync();
+    }
+
+    public async Task MigrateDatabaseAsync()
+    {
+        await db.Database.MigrateAsync();
     }
 
     private void GenerateProductTypes()

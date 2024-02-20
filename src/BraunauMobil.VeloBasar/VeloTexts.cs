@@ -153,6 +153,9 @@ public static class VeloTexts
     public const string LostProduct = $"{Prefix}{nameof(LostProduct)}";
     public const string LostProducts = $"{Prefix}{nameof(LostProducts)}";
     public const string Menu = $"{Prefix}{nameof(Menu)}";
+    public const string MigrateDatabase = $"{Prefix}{nameof(MigrateDatabase)}";
+    public const string MigrateDatabaseHint = $"{Prefix}{nameof(MigrateDatabaseHint)}";
+    public const string MigrateDatabaseText = $"{Prefix}{nameof(MigrateDatabaseText)}";
     public const string Misc = $"{Prefix}{nameof(Misc)}";
     public const string Name = $"{Prefix}{nameof(Name)}";
     public const string NewAcceptance = $"{Prefix}{nameof(NewAcceptance)}";
@@ -298,6 +301,15 @@ public static class VeloTexts
     public const string UpdatedAt = $"{Prefix}{nameof(UpdatedAt)}";
     public const string ValueState = $"{Prefix}{nameof(ValueState)}";
     public const string ZIP = $"{Prefix}{nameof(ZIP)}";    
+
+    public static string StartAcceptSession(int? activeSessionId)
+    {
+        if (activeSessionId is null)
+        {
+            return NewAcceptance;
+        }
+        return ContinueAcceptSession;
+    }
 
     public static string Singular(AcceptSessionState? state)
         => state switch

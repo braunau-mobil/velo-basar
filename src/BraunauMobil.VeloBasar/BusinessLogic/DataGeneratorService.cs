@@ -7,32 +7,12 @@ using Xan.AspNetCore.EntityFrameworkCore;
 
 namespace BraunauMobil.VeloBasar.BusinessLogic;
 
-public sealed class DataGeneratorService
+public sealed class DataGeneratorService(VeloDbContext db, ISetupService setupService, IBasarService basarService, ISellerService sellerService, IAcceptSessionService acceptSessionService, IAcceptProductService acceptProductService, ITransactionService transactionService, IClock clock)
     : IDataGeneratorService
 {
-    private readonly VeloDbContext _db;
-    private readonly ISetupService _setupService;
-    private readonly ISellerService _sellerService;
-    private readonly IAcceptSessionService _acceptSessionService;
-    private readonly IAcceptProductService _acceptProductService;
-    private readonly ITransactionService _transactionService;
-    private readonly IBasarService _basarService;
-    private readonly IClock _clock;
     private DataGeneratorConfiguration? _config;
     private Random? _random;
     private DateTime _timeStamp;
-
-    public DataGeneratorService(VeloDbContext db, ISetupService setupService, IBasarService basarCrudService, ISellerService sellerService, IAcceptSessionService acceptSessionService, IAcceptProductService acceptProductService, ITransactionService transactionService, IClock clock)
-    {
-        _db = db ?? throw new ArgumentNullException(nameof(db));
-        _setupService = setupService ?? throw new ArgumentNullException(nameof(setupService));
-        _basarService = basarCrudService ?? throw new ArgumentNullException(nameof(basarCrudService));
-        _sellerService = sellerService ?? throw new ArgumentNullException(nameof(sellerService));
-        _acceptSessionService = acceptSessionService ?? throw new ArgumentNullException(nameof(acceptSessionService));
-        _acceptProductService = acceptProductService ?? throw new ArgumentNullException(nameof(acceptProductService));
-        _transactionService = transactionService ?? throw new ArgumentNullException(nameof(transactionService));
-        _clock = clock ?? throw new ArgumentNullException(nameof(clock));
-    }
 
     private DataGeneratorConfiguration Config
     {
@@ -74,28 +54,30 @@ public sealed class DataGeneratorService
         }
     }
 
+    public async Task CreateDatabaseAsync()
+    {
+        await db.CreateDatabaseAsync();
+    }
+
     public async Task DropDatabaseAsync()
     {
-        await _db.Database.EnsureDeletedAsync();
-        await _db.SaveChangesAsync();
+        await db.DropDatabaseAsync();
     }
 
     public async Task GenerateAsync()
     {
         //  Detach everything because otherwise this could lead to problems when creating new data
-        foreach (EntityEntry entry in _db.ChangeTracker.Entries().ToArray())
+        foreach (EntityEntry entry in db.ChangeTracker.Entries().ToArray())
         {
             entry.State = EntityState.Detached;
         }
 
-        await _db.Database.EnsureDeletedAsync();
-        await _db.SaveChangesAsync();
+        await DropDatabaseAsync();
 
-        await _setupService.CreateDatabaseAsync();
-        await _db.SaveChangesAsync();
+        await CreateDatabaseAsync();
 
-        await _setupService.InitializeDatabaseAsync(Config);
-        await _db.SaveChangesAsync();
+        await setupService.InitializeDatabaseAsync(Config);
+        await db.SaveChangesAsync();
 
         for (int basarNumber = 1; basarNumber <= Config.BasarCount; basarNumber++)
         {
@@ -111,20 +93,20 @@ public sealed class DataGeneratorService
             }
         }
 
-        await _db.SaveChangesAsync();
+        await db.SaveChangesAsync();
     }
 
     public BasarEntity NextBasar()
         => new()
         {
             Id = Random.Next(),
-            CreatedAt = _clock.GetCurrentDateTime(),
+            CreatedAt = clock.GetCurrentDateTime(),
             Date = new DateTime(2063, 04, 05),
             Location = Random.GetRandomElement(Names.Cities),
             Name = $"Basar #{Random.Next()}",
             ProductCommissionPercentage = Random.Next(5, 21),
             State = ObjectState.Enabled,
-            UpdatedAt = _clock.GetCurrentDateTime(),
+            UpdatedAt = clock.GetCurrentDateTime(),
         };
 
     public string NextBrand()
@@ -134,11 +116,11 @@ public sealed class DataGeneratorService
         => new()
         {
             Id = Random.Next(),
-            CreatedAt = _clock.GetCurrentDateTime(),
+            CreatedAt = clock.GetCurrentDateTime(),
             Name = "Mittelerde",
             Iso3166Alpha3Code = "MEA",
             State = ObjectState.Enabled,
-            UpdatedAt = _clock.GetCurrentDateTime(),
+            UpdatedAt = clock.GetCurrentDateTime(),
         };
 
     public ProductEntity NextProduct(string brand, ProductTypeEntity productType, AcceptSessionEntity session)
@@ -165,10 +147,10 @@ public sealed class DataGeneratorService
         => new()
         {
             Id = Random.Next(),
-            CreatedAt = _clock.GetCurrentDateTime(),
+            CreatedAt = clock.GetCurrentDateTime(),
             Name = $"Basar #{Random.Next()}",
             State = ObjectState.Enabled,
-            UpdatedAt = _clock.GetCurrentDateTime(),
+            UpdatedAt = clock.GetCurrentDateTime(),
         };
 
     public SellerEntity NextSeller(CountryEntity country)
@@ -192,7 +174,7 @@ public sealed class DataGeneratorService
         basar.Date = date;
         basar.Name = name;
         basar.Id = 0;
-        int basarId = await _basarService.CreateAsync(basar);
+        int basarId = await basarService.CreateAsync(basar);
 
         int sellerCount = Random.Next(Config.MinSellers, Config.MaxSellers + 1);
         for (int sellerNumber = 1; sellerNumber <= sellerCount; sellerNumber++)
@@ -210,7 +192,7 @@ public sealed class DataGeneratorService
 
     private async Task SettleSellers(int basarId)
     {
-        IList<int?> sellerIds = await _db.Transactions
+        IList<int?> sellerIds = await db.Transactions
             .Where(transaction => transaction.BasarId == basarId && transaction.SellerId.HasValue)
             .Select(Transaction => Transaction.SellerId)
             .Distinct()
@@ -224,7 +206,7 @@ public sealed class DataGeneratorService
                 continue;
             }
 
-            await _sellerService.SettleAsync(basarId, sellerId.Value);
+            await sellerService.SettleAsync(basarId, sellerId.Value);
         }
     }
 
@@ -260,7 +242,7 @@ public sealed class DataGeneratorService
                 productCount--;
             }
 
-            int transactionId = await _transactionService.CheckoutAsync(basarId, productIdsForSaleTransaction);
+            int transactionId = await transactionService.CheckoutAsync(basarId, productIdsForSaleTransaction);
             await SetTransactionTimestamp(transactionId);
         }
     }
@@ -274,7 +256,7 @@ public sealed class DataGeneratorService
         while (productIdsToLoose.Count > 0)
         {
             int productId = productIdsToLoose.Dequeue();
-            int transactionId = await _transactionService.SetLostAsync(basarId, "Product could not be found anymore", productId);
+            int transactionId = await transactionService.SetLostAsync(basarId, "Product could not be found anymore", productId);
             await SetTransactionTimestamp(transactionId);
         }
     }
@@ -288,14 +270,14 @@ public sealed class DataGeneratorService
         while (productIdsToLock.Count > 0)
         {
             int productId = productIdsToLock.Dequeue();
-            int transactionId = await _transactionService.LockAsync(basarId, "Product is damaged", productId);
+            int transactionId = await transactionService.LockAsync(basarId, "Product is damaged", productId);
             await SetTransactionTimestamp(transactionId);
         }
     }
 
     private async Task SimulateSettlementsAsync(int basarId)
     {
-        IList<int> sellerIds = await _db.Sellers
+        IList<int> sellerIds = await db.Sellers
             .Where(seller => seller.ValueState == ValueState.NotSettled)
             .Select(seller => seller.Id)
             .ToArrayAsync();
@@ -305,15 +287,15 @@ public sealed class DataGeneratorService
         while (sellerIdsToSettle.Count > 0)
         {
             int sellerId = sellerIdsToSettle.Dequeue();
-            await _sellerService.SettleAsync(basarId, sellerId);
+            await sellerService.SettleAsync(basarId, sellerId);
         }
     }
 
     private async Task CreateSellerWithAcceptancesAsync(int basarId)
     {
-        SellerEntity seller = NextSeller(Random.GetRandomElement(_db.Countries));
+        SellerEntity seller = NextSeller(Random.GetRandomElement(db.Countries));
         seller.Id = 0;
-        await _sellerService.CreateAsync(seller);
+        await sellerService.CreateAsync(seller);
 
         int acceptancePerCustomerCount = Random.Next(Config.MinAcceptancesPerSeller, Config.MaxAcceptancesPerSeller + 1);
         while (acceptancePerCustomerCount > 0)
@@ -325,21 +307,21 @@ public sealed class DataGeneratorService
 
     private async Task CreateAcceptanceAsync(int basarId, SellerEntity seller)
     {
-        AcceptSessionEntity session = await _acceptSessionService.CreateAsync(basarId, seller.Id);
+        AcceptSessionEntity session = await acceptSessionService.CreateAsync(basarId, seller.Id);
 
         int productCount = NextProductCount();
         foreach (int _ in Enumerable.Range(0, productCount))
         {
             ProductEntity product = NextProduct(session);
-            await _acceptProductService.CreateAsync(product);
+            await acceptProductService.CreateAsync(product);
         }
 
-        int transactionId = await _acceptSessionService.SubmitAsync(session.Id);
+        int transactionId = await acceptSessionService.SubmitAsync(session.Id);
         await SetTransactionTimestamp(transactionId);
     }
 
     private ProductEntity NextProduct(AcceptSessionEntity session)
-        => NextProduct(NextBrand(), Random.GetRandomElement(_db.ProductTypes), session);
+        => NextProduct(NextBrand(), Random.GetRandomElement(db.ProductTypes), session);
 
     private string NextPhoneNumber()
     {
@@ -381,7 +363,7 @@ public sealed class DataGeneratorService
 
     private async Task<IList<int>> GetAvailableProductIdsAsync(int basarId)
     {
-        return await _db.Products
+        return await db.Products
             .Include(product => product.Session)
             .Where(product => product.Session.BasarId == basarId && product.StorageState == StorageState.Available)
             .Select(product => product.Id)
@@ -390,9 +372,9 @@ public sealed class DataGeneratorService
 
     private async Task SetTransactionTimestamp(int transactionId)
     {
-        TransactionEntity tx = await _db.Transactions.FirstByIdAsync(transactionId);
+        TransactionEntity tx = await db.Transactions.FirstByIdAsync(transactionId);
         tx.TimeStamp = _timeStamp;
-        await _db.SaveChangesAsync();
+        await db.SaveChangesAsync();
 
         _timeStamp = _timeStamp.AddMinutes(Random.Next(3, 8));
     }

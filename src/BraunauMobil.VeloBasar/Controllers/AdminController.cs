@@ -5,6 +5,7 @@ using Xan.Extensions;
 
 namespace BraunauMobil.VeloBasar.Controllers;
 
+[Authorize]
 public sealed class AdminController
     : AbstractVeloController
 {
@@ -17,35 +18,30 @@ public sealed class AdminController
         _clock = clock ?? throw new ArgumentNullException(nameof(clock));
     }
 
-    [Authorize]
     public async Task<IActionResult> CreateSampleAcceptanceDocument()
     {
         FileDataEntity fileData = await _adminService.CreateSampleAcceptanceDocumentAsync();
         return File(fileData.Data, fileData.ContentType, fileData.FileName);
     }
 
-    [Authorize]
     public async Task<IActionResult> CreateSampleLabels()
     {
         FileDataEntity fileData = await _adminService.CreateSampleLabelsAsync();
         return File(fileData.Data, fileData.ContentType, fileData.FileName);
     }
 
-    [Authorize]
     public async Task<IActionResult> CreateSampleSaleDocument()
     {
         FileDataEntity fileData = await _adminService.CreateSampleSaleDocumentAsync();
         return File(fileData.Data, fileData.ContentType, fileData.FileName);
     }
 
-    [Authorize]
     public async Task<IActionResult> CreateSampleSettlementDocument()
     {
         FileDataEntity fileData = await _adminService.CreateSampleSettlementDocumentAsync();
         return File(fileData.Data, fileData.ContentType, fileData.FileName);
     }
 
-    [Authorize]
     public IActionResult Export()
     {
         ExportModel model = new()
@@ -55,7 +51,6 @@ public sealed class AdminController
         return View(model);
     }
 
-    [Authorize]
     public async Task<IActionResult> ExportSellersForNewsletter(ExportModel model)
     {
         ArgumentNullException.ThrowIfNull(model);
@@ -70,7 +65,6 @@ public sealed class AdminController
         return File(fileData.Data, fileData.ContentType, fileData.FileName);
     }
 
-    [Authorize]
     public IActionResult PrintTest()
         => View();
 }

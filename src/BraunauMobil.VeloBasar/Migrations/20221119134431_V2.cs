@@ -12,8 +12,6 @@ namespace BraunauMobil.VeloBasar.Migrations
         {
             ArgumentNullException.ThrowIfNull(migrationBuilder);
 
-            ArgumentNullException.ThrowIfNull(migrationBuilder);
-
             BasarsUp(migrationBuilder);
             BrandsUp(migrationBuilder);
             CountriesUp(migrationBuilder);

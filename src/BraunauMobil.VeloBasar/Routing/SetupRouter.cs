@@ -5,14 +5,13 @@ using Xan.AspNetCore.Mvc.Routing;
 
 namespace BraunauMobil.VeloBasar.Routing;
 
-public sealed class SetupRouter
-    : ControllerRouter
+public sealed class SetupRouter(LinkGenerator linkGenerator)
+    : ControllerRouter(MvcHelper.ControllerName<SetupController>(), linkGenerator)
     , ISetupRouter
 {
-    public SetupRouter(LinkGenerator linkGenerator)
-        : base(MvcHelper.ControllerName<SetupController>(), linkGenerator)
-    { }
-
     public string ToInitialSetup()
         => GetUriByAction(nameof(SetupController.InitialSetup));
+
+    public string ToMigrateDatabase()
+        => GetUriByAction(nameof(SetupController.MigrateDatabase));
 }

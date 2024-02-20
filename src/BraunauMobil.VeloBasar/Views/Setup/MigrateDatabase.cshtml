@@ -1,0 +1,20 @@
+﻿@{
+    Layout = "_LayoutSimple";
+    ViewData.SetTitle(Localizer[VeloTexts.MigrateDatabase]);
+}
+
+<form method="post">
+    <div class="card m-2">
+        <div class="card-header align-items-center">
+            <h2>velo-basar</h2>
+            <h4>@ViewData.Title()</h4>
+        </div>
+        <div class="card-body">
+            <p>@Localizer[VeloTexts.MigrateDatabaseText]</p>
+            <b>@Localizer[VeloTexts.MigrateDatabaseHint]</b>
+        </div>
+        <div class="card-footer">
+            <button class="btn btn-primary">@Localizer[VeloTexts.Ok]</button>
+        </div>
+    </div>
+</form>

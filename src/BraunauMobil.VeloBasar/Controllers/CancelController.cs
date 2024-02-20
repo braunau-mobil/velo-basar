@@ -1,10 +1,12 @@
 ﻿using BraunauMobil.VeloBasar.BusinessLogic;
 using BraunauMobil.VeloBasar.Routing;
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BraunauMobil.VeloBasar.Controllers;
 
+[Authorize]
 public sealed class CancelController
     : AbstractVeloController
 {

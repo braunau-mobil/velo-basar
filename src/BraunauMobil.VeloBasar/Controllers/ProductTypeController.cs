@@ -1,10 +1,12 @@
 ﻿using BraunauMobil.VeloBasar.BusinessLogic;
 using BraunauMobil.VeloBasar.Routing;
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Xan.AspNetCore.Parameter;
 
 namespace BraunauMobil.VeloBasar.Controllers;
 
+[Authorize]
 public class ProductTypeController
     : AbstractCrudController<ProductTypeEntity, ListParameter, IProductTypeRouter, IProductTypeService>
 {

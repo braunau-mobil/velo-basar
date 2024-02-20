@@ -1,6 +1,7 @@
 ﻿using BraunauMobil.VeloBasar.Routing;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -53,6 +54,7 @@ public sealed class SecurityController
         return View(model);
     }
 
+    [Authorize]
     public async Task<IActionResult> Logout()
     {
         await _signInManager.SignOutAsync();

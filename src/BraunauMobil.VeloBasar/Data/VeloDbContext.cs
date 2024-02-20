@@ -1,12 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Storage;
 using Xan.Extensions;
 using Npgsql;
 using Microsoft.Data.SqlClient;
 using System.Data.Common;
 using Xan.AspNetCore.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace BraunauMobil.VeloBasar.Data;
 
@@ -38,7 +38,7 @@ public sealed class VeloDbContext
 
     public DbSet<SellerEntity> Sellers => Set<SellerEntity>();
 
-    public DbSet<TransactionEntity> Transactions => Set<TransactionEntity>();    
+    public DbSet<TransactionEntity> Transactions => Set<TransactionEntity>();
 
     public DbSet<ZipCodeEntity> ZipCodes => Set<ZipCodeEntity>();
 
@@ -53,10 +53,37 @@ public sealed class VeloDbContext
         return new SqlParameter(name, value);
     }
 
-    public bool IsInitialized()
+    public async Task CreateDatabaseAsync()
     {
-        return Database.GetService<IRelationalDatabaseCreator>().Exists();
+        if (IsSQLITE())
+        {
+            await Database.EnsureCreatedAsync();
+        }
+        else
+        {
+            await Database.MigrateAsync();
+        }
     }
+
+
+    public async Task DropDatabaseAsync()
+    {
+        await Database.EnsureDeletedAsync();
+        await SaveChangesAsync();
+    }
+
+
+    public async Task<bool> NeedsInitialSetupAsync()
+        => !await Users.AnyAsync();
+
+    public async Task<bool> NeedsMigrationAsync()
+    {
+        IEnumerable<string> pendingMigrations = await Database.GetPendingMigrationsAsync();
+        return pendingMigrations.Any();
+    }
+
+    public async Task<bool> IsInitializedAsync()
+        => await Users.AnyAsync();
 
     public bool IsPostgreSQL() => Database.ProviderName == "Npgsql.EntityFrameworkCore.PostgreSQL";
 
