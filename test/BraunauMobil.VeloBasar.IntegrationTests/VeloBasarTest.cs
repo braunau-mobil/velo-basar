@@ -22,10 +22,13 @@ public class VeloBasarTest
     {
         await new Steps.InitialSetup(_context).Run();
         await Login();
+        
         await new Steps.FirstBasar.Creation(_context).Run();
         await new Steps.FirstBasar.AcceptSellers(_context).Run();
         await new Steps.FirstBasar.SellProducts(_context).Run();
         await new Steps.FirstBasar.SettleSellers(_context).Run();
+
+        await new Steps.SecondBasar.Creation(_context).Run();
     }
 
     private async Task Login()

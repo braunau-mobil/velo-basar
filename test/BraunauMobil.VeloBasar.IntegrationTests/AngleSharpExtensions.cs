@@ -53,6 +53,13 @@ public static class AngleSharpExtensions
             .Should().BeAssignableTo<TElement>().Subject;
     }
 
+    public static IHtmlTableElement QueryTable(this IParentNode node)
+    {
+        ArgumentNullException.ThrowIfNull(node);
+
+        return node.QueryElement<IHtmlTableElement>("table");
+    }
+
     public static TElement QueryElement<TElement>(this IParentNode node, string selector, Func<TElement, bool> predicate)
     {
         ArgumentNullException.ThrowIfNull(node);
