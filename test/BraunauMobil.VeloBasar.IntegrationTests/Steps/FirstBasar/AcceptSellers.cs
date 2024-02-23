@@ -1,6 +1,4 @@
-﻿using BraunauMobil.VeloBasar.Models.Documents;
-
-namespace BraunauMobil.VeloBasar.IntegrationTests.Steps.FirstBasar;
+﻿namespace BraunauMobil.VeloBasar.IntegrationTests.Steps.FirstBasar;
 
 public class AcceptSellers(TestContext context)
 {
