@@ -33,10 +33,17 @@ public class Creation(TestContext context)
     private async Task AssertBasarList()
     {
         IHtmlDocument basarListDocument = await context.HttpClient.NavigateMenuAsync("Bazaars");
-        IHtmlTableElement basarTable = basarListDocument.QueryTable();
+        IHtmlFormElement form = basarListDocument.QueryForm();
 
+        basarListDocument = await context.HttpClient.SendFormAsync(form, new Dictionary<string, object>
+        {
+            { "State", "" }
+        });
+
+        IHtmlTableElement basarTable = basarListDocument.QueryTable();
         basarTable.Should().BeEquivalentTo(
             ["Id", "Date", "Name", "Location", "Created at", "Updated at", "State", "", "", ""],
+            ["1", "Friday, May 4, 2063", "First Bazaar", "Edoras", "1/1/0001 12:00 AM", "4/5/2063 11:22 AM", "Disabled", "Details", "Edit", "Enable"],
             ["2", "Sunday, May 4, 2064", "Second Bazaar", "Thal", "4/5/2063 11:22 AM", "4/5/2063 11:22 AM", "Enabled", "Details", "Edit", "Delete"]
         );
     }

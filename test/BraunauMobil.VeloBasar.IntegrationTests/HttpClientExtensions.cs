@@ -83,71 +83,69 @@ public static class HttpClientExtensions
         IHtmlAnchorElement menuEntryAnchor = menuDocument.QueryAnchorByText(menuEntryText);
         return await client.GetDocumentAsync(menuEntryAnchor.Href);
     }
+    
+    public static async Task<IHtmlDocument> SendFormAsync(this HttpClient client, IHtmlFormElement form)
+    {
+        ArgumentNullException.ThrowIfNull(client);
+        ArgumentNullException.ThrowIfNull(form);
+
+        DocumentRequest? request = form.GetSubmission();
+        Uri target = (Uri)request!.Target;
+
+        return await client.SendFormAsync(request, target);
+    }
+
+    public static async Task<IHtmlDocument> SendFormAsync(this HttpClient client, IHtmlFormElement form, IEnumerable<KeyValuePair<string, object>> formValues)
+    {
+        ArgumentNullException.ThrowIfNull(client);
+        ArgumentNullException.ThrowIfNull(form);
+        ArgumentNullException.ThrowIfNull(formValues);
+
+        form.SetFormValues(formValues);        
+        return await client.SendFormAsync(form);
+    }
 
     public static async Task<IHtmlDocument> SendFormAsync(this HttpClient client, IHtmlFormElement form, IHtmlElement button)
     {
         ArgumentNullException.ThrowIfNull(client);
-        ArgumentNullException.ThrowIfNull(button);
         ArgumentNullException.ThrowIfNull(form);
+        ArgumentNullException.ThrowIfNull(button);
 
-        return await client.SendFormAsync(form, button, []);
+        DocumentRequest? request = form.GetSubmission(button);
+        Uri target = (Uri)request!.Target;
+        string? formaction = button.GetAttribute("formaction");
+        if (formaction is not null)
+        {
+            target = new Uri(formaction, UriKind.Relative);
+        }
+
+        return await client.SendFormAsync(request, target);
     }
 
     public static async Task<IHtmlDocument> SendFormAsync(this HttpClient client, IHtmlFormElement form, IHtmlElement button, IEnumerable<KeyValuePair<string, object>> formValues)
     {
         ArgumentNullException.ThrowIfNull(client);
-        ArgumentNullException.ThrowIfNull(button);
         ArgumentNullException.ThrowIfNull(form);
+        ArgumentNullException.ThrowIfNull(button);
         ArgumentNullException.ThrowIfNull(formValues);
-        
-        foreach (var (key, value) in formValues)
-        {
-            IElement? formElement = form[key];
-            if (formElement is IHtmlInputElement input)
-            {
-                if (input.Type == "checkbox")
-                {
-                    input.IsChecked = value.Should().BeOfType<bool>().Subject;
-                }
-                else
-                {
-                    input.Value = value.ToString() ?? throw new NullReferenceException($"String value for element {key} is null.");
-                }
-            }
-            else if (formElement is IHtmlSelectElement select)
-            {
-                string selectedValue = value.ToString() ?? throw new NullReferenceException($"String value for element {key} is null.");
-                foreach (IHtmlOptionElement option in select.Options)
-                {
-                    option.IsSelected = option.Value == selectedValue;
-                }
-            }
-            else if (formElement is null)
-            {
-                throw new InvalidOperationException($"No form element found for value {key}({value}).");
-            }
-            else
-            {
-                throw new InvalidOperationException($"Form element for value {key}({value}) has an unsupported type: {formElement.GetType()}");
-            }
-        }
 
-        DocumentRequest? submit = form.GetSubmission(button);
-        Uri target = (Uri)submit!.Target;
-        if (button.HasAttribute("formaction"))
+        form.SetFormValues(formValues);
+
+        return await client.SendFormAsync(form, button);
+    }
+
+    public static async Task<IHtmlDocument> SendFormAsync(this HttpClient client, DocumentRequest request, Uri target)
+    {
+        ArgumentNullException.ThrowIfNull(client);
+        ArgumentNullException.ThrowIfNull(request);
+        ArgumentNullException.ThrowIfNull(target);
+        
+        HttpRequestMessage submission = new(new System.Net.Http.HttpMethod(request.Method.ToString()), target)
         {
-            string? formaction = button.GetAttribute("formaction");
-            if (formaction is not null)
-            {
-                target = new Uri(formaction, UriKind.Relative); 
-            }
-        }
-        HttpRequestMessage submission = new(new System.Net.Http.HttpMethod(submit.Method.ToString()), target)
-        {
-            Content = new StreamContent(submit.Body)
+            Content = new StreamContent(request.Body)
         };
 
-        foreach (var (key, value) in submit.Headers)
+        foreach (var (key, value) in request.Headers)
         {
             submission.Headers.TryAddWithoutValidation(key, value);
             submission.Content.Headers.TryAddWithoutValidation(key, value);

@@ -71,4 +71,42 @@ public static class AngleSharpExtensions
         element.Should().NotBeNull();
         return element!;
     }
+
+    public static void SetFormValues(this IHtmlFormElement form, IEnumerable<KeyValuePair<string, object>> formValues)
+    {
+        ArgumentNullException.ThrowIfNull(form);
+        ArgumentNullException.ThrowIfNull(formValues);
+
+        foreach (var (key, value) in formValues)
+        {
+            IElement? formElement = form[key];
+            if (formElement is IHtmlInputElement input)
+            {
+                if (input.Type == "checkbox")
+                {
+                    input.IsChecked = value.Should().BeOfType<bool>().Subject;
+                }
+                else
+                {
+                    input.Value = value.ToString() ?? throw new NullReferenceException($"String value for element {key} is null.");
+                }
+            }
+            else if (formElement is IHtmlSelectElement select)
+            {
+                string selectedValue = value.ToString() ?? throw new NullReferenceException($"String value for element {key} is null.");
+                foreach (IHtmlOptionElement option in select.Options)
+                {
+                    option.IsSelected = option.Value == selectedValue;
+                }
+            }
+            else if (formElement is null)
+            {
+                throw new InvalidOperationException($"No form element found for value {key}({value}).");
+            }
+            else
+            {
+                throw new InvalidOperationException($"Form element for value {key}({value}) has an unsupported type: {formElement.GetType()}");
+            }
+        }
+    }
 }
