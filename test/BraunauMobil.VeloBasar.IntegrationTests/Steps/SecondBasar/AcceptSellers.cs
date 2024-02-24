@@ -5,6 +5,7 @@ public class AcceptSellers(TestContext context)
     public async Task Run()
     {
         await Seller2();
+        await AssertOverview();
     }
 
     private async Task Seller2()
@@ -72,6 +73,40 @@ public class AcceptSellers(TestContext context)
                 new ProductTableRowDocumentModel("4", "Toxy - Scooter".Line("TY 66-17").Line(" white"), "17", "$45.75", null),
             ])
         );
+    }
+
+    private async Task AssertOverview()
+    {
+        BasarSettlementStatus basarSettlementStatus = new(false,
+            new SellerGroupSettlementStatus(1, 0),
+            new SellerGroupSettlementStatus(1, 0),
+            new SellerGroupSettlementStatus(0, 0)
+        );
+        BasarDetailsModel expectedDetails = new(new BasarEntity(), basarSettlementStatus)
+        {
+            AcceptanceCount = 1,
+            AcceptedProductsAmount = 96.81M,
+            AcceptedProductsCount = 2,
+            AcceptedProductTypesByAmount = [
+                new ChartDataPoint(96.81M, "Scooter", Color.FromArgb(0xFF, 0x00, 0x7B, 0xFF))
+            ],
+            AcceptedProductTypesByCount = [
+                new ChartDataPoint(2M, "Scooter", Color.FromArgb(0xFF, 0x00, 0x7B, 0xFF))
+            ],
+            LockedProductsCount = 0,
+            LostProductsCount = 0,
+            PriceDistribution = [
+                new ChartDataPoint(1, "$50.00", Color.FromArgb(0xFF, 0x00, 0x7B, 0xFF))
+            ],
+            SaleCount = 0,
+            SaleDistribution = [],
+            SoldProductsAmount = 0,
+            SoldProductsCount = 0,
+            SoldProductTypesByCount = [],
+            SoldProductTypesByAmount = [],
+        };
+
+        await context.AssertBasarDetails(2, expectedDetails);
     }
 
     private async Task<IHtmlDocument> EnterProduct(IHtmlDocument enterProductsDocument, string expectedTitle, IDictionary<string, object> values)

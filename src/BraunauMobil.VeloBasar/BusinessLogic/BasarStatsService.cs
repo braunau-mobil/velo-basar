@@ -180,7 +180,7 @@ public class BasarStatsService
         }
 
         return new BasarSettlementStatus(
-            overallCount > 0,
+            overallSettledCount > 0,
             new SellerGroupSettlementStatus(overallCount, overallSettledCount),
             new SellerGroupSettlementStatus(mustBeCount, mustBeSettledCount),
             new SellerGroupSettlementStatus(mayBeCount, mayBeSettledCount)

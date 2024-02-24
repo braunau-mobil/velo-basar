@@ -1,5 +1,6 @@
-﻿using BraunauMobil.VeloBasar.Configuration;
-using BraunauMobil.VeloBasar.Models.Documents;
+﻿using BraunauMobil.VeloBasar.BusinessLogic;
+using BraunauMobil.VeloBasar.Configuration;
+using BraunauMobil.VeloBasar.Models;
 
 namespace BraunauMobil.VeloBasar.IntegrationTests;
 
@@ -33,6 +34,16 @@ public record TestContext(IServiceProvider ServiceProvider, HttpClient HttpClien
                     productTableRows
                 )
             );
+
+    public async Task AssertBasarDetails(int basarId, BasarDetailsModel expectedDetails)
+    {
+        ArgumentNullException.ThrowIfNull(expectedDetails);
+
+        IBasarService basarService = ServiceProvider.GetRequiredService<IBasarService>();
+        BasarDetailsModel result = await basarService.GetDetailsAsync(basarId);
+
+        result.Should().BeEquivalentTo(expectedDetails, options => options.Excluding(details => details.Entity));
+    }
 
     public string BankingQrCode(string seller, string amount, string decscription)
     {

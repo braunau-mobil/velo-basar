@@ -23,7 +23,7 @@ public class GetSettlementStatusAsync
         //  Assert
         using (new AssertionScope())
         {
-            result.HasAny.Should().BeTrue();
+            result.HasSettlementStarted.Should().BeTrue();
             
             result.MayBeSettledOnSite.SettledCount.Should().Be(1);
             result.MayBeSettledOnSite.TotalCount.Should().Be(2);
