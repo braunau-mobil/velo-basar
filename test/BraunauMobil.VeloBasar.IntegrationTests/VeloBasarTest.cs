@@ -31,7 +31,7 @@ public class VeloBasarTest
         X.Clock.Now = X.FirstContactDay.AddYears(1).AddMonths(1).AddDays(1).AddHours(1).AddMinutes(1).AddSeconds(1);
 
         await new Steps.SecondBasar.Creation(_context).Run();
-        await new Steps.SecondBasar.AcceptSellers(_context).Run();
+        await new Steps.SecondBasar.AcceptSellers.AcceptSellers(_context).Run();
 
     }
 

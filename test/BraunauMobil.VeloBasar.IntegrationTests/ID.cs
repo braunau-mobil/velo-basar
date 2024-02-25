@@ -28,6 +28,8 @@ public static class ID
         public const int SchattenfellMagsame = 1;
         public const int MeneldorBorondir = 2;
         public const int AmrothGerstenmann = 3;
+        public const int LanghöhlenSiriondil = 4;
+        public const int FrórBilbo = 5;
     }
 
     public static class Products

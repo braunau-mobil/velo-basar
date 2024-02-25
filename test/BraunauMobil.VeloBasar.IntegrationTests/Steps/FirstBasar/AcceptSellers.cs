@@ -11,6 +11,8 @@ public class AcceptSellers(TestContext context)
 
     private async Task AcceptSeller1(TestContext context)
     {
+        const string expectedTitle = "Acceptance for seller with ID: 1 - Enter products - Velo Basar";
+
         IHtmlDocument newAcceptanceDocument = await context.HttpClient.NavigateMenuAsync("New Acceptance");
         newAcceptanceDocument.Title.Should().Be("Acceptance - Enter seller - Velo Basar");
 
@@ -28,10 +30,28 @@ public class AcceptSellers(TestContext context)
             { "PhoneNumber", "71904814" },
             { "EMail", "schattenfell@magsame.me" },
         });
-        enterProductsDocument.Title.Should().Be("Acceptance for seller with ID: 1 - Enter products - Velo Basar");
+        enterProductsDocument.Title.Should().Be(expectedTitle);
 
-        enterProductsDocument = await EnterProduct1(enterProductsDocument);
-        enterProductsDocument = await EnterProduct2(enterProductsDocument);
+        enterProductsDocument = await context.EnterProduct(enterProductsDocument, expectedTitle, new Dictionary<string, object>
+        {
+            { "TypeId", ID.ProductTypes.ChildrensBike },
+            { "Brand", "Votec" },
+            { "Color", "green" },
+            { "FrameNumber", "1067425379" },
+            { "Description", "Votec VRC Comp" },
+            { "TireSize", "24" },
+            { "Price", 92.99m }
+        });
+        enterProductsDocument = await context.EnterProduct(enterProductsDocument, expectedTitle, new Dictionary<string, object>
+        {
+            { "TypeId", ID.ProductTypes.SteelSteed },
+            { "Brand", "KTM" },
+            { "Color", "red" },
+            { "FrameNumber", "1239209209" },
+            { "Description", "Steed 1" },
+            { "TireSize", "22" },
+            { "Price", 98.89m }
+        });
 
         IHtmlAnchorElement saveAnchor = enterProductsDocument.QueryAnchorByText("Save accept session");
 
@@ -54,44 +74,6 @@ public class AcceptSellers(TestContext context)
                 new ProductTableRowDocumentModel("2", "KTM - Steel steed".Line("Steed 1").Line(" red 1239209209"), "22", "$98.89", null),
             ])
         );
-    }
-
-    private async Task<IHtmlDocument> EnterProduct1(IHtmlDocument enterProductsDocument)
-    {
-        IHtmlFormElement form = enterProductsDocument.QueryForm();
-        IHtmlButtonElement submitButton = enterProductsDocument.QueryButtonByText("Add");
-
-        IHtmlDocument postDocument = await context.HttpClient.SendFormAsync(form, submitButton, new Dictionary<string, object>
-        {
-            { "TypeId", ID.ProductTypes.ChildrensBike },
-            { "Brand", "Votec" },
-            { "Color", "green" },
-            { "FrameNumber", "1067425379" },
-            { "Description", "Votec VRC Comp" },
-            { "TireSize", "24" },
-            { "Price", 92.99m }
-        });
-        postDocument.Title.Should().Be("Acceptance for seller with ID: 1 - Enter products - Velo Basar");
-        return postDocument;
-    }
-
-    private async Task<IHtmlDocument> EnterProduct2(IHtmlDocument enterProductsDocument)
-    {
-        IHtmlFormElement form = enterProductsDocument.QueryForm();
-        IHtmlButtonElement submitButton = enterProductsDocument.QueryButtonByText("Add");
-
-        IHtmlDocument postDocument = await context.HttpClient.SendFormAsync(form, submitButton, new Dictionary<string, object>
-        {
-            { "TypeId", ID.ProductTypes.SteelSteed },
-            { "Brand", "KTM" },
-            { "Color", "red" },
-            { "FrameNumber", "1239209209" },
-            { "Description", "Steed 1" },
-            { "TireSize", "22" },
-            { "Price", 98.89m }
-        });
-        postDocument.Title.Should().Be("Acceptance for seller with ID: 1 - Enter products - Velo Basar");
-        return postDocument;
     }
 
     private async Task AssertBasarDetails()

@@ -97,6 +97,20 @@ public record TestContext(IServiceProvider ServiceProvider, HttpClient HttpClien
             .Line();
     }
 
+    public async Task<IHtmlDocument> EnterProduct(IHtmlDocument enterProductsDocument, string expectedTitle, IDictionary<string, object> values)
+    {
+        ArgumentNullException.ThrowIfNull(enterProductsDocument);
+        ArgumentNullException.ThrowIfNull(expectedTitle);
+        ArgumentNullException.ThrowIfNull(values);
+
+        IHtmlFormElement form = enterProductsDocument.QueryForm();
+        IHtmlButtonElement submitButton = enterProductsDocument.QueryButtonByText("Add");
+
+        IHtmlDocument postDocument = await HttpClient.SendFormAsync(form, submitButton, values);
+        postDocument.Title.Should().Be(expectedTitle);
+        return postDocument;
+    }
+
     public SaleDocumentModel SaleDocument(string title, string locationAndDateText, string productTableCountText, string productTablePriceText, IReadOnlyCollection<ProductTableRowDocumentModel> productTableRows)
         => new(title,
                 locationAndDateText,
