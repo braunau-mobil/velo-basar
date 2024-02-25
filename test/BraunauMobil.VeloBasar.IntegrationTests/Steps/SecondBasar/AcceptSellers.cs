@@ -4,12 +4,12 @@ public class AcceptSellers(TestContext context)
 {
     public async Task Run()
     {
-        await Seller2();
+        await Seller2_AcceptAndThenAcceptViaDetails();
         await Seller3_CancelOnEnterProducts();
         await AssertBasarDetails();
     }
 
-    private async Task Seller2()
+    private async Task Seller2_AcceptAndThenAcceptViaDetails()
     {
         const string expectedTitle = "Acceptance for seller with ID: 2 - Enter products - Velo Basar";
 
@@ -75,14 +75,62 @@ public class AcceptSellers(TestContext context)
             ])
         );
 
+        IHtmlDocument sellerListDocument = await context.HttpClient.NavigateMenuAsync("Seller");
+        IHtmlFormElement sellerListform = sellerListDocument.QueryForm();
+        IHtmlDocument sellerDetailsDocument = await context.HttpClient.SendFormAsync(sellerListform, new Dictionary<string, object>
+        {
+            { "SearchString", ID.Sellers.MeneldorBorondir }
+        });
+        
+        IHtmlAnchorElement acceptProductsAnchor = sellerDetailsDocument.QueryAnchorByText("Accept products");
+
+        enterProductsDocument = await context.HttpClient.GetDocumentAsync(acceptProductsAnchor.Href);
+        enterProductsDocument = await EnterProduct(enterProductsDocument, expectedTitle, new Dictionary<string, object>
+        {
+            { "TypeId", ID.ProductTypes.EBike },
+            { "Brand", "Draisin" },
+            { "Color", "white" },
+            { "Description", "DR-F5" },
+            { "TireSize", "23" },
+            { "Price", 69.54M }
+        });
+        enterProductsDocument = await EnterProduct(enterProductsDocument, expectedTitle, new Dictionary<string, object>
+        {
+            { "TypeId", ID.ProductTypes.RoadBike },
+            { "Brand", "Cyclecraft" },
+            { "Color", "yellow" },
+            { "Description", "No lights, brakes are fine" },
+            { "TireSize", "28" },
+            { "Price", 117.48M }
+        });
+
+        saveAnchor = enterProductsDocument.QueryAnchorByText("Save accept session");
+
+        successDocument = await context.HttpClient.GetDocumentAsync(saveAnchor.Href);
+        successDocument.Title.Should().Be("Acceptance #2 - Velo Basar");
+
+        voucherAnchor = successDocument.QueryAnchorByText("Voucher");
+        document = await context.HttpClient.GetAcceptanceDocumentAsync(voucherAnchor.Href);
+        document.Should().BeEquivalentTo(context.AcceptanceDocument("XYZ - Second Bazaar : Acceptance receipt #2",
+            "Thal, 6/4/2064",
+            "Meneldor Borondir".Line("Heßgasse 10").Line("2828 Bree").Line(),
+            "Seller.-ID: 2",
+            "statusLink=4D652426F",
+            "4D652426F",
+            "Thal on Tuesday, May 6, 2064 at 12:23 PM",
+            "2 Product",
+            "$187.02",
+            [
+                new ProductTableRowDocumentModel("5", "Draisin - E-bike".Line("DR-F5").Line(" white"), "23", "$69.54", null),
+                new ProductTableRowDocumentModel("6", "Cyclecraft - Road bike".Line("No lights, brakes are fine").Line(" yellow"), "28", "$117.48", null),
+            ])
+        );
+
         SellerDetailsModel expectedDetails = new(new SellerEntity())
         {
-            AcceptedProductCount = 2,
-            NotSoldProductCount = 2,
+            AcceptedProductCount = 4,
+            NotSoldProductCount = 4,
             PickedUpProductCount = 0,
-            Products = [
-
-            ],
             SettlementAmout = 0,
             SoldProductCount = 0,
             Transactions = []
@@ -140,20 +188,26 @@ public class AcceptSellers(TestContext context)
         );
         BasarDetailsModel expectedDetails = new(new BasarEntity(), basarSettlementStatus)
         {
-            AcceptanceCount = 1,
-            AcceptedProductsAmount = 96.81M,
-            AcceptedProductsCount = 2,
+            AcceptanceCount = 2,
+            AcceptedProductsAmount = 283.83M,
+            AcceptedProductsCount = 4,
             AcceptedProductTypesByAmount = [
-                new ChartDataPoint(96.81M, "Scooter", X.AnyColor)
+                new ChartDataPoint(96.81M, "Scooter", X.AnyColor),
+                new ChartDataPoint(69.54M, "E-bike", X.AnyColor),
+                new ChartDataPoint(117.48M, "Road bike", X.AnyColor)
             ],
             AcceptedProductTypesByCount = [
-                new ChartDataPoint(2M, "Scooter", X.AnyColor)
+                new ChartDataPoint(2, "Scooter", X.AnyColor),
+                new ChartDataPoint(1, "E-bike", X.AnyColor),
+                new ChartDataPoint(1, "Road bike", X.AnyColor)
             ],
             LockedProductsCount = 0,
             LostProductsCount = 0,
             PriceDistribution = [
                 new ChartDataPoint(1, "$50.00", X.AnyColor),
-                new ChartDataPoint(1, "$60.00", X.AnyColor)
+                new ChartDataPoint(1, "$60.00", X.AnyColor),
+                new ChartDataPoint(1, "$70.00", X.AnyColor),
+                new ChartDataPoint(1, "$120.00", X.AnyColor)
             ],
             SaleCount = 0,
             SaleDistribution = [],
