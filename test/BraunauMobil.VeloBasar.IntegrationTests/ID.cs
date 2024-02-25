@@ -30,6 +30,10 @@ public static class ID
         public const int AmrothGerstenmann = 3;
         public const int LanghöhlenSiriondil = 4;
         public const int FrórBilbo = 5;
+        public const int ChicaCiryatur = 6;
+        public const int FolcwineGollum = 7;
+        public const int AnsenGróin = 8;
+        public const int MallorFimbrethil = 9;
     }
 
     public static class Products

@@ -1,10 +1,10 @@
 ﻿namespace BraunauMobil.VeloBasar.IntegrationTests.Steps.SecondBasar;
 
-public class Seller4(TestContext context)
+public class Seller9(TestContext context)
 {
     public async Task Run()
     {
-        const string expectedTitle = "Acceptance for seller with ID: 4 - Enter products - Velo Basar";
+        const string expectedTitle = "Acceptance for seller with ID: 9 - Enter products - Velo Basar";
 
         IHtmlDocument newAcceptanceDocument = await context.HttpClient.NavigateMenuAsync("New Acceptance");
         newAcceptanceDocument.Title.Should().Be("Acceptance - Enter seller - Velo Basar");
@@ -14,47 +14,49 @@ public class Seller4(TestContext context)
 
         IHtmlDocument enterProductsDocument = await context.HttpClient.SendFormAsync(form, submitButton, new Dictionary<string, object>
         {
-            { "FirstName", "Langhöhlen" },
-            { "LastName", "Siriondil" },
-            { "CountryId", ID.Countries.Germany },
-            { "ZIP", "2178" },
-            { "City", "Nargothrond" },
-            { "Street", "Börseplatz 11" },
-            { "PhoneNumber", "74460686" },
-            { "EMail", "langhoehlen@siriondil.me" },
-            { "HasNewsletterPermission", false },
+            { "BankAccountHolder", "Mallor M.F. Fimbrethil" },
+            { "City", "Edhellond" },
+            { "CountryId", ID.Countries.Austria },
+            { "EMail", "mallor@fimbrethil.me" },
+            { "FirstName", "Mallor" },
+            { "HasNewsletterPermission", true },
+            { "IBAN", "" },
+            { "LastName", "Fimbrethil" },
+            { "Street", "Schönlaterngasse 16" },
+            { "PhoneNumber", "22870292" },
+            { "ZIP", "2758" },
         });
         enterProductsDocument.Title.Should().Be(expectedTitle);
 
         enterProductsDocument = await context.EnterProduct(enterProductsDocument, expectedTitle, new Dictionary<string, object>
         {
-            { "TypeId", ID.ProductTypes.WomansCityBike },
-            { "Brand", "Epple" },
-            { "Color", "white" },
-            { "FrameNumber", "G#%$BIBM#$)" },
-            { "Description", "No tires" },
-            { "TireSize", "22" },
-            { "Price", 69.54m }
+            { "TypeId", ID.ProductTypes.RoadBike },
+            { "Brand", "Idworx" },
+            { "Color", "orange" },
+            { "FrameNumber", "12a2dc85-" },
+            { "Description", "IDWORX_768016" },
+            { "TireSize", "24" },
+            { "Price", 8.49M },
         });
 
         IHtmlAnchorElement saveAnchor = enterProductsDocument.QueryAnchorByText("Save accept session");
 
         IHtmlDocument successDocument = await context.HttpClient.GetDocumentAsync(saveAnchor.Href);
-        successDocument.Title.Should().Be("Acceptance #3 - Velo Basar");
+        successDocument.Title.Should().Be("Acceptance #8 - Velo Basar");
 
         IHtmlAnchorElement voucherAnchor = successDocument.QueryAnchorByText("Voucher");
         AcceptanceDocumentModel document = await context.HttpClient.GetAcceptanceDocumentAsync(voucherAnchor.Href);
-        document.Should().BeEquivalentTo(context.AcceptanceDocument("XYZ - Second Bazaar : Acceptance receipt #3",
+        document.Should().BeEquivalentTo(context.AcceptanceDocument("XYZ - Second Bazaar : Acceptance receipt #8",
             "Thal, 6/4/2064",
-            "Langhöhlen Siriondil".Line("Börseplatz 11").Line("2178 Nargothrond").Line(),
-            "Seller.-ID: 4",
-            "statusLink=4C6145369",
-            "4C6145369",
+            "Mallor Fimbrethil".Line("Schönlaterngasse 16").Line("2758 Edhellond").Line(),
+            "Seller.-ID: 9",
+            "statusLink=4D6194669",
+            "4D6194669",
             "Thal on Tuesday, May 6, 2064 at 12:23 PM",
             "1 Product",
-            "$69.54",
+            "$8.49",
             [
-                new ProductTableRowDocumentModel("7", "Epple - Woman's city bike".Line("No tires").Line(" white G#%$BIBM#$)"), "22", "$69.54", null)
+                new ProductTableRowDocumentModel("15", "Idworx - Road bike".Line("IDWORX_768016").Line(" orange 12a2dc85-"), "24", "$8.49", null),
             ])
         );
 
@@ -66,6 +68,6 @@ public class Seller4(TestContext context)
             SettlementAmout = 0,
             SoldProductCount = 0
         };
-        await context.AssertSellerDetails(ID.SecondBasar, ID.Sellers.LanghöhlenSiriondil, expectedDetails);
+        await context.AssertSellerDetails(ID.SecondBasar, ID.Sellers.MallorFimbrethil, expectedDetails);
     }
 }

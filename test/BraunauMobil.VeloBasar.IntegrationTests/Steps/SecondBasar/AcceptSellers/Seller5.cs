@@ -96,8 +96,7 @@ public class Seller5(TestContext context)
             NotSoldProductCount = 4,
             PickedUpProductCount = 0,
             SettlementAmout = 0,
-            SoldProductCount = 0,
-            Transactions = []
+            SoldProductCount = 0
         };
         await context.AssertSellerDetails(ID.SecondBasar, ID.Sellers.FrórBilbo, expectedDetails);
     }
