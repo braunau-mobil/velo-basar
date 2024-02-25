@@ -26,8 +26,8 @@ public class GetPriceDistribution
     {
         // Arrange
         A.CallTo(() => ColorProvider.Primary).Returns(primaryColor);
-        ProductEntity[] products = new[]
-        {
+        ProductEntity[] products =
+        [
             CreateProduct(0),
             CreateProduct(0),
             CreateProduct(1),
@@ -37,7 +37,9 @@ public class GetPriceDistribution
             CreateProduct(11),
             CreateProduct(100),
             CreateProduct(1000),
-        };
+            CreateProduct(9989.89M),
+            CreateProduct(9999.99M),
+        ];
         
         // Act
         IReadOnlyList<ChartDataPoint> result = Sut.GetPriceDistribution(products);
@@ -49,9 +51,35 @@ public class GetPriceDistribution
             new ChartDataPoint(2, "€ 20,00", primaryColor),
             new ChartDataPoint(1, "€ 100,00", primaryColor),
             new ChartDataPoint(1, "€ 1.000,00", primaryColor),
+            new ChartDataPoint(1, "€ 9.990,00", primaryColor),
+            new ChartDataPoint(1, "€ 10.000,00", primaryColor),
         });
 
-        A.CallTo(() => ColorProvider.Primary).MustHaveHappened(4, Times.Exactly);
+        A.CallTo(() => ColorProvider.Primary).MustHaveHappened(result.Count, Times.Exactly);
+    }
+
+    [Theory]
+    [VeloAutoData]
+    public void ProductsWithTwoPricesInTheSameRange_ShouldReturnDistribution(Color primaryColor)
+    {
+        // Arrange
+        A.CallTo(() => ColorProvider.Primary).Returns(primaryColor);
+        ProductEntity[] products =
+        [
+            CreateProduct(92.99M),
+            CreateProduct(98.89M)
+        ];
+
+        // Act
+        IReadOnlyList<ChartDataPoint> result = Sut.GetPriceDistribution(products);
+
+        // Assert
+        result.Should().BeEquivalentTo(new[]
+        {
+            new ChartDataPoint(2, "€ 100,00", primaryColor)
+        });
+
+        A.CallTo(() => ColorProvider.Primary).MustHaveHappened(1, Times.Exactly);
     }
 
     [Theory]
@@ -60,13 +88,13 @@ public class GetPriceDistribution
     {
         // Arrange
         A.CallTo(() => ColorProvider.Primary).Returns(primaryColor);
-        ProductEntity[] products = new[]
-        {
+        ProductEntity[] products =
+        [
             CreateProduct(0),
             CreateProduct(0),
             CreateProduct(1),
             CreateProduct(5)
-        };
+        ];
         
         // Act
         IReadOnlyList<ChartDataPoint> result = Sut.GetPriceDistribution(products);
@@ -74,7 +102,7 @@ public class GetPriceDistribution
         // Assert
         result.Should().BeEquivalentTo(new[]
         {
-            new ChartDataPoint(4, "€ 5,00", primaryColor),
+            new ChartDataPoint(4, "€ 10,00", primaryColor),
         });
 
         A.CallTo(() => ColorProvider.Primary).MustHaveHappenedOnceExactly();

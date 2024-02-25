@@ -42,7 +42,23 @@ public record TestContext(IServiceProvider ServiceProvider, HttpClient HttpClien
         IBasarService basarService = ServiceProvider.GetRequiredService<IBasarService>();
         BasarDetailsModel result = await basarService.GetDetailsAsync(basarId);
 
-        result.Should().BeEquivalentTo(expectedDetails, options => options.Excluding(details => details.Entity));
+        result.Should().BeEquivalentTo(expectedDetails, options =>
+        {
+            return options.Excluding(details => details.Entity)
+                .For(details => details.AcceptedProductTypesByAmount)
+                    .Exclude(chartData => chartData.Color)
+                .For(details => details.AcceptedProductTypesByCount)
+                    .Exclude(chartData => chartData.Color)
+                .For(details => details.PriceDistribution)
+                    .Exclude(chartData => chartData.Color)
+                .For(details => details.SaleDistribution)
+                    .Exclude(chartData => chartData.Color)
+                .For(details => details.SoldProductTypesByAmount)
+                    .Exclude(chartData => chartData.Color)
+                .For(details => details.SoldProductTypesByCount)
+                    .Exclude(chartData => chartData.Color)
+                ;
+        });
     }
 
     public string BankingQrCode(string seller, string amount, string decscription)

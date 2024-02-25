@@ -6,7 +6,9 @@ public static class X
 {
     public static DateTime FirstContactDay { get; set; } = new DateTime(2063, 04, 05, 11, 22, 33);
 
-    public static ClockMock Clock { get; } = new (() => FirstContactDay);
+    public static ClockMock Clock { get; } = new (FirstContactDay);
+
+    public static Color AnyColor { get; } = new Color();
 
     public static string Line(this string s, string nextLine = "")
     {

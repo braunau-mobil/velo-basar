@@ -2,10 +2,10 @@
 
 namespace BraunauMobil.VeloBasar.IntegrationTests.Mockups;
 
-public class ClockMock(Func<DateTime> getDateTime)
+public class ClockMock(DateTime now)
         : IClock
 {
-    public DateTimeOffset Now { get => getDateTime(); }
+    public DateTimeOffset Now { get; set; } = now;
 
     public DateOnly GetCurrentDate()
         => DateOnly.FromDateTime(Now.DateTime);

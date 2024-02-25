@@ -34,5 +34,49 @@ public class SellProducts(TestContext context)
                 new ProductTableRowDocumentModel("1", "Votec - Children's bike".Line("Votec VRC Comp").Line(" green 1067425379"), "24", "$92.99", "* Schattenfell Magsame, Heidenschuss 41, 6295 Hobbingen")
             ])
         );
+
+        await AssertBasarDetails();
+    }
+
+    private async Task AssertBasarDetails()
+    {
+        BasarSettlementStatus basarSettlementStatus = new(false,
+            new SellerGroupSettlementStatus(1, 0),
+            new SellerGroupSettlementStatus(1, 0),
+            new SellerGroupSettlementStatus(0, 0)
+        );
+        BasarDetailsModel expectedDetails = new(new BasarEntity(), basarSettlementStatus)
+        {
+            AcceptanceCount = 1,
+            AcceptedProductsAmount = 191.88M,
+            AcceptedProductsCount = 2,
+            AcceptedProductTypesByAmount = [
+                new ChartDataPoint(92.99m, "Children's bike", X.AnyColor),
+                new ChartDataPoint(98.89m, "Steel steed", X.AnyColor),
+            ],
+            AcceptedProductTypesByCount = [
+                new ChartDataPoint(1, "Children's bike", X.AnyColor),
+                new ChartDataPoint(1, "Steel steed", X.AnyColor)
+            ],
+            LockedProductsCount = 0,
+            LostProductsCount = 0,
+            PriceDistribution = [
+                new ChartDataPoint(2, "$100.00", X.AnyColor)
+            ],
+            SaleCount = 1,
+            SaleDistribution = [
+                new ChartDataPoint(92.99M, "11:22 AM", X.AnyColor),
+            ],
+            SoldProductsAmount = 92.99m,
+            SoldProductsCount = 1,
+            SoldProductTypesByCount = [
+                new ChartDataPoint(1, "Children's bike", X.AnyColor),
+            ],
+            SoldProductTypesByAmount = [
+                new ChartDataPoint(92.99m, "Children's bike", X.AnyColor),
+            ],
+        };
+
+        await context.AssertBasarDetails(ID.FirstBasar, expectedDetails);
     }
 }

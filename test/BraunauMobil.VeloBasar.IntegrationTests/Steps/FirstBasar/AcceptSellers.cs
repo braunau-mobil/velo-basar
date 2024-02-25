@@ -4,6 +4,13 @@ public class AcceptSellers(TestContext context)
 {
     public async Task Run()
     {
+        await AcceptSeller1(context);
+
+        await AssertBasarDetails();
+    }
+
+    private async Task AcceptSeller1(TestContext context)
+    {
         IHtmlDocument newAcceptanceDocument = await context.HttpClient.NavigateMenuAsync("New Acceptance");
         newAcceptanceDocument.Title.Should().Be("Acceptance - Enter seller - Velo Basar");
 
@@ -27,7 +34,7 @@ public class AcceptSellers(TestContext context)
         enterProductsDocument = await EnterProduct2(enterProductsDocument);
 
         IHtmlAnchorElement saveAnchor = enterProductsDocument.QueryAnchorByText("Save accept session");
-        
+
         IHtmlDocument successDocument = await context.HttpClient.GetDocumentAsync(saveAnchor.Href);
         successDocument.Title.Should().Be("Acceptance #1 - Velo Basar");
 
@@ -85,5 +92,41 @@ public class AcceptSellers(TestContext context)
         });
         postDocument.Title.Should().Be("Acceptance for seller with ID: 1 - Enter products - Velo Basar");
         return postDocument;
+    }
+
+    private async Task AssertBasarDetails()
+    {
+        BasarSettlementStatus basarSettlementStatus = new(false,
+            new SellerGroupSettlementStatus(1, 0),
+            new SellerGroupSettlementStatus(1, 0),
+            new SellerGroupSettlementStatus(0, 0)
+        );
+        BasarDetailsModel expectedDetails = new(new BasarEntity(), basarSettlementStatus)
+        {
+            AcceptanceCount = 1,
+            AcceptedProductsAmount = 191.88M,
+            AcceptedProductsCount = 2,
+            AcceptedProductTypesByAmount = [
+                new ChartDataPoint(92.99m, "Children's bike", X.AnyColor),
+                new ChartDataPoint(98.89m, "Steel steed", X.AnyColor)
+            ],
+            AcceptedProductTypesByCount = [
+                new ChartDataPoint(1, "Children's bike", X.AnyColor),
+                new ChartDataPoint(1, "Steel steed", X.AnyColor)
+            ],
+            LockedProductsCount = 0,
+            LostProductsCount = 0,
+            PriceDistribution = [
+                new ChartDataPoint(2, "$100.00", X.AnyColor)
+            ],
+            SaleCount = 0,
+            SaleDistribution = [],
+            SoldProductsAmount = 0,
+            SoldProductsCount = 0,
+            SoldProductTypesByCount = [],
+            SoldProductTypesByAmount = [],
+        };
+
+        await context.AssertBasarDetails(ID.FirstBasar, expectedDetails);
     }
 }

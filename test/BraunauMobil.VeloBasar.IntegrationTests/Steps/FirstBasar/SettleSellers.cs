@@ -42,5 +42,49 @@ public class SettleSellers(TestContext context)
             "Edoras on Thursday, April 5, 2063 at 11:22 AM"
             )
         );
+
+        await AssertBasarDetails();
+    }
+
+    private async Task AssertBasarDetails()
+    {
+        BasarSettlementStatus basarSettlementStatus = new(true,
+            new SellerGroupSettlementStatus(1, 1),
+            new SellerGroupSettlementStatus(1, 1),
+            new SellerGroupSettlementStatus(0, 0)
+        );
+        BasarDetailsModel expectedDetails = new(new BasarEntity(), basarSettlementStatus)
+        {
+            AcceptanceCount = 1,
+            AcceptedProductsAmount = 191.88M,
+            AcceptedProductsCount = 2,
+            AcceptedProductTypesByAmount = [
+                new ChartDataPoint(92.99m, "Children's bike", X.AnyColor),
+                new ChartDataPoint(98.89m, "Steel steed", X.AnyColor)
+            ],
+            AcceptedProductTypesByCount = [
+                new ChartDataPoint(1, "Children's bike", X.AnyColor),
+                new ChartDataPoint(1, "Steel steed", X.AnyColor)
+            ],
+            LockedProductsCount = 0,
+            LostProductsCount = 0,
+            PriceDistribution = [
+                new ChartDataPoint(2, "$100.00", X.AnyColor)
+            ],
+            SaleCount = 1,
+            SaleDistribution = [
+                new ChartDataPoint(92.99M, "11:22 AM", X.AnyColor),
+            ],
+            SoldProductsAmount = 92.99m,
+            SoldProductsCount = 1,
+            SoldProductTypesByCount = [
+                new ChartDataPoint(1, "Children's bike", X.AnyColor),
+            ],
+            SoldProductTypesByAmount = [
+                new ChartDataPoint(92.99m, "Children's bike", X.AnyColor),
+            ],
+        };
+
+        await context.AssertBasarDetails(ID.FirstBasar, expectedDetails);
     }
 }

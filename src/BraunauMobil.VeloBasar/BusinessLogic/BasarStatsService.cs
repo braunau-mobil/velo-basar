@@ -86,7 +86,7 @@ public class BasarStatsService
         }
 
         decimal step = 10.0m;
-        decimal maxPrice = productPrices.Max();
+        decimal maxPrice = ((int)(productPrices.Max() / step) + 1) * step;
         decimal currentMin = 0;
         decimal currentMax = Math.Min(step, maxPrice);
 

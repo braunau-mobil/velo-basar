@@ -1,6 +1,4 @@
-﻿using AngleSharp.Dom;
-using AngleSharp.Io;
-using BraunauMobil.VeloBasar.Models.Documents;
+﻿using AngleSharp.Io;
 
 namespace BraunauMobil.VeloBasar.IntegrationTests;
 
@@ -13,6 +11,7 @@ public static class HttpClientExtensions
 
         HttpResponseMessage response = await client.GetAsync(requestUri);
         response.EnsureSuccessStatusCode();
+
         return await response.GetDocumentAsync();
     }
 
@@ -23,6 +22,7 @@ public static class HttpClientExtensions
 
         HttpResponseMessage response = await client.SendAsync(request);
         response.EnsureSuccessStatusCode();
+
         return await response.GetDocumentAsync();
     }
 
