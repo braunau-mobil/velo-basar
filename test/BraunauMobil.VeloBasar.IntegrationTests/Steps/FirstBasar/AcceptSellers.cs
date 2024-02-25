@@ -4,15 +4,22 @@ public class AcceptSellers(TestContext context)
 {
     public async Task Run()
     {
-        await AcceptSeller1(context);
+        await AcceptSeller1();
 
         await AssertBasarDetails();
     }
 
-    private async Task AcceptSeller1(TestContext context)
+    private async Task AcceptSeller1()
     {
-        const string expectedTitle = "Acceptance for seller with ID: 1 - Enter products - Velo Basar";
+        IHtmlDocument enterProductsDocument = await EnterSeller();
+        IHtmlDocument successDocument = await EnterProducts(enterProductsDocument);
+        successDocument.Title.Should().Be("Acceptance #1 - Velo Basar");
 
+        await CheckVoucher(successDocument);
+    }
+
+    private async Task<IHtmlDocument> EnterSeller()
+    {
         IHtmlDocument newAcceptanceDocument = await context.HttpClient.NavigateMenuAsync("New Acceptance");
         newAcceptanceDocument.Title.Should().Be("Acceptance - Enter seller - Velo Basar");
 
@@ -30,8 +37,14 @@ public class AcceptSellers(TestContext context)
             { "PhoneNumber", "71904814" },
             { "EMail", "schattenfell@magsame.me" },
         });
-        enterProductsDocument.Title.Should().Be(expectedTitle);
+        return enterProductsDocument;
+    }
 
+    private async Task<IHtmlDocument> EnterProducts(IHtmlDocument enterProductsDocument)
+    {
+        const string expectedTitle = "Acceptance for seller with ID: 1 - Enter products - Velo Basar";
+
+        enterProductsDocument.Title.Should().Be(expectedTitle);
         enterProductsDocument = await context.EnterProduct(enterProductsDocument, expectedTitle, new Dictionary<string, object>
         {
             { "TypeId", ID.ProductTypes.ChildrensBike },
@@ -54,10 +67,11 @@ public class AcceptSellers(TestContext context)
         });
 
         IHtmlAnchorElement saveAnchor = enterProductsDocument.QueryAnchorByText("Save accept session");
+        return await context.HttpClient.GetDocumentAsync(saveAnchor.Href);
+    }
 
-        IHtmlDocument successDocument = await context.HttpClient.GetDocumentAsync(saveAnchor.Href);
-        successDocument.Title.Should().Be("Acceptance #1 - Velo Basar");
-
+    private async Task CheckVoucher(IHtmlDocument successDocument)
+    {
         IHtmlAnchorElement voucherAnchor = successDocument.QueryAnchorByText("Voucher");
         AcceptanceDocumentModel document = await context.HttpClient.GetAcceptanceDocumentAsync(voucherAnchor.Href);
         document.Should().BeEquivalentTo(context.AcceptanceDocument("XYZ - First Bazaar : Acceptance receipt #1",

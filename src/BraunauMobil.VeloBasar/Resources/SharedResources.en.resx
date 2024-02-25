@@ -616,7 +616,7 @@
     <value>The description must not be longer than {0} characters.</value>
   </data>
   <data name="VeloBasar_ProductDetails" xml:space="preserve">
-    <value>Procuct #{0}</value>
+    <value>Product #{0}</value>
   </data>
   <data name="VeloBasar_ProductIsLocked" xml:space="preserve">
     <value>The product has been locked. Notes: {0}</value>

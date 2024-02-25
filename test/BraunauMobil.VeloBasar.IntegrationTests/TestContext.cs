@@ -34,6 +34,20 @@ public record TestContext(IServiceProvider ServiceProvider, HttpClient HttpClien
                 )
             );
 
+
+    public async Task<IHtmlDocument> AddProductToCart(IHtmlDocument cartDocument, int productId)
+    {
+        ArgumentNullException.ThrowIfNull(cartDocument);
+
+        IHtmlFormElement form = cartDocument.QueryForm();
+        IHtmlButtonElement addButton = cartDocument.QueryButtonByText("Add");
+        cartDocument = await HttpClient.SendFormAsync(form, addButton, new Dictionary<string, object>
+        {
+            { "ProductId", productId }
+        });
+        return cartDocument;
+    }
+
     public async Task AssertBasarDetails(int basarId, BasarDetailsModel expectedDetails)
     {
         ArgumentNullException.ThrowIfNull(expectedDetails);

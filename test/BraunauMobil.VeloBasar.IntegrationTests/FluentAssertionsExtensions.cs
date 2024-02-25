@@ -42,7 +42,7 @@ public class IHtmlTableElementAssertions(IHtmlTableElement instance)
 
                         if (expectedTextContent != actualCellContent)
                         {
-                            sb.AppendLine($"Expected table cell {row} in row {cell} to be \"{expectedTextContent}\" but actual: \"{actualCellContent}\"");
+                            sb.AppendLine($"Expected table cell {cell} in row {row} to be \"{expectedTextContent}\" but actual: \"{actualCellContent}\"");
                         }
                     }
                 }

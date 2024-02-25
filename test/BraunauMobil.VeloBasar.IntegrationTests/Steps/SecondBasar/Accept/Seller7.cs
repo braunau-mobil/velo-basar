@@ -1,10 +1,10 @@
-﻿namespace BraunauMobil.VeloBasar.IntegrationTests.Steps.SecondBasar;
+﻿namespace BraunauMobil.VeloBasar.IntegrationTests.Steps.SecondBasar.Accept;
 
-public class Seller4(TestContext context)
+public class Seller7(TestContext context)
 {
     public async Task Run()
     {
-        const string expectedTitle = "Acceptance for seller with ID: 4 - Enter products - Velo Basar";
+        const string expectedTitle = "Acceptance for seller with ID: 7 - Enter products - Velo Basar";
 
         IHtmlDocument newAcceptanceDocument = await context.HttpClient.NavigateMenuAsync("New Acceptance");
         newAcceptanceDocument.Title.Should().Be("Acceptance - Enter seller - Velo Basar");
@@ -14,47 +14,49 @@ public class Seller4(TestContext context)
 
         IHtmlDocument enterProductsDocument = await context.HttpClient.SendFormAsync(form, submitButton, new Dictionary<string, object>
         {
-            { "FirstName", "Langhöhlen" },
-            { "LastName", "Siriondil" },
+            { "BankAccountHolder", "Folcwine F.G. Gollum" },
+            { "City", "Unterharg" },
             { "CountryId", ID.Countries.Germany },
-            { "ZIP", "2178" },
-            { "City", "Nargothrond" },
-            { "Street", "Börseplatz 11" },
-            { "PhoneNumber", "74460686" },
-            { "EMail", "langhoehlen@siriondil.me" },
-            { "HasNewsletterPermission", false },
+            { "EMail", "folcwine@gollum.me" },
+            { "FirstName", "Folcwine" },
+            { "HasNewsletterPermission", true },
+            { "IBAN", "" },
+            { "LastName", "Gollum" },
+            { "Street", "Domgasse 25" },
+            { "PhoneNumber", "192930419" },
+            { "ZIP", "7356" },
         });
         enterProductsDocument.Title.Should().Be(expectedTitle);
 
         enterProductsDocument = await context.EnterProduct(enterProductsDocument, expectedTitle, new Dictionary<string, object>
         {
-            { "TypeId", ID.ProductTypes.WomansCityBike },
-            { "Brand", "Epple" },
-            { "Color", "white" },
-            { "FrameNumber", "G#%$BIBM#$)" },
-            { "Description", "No tires" },
-            { "TireSize", "22" },
-            { "Price", 69.54m }
+            { "TypeId", ID.ProductTypes.MansCityBike },
+            { "Brand", "Univega" },
+            { "Color", "slate" },
+            { "FrameNumber", "3eb2377a-" },
+            { "Description", "UNIVEGA_749336" },
+            { "TireSize", "26" },
+            { "Price", 149.87M },
         });
 
         IHtmlAnchorElement saveAnchor = enterProductsDocument.QueryAnchorByText("Save accept session");
 
         IHtmlDocument successDocument = await context.HttpClient.GetDocumentAsync(saveAnchor.Href);
-        successDocument.Title.Should().Be("Acceptance #3 - Velo Basar");
+        successDocument.Title.Should().Be("Acceptance #7 - Velo Basar");
 
         IHtmlAnchorElement voucherAnchor = successDocument.QueryAnchorByText("Voucher");
         AcceptanceDocumentModel document = await context.HttpClient.GetAcceptanceDocumentAsync(voucherAnchor.Href);
-        document.Should().BeEquivalentTo(context.AcceptanceDocument("XYZ - Second Bazaar : Acceptance receipt #3",
+        document.Should().BeEquivalentTo(context.AcceptanceDocument("XYZ - Second Bazaar : Acceptance receipt #7",
             "Thal, 6/4/2064",
-            "Langhöhlen Siriondil".Line("Börseplatz 11").Line("2178 Nargothrond").Line(),
-            "Seller.-ID: 4",
-            "statusLink=4C6145369",
-            "4C6145369",
+            "Folcwine Gollum".Line("Domgasse 25").Line("7356 Unterharg").Line(),
+            "Seller.-ID: 7",
+            "statusLink=466F7476F",
+            "466F7476F",
             "Thal on Tuesday, May 6, 2064 at 12:23 PM",
             "1 Product",
-            "$69.54",
+            "$149.87",
             [
-                new ProductTableRowDocumentModel("7", "Epple - Woman's city bike".Line("No tires").Line(" white G#%$BIBM#$)"), "22", "$69.54", null)
+                new ProductTableRowDocumentModel("14", "Univega - Men's city bike".Line("UNIVEGA_749336").Line(" slate 3eb2377a-"), "26", "$149.87", null),
             ])
         );
 
@@ -66,6 +68,6 @@ public class Seller4(TestContext context)
             SettlementAmout = 0,
             SoldProductCount = 0
         };
-        await context.AssertSellerDetails(ID.SecondBasar, ID.Sellers.LanghöhlenSiriondil, expectedDetails);
+        await context.AssertSellerDetails(ID.SecondBasar, ID.Sellers.FolcwineGollum, expectedDetails);
     }
 }

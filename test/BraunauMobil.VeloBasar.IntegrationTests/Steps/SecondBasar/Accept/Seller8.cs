@@ -1,4 +1,4 @@
-﻿namespace BraunauMobil.VeloBasar.IntegrationTests.Steps.SecondBasar;
+﻿namespace BraunauMobil.VeloBasar.IntegrationTests.Steps.SecondBasar.Accept;
 
 public class Seller8(TestContext context)
 {
@@ -41,11 +41,11 @@ public class Seller8(TestContext context)
         IHtmlAnchorElement saveAnchor = enterProductsDocument.QueryAnchorByText("Save accept session");
 
         IHtmlDocument successDocument = await context.HttpClient.GetDocumentAsync(saveAnchor.Href);
-        successDocument.Title.Should().Be("Acceptance #7 - Velo Basar");
+        successDocument.Title.Should().Be("Acceptance #8 - Velo Basar");
 
         IHtmlAnchorElement voucherAnchor = successDocument.QueryAnchorByText("Voucher");
         AcceptanceDocumentModel document = await context.HttpClient.GetAcceptanceDocumentAsync(voucherAnchor.Href);
-        document.Should().BeEquivalentTo(context.AcceptanceDocument("XYZ - Second Bazaar : Acceptance receipt #7",
+        document.Should().BeEquivalentTo(context.AcceptanceDocument("XYZ - Second Bazaar : Acceptance receipt #8",
             "Thal, 6/4/2064",
             "Ansen Gróin".Line("Liebiggasse 3").Line("4579 Tuckbergen").Line(),
             "Seller.-ID: 8",
@@ -55,7 +55,7 @@ public class Seller8(TestContext context)
             "1 Product",
             "$75.29",
             [
-                new ProductTableRowDocumentModel("14", "Nishiki - Scooter".Line("NISHIKI_266634").Line(" peach"), "14", "$75.29", null),
+                new ProductTableRowDocumentModel("15", "Nishiki - Scooter".Line("NISHIKI_266634").Line(" peach"), "14", "$75.29", null),
             ])
         );
 

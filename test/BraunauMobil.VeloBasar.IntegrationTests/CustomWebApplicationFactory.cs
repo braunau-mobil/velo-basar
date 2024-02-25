@@ -29,7 +29,7 @@ public class CustomWebApplicationFactory
             // Create open SqliteConnection so EF won't automatically close it.
             services.AddSingleton<DbConnection>(container =>
             {
-                SqliteConnection connection = new ("DataSource=:memory:");
+                SqliteConnection connection = new("DataSource=:memory:");
                 connection.Open();
 
                 return connection;

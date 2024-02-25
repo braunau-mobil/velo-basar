@@ -1,10 +1,10 @@
-﻿namespace BraunauMobil.VeloBasar.IntegrationTests.Steps.SecondBasar;
+﻿namespace BraunauMobil.VeloBasar.IntegrationTests.Steps.SecondBasar.Accept;
 
-public class Seller9(TestContext context)
+public class Seller6(TestContext context)
 {
     public async Task Run()
     {
-        const string expectedTitle = "Acceptance for seller with ID: 9 - Enter products - Velo Basar";
+        const string expectedTitle = "Acceptance for seller with ID: 6 - Enter products - Velo Basar";
 
         IHtmlDocument newAcceptanceDocument = await context.HttpClient.NavigateMenuAsync("New Acceptance");
         newAcceptanceDocument.Title.Should().Be("Acceptance - Enter seller - Velo Basar");
@@ -14,49 +14,48 @@ public class Seller9(TestContext context)
 
         IHtmlDocument enterProductsDocument = await context.HttpClient.SendFormAsync(form, submitButton, new Dictionary<string, object>
         {
-            { "BankAccountHolder", "Mallor M.F. Fimbrethil" },
-            { "City", "Edhellond" },
+            { "BankAccountHolder", "Chica C.C. Ciryatur" },
+            { "City", "Avallóne" },
             { "CountryId", ID.Countries.Austria },
-            { "EMail", "mallor@fimbrethil.me" },
-            { "FirstName", "Mallor" },
+            { "EMail", "chica@ciryatur.me" },
+            { "FirstName", "Chica" },
             { "HasNewsletterPermission", true },
-            { "IBAN", "" },
-            { "LastName", "Fimbrethil" },
-            { "Street", "Schönlaterngasse 16" },
-            { "PhoneNumber", "22870292" },
-            { "ZIP", "2758" },
+            { "IBAN", "AT381400016314544716" },
+            { "LastName", "Ciryatur" },
+            { "Street", "Tiefer Graben 6" },
+            { "PhoneNumber", "26005835" },
+            { "ZIP", "7332" },
         });
         enterProductsDocument.Title.Should().Be(expectedTitle);
 
         enterProductsDocument = await context.EnterProduct(enterProductsDocument, expectedTitle, new Dictionary<string, object>
         {
-            { "TypeId", ID.ProductTypes.RoadBike },
-            { "Brand", "Idworx" },
-            { "Color", "orange" },
-            { "FrameNumber", "12a2dc85-" },
-            { "Description", "IDWORX_768016" },
-            { "TireSize", "24" },
-            { "Price", 8.49M },
+            { "TypeId", ID.ProductTypes.ChildrensBike },
+            { "Brand", "Indienrad" },
+            { "Color", "brown" },
+            { "Description", "INDIENRAD_246011" },
+            { "TireSize", "26" },
+            { "Price", 143.64M },
         });
 
         IHtmlAnchorElement saveAnchor = enterProductsDocument.QueryAnchorByText("Save accept session");
 
         IHtmlDocument successDocument = await context.HttpClient.GetDocumentAsync(saveAnchor.Href);
-        successDocument.Title.Should().Be("Acceptance #8 - Velo Basar");
+        successDocument.Title.Should().Be("Acceptance #5 - Velo Basar");
 
         IHtmlAnchorElement voucherAnchor = successDocument.QueryAnchorByText("Voucher");
         AcceptanceDocumentModel document = await context.HttpClient.GetAcceptanceDocumentAsync(voucherAnchor.Href);
-        document.Should().BeEquivalentTo(context.AcceptanceDocument("XYZ - Second Bazaar : Acceptance receipt #8",
+        document.Should().BeEquivalentTo(context.AcceptanceDocument("XYZ - Second Bazaar : Acceptance receipt #5",
             "Thal, 6/4/2064",
-            "Mallor Fimbrethil".Line("Schönlaterngasse 16").Line("2758 Edhellond").Line(),
-            "Seller.-ID: 9",
-            "statusLink=4D6194669",
-            "4D6194669",
+            "Chica Ciryatur".Line("Tiefer Graben 6").Line("7332 Avallóne").Line(),
+            "Seller.-ID: 6",
+            "statusLink=436864369",
+            "436864369",
             "Thal on Tuesday, May 6, 2064 at 12:23 PM",
             "1 Product",
-            "$8.49",
+            "$143.64",
             [
-                new ProductTableRowDocumentModel("15", "Idworx - Road bike".Line("IDWORX_768016").Line(" orange 12a2dc85-"), "24", "$8.49", null),
+                new ProductTableRowDocumentModel("12", "Indienrad - Children's bike".Line("INDIENRAD_246011").Line(" brown"), "26", "$143.64", null),
             ])
         );
 
@@ -68,6 +67,6 @@ public class Seller9(TestContext context)
             SettlementAmout = 0,
             SoldProductCount = 0
         };
-        await context.AssertSellerDetails(ID.SecondBasar, ID.Sellers.MallorFimbrethil, expectedDetails);
+        await context.AssertSellerDetails(ID.SecondBasar, ID.Sellers.ChicaCiryatur, expectedDetails);
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace BraunauMobil.VeloBasar.IntegrationTests.Steps.SecondBasar;
+﻿namespace BraunauMobil.VeloBasar.IntegrationTests.Steps.SecondBasar.Accept;
 
 public class Seller5(TestContext context)
 {

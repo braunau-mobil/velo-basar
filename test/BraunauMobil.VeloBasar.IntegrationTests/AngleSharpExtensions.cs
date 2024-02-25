@@ -11,7 +11,7 @@ public static class AngleSharpExtensions
 
         return node.QueryElement<IHtmlAnchorElement>("a", button => button.InnerHtml == text);
     }
-    
+
     public static IHtmlButtonElement QueryButtonByText(this IParentNode node, string text)
 
     {
@@ -19,6 +19,20 @@ public static class AngleSharpExtensions
         ArgumentNullException.ThrowIfNull(text);
 
         return node.QueryElement<IHtmlButtonElement>("button", button => button.InnerHtml == text);
+    }
+
+    public static IHtmlAnchorElement QueryTableApplyLink(this IParentNode node, int rowId)
+    {
+        ArgumentNullException.ThrowIfNull(node);
+
+        IHtmlTableElement? table = node.QuerySelector<IHtmlTableElement>("table");
+        table.Should().NotBeNull();
+        IHtmlTableRowElement headerRow = table!.Rows[0];
+        INode idHeaderCell = headerRow.Cells.Should().ContainSingle(cell => cell.TextContent == "Id").Subject;
+        int idColumnIndex = headerRow.Cells.Index(idHeaderCell);
+
+        IHtmlTableRowElement row = table.Rows.Should().ContainSingle(row => row.Cells[idColumnIndex].TextContent == rowId.ToString()).Subject;
+        return row.QueryAnchorByText("Apply");
     }
 
     public static IHtmlAnchorElement QueryTableDetailsLink(this IParentNode node, int rowId)
@@ -90,6 +104,10 @@ public static class AngleSharpExtensions
                 {
                     input.Value = value.ToString() ?? throw new NullReferenceException($"String value for element {key} is null.");
                 }
+            }
+            else if (formElement is IHtmlTextAreaElement textArea)
+            {
+                textArea.Value = value.ToString() ?? throw new NullReferenceException($"String value for element {key} is null.");
             }
             else if (formElement is IHtmlSelectElement select)
             {
