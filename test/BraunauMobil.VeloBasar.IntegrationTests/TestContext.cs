@@ -1,6 +1,5 @@
 ﻿using BraunauMobil.VeloBasar.BusinessLogic;
 using BraunauMobil.VeloBasar.Configuration;
-using BraunauMobil.VeloBasar.Models;
 
 namespace BraunauMobil.VeloBasar.IntegrationTests;
 
@@ -58,6 +57,22 @@ public record TestContext(IServiceProvider ServiceProvider, HttpClient HttpClien
                 .For(details => details.SoldProductTypesByCount)
                     .Exclude(chartData => chartData.Color)
                 ;
+        });
+    }
+
+    public async Task AssertSellerDetails(int basarId, int sellerId, SellerDetailsModel expectedDetails)
+    {
+        ArgumentNullException.ThrowIfNull(expectedDetails);
+
+        ISellerService sellerService = ServiceProvider.GetRequiredService<ISellerService>();
+        SellerDetailsModel result = await sellerService.GetDetailsAsync(basarId, sellerId);
+
+        result.Should().BeEquivalentTo(expectedDetails, options =>
+        {
+            return options.Excluding(details => details.Entity)
+                .Excluding(details => details.BasarId)
+                .Excluding(details => details.Products)
+                .Excluding(details => details.Transactions);
         });
     }
 

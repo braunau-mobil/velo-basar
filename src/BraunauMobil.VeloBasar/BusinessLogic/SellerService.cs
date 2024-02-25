@@ -83,7 +83,7 @@ public sealed class SellerService
             BasarId = basarId,
             CanPushStatus = _statusPushService.IsEnabled,
             Transactions = transactions,
-            Procucts = products,
+            Products = products,
             AcceptedProductCount = products.Count,
             SettlementAmout = soldProducts.Sum(p => p.GetCommissionedPrice(basar)),
             NotSoldProductCount = products.Where(p => p.StorageState != StorageState.Sold).Count(),

@@ -39,7 +39,7 @@ public class DetailsAsync_SampleDb
             model.Entity.ValueState.Should().Be(ValueState.Settled);
             model.NotSoldProductCount.Should().Be(5);
             model.PickedUpProductCount.Should().Be(3);
-            model.Procucts.Should().HaveCount(8);
+            model.Products.Should().HaveCount(8);
             model.SettlementAmout.Should().Be(27M);
             model.SoldProductCount.Should().Be(3);
             model.Transactions.Should().HaveCount(transactionCount);

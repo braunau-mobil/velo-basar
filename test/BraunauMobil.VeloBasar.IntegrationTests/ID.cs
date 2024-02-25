@@ -26,6 +26,8 @@ public static class ID
     public static class Sellers
     {
         public const int SchattenfellMagsame = 1;
+        public const int MeneldorBorondir = 2;
+        public const int AmrothGerstenmann = 3;
     }
 
     public static class Products

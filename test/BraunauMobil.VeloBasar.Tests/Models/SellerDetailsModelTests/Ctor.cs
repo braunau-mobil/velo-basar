@@ -23,7 +23,7 @@ public class Ctor
             sut.PickedUpProductCount.Should().Be(0);
             sut.SettlementAmout.Should().Be(0);
             sut.Transactions.Should().BeEmpty();
-            sut.Procucts.Should().BeEmpty();
+            sut.Products.Should().BeEmpty();
         }
     }
 }

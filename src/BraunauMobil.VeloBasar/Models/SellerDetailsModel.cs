@@ -25,5 +25,5 @@ public sealed class SellerDetailsModel
 
     public IReadOnlyList<TransactionEntity> Transactions { get; init; } = Array.Empty<TransactionEntity>();
 
-    public IReadOnlyList<ProductEntity> Procucts { get; init; } = Array.Empty<ProductEntity>();
+    public IReadOnlyList<ProductEntity> Products { get; init; } = Array.Empty<ProductEntity>();
 }

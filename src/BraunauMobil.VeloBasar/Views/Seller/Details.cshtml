@@ -62,7 +62,7 @@
             {
                 <a class="btn btn-secondary" href="@Router.Seller.ToTriggerStatusPush(Model.Entity.Id)">@Localizer[VeloTexts.PushSellerStatus]</a>
             }
-            @if (Model.Procucts.Any())
+            @if (Model.Products.Any())
             {
                 <a class="btn btn-outline-primary" href="@Router.Seller.ToLabels(Model.Entity.Id)" target="_blank">@Localizer[VeloTexts.PrintLabels]</a>            
             }
@@ -73,7 +73,7 @@
     <div class="card m-2">
         <div class="card-header">@Localizer[VeloTexts.Products]</div>
         <div class="card-body p-0">
-            @(VeloHtml.ProductsTable(Model.Procucts, showId: true, showState: true)
+            @(VeloHtml.ProductsTable(Model.Products, showId: true, showState: true)
                 .Column(c => c.ForLink(item => Router.Product.ToDetails(item.Id), Localizer[VeloTexts.Details]))
                 .Build())
         </div>
