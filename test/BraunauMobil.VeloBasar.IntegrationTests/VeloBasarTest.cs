@@ -23,16 +23,17 @@ public class VeloBasarTest
         await new Steps.InitialSetup(_context).Run();
         await Login();
         
-        await new Steps.FirstBasar.Creation(_context).Run();
-        await new Steps.FirstBasar.AcceptSellers(_context).Run();
-        await new Steps.FirstBasar.SellProducts(_context).Run();
-        await new Steps.FirstBasar.SettleSellers(_context).Run();
+        await new Steps.FirstBasar.Create(_context).Run();
+        await new Steps.FirstBasar.Acccept(_context).Run();
+        await new Steps.FirstBasar.Sell(_context).Run();
+        await new Steps.FirstBasar.Settle(_context).Run();
 
         X.Clock.Now = X.FirstContactDay.AddYears(1).AddMonths(1).AddDays(1).AddHours(1).AddMinutes(1).AddSeconds(1);
 
-        await new Steps.SecondBasar.Creation(_context).Run();
+        await new Steps.SecondBasar.Create(_context).Run();
         await new Steps.SecondBasar.Accept.AcceptSellers(_context).Run();
         await new Steps.SecondBasar.Sell.SellProducts(_context).Run();
+        await new Steps.SecondBasar.Settle(_context).Run();
     }
 
     private async Task Login()

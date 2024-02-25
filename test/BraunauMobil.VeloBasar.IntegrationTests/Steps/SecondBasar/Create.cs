@@ -1,6 +1,6 @@
 ﻿namespace BraunauMobil.VeloBasar.IntegrationTests.Steps.SecondBasar;
 
-public class Creation(TestContext context)
+public class Create(TestContext context)
 {
     public async Task Run()
     {

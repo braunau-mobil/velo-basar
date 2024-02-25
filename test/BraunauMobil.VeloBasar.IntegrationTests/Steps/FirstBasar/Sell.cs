@@ -2,7 +2,7 @@
 
 namespace BraunauMobil.VeloBasar.IntegrationTests.Steps.FirstBasar;
 
-public class SellProducts(TestContext context)
+public class Sell(TestContext context)
 {
     public async Task Run()
     {

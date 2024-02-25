@@ -1,6 +1,6 @@
 ﻿namespace BraunauMobil.VeloBasar.IntegrationTests.Steps.FirstBasar;
 
-public class AcceptSellers(TestContext context)
+public class Acccept(TestContext context)
 {
     public async Task Run()
     {

@@ -8,5 +8,79 @@ public class SellProducts(TestContext context)
         await new LockProductUnlockAndSellIt(context).Run();
         await new LooseProductUnlockAndSellIt(context).Run();
         await new SellTwoProductsCancelOneSellItAgainCancelItAndFinallySellIt(context).Run();
+
+        await AssertBasarDetails();
+    }
+
+    private async Task AssertBasarDetails()
+    {
+        BasarSettlementStatus basarSettlementStatus = new(false,
+            new SellerGroupSettlementStatus(7, 0),
+            new SellerGroupSettlementStatus(6, 0),
+            new SellerGroupSettlementStatus(1, 0)
+        );
+        BasarDetailsModel expectedDetails = new(new BasarEntity(), basarSettlementStatus)
+        {
+            AcceptanceCount = 9,
+            AcceptedProductsAmount = 1369.43M,
+            AcceptedProductsCount = 14,
+            AcceptedProductTypesByAmount = [
+                new ChartDataPoint(172.10M, "Scooter", X.AnyColor),
+                new ChartDataPoint(69.54M, "E-bike", X.AnyColor),
+                new ChartDataPoint(125.97M, "Road bike", X.AnyColor),
+                new ChartDataPoint(151.34M, "Steel steed", X.AnyColor),
+                new ChartDataPoint(333.40M, "Men's city bike", X.AnyColor),
+                new ChartDataPoint(183.90M, "Woman's city bike", X.AnyColor),
+                new ChartDataPoint(189.54M, "Unicycle", X.AnyColor),
+                new ChartDataPoint(143.64M, "Children's bike", X.AnyColor),
+            ],
+            AcceptedProductTypesByCount = [
+                new ChartDataPoint(3, "Scooter", X.AnyColor),
+                new ChartDataPoint(1, "E-bike", X.AnyColor),
+                new ChartDataPoint(2, "Road bike", X.AnyColor),
+                new ChartDataPoint(1, "Steel steed", X.AnyColor),
+                new ChartDataPoint(2, "Men's city bike", X.AnyColor),
+                new ChartDataPoint(2, "Woman's city bike", X.AnyColor),
+                new ChartDataPoint(2, "Unicycle", X.AnyColor),
+                new ChartDataPoint(1, "Children's bike", X.AnyColor),
+            ],
+            LockedProductsCount = 0,
+            LostProductsCount = 0,
+            PriceDistribution = [
+                new ChartDataPoint(1, "$10.00", X.AnyColor),
+                new ChartDataPoint(1, "$50.00", X.AnyColor),
+                new ChartDataPoint(1, "$60.00", X.AnyColor),
+                new ChartDataPoint(2, "$70.00", X.AnyColor),
+                new ChartDataPoint(1, "$80.00", X.AnyColor),
+                new ChartDataPoint(1, "$90.00", X.AnyColor),
+                new ChartDataPoint(1, "$110.00", X.AnyColor),
+                new ChartDataPoint(2, "$120.00", X.AnyColor),
+                new ChartDataPoint(2, "$150.00", X.AnyColor),
+                new ChartDataPoint(1, "$160.00", X.AnyColor),
+                new ChartDataPoint(1, "$190.00", X.AnyColor),
+            ],
+            SaleCount = 6,
+            SaleDistribution = [
+                new ChartDataPoint(554.89M, "12:23 PM", X.AnyColor),
+            ],
+            SoldProductsAmount = 554.89M,
+            SoldProductsCount = 6,
+            SoldProductTypesByAmount = [
+                new ChartDataPoint(51.06M, "Scooter", X.AnyColor),
+                new ChartDataPoint(69.54M, "E-bike", X.AnyColor),
+                new ChartDataPoint(183.90M, "Woman's city bike", X.AnyColor),
+                new ChartDataPoint(106.75M, "Unicycle", X.AnyColor),
+                new ChartDataPoint(143.64M, "Children's bike", X.AnyColor),
+            ],
+            SoldProductTypesByCount = [
+                new ChartDataPoint(1, "Scooter", X.AnyColor),
+                new ChartDataPoint(1, "E-bike", X.AnyColor),
+                new ChartDataPoint(2, "Woman's city bike", X.AnyColor),
+                new ChartDataPoint(1, "Unicycle", X.AnyColor),
+                new ChartDataPoint(1, "Children's bike", X.AnyColor),
+            ],
+        };
+
+        await context.AssertBasarDetails(ID.SecondBasar, expectedDetails);
     }
 }

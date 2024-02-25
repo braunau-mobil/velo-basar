@@ -1,6 +1,6 @@
 ﻿namespace BraunauMobil.VeloBasar.IntegrationTests.Steps.FirstBasar;
 
-public class SettleSellers(TestContext context)
+public class Settle(TestContext context)
 {
     public async Task Run()
     {
@@ -17,7 +17,8 @@ public class SettleSellers(TestContext context)
 
         IHtmlAnchorElement voucherAnchor = successDocument.QueryAnchorByText("Voucher");
         SettlementDocumentModel document = await context.HttpClient.GetSettlementDocumentAsync(voucherAnchor.Href);
-        document.Should().BeEquivalentTo(context.SettlementDocument("XYZ - First Bazaar : Settlement #1",
+        document.Should().BeEquivalentTo(context.SettlementDocument(
+            "XYZ - First Bazaar : Settlement #1",
             "Edoras, 5/4/2063",
             "Schattenfell Magsame".Line("Heidenschuss 41").Line("6295 Hobbingen").Line(),
             "Seller.-ID: 1",

@@ -10,9 +10,7 @@ using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
-using System.Diagnostics;
 using System.Globalization;
-using System.Text;
 using Xan.Extensions;
 
 namespace BraunauMobil.VeloBasar.DataGenerator;
@@ -24,94 +22,7 @@ public class Program
         CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-US");
         CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-US");
 
-        Random rand = new();
-
-        StringBuilder sb = new();
-
-        string[] countries = ["Austria", "Germany"];
-
-        string firstName = rand.GetRandomElement(Names.FirstNames);
-        string lastName = rand.GetRandomElement(Names.FirstNames);
-        sb.AppendLine($"{{ \"BankAccountHolder\", \"{firstName} {firstName[0]}.{lastName[0]}. {lastName}\" }},");
-        sb.AppendLine($"{{ \"City\", \"{rand.GetRandomElement(Names.Cities)}\" }},");
-        sb.AppendLine($"{{ \"CountryId\", ID.Countries.{rand.GetRandomElement(countries)} }},");
-        sb.AppendLine($"{{ \"EMail\", \"{firstName.ToLower().Replace(" ", "")}@{lastName.ToLower().Replace(" ", "")}.me\" }},");
-        sb.AppendLine($"{{ \"FirstName\", \"{firstName}\" }},");
-        sb.AppendLine($"{{ \"HasNewsletterPermission\", {(rand.Next(0, 2) == 0).ToString().ToLower()} }},");
-        sb.AppendLine("{ \"IBAN\", \"\" },");
-        sb.AppendLine($"{{ \"LastName\", \"{lastName}\" }},");
-        sb.AppendLine($"{{ \"Street\", \"{rand.GetRandomElement(Names.Streets)} {rand.Next(1, 50)}\" }},");
-        sb.Append("{ \"PhoneNumber\", \"");
-        for (int counter = 0; counter < rand.Next(8, 11); counter++)
-        {
-            sb.Append(rand.Next(0, 10));
-        }
-        sb.AppendLine("\" },");
-        sb.AppendLine($"{{ \"ZIP\", \"{rand.Next(1, 10)}{rand.Next(1, 10)}{rand.Next(1, 10)}{rand.Next(1, 10)}\" }},");
-
-        sb.AppendLine();
-
-        sb.AppendLine("--------------------------------------------------------------------------");
-        sb.AppendLine("Products");
-        sb.AppendLine();
-
-
-        string[] typeNames = [
-            "Unicycle",
-        "RoadBike",
-        "MansCityBike",
-        "WomansCityBike",
-        "ChildrensBike",
-        "Scooter",
-        "EBike",
-        "SteelSteed",
-        ];
-        string[] colors = [
-            "red",
-        "blue",
-        "green",
-        "yellow",
-        "orange",
-        "purple",
-        "pink",
-        "brown",
-        "gray",
-        "turquoise",
-        "lavender",
-        "maroon",
-        "indigo",
-        "cyan",
-        "olive",
-        "peach",
-        "teal",
-        "magenta",
-        "beige",
-        "slate",
-        ];
-
-        foreach (int _ in Enumerable.Range(0, 4))
-        {
-            string brand = rand.GetRandomElement(Names.BrandNames);
-            sb.AppendLine($"{{ \"TypeId\", ID.ProductTypes.{rand.GetRandomElement(typeNames)} }},");
-            sb.AppendLine($"{{ \"Brand\", \"{brand}\" }},");
-            sb.AppendLine($"{{ \"Color\", \"{rand.GetRandomElement(colors)}\" }},");
-            if (rand.Next(0, 2) == 0)
-            {
-                sb.AppendLine($"{{ \"FrameNumber\", \"{Guid.NewGuid().ToString()[..rand.Next(7, 10)]}\" }},");
-            }
-            sb.AppendLine($"{{ \"Description\", \"{brand[..].ToUpper()}_{rand.Next(10000, 999999)}\" }},");
-            sb.AppendLine($"{{ \"TireSize\", \"{rand.GetRandomElement(Names.TireSizes)}\" }},");
-            sb.AppendLine($"{{ \"Price\", {Math.Round((decimal)rand.GetGaussian(100, 50), 2)}M }},");
-            sb.AppendLine();
-        }
-
-        string fileName = @"c:\temp\testData.txt";
-        File.WriteAllText(fileName, sb.ToString());
-        ProcessStartInfo info = new(fileName)
-        {
-            UseShellExecute = true
-        };
-        Process.Start(info);
+        await GeneratePostgresAsync("User ID=postgres;Password=postgres;Host=localhost;Port=5432;Database=velobasar;Pooling=true;");
     }
 
     private static async Task GeneratePostgresAsync(string connectionString)

@@ -91,8 +91,12 @@ public record TestContext(IServiceProvider ServiceProvider, HttpClient HttpClien
     }
 
     public string BankingQrCode(string seller, string amount, string decscription)
+        => BankingQrCode(seller, "", amount, decscription);
+
+    public string BankingQrCode(string seller, string iban, string amount, string decscription)
     {
         ArgumentNullException.ThrowIfNull(seller);
+        ArgumentNullException.ThrowIfNull(iban);
         ArgumentNullException.ThrowIfNull(amount);
         ArgumentNullException.ThrowIfNull(decscription);
 
@@ -102,7 +106,7 @@ public record TestContext(IServiceProvider ServiceProvider, HttpClient HttpClien
             .Line("SCT")
             .Line()
             .Line(seller)
-            .Line()
+            .Line(iban)
             .Line(amount)
             .Line()
             .Line()
@@ -151,8 +155,112 @@ public record TestContext(IServiceProvider ServiceProvider, HttpClient HttpClien
                 )
             );
 
-    public SettlementDocumentModel SettlementDocument(string title, string locationAndDateText, string addressText, string sellerIdText, string commissionPartText, string payoutAmountInclComissionText, string payoutCommissionAmountText, string payoutAmountText, string payoutTableCountText, string payoutTablePriceText, IReadOnlyCollection<ProductTableRowDocumentModel> payoutTableRows, string pickupTableCountText, string pickupTablePriceText, IReadOnlyCollection<ProductTableRowDocumentModel> pickupTableRows, bool addBankingQrCode, string bankAccountHolder, string iban, string bankingQrCodeContent, string signatureText)
-        => new(title,
+    public SettlementDocumentModel SettlementDocument(string title, string locationAndDateText, string addressText, string sellerIdText, bool addBankingQrCode, string bankAccountHolder, string iban, string bankingQrCodeContent, string signatureText)
+        => SettlementDocument(title,
+            locationAndDateText,
+            addressText,
+            sellerIdText,
+            null, null, null, null, null, null, null, null, null, null,
+            addBankingQrCode,
+            bankAccountHolder,
+            iban,
+            bankingQrCodeContent,
+            signatureText
+        );
+
+    public SettlementDocumentModel SettlementDocument(string title, string locationAndDateText, string addressText, string sellerIdText, string pickupTableCountText, string pickupTablePriceText, IReadOnlyCollection<ProductTableRowDocumentModel> pickupTableRows, bool addBankingQrCode, string bankAccountHolder, string iban, string bankingQrCodeContent, string signatureText)
+        => SettlementDocument(title,
+            locationAndDateText,
+            addressText,
+            sellerIdText,
+            null, null, null, null, null, null, null,
+            pickupTableCountText,
+            pickupTablePriceText,
+            pickupTableRows,
+            addBankingQrCode,
+            bankAccountHolder,
+            iban,
+            bankingQrCodeContent,
+            signatureText
+        );
+
+    public SettlementDocumentModel SettlementDocument(string title, string locationAndDateText, string addressText, string sellerIdText, string commissionPartText, string payoutAmountInclComissionText, string payoutCommissionAmountText, string payoutAmountText, string payoutTableCountText, string payoutTablePriceText, IReadOnlyCollection<ProductTableRowDocumentModel> payoutTableRows, bool addBankingQrCode, string bankAccountHolder, string iban, string bankingQrCodeContent, string signatureText)
+        => SettlementDocument(title,
+            locationAndDateText,
+            addressText,
+            sellerIdText,
+            commissionPartText,
+            payoutAmountInclComissionText,
+            payoutCommissionAmountText,
+            payoutAmountText,
+            payoutTableCountText,
+            payoutTablePriceText,
+            payoutTableRows,
+            null, null, null,
+            addBankingQrCode,
+            bankAccountHolder,
+            iban,
+            bankingQrCodeContent,
+            signatureText
+        );
+
+    public SettlementDocumentModel SettlementDocument(string title, string locationAndDateText, string addressText, string sellerIdText, string? commissionPartText, string? payoutAmountInclComissionText, string? payoutCommissionAmountText, string? payoutAmountText, string? payoutTableCountText, string? payoutTablePriceText, IReadOnlyCollection<ProductTableRowDocumentModel>? payoutTableRows, string? pickupTableCountText, string? pickupTablePriceText, IReadOnlyCollection<ProductTableRowDocumentModel>? pickupTableRows, bool addBankingQrCode, string bankAccountHolder, string iban, string bankingQrCodeContent, string signatureText)
+    {
+        ProductsTableDocumentModel? payoutTable = null;
+
+        if (payoutTableCountText is not null
+            && payoutTablePriceText is not null
+            && payoutTableRows is not null)
+        {
+            payoutTable = new ProductsTableDocumentModel(
+                "Id",
+                "Procuct description",
+                "Size",
+                "Selling price",
+                "Sum:",
+                payoutTableCountText,
+                payoutTablePriceText,
+                null,
+                payoutTableRows
+            );
+        }
+
+        ProductsTableDocumentModel? pickupTable = null;
+        if (pickupTableCountText is not null
+            && pickupTablePriceText is not null
+            && pickupTableRows is not null)
+        {
+            pickupTable = new ProductsTableDocumentModel(
+                "Id",
+                "Procuct description",
+                "Size",
+                "Price",
+                "Sum:",
+                pickupTableCountText,
+                pickupTablePriceText,
+                null,
+                pickupTableRows
+            );
+        }
+
+        SettlementCommisionSummaryModel? settlementCommisionSummary = null;
+        if (commissionPartText is not null
+            && payoutAmountInclComissionText is not null
+            && payoutCommissionAmountText is not null
+            && payoutAmountText is not null)
+        {
+            settlementCommisionSummary = new SettlementCommisionSummaryModel(
+                   "Revenue from items sold:",
+                   "Costs:",
+                   "Total amount:",
+                   commissionPartText,
+                   payoutAmountInclComissionText,
+                   payoutCommissionAmountText,
+                   payoutAmountText
+                );
+        }
+
+        return new(title,
                 locationAndDateText,
                 "Page {0} of {1}",
                 "  - powered by https://github.com/braunau-mobil/velo-basar",
@@ -163,38 +271,10 @@ public record TestContext(IServiceProvider ServiceProvider, HttpClient HttpClien
                 PrintSettings.Website,
                 addressText,
                 sellerIdText,
-                new SettlementCommisionSummaryModel(
-                   "Revenue from items sold:",
-                   "Costs:",
-                   "Total amount:",
-                   commissionPartText,
-                   payoutAmountInclComissionText,
-                   payoutCommissionAmountText,
-                   payoutAmountText
-                ),
-                new ProductsTableDocumentModel(
-                    "Id",
-                    "Procuct description",
-                    "Size",
-                    "Selling price",
-                    "Sum:",
-                    payoutTableCountText,
-                    payoutTablePriceText,
-                    null,
-                    payoutTableRows
-                ),
+                settlementCommisionSummary,
+                payoutTable,
                 PrintSettings.Settlement.SoldTitle,
-                new ProductsTableDocumentModel(
-                    "Id",
-                    "Procuct description",
-                    "Size",
-                    "Price",
-                    "Sum:",
-                    pickupTableCountText,
-                    pickupTablePriceText,
-                    null,
-                    pickupTableRows
-                ),
+                pickupTable,
                 PrintSettings.Settlement.NotSoldTitle,
                 PrintSettings.Settlement.ConfirmationText,
                 addBankingQrCode,
@@ -205,4 +285,6 @@ public record TestContext(IServiceProvider ServiceProvider, HttpClient HttpClien
                 "Signature ______________________________",
                 signatureText
             );
+    }
+        
 }

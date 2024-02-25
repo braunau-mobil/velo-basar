@@ -25,28 +25,28 @@ public static class AngleSharpExtensions
     {
         ArgumentNullException.ThrowIfNull(node);
 
-        IHtmlTableElement? table = node.QuerySelector<IHtmlTableElement>("table");
-        table.Should().NotBeNull();
-        IHtmlTableRowElement headerRow = table!.Rows[0];
-        INode idHeaderCell = headerRow.Cells.Should().ContainSingle(cell => cell.TextContent == "Id").Subject;
-        int idColumnIndex = headerRow.Cells.Index(idHeaderCell);
-
-        IHtmlTableRowElement row = table.Rows.Should().ContainSingle(row => row.Cells[idColumnIndex].TextContent == rowId.ToString()).Subject;
-        return row.QueryAnchorByText("Apply");
+        return node.QueryTableLinkByIdAndText(rowId, "Apply");
     }
 
     public static IHtmlAnchorElement QueryTableDetailsLink(this IParentNode node, int rowId)
     {
         ArgumentNullException.ThrowIfNull(node);
 
+        return node.QueryTableLinkByIdAndText(rowId, "Details");
+    }
+
+    public static IHtmlAnchorElement QueryTableLinkByIdAndText(this IParentNode node, int rowId, string linkText)
+    {
+        ArgumentNullException.ThrowIfNull(node);
+
         IHtmlTableElement? table = node.QuerySelector<IHtmlTableElement>("table");
-        table.Should().NotBeNull();
+        table!.Should().NotBeNull();
         IHtmlTableRowElement headerRow = table!.Rows[0];
         INode idHeaderCell = headerRow.Cells.Should().ContainSingle(cell => cell.TextContent == "Id").Subject;
         int idColumnIndex = headerRow.Cells.Index(idHeaderCell);
 
         IHtmlTableRowElement row = table.Rows.Should().ContainSingle(row => row.Cells[idColumnIndex].TextContent == rowId.ToString()).Subject;
-        return row.QueryAnchorByText("Details");
+        return row.QueryAnchorByText(linkText);
     }
 
     public static IHtmlFormElement QueryForm(this IParentNode node, string selector = "form")
