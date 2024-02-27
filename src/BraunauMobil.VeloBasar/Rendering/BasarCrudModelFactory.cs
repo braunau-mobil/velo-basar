@@ -35,7 +35,7 @@ public sealed class BasarCrudModelFactory
         ArgumentNullException.ThrowIfNull(entity);
 
         HtmlContentBuilder result = new();
-        result.AppendHtml(_html.HiddenInput(nameof(entity.Id), entity.Id));
+        result.AppendHtml(_html.HiddenInputs(entity));
         result.AppendHtml(_html.DateInputField(nameof(entity.Date), entity.Date, _localizer[VeloTexts.Date], autoFocus: true));
         result.AppendHtml(_html.TextInputField(nameof(entity.Name), entity.Name, _localizer[VeloTexts.Name]));
         result.AppendHtml(_html.TextInputField(nameof(entity.Location), entity.Location, _localizer[VeloTexts.Location]));

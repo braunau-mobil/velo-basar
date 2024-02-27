@@ -35,7 +35,7 @@ public sealed class CountryCrudModelFactory
         ArgumentNullException.ThrowIfNull(entity);
 
         HtmlContentBuilder result = new();
-        result.AppendHtml(_html.HiddenInput(nameof(entity.Id), entity.Id));
+        result.AppendHtml(_html.HiddenInputs(entity));
         result.AppendHtml(_html.TextInputField(nameof(entity.Name), entity.Name, _localizer[VeloTexts.Name], autoFocus: true));
         result.AppendHtml(_html.TextInputField(nameof(entity.Iso3166Alpha3Code), entity.Iso3166Alpha3Code, _localizer[VeloTexts.Iso3166Alpha3Code]));
         result.AppendHtml(_html.SelectField(nameof(entity.State), entity.State, _selectLists.States(), _localizer[VeloTexts.State]));

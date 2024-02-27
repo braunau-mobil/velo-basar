@@ -66,6 +66,20 @@ public sealed class DefaultVeloHtmlFactory
         return span;
     }
 
+    public HtmlContentBuilder HiddenInputs(AbstractEntity entity)
+    {
+        ArgumentNullException.ThrowIfNull(entity);
+
+        HtmlContentBuilder builder = new();
+        builder.AppendHtml(this.HiddenIEntityInput(entity));
+        if (entity is IHasTimestamps hasTimestamps)
+        {
+            builder.AppendHtml(this.HiddenIHasTimestampsInput(hasTimestamps));
+        }
+
+        return builder;
+    }
+
     public IHtmlContent ProductDonateableBadge(ProductEntity product)
     {
         ArgumentNullException.ThrowIfNull(product);

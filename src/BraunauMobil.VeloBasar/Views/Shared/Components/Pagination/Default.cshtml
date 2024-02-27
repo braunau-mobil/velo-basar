@@ -46,17 +46,18 @@
         <ul class="pagination m-0">
             @foreach (int pageSize in PaginationModel.GetPageSizes())
             {
+                string linkText;
+                @if (pageSize == Xan.Extensions.Collections.IPaginatedList.AllPageSize)
+                {
+                    linkText = Localizer[VeloTexts.All];
+                }
+                else
+                {
+                    linkText = pageSize.ToString();
+                }
+
                 <li class="page-item">
-                    <a class="page-link @ActiveCss(Model.Items.PageSize == pageSize)" href="@Model.ToPageSize(pageSize)">
-                        @if (pageSize == Xan.Extensions.Collections.IPaginatedList.AllPageSize)
-                        {
-                            @Localizer[VeloTexts.All]
-                        }
-                        else
-                        {
-                            @pageSize
-                        }
-                    </a>
+                    <a class="page-link @ActiveCss(Model.Items.PageSize == pageSize)" href="@Model.ToPageSize(pageSize)">@linkText</a>
                 </li>
             }
         </ul>

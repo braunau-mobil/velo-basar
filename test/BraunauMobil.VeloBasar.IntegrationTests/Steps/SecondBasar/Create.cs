@@ -43,7 +43,7 @@ public class Create(TestContext context)
         IHtmlTableElement basarTable = basarListDocument.QueryTable();
         basarTable.Should().BeEquivalentTo(
             ["Id", "Date", "Name", "Location", "Created at", "Updated at", "State", "", "", ""],
-            ["1", "Friday, May 4, 2063", "First Bazaar", "Edoras", "1/1/0001 12:00 AM", "5/6/2064 12:23 PM", "Disabled", "Details", "Edit", "Enable"],
+            ["1", "Friday, May 4, 2063", "First Bazaar", "Edoras", "4/5/2063 11:22 AM", "5/6/2064 12:23 PM", "Disabled", "Details", "Edit", "Enable"],
             ["2", "Wednesday, June 4, 2064", "Second Bazaar", "Thal", "5/6/2064 12:23 PM", "5/6/2064 12:23 PM", "Enabled", "Details", "Edit", "Delete"]
         );
     }

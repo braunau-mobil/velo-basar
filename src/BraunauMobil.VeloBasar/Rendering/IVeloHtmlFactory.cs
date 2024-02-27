@@ -15,6 +15,8 @@ public interface IVeloHtmlFactory
 
     TagBuilder Badge(BadgeType type);
 
+    HtmlContentBuilder HiddenInputs(AbstractEntity entity);
+
     IHtmlContent ProductDonateableBadge(ProductEntity product);
 
     IHtmlContent ProductInfoBadges(ProductEntity product);

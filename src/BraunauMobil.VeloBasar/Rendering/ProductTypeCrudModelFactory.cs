@@ -35,7 +35,7 @@ public sealed class ProductTypeCrudModelFactory
         ArgumentNullException.ThrowIfNull(entity);
 
         HtmlContentBuilder result = new();
-        result.AppendHtml(_html.HiddenInput(nameof(entity.Id), entity.Id));
+        result.AppendHtml(_html.HiddenInputs(entity));
         result.AppendHtml(_html.TextInputField(nameof(entity.Name), entity.Name, _localizer[VeloTexts.Name], autoFocus: true));
         result.AppendHtml(_html.TextAreaField(nameof(entity.Description), entity.Description, _localizer[VeloTexts.Description]));
         result.AppendHtml(_html.SelectField(nameof(entity.State), entity.State, _selectListSevice.States(), _localizer[VeloTexts.State]));

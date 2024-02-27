@@ -16,7 +16,7 @@
             @VeloHtml.TextInputField(nameof(Model.TireSize), Model.TireSize, Localizer[VeloTexts.TireSize])
             @VeloHtml.NumberInputField(nameof(Model.Price), Model.Price, Localizer[VeloTexts.Price])
             @VeloHtml.CheckBoxField(nameof(Model.DonateIfNotSold), Model.DonateIfNotSold, Localizer[VeloTexts.DonateIfNotSold])
-            @VeloHtml.HiddenInput(nameof(Model.Id), Model.Id)
+            @VeloHtml.HiddenInputs(Model)
             @VeloHtml.HiddenInput(nameof(Model.SessionId), Model.SessionId)
             @VeloHtml.HiddenInput(nameof(Model.ValueState), (int)Model.ValueState)
             @VeloHtml.HiddenInput(nameof(Model.StorageState), (int)Model.StorageState)

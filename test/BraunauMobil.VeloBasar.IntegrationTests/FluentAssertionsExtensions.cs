@@ -1,5 +1,6 @@
 ﻿using FluentAssertions.Execution;
 using FluentAssertions.Primitives;
+using System.Linq;
 using System.Text;
 
 namespace BraunauMobil.VeloBasar.IntegrationTests;
@@ -35,6 +36,7 @@ public class IHtmlTableElementAssertions(IHtmlTableElement instance)
                 else
                 {
                     IHtmlTableRowElement rowElement = Subject.Rows[row];
+                    bool isRowOk = true;
                     for (int cell = 0; cell < rowElement.Cells.Length; cell++)
                     {
                         string expectedTextContent = ToTextContent(rows[row][cell]);
@@ -42,8 +44,21 @@ public class IHtmlTableElementAssertions(IHtmlTableElement instance)
 
                         if (expectedTextContent != actualCellContent)
                         {
-                            sb.AppendLine($"Expected table cell {cell} in row {row} to be \"{expectedTextContent}\" but actual: \"{actualCellContent}\"");
+                            isRowOk = false;
+                            break;
                         }
+                    }
+
+                    if (!isRowOk)
+                    {
+                        sb.AppendLine($"Expected row: {row} to be:");
+                        sb.Append("[ \"");
+                        sb.Append(string.Join("\", \"", rows[row]));
+                        sb.AppendLine("\" ]");
+                        sb.AppendLine($"but actual:");
+                        sb.Append("[ \"");
+                        sb.Append(string.Join("\", \"", rowElement.Cells.Select(cell => cell.TextContent)));
+                        sb.AppendLine("\" ]");
                     }
                 }
             }
