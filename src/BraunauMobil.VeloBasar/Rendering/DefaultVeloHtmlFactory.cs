@@ -195,7 +195,7 @@ public sealed class DefaultVeloHtmlFactory
                 c.PercentWidth(5).Align(ColumnAlign.Right).Title(Localizer[VeloTexts.Price]).ForPrice(item => getProduct(item).Price);
                 if (showSum)
                 {
-                    IHtmlContent sum = products.Select(getProduct).SumPrice().ToHtmlPrice();
+                    IHtmlContent sum = products.Select(getProduct).SumPrice().ToHtmlPriceDisplay();
                     c.Footer(f => f.Align(ColumnAlign.Right).For(sum));
                 }
             });
@@ -229,7 +229,7 @@ public sealed class DefaultVeloHtmlFactory
 
         builder
             .Column(c => c.AutoWidth().Title(Localizer[VeloTexts.Number]).For(item => item.Number))
-            .Column(c => c.PercentWidth(10).Title(Localizer[VeloTexts.TimeStamp]).ForTimeStamp(item => item.TimeStamp));
+            .Column(c => c.PercentWidth(10).Title(Localizer[VeloTexts.TimeStamp]).For(item => item.TimeStamp));
 
         if (showType)
         {

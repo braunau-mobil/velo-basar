@@ -48,7 +48,7 @@
                     <dd class="col-sm-10">@Model.Entity.Color</dd>
 
                     <dt class="col-sm-2">@Localizer[VeloTexts.Price]</dt>
-                    <dd class="col-sm-10">@Model.Entity.Price.ToHtmlPrice()</dd>
+                    <dd class="col-sm-10">@Model.Entity.Price.ToHtmlPriceDisplay()</dd>
 
                     <dt class="col-sm-2">@Localizer[VeloTexts.DonateIfNotSold]</dt>
                     <dd class="col-sm-10">
@@ -68,10 +68,10 @@
                     </dd>
 
                     <dt class="col-sm-2">@Localizer[VeloTexts.CreatedAt]</dt>
-                    <dd class="col-sm-10">@Model.Entity.CreatedAt.ToHtmlTimeStamp()</dd>
+                    <dd class="col-sm-10">@Model.Entity.CreatedAt.ToHtmlTimeStampDisplay()</dd>
 
                     <dt class="col-sm-2">@Localizer[VeloTexts.UpdatedAt]</dt>
-                    <dd class="col-sm-10">@Model.Entity.UpdatedAt.ToHtmlTimeStamp()</dd>
+                    <dd class="col-sm-10">@Model.Entity.UpdatedAt.ToHtmlTimeStampDisplay()</dd>
                 </dl>
             </div>
         </div>

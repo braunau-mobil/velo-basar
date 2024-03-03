@@ -25,7 +25,7 @@
         </div>
         <div class="card-body p-0">
             @(VeloHtml.ProductsTable(Model, showId: true, showState: true)
-                .Column(c => c.Title(Localizer[VeloTexts.Seller]).Align(ColumnAlign.Center).ForLink(item => Router.Seller.ToDetails(item.Session.SellerId), item => item.Session.SellerId.ToHtml()))
+                .Column(c => c.Title(Localizer[VeloTexts.Seller]).Align(ColumnAlign.Center).ForLink(item => Router.Seller.ToDetails(item.Session.SellerId), item => item.Session.SellerId.ToHtmlDisplay()))
                 .Column(c => c.ForLink(item => Router.Product.ToDetails(item.Id), Localizer[VeloTexts.Details]))
                 .Build())
         </div>
