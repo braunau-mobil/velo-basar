@@ -9,7 +9,6 @@ using Xan.Extensions.Collections.Generic;
 
 namespace BraunauMobil.VeloBasar.Controllers;
 
-[Authorize]
 public sealed class TransactionController
     : AbstractVeloController
 {
@@ -26,6 +25,7 @@ public sealed class TransactionController
         _transactionSuccessValidator = transactionSuccessValidator ?? throw new ArgumentNullException(nameof(transactionSuccessValidator));
     }
 
+    [Authorize]
     public async Task<IActionResult> Cancel(int id)
     {
         TransactionEntity transaction = await _transactionService.GetAsync(id);
@@ -68,7 +68,6 @@ public sealed class TransactionController
         return File(fileData.Data, fileData.ContentType, fileData.FileName);
     }
 
-    [AllowAnonymous]
     public async Task<IActionResult> List(TransactionListParameter parameter)
     {
         ArgumentNullException.ThrowIfNull(parameter);
