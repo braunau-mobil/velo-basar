@@ -6,7 +6,7 @@
     string countrySelectName = nameof(Model.CountryId);
 }
 
-@VeloHtml.HiddenInputs(Model);
+@VeloHtml.HiddenInputs(Model)
 @VeloHtml.HiddenInput(nameof(Model.Token), Model.Token)
 @VeloHtml.HiddenInput(nameof(Model.ValueState), (int)Model.ValueState)
 
