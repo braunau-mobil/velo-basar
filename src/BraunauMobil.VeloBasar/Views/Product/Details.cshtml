@@ -6,11 +6,11 @@
     ViewData.SetTitle(Localizer[VeloTexts.ProductDetails, Model.Entity.Id]);
 
     var cardStyle = "";
-    if (Model.Entity.IsLocked())
+    if (Model.Entity.IsLocked)
     {
         cardStyle = "border-danger ";
     }
-    else if (Model.Entity.IsLost())
+    else if (Model.Entity.IsLost)
     {
         cardStyle = "border-warning";
     }

@@ -1,16 +1,23 @@
 ﻿namespace BraunauMobil.VeloBasar.Tests.Models.Entities.ProductEntityTests;
 
-public class IsGone
+public class IsLost
 {
+    private readonly VeloFixture _fixture = new();
+    
     [Theory]
     [InlineData(StorageState.Lost)]
-    public void Gone(StorageState storageState)
+    public void ShouldBeTrue(StorageState storageState)
     {
-        ProductEntity product = new()
-        {
-            StorageState = storageState
-        };
-        Assert.True(product.IsLost());
+        //  Arrange
+        ProductEntity product = _fixture.BuildProduct()
+            .With(product => product.StorageState, storageState)
+            .Create();
+
+        //  Act
+        bool result = product.IsLost;
+
+        //  Assert
+        result.Should().BeTrue();
     }
 
     [Theory]
@@ -18,12 +25,17 @@ public class IsGone
     [InlineData(StorageState.Locked)]
     [InlineData(StorageState.NotAccepted)]
     [InlineData(StorageState.Sold)]
-    public void NotGone(StorageState storageState)
+    public void ShouldBeFalse(StorageState storageState)
     {
-        ProductEntity product = new()
-        {
-            StorageState = storageState
-        };
-        Assert.False(product.IsLost());
+        //  Arrange
+        ProductEntity product = _fixture.BuildProduct()
+            .With(product => product.StorageState, storageState)
+            .Create();
+
+        //  Act
+        bool result = product.IsLost;
+
+        //  Assert
+        result.Should().BeFalse();
     }
 }

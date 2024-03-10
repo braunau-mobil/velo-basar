@@ -2,15 +2,22 @@
 
 public class IsLocked
 {
+    private readonly VeloFixture _fixture = new();
+
     [Theory]
     [InlineData(StorageState.Locked)]
-    public void Locked(StorageState storageState)
+    public void ShouldBeTrue(StorageState storageState)
     {
-        ProductEntity product = new()
-        {
-            StorageState = storageState
-        };
-        Assert.True(product.IsLocked());
+        //  Arrange
+        ProductEntity product = _fixture.BuildProduct()
+            .With(product => product.StorageState, storageState)
+            .Create();
+
+        //  Act
+        bool result = product.IsLocked;
+
+        //  Assert
+        result.Should().BeTrue();
     }
 
     [Theory]
@@ -20,10 +27,15 @@ public class IsLocked
     [InlineData(StorageState.Sold)]
     public void NotLocked(StorageState storageState)
     {
-        ProductEntity product = new()
-        {
-            StorageState = storageState
-        };
-        Assert.False(product.IsLocked());
+        //  Arrange
+        ProductEntity product = _fixture.BuildProduct()
+            .With(product => product.StorageState, storageState)
+            .Create();
+
+        //  Act
+        bool result = product.IsLocked;
+
+        //  Assert
+        result.Should().BeFalse();
     }
 }

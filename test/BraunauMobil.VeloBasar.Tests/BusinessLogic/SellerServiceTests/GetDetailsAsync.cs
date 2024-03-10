@@ -1,6 +1,6 @@
 ﻿namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.SellerServiceTests;
 
-public class DetailsAsync_SampleDb
+public class GetDetailsAsync
     : TestBase
 {
     private readonly VeloFixture _fixture = new();

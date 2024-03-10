@@ -50,15 +50,15 @@ public sealed class ProductEntity
 
     public DateTime UpdatedAt { get; set; }
 
-    public bool CanEdit
-    {
-        get => (StorageState == StorageState.Available || StorageState == StorageState.NotAccepted) && ValueState == ValueState.NotSettled;
-    }
+    public bool CanEdit => (StorageState == StorageState.Available || StorageState == StorageState.NotAccepted) && ValueState == ValueState.NotSettled;
 
-    public bool CanBeSettledWithoutSeller
-    {
-        get => StorageState != StorageState.NotAccepted && (StorageState == StorageState.Sold || StorageState == StorageState.Lost || DonateIfNotSold);
-    }
+    public bool CanBeSettledWithoutSeller => StorageState != StorageState.NotAccepted && (StorageState == StorageState.Sold || StorageState == StorageState.Lost || DonateIfNotSold);
+
+    public bool IsLost => StorageState == StorageState.Lost;
+    
+    public bool IsLocked => StorageState == StorageState.Locked;
+
+    public bool WasPickedUp => ValueState == ValueState.Settled && (StorageState == StorageState.Available || StorageState == StorageState.Locked);
 
     public bool IsAllowed(TransactionType transactionType)
         => transactionType switch
@@ -106,14 +106,6 @@ public sealed class ProductEntity
             default:
                 throw new UnreachableException();
         }
-    }
-    public bool IsLost()
-    {
-        return StorageState == StorageState.Lost;
-    }
-    public bool IsLocked()
-    {
-        return StorageState == StorageState.Locked;
     }
     public decimal GetCommissionedPrice(BasarEntity basar)
     {
