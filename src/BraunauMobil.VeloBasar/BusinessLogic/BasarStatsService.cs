@@ -136,7 +136,9 @@ public class BasarStatsService
             .Where(p => p.Session.BasarId == basarId)
             .Select(p => new
             {
-                ProductState = p.StorageState,
+                ProductStorageState = p.StorageState,
+                ProductValueState = p.ValueState,
+                ProductDonateIfNotSold = p.DonateIfNotSold,
                 Seller = new
                 {
                     p.Session.SellerId,
@@ -147,43 +149,37 @@ public class BasarStatsService
             .AsNoTracking()
             .ToArrayAsync();
 
-        int overallCount = 0;
         int overallSettledCount = 0;
+        int overallNotSettledCount = 0;
         int mayBeCount = 0;
-        int mayBeSettledCount = 0;
         int mustBeCount = 0;
-        int mustBeSettledCount = 0;
         foreach (var group in products.GroupBy(p => p.Seller))
         {
-            if (group.Key.IBAN is not null && group.All(x => x.ProductState == StorageState.Sold))
-            {
-                mayBeCount++;
-                if (group.Key.ValueState == ValueState.Settled)
-                {
-                    mayBeSettledCount++;
-                }
-            }
-            else
-            {
-                mustBeCount++;
-                if (group.Key.ValueState == ValueState.Settled)
-                {
-                    mustBeSettledCount++;
-                }
-            }
-
-            overallCount++;
             if (group.Key.ValueState == ValueState.Settled)
             {
                 overallSettledCount++;
+            }
+            else
+            {
+                overallNotSettledCount++;
+
+                if (group.Key.IBAN is not null && group.Where(p => p.ProductValueState == ValueState.NotSettled).All(x => x.ProductStorageState == StorageState.Sold || x.ProductStorageState == StorageState.Lost || x.ProductDonateIfNotSold))
+                {
+                    mayBeCount++;
+                }
+                else
+                {
+                    mustBeCount++;
+                }
             }
         }
 
         return new BasarSettlementStatus(
             overallSettledCount > 0,
-            new SellerGroupSettlementStatus(overallCount, overallSettledCount),
-            new SellerGroupSettlementStatus(mustBeCount, mustBeSettledCount),
-            new SellerGroupSettlementStatus(mayBeCount, mayBeSettledCount)
+            overallSettledCount,
+            overallNotSettledCount,
+            mustBeCount,
+            mayBeCount            
         );
     }
 

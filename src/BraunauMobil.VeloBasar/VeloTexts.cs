@@ -152,11 +152,13 @@ public static class VeloTexts
     public const string LostInfo = $"{Prefix}{nameof(LostInfo)}";
     public const string LostProduct = $"{Prefix}{nameof(LostProduct)}";
     public const string LostProducts = $"{Prefix}{nameof(LostProducts)}";
+    public const string MayComeBy = $"{Prefix}{nameof(MayComeBy)}";
     public const string Menu = $"{Prefix}{nameof(Menu)}";
     public const string MigrateDatabase = $"{Prefix}{nameof(MigrateDatabase)}";
     public const string MigrateDatabaseHint = $"{Prefix}{nameof(MigrateDatabaseHint)}";
     public const string MigrateDatabaseText = $"{Prefix}{nameof(MigrateDatabaseText)}";
     public const string Misc = $"{Prefix}{nameof(Misc)}";
+    public const string MustComeBy = $"{Prefix}{nameof(MustComeBy)}";
     public const string Name = $"{Prefix}{nameof(Name)}";
     public const string NewAcceptance = $"{Prefix}{nameof(NewAcceptance)}";
     public const string NewSale = $"{Prefix}{nameof(NewSale)}";
@@ -172,12 +174,12 @@ public static class VeloTexts
     public const string NotAccepted = $"{Prefix}{nameof(NotAccepted)}";
     public const string Notes = $"{Prefix}{nameof(Notes)}";
     public const string NotSettled = $"{Prefix}{nameof(NotSettled)}";
+    public const string NotSettledCount = $"{Prefix}{nameof(NotSettledCount)}";
     public const string NotSold = $"{Prefix}{nameof(NotSold)}";
     public const string NotSoldProductCount = $"{Prefix}{nameof(NotSoldProductCount)}";
     public const string Number = $"{Prefix}{nameof(Number)}";
     public const string Ok = $"{Prefix}{nameof(Ok)}";
     public const string Other = $"{Prefix}{nameof(Other)}";
-    public const string Overall = $"{Prefix}{nameof(Overall)}";
     public const string Overview = $"{Prefix}{nameof(Overview)}";
     public const string PageNumberFromOverall = $"{Prefix}{nameof(PageNumberFromOverall)}";
     public const string ParentTransaction = $"{Prefix}{nameof(ParentTransaction)}";
@@ -256,8 +258,6 @@ public static class VeloTexts
     public const string SellerList = $"{Prefix}{nameof(SellerList)}";
     public const string SellerNotFound = $"{Prefix}{nameof(SellerNotFound)}";
     public const string SellersForNewsletter = $"{Prefix}{nameof(SellersForNewsletter)}";
-    public const string SellersThatMayBeSettledOnSite = $"{Prefix}{nameof(SellersThatMayBeSettledOnSite)}";
-    public const string SellerThatMustBeSettledOnSite = $"{Prefix}{nameof(SellerThatMustBeSettledOnSite)}";
     public const string SellingPrice = $"{Prefix}{nameof(SellingPrice)}";
     public const string SetAsLost = $"{Prefix}{nameof(SetAsLost)}";
     public const string SetLostSingular = $"{Prefix}{nameof(SetLostSingular)}";

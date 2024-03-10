@@ -183,11 +183,7 @@ public class Settle(TestContext context)
 
     private async Task AssertBasarDetails()
     {
-        BasarSettlementStatus basarSettlementStatus = new(true,
-            new SellerGroupSettlementStatus(7, 7),
-            new SellerGroupSettlementStatus(6, 6),
-            new SellerGroupSettlementStatus(1, 1)
-        );
+        BasarSettlementStatus basarSettlementStatus = new(true, 7, 0, 0, 0);
         BasarDetailsModel expectedDetails = new(new BasarEntity(), basarSettlementStatus)
         {
             AcceptanceCount = 9,

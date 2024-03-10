@@ -14,11 +14,7 @@ public class SellProducts(TestContext context)
 
     private async Task AssertBasarDetails()
     {
-        BasarSettlementStatus basarSettlementStatus = new(false,
-            new SellerGroupSettlementStatus(7, 0),
-            new SellerGroupSettlementStatus(6, 0),
-            new SellerGroupSettlementStatus(1, 0)
-        );
+        BasarSettlementStatus basarSettlementStatus = new(false, 0, 7, 6, 1);
         BasarDetailsModel expectedDetails = new(new BasarEntity(), basarSettlementStatus)
         {
             AcceptanceCount = 9,

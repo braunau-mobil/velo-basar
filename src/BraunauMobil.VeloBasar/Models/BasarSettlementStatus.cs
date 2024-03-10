@@ -2,7 +2,8 @@
 
 public record BasarSettlementStatus (
     bool HasSettlementStarted,
-    SellerGroupSettlementStatus OverallStatus,
-    SellerGroupSettlementStatus MustBeSettledOnSite,
-    SellerGroupSettlementStatus MayBeSettledOnSite
+    int OverallSettledCount,
+    int OverallNotSettledCount,
+    int MustComeBy,
+    int MayComeBy
 );

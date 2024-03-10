@@ -11,10 +11,59 @@ public class GetSettlementStatusAsync
     {
         //  Arrange
         Db.Basars.Add(basar);
-        CreateSellerAndProduct(basar, "", ValueState.NotSettled, StorageState.Available);
-        CreateSellerAndProduct(basar, "", ValueState.Settled, StorageState.Sold);
-        CreateSellerAndProduct(basar, "DE76500105171978746253", ValueState.NotSettled, StorageState.Sold);
-        CreateSellerAndProduct(basar, "AT363400012714178396", ValueState.Settled, StorageState.Available);
+        CreateSellerAndProducts(basar, null, ValueState.Settled, [(ValueState.NotSettled, StorageState.Available, false)]);
+        CreateSellerAndProducts(basar, null, ValueState.Settled, [(ValueState.NotSettled, StorageState.Available, true)]);
+        CreateSellerAndProducts(basar, null, ValueState.Settled, [(ValueState.NotSettled, StorageState.Lost, false)]);
+        CreateSellerAndProducts(basar, null, ValueState.Settled, [(ValueState.NotSettled, StorageState.Lost, true)]);
+        CreateSellerAndProducts(basar, null, ValueState.Settled, [(ValueState.NotSettled, StorageState.Locked, false)]);
+        CreateSellerAndProducts(basar, null, ValueState.Settled, [(ValueState.NotSettled, StorageState.Locked, true)]);
+        CreateSellerAndProducts(basar, null, ValueState.Settled, [(ValueState.NotSettled, StorageState.Sold, false)]);
+        CreateSellerAndProducts(basar, null, ValueState.Settled, [(ValueState.NotSettled, StorageState.Sold, true)]);
+        CreateSellerAndProducts(basar, "DE76500105171978746253", ValueState.Settled, [(ValueState.NotSettled, StorageState.Available, false)]);
+        CreateSellerAndProducts(basar, "DE76500105171978746253", ValueState.Settled, [(ValueState.NotSettled, StorageState.Available, true)]);
+        CreateSellerAndProducts(basar, "DE76500105171978746253", ValueState.Settled, [(ValueState.NotSettled, StorageState.Lost, false)]);
+        CreateSellerAndProducts(basar, "DE76500105171978746253", ValueState.Settled, [(ValueState.NotSettled, StorageState.Lost, true)]);
+        CreateSellerAndProducts(basar, "DE76500105171978746253", ValueState.Settled, [(ValueState.NotSettled, StorageState.Locked, false)]);
+        CreateSellerAndProducts(basar, "DE76500105171978746253", ValueState.Settled, [(ValueState.NotSettled, StorageState.Locked, true)]);
+        CreateSellerAndProducts(basar, "DE76500105171978746253", ValueState.Settled, [(ValueState.NotSettled, StorageState.Sold, false)]);
+        CreateSellerAndProducts(basar, "DE76500105171978746253", ValueState.Settled, [(ValueState.NotSettled, StorageState.Sold, true)]);
+
+        CreateSellerAndProducts(basar, null, ValueState.NotSettled, [(ValueState.NotSettled, StorageState.Available, false)]);
+        CreateSellerAndProducts(basar, null, ValueState.NotSettled, [(ValueState.NotSettled, StorageState.Available, true)]);
+        CreateSellerAndProducts(basar, null, ValueState.NotSettled, [(ValueState.NotSettled, StorageState.Lost, false)]);
+        CreateSellerAndProducts(basar, null, ValueState.NotSettled, [(ValueState.NotSettled, StorageState.Lost, true)]);
+        CreateSellerAndProducts(basar, null, ValueState.NotSettled, [(ValueState.NotSettled, StorageState.Locked, false)]);
+        CreateSellerAndProducts(basar, null, ValueState.NotSettled, [(ValueState.NotSettled, StorageState.Locked, true)]);
+        CreateSellerAndProducts(basar, null, ValueState.NotSettled, [(ValueState.NotSettled, StorageState.Sold, false)]);
+        CreateSellerAndProducts(basar, null, ValueState.NotSettled, [(ValueState.NotSettled, StorageState.Sold, true)]);
+        CreateSellerAndProducts(basar, "DE76500105171978746253", ValueState.NotSettled, [(ValueState.NotSettled, StorageState.Available, false)]);
+        CreateSellerAndProducts(basar, "DE76500105171978746253", ValueState.NotSettled, [(ValueState.NotSettled, StorageState.Available, true)]);
+        CreateSellerAndProducts(basar, "DE76500105171978746253", ValueState.NotSettled, [(ValueState.NotSettled, StorageState.Lost, false)]);
+        CreateSellerAndProducts(basar, "DE76500105171978746253", ValueState.NotSettled, [(ValueState.NotSettled, StorageState.Lost, true)]);
+        CreateSellerAndProducts(basar, "DE76500105171978746253", ValueState.NotSettled, [(ValueState.NotSettled, StorageState.Locked, false)]);
+        CreateSellerAndProducts(basar, "DE76500105171978746253", ValueState.NotSettled, [(ValueState.NotSettled, StorageState.Locked, true)]);
+        CreateSellerAndProducts(basar, "DE76500105171978746253", ValueState.NotSettled, [(ValueState.NotSettled, StorageState.Sold, false)]);
+        CreateSellerAndProducts(basar, "DE76500105171978746253", ValueState.NotSettled, [(ValueState.NotSettled, StorageState.Sold, true)]);
+        CreateSellerAndProducts(basar, "AT373219569166859861", ValueState.NotSettled, [
+            (ValueState.Settled, StorageState.Available, false),
+            (ValueState.Settled, StorageState.Available, true),
+            (ValueState.Settled, StorageState.Locked, false),
+            (ValueState.Settled, StorageState.Locked, true),
+            (ValueState.NotSettled, StorageState.Available, false),
+            (ValueState.NotSettled, StorageState.Available, true),
+            (ValueState.NotSettled, StorageState.Locked, false),
+            (ValueState.NotSettled, StorageState.Locked, true)
+        ]);
+        CreateSellerAndProducts(basar, "DE41500105174654858252", ValueState.NotSettled, [
+            (ValueState.Settled, StorageState.Sold, false),
+            (ValueState.Settled, StorageState.Sold, true),
+            (ValueState.Settled, StorageState.Lost, false),
+            (ValueState.Settled, StorageState.Lost, true),
+            (ValueState.NotSettled, StorageState.Sold, false),
+            (ValueState.NotSettled, StorageState.Sold, true),
+            (ValueState.NotSettled, StorageState.Lost, false),
+            (ValueState.NotSettled, StorageState.Lost, true)
+        ]);
         await Db.SaveChangesAsync();
 
         //  Act
@@ -24,19 +73,15 @@ public class GetSettlementStatusAsync
         using (new AssertionScope())
         {
             result.HasSettlementStarted.Should().BeTrue();
-            
-            result.MayBeSettledOnSite.SettledCount.Should().Be(1);
-            result.MayBeSettledOnSite.TotalCount.Should().Be(2);
-            
-            result.MustBeSettledOnSite.SettledCount.Should().Be(1);
-            result.MustBeSettledOnSite.TotalCount.Should().Be(2);
 
-            result.OverallStatus.SettledCount.Should().Be(2);
-            result.OverallStatus.TotalCount.Should().Be(4);
+            result.OverallSettledCount.Should().Be(16);
+            result.OverallNotSettledCount.Should().Be(18);
+            result.MayComeBy.Should().Be(7);
+            result.MustComeBy.Should().Be(11);
         }
     }
 
-    private void CreateSellerAndProduct(BasarEntity basar, string iban, ValueState valueState, StorageState storageState)
+    private void CreateSellerAndProducts(BasarEntity basar, string? iban, ValueState valueState, params (ValueState, StorageState, bool)[] prodcuts)
     {
         SellerEntity seller = _fixture.BuildSeller()
             .With(seller => seller.IBAN, iban)
@@ -45,12 +90,16 @@ public class GetSettlementStatusAsync
         AcceptSessionEntity session = _fixture.BuildAcceptSession(basar)
             .With(session => session.Seller, seller)
             .Create();
-        ProductEntity product = _fixture.BuildProduct()
-            .With(product => product.Session, session)
-            .With(product => product.ValueState, valueState)
-            .With(product => product.StorageState, storageState)
-            .Create();
-        session.Products.Add(product);
+        foreach ((ValueState productValueState, StorageState productStorageState, bool donateProductIfNotSold) in prodcuts)
+        {
+            ProductEntity product = _fixture.BuildProduct()
+                .With(product => product.Session, session)
+                .With(product => product.ValueState, productValueState)
+                .With(product => product.StorageState, productStorageState)
+                .With(product => product.DonateIfNotSold, donateProductIfNotSold)
+                .Create();
+            session.Products.Add(product);
+        }
         Db.AcceptSessions.Add(session);
     }
 }

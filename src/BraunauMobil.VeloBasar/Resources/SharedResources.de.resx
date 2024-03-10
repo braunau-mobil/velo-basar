@@ -951,14 +951,14 @@
   <data name="VeloBasar_PushSellerStatus" xml:space="preserve">
     <value>Push Status</value>
   </data>
-  <data name="VeloBasar_Overall" xml:space="preserve">
-    <value>Gesamt</value>
+  <data name="VeloBasar_NotSettledCount" xml:space="preserve">
+    <value>Nicht abgerechnete Verkäufer: {0}</value>
   </data>
-  <data name="VeloBasar_SellersThatMayBeSettledOnSite" xml:space="preserve">
-    <value>Verkäufer, die ihr Geld überwiesen bekommen könnten</value>
+  <data name="VeloBasar_MayComeBy" xml:space="preserve">
+    <value>{0} müssen nicht mehr vorbeikommen</value>
   </data>
-  <data name="VeloBasar_SellerThatMustBeSettledOnSite" xml:space="preserve">
-    <value>Verkäufer, die noch vorbeikommen müssen</value>
+  <data name="VeloBasar_MustComeBy" xml:space="preserve">
+    <value>{0} müssen noch vorbeikommen</value>
   </data>
   <data name="VeloBasar_PermissionTimestampGreaterOrEqualThan" xml:space="preserve">
     <value>Erlaubnis-Zeitpunkt größer oder gleich:</value>
