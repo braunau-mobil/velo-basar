@@ -124,35 +124,53 @@ public sealed class DefaultVeloHtmlFactory
             text = VeloTexts.Accepting;
             type = BadgeType.Light;
         }
-        else if (storageState == StorageState.Available && valueState == ValueState.NotSettled)
+        else if (valueState == ValueState.Settled)
         {
-            text = VeloTexts.Available;
-            type = BadgeType.Success;
-        }
-        else if (storageState == StorageState.Sold && valueState == ValueState.NotSettled)
-        {
-            text = VeloTexts.Sold;
-            type = BadgeType.Warning;
-        }
-        else if (storageState == StorageState.Available && valueState == ValueState.Settled)
-        {
-            text = VeloTexts.PickedUp;
             type = BadgeType.Secondary;
+            
+            if (storageState == StorageState.Available
+            || storageState == StorageState.Locked)
+            {
+                text = VeloTexts.PickedUp;
+            }
+            else if (storageState == StorageState.Sold
+                    || storageState == StorageState.Lost)
+            {
+                text = VeloTexts.Settled;
+            }
+            else
+            {
+                text = VeloTexts.UndefinedProductState;
+                type = BadgeType.Danger;
+            }
         }
-        else if (storageState == StorageState.Sold && valueState == ValueState.Settled)
+        else if (valueState == ValueState.NotSettled)
         {
-            text = VeloTexts.Settled;
-            type = BadgeType.Secondary;
-        }
-        else if (storageState == StorageState.Locked)
-        {
-            text = VeloTexts.Locked;
-            type = BadgeType.Danger;
-        }
-        else if (storageState == StorageState.Lost)
-        {
-            text = VeloTexts.Lost;
-            type = BadgeType.Danger;
+            if (storageState == StorageState.Available)
+            {
+                text = VeloTexts.Available;
+                type = BadgeType.Success;
+            }
+            else if (storageState == StorageState.Sold)
+            {
+                text = VeloTexts.Sold;
+                type = BadgeType.Warning;
+            }
+            else if (storageState == StorageState.Locked)
+            {
+                text = VeloTexts.Locked;
+                type = BadgeType.Danger;
+            }
+            else if (storageState == StorageState.Lost)
+            {
+                text = VeloTexts.Lost;
+                type = BadgeType.Danger;
+            }
+            else
+            {
+                text = VeloTexts.UndefinedProductState;
+                type = BadgeType.Danger;
+            }
         }
         else
         {
