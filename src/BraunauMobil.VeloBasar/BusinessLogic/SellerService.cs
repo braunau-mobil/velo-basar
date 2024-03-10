@@ -74,6 +74,7 @@ public sealed class SellerService
             .WhereBasarAndSeller(basarId, sellerId)
             .Include(product => product.Type) 
             .Include(product => product.Session)
+            .OrderBy(product => product.Id)
             .ToArrayAsync();
 
         IReadOnlyList<ProductEntity> soldProducts = products.Where(p => p.StorageState == StorageState.Sold).ToArray();
