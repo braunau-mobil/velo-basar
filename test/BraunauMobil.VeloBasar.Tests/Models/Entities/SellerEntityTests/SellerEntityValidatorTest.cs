@@ -212,7 +212,6 @@ public class SellerEntityValidatorTest
     }
 
     [Theory]
-    [InlineData(null)]
     [InlineData("")]
     [InlineData("123456")]
     public void InvalidEMails(string? email)
@@ -234,13 +233,33 @@ public class SellerEntityValidatorTest
 
     [Theory]
     [InlineData(null)]
-    [InlineData("")]
     public void ValidEMails_IfPermissionIsNotSet(string? email)
     {
         //  Arrange
         SellerEntity seller = CreateValidSeller();
         seller.EMail = email;
         seller.HasNewsletterPermission = false;
+
+        //  Act
+        ValidationResult result = _sut.Validate(seller);
+
+        //  Assert
+        using (new AssertionScope())
+        {
+            result.IsValid.Should().BeTrue();
+            result.Errors.Should().BeEmpty();
+        }
+    }
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData("123@blubb.com")]
+    public void ValidEMails_IfPermissionIsSet(string? email)
+    {
+        //  Arrange
+        SellerEntity seller = CreateValidSeller();
+        seller.EMail = email;
+        seller.HasNewsletterPermission = true;
 
         //  Act
         ValidationResult result = _sut.Validate(seller);

@@ -130,8 +130,6 @@ public sealed class SellerEntityValidator
             .WithMessage(localizer[VeloTexts.PleaseEnterValidIBAN]);
 
         RuleFor(seller => seller.EMail)
-            .EmailAddress()
-            .NotNull()
-            .When(seller => seller.HasNewsletterPermission).WithMessage(localizer[VeloTexts.PleaseEnterValidEMail]);
+            .EmailAddress();
     }
 }
