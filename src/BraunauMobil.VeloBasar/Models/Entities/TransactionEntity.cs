@@ -65,7 +65,8 @@ public sealed class TransactionEntity
         {
             return Type == TransactionType.Settlement
                 && !string.IsNullOrEmpty(Seller.IBAN)
-                && Products.Any(pt => pt.Product.StorageState == StorageState.Sold);
+                && Products.Count > 0
+                && Products.All(p => p.Product.CanBeSettledWithoutSeller);
         }
     }
 

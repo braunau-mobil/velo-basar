@@ -136,9 +136,7 @@ public class BasarStatsService
             .Where(p => p.Session.BasarId == basarId)
             .Select(p => new
             {
-                ProductStorageState = p.StorageState,
-                ProductValueState = p.ValueState,
-                ProductDonateIfNotSold = p.DonateIfNotSold,
+                Product = p,
                 Seller = new
                 {
                     p.Session.SellerId,
@@ -163,7 +161,7 @@ public class BasarStatsService
             {
                 overallNotSettledCount++;
 
-                if (group.Key.IBAN is not null && group.Where(p => p.ProductValueState == ValueState.NotSettled).All(x => x.ProductStorageState == StorageState.Sold || x.ProductStorageState == StorageState.Lost || x.ProductDonateIfNotSold))
+                if (group.Key.IBAN is not null && group.Where(p => p.Product.ValueState == ValueState.NotSettled).All(x => x.Product.CanBeSettledWithoutSeller))
                 {
                     mayBeCount++;
                 }

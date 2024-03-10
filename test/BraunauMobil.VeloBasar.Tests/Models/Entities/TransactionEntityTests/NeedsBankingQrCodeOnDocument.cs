@@ -122,7 +122,7 @@ public class NeedsBankingQrCodeOnDocument
 
     [Theory]
     [VeloInlineAutoData(TransactionType.Settlement)]
-    public void SoldProducts_SellerIBAN_ShouldBeTrue(TransactionType transactionType)
+    public void AllProductsSold_SellerIBAN_ShouldBeTrue(TransactionType transactionType)
     {
         //  Arrange
         TransactionEntity transaction = _fixture.BuildTransaction()
@@ -131,7 +131,6 @@ public class NeedsBankingQrCodeOnDocument
         transaction.Seller!.IBAN = _fixture.Create<string>();
 
         AddSoldProducts(transaction);
-        AddUnsoldProducts(transaction);
 
         //  Act
         bool result = transaction.NeedsBankingQrCodeOnDocument;

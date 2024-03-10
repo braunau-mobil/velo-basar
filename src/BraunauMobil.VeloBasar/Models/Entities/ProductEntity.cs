@@ -55,6 +55,11 @@ public sealed class ProductEntity
         get => (StorageState == StorageState.Available || StorageState == StorageState.NotAccepted) && ValueState == ValueState.NotSettled;
     }
 
+    public bool CanBeSettledWithoutSeller
+    {
+        get => StorageState != StorageState.NotAccepted && (StorageState == StorageState.Sold || StorageState == StorageState.Lost || DonateIfNotSold);
+    }
+
     public bool IsAllowed(TransactionType transactionType)
         => transactionType switch
     {
