@@ -16,12 +16,8 @@ public class ProductsTable
 
         //  Assert
         table.Should().SatisfyRespectively(
-            column => column.Title.Should().BeHtml("VeloBasar_Brand"),
-            column => column.Title.Should().BeHtml("VeloBasar_Type"),
-            column => column.Title.Should().BeHtml("VeloBasar_Color"),
-            column => column.Title.Should().BeHtml("VeloBasar_FrameNumber"),
+            column => column.Title.Should().BeHtml("VeloBasar_BrandAndType"),
             column => column.Title.Should().BeHtml("VeloBasar_Description"),
-            column => column.Title.Should().BeHtml("VeloBasar_TireSize"),
             column => column.Title.Should().BeHtml("VeloBasar_Price")
         );
     }
@@ -38,12 +34,8 @@ public class ProductsTable
         //  Assert
         table.Should().SatisfyRespectively(
             column => column.Title.Should().BeHtml("Xan_AspNetCore_Id"),
-            column => column.Title.Should().BeHtml("VeloBasar_Brand"),
-            column => column.Title.Should().BeHtml("VeloBasar_Type"),
-            column => column.Title.Should().BeHtml("VeloBasar_Color"),
-            column => column.Title.Should().BeHtml("VeloBasar_FrameNumber"),
+            column => column.Title.Should().BeHtml("VeloBasar_BrandAndType"),
             column => column.Title.Should().BeHtml("VeloBasar_Description"),
-            column => column.Title.Should().BeHtml("VeloBasar_TireSize"),
             column => column.Title.Should().BeHtml("VeloBasar_Price")
         );
     }
@@ -59,12 +51,8 @@ public class ProductsTable
 
         //  Assert
         table.Should().SatisfyRespectively(
-            column => column.Title.Should().BeHtml("VeloBasar_Brand"),
-            column => column.Title.Should().BeHtml("VeloBasar_Type"),
-            column => column.Title.Should().BeHtml("VeloBasar_Color"),
-            column => column.Title.Should().BeHtml("VeloBasar_FrameNumber"),
+            column => column.Title.Should().BeHtml("VeloBasar_BrandAndType"),
             column => column.Title.Should().BeHtml("VeloBasar_Description"),
-            column => column.Title.Should().BeHtml("VeloBasar_TireSize"),
             column => column.Title.Should().BeHtml("VeloBasar_Price"),
             column => column.Title.Should().BeHtml("")
         );
@@ -82,12 +70,8 @@ public class ProductsTable
         //  Assert
         table.Should().SatisfyRespectively(
             column => column.Title.Should().BeHtml("Xan_AspNetCore_Id"),
-            column => column.Title.Should().BeHtml("VeloBasar_Brand"),
-            column => column.Title.Should().BeHtml("VeloBasar_Type"),
-            column => column.Title.Should().BeHtml("VeloBasar_Color"),
-            column => column.Title.Should().BeHtml("VeloBasar_FrameNumber"),
+            column => column.Title.Should().BeHtml("VeloBasar_BrandAndType"),
             column => column.Title.Should().BeHtml("VeloBasar_Description"),
-            column => column.Title.Should().BeHtml("VeloBasar_TireSize"),
             column => column.Title.Should().BeHtml("VeloBasar_Price"),
             column => column.Title.Should().BeHtml("")
         );

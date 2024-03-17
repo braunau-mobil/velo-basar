@@ -19,10 +19,7 @@ public class SellersTable
             column => column.Title.Should().BeHtml("Xan_AspNetCore_Id"),
             column => column.Title.Should().BeHtml("VeloBasar_FirstName"),
             column => column.Title.Should().BeHtml("VeloBasar_LastName"),
-            column => column.Title.Should().BeHtml("VeloBasar_Street"),
-            column => column.Title.Should().BeHtml("VeloBasar_City"),
-            column => column.Title.Should().BeHtml("VeloBasar_ZIP"),
-            column => column.Title.Should().BeHtml("VeloBasar_Country"),
+            column => column.Title.Should().BeHtml("VeloBasar_Address"),
             column => column.Title.Should().BeHtml("VeloBasar_ValueState")
         );
     }

@@ -195,14 +195,45 @@ public sealed class DefaultVeloHtmlFactory
             builder.IdColumn(item => getProduct(item).Id);
         }
         builder
-            .Column(c => c.PercentWidth(10).BreakText().Title(Localizer[VeloTexts.Brand]).For(item => getProduct(item).Brand))
-            .Column(c => c.PercentWidth(10).BreakText().Title(Localizer[VeloTexts.Type]).For(item => getProduct(item).Type.Name))
-            .Column(c => c.PercentWidth(20).BreakText().Title(Localizer[VeloTexts.Color]).For(item => getProduct(item).Color))
-            .Column(c => c.PercentWidth(10).Title(Localizer[VeloTexts.FrameNumber]).For(item => getProduct(item).FrameNumber))
-            .Column(c => c.PercentWidth(40).BreakText().Title(Localizer[VeloTexts.Description]).For(item => getProduct(item).Description))
             .Column(c =>
             {
-                c.PercentWidth(5).BreakText().Title(Localizer[VeloTexts.TireSize]).For(item => getProduct(item).TireSize);
+                c.PercentWidth(20).BreakText().Title(Localizer[VeloTexts.BrandAndType]).For(item =>
+                {
+                    ProductEntity product = getProduct(item);
+                    HtmlContentBuilder content = new();
+                    content.Append(product.Brand);
+                    content.AppendHtml("<br/>");
+                    content.Append(product.Type.Name);
+                    return content;
+                });
+            })
+            .Column(c =>
+            {
+                c.PercentWidth(75).BreakText().Title(Localizer[VeloTexts.Description]).For(item =>
+                {
+                    ProductEntity product = getProduct(item);
+                    HtmlContentBuilder content = new();
+                    if (product.Color is not null)
+                    {
+                        content.Append(product.Color);
+                    }
+                    if (product.Color is not null && product.TireSize is not null)
+                    {
+                        content.Append(" - ");
+                    }
+                    if (product.TireSize is not null)
+                    {
+                        content.Append(product.TireSize);
+                    }
+                    content.AppendHtml("<br/>");
+                    if (product.FrameNumber is not null)
+                    {
+                        content.Append(product.FrameNumber);
+                        content.Append(" - ");
+                    }
+                    content.Append(product.Description);
+                    return content;
+                });
                 if (showSum)
                 {
                     c.Footer(f => f.Align(ColumnAlign.Right).For(Localizer[VeloTexts.Sum]));
@@ -230,12 +261,19 @@ public sealed class DefaultVeloHtmlFactory
 
         return Table(sellers)
             .IdColumn()
-            .Column(c => c.PercentWidth(20).BreakText().Title(Localizer[VeloTexts.FirstName]).For(item => item.FirstName))
-            .Column(c => c.PercentWidth(10).BreakText().Title(Localizer[VeloTexts.LastName]).For(item => item.LastName))
-            .Column(c => c.PercentWidth(35).BreakText().Title(Localizer[VeloTexts.Street]).For(item => item.Street))
-            .Column(c => c.PercentWidth(5).BreakText().Title(Localizer[VeloTexts.City]).For(item => item.City))
-            .Column(c => c.PercentWidth(5).Title(Localizer[VeloTexts.ZIP]).For(item => item.ZIP))
-            .Column(c => c.PercentWidth(10).BreakText().Title(Localizer[VeloTexts.Country]).For(item => item.Country.Name))
+            .Column(c => c.PercentWidth(17).BreakText().Title(Localizer[VeloTexts.FirstName]).For(item => item.FirstName))
+            .Column(c => c.PercentWidth(17).BreakText().Title(Localizer[VeloTexts.LastName]).For(item => item.LastName))
+            .Column(c =>
+            {
+                c.PercentWidth(61).Title(Localizer[VeloTexts.Address]).For(item =>
+                {
+                    HtmlContentBuilder content = new();
+                    content.Append(item.Street);
+                    content.AppendHtml("<br/>");
+                    content.Append($"{item.ZIP} {item.City} {item.Country.Name}");
+                    return content;
+                });
+            })
             .Column(c => c.PercentWidth(5).BreakText().Title(Localizer[VeloTexts.ValueState]).For(item => Localizer[VeloTexts.Singular(item.ValueState)]));
     }
 

@@ -60,6 +60,7 @@ public static class VeloTexts
     public const string BasarDetails = $"{Prefix}{nameof(BasarDetails)}";
     public const string BasarList = $"{Prefix}{nameof(BasarList)}";
     public const string Brand = $"{Prefix}{nameof(Brand)}";
+    public const string BrandAndType = $"{Prefix}{nameof(BrandAndType)}";
     public const string CalculateChangeMoney = $"{Prefix}{nameof(CalculateChangeMoney)}";
     public const string Cancel = $"{Prefix}{nameof(Cancel)}";
     public const string Cancellate = $"{Prefix}{nameof(Cancellate)}";
@@ -160,6 +161,7 @@ public static class VeloTexts
     public const string Misc = $"{Prefix}{nameof(Misc)}";
     public const string MustComeBy = $"{Prefix}{nameof(MustComeBy)}";
     public const string Name = $"{Prefix}{nameof(Name)}";
+    public const string NameAndLocation = $"{Prefix}{nameof(NameAndLocation)}";
     public const string NewAcceptance = $"{Prefix}{nameof(NewAcceptance)}";
     public const string NewSale = $"{Prefix}{nameof(NewSale)}";
     public const string Newsletter = $"{Prefix}{nameof(Newsletter)}";

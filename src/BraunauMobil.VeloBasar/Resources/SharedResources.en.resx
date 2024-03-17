@@ -1005,4 +1005,10 @@
   <data name="VeloBasar_MigrateDatabaseText" xml:space="preserve">
     <value>The database hast to be migrated. Click on OK to start.</value>
   </data>
+  <data name="VeloBasar_BrandAndType" xml:space="preserve">
+    <value>Brand &amp; Type</value>
+  </data>
+  <data name="VeloBasar_NameAndLocation" xml:space="preserve">
+    <value>Name &amp; Location</value>
+  </data>
 </root>
