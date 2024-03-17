@@ -77,10 +77,21 @@ namespace BraunauMobil.VeloBasar.Migrations
             migrationBuilder.Sql(@"UPDATE ""Transactions"" SET ""Type"" = 6 WHERE ""Type"" = 6");
             migrationBuilder.Sql(@"UPDATE ""Transactions"" SET ""Type"" = 5 WHERE ""Type"" = 5");
             migrationBuilder.Sql(@"UPDATE ""Transactions"" SET ""Type"" = 4 WHERE ""Type"" = 4");
-            migrationBuilder.Sql(@"UPDATE ""Transactions"" SET ""Type"" = 2 WHERE ""Type"" = 3");
-            migrationBuilder.Sql(@"UPDATE ""Transactions"" SET ""Type"" = 1 WHERE ""Type"" = 2");
-            migrationBuilder.Sql(@"UPDATE ""Transactions"" SET ""Type"" = 3 WHERE ""Type"" = 1");
             migrationBuilder.Sql(@"UPDATE ""Transactions"" SET ""Type"" = 0 WHERE ""Type"" = 0");
+            //  3 -> 2
+            migrationBuilder.Sql(@"UPDATE ""Transactions"" SET ""Type"" = 20 WHERE ""Type"" = 3");
+            //  2 -> 1
+            migrationBuilder.Sql(@"UPDATE ""Transactions"" SET ""Type"" = 10 WHERE ""Type"" = 2");
+            //  1 -> 3
+            migrationBuilder.Sql(@"UPDATE ""Transactions"" SET ""Type"" = 30 WHERE ""Type"" = 1");
+            
+            //  3 -> 2
+            migrationBuilder.Sql(@"UPDATE ""Transactions"" SET ""Type"" = 1 WHERE ""Type"" = 10");
+            //  2 -> 1
+            migrationBuilder.Sql(@"UPDATE ""Transactions"" SET ""Type"" = 2 WHERE ""Type"" = 20");
+            //  1 -> 3
+            migrationBuilder.Sql(@"UPDATE ""Transactions"" SET ""Type"" = 3 WHERE ""Type"" = 30");
+
             migrationBuilder.Sql(@"UPDATE ""Transactions"" SET ""DocumentId"" = NULL");
             migrationBuilder.AddColumn<int>(
                 name: "ParentTransactionId",
