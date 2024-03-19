@@ -6,11 +6,12 @@ public class CreateSaleModel
     : TestBase
 {
     [Theory]
-    [InlineData(null, "", false)]
-    [InlineData("MyBannerFilePath", "MyBannerFilePath", true)]
-    public void CheckModel(string? bannerFilePath, string expectedBannerFilePath, bool expectedAddBanner)
+    [InlineData(false, "", "", false)]
+    [InlineData(true, "MyBannerFilePath", "MyBannerFilePath", true)]
+    public void CheckModel(bool useBannerFile, string bannerFilePath, string expectedBannerFilePath, bool expectedAddBanner)
     {
         //  Arrange
+        Settings.UseBannerFile = useBannerFile;
         Settings.BannerFilePath = bannerFilePath;
 
         BasarEntity basar = Fixture.Create<BasarEntity>();

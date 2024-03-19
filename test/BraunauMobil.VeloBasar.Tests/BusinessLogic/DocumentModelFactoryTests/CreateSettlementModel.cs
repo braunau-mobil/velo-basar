@@ -21,12 +21,13 @@ public class CreateSettlementModel
     }
 
     [Theory]
-    [InlineData(null, "", false)]
-    [InlineData("BannerFilePath", "BannerFilePath", true)]
-    public void WithPayoutProductsAndPickupProducts(string? bannerFilePath, string expectedBannerFilePath, bool expectedAddBanner)
+    [InlineData(false, "", "", false)]
+    [InlineData(true, "BannerFilePath", "BannerFilePath", true)]
+    public void WithPayoutProductsAndPickupProducts(bool useBannerFile, string bannerFilePath, string expectedBannerFilePath, bool expectedAddBanner)
     {
         //  Arrange
         Settings.Settlement.SignatureText = "SignatureText";
+        Settings.UseBannerFile = useBannerFile;
         Settings.BannerFilePath = bannerFilePath;
         Settings.Settlement.BankTransactionTextFormat = "BankTransactionTextFormat_{0}";
 
@@ -177,12 +178,13 @@ public class CreateSettlementModel
     }
 
     [Theory]
-    [InlineData(null, "", false)]
-    [InlineData("BannerFilePath", "BannerFilePath", true)]
-    public void OnlyPayoutProducts(string? bannerFilePath, string expectedBannerFilePath, bool expectedAddBanner)
+    [InlineData(false, "", "", false)]
+    [InlineData(true, "BannerFilePath", "BannerFilePath", true)]
+    public void OnlyPayoutProducts(bool useBannerFile, string bannerFilePath, string expectedBannerFilePath, bool expectedAddBanner)
     {
         //  Arrange
         Settings.Settlement.SignatureText = "SignatureText";
+        Settings.UseBannerFile = useBannerFile;
         Settings.BannerFilePath = bannerFilePath;
         Settings.Settlement.BankTransactionTextFormat = "BankTransactionTextFormat_{0}";
 
@@ -276,12 +278,13 @@ public class CreateSettlementModel
     }
 
     [Theory]
-    [InlineData(null, "", false)]
-    [InlineData("BannerFilePath", "BannerFilePath", true)]
-    public void WithoutProducts(string? bannerFilePath, string expectedBannerFilePath, bool expectedAddBanner)
+    [InlineData(false, "", "", false)]
+    [InlineData(true, "BannerFilePath", "BannerFilePath", true)]
+    public void WithoutProducts(bool useBannerFile, string bannerFilePath, string expectedBannerFilePath, bool expectedAddBanner)
     {
         //  Arrange
         Settings.Settlement.SignatureText = "SignatureText";
+        Settings.UseBannerFile = useBannerFile;
         Settings.BannerFilePath = bannerFilePath;
         Settings.Settlement.BankTransactionTextFormat = "BankTransactionTextFormat_{0}";
 

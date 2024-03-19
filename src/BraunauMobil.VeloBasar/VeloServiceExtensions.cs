@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Xan.AspNetCore.Parameter;
 
 namespace BraunauMobil.VeloBasar;
@@ -33,6 +34,7 @@ public static class VeloServiceExtensions
         ArgumentNullException.ThrowIfNull(services);
         ArgumentNullException.ThrowIfNull(configuration);
 
+
         services
             .AddOptions<ApplicationSettings>()
                 .Bind(configuration.GetSection(nameof(ApplicationSettings)))
@@ -40,7 +42,8 @@ public static class VeloServiceExtensions
         services
             .AddOptions<PrintSettings>()
                 .Bind(configuration.GetSection(nameof(PrintSettings)))
-                .ValidateDataAnnotations();
+                .ValidateDataAnnotations()
+                .ValidateOnStart();
         services
             .AddOptions<WordPressStatusPushSettings>()
                 .Bind(configuration.GetSection(nameof(WordPressStatusPushSettings)))
@@ -50,6 +53,7 @@ public static class VeloServiceExtensions
                 .Bind(configuration.GetSection(nameof(ExportSettings)))
                 .ValidateDataAnnotations();
 
+        services.AddSingleton<IValidateOptions<PrintSettings>, PrintSettingsValidation>();
         return services;
     }
 

@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.Extensions.Options;
+using System.ComponentModel.DataAnnotations;
+using System.IO;
 
 namespace BraunauMobil.VeloBasar.Configuration;
 
@@ -20,7 +22,9 @@ public sealed class PrintSettings
     [Required]
     public Margins PageMargins { get; set; }
 
-    public string? BannerFilePath { get; set; }
+    public bool UseBannerFile { get; set; }
+
+    public string BannerFilePath { get; set; }
 
     [Required]
     public string BannerSubtitle { get; set; }
@@ -30,4 +34,23 @@ public sealed class PrintSettings
 
     [Required]
     public int QrCodeLengthMillimeters { get; set; }
+}
+#nullable restore warnings
+
+public sealed class PrintSettingsValidation
+    : IValidateOptions<PrintSettings>
+{
+    public ValidateOptionsResult Validate(string? name, PrintSettings options)
+    {
+        ArgumentNullException.ThrowIfNull(options);
+
+        if (options.UseBannerFile)
+        {
+            if (!File.Exists(options.BannerFilePath))
+            {
+                return ValidateOptionsResult.Fail($"{nameof(PrintSettings.BannerFilePath)}: '{options.BannerFilePath}' does not exist.");
+            }
+        }
+        return ValidateOptionsResult.Success;
+    }
 }

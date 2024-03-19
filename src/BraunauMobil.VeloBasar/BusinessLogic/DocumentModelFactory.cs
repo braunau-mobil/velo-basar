@@ -98,7 +98,7 @@ public class DocumentModelFactory
 
         bool addBanner = false;
         string bannerFilePath = "";
-        if (_settings.BannerFilePath is not null)
+        if (_settings.UseBannerFile)
         {
             addBanner = true;
             bannerFilePath = _settings.BannerFilePath;
@@ -131,7 +131,7 @@ public class DocumentModelFactory
 
         bool addBanner = false;
         string bannerFilePath = "";
-        if (_settings.BannerFilePath is not null)
+        if (_settings.UseBannerFile)
         {
             addBanner = true;
             bannerFilePath = _settings.BannerFilePath;
