@@ -25,6 +25,8 @@ public class GetAcceptedProductTypesWithAmount
     public void Products_ShouldGroupByTypeAndSumPrices(ProductTypeEntity typeA, ProductTypeEntity typeB, Color colorA, Color colorB)
     {
         //  Arrange
+        typeA.Name = "A";
+        typeB.Name = "B";
         A.CallTo(() => ColorProvider[typeA.Name]).Returns(colorA);
         A.CallTo(() => ColorProvider[typeB.Name]).Returns(colorB);
         ProductEntity[] products = new[]

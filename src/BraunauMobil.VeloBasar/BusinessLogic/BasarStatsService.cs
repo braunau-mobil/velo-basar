@@ -222,6 +222,7 @@ public class BasarStatsService
     private IReadOnlyList<ChartDataPoint> GroupByTypeAndAmount(IEnumerable<ProductEntity> products)
     {
         var productTypeAmounts = products
+            .OrderBy(product => product.Type.Name)
             .GroupBy(product => product.Type.Name)
             .Select(group => new
             {
@@ -237,6 +238,7 @@ public class BasarStatsService
     private IReadOnlyList<ChartDataPoint> GroupByTypeAndCount(IEnumerable<ProductEntity> products)
     {
         var productTypeAmounts = products
+            .OrderBy(product => product.Type.Name)
             .GroupBy(product => product.Type.Name)
             .Select(group => new
             {
