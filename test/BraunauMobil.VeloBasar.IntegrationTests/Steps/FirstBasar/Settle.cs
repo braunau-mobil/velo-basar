@@ -70,6 +70,7 @@ public class Settle(TestContext context)
             SaleDistribution = [
                 new ChartDataPoint(92.99M, "11:22 AM", X.AnyColor),
             ],
+            SellerCount = 1,
             SoldProductsAmount = 92.99m,
             SoldProductsCount = 1,
             SoldProductTypesByCount = [

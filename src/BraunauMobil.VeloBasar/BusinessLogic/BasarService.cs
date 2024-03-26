@@ -166,6 +166,7 @@ public sealed class BasarService
             PriceDistribution = _statsService.GetPriceDistribution(acceptedProducts),
             SaleCount = await _statsService.GetSaleCountAsync(id),
             SaleDistribution = _statsService.GetSaleDistribution(soldProductTimestampsAndPrices),
+            SellerCount = await _statsService.GetSellerCountAsync(id),
             SoldProductsAmount = _statsService.GetSoldProductsAmount(acceptedProducts),
             SoldProductsCount = _statsService.GetSoldProductsCount(acceptedProducts),
             SoldProductTypesByAmount = _statsService.GetSoldProductTypesWithAmount(acceptedProducts),

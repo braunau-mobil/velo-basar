@@ -111,6 +111,7 @@ public class Acccept(TestContext context)
             PriceDistribution = context.PriceDistribtion(0, 0, 2, 0, 0),
             SaleCount = 0,
             SaleDistribution = [],
+            SellerCount = 1,
             SoldProductsAmount = 0,
             SoldProductsCount = 0,
             SoldProductTypesByCount = [],

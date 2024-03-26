@@ -120,6 +120,13 @@ public class BasarStatsService
             .ToArray();
     }
 
+    public async Task<int> GetSellerCountAsync(int basarId)
+        => await _db.Transactions.AsNoTracking()
+            .WhereBasarAndType(basarId, TransactionType.Acceptance)
+            .Select(transaction => transaction.SellerId)
+            .Distinct()
+            .CountAsync();
+
     public async Task<BasarSettlementStatus> GetSettlementStatusAsync(int basarId)
     {
         var products = await _db.Products

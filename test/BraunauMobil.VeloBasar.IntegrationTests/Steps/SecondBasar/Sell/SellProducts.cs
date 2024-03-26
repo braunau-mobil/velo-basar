@@ -47,6 +47,7 @@ public class SellProducts(TestContext context)
             SaleDistribution = [
                 new ChartDataPoint(554.89M, "12:23 PM", X.AnyColor),
             ],
+            SellerCount = 7,
             SoldProductsAmount = 554.89M,
             SoldProductsCount = 6,
             SoldProductTypesByAmount = [

@@ -24,6 +24,8 @@ public interface IBasarStatsService
 
     IReadOnlyList<ChartDataPoint> GetSaleDistribution(IEnumerable<Tuple<TimeOnly, decimal>> transactionsAndTotals);
 
+    Task<int> GetSellerCountAsync(int basarId);
+
     Task<BasarSettlementStatus> GetSettlementStatusAsync(int basarId);
 
     decimal GetSoldProductsAmount(IEnumerable<ProductEntity> products);

@@ -50,6 +50,7 @@ public class AcceptSellers(TestContext context)
             PriceDistribution = context.PriceDistribtion(1, 1, 5, 7, 0),
             SaleCount = 0,
             SaleDistribution = [],
+            SellerCount = 7,
             SoldProductsAmount = 0,
             SoldProductsCount = 0,
             SoldProductTypesByCount = [],

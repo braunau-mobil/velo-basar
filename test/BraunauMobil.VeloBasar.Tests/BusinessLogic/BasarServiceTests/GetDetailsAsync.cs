@@ -25,6 +25,7 @@ public sealed class GetDetailsAsync
         A.CallTo(() => StatsService.GetLockedProductsCount(acceptedProducts)).Returns(details.LockedProductsCount);
         A.CallTo(() => StatsService.GetPriceDistribution(acceptedProducts)).Returns(details.PriceDistribution);
         A.CallTo(() => StatsService.GetSaleDistribution(transactionsAndTotals)).Returns(details.SaleDistribution);
+        A.CallTo(() => StatsService.GetSellerCountAsync(basarId)).Returns(details.SellerCount);
         A.CallTo(() => StatsService.GetSoldProductsAmount(acceptedProducts)).Returns(details.SoldProductsAmount);
         A.CallTo(() => StatsService.GetSoldProductsCount(acceptedProducts)).Returns(details.SoldProductsCount);
         A.CallTo(() => StatsService.GetSoldProductTypesWithAmount(acceptedProducts)).Returns(details.SoldProductTypesByAmount);
@@ -51,6 +52,7 @@ public sealed class GetDetailsAsync
         A.CallTo(() => StatsService.GetLockedProductsCount(acceptedProducts)).MustHaveHappenedOnceExactly();
         A.CallTo(() => StatsService.GetPriceDistribution(acceptedProducts)).MustHaveHappenedOnceExactly();
         A.CallTo(() => StatsService.GetSaleDistribution(transactionsAndTotals)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => StatsService.GetSellerCountAsync(basarId)).MustHaveHappenedOnceExactly();
         A.CallTo(() => StatsService.GetSoldProductsAmount(acceptedProducts)).MustHaveHappenedOnceExactly();
         A.CallTo(() => StatsService.GetSoldProductsCount(acceptedProducts)).MustHaveHappenedOnceExactly();
         A.CallTo(() => StatsService.GetSoldProductTypesWithAmount(acceptedProducts)).MustHaveHappenedOnceExactly();
