@@ -113,7 +113,9 @@ public class BasarStatsService
     {
         ArgumentNullException.ThrowIfNull(transactionsAndTotals);
 
-        return transactionsAndTotals.GroupBy(x => new TimeOnly(x.Item1.Hour, x.Item1.Minute))
+        return transactionsAndTotals
+            .OrderBy(x => x.Item1)
+            .GroupBy(x => new TimeOnly(x.Item1.Hour, x.Item1.Minute))
             .Select(g => new ChartDataPoint(g.Sum(x => x.Item2), g.Key.ToString("t", _formatProvider), _colorProvider.Primary))
             .ToArray();
     }
