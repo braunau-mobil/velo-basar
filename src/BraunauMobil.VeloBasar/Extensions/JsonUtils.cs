@@ -6,6 +6,40 @@ namespace BraunauMobil.VeloBasar.Extensions;
 
 public static class JsonUtils
 {
+    public static string GetBarConfig(IReadOnlyList<ChartDataPoint> points, string label, bool showLine)
+    {
+        ArgumentNullException.ThrowIfNull(points);
+        ArgumentNullException.ThrowIfNull(label);
+
+        string color = ToChartJsColor(new Color());
+        if (points.Any())
+        {
+            color = ToChartJsColor(points[0].Color);
+        }
+
+        var config = new
+        {
+            type = "bar",
+            data = new
+            {
+                labels = points.Select(p => p.Label),
+                datasets = new[]
+                {
+                    new
+                    {
+                        label,
+                        fill = false,
+                        data = points.Select(p => p.Value),
+                        backgroundColor = points.Select(p => ToChartJsColor(p.Color)),
+                        borderColor = points.Select(p => ToChartJsColor(p.Color)),
+                        showLine
+                    }
+                }
+            }
+        };
+        return JsonConvert.SerializeObject(config);
+    }
+
     public static string GetDonutConfig(IReadOnlyList<ChartDataPoint> points)
     {
         ArgumentNullException.ThrowIfNull(points);

@@ -108,9 +108,7 @@ public class Acccept(TestContext context)
             ],
             LockedProductsCount = 0,
             LostProductsCount = 0,
-            PriceDistribution = [
-                new ChartDataPoint(2, "$100.00", X.AnyColor)
-            ],
+            PriceDistribution = context.PriceDistribtion(0, 0, 2, 0, 0),
             SaleCount = 0,
             SaleDistribution = [],
             SoldProductsAmount = 0,

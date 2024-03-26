@@ -129,6 +129,15 @@ public record TestContext(IServiceProvider ServiceProvider, HttpClient HttpClien
         return postDocument;
     }
 
+    public IReadOnlyList<ChartDataPoint> PriceDistribtion(int toNineCommaNineNine, int tenToFourtyNineCommaNineNine, int fiftyToNinteyNineCommaNineNine, int houndredToFourhundredNinetyNineCommaNineNine, int formFiveHundred)
+        => [
+            new ChartDataPoint(toNineCommaNineNine, "-$9.99", X.AnyColor),
+            new ChartDataPoint(tenToFourtyNineCommaNineNine, "$10.00 - $49.99", X.AnyColor),
+            new ChartDataPoint(fiftyToNinteyNineCommaNineNine, "$50.00 - $99.99", X.AnyColor),
+            new ChartDataPoint(houndredToFourhundredNinetyNineCommaNineNine, "$100.00 - $499.99", X.AnyColor),
+            new ChartDataPoint(formFiveHundred, "$500.00+", X.AnyColor)
+        ];
+
     public SaleDocumentModel SaleDocument(string title, string locationAndDateText, string productTableCountText, string productTablePriceText, IReadOnlyCollection<ProductTableRowDocumentModel> productTableRows)
         => new(title,
                 locationAndDateText,

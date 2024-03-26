@@ -1,7 +1,10 @@
+using BraunauMobil.VeloBasar.Configuration;
 using BraunauMobil.VeloBasar.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.Extensions.Options;
 using System.Globalization;
+using System.Text;
 using Xan.Extensions;
 
 namespace BraunauMobil.VeloBasar.BusinessLogic;
@@ -12,12 +15,16 @@ public class BasarStatsService
     private readonly IColorProvider _colorProvider;
     private readonly VeloDbContext _db;
     private readonly IFormatProvider _formatProvider;
+    private readonly ApplicationSettings _settings;
 
-    public BasarStatsService(IColorProvider colorProvider, VeloDbContext db, IFormatProvider formatProvider)
+    public BasarStatsService(IColorProvider colorProvider, VeloDbContext db, IFormatProvider formatProvider, IOptions<ApplicationSettings> settings)
     {
+        ArgumentNullException.ThrowIfNull(settings);
+
         _colorProvider = colorProvider ?? throw new ArgumentNullException(nameof(colorProvider));
         _db = db ?? throw new ArgumentNullException(nameof(db));
         _formatProvider = formatProvider ?? throw new ArgumentNullException(nameof(formatProvider));
+        _settings = settings.Value;
     }
 
     public async Task<int> GetAcceptanceCountAsync(int basarId)
@@ -74,6 +81,7 @@ public class BasarStatsService
 
         return products.Where(product => product.StorageState == StorageState.Lost).Count();
     }
+
     public IReadOnlyList<ChartDataPoint> GetPriceDistribution(IEnumerable<ProductEntity> products)
     {
         ArgumentNullException.ThrowIfNull(products);
@@ -82,34 +90,16 @@ public class BasarStatsService
 
         if (!productPrices.Any())
         {
-            return Array.Empty<ChartDataPoint>();
+            return [];
         }
 
-        decimal step = 10.0m;
-        decimal maxPrice = ((int)(productPrices.Max() / step) + 1) * step;
-        decimal currentMin = 0;
-        decimal currentMax = Math.Min(step, maxPrice);
-
-        List<ChartDataPoint> data = new();
-        while (currentMax <= maxPrice)
+        List<ChartDataPoint> data = [];
+        foreach (PriceRange range in _settings.PriceDistributionRanges)
         {
-            int count = productPrices.Count(price => price >= currentMin && price <= currentMax);
-            if (count > 0)
-            {
-                string label = currentMax.ToString("C", _formatProvider);
-                Color color = _colorProvider.Primary;
-                data.Add(new ChartDataPoint(count, label, color));
-            }
+            int count = productPrices.Count(range.IsInRange);
+            string label = range.GetLabel(_formatProvider);
 
-            if (currentMin == 0)
-            {
-                currentMin = 10.01M;
-            }
-            else
-            {
-                currentMin += step;
-            }
-            currentMax += step;
+            data.Add(new ChartDataPoint(count, label, _colorProvider[label]));
         }
         return data.ToArray();
     }

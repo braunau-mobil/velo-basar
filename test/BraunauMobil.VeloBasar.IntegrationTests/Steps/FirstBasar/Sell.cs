@@ -56,9 +56,7 @@ public class Sell(TestContext context)
             ],
             LockedProductsCount = 0,
             LostProductsCount = 0,
-            PriceDistribution = [
-                new ChartDataPoint(2, "$100.00", X.AnyColor)
-            ],
+            PriceDistribution = context.PriceDistribtion(0, 0, 2, 0, 0),
             SaleCount = 1,
             SaleDistribution = [
                 new ChartDataPoint(92.99M, "11:22 AM", X.AnyColor),

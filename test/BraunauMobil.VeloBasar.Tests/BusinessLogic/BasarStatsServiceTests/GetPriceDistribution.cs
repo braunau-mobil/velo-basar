@@ -1,4 +1,5 @@
-﻿using Xan.Extensions;
+﻿using BraunauMobil.VeloBasar.Configuration;
+using Xan.Extensions;
 
 namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.BasarStatsServiceTests;
 
@@ -25,7 +26,13 @@ public class GetPriceDistribution
     public void Products_ShouldReturnDistribution(Color primaryColor)
     {
         // Arrange
-        A.CallTo(() => ColorProvider.Primary).Returns(primaryColor);
+        ApplicationSettings.PriceDistributionRanges = [
+            new PriceRange(50, null),
+            new PriceRange(null, 50),
+            new PriceRange(100, 200),
+            new PriceRange(1000, 10000)
+        ];
+        A.CallTo(() => ColorProvider[A<string>.Ignored]).Returns(primaryColor);
         ProductEntity[] products =
         [
             CreateProduct(0),
@@ -47,65 +54,13 @@ public class GetPriceDistribution
         // Assert
         result.Should().BeEquivalentTo(new[]
         {
-            new ChartDataPoint(5, "€ 10,00", primaryColor),
-            new ChartDataPoint(2, "€ 20,00", primaryColor),
-            new ChartDataPoint(1, "€ 100,00", primaryColor),
-            new ChartDataPoint(1, "€ 1.000,00", primaryColor),
-            new ChartDataPoint(1, "€ 9.990,00", primaryColor),
-            new ChartDataPoint(1, "€ 10.000,00", primaryColor),
+            new ChartDataPoint(4, "€ 50,00+", primaryColor),
+            new ChartDataPoint(7, "-€ 50,00", primaryColor),
+            new ChartDataPoint(1, "€ 100,00 - € 200,00", primaryColor),
+            new ChartDataPoint(3, "€ 1.000,00 - € 10.000,00", primaryColor),
         });
 
-        A.CallTo(() => ColorProvider.Primary).MustHaveHappened(result.Count, Times.Exactly);
-    }
-
-    [Theory]
-    [VeloAutoData]
-    public void ProductsWithTwoPricesInTheSameRange_ShouldReturnDistribution(Color primaryColor)
-    {
-        // Arrange
-        A.CallTo(() => ColorProvider.Primary).Returns(primaryColor);
-        ProductEntity[] products =
-        [
-            CreateProduct(92.99M),
-            CreateProduct(98.89M)
-        ];
-
-        // Act
-        IReadOnlyList<ChartDataPoint> result = Sut.GetPriceDistribution(products);
-
-        // Assert
-        result.Should().BeEquivalentTo(new[]
-        {
-            new ChartDataPoint(2, "€ 100,00", primaryColor)
-        });
-
-        A.CallTo(() => ColorProvider.Primary).MustHaveHappened(1, Times.Exactly);
-    }
-
-    [Theory]
-    [VeloAutoData]
-    public void ProductsWithPricesLowerThan10_ShouldReturnDistribution(Color primaryColor)
-    {
-        // Arrange
-        A.CallTo(() => ColorProvider.Primary).Returns(primaryColor);
-        ProductEntity[] products =
-        [
-            CreateProduct(0),
-            CreateProduct(0),
-            CreateProduct(1),
-            CreateProduct(5)
-        ];
-        
-        // Act
-        IReadOnlyList<ChartDataPoint> result = Sut.GetPriceDistribution(products);
-
-        // Assert
-        result.Should().BeEquivalentTo(new[]
-        {
-            new ChartDataPoint(4, "€ 10,00", primaryColor),
-        });
-
-        A.CallTo(() => ColorProvider.Primary).MustHaveHappenedOnceExactly();
+        A.CallTo(() => ColorProvider[A<string>.Ignored]).MustHaveHappened(4, Times.Exactly);
     }
 
     private ProductEntity CreateProduct(decimal price)

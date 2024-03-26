@@ -38,7 +38,8 @@ public static class VeloServiceExtensions
         services
             .AddOptions<ApplicationSettings>()
                 .Bind(configuration.GetSection(nameof(ApplicationSettings)))
-                .ValidateDataAnnotations();
+                .ValidateDataAnnotations()
+                .ValidateOnStart();
         services
             .AddOptions<PrintSettings>()
                 .Bind(configuration.GetSection(nameof(PrintSettings)))
@@ -54,6 +55,7 @@ public static class VeloServiceExtensions
                 .ValidateDataAnnotations();
 
         services.AddSingleton<IValidateOptions<PrintSettings>, PrintSettingsValidation>();
+        services.AddSingleton<IValidateOptions<ApplicationSettings>, ApplicationSettingsValidation>();
         return services;
     }
 
