@@ -39,6 +39,19 @@
     <a class="btn btn-@TransactionType.Sale.ToCssColor() m-2" href="@Router.Cart.ToIndex()">@Localizer[VeloTexts.NewSale]</a>
 }
 
+@if(Model.Entity.Seller is not null)
+{
+    <div class="card m-2">
+        <div class="card-header">@Localizer[VeloTexts.Seller]: @Model.Entity.Seller.FirstName @Model.Entity.Seller.LastName</div>
+        <div class="card-body">
+            <partial name="/Views/Seller/_Properties.cshtml" model="Model.Entity.Seller" />
+        </div>
+        <div class="card-footer">
+            <a class="btn btn-outline-primary" href="@Router.Seller.ToDetails(Model.Entity.Seller.Id)">@Localizer[VeloTexts.Details]</a>
+        </div>
+    </div>    
+}
+
 @section Scripts {
 
 @if (Model.OpenDocument)
