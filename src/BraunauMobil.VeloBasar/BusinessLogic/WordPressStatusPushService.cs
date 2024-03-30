@@ -49,7 +49,7 @@ public sealed class WordPressStatusPushService
 
         _taskQueue.QueueBackgroundWorkItem(async token => await PostStatusAsync(seller.Token, html, token));
 
-        _logger.LogInformation("Queued status push for basar {BasarId} and seller {SellerId}", basarId, sellerId);
+        _logger.LogInformation("Queued status push for {AccessId}", seller.Token);
     }
 
     public async Task<string> GetStatesListAsync(int basarId, int sellerId)
@@ -131,6 +131,7 @@ public sealed class WordPressStatusPushService
             using HttpResponseMessage response = await httpClient.PostAsync(new Uri(_settings.EndpointUrl), body);
             response.EnsureSuccessStatusCode();
 
+            _logger.LogInformation("Successfully pushed status for {AccessId}", accessid);
             _logger.LogDebug("Successfully pushed status {Status}", saletext);
             return true;
         }
