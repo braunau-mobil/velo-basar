@@ -115,6 +115,13 @@ public record TestContext(IServiceProvider ServiceProvider, HttpClient HttpClien
             .Line();
     }
 
+    public async Task DoScoped(Func<IServiceScope, Task> what)
+    {
+        using IServiceScope scope = ServiceProvider.CreateScope();
+        
+        await what(scope);
+    }
+
     public async Task<IHtmlDocument> EnterProduct(IHtmlDocument enterProductsDocument, string expectedTitle, IDictionary<string, object> values)
     {
         ArgumentNullException.ThrowIfNull(enterProductsDocument);

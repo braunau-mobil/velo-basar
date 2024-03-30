@@ -1,4 +1,6 @@
-﻿namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.BasarStatsServiceTests;
+﻿using Xan.AspNetCore.Models;
+
+namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.BasarStatsServiceTests;
 
 public class GetSettlementStatusAsync
     : TestBase
@@ -10,6 +12,7 @@ public class GetSettlementStatusAsync
     public async Task ShouldBeCorrect(BasarEntity basar)
     {
         //  Arrange
+        basar.State = ObjectState.Enabled;
         Db.Basars.Add(basar);
         CreateSellerAndProducts(basar, null, ValueState.Settled, [(ValueState.NotSettled, StorageState.Available, false)]);
         CreateSellerAndProducts(basar, null, ValueState.Settled, [(ValueState.NotSettled, StorageState.Available, true)]);
@@ -67,7 +70,7 @@ public class GetSettlementStatusAsync
         await Db.SaveChangesAsync();
 
         //  Act
-        BasarSettlementStatus result = await Sut.GetSettlementStatusAsync(basar.Id);
+        BasarSettlementStatus result = await Sut.GetSettlementStatusAsync(basar);
 
         //  Assert
         using (new AssertionScope())
@@ -78,6 +81,31 @@ public class GetSettlementStatusAsync
             result.OverallNotSettledCount.Should().Be(18);
             result.MayComeBy.Should().Be(7);
             result.MustComeBy.Should().Be(11);
+        }
+    }
+
+    [Theory]
+    [VeloAutoData]
+    public async Task DisabledBasar_SettlementStatusShouldBeNotStarted(BasarEntity basar)
+    {
+        //  Arrange
+        basar.State = ObjectState.Disabled;
+        Db.Basars.Add(basar);
+        CreateSellerAndProducts(basar, "DE76500105171978746253", ValueState.Settled, [(ValueState.Settled, StorageState.Available, false)]);
+        await Db.SaveChangesAsync();
+
+        //  Act
+        BasarSettlementStatus result = await Sut.GetSettlementStatusAsync(basar);
+
+        //  Assert
+        using (new AssertionScope())
+        {
+            result.HasSettlementStarted.Should().BeFalse();
+
+            result.OverallSettledCount.Should().Be(0);
+            result.OverallNotSettledCount.Should().Be(0);
+            result.MayComeBy.Should().Be(0);
+            result.MustComeBy.Should().Be(0);            
         }
     }
 

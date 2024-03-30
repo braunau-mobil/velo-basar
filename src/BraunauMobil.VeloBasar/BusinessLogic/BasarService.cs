@@ -149,7 +149,7 @@ public sealed class BasarService
         BasarEntity basar = await _db.Basars.AsNoTracking()
             .FirstByIdAsync(id);
 
-        BasarSettlementStatus settlementStatus = await _statsService.GetSettlementStatusAsync(id);
+        BasarSettlementStatus settlementStatus = await _statsService.GetSettlementStatusAsync(basar);
 
         IReadOnlyList<ProductEntity> acceptedProducts = await _statsService.GetAcceptedProductsAsync(id);
         IReadOnlyList<Tuple<TimeOnly, decimal>> soldProductTimestampsAndPrices = await _statsService.GetSoldProductTimestampsAndPricesAsync(id);

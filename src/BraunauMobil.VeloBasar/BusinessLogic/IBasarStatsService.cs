@@ -26,7 +26,7 @@ public interface IBasarStatsService
 
     Task<int> GetSellerCountAsync(int basarId);
 
-    Task<BasarSettlementStatus> GetSettlementStatusAsync(int basarId);
+    Task<BasarSettlementStatus> GetSettlementStatusAsync(BasarEntity basar);
 
     decimal GetSoldProductsAmount(IEnumerable<ProductEntity> products);
 

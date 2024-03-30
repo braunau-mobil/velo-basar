@@ -1,4 +1,6 @@
 ﻿using BraunauMobil.VeloBasar.Configuration;
+using BraunauMobil.VeloBasar.Data;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
 namespace BraunauMobil.VeloBasar.IntegrationTests;
@@ -36,6 +38,8 @@ public class VeloBasarTest
         await new Steps.SecondBasar.Sell.SellProducts(_context).Run();
         await new Steps.SecondBasar.Settle(_context).Run();
         await new Steps.SecondBasar.ProductTable(_context).Run();
+
+        await new Steps.EndChecks.OldBasarStats(_context).Run();
     }
 
     private async Task Login()

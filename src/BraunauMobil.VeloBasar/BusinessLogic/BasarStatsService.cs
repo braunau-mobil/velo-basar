@@ -1,10 +1,7 @@
 using BraunauMobil.VeloBasar.Configuration;
 using BraunauMobil.VeloBasar.Data;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Options;
-using System.Globalization;
-using System.Text;
 using Xan.Extensions;
 
 namespace BraunauMobil.VeloBasar.BusinessLogic;
@@ -127,12 +124,19 @@ public class BasarStatsService
             .Distinct()
             .CountAsync();
 
-    public async Task<BasarSettlementStatus> GetSettlementStatusAsync(int basarId)
+    public async Task<BasarSettlementStatus> GetSettlementStatusAsync(BasarEntity basar)
     {
+        ArgumentNullException.ThrowIfNull(basar);
+
+        if (basar.State == ObjectState.Disabled)
+        {
+            return new BasarSettlementStatus(false, 0, 0, 0, 0);
+        }
+
         var products = await _db.Products
             .Include(p => p.Session)
                 .ThenInclude(s => s.Seller)
-            .Where(p => p.Session.BasarId == basarId)
+            .Where(p => p.Session.BasarId == basar.Id)
             .Select(p => new
             {
                 Product = p,

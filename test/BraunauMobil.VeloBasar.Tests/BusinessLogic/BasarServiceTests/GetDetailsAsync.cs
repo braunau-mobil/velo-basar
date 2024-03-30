@@ -14,7 +14,7 @@ public sealed class GetDetailsAsync
         
         A.CallTo(() => StatsService.GetAcceptanceCountAsync(basarId)).Returns(details.AcceptanceCount);
         A.CallTo(() => StatsService.GetSaleCountAsync(basarId)).Returns(details.SaleCount);
-        A.CallTo(() => StatsService.GetSettlementStatusAsync(basarId)).Returns(details.SettlementStatus);
+        A.CallTo(() => StatsService.GetSettlementStatusAsync(A<BasarEntity>.Ignored)).Returns(details.SettlementStatus);
         A.CallTo(() => StatsService.GetAcceptedProductsAsync(basarId)).Returns(acceptedProducts);
         A.CallTo(() => StatsService.GetSoldProductTimestampsAndPricesAsync(basarId)).Returns(transactionsAndTotals);
         A.CallTo(() => StatsService.GetAcceptedProductsAmount(acceptedProducts)).Returns(details.AcceptedProductsAmount);
@@ -41,7 +41,7 @@ public sealed class GetDetailsAsync
         result.Entity.Should().BeEquivalentTo(details.Entity);
         A.CallTo(() => StatsService.GetAcceptanceCountAsync(basarId)).MustHaveHappenedOnceExactly();
         A.CallTo(() => StatsService.GetSaleCountAsync(basarId)).MustHaveHappenedOnceExactly();
-        A.CallTo(() => StatsService.GetSettlementStatusAsync(basarId)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => StatsService.GetSettlementStatusAsync(A<BasarEntity>.Ignored)).MustHaveHappenedOnceExactly();
         A.CallTo(() => StatsService.GetAcceptedProductsAsync(basarId)).MustHaveHappenedOnceExactly();
         A.CallTo(() => StatsService.GetSoldProductTimestampsAndPricesAsync(basarId)).MustHaveHappenedOnceExactly();
         A.CallTo(() => StatsService.GetAcceptedProductsAmount(acceptedProducts)).MustHaveHappenedOnceExactly();
