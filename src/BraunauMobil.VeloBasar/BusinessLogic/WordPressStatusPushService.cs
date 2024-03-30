@@ -16,8 +16,6 @@ namespace BraunauMobil.VeloBasar.BusinessLogic;
 public sealed class WordPressStatusPushService
     : IStatusPushService
 {
-    private const int _retryDelyInSeconds = 2;
-
     private readonly ILogger<WordPressStatusPushService> _logger;
     private readonly WordPressStatusPushSettings _settings;
     private readonly IBackgroundTaskQueue _taskQueue;
@@ -102,8 +100,8 @@ public sealed class WordPressStatusPushService
                 break;
             }
 
-            _logger.LogWarning("Retry PostStatusAsync in {_retryDelyInSeconds} seconds.", _retryDelyInSeconds);
-            await Task.Delay(_retryDelyInSeconds * 1000, token);
+            _logger.LogWarning("Retry PostStatusAsync in {_retryDelyInSeconds} seconds.", _settings.RetryDelayInSeconds);
+            await Task.Delay(_settings.RetryDelayInSeconds * 1000, token);
         }
     }
 

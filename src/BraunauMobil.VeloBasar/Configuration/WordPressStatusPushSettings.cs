@@ -9,5 +9,7 @@ public sealed class WordPressStatusPushSettings
     [Required]
     public bool Enabled { get; set; }
 
-    public string? EndpointUrl { get; set; }    
+    public string? EndpointUrl { get; set; }
+
+    public int RetryDelayInSeconds { get; set; }
 }
