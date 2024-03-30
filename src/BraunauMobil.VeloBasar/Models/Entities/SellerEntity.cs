@@ -76,6 +76,19 @@ public sealed class SellerEntity
             NewsletterPermissionTimesStamp = clock.GetCurrentDateTime();
         }
     }
+
+    public void UpdateValueState(TransactionType transactionType)
+    {
+        if (transactionType == TransactionType.Settlement)
+        {
+            ValueState = ValueState.Settled;
+        }
+        else if (transactionType == TransactionType.Acceptance
+            || transactionType == TransactionType.Unsettlement)
+        {
+            ValueState = ValueState.NotSettled;
+        }
+    }
 }
 
 public sealed class SellerEntityValidator

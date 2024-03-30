@@ -9,7 +9,6 @@ public class Complete
         //  Arrange
         sut.EndTimeStamp = null;
         sut.State = AcceptSessionState.Uncompleted;
-        sut.Seller.ValueState = ValueState.Settled;
 
         //  Act
         sut.Complete(endTimeStamp);
@@ -17,6 +16,5 @@ public class Complete
         //  Assert
         sut.EndTimeStamp.Should().Be(endTimeStamp);
         sut.State.Should().Be(AcceptSessionState.Completed);
-        sut.Seller.ValueState.Should().Be(ValueState.NotSettled);
     }
 }

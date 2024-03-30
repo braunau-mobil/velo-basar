@@ -1011,4 +1011,16 @@
   <data name="VeloBasar_NameAndLocation" xml:space="preserve">
     <value>Name &amp; Location</value>
   </data>
+  <data name="VeloBasar_UnsettlementPlural" xml:space="preserve">
+    <value>Unsettlements</value>
+  </data>
+  <data name="VeloBasar_UnsettlementPluralWithCount" xml:space="preserve">
+    <value>Unsettlements {0}</value>
+  </data>
+  <data name="VeloBasar_UnsettlementSingular" xml:space="preserve">
+    <value>Unsettlement</value>
+  </data>
+  <data name="VeloBasar_Unsettle" xml:space="preserve">
+    <value>Unsettle</value>
+  </data>
 </root>

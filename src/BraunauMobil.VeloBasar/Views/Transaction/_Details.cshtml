@@ -19,6 +19,10 @@
         {
             <a class="btn btn-info" href="@Router.Transaction.ToCancel(Model.Id)">@Localizer[VeloTexts.Cancellate]</a>
         }
+        @if (SignInManager.IsSignedIn(User) && Model.CanUnsettle)
+        {
+            <a class="btn btn-info" href="@Router.Transaction.ToUnsettle(Model.Id)">@Localizer[VeloTexts.Unsettle]</a>
+        }
         @if (Model.ParentTransaction != null)
         {
             <a class="btn btn-outline-@Model.ParentTransaction.Type.ToCssColor()" href="@Router.Transaction.ToDetails(Model.ParentTransaction.Id)">@Localizer[VeloTexts.ParentTransaction, Localizer[VeloTexts.Singular(Model.ParentTransaction.Type)], Model.ParentTransaction.Number]</a>

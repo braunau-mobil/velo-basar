@@ -8,5 +8,6 @@ public enum TransactionType
     Cancellation = 3,
     Lock = 4,
     SetLost = 5,
-    Unlock = 6
+    Unlock = 6,
+    Unsettlement = 7
 };

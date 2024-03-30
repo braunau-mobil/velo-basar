@@ -7,7 +7,7 @@ public class SettleAsync
 {
     [Theory]
     [VeloAutoData]
-    public async Task NoProducts_ShouldCreateTransactionAndSetSellerToSettled(int basarId, SellerEntity seller, int settlemendId)
+    public async Task NoProducts_ShouldCreateTransaction(int basarId, SellerEntity seller, int settlemendId)
     {
         //  Arrange
         IEnumerable<int> productIds = Enumerable.Empty<int>();
@@ -23,13 +23,11 @@ public class SettleAsync
         result.Should().Be(settlemendId);
 
         A.CallTo(() => TransactionService.SettleAsync(basarId, seller.Id, productIds)).MustHaveHappenedOnceExactly();
-        SellerEntity sellerInDb = await Db.Sellers.FirstByIdAsync(seller.Id);
-        sellerInDb.ValueState.Should().Be(ValueState.Settled);
     }
 
     [Theory]
     [VeloAutoData]
-    public async Task Products_ShouldCreateTransactionAndSetSellerToSettled(BasarEntity basar, SellerEntity seller, int settlemendId)
+    public async Task Products_ShouldCreateTransaction(BasarEntity basar, SellerEntity seller, int settlemendId)
     {
         //  Arrange
         VeloFixture fixture = new();
@@ -52,7 +50,5 @@ public class SettleAsync
         result.Should().Be(settlemendId);
 
         A.CallTo(() => TransactionService.SettleAsync(basar.Id, seller.Id, A<IEnumerable<int>>._)).MustHaveHappenedOnceExactly();
-        SellerEntity sellerInDb = await Db.Sellers.FirstByIdAsync(seller.Id);
-        sellerInDb.ValueState.Should().Be(ValueState.Settled);
     }
 }

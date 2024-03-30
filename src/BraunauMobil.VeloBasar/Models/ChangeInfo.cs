@@ -47,6 +47,15 @@ public sealed class ChangeInfo
                     }
                     return new ChangeInfo(amountGiven - sum);
                 }
+            case TransactionType.Unsettlement:
+                {
+                    decimal sum = transaction.GetPaybackAmount();
+                    if (amountGiven < sum)
+                    {
+                        return new ChangeInfo();
+                    }
+                    return new ChangeInfo(amountGiven - sum);
+                }
             default:
                 throw new UnreachableException();
         }

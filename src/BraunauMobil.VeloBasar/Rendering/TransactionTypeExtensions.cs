@@ -14,6 +14,7 @@ public static class TransactionTypeExtensions
             TransactionType.Unlock => "secondary",
             TransactionType.Sale => "success",
             TransactionType.Settlement => "secondary",
+            TransactionType.Unsettlement => "info",
             _ => throw new UnreachableException(),
         };
 }

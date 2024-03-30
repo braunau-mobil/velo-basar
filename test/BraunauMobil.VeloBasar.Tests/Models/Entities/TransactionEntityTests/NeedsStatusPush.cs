@@ -10,6 +10,7 @@ public class NeedsStatusPush
     [VeloInlineAutoData(TransactionType.SetLost, false)]
     [VeloInlineAutoData(TransactionType.Settlement, true)]
     [VeloInlineAutoData(TransactionType.Unlock, false)]
+    [VeloInlineAutoData(TransactionType.Unsettlement, true)]
     public void ShouldBe(TransactionType type, bool expectedResult, TransactionEntity sut)
     {
         //  Arrange

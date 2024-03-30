@@ -8,7 +8,7 @@ public class SettleAsync
 {
     [Theory]
     [VeloAutoData]
-    public async Task ShouldSettleProducts(AcceptSessionEntity acceptSession, ProductEntity[] products, DateTime timestamp, int number)
+    public async Task ShouldSettleProducts_AndSetSellerToSettled(AcceptSessionEntity acceptSession, ProductEntity[] products, DateTime timestamp, int number)
     {
         // Arrange
         foreach (ProductEntity product in products)
@@ -54,6 +54,9 @@ public class SettleAsync
                 pt.Product.StorageState.Should().Be(StorageState.Available);
                 pt.Product.ValueState.Should().Be(ValueState.Settled);
             });
+
+            SellerEntity sellerFromDb = await Db.Sellers.FirstByIdAsync(acceptSession.Seller.Id);
+            sellerFromDb.ValueState.Should().Be(ValueState.Settled);
         }
 
         A.CallTo(() => NumberService.NextNumberAsync(acceptSession.Basar.Id, TransactionType.Settlement)).MustHaveHappenedOnceExactly();

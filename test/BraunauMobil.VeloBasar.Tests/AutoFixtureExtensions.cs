@@ -62,6 +62,17 @@ public class VeloFixture
             .With(_ => _.BasarId, basar.Id);
     }
 
+    public IPostprocessComposer<AcceptSessionEntity> BuildAcceptSession(BasarEntity basar, SellerEntity seller)
+    {
+        ArgumentNullException.ThrowIfNull(basar);
+
+        return BuildAcceptSession()
+            .With(_ => _.Basar, basar)
+            .With(_ => _.BasarId, basar.Id)
+            .With(_ => _.Seller, seller)
+            .With(_ => _.SellerId, seller.Id);
+    }
+
     public IPostprocessComposer<BasarEntity> BuildBasar()
         => CustomizeBasar(Build<BasarEntity>());
 

@@ -1,6 +1,8 @@
-﻿namespace BraunauMobil.VeloBasar.IntegrationTests.Steps.SecondBasar;
+﻿using BraunauMobil.VeloBasar.IntegrationTests;
 
-public class Settle(TestContext context)
+namespace BraunauMobil.VeloBasar.IntegrationTests.Steps.SecondBasar.Settle;
+
+public class SettleSellers(TestContext context)
 {
     public async Task Run()
     {

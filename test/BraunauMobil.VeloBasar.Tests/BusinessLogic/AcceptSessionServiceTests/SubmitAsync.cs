@@ -10,7 +10,6 @@ public class SubmitAsync
         // Arrange
         session.State = AcceptSessionState.Uncompleted;
         session.EndTimeStamp = null;
-        session.Seller.ValueState = ValueState.Settled;
         Db.AcceptSessions.Add(session);
         await Db.SaveChangesAsync();
         A.CallTo(() => TransactionService.AcceptAsync(session.BasarId, session.SellerId, Enumerable.Empty<int>()))
@@ -27,7 +26,6 @@ public class SubmitAsync
             result.Should().Be(acceptanceId);
             session.State.Should().Be(AcceptSessionState.Completed);
             session.EndTimeStamp.Should().Be(endTimeStamp);
-            session.Seller.ValueState.Should().Be(ValueState.NotSettled);        
         }
         A.CallTo(() => TransactionService.AcceptAsync(session.BasarId, session.SellerId, Enumerable.Empty<int>())).MustHaveHappenedOnceExactly();
     }

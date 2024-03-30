@@ -41,4 +41,7 @@ public sealed class TransactionRouter
 
     public string ToSucess(int id)
         => GetUriByAction(nameof(TransactionController.Success), new { id });
+
+    public string ToUnsettle(int id)
+        => GetUriByAction(nameof(TransactionController.Unsettle), new { id });
 }

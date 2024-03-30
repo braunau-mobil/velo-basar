@@ -51,12 +51,19 @@ public sealed class TransactionEntity
             || Type == TransactionType.Settlement;
     }
 
+    public bool CanUnsettle
+    {
+        get => Type == TransactionType.Settlement
+            && Products.GetProducts().Any(product => product.IsAllowed(TransactionType.Unsettlement));
+    }
+
     public bool NeedsStatusPush
     {
         get => Type == TransactionType.Acceptance
             || Type == TransactionType.Cancellation
             || Type == TransactionType.Sale
-            || Type == TransactionType.Settlement;
+            || Type == TransactionType.Settlement
+            || Type == TransactionType.Unsettlement;
     }
 
     public bool NeedsBankingQrCodeOnDocument
@@ -83,6 +90,9 @@ public sealed class TransactionEntity
 
     public decimal GetPayoutAmount()
         => GetPayoutAmountInclCommission() - GetPayoutCommissionAmount();
+
+    public decimal GetPaybackAmount()
+        => Products.GetPaybackProducts().Sum(p => p.GetCommissionedPrice(Basar));
 
     public decimal GetSoldProductsSum()
         => Products.GetSoldProducts().SumPrice();

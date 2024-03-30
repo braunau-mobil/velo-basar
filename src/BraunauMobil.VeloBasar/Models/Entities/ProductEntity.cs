@@ -64,12 +64,13 @@ public sealed class ProductEntity
         => transactionType switch
     {
         TransactionType.Acceptance => StorageState == StorageState.NotAccepted && ValueState == ValueState.NotSettled,
-        TransactionType.Cancellation => StorageState == StorageState.Sold && ValueState == ValueState.NotSettled,
+        TransactionType.Cancellation => ValueState == ValueState.NotSettled && StorageState == StorageState.Sold, 
         TransactionType.Lock => StorageState == StorageState.Available && ValueState == ValueState.NotSettled,
         TransactionType.SetLost => StorageState == StorageState.Available && ValueState == ValueState.NotSettled,
         TransactionType.Unlock => (StorageState == StorageState.Locked || StorageState == StorageState.Lost) && ValueState == ValueState.NotSettled,
         TransactionType.Sale => StorageState == StorageState.Available && ValueState == ValueState.NotSettled,
         TransactionType.Settlement => (StorageState == StorageState.Available || StorageState == StorageState.Locked || StorageState == StorageState.Lost || StorageState == StorageState.Sold) && ValueState == ValueState.NotSettled,
+        TransactionType.Unsettlement => (StorageState == StorageState.Available || StorageState == StorageState.Locked || StorageState == StorageState.Lost || StorageState == StorageState.Sold) && ValueState == ValueState.Settled,
         _ => throw new UnreachableException(),
     };
 
@@ -82,7 +83,7 @@ public sealed class ProductEntity
                 StorageState = StorageState.Available;
                 return;
             case TransactionType.Cancellation:
-                if (StorageState == StorageState.Sold)
+                if (ValueState == ValueState.NotSettled && StorageState == StorageState.Sold)
                 {
                     StorageState = StorageState.Available;
                 }
@@ -103,6 +104,9 @@ public sealed class ProductEntity
             case TransactionType.Settlement:
                 ValueState = ValueState.Settled;
                 return;
+            case TransactionType.Unsettlement:
+                ValueState = ValueState.NotSettled;
+                return;
             default:
                 throw new UnreachableException();
         }
@@ -122,6 +126,12 @@ public sealed class ProductEntity
             return 0;
         }
         return Price * basar.ProductCommission;
+    }
+    public bool ShouldBePayedBack()
+    {
+        return ValueState == ValueState.NotSettled
+            &&
+            (StorageState == StorageState.Sold || StorageState == StorageState.Lost);
     }
     public bool ShouldBePayedOut()
     {

@@ -2,6 +2,13 @@
 
 public static class ExtensionMethods
 {
+    public static IEnumerable<ProductEntity> GetPaybackProducts(this IEnumerable<ProductToTransactionEntity> productToTransactions)
+    {
+        ArgumentNullException.ThrowIfNull(productToTransactions);
+
+        return productToTransactions.GetProducts().Where(p => p.ShouldBePayedBack());
+    }
+
     public static IEnumerable<ProductEntity> GetPayoutProducts(this IEnumerable<ProductToTransactionEntity> productToTransactions)
     {
         ArgumentNullException.ThrowIfNull(productToTransactions);

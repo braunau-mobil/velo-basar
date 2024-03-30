@@ -3,14 +3,15 @@
 public class ShowAmountInput
 {
     [Theory]
-    [VeloAutoData]
-    public void Sale_ShouldBeTrue(TransactionEntity sale)
+    [VeloInlineAutoData(TransactionType.Sale)]
+    [VeloInlineAutoData(TransactionType.Unsettlement)]
+    public void ShouldBeTrue(TransactionType type, TransactionEntity transaction)
     {
         //  Arrange
-        sale.Type = TransactionType.Sale;
+        transaction.Type = type;
 
         //  Act
-        TransactionSuccessModel sut = new(sale);
+        TransactionSuccessModel sut = new(transaction);
 
         //  Assert
         sut.ShowAmountInput.Should().BeTrue();
@@ -22,6 +23,7 @@ public class ShowAmountInput
         //  Arrange
         VeloFixture fixture = new();
         fixture.ExcludeEnumValues(TransactionType.Sale);
+        fixture.ExcludeEnumValues(TransactionType.Unsettlement);
         TransactionEntity sale = fixture.Create<TransactionEntity>();
 
         //  Act

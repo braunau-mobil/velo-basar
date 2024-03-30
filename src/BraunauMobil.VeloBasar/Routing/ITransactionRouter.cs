@@ -22,4 +22,6 @@ public interface ITransactionRouter
     string ToList(TransactionType type);
 
     string ToSucess(int id);
+
+    string ToUnsettle(int id);
 }

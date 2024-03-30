@@ -146,12 +146,7 @@ public sealed class SellerService
         IEnumerable<ProductEntity> sellersProducts = await _db.Products.GetForBasarAndSellerAsync(basarId, sellerId);
         IEnumerable<int> productIdsToSettle = sellersProducts.Where(p => p.IsAllowed(TransactionType.Settlement)).Ids();
 
-        int settlemenId = await _transactionService.SettleAsync(basarId, sellerId, productIdsToSettle);
-        SellerEntity seller = await _db.Sellers.FirstByIdAsync(sellerId);
-        seller.ValueState = ValueState.Settled;
-        await _db.SaveChangesAsync();
-
-        return settlemenId;
+        return await _transactionService.SettleAsync(basarId, sellerId, productIdsToSettle);
     }
 
     public async Task TriggerStatusPushAsync(int basarId, int sellerId)

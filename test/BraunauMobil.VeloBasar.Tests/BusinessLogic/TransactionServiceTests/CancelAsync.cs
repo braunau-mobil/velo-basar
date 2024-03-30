@@ -61,6 +61,7 @@ public class CancelAsync
             cancellationFromDb.Seller.Should().BeNull();
             cancellationFromDb.SellerId.Should().BeNull();
             cancellationFromDb.TimeStamp.Should().Be(timestamp);
+            cancellationFromDb.Type.Should().Be(TransactionType.Cancellation);
         }
         TransactionEntity saleFromDb = await Db.Transactions.FirstByIdAsync(sale.Id);
         using (new AssertionScope())
@@ -81,6 +82,7 @@ public class CancelAsync
             saleFromDb.Seller.Should().BeEquivalentTo(sale.Seller);
             saleFromDb.SellerId.Should().Be(sale.SellerId);
             saleFromDb.TimeStamp.Should().Be(sale.TimeStamp);
+            saleFromDb.Type.Should().Be(TransactionType.Sale);
         }
 
         A.CallTo(() => NumberService.NextNumberAsync(basar.Id, TransactionType.Cancellation)).MustHaveHappenedOnceExactly();
@@ -146,6 +148,7 @@ public class CancelAsync
             cancellationFromDb.Seller.Should().BeNull();
             cancellationFromDb.SellerId.Should().BeNull();
             cancellationFromDb.TimeStamp.Should().Be(timestamp);
+            cancellationFromDb.Type.Should().Be(TransactionType.Cancellation);
         }
         TransactionEntity saleFromDb = await Db.Transactions.FirstByIdAsync(sale.Id);
         using (new AssertionScope())
@@ -166,6 +169,7 @@ public class CancelAsync
             saleFromDb.Seller.Should().BeEquivalentTo(sale.Seller);
             saleFromDb.SellerId.Should().Be(sale.SellerId);
             saleFromDb.TimeStamp.Should().Be(sale.TimeStamp);
+            saleFromDb.Type.Should().Be(TransactionType.Sale);
         }
 
         A.CallTo(() => NumberService.NextNumberAsync(basar.Id, TransactionType.Cancellation)).MustHaveHappenedOnceExactly();

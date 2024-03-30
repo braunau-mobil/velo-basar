@@ -21,22 +21,22 @@ public class Ctor
     }
 
     [Theory]
-    [VeloAutoData]
-    public void Cancellation_ShouldUseIdFromParent(TransactionEntity transaction, TransactionEntity parentTransaction)
+    [VeloInlineAutoData(TransactionType.Cancellation)]
+    public void ShouldUseIdFromParent(TransactionType type, TransactionEntity transaction, TransactionEntity parentTransaction)
     {
         //  Arrange
         transaction.ParentTransaction = parentTransaction;
-        transaction.Type = TransactionType.Cancellation;
+        transaction.Type = type;
 
         //  Act
-        TransactionSuccessModel sut = new(transaction);
+        TransactionSuccessModel sut = new(transaction, true);
 
         //  Assert
         using (new AssertionScope())
         {
             sut.AmountGiven.Should().Be(0);
             sut.Entity.Should().Be(transaction);
-            sut.OpenDocument.Should().BeFalse();
+            sut.OpenDocument.Should().BeTrue();
             sut.DocumentTransactionId.Should().Be(transaction.ParentTransaction!.Id);
         }
     }

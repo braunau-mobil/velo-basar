@@ -66,6 +66,14 @@ public class TransactionTypes
                 item.Selected.Should().BeFalse();
                 item.Text.Should().Be("VeloBasar_UnlockSingular");
                 item.Value.Should().Be("Unlock");
+            },
+            item =>
+            {
+                item.Disabled.Should().BeFalse();
+                item.Group.Should().BeNull();
+                item.Selected.Should().BeFalse();
+                item.Text.Should().Be("VeloBasar_UnsettlementSingular");
+                item.Value.Should().Be("Unsettlement");
             }
         };
     }

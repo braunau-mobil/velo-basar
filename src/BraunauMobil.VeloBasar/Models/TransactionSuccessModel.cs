@@ -5,16 +5,18 @@ namespace BraunauMobil.VeloBasar.Models;
 
 public sealed class TransactionSuccessModel
 {
-    public TransactionSuccessModel(TransactionEntity entity)
+    public TransactionSuccessModel(TransactionEntity entity, bool openDocument = false)
     {
         Entity = entity ?? throw new ArgumentNullException(nameof(entity));
         if (entity.Type == TransactionType.Cancellation)
         {
             DocumentTransactionId = entity.ParentTransaction!.Id;
+            OpenDocument = openDocument && entity.ParentTransaction.CanHasDocument;
         }
         else
         {
             DocumentTransactionId = entity.Id;
+            OpenDocument = openDocument && entity.CanHasDocument;
         }
     }
 
@@ -24,7 +26,7 @@ public sealed class TransactionSuccessModel
 
     public int DocumentTransactionId { get; init; }
 
-    public bool OpenDocument { get; set; }
+    public bool OpenDocument { get; init; }
 
     public bool ShowChange
     {
@@ -33,7 +35,8 @@ public sealed class TransactionSuccessModel
 
     public bool ShowAmountInput
     {
-        get => Entity.Type == TransactionType.Sale;
+        get => Entity.Type == TransactionType.Sale
+            || Entity.Type == TransactionType.Unsettlement;
     }
 }
 

@@ -41,7 +41,6 @@ public class AcceptSessionEntity
     public void Complete(DateTime timestamp)
     {
         EndTimeStamp = timestamp;
-        Seller.ValueState = ValueState.NotSettled;
         State = AcceptSessionState.Completed;
     }
 }

@@ -200,6 +200,15 @@ public sealed class TransactionService
     public async Task<int> UnlockAsync(int basarId, string? notes, int productId)
         => await CreateAsync(TransactionType.Unlock, basarId, new[] { productId }, notes);
 
+    public async Task<int> UnsettleAsync(int settlementId)
+    {
+        TransactionEntity settlement = await _db.Transactions
+            .IncludeOnlyProducts()
+            .FirstByIdAsync(settlementId);
+
+        return await CreateAsync(TransactionType.Unsettlement, settlement.Basar.Id, settlement.Products.GetProducts().Ids(), sellerId: settlement.SellerId, parent: settlement);
+    }
+
     private async Task<int> CreateAsync(TransactionType type, int basarId, IEnumerable<int> productIds, string? notes = null, int? sellerId = null, TransactionEntity? parent = null)
     {
         TransactionEntity transaction = await CreateNewAsync(type, basarId, productIds, notes, sellerId, parent);
@@ -233,6 +242,7 @@ public sealed class TransactionService
             SellerEntity seller = await _db.Sellers.FirstByIdAsync(sellerId.Value);
             transaction.Seller = seller;
             transaction.SellerId = seller.Id;
+            seller.UpdateValueState(transaction.Type);
         }
         if (notes != null)
         {

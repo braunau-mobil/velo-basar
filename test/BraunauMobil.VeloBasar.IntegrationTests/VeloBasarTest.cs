@@ -36,7 +36,8 @@ public class VeloBasarTest
         await new Steps.SecondBasar.Create(_context).Run();
         await new Steps.SecondBasar.Accept.AcceptSellers(_context).Run();
         await new Steps.SecondBasar.Sell.SellProducts(_context).Run();
-        await new Steps.SecondBasar.Settle(_context).Run();
+        await new Steps.SecondBasar.Settle.SettleSellers(_context).Run();
+        await new Steps.SecondBasar.Settle.UnsettleAndSettle(_context).Run();
         await new Steps.SecondBasar.ProductTable(_context).Run();
 
         await new Steps.EndChecks.OldBasarStats(_context).Run();

@@ -59,6 +59,40 @@ public class AcceptAsync
 
     [Theory]
     [VeloAutoData]
+    public async Task SettledSeller_ShouldSetToNotSettled(BasarEntity basar, SellerEntity seller, int number, DateTime timestamp)
+    {
+        //  Arrange
+        seller.ValueState = ValueState.Settled;
+        AcceptSessionEntity session = Fixture.BuildAcceptSession(basar)
+            .With(_ => _.Seller, seller)
+            .Create();
+        ProductEntity[] products = Fixture.BuildProduct()
+            .With(_ => _.Session, session)
+            .With(_ => _.StorageState, StorageState.NotAccepted)
+            .With(_ => _.ValueState, ValueState.NotSettled)
+            .CreateMany().ToArray();
+        Db.Products.AddRange(products);
+        await Db.SaveChangesAsync();
+
+        A.CallTo(() => NumberService.NextNumberAsync(basar.Id, TransactionType.Acceptance)).Returns(number);
+        Clock.Now = timestamp;
+        A.CallTo(() => StatusPushService.IsEnabled).Returns(true);
+        A.CallTo(() => StatusPushService.PushSellerAsync(basar.Id, seller.Id)).DoesNothing();
+
+        //  Act
+        int id = await Sut.AcceptAsync(basar.Id, seller.Id, products.Ids());
+
+        //  Assert
+        SellerEntity sellerFromDb = await Db.Sellers.FirstByIdAsync(seller.Id);
+        sellerFromDb.ValueState.Should().Be(ValueState.NotSettled);
+
+        A.CallTo(() => NumberService.NextNumberAsync(basar.Id, TransactionType.Acceptance)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => StatusPushService.IsEnabled).MustHaveHappenedOnceExactly();
+        A.CallTo(() => StatusPushService.PushSellerAsync(basar.Id, seller.Id)).MustHaveHappenedOnceExactly();
+    }
+
+    [Theory]
+    [VeloAutoData]
     public async Task NotAllowedProduct_ShouldThrow(BasarEntity basar, SellerEntity seller)
     {
         //  Arrange

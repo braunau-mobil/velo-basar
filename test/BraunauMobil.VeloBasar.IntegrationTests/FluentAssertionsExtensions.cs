@@ -1,6 +1,4 @@
-﻿using FluentAssertions.Execution;
-using FluentAssertions.Primitives;
-using System.Linq;
+﻿using FluentAssertions.Primitives;
 using System.Text;
 
 namespace BraunauMobil.VeloBasar.IntegrationTests;

@@ -299,6 +299,10 @@ public static class VeloTexts
     public const string UnlockProduct = $"{Prefix}{nameof(UnlockProduct)}";
     public const string UnlocksPlural = $"{Prefix}{nameof(UnlocksPlural)}";
     public const string UnlocksPluralWithCount = $"{Prefix}{nameof(UnlocksPluralWithCount)}";
+    public const string Unsettle = $"{Prefix}{nameof(Unsettle)}";
+    public const string UnsettlementPlural = $"{Prefix}{nameof(UnsettlementPlural)}";
+    public const string UnsettlementPluralWithCount = $"{Prefix}{nameof(UnsettlementPluralWithCount)}";
+    public const string UnsettlementSingular = $"{Prefix}{nameof(UnsettlementSingular)}";
     public const string Update = $"{Prefix}{nameof(Update)}";
     public const string UpdatedAt = $"{Prefix}{nameof(UpdatedAt)}";
     public const string ValueState = $"{Prefix}{nameof(ValueState)}";
@@ -333,6 +337,7 @@ public static class VeloTexts
             TransactionType.Cancellation => CancellationSingular,
             TransactionType.Sale => SaleSingular,
             TransactionType.SetLost => SetLostSingular,
+            TransactionType.Unsettlement => UnsettlementSingular,
             _ => throw new UnreachableException(),
         };
 
@@ -346,6 +351,7 @@ public static class VeloTexts
             TransactionType.Cancellation => CancellationsPlural,
             TransactionType.Sale => SalesPlural,
             TransactionType.SetLost => SetLostsPlural,
+            TransactionType.Unsettlement => UnsettlementPlural,
             _ => throw new UnreachableException(),
         };
 
@@ -359,6 +365,7 @@ public static class VeloTexts
            TransactionType.Cancellation => CancellationsPluralWithCount,
            TransactionType.Sale => SalesPluralWithCount,
            TransactionType.SetLost => SetLostsPluralWithCount,
+           TransactionType.Unsettlement => UnsettlementPluralWithCount,
            _ => throw new UnreachableException(),
        };
 

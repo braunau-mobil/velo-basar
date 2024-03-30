@@ -12,6 +12,7 @@ public class TransactionTypeExtensionsTests
     [InlineData(TransactionType.Unlock, "secondary")]
     [InlineData(TransactionType.Sale, "success")]
     [InlineData(TransactionType.Settlement, "secondary")]
+    [InlineData(TransactionType.Unsettlement, "info")]
     public void ToCssColor_ShouldReturnCorrectCssColor(TransactionType transactionType, string expectedCssColor)
     {
         // Arrange

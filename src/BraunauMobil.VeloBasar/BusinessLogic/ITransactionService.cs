@@ -33,4 +33,6 @@ public interface ITransactionService
     Task<int> SettleAsync(int basarId, int sellerId, IEnumerable<int> productIds);
 
     Task<int> UnlockAsync(int basarId, string? notes, int productId);
+
+    Task<int> UnsettleAsync(int settlementId);
 }

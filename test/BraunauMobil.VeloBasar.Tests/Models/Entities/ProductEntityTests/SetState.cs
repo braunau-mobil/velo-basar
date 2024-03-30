@@ -24,7 +24,7 @@ public class SetState
     [InlineData(TransactionType.Cancellation, StorageState.Locked, ValueState.Settled, StorageState.Locked, ValueState.NotSettled)]
     [InlineData(TransactionType.Cancellation, StorageState.Lost, ValueState.Settled, StorageState.Lost, ValueState.NotSettled)]
     [InlineData(TransactionType.Cancellation, StorageState.NotAccepted, ValueState.Settled, StorageState.NotAccepted, ValueState.NotSettled)]
-    [InlineData(TransactionType.Cancellation, StorageState.Sold, ValueState.Settled, StorageState.Available, ValueState.NotSettled)]
+    [InlineData(TransactionType.Cancellation, StorageState.Sold, ValueState.Settled, StorageState.Sold, ValueState.NotSettled)]
 
     [InlineData(TransactionType.Lock, StorageState.Available, ValueState.NotSettled, StorageState.Locked, ValueState.NotSettled)]
     [InlineData(TransactionType.Lock, StorageState.Locked, ValueState.NotSettled, StorageState.Locked, ValueState.NotSettled)]
@@ -80,6 +80,17 @@ public class SetState
     [InlineData(TransactionType.Unlock, StorageState.Lost, ValueState.Settled, StorageState.Available, ValueState.Settled)]
     [InlineData(TransactionType.Unlock, StorageState.NotAccepted, ValueState.Settled, StorageState.Available, ValueState.Settled)]
     [InlineData(TransactionType.Unlock, StorageState.Sold, ValueState.Settled, StorageState.Available, ValueState.Settled)]
+
+    [InlineData(TransactionType.Unsettlement, StorageState.Available, ValueState.NotSettled, StorageState.Available, ValueState.NotSettled)]
+    [InlineData(TransactionType.Unsettlement, StorageState.Locked, ValueState.NotSettled, StorageState.Locked, ValueState.NotSettled)]
+    [InlineData(TransactionType.Unsettlement, StorageState.Lost, ValueState.NotSettled, StorageState.Lost, ValueState.NotSettled)]
+    [InlineData(TransactionType.Unsettlement, StorageState.NotAccepted, ValueState.NotSettled, StorageState.NotAccepted, ValueState.NotSettled)]
+    [InlineData(TransactionType.Unsettlement, StorageState.Sold, ValueState.NotSettled, StorageState.Sold, ValueState.NotSettled)]
+    [InlineData(TransactionType.Unsettlement, StorageState.Available, ValueState.Settled, StorageState.Available, ValueState.NotSettled)]
+    [InlineData(TransactionType.Unsettlement, StorageState.Locked, ValueState.Settled, StorageState.Locked, ValueState.NotSettled)]
+    [InlineData(TransactionType.Unsettlement, StorageState.Lost, ValueState.Settled, StorageState.Lost, ValueState.NotSettled)]
+    [InlineData(TransactionType.Unsettlement, StorageState.NotAccepted, ValueState.Settled, StorageState.NotAccepted, ValueState.NotSettled)]
+    [InlineData(TransactionType.Unsettlement, StorageState.Sold, ValueState.Settled, StorageState.Sold, ValueState.NotSettled)]
     public void StorageStateAndValueStateShouldBeSetLike(TransactionType transactionType, StorageState storageState, ValueState valueState, StorageState expectedStorageState, ValueState expectedValueState)
     {
         ProductEntity product = new()

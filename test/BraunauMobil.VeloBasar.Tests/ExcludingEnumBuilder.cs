@@ -25,7 +25,7 @@ public class ExcludingEnumBuilder<TEnum>
         object value = _enumGenerator.Create(request, context);
         if (value is TEnum enumValue && _valuesToExlude.Contains(enumValue))
         {
-            return _enumGenerator.Create(request, context);
+            return Create(request, context);
         }
 
         return value;

@@ -10,6 +10,7 @@ public class TestBase
     public TestBase()
     {
         A.CallTo(() => Router.Cancel).Returns(CancelRouter);
+        A.CallTo(() => Router.Transaction).Returns(TransactionRouter);
 
         Sut = new (TransactionService, Router, SignInManager, new TransactionSuccessModelValidator(Localizer));        
     }
@@ -27,4 +28,6 @@ public class TestBase
     protected TransactionController Sut { get; }
 
     protected ITransactionService TransactionService { get; } = X.StrictFake<ITransactionService>();
+
+    protected ITransactionRouter TransactionRouter { get; } = X.StrictFake<ITransactionRouter>();
 }

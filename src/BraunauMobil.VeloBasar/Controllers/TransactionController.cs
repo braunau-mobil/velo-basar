@@ -9,62 +9,46 @@ using Xan.Extensions.Collections.Generic;
 
 namespace BraunauMobil.VeloBasar.Controllers;
 
-public sealed class TransactionController
-    : AbstractVeloController
+public sealed class TransactionController(ITransactionService transactionService, IVeloRouter router, SignInManager<IdentityUser> signInManager, IValidator<TransactionSuccessModel> transactionSuccessValidator)
+        : AbstractVeloController
 {
-    private readonly ITransactionService _transactionService;
-    private readonly SignInManager<IdentityUser> _signInManager;
-    private readonly IVeloRouter _router;
-    private readonly IValidator<TransactionSuccessModel> _transactionSuccessValidator;
-
-    public TransactionController(ITransactionService transactionService, IVeloRouter router, SignInManager<IdentityUser> signInManager, IValidator<TransactionSuccessModel> transactionSuccessValidator)
-    {
-        _transactionService = transactionService ?? throw new ArgumentNullException(nameof(transactionService));
-        _router = router ?? throw new ArgumentNullException(nameof(router));
-        _signInManager = signInManager ?? throw new ArgumentNullException(nameof(signInManager));
-        _transactionSuccessValidator = transactionSuccessValidator ?? throw new ArgumentNullException(nameof(transactionSuccessValidator));
-    }
-
     [Authorize]
     public async Task<IActionResult> Cancel(int id)
     {
-        TransactionEntity transaction = await _transactionService.GetAsync(id);
-        return Redirect(_router.Cancel.ToSelectProducts(transaction.Id));
+        TransactionEntity transaction = await transactionService.GetAsync(id);
+        return Redirect(router.Cancel.ToSelectProducts(transaction.Id));
     }
 
     public async Task<IActionResult> Details(int id)
     {
-        TransactionEntity transaction = await _transactionService.GetAsync(id);     
+        TransactionEntity transaction = await transactionService.GetAsync(id);     
         return View(transaction);
     }
 
     public async Task<IActionResult> Success(int id)
     {
-        TransactionEntity transaction = await _transactionService.GetAsync(id);
-        TransactionSuccessModel model = new(transaction)
-        {
-            OpenDocument = true
-        };
+        TransactionEntity transaction = await transactionService.GetAsync(id);
+        TransactionSuccessModel model = new(transaction, openDocument: true);
         return View(model);
     }
 
     [HttpPost]
     public async Task<IActionResult> Success(int id, decimal amountGiven)
     {
-        TransactionEntity transactionEntity = await _transactionService.GetAsync(id, amountGiven);
+        TransactionEntity transactionEntity = await transactionService.GetAsync(id, amountGiven);
         TransactionSuccessModel model = new(transactionEntity)
         {
             AmountGiven = amountGiven
         };
 
-        SetValidationResult(await _transactionSuccessValidator.ValidateAsync(model));
+        SetValidationResult(await transactionSuccessValidator.ValidateAsync(model));
 
         return View(model);
     }
 
     public async Task<IActionResult> Document(int id)
     {
-        FileDataEntity fileData = await _transactionService.GetDocumentAsync(id);
+        FileDataEntity fileData = await transactionService.GetDocumentAsync(id);
         return File(fileData.Data, fileData.ContentType, fileData.FileName);
     }
 
@@ -73,13 +57,20 @@ public sealed class TransactionController
         ArgumentNullException.ThrowIfNull(parameter);
         ArgumentNullException.ThrowIfNull(parameter.PageSize);
 
-        if (parameter.TransactionType != TransactionType.Sale && !_signInManager.IsSignedIn(HttpContext.User))
+        if (parameter.TransactionType != TransactionType.Sale && !signInManager.IsSignedIn(HttpContext.User))
         {
-            return Redirect(_router.ToLogin());
+            return Redirect(router.ToLogin());
         }
 
-        IPaginatedList<TransactionEntity> items = await _transactionService.GetManyAsync(parameter.PageSize.Value, parameter.PageIndex, parameter.BasarId, parameter.TransactionType, parameter.SearchString);
+        IPaginatedList<TransactionEntity> items = await transactionService.GetManyAsync(parameter.PageSize.Value, parameter.PageIndex, parameter.BasarId, parameter.TransactionType, parameter.SearchString);
         ListModel<TransactionEntity, TransactionListParameter> model = new (items, parameter);
         return View(model);
+    }
+
+    [Authorize]
+    public async Task<IActionResult> Unsettle(int id)
+    {
+        int unsettlementId = await transactionService.UnsettleAsync(id);
+        return Redirect(router.Transaction.ToSucess(unsettlementId));
     }
 }

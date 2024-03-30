@@ -49,6 +49,18 @@ public static class AngleSharpExtensions
         return row.QueryAnchorByText(linkText);
     }
 
+    public static IHtmlAnchorElement QueryTableLinkByNumberAndText(this IHtmlTableElement table, int number, string linkText)
+    {
+        ArgumentNullException.ThrowIfNull(table);
+
+        IHtmlTableRowElement headerRow = table!.Rows[0];
+        INode numberHeaderCell = headerRow.Cells.Should().ContainSingle(cell => cell.TextContent == "Number").Subject;
+        int numberColumnIndex = headerRow.Cells.Index(numberHeaderCell);
+
+        IHtmlTableRowElement row = table.Rows.Should().ContainSingle(row => row.Cells[numberColumnIndex].TextContent == number.ToString()).Subject;
+        return row.QueryAnchorByText(linkText);
+    }
+
     public static IHtmlFormElement QueryForm(this IParentNode node, string selector = "form")
     {
         ArgumentNullException.ThrowIfNull(node);

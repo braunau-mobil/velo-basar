@@ -146,4 +146,82 @@ public class CreateFor
             changeInfo.IsValid.Should().BeTrue();
         }
     }
+
+    [Theory]
+    [VeloAutoData]
+    public void Unsettlement_LessGiven_ShouldReturnInvalid(TransactionEntity transaction, ProductEntity product1, ProductEntity product2)
+    {
+        //  Arrange
+        transaction.Basar.ProductCommission = 0.1m;
+        transaction.Type = TransactionType.Unsettlement;
+        transaction.Products.Add(new ProductToTransactionEntity(transaction, product1));
+        transaction.Products.Add(new ProductToTransactionEntity(transaction, product2));
+        product1.StorageState = StorageState.Sold;
+        product2.StorageState = StorageState.Available;
+        decimal amountGiven = product1.GetCommissionedPrice(transaction.Basar) - 0.1m;
+
+        //  Act
+        ChangeInfo changeInfo = ChangeInfo.CreateFor(transaction, amountGiven);
+
+        //  Assert
+        using (new AssertionScope())
+        {
+            changeInfo.Amount.Should().Be(0);
+            changeInfo.Denomination.Should().BeEmpty();
+            changeInfo.HasDenomination.Should().BeFalse();
+            changeInfo.IsValid.Should().BeFalse();
+        }
+    }
+
+    [Theory]
+    [VeloAutoData]
+    public void Unsettlement_EqualGiven_ShouldReturnZero(TransactionEntity transaction, ProductEntity product1, ProductEntity product2)
+    {
+        //  Arrange
+        transaction.Basar.ProductCommission = 0.1m;
+        transaction.Type = TransactionType.Unsettlement;
+        transaction.Products.Add(new ProductToTransactionEntity(transaction, product1));
+        transaction.Products.Add(new ProductToTransactionEntity(transaction, product2));
+        product1.StorageState = StorageState.Sold;
+        product2.StorageState = StorageState.Available;
+        decimal amountGiven = product1.GetCommissionedPrice(transaction.Basar);
+
+        //  Act
+        ChangeInfo changeInfo = ChangeInfo.CreateFor(transaction, amountGiven);
+
+        //  Assert
+        using (new AssertionScope())
+        {
+            changeInfo.Amount.Should().Be(0);
+            changeInfo.Denomination.Should().NotBeEmpty();
+            changeInfo.HasDenomination.Should().BeFalse();
+            changeInfo.IsValid.Should().BeTrue();
+        }
+    }
+
+    [Theory]
+    [VeloAutoData]
+    public void Unsettlement_MoreGiven_ShouldReturnAdditionalAmountGiven(TransactionEntity transaction, ProductEntity product1, ProductEntity product2, decimal additionalAmountGiven)
+    {
+        //  Arrange
+        transaction.Basar.ProductCommission = 0.1m;
+        transaction.Type = TransactionType.Unsettlement;
+        transaction.Products.Add(new ProductToTransactionEntity(transaction, product1));
+        transaction.Products.Add(new ProductToTransactionEntity(transaction, product2));
+        product1.StorageState = StorageState.Sold;
+        product2.StorageState = StorageState.Available;
+        decimal amountGiven = product1.GetCommissionedPrice(transaction.Basar) + additionalAmountGiven;
+
+        //  Act
+        ChangeInfo changeInfo = ChangeInfo.CreateFor(transaction, amountGiven);
+
+        //  Assert
+        using (new AssertionScope())
+        {
+            changeInfo.Amount.Should().Be(additionalAmountGiven);
+            changeInfo.Denomination.Should().NotBeEmpty();
+            changeInfo.HasDenomination.Should().BeTrue();
+            changeInfo.IsValid.Should().BeTrue();
+        }
+    }
 }
