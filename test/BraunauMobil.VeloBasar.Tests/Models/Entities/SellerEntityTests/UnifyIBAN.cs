@@ -1,6 +1,6 @@
 ﻿namespace BraunauMobil.VeloBasar.Tests.Models.Entities.SellerEntityTests;
 
-public class TrimIBAN
+public class UnifyIBAN
 {
     [Theory]
     [VeloAutoData]
@@ -10,7 +10,7 @@ public class TrimIBAN
         sut.IBAN = null;
 
         //  Act
-        sut.TrimIBAN();
+        sut.UnifyIBAN();
 
         //  Assert
         sut.IBAN.Should().BeNull();
@@ -24,7 +24,7 @@ public class TrimIBAN
         sut.IBAN = "";
 
         //  Act
-        sut.TrimIBAN();
+        sut.UnifyIBAN();
 
         //  Assert
         sut.IBAN.Should().BeEmpty();
@@ -38,7 +38,7 @@ public class TrimIBAN
         sut.IBAN = " ";
 
         //  Act
-        sut.TrimIBAN();
+        sut.UnifyIBAN();
 
         //  Assert
         sut.IBAN.Should().BeEmpty();
@@ -46,13 +46,27 @@ public class TrimIBAN
 
     [Theory]
     [VeloAutoData]
-    public void ShouldTrimIBAN(SellerEntity sut)
+    public void ShouldTrimWhitespaces(SellerEntity sut)
     {
         //  Arrange
         sut.IBAN = "  AT123456789012345678  ";
 
         //  Act
-        sut.TrimIBAN();
+        sut.UnifyIBAN();
+
+        //  Assert
+        sut.IBAN.Should().Be("AT123456789012345678");
+    }
+
+    [Theory]
+    [VeloAutoData]
+    public void ShouldMakeAlluppercase(SellerEntity sut)
+    {
+        //  Arrange
+        sut.IBAN = "at123456789012345678";
+
+        //  Act
+        sut.UnifyIBAN();
 
         //  Assert
         sut.IBAN.Should().Be("AT123456789012345678");

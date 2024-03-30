@@ -55,13 +55,16 @@ public sealed class SellerEntity
         }
     }
 
-    public void TrimIBAN()
+    public void UnifyIBAN()
     {
         if (string.IsNullOrEmpty(IBAN))
         {
             return;
         }
+        //  Trim
         IBAN = IBAN.Replace(" ", "", StringComparison.InvariantCultureIgnoreCase);
+        //  To upper
+        IBAN = IBAN.ToUpperInvariant();
     }
 
     public void UpdateNewsletterPermissions(IClock clock)
