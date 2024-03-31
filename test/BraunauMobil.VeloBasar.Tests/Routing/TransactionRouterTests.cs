@@ -142,4 +142,16 @@ public class TransactionRouterTests
         //  Assert
         actual.Should().Be("//id=666&action=Success&controller=Transaction");
     }
+
+    [Fact]
+    public void ToUnsettle()
+    {
+        //  Arrange
+
+        //  Act
+        string actual = _sut.ToUnsettle(1234);
+
+        //  Assert
+        actual.Should().Be("//id=1234&action=Unsettle&controller=Transaction");
+    }
 }
