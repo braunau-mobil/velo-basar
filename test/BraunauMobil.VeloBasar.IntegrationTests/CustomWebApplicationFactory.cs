@@ -6,13 +6,24 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using System.Data.Common;
-using Xan.Extensions;
+using System.Globalization;
 
 namespace BraunauMobil.VeloBasar.IntegrationTests;
 
 public class CustomWebApplicationFactory
     : WebApplicationFactory<Program>
 {
+    static CustomWebApplicationFactory()
+    {
+        //  We have to override this because on Mac it looks like this: h:mm:ss\u202Ftt
+        Program.GetCultureInfo = name => 
+        {
+            CultureInfo newEnUs = new ("en-US");
+            newEnUs.DateTimeFormat.ShortTimePattern = "h:mm tt";
+            return newEnUs;
+        };
+    }
+
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.ConfigureServices(services =>

@@ -39,7 +39,7 @@ public class Program
         {
             throw new InvalidOperationException($"No {nameof(ApplicationSettings)} section found.");
         }
-        CultureInfo applicationCulture = CultureInfo.GetCultureInfo(applicationSettings.Culture);
+        CultureInfo applicationCulture = GetCultureInfoInternal(applicationSettings.Culture);
         CultureInfo.DefaultThreadCurrentCulture = applicationCulture;
         CultureInfo.DefaultThreadCurrentUICulture = applicationCulture;
 
@@ -124,5 +124,16 @@ public class Program
             .ConfigureVeloCookies()
             .ConfigureVeloIdentity()
         ;
+    }
+
+    public static Func<string, CultureInfo>? GetCultureInfo {get; set; }
+
+    private static CultureInfo GetCultureInfoInternal(string name)
+    {
+        if (GetCultureInfo is not null)
+        {
+            return GetCultureInfo(name);
+        }
+        return CultureInfo.GetCultureInfo(name);
     }
 }
