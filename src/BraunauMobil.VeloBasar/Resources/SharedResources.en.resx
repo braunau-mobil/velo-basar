@@ -954,12 +954,6 @@
   <data name="VeloBasar_NotSettledCount" xml:space="preserve">
     <value>Not settled sellers: {0}</value>
   </data>
-  <data name="VeloBasar_MayComeBy" xml:space="preserve">
-    <value>{0} may come by</value>
-  </data>
-  <data name="VeloBasar_MustComeBy" xml:space="preserve">
-    <value>{0} must come by</value>
-  </data>
   <data name="VeloBasar_PermissionTimestampGreaterOrEqualThan" xml:space="preserve">
     <value>Permission Timstamp greater or equal than:</value>
   </data>
@@ -1022,5 +1016,20 @@
   </data>
   <data name="VeloBasar_Unsettle" xml:space="preserve">
     <value>Unsettle</value>
+  </data>
+  <data name="VeloBasar_AllSellerSettlementTypes" xml:space="preserve">
+    <value>Alle (Settlement type)</value>
+  </data>
+  <data name="VeloBasar_OnSiteSingular" xml:space="preserve">
+    <value>On site</value>
+  </data>
+  <data name="VeloBasar_RemoteSingular" xml:space="preserve">
+    <value>Remote</value>
+  </data>
+  <data name="VeloBasar_OnSiteWithCount" xml:space="preserve">
+    <value>On site: {0}</value>
+  </data>
+  <data name="VeloBasar_RemoteWithCount" xml:space="preserve">
+    <value>Remote: {0}</value>
   </data>
 </root>

@@ -4,6 +4,7 @@ namespace BraunauMobil.VeloBasar.Parameters;
 
 public sealed class SellerListParameter
     : ListParameter
+    , IHasBasarId
 {
     public SellerListParameter()
     {
@@ -15,8 +16,14 @@ public sealed class SellerListParameter
     {
         ArgumentNullException.ThrowIfNull(other);
 
+        BasarId = other.BasarId;
+        SettlementType = other.SettlementType;
         ValueState = other.ValueState;
     }
+
+    public int BasarId { get; set; }
+
+    public SellerSettlementType? SettlementType { get; set; }
 
     public ValueState? ValueState { get; set; }
 

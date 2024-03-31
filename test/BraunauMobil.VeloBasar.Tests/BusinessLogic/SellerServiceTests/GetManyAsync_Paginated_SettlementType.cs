@@ -1,85 +1,59 @@
-﻿using Xan.AspNetCore.Models;
+﻿using BraunauMobil.VeloBasar.Parameters;
+using Xan.AspNetCore.Models;
+using Xan.AspNetCore.Mvc.Crud;
+using Xan.Extensions.Collections.Generic;
 
-namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.BasarStatsServiceTests;
+namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.SellerServiceTests;
 
-public class GetSettlementStatusAsync
+public class GetManyAsync_Paginated_SettlementType
     : TestBase
 {
     private readonly VeloFixture _fixture = new();
 
     [Theory]
     [VeloAutoData]
-    public async Task SettlementStarted_ShouldBeCorrect(BasarEntity basar, TransactionEntity settlement)
+    public async Task OnSite_ShouldBeCorrect(BasarEntity basar)
     {
         //  Arrange
-        await InsertSellersAndProducts(basar);
-        settlement.Type = TransactionType.Settlement;
-        settlement.Basar = basar;
-        settlement.BasarId = basar.Id;
-        settlement.Seller = null;
-        Db.Transactions.Add(settlement);
-        await Db.SaveChangesAsync();
+        await InsertTestData(basar);
+        SellerListParameter parameter = new()
+        {
+            BasarId = basar.Id,
+            PageSize = 10,
+            PageIndex = 1,
+            SettlementType = SellerSettlementType.OnSite
+        };
 
         //  Act
-        BasarSettlementStatus result = await Sut.GetSettlementStatusAsync(basar);
+        IPaginatedList<CrudItemModel<SellerEntity>> result = await Sut.GetManyAsync(parameter);
 
         //  Assert
-        using (new AssertionScope())
-        {
-            result.HasSettlementStarted.Should().BeTrue();
-
-            result.OverallNotSettledCount.Should().Be(18);
-            result.RemoteCount.Should().Be(9);
-            result.OnSiteCount.Should().Be(9);
-        }
+        result.TotalItemCount.Should().Be(17);
     }
+
 
     [Theory]
     [VeloAutoData]
-    public async Task NotSettlementTransaction_SettlementStatusShouldBeNotStarted(BasarEntity basar)
+    public async Task Remote_ShouldBeCorrect(BasarEntity basar)
     {
         //  Arrange
-        await InsertSellersAndProducts(basar);
+        await InsertTestData(basar);
+        SellerListParameter parameter = new()
+        {
+            BasarId = basar.Id,
+            PageSize = 10,
+            PageIndex = 1,
+            SettlementType = SellerSettlementType.Remote
+        };
 
         //  Act
-        BasarSettlementStatus result = await Sut.GetSettlementStatusAsync(basar);
+        IPaginatedList<CrudItemModel<SellerEntity>> result = await Sut.GetManyAsync(parameter);
 
         //  Assert
-        using (new AssertionScope())
-        {
-            result.HasSettlementStarted.Should().BeFalse();
-
-            result.OverallNotSettledCount.Should().Be(0);
-            result.RemoteCount.Should().Be(0);
-            result.OnSiteCount.Should().Be(0);
-        }
+        result.TotalItemCount.Should().Be(17);
     }
 
-    [Theory]
-    [VeloAutoData]
-    public async Task DisabledBasar_SettlementStatusShouldBeNotStarted(BasarEntity basar)
-    {
-        //  Arrange
-        basar.State = ObjectState.Disabled;
-        Db.Basars.Add(basar);
-        CreateSellerAndProducts(basar, "DE76500105171978746253", ValueState.Settled, [(ValueState.Settled, StorageState.Available, false)]);
-        await Db.SaveChangesAsync();
-
-        //  Act
-        BasarSettlementStatus result = await Sut.GetSettlementStatusAsync(basar);
-
-        //  Assert
-        using (new AssertionScope())
-        {
-            result.HasSettlementStarted.Should().BeFalse();
-
-            result.OverallNotSettledCount.Should().Be(0);
-            result.RemoteCount.Should().Be(0);
-            result.OnSiteCount.Should().Be(0);            
-        }
-    }
-
-    private async Task InsertSellersAndProducts(BasarEntity basar)
+    private async Task InsertTestData(BasarEntity basar)
     {
         basar.State = ObjectState.Enabled;
         Db.Basars.Add(basar);

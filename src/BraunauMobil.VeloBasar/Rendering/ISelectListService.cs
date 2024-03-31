@@ -20,6 +20,8 @@ public interface ISelectListService
 
     Task<SelectList> ProductTypesAsync(bool includeAll = false);
 
+    SelectList SellerSettlementTypes(bool includeAll = false);
+
     SelectList TransactionTypes(bool includeAll = false);
 
     SelectList ValueStates(bool includeAll = false);

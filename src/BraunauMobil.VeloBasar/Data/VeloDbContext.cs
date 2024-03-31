@@ -5,8 +5,6 @@ using Npgsql;
 using Microsoft.Data.SqlClient;
 using System.Data.Common;
 using Xan.AspNetCore.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Storage;
 
 namespace BraunauMobil.VeloBasar.Data;
 

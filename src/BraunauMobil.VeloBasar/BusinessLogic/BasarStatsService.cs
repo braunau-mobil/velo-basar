@@ -1,8 +1,10 @@
 using BraunauMobil.VeloBasar.Configuration;
 using BraunauMobil.VeloBasar.Data;
+using BraunauMobil.VeloBasar.Parameters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Xan.Extensions;
+using Xan.Extensions.Collections.Generic;
 
 namespace BraunauMobil.VeloBasar.BusinessLogic;
 
@@ -13,8 +15,9 @@ public class BasarStatsService
     private readonly VeloDbContext _db;
     private readonly IFormatProvider _formatProvider;
     private readonly ApplicationSettings _settings;
+    private readonly ISellerService _sellerService;
 
-    public BasarStatsService(IColorProvider colorProvider, VeloDbContext db, IFormatProvider formatProvider, IOptions<ApplicationSettings> settings)
+    public BasarStatsService(IColorProvider colorProvider, VeloDbContext db, IFormatProvider formatProvider, IOptions<ApplicationSettings> settings, ISellerService sellerService)
     {
         ArgumentNullException.ThrowIfNull(settings);
 
@@ -22,6 +25,7 @@ public class BasarStatsService
         _db = db ?? throw new ArgumentNullException(nameof(db));
         _formatProvider = formatProvider ?? throw new ArgumentNullException(nameof(formatProvider));
         _settings = settings.Value;
+        _sellerService = sellerService ?? throw new ArgumentNullException(nameof(sellerService));
     }
 
     public async Task<int> GetAcceptanceCountAsync(int basarId)
@@ -130,58 +134,31 @@ public class BasarStatsService
 
         if (basar.State == ObjectState.Disabled)
         {
-            return new BasarSettlementStatus(false, 0, 0, 0, 0);
+            return new BasarSettlementStatus(false, 0, 0, 0);
         }
 
-        var products = await _db.Products
-            .Include(p => p.Session)
-                .ThenInclude(s => s.Seller)
-            .Where(p => p.Session.BasarId == basar.Id)
-            .Select(p => new
-            {
-                Product = p,
-                Seller = new
-                {
-                    p.Session.SellerId,
-                    p.Session.Seller.ValueState,
-                    p.Session.Seller.IBAN
-                }
-            })
-            .AsNoTracking()
-            .ToArrayAsync();
-
-        int overallSettledCount = 0;
-        int overallNotSettledCount = 0;
-        int mayBeCount = 0;
-        int mustBeCount = 0;
-        foreach (var group in products.GroupBy(p => p.Seller))
+        int settlementCount = await _db.Transactions.AsNoTracking()
+            .WhereBasarAndType(basar.Id, TransactionType.Settlement)
+            .CountAsync();
+        if (settlementCount == 0)
         {
-            if (group.Key.ValueState == ValueState.Settled)
-            {
-                overallSettledCount++;
-            }
-            else
-            {
-                overallNotSettledCount++;
-
-                if (group.Key.IBAN is not null && group.Where(p => p.Product.ValueState == ValueState.NotSettled).All(x => x.Product.CanBeSettledWithoutSeller))
-                {
-                    mayBeCount++;
-                }
-                else
-                {
-                    mustBeCount++;
-                }
-            }
+            return new BasarSettlementStatus(false, 0, 0, 0);
         }
 
-        return new BasarSettlementStatus(
-            overallSettledCount > 0,
-            overallSettledCount,
-            overallNotSettledCount,
-            mustBeCount,
-            mayBeCount            
-        );
+        SellerListParameter sellerListParameter = new()
+        {
+            BasarId = basar.Id,
+            PageSize = int.MaxValue,
+            State = ObjectState.Enabled,
+            ValueState = ValueState.NotSettled
+        };
+        IPaginatedList<CrudItemModel<SellerEntity>> sellers = await _sellerService.GetManyAsync(sellerListParameter);
+        int onSiteCount = sellers.Count(item => item.Entity.SettlementType == SellerSettlementType.OnSite);
+        int remoteCount = sellers.Count(item => item.Entity.SettlementType == SellerSettlementType.Remote);
+
+        int overallNotSettledCount = await _db.Sellers.Where(seller => seller.State == ObjectState.Enabled && seller.ValueState == ValueState.NotSettled).CountAsync();
+
+        return new BasarSettlementStatus(true, overallNotSettledCount, onSiteCount, remoteCount);
     }
 
     public async Task<IReadOnlyList<Tuple<TimeOnly, decimal>>> GetSoldProductTimestampsAndPricesAsync(int basarId)

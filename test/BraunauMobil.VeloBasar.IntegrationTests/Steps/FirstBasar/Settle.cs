@@ -49,7 +49,7 @@ public class Settle(TestContext context)
 
     private async Task AssertBasarDetails()
     {
-        BasarSettlementStatus basarSettlementStatus = new(true, 1, 0, 0, 0);
+        BasarSettlementStatus basarSettlementStatus = new(true, 0, 0, 0);
         BasarDetailsModel expectedDetails = new(new BasarEntity(), basarSettlementStatus)
         {
             AcceptanceCount = 1,

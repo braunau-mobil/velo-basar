@@ -54,13 +54,13 @@ public class TransactionRouterTests
         string actual = _sut.ToList();
 
         //  Assert
-        actual.Should().Be("//BasarId=0&PageIndex=1&State=Enabled&action=List&controller=Transaction");
+        actual.Should().Be("//BasarId=0&PageIndex=1&action=List&controller=Transaction");
     }
 
 
     [Theory]
-    [InlineData(null, 123, "//BasarId=0&PageIndex=123&State=Enabled&action=List&controller=Transaction")]
-    [InlineData(444, 555, "//BasarId=0&PageIndex=555&PageSize=444&State=Enabled&action=List&controller=Transaction")]
+    [InlineData(null, 123, "//BasarId=0&PageIndex=123&action=List&controller=Transaction")]
+    [InlineData(444, 555, "//BasarId=0&PageIndex=555&PageSize=444&action=List&controller=Transaction")]
     public void ToList_PageSize_PageIndex(int? pageSize, int pageIndex, string expectedResult)
     {
         //  Arrange
@@ -73,8 +73,8 @@ public class TransactionRouterTests
     }
 
     [Theory]
-    [InlineData(TransactionType.Acceptance, "//BasarId=0&TransactionType=Acceptance&PageIndex=1&State=Enabled&action=List&controller=Transaction")]
-    [InlineData(TransactionType.Sale, "//BasarId=0&TransactionType=Sale&PageIndex=1&State=Enabled&action=List&controller=Transaction")]
+    [InlineData(TransactionType.Acceptance, "//BasarId=0&TransactionType=Acceptance&PageIndex=1&action=List&controller=Transaction")]
+    [InlineData(TransactionType.Sale, "//BasarId=0&TransactionType=Sale&PageIndex=1&action=List&controller=Transaction")]
     public void ToList_TransactionType(TransactionType transactionType, string expectedResult)
     {
         //  Arrange

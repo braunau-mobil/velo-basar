@@ -92,7 +92,7 @@ public class Acccept(TestContext context)
 
     private async Task AssertBasarDetails()
     {
-        BasarSettlementStatus basarSettlementStatus = new(false, 0, 1, 1, 0);
+        BasarSettlementStatus basarSettlementStatus = new(false, 0, 0, 0);
         BasarDetailsModel expectedDetails = new(new BasarEntity(), basarSettlementStatus)
         {
             AcceptanceCount = 1,

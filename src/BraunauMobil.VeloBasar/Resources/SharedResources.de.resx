@@ -954,12 +954,6 @@
   <data name="VeloBasar_NotSettledCount" xml:space="preserve">
     <value>Nicht abgerechnete Verkäufer: {0}</value>
   </data>
-  <data name="VeloBasar_MayComeBy" xml:space="preserve">
-    <value>{0} müssen nicht mehr vorbeikommen</value>
-  </data>
-  <data name="VeloBasar_MustComeBy" xml:space="preserve">
-    <value>{0} müssen noch vorbeikommen</value>
-  </data>
   <data name="VeloBasar_PermissionTimestampGreaterOrEqualThan" xml:space="preserve">
     <value>Erlaubnis-Zeitpunkt größer oder gleich:</value>
   </data>
@@ -1022,5 +1016,20 @@
   </data>
   <data name="VeloBasar_Unsettle" xml:space="preserve">
     <value>Storno</value>
+  </data>
+  <data name="VeloBasar_AllSellerSettlementTypes" xml:space="preserve">
+    <value>Alle (Abrechungsart)</value>
+  </data>
+  <data name="VeloBasar_OnSiteSingular" xml:space="preserve">
+    <value>Vor Ort</value>
+  </data>
+  <data name="VeloBasar_RemoteSingular" xml:space="preserve">
+    <value>Online Banking</value>
+  </data>
+  <data name="VeloBasar_OnSiteWithCount" xml:space="preserve">
+    <value>Vor Ort: {0}</value>
+  </data>
+  <data name="VeloBasar_RemoteWithCount" xml:space="preserve">
+    <value>Online Banking: {0}</value>
   </data>
 </root>

@@ -4,7 +4,7 @@ public class OldBasarStats(TestContext context)
 {
     public async Task Run()
     {
-        BasarSettlementStatus basarSettlementStatus = new(false, 0, 0, 0, 0);
+        BasarSettlementStatus basarSettlementStatus = new(false, 0, 0, 0);
         BasarDetailsModel expectedDetails = new(new BasarEntity(), basarSettlementStatus)
         {
             AcceptanceCount = 1,

@@ -9,7 +9,8 @@ public class TestBase
 {
     public TestBase()
     {
-        Sut = new BasarStatsService(ColorProvider, Db, X.FormatProvider, Options.Create(ApplicationSettings));
+        SellerService sellerService = new(X.StrictFake<ITransactionService>(), X.StrictFake<IDocumentService>(), X.StrictFake<IStatusPushService>(), X.StrictFake<ITokenProvider>(), Clock, Db, X.StringLocalizer);
+        Sut = new BasarStatsService(ColorProvider, Db, X.FormatProvider, Options.Create(ApplicationSettings), sellerService);
     }
 
     public ApplicationSettings ApplicationSettings { get; } = new();

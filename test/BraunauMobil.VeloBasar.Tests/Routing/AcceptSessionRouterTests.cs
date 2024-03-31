@@ -41,7 +41,7 @@ public class AcceptSessionRouterTests
         string actual = _sut.ToList();
 
         //  Assert
-        actual.Should().Be("//AcceptSessionState=Uncompleted&BasarId=0&PageIndex=1&State=Enabled&action=List&controller=AcceptSession");
+        actual.Should().Be("//AcceptSessionState=Uncompleted&BasarId=0&PageIndex=1&action=List&controller=AcceptSession");
     }
 
     [Fact]
@@ -53,13 +53,13 @@ public class AcceptSessionRouterTests
         string actual = _sut.ToList(66);
 
         //  Assert
-        actual.Should().Be("//AcceptSessionState=Uncompleted&BasarId=0&PageIndex=66&State=Enabled&action=List&controller=AcceptSession");
+        actual.Should().Be("//AcceptSessionState=Uncompleted&BasarId=0&PageIndex=66&action=List&controller=AcceptSession");
     }
 
 
     [Theory]
-    [InlineData(null, 123, "//AcceptSessionState=Uncompleted&BasarId=0&PageIndex=123&State=Enabled&action=List&controller=AcceptSession")]
-    [InlineData(987, 321, "//AcceptSessionState=Uncompleted&BasarId=0&PageIndex=321&PageSize=987&State=Enabled&action=List&controller=AcceptSession")]
+    [InlineData(null, 123, "//AcceptSessionState=Uncompleted&BasarId=0&PageIndex=123&action=List&controller=AcceptSession")]
+    [InlineData(987, 321, "//AcceptSessionState=Uncompleted&BasarId=0&PageIndex=321&PageSize=987&action=List&controller=AcceptSession")]
     public void ToList_PageSize_PageIndex(int? pageSize, int pageIndex, string expectedResult)
     {
         //  Arrange

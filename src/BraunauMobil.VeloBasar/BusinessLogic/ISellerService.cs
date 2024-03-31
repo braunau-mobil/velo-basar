@@ -11,7 +11,7 @@ public interface ISellerService
 
     Task<FileDataEntity> GetLabelsAsync(int basarId, int sellerId);
 
-    Task<IReadOnlyList<SellerEntity>> GetManyAsync(string firstName, string lastName);    
+    Task<IReadOnlyList<SellerEntity>> GetManyAsync(string firstName, string lastName);
 
     Task<int> SettleAsync(int basarId, int sellerId);
 

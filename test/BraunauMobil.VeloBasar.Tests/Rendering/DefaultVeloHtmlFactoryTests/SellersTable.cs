@@ -20,7 +20,7 @@ public class SellersTable
             column => column.Title.Should().BeHtml("VeloBasar_FirstName"),
             column => column.Title.Should().BeHtml("VeloBasar_LastName"),
             column => column.Title.Should().BeHtml("VeloBasar_Address"),
-            column => column.Title.Should().BeHtml("VeloBasar_ValueState")
+            column => column.Title.Should().BeHtml("")
         );
     }
 }

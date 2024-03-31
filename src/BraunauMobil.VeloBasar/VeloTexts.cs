@@ -44,7 +44,8 @@ public static class VeloTexts
     public const string AllBrand = $"{Prefix}{nameof(AllBrand)}";
     public const string AllProductsOfSaleAlreadyCancelledOrSettled = $"{Prefix}{nameof(AllProductsOfSaleAlreadyCancelledOrSettled)}";
     public const string AllProductTypes = $"{Prefix}{nameof(AllProductTypes)}";
-    public const string AllStates = $"{Prefix}{nameof(AllStates)}";
+    public const string AllSellerSettlementTypes = $"{Prefix}{nameof(AllSellerSettlementTypes)}";
+    public const string AllStates = $"{Prefix}{nameof(AllStates)}";    
     public const string AllStorageStates = $"{Prefix}{nameof(AllStorageStates)}";
     public const string AllTransactionTypes = $"{Prefix}{nameof(AllTransactionTypes)}";
     public const string AllValueStates = $"{Prefix}{nameof(AllValueStates)}";
@@ -153,13 +154,11 @@ public static class VeloTexts
     public const string LostInfo = $"{Prefix}{nameof(LostInfo)}";
     public const string LostProduct = $"{Prefix}{nameof(LostProduct)}";
     public const string LostProducts = $"{Prefix}{nameof(LostProducts)}";
-    public const string MayComeBy = $"{Prefix}{nameof(MayComeBy)}";
     public const string Menu = $"{Prefix}{nameof(Menu)}";
     public const string MigrateDatabase = $"{Prefix}{nameof(MigrateDatabase)}";
     public const string MigrateDatabaseHint = $"{Prefix}{nameof(MigrateDatabaseHint)}";
     public const string MigrateDatabaseText = $"{Prefix}{nameof(MigrateDatabaseText)}";
     public const string Misc = $"{Prefix}{nameof(Misc)}";
-    public const string MustComeBy = $"{Prefix}{nameof(MustComeBy)}";
     public const string Name = $"{Prefix}{nameof(Name)}";
     public const string NameAndLocation = $"{Prefix}{nameof(NameAndLocation)}";
     public const string NewAcceptance = $"{Prefix}{nameof(NewAcceptance)}";
@@ -181,6 +180,8 @@ public static class VeloTexts
     public const string NotSoldProductCount = $"{Prefix}{nameof(NotSoldProductCount)}";
     public const string Number = $"{Prefix}{nameof(Number)}";
     public const string Ok = $"{Prefix}{nameof(Ok)}";
+    public const string OnSiteSingular = $"{Prefix}{nameof(OnSiteSingular)}";
+    public const string OnSiteWithCount = $"{Prefix}{nameof(OnSiteWithCount)}";
     public const string Other = $"{Prefix}{nameof(Other)}";
     public const string Overview = $"{Prefix}{nameof(Overview)}";
     public const string PageNumberFromOverall = $"{Prefix}{nameof(PageNumberFromOverall)}";
@@ -237,6 +238,8 @@ public static class VeloTexts
     public const string ProductWasSettled = $"{Prefix}{nameof(ProductWasSettled)}";
     public const string PushSellerStatus = $"{Prefix}{nameof(PushSellerStatus)}";
     public const string RememberMe = $"{Prefix}{nameof(RememberMe)}";
+    public const string RemoteSingular = $"{Prefix}{nameof(RemoteSingular)}";
+    public const string RemoteWithCount = $"{Prefix}{nameof(RemoteWithCount)}";
     public const string Reset = $"{Prefix}{nameof(Reset)}";
     public const string ReturnMoney = $"{Prefix}{nameof(ReturnMoney)}";
     public const string SaleSingular = $"{Prefix}{nameof(SaleSingular)}";
@@ -323,6 +326,15 @@ public static class VeloTexts
             null => AllStates,
             AcceptSessionState.Completed => Completed,
             AcceptSessionState.Uncompleted => Uncompleted,
+            _ => throw new UnreachableException(),
+        };
+
+    public static string Singular(SellerSettlementType? settlementStatus)
+        => settlementStatus switch
+        {
+            null => AllSellerSettlementTypes,
+            SellerSettlementType.Remote => RemoteSingular,
+            SellerSettlementType.OnSite => OnSiteSingular,
             _ => throw new UnreachableException(),
         };
 

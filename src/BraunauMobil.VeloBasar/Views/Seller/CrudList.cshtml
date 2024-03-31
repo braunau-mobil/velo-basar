@@ -14,6 +14,7 @@
                 <div class="col"></div>
                 <div class="col-auto">
                     <div class="input-group">
+                        @VeloHtml.Select(nameof(SellerListParameter.SettlementType), Model.Parameter.SettlementType, SelectLists.SellerSettlementTypes(true), submitOnChange: true)
                         @VeloHtml.Select(nameof(SellerListParameter.ValueState), Model.Parameter.ValueState, SelectLists.ValueStates(true), submitOnChange: true)
                     </div>
                 </div>

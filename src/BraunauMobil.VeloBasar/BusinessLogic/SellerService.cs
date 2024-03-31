@@ -136,9 +136,26 @@ public sealed class SellerService
         }
         iq = OrderByDefault(iq);
 
-        IPaginatedList<CrudItemModel<SellerEntity>> items = await iq
-            .AsPaginatedAsync(parameter.PageSize.Value, parameter.PageIndex, CreateItemModelAsync);
-        return items;
+        if (parameter.SettlementType.HasValue)
+        {
+            IReadOnlyList<SellerEntity> sellers = await iq.ToArrayAsync();
+            List<CrudItemModel<SellerEntity>> items = [];
+            foreach (SellerEntity seller in sellers)
+            {
+                CrudItemModel<SellerEntity> item = await CreateItemModelAsync(parameter.BasarId, seller);
+                if (item.Entity.SettlementType == parameter.SettlementType.Value)
+                {
+                    items.Add(item);
+                }
+            }
+            return await items.AsPaginatedAsync(parameter.PageSize.Value, parameter.PageIndex);
+        }
+        else
+        {
+            IPaginatedList<CrudItemModel<SellerEntity>> items = await iq
+                .AsPaginatedAsync(parameter.PageSize.Value, parameter.PageIndex, async seller => await CreateItemModelAsync(parameter.BasarId, seller));
+            return items;
+        }
     }
 
     public async Task<int> SettleAsync(int basarId, int sellerId)
@@ -187,6 +204,43 @@ public sealed class SellerService
           || EF.Functions.Like(s.City, $"%{searchString}%")
           || EF.Functions.Like(s.Country.Name, $"%{searchString}%")
           || s.BankAccountHolder != null && EF.Functions.Like(s.BankAccountHolder, $"%{searchString}%");
+    }
+
+    private async Task<CrudItemModel<SellerEntity>> CreateItemModelAsync(int basarId, SellerEntity entity)
+    {
+        //  Default = Must come by
+        entity.SettlementType = SellerSettlementType.OnSite;
+
+        if (entity.IBAN is not null)
+        {
+            //  Products to pickup are available/locked (not dontatable)
+            int productsToPickupCount = await _db.Products.AsNoTracking()
+                .Include(product => product.Session)
+                    .ThenInclude(session => session.Seller)
+                .Where(product => product.Session.BasarId == basarId && product.Session.SellerId == entity.Id
+                    && product.ValueState == ValueState.NotSettled && product.StorageState != StorageState.NotAccepted && !product.DonateIfNotSold && (product.StorageState == StorageState.Available || product.StorageState == StorageState.Locked))
+                .CountAsync();
+            if (productsToPickupCount == 0)
+            {
+                entity.SettlementType = SellerSettlementType.Remote;
+            }
+        }
+        else
+        {
+            //  Products to pickup are sold/lost (money) or available/locked (not dontatable)
+            int productsToPickupCount = await _db.Products.AsNoTracking()
+                .Include(product => product.Session)
+                    .ThenInclude(session => session.Seller)
+                .Where(product => product.Session.BasarId == basarId && product.Session.SellerId == entity.Id
+                    && product.ValueState == ValueState.NotSettled && product.StorageState != StorageState.NotAccepted && (product.StorageState == StorageState.Sold || product.StorageState == StorageState.Lost || (product.StorageState == StorageState.Available && !product.DonateIfNotSold) || (product.StorageState == StorageState.Locked && !product.DonateIfNotSold)))
+                .CountAsync();
+            if (productsToPickupCount == 0)
+            {
+                entity.SettlementType = SellerSettlementType.Remote;
+            }
+        }
+
+        return await CreateItemModelAsync(entity);
     }
 
     private Expression<Func<SellerEntity, bool>> SellerSearch(string firstName, string lastName)

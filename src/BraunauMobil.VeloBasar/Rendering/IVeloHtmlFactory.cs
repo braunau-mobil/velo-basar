@@ -29,5 +29,7 @@ public interface IVeloHtmlFactory
 
     TableBuilder<SellerEntity> SellersTable(IEnumerable<SellerEntity> sellers);
 
+    IHtmlContent SellerStateBadges(SellerEntity seller);
+
     TableBuilder<TransactionEntity> TransactionsTable(IEnumerable<TransactionEntity> transactions, bool showType = false, bool showProducts = false);
 }

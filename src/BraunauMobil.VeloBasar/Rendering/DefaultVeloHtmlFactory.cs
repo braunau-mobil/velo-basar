@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Localization;
+using System.Diagnostics;
 using Xan.AspNetCore.Rendering;
 
 namespace BraunauMobil.VeloBasar.Rendering;
@@ -262,10 +263,10 @@ public sealed class DefaultVeloHtmlFactory
         return Table(sellers)
             .IdColumn()
             .Column(c => c.PercentWidth(17).BreakText().Title(Localizer[VeloTexts.FirstName]).For(item => item.FirstName))
-            .Column(c => c.PercentWidth(17).BreakText().Title(Localizer[VeloTexts.LastName]).For(item => item.LastName))
+            .Column(c => c.PercentWidth(18).BreakText().Title(Localizer[VeloTexts.LastName]).For(item => item.LastName))
             .Column(c =>
             {
-                c.PercentWidth(61).Title(Localizer[VeloTexts.Address]).For(item =>
+                c.PercentWidth(65).Title(Localizer[VeloTexts.Address]).For(item =>
                 {
                     HtmlContentBuilder content = new();
                     content.Append(item.Street);
@@ -274,7 +275,55 @@ public sealed class DefaultVeloHtmlFactory
                     return content;
                 });
             })
-            .Column(c => c.PercentWidth(5).BreakText().Title(Localizer[VeloTexts.ValueState]).For(item => Localizer[VeloTexts.Singular(item.ValueState)]));
+            .Column(c => c.AutoWidth().Align(ColumnAlign.Center).For(item => SellerStateBadges(item)));
+    }
+
+    public IHtmlContent SellerStateBadges(SellerEntity seller)
+    {
+        ArgumentNullException.ThrowIfNull(seller);
+
+        BadgeType valueStateBadgeType;
+        BadgeType settlementTypeBadgeType;
+        if (seller.ValueState == ValueState.Settled)
+        {
+            valueStateBadgeType = BadgeType.Secondary;
+            settlementTypeBadgeType = BadgeType.Secondary;
+        }
+        else if (seller.ValueState == ValueState.NotSettled)
+        {
+            valueStateBadgeType = BadgeType.Primary;
+            if (seller.SettlementType == SellerSettlementType.Remote)
+            {
+                settlementTypeBadgeType = BadgeType.Success;
+            }
+            else if (seller.SettlementType == SellerSettlementType.OnSite)
+            {
+                settlementTypeBadgeType = BadgeType.Warning;
+            }
+            else
+            {
+                throw new UnreachableException();
+            }
+        }
+        else
+        {
+            throw new UnreachableException();
+        }
+
+        HtmlContentBuilder badges = new();
+        TagBuilder valueStateBadge = Badge(valueStateBadgeType);
+        valueStateBadge.InnerHtml.SetHtmlContent(Localizer[VeloTexts.Singular(seller.ValueState)]);
+        badges.AppendHtml(valueStateBadge);
+        TagBuilder br = new("br")
+        {
+            TagRenderMode = TagRenderMode.StartTag
+        };
+        badges.AppendHtml(br);
+
+        TagBuilder settlementTypeBadge = Badge(settlementTypeBadgeType);
+        settlementTypeBadge.InnerHtml.SetHtmlContent(Localizer[VeloTexts.Singular(seller.SettlementType)]);
+        badges.AppendHtml(settlementTypeBadge);
+        return badges;
     }
 
     public TableBuilder<TransactionEntity> TransactionsTable(IEnumerable<TransactionEntity> transactions, bool showType = false, bool showProducts = false)

@@ -43,6 +43,9 @@ public sealed class SellerEntity
     public string? Comment { get; set; }
 
     [NotMapped]
+    public SellerSettlementType SettlementType { get; set; }
+
+    [NotMapped]
     public string EffectiveBankAccountHolder
     {
         get

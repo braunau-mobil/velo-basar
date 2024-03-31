@@ -69,6 +69,9 @@ public sealed class SelectListService
         return new SelectList(items, "Item1", "Item2");
     }
 
+    public SelectList SellerSettlementTypes(bool includeAll = false)
+        => EnumSelectList<SellerSettlementType>(includeAll, VeloTexts.Singular);
+
     public SelectList TransactionTypes(bool includeAll = false)
         => EnumSelectList<TransactionType>(includeAll, VeloTexts.Singular);
 

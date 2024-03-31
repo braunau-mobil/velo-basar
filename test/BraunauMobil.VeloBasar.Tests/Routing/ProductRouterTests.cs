@@ -54,7 +54,7 @@ public class ProductRouterTests
         string actual = _sut.ToList();
 
         //  Assert
-        actual.Should().Be("//BasarId=0&PageIndex=1&State=Enabled&action=List&controller=Product");
+        actual.Should().Be("//BasarId=0&PageIndex=1&action=List&controller=Product");
     }
 
     [Fact]
@@ -66,13 +66,13 @@ public class ProductRouterTests
         string actual = _sut.ToList(33);
 
         //  Assert
-        actual.Should().Be("//BasarId=0&PageIndex=33&State=Enabled&action=List&controller=Product");
+        actual.Should().Be("//BasarId=0&PageIndex=33&action=List&controller=Product");
     }
 
 
     [Theory]
-    [InlineData(null, 321, "//BasarId=0&PageIndex=321&State=Enabled&action=List&controller=Product")]
-    [InlineData(456, 123, "//BasarId=0&PageIndex=123&PageSize=456&State=Enabled&action=List&controller=Product")]
+    [InlineData(null, 321, "//BasarId=0&PageIndex=321&action=List&controller=Product")]
+    [InlineData(456, 123, "//BasarId=0&PageIndex=123&PageSize=456&action=List&controller=Product")]
     public void ToList_PageSize_PageIndex(int? pageSize, int pageIndex, string expectedResult)
     {
         //  Arrange
