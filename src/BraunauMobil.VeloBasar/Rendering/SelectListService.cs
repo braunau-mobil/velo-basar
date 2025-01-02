@@ -25,7 +25,7 @@ public sealed class SelectListService
     public async Task<SelectList> BasarsAsync()
     {
         BasarEntity[] basars = await _db.Basars
-            .OrderBy(basar => basar.Name)
+            .OrderByDescending(basar => basar.Date)
             .ToArrayAsync();
 
         return new SelectList(basars, nameof(BasarEntity.Id), nameof(BasarEntity.Name));
