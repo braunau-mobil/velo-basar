@@ -1,4 +1,9 @@
-﻿using BraunauMobil.VeloBasar.Pdf;
+﻿using System.IO;
+using AutoFixture.Xunit2;
+using BraunauMobil.VeloBasar.Configuration;
+using BraunauMobil.VeloBasar.Pdf;
+using iText.Kernel.Pdf;
+using iText.Layout;
 
 namespace BraunauMobil.VeloBasar.Tests.Pdf;
 
@@ -13,7 +18,7 @@ public class PdfExtensionsTests
         // Arrange
 
         // Act
-        float result = PdfExtensions.ToUnit(mm);
+        float result = mm.ToUnit();
 
         // Assert
         result.Should().Be(expectedResult);
@@ -28,9 +33,32 @@ public class PdfExtensionsTests
         // Arrange
 
         // Act
-        float result = PdfExtensions.ToUnit(mm);
+        float result = mm.ToUnit();
 
         // Assert
         result.Should().Be(expectedResult);
+    }
+
+    [Theory]
+    [AutoData]
+    public void SetMargins_ShouldSetMarginsCorrectly(Margins margins)
+    {
+        //  Arrange
+        using MemoryStream memoryStream = new();
+        using PdfWriter pdfWriter = new(memoryStream);
+        using PdfDocument pdfDoc = new(pdfWriter);
+        using Document doc = new(pdfDoc);
+        
+        //  Act
+        doc.SetMargins(margins);
+        
+        //  Assert
+        using (new AssertionScope())
+        {
+            doc.GetLeftMargin().Should().Be(margins.Left.ToUnit());
+            doc.GetTopMargin().Should().Be(margins.Top.ToUnit());
+            doc.GetRightMargin().Should().Be(margins.Right.ToUnit());
+            doc.GetBottomMargin().Should().Be(margins.Bottom.ToUnit());
+        }
     }
 }

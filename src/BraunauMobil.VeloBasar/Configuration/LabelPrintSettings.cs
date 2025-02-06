@@ -6,6 +6,15 @@ namespace BraunauMobil.VeloBasar.Configuration;
 public sealed class LabelPrintSettings
 {
     [Required]
+    public int WidthInMillimeters { get; set; }
+    
+    [Required]
+    public int HeightInMillimeters { get; set; }
+    
+    [Required]
+    public Margins Margins { get; set; }
+    
+    [Required]
     public int MaxDescriptionLength { get; set; }
 
     [Required]

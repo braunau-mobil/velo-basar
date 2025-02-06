@@ -9,14 +9,14 @@ public class DocumentService(IDocumentModelFactory factory, IProductLabelGenerat
     {
         ArgumentNullException.ThrowIfNull(product);
 
-        return await productLabelGenerator.CreateLabelAsync(factory.CreateProductLabelModel(product));
+        return await productLabelGenerator.CreateLabelAsync(factory.CreateProductLabelModel(product), factory.LabelPrintSettings);
     }
 
     public async Task<byte[]> CreateLabelsAsync(IEnumerable<ProductEntity> products)
     {
         ArgumentNullException.ThrowIfNull(products);
 
-        return await productLabelGenerator.CreateLabelsAsync(products.Select(factory.CreateProductLabelModel));
+        return await productLabelGenerator.CreateLabelsAsync(products.Select(factory.CreateProductLabelModel), factory.LabelPrintSettings);
     }
 
     public async Task<byte[]> CreateTransactionDocumentAsync(TransactionEntity transaction)
@@ -38,5 +38,4 @@ public class DocumentService(IDocumentModelFactory factory, IProductLabelGenerat
 
         throw new InvalidOperationException($"Cannot generate transaction document for: {transaction.Type}");
     }
-
 }

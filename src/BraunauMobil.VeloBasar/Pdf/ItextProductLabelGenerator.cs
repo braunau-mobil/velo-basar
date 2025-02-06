@@ -1,4 +1,5 @@
-﻿using BraunauMobil.VeloBasar.Models.Documents;
+﻿using BraunauMobil.VeloBasar.Configuration;
+using BraunauMobil.VeloBasar.Models.Documents;
 using iText.Barcodes;
 using iText.IO.Font.Constants;
 using iText.Kernel.Font;
@@ -14,21 +15,22 @@ namespace BraunauMobil.VeloBasar.Pdf;
 public sealed class ItextProductLabelGenerator(PdfGenerator pdf)
     : IProductLabelGenerator
 {
-    public async Task<byte[]> CreateLabelAsync(ProductLabelDocumentModel model)
+    public async Task<byte[]> CreateLabelAsync(ProductLabelDocumentModel model, LabelPrintSettings settings)
     {
         ArgumentNullException.ThrowIfNull(model);
         
-        return await CreateLabelsAsync(new[] { model });
+        return await CreateLabelsAsync([model], settings);
     }
 
-    public async Task<byte[]> CreateLabelsAsync(IEnumerable<ProductLabelDocumentModel> models)
+    public async Task<byte[]> CreateLabelsAsync(IEnumerable<ProductLabelDocumentModel> models, LabelPrintSettings settings)
     {
         ArgumentNullException.ThrowIfNull(models);
+        ArgumentNullException.ThrowIfNull(settings);
 
         byte[] data = pdf.CreatePdf((pdfDoc, doc) =>
         {
-            pdfDoc.SetDefaultPageSize(new PageSize(45f.ToUnit(), 79f.ToUnit()));
-            doc.SetMargins(5, 5, 5, 5);
+            pdfDoc.SetDefaultPageSize(new PageSize(settings.WidthInMillimeters.ToUnit(), settings.HeightInMillimeters.ToUnit()));
+            doc.SetMargins(settings.Margins);
             doc.SetFontSize(10);
             doc.SetFont(PdfFontFactory.CreateFont(StandardFonts.TIMES_ROMAN));
 
@@ -40,7 +42,7 @@ public sealed class ItextProductLabelGenerator(PdfGenerator pdf)
                     doc.Add(new AreaBreak(AreaBreakType.NEXT_PAGE));
                 }
 
-                AddProductLabel(pdfDoc, doc, model);
+                AddProductLabel(pdfDoc, doc, model, settings);
 
                 addPageBreak = true;
             }
@@ -48,7 +50,7 @@ public sealed class ItextProductLabelGenerator(PdfGenerator pdf)
         return await Task.FromResult(data);
     }
 
-    private void AddProductLabel(PdfDocument pdfDoc, Document doc, ProductLabelDocumentModel model)
+    private void AddProductLabel(PdfDocument pdfDoc, Document doc, ProductLabelDocumentModel model, LabelPrintSettings settings)
     {
         doc.Add(pdf.GetRegularParagraph(model.Title)
                 .SetTextAlignment(TextAlignment.CENTER)
@@ -88,14 +90,17 @@ public sealed class ItextProductLabelGenerator(PdfGenerator pdf)
             .SetBold()
             .SetTextAlignment(TextAlignment.RIGHT)
             .SetBorderTop(new SolidBorder(2))
-            .SetWidth(40f.ToUnit());
 
+            .SetWidth(settings.WidthInMillimeters.ToUnit());
         barcodeAndPrice
             .Add(new Image(barcode.CreateFormXObject(pdfDoc)))
             .Add(new Text(Environment.NewLine))
             .Add(price)
-            .SetFixedPosition(5f, 5f, 40f.ToUnit());
-
+            .SetFixedPosition(settings.Margins.Left.ToUnit(), settings.Margins.Bottom.ToUnit(), GetContentWidthInMillimeters(settings).ToUnit());
+        
         doc.Add(barcodeAndPrice);
     }
+
+    private static int GetContentWidthInMillimeters(LabelPrintSettings settings)
+        => settings.WidthInMillimeters - settings.Margins.Left - settings.Margins.Right;
 }

@@ -39,7 +39,7 @@ public sealed class PageFooterHandler
             PdfCanvas canvas = new(page);
             canvas.BeginText();
             canvas.SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), Height);
-            canvas.MoveText(_doc.GetLeftMargin(), _pageMargins.Bottom);
+            canvas.MoveText(_doc.GetLeftMargin(), _pageMargins.Bottom.ToUnit());
             canvas.ShowText(string.Format(_formatProvider, _pageNumberFormat, pageNumber, docEvent.GetDocument().GetNumberOfPages()));
             canvas.ShowText(_poweredBy);
             canvas.EndText().Release();

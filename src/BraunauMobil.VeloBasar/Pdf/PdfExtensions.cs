@@ -1,4 +1,7 @@
-﻿namespace BraunauMobil.VeloBasar.Pdf;
+﻿using BraunauMobil.VeloBasar.Configuration;
+using iText.Layout;
+
+namespace BraunauMobil.VeloBasar.Pdf;
 
 public static class PdfExtensions
 {
@@ -16,5 +19,13 @@ public static class PdfExtensions
     public static float ToUnit(this float mm)
     {
         return (mm / 25.4f) * 72.0f;
+    }
+
+    public static void SetMargins(this Document doc, Margins margins)
+    {
+        ArgumentNullException.ThrowIfNull(margins);
+        ArgumentNullException.ThrowIfNull(doc);
+        
+        doc.SetMargins(margins.Top.ToUnit(), margins.Right.ToUnit(), margins.Bottom.ToUnit(), margins.Left.ToUnit());
     }
 }

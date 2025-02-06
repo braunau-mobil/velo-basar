@@ -173,7 +173,7 @@ public sealed class ItextTransactionDocumentGenerator(PdfGenerator pdf, IFormatP
         {
             pdfDoc.SetDefaultPageSize(pageSize: PageSize.A4);
             doc.SetFont(PdfFontFactory.CreateFont(StandardFonts.TIMES_ROMAN));
-            doc.SetMargins(model.PageMargins.Top, model.PageMargins.Right, model.PageMargins.Bottom + PageFooterHandler.Height, model.PageMargins.Left);
+            doc.SetMargins(model.PageMargins.Top.ToUnit(), model.PageMargins.Right.ToUnit(), (model.PageMargins.Bottom + PageFooterHandler.Height).ToUnit(), model.PageMargins.Left.ToUnit());
             pdfDoc.AddEventHandler(PdfDocumentEvent.END_PAGE, new PageFooterHandler(model.PageMargins, doc, model.PageNumberFormat, model.PoweredBy, formatProvider));
 
             decorate(pdfDoc, doc);

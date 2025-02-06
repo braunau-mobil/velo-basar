@@ -25,6 +25,8 @@ public class DocumentModelFactory
         ArgumentNullException.ThrowIfNull(options);
         _settings = options.Value;
     }
+    
+    public LabelPrintSettings LabelPrintSettings => _settings.Label;
 
     public AcceptanceDocumentModel CreateAcceptanceModel(TransactionEntity acceptance)
     {
