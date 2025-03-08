@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <Version>2.3.1</Version>
+    <Version>2.4.0</Version>
     <RootNamespace>BraunauMobil.VeloBasar</RootNamespace>
     <Nullable>enable</Nullable>
     <WarningLevel>9999</WarningLevel>
