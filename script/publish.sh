@@ -1,0 +1,1 @@
+dotnet publish ./src/BraunauMobil.VeloBasar/BraunauMobil.VeloBasar.csproj --output ./output
