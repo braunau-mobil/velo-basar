@@ -1,6 +1,6 @@
 ﻿namespace BraunauMobil.VeloBasar.Tests.Models.Entities.SellerEntityTests;
 
-public class UnifyIBAN
+public class SanitizeIBAN
 {
     [Theory]
     [VeloAutoData]
@@ -10,7 +10,7 @@ public class UnifyIBAN
         sut.IBAN = null;
 
         //  Act
-        sut.UnifyIBAN();
+        sut.SanitizeIBAN();
 
         //  Assert
         sut.IBAN.Should().BeNull();
@@ -24,7 +24,7 @@ public class UnifyIBAN
         sut.IBAN = "";
 
         //  Act
-        sut.UnifyIBAN();
+        sut.SanitizeIBAN();
 
         //  Assert
         sut.IBAN.Should().BeEmpty();
@@ -38,7 +38,7 @@ public class UnifyIBAN
         sut.IBAN = " ";
 
         //  Act
-        sut.UnifyIBAN();
+        sut.SanitizeIBAN();
 
         //  Assert
         sut.IBAN.Should().BeEmpty();
@@ -46,13 +46,13 @@ public class UnifyIBAN
 
     [Theory]
     [VeloAutoData]
-    public void ShouldTrimWhitespaces(SellerEntity sut)
+    public void ShouldTrimWhitespacesAndOtherStuff(SellerEntity sut)
     {
         //  Arrange
-        sut.IBAN = "  AT123456789012345678  ";
+        sut.IBAN = "  AT12 3456-789012345678  ";
 
         //  Act
-        sut.UnifyIBAN();
+        sut.SanitizeIBAN();
 
         //  Assert
         sut.IBAN.Should().Be("AT123456789012345678");
@@ -60,13 +60,27 @@ public class UnifyIBAN
 
     [Theory]
     [VeloAutoData]
-    public void ShouldMakeAlluppercase(SellerEntity sut)
+    public void ShouldMakeAllUppercase(SellerEntity sut)
     {
         //  Arrange
         sut.IBAN = "at123456789012345678";
 
         //  Act
-        sut.UnifyIBAN();
+        sut.SanitizeIBAN();
+
+        //  Assert
+        sut.IBAN.Should().Be("AT123456789012345678");
+    }
+
+    [Theory]
+    [VeloAutoData]
+    public void AllTogether(SellerEntity sut)
+    {
+        //  Arrange
+        sut.IBAN = "  aT12 3456-789{012-3456$#78  ";
+
+        //  Act
+        sut.SanitizeIBAN();
 
         //  Assert
         sut.IBAN.Should().Be("AT123456789012345678");

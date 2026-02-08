@@ -58,16 +58,17 @@ public sealed class SellerEntity
         }
     }
 
-    public void UnifyIBAN()
+    public void SanitizeIBAN()
     {
         if (string.IsNullOrEmpty(IBAN))
         {
             return;
         }
-        //  Trim
-        IBAN = IBAN.Replace(" ", "", StringComparison.InvariantCultureIgnoreCase);
+        
+        // Remove everything except letters and numbers
+        char[] trimmed = IBAN.Where(char.IsLetterOrDigit).ToArray();
         //  To upper
-        IBAN = IBAN.ToUpperInvariant();
+        IBAN = new string(trimmed).ToUpperInvariant();
     }
 
     public void UpdateNewsletterPermissions(IClock clock)

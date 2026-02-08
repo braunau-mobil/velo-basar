@@ -46,7 +46,7 @@ public sealed class SellerService
     {
         ArgumentNullException.ThrowIfNull(entity);
 
-        entity.UnifyIBAN();
+        entity.SanitizeIBAN();
         entity.UpdateNewsletterPermissions(_clock);
         int id = await base.CreateAsync(entity);
 
@@ -175,7 +175,7 @@ public sealed class SellerService
     {
         ArgumentNullException.ThrowIfNull(entity);
 
-        entity.UnifyIBAN();
+        entity.SanitizeIBAN();
         entity.UpdateNewsletterPermissions(_clock);
         return base.UpdateAsync(entity);
     }
