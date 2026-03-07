@@ -9,8 +9,9 @@
     <NoWarn>1701;1702;CA2007;CA1859</NoWarn>
     <AnalysisMode>All</AnalysisMode>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-	  <CodeAnalysisTreatWarningsAsErrors>true</CodeAnalysisTreatWarningsAsErrors>
+    <CodeAnalysisTreatWarningsAsErrors>true</CodeAnalysisTreatWarningsAsErrors>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <SatelliteResourceLanguages>en;de</SatelliteResourceLanguages>
   </PropertyGroup>
 
   <ItemGroup>
