@@ -159,6 +159,7 @@ public partial class AdminService
         {
             product.StorageState = storageState.Value;
         }
+        product.Id = 1234567890;
         return product;
     }
 

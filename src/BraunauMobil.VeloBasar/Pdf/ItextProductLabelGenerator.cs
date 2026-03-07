@@ -86,6 +86,16 @@ public sealed class ItextProductLabelGenerator(PdfGenerator pdf)
             .SetTextAlignment(TextAlignment.CENTER);
         Barcode128 barcode = new (pdfDoc);
         barcode.SetCode(model.Barcode);
+        if (settings.BarcodeWidthInMillimeters.HasValue)
+        {
+            int barcodeWidth = settings.BarcodeWidthInMillimeters.Value - settings.Margins.Left - settings.Margins.Right;
+            barcode.FitWidth(barcodeWidth.ToUnit());
+        }
+        if (settings.BarcodeHeightInMillimeters.HasValue)
+        {
+            barcode.SetBarHeight(settings.BarcodeHeightInMillimeters.Value.ToUnit());
+        }
+
         Paragraph price = pdf.GetParagraph(14, model.Price)
             .SetBold()
             .SetTextAlignment(TextAlignment.RIGHT)

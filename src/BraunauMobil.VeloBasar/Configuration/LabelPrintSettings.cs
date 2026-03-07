@@ -19,4 +19,8 @@ public sealed class LabelPrintSettings
 
     [Required]
     public string TitleFormat { get; set; }
+
+    public int? BarcodeWidthInMillimeters { get; set; }
+
+    public int? BarcodeHeightInMillimeters { get; set; }
 }
