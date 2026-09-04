@@ -46,3 +46,11 @@
         return map[countryId][zip];
     }
 </script>
+
+<script src="~/lib/imask/js/imask.min.js" asp-append-version="true"></script>
+<script>
+    IMask(document.getElementById("@VeloHtml.Id(nameof(Model.IBAN))"), {
+        mask: "aa00 0000 0000 0000 0000 0000 0000 0000 0000 00[00]",
+        prepare: str => str.toUpperCase()
+    });
+</script>
