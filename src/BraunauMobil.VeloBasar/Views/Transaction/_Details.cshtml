@@ -1,4 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Identity
+@using Org.BouncyCastle.Crypto.Engines
 @model TransactionEntity
 @inject SignInManager<IdentityUser> SignInManager
 
@@ -29,6 +30,19 @@
         }
     </div>
 </div>
+
+@if (Model.Seller is not null)
+{
+    <div class="card m-2">
+        <div class="card-header">@Localizer[VeloTexts.Seller]: @Model.Seller.FirstName @Model.Seller.LastName</div>
+        <div class="card-body">
+            <partial name="/Views/Seller/_Properties.cshtml" model="Model.Seller" />
+        </div>
+        <div class="card-footer">
+            <a class="btn btn-outline-primary" href="@Router.Seller.ToDetails(Model.Seller.Id)">@Localizer[VeloTexts.Details]</a>
+        </div>
+    </div>
+}
 
 @if (Model.ChildTransactions.Any())
 {
