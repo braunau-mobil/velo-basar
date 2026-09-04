@@ -1,6 +1,5 @@
 ﻿using BraunauMobil.VeloBasar.BusinessLogic;
 using BraunauMobil.VeloBasar.Data;
-using BraunauMobil.VeloBasar.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Localization;
 

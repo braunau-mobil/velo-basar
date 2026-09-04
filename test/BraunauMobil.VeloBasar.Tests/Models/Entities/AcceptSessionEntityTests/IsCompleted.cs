@@ -1,6 +1,4 @@
-﻿using BraunauMobil.VeloBasar.Tests;
-
-namespace BraunauMobil.VeloBasar.Tests.Models.Entities.AcceptSessionEntityTests;
+﻿namespace BraunauMobil.VeloBasar.Tests.Models.Entities.AcceptSessionEntityTests;
 
 public class IsCompleted
 {

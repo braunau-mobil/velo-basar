@@ -3,7 +3,6 @@ using BraunauMobil.VeloBasar.Data;
 using BraunauMobil.VeloBasar.Parameters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using Xan.Extensions;
 using Xan.Extensions.Collections.Generic;
 
 namespace BraunauMobil.VeloBasar.BusinessLogic;

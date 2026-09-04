@@ -1,5 +1,5 @@
-﻿using Newtonsoft.Json;
-using System.Globalization;
+﻿using System.Globalization;
+using Newtonsoft.Json;
 using Xan.Extensions;
 
 namespace BraunauMobil.VeloBasar.Extensions;

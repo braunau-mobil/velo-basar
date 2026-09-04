@@ -1,4 +1,5 @@
-﻿using BraunauMobil.VeloBasar.BusinessLogic;
+﻿using System.Globalization;
+using BraunauMobil.VeloBasar.BusinessLogic;
 using BraunauMobil.VeloBasar.Data;
 using BraunauMobil.VeloBasar.DataGenerator.Mockups;
 using BraunauMobil.VeloBasar.Models;
@@ -10,7 +11,6 @@ using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
-using System.Globalization;
 using Xan.Extensions;
 
 namespace BraunauMobil.VeloBasar.DataGenerator;

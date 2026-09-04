@@ -1,6 +1,6 @@
-﻿using Microsoft.Extensions.Options;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.IO;
+using Microsoft.Extensions.Options;
 
 namespace BraunauMobil.VeloBasar.Configuration;
 

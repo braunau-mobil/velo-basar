@@ -1,6 +1,4 @@
 ﻿using BraunauMobil.VeloBasar.Configuration;
-using BraunauMobil.VeloBasar.Data;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
 namespace BraunauMobil.VeloBasar.IntegrationTests;

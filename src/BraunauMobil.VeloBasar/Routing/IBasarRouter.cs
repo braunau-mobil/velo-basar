@@ -1,6 +1,4 @@
-﻿using Xan.AspNetCore.Parameter;
-
-namespace BraunauMobil.VeloBasar.Routing;
+﻿namespace BraunauMobil.VeloBasar.Routing;
 
 public interface IBasarRouter
     : ICrudRouter

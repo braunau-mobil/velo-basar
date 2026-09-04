@@ -1,6 +1,5 @@
 ﻿using BraunauMobil.VeloBasar.BusinessLogic;
 using BraunauMobil.VeloBasar.Routing;
-using BraunauMobil.VeloBasar.Tests;
 using FluentValidation.Results;
 
 namespace BraunauMobil.VeloBasar.Tests.Models.CartModelTests;

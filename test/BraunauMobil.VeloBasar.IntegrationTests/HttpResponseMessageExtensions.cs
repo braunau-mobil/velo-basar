@@ -1,6 +1,6 @@
-﻿using AngleSharp;
+﻿using System.Net.Http.Headers;
+using AngleSharp;
 using AngleSharp.Io;
-using System.Net.Http.Headers;
 
 namespace BraunauMobil.VeloBasar.IntegrationTests;
 

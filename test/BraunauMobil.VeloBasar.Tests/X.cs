@@ -1,6 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System.Globalization;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
-using System.Globalization;
 using Xan.Extensions.Collections.Generic;
 
 namespace BraunauMobil.VeloBasar.Tests;

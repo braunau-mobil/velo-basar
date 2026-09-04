@@ -1,7 +1,7 @@
-﻿using Microsoft.Extensions.Options;
-using System.Net;
+﻿using System.Net;
 using System.Net.Http;
 using System.Threading;
+using Microsoft.Extensions.Options;
 
 namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.WordPressStatusPushServiceTests;
 

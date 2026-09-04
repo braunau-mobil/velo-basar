@@ -1,6 +1,5 @@
-﻿using BraunauMobil.VeloBasar.Tests;
+﻿using System.Net.Mail;
 using FluentValidation.Results;
-using System.Net.Mail;
 
 namespace BraunauMobil.VeloBasar.Tests.Models.InitializationConfigurationTests;
 

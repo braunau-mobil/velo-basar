@@ -1,6 +1,6 @@
-﻿using FluentValidation;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using FluentValidation;
 using Microsoft.Extensions.Localization;
-using System.ComponentModel.DataAnnotations.Schema;
 using Xan.AspNetCore.Validation;
 using Xan.Extensions;
 

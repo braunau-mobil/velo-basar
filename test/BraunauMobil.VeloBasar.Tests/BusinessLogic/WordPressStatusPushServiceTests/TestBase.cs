@@ -1,8 +1,8 @@
-﻿using BraunauMobil.VeloBasar.BusinessLogic;
+﻿using System.Net.Http;
+using BraunauMobil.VeloBasar.BusinessLogic;
 using BraunauMobil.VeloBasar.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using System.Net.Http;
 using Xan.Extensions.Tasks;
 
 namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.WordPressStatusPushServiceTests;

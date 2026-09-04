@@ -1,6 +1,6 @@
-﻿using FluentValidation;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using FluentValidation;
 using Microsoft.Extensions.Localization;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BraunauMobil.VeloBasar.Models.Entities;
 

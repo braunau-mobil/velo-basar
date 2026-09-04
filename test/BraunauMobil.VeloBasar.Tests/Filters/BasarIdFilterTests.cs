@@ -1,5 +1,4 @@
 ﻿using BraunauMobil.VeloBasar.BusinessLogic;
-using BraunauMobil.VeloBasar.Cookies;
 using BraunauMobil.VeloBasar.Extensions;
 using BraunauMobil.VeloBasar.Filters;
 using BraunauMobil.VeloBasar.Routing;

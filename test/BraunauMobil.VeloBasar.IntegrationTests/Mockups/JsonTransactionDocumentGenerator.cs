@@ -1,5 +1,4 @@
-﻿using BraunauMobil.VeloBasar.Models.Documents;
-using BraunauMobil.VeloBasar.Pdf;
+﻿using BraunauMobil.VeloBasar.Pdf;
 
 namespace BraunauMobil.VeloBasar.IntegrationTests.Mockups;
 

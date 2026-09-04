@@ -1,8 +1,8 @@
-﻿using BraunauMobil.VeloBasar.BusinessLogic;
+﻿using System.Threading;
+using BraunauMobil.VeloBasar.BusinessLogic;
 using BraunauMobil.VeloBasar.Routing;
 using FluentValidation;
 using Microsoft.Extensions.Localization;
-using System.Threading;
 
 namespace BraunauMobil.VeloBasar.Models;
 

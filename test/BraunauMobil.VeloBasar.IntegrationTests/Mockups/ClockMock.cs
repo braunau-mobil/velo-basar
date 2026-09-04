@@ -1,6 +1,4 @@
-﻿using Xan.Extensions;
-
-namespace BraunauMobil.VeloBasar.IntegrationTests.Mockups;
+﻿namespace BraunauMobil.VeloBasar.IntegrationTests.Mockups;
 
 public class ClockMock(DateTime now)
         : IClock

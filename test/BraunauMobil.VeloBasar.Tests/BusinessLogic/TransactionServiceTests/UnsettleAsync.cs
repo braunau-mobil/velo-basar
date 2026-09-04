@@ -1,5 +1,4 @@
-﻿using BraunauMobil.VeloBasar.BusinessLogic;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Xan.AspNetCore.EntityFrameworkCore;
 using Xan.AspNetCore.Mvc.Abstractions;
 

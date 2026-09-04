@@ -1,6 +1,5 @@
 ﻿using BraunauMobil.VeloBasar.Rendering;
 using Microsoft.AspNetCore.Http;
-using System.Globalization;
 
 namespace BraunauMobil.VeloBasar.Cookies;
 

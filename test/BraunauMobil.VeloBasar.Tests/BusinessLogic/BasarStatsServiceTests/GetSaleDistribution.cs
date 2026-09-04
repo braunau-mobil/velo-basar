@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using Xan.Extensions;
+﻿using Xan.Extensions;
 
 namespace BraunauMobil.VeloBasar.Tests.BusinessLogic.BasarStatsServiceTests;
 

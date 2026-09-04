@@ -1,5 +1,4 @@
-﻿using BraunauMobil.VeloBasar.Controllers;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace BraunauMobil.VeloBasar.Tests.Controllers.CartControllerTests;
 

@@ -1,5 +1,4 @@
-﻿using BraunauMobil.VeloBasar.Tests;
-using FluentValidation.Results;
+﻿using FluentValidation.Results;
 using Xan.AspNetCore.Models;
 
 namespace BraunauMobil.VeloBasar.Tests.Models.SelectProductsModelTests;

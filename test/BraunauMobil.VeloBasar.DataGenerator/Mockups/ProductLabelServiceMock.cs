@@ -1,7 +1,7 @@
-﻿using BraunauMobil.VeloBasar.Models.Documents;
-using BraunauMobil.VeloBasar.Pdf;
-using System.Text;
+﻿using System.Text;
 using BraunauMobil.VeloBasar.Configuration;
+using BraunauMobil.VeloBasar.Models.Documents;
+using BraunauMobil.VeloBasar.Pdf;
 
 namespace BraunauMobil.VeloBasar.DataGenerator.Mockups;
 

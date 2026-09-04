@@ -1,9 +1,9 @@
-﻿using BraunauMobil.VeloBasar.Data;
+﻿using System.Text;
+using BraunauMobil.VeloBasar.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using System.Text;
-using Xan.Extensions;
 using Xan.AspNetCore.EntityFrameworkCore;
+using Xan.Extensions;
 
 namespace BraunauMobil.VeloBasar.BusinessLogic;
 

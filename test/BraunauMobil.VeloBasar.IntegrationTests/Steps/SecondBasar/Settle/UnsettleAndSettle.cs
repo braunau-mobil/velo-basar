@@ -1,6 +1,4 @@
-﻿using BraunauMobil.VeloBasar.IntegrationTests;
-
-namespace BraunauMobil.VeloBasar.IntegrationTests.Steps.SecondBasar.Settle;
+﻿namespace BraunauMobil.VeloBasar.IntegrationTests.Steps.SecondBasar.Settle;
 
 public class UnsettleAndSettle(TestContext context)
 {

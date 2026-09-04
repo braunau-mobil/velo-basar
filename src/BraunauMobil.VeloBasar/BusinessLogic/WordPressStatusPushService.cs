@@ -1,13 +1,13 @@
-﻿using BraunauMobil.VeloBasar.Configuration;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Net.Http;
+using System.Text;
+using System.Threading;
+using BraunauMobil.VeloBasar.Configuration;
 using BraunauMobil.VeloBasar.Data;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using System.Diagnostics.CodeAnalysis;
-using System.Net.Http;
-using System.Text;
-using System.Threading;
 using Xan.AspNetCore.EntityFrameworkCore;
 using Xan.Extensions.Tasks;
 

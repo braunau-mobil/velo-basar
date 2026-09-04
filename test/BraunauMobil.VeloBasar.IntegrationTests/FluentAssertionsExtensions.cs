@@ -1,5 +1,5 @@
-﻿using FluentAssertions.Primitives;
-using System.Text;
+﻿using System.Text;
+using FluentAssertions.Primitives;
 
 namespace BraunauMobil.VeloBasar.IntegrationTests;
 

@@ -1,7 +1,7 @@
-﻿using FluentAssertions.Primitives;
-using Microsoft.AspNetCore.Html;
-using System.IO;
+﻿using System.IO;
 using System.Text.Encodings.Web;
+using FluentAssertions.Primitives;
+using Microsoft.AspNetCore.Html;
 
 namespace BraunauMobil.VeloBasar.Tests;
 

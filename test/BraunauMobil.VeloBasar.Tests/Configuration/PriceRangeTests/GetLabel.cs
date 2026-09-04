@@ -1,5 +1,5 @@
-﻿using BraunauMobil.VeloBasar.Configuration;
-using System.Globalization;
+﻿using System.Globalization;
+using BraunauMobil.VeloBasar.Configuration;
 
 namespace BraunauMobil.VeloBasar.Tests.Configuration.PriceRangeTests;
 

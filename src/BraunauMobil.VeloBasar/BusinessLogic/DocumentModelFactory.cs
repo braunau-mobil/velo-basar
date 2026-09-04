@@ -1,9 +1,9 @@
-﻿using BraunauMobil.VeloBasar.Configuration;
+﻿using System.Globalization;
+using System.Text;
+using BraunauMobil.VeloBasar.Configuration;
 using BraunauMobil.VeloBasar.Models.Documents;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
-using System.Globalization;
-using System.Text;
 using Xan.Extensions;
 
 namespace BraunauMobil.VeloBasar.BusinessLogic;

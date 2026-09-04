@@ -1,5 +1,4 @@
-﻿using BraunauMobil.VeloBasar.Tests;
-using FluentValidation.Results;
+﻿using FluentValidation.Results;
 
 namespace BraunauMobil.VeloBasar.Tests.Models.SelectSaleModelTests;
 
