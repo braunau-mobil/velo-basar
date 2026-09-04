@@ -52,7 +52,9 @@ public sealed class ProductEntity
 
     public bool CanEdit => (StorageState == StorageState.Available || StorageState == StorageState.NotAccepted) && ValueState == ValueState.NotSettled;
 
-    public bool CanBeSettledWithoutSeller => StorageState != StorageState.NotAccepted && (StorageState == StorageState.Sold || StorageState == StorageState.Lost || DonateIfNotSold);
+    public bool NeedsBankingQrCodeOnDocument =>
+        StorageState != StorageState.NotAccepted
+        && (StorageState == StorageState.Sold || (StorageState == StorageState.Lost && !DonateIfNotSold));
 
     public bool IsLost => StorageState == StorageState.Lost;
     

@@ -73,7 +73,7 @@ public sealed class TransactionEntity
             return Type == TransactionType.Settlement
                 && !string.IsNullOrEmpty(Seller.IBAN)
                 && Products.Count > 0
-                && Products.All(p => p.Product.CanBeSettledWithoutSeller);
+                && Products.All(p => p.Product.NeedsBankingQrCodeOnDocument);
         }
     }
 

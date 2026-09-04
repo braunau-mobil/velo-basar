@@ -1,15 +1,12 @@
 ﻿namespace BraunauMobil.VeloBasar.Tests.Models.Entities.ProductEntityTests;
 
-public class CanBeSettledWithoutSeller
+public class NeedsBankingQrCodeOnDocument
 {
     private readonly VeloFixture _fixture = new();
 
     [Theory]
     [InlineData(StorageState.Lost, false)]
     [InlineData(StorageState.Sold, false)]
-    [InlineData(StorageState.Available, true)]
-    [InlineData(StorageState.Locked, true)]
-    [InlineData(StorageState.Lost, true)]
     [InlineData(StorageState.Sold, true)]
     public void ShouldReturnTrue(StorageState storageState, bool donateIfNotSold)
     {
@@ -20,13 +17,16 @@ public class CanBeSettledWithoutSeller
             .Create();
 
         //  Act
-        bool result = sut.CanBeSettledWithoutSeller;
+        bool result = sut.NeedsBankingQrCodeOnDocument;
 
         //  Assert
         result.Should().BeTrue();
     }
 
     [Theory]
+    [InlineData(StorageState.Available, true)]
+    [InlineData(StorageState.Locked, true)]
+    [InlineData(StorageState.Lost, true)]
     [InlineData(StorageState.NotAccepted, false)]
     [InlineData(StorageState.Available, false)]
     [InlineData(StorageState.Locked, false)]
@@ -40,7 +40,7 @@ public class CanBeSettledWithoutSeller
             .Create();
 
         //  Act
-        bool result = sut.CanBeSettledWithoutSeller;
+        bool result = sut.NeedsBankingQrCodeOnDocument;
 
         //  Assert
         result.Should().BeFalse();
