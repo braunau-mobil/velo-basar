@@ -14,11 +14,15 @@ using iText.Layout.Properties;
 
 namespace BraunauMobil.VeloBasar.Pdf;
 
-public sealed class ItextTransactionDocumentGenerator(PdfGenerator pdf, IFormatProvider formatProvider)
+public sealed class ItextTransactionDocumentGenerator(PdfGenerator pdf, IFormatProvider formatProvider, IVeloCache veloCache)
     : ITransactionDocumentGenerator
 {
+    private readonly IVeloCache _veloCache = veloCache ?? throw new ArgumentNullException(nameof(veloCache));
+
     public async Task<byte[]> CreateAcceptanceAsync(AcceptanceDocumentModel model)
     {
+        ArgumentNullException.ThrowIfNull(model);
+
         return await CreateTransactionPdfAsync((pdfDoc, doc) =>
         {
             pdf.AddHeader(doc, model.AddressText, model.LocationAndDateText, model.SellerIdText);
@@ -66,14 +70,18 @@ public sealed class ItextTransactionDocumentGenerator(PdfGenerator pdf, IFormatP
             }
 
             AddSignature(doc, model.SignatureLine, model.SignatureText);
+
+            return Task.CompletedTask;
         }, model);
     }
 
     public async Task<byte[]> CreateSaleAsync(SaleDocumentModel model)
     {
-        return await CreateTransactionPdfAsync((pdfDoc, doc) =>
+        ArgumentNullException.ThrowIfNull(model);
+
+        return await CreateTransactionPdfAsync(async (_, doc) =>
         {
-            AddBanner(doc, model.BannerFilePath);
+            await AddBannerAsync(doc, model.BannerFilePath);
             pdf.AddBannerSubtitle(doc, model.BannerSubtitle, model.Website);
 
             pdf.AddHeader(doc, null, model.LocationAndDateText, null);
@@ -92,9 +100,11 @@ public sealed class ItextTransactionDocumentGenerator(PdfGenerator pdf, IFormatP
 
     public async Task<byte[]> CreateSettlementAsync(SettlementDocumentModel model)
     {
-        return await CreateTransactionPdfAsync((pdfDoc, doc) =>
+        ArgumentNullException.ThrowIfNull(model);
+
+        return await CreateTransactionPdfAsync(async (pdfDoc, doc) =>
         {
-            AddBanner(doc, model.BannerFilePath);
+            await AddBannerAsync(doc, model.BannerFilePath);
             pdf.AddBannerSubtitle(doc, model.BannerSubtitle, model.Website);
 
             pdf.AddHeader(doc, model.AddressText, model.LocationAndDateText, model.SellerIdText);
@@ -152,7 +162,7 @@ public sealed class ItextTransactionDocumentGenerator(PdfGenerator pdf, IFormatP
         }, model);
     }
 
-    private static void AddBanner(Document doc, string bannerFilePath)
+    private async Task AddBannerAsync(Document doc, string bannerFilePath)
     {
         if (string.IsNullOrEmpty(bannerFilePath))
         {
@@ -162,23 +172,23 @@ public sealed class ItextTransactionDocumentGenerator(PdfGenerator pdf, IFormatP
         {
             throw new FileNotFoundException($"{nameof(bannerFilePath)} '{bannerFilePath}' not found.");
         }
-        ImageData bannerData = ImageDataFactory.Create(bannerFilePath);
+
+        byte[] bannerBytes = await _veloCache.GetBannerBytesAsync(bannerFilePath);
+        ImageData bannerData = ImageDataFactory.Create(bannerBytes);
         Image banner = new(bannerData);
         doc.Add(banner);
     }
 
-    private async Task<byte[]> CreateTransactionPdfAsync(Action<PdfDocument, Document> decorate, ITransactionDocumentModel model)
-    {
-        return await Task.FromResult(pdf.CreatePdf((pdfDoc, doc) =>
+    private async Task<byte[]> CreateTransactionPdfAsync(Func<PdfDocument, Document, Task> decorateAsync, ITransactionDocumentModel model)
+        => await pdf.CreatePdfAsync(async (pdfDoc, doc) =>
         {
             pdfDoc.SetDefaultPageSize(pageSize: PageSize.A4);
             doc.SetFont(PdfFontFactory.CreateFont(StandardFonts.TIMES_ROMAN));
             doc.SetMargins(model.PageMargins.Top.ToUnit(), model.PageMargins.Right.ToUnit(), (model.PageMargins.Bottom + PageFooterHandler.Height).ToUnit(), model.PageMargins.Left.ToUnit());
             pdfDoc.AddEventHandler(PdfDocumentEvent.END_PAGE, new PageFooterHandler(model.PageMargins, doc, model.PageNumberFormat, model.PoweredBy, formatProvider));
 
-            decorate(pdfDoc, doc);
-        }));
-    }
+            await decorateAsync(pdfDoc, doc);
+        });
 
     private void AddProductTable(Document doc, ProductsTableDocumentModel model)
     {

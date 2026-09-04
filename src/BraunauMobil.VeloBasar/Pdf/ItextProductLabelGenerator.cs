@@ -27,7 +27,7 @@ public sealed class ItextProductLabelGenerator(PdfGenerator pdf)
         ArgumentNullException.ThrowIfNull(models);
         ArgumentNullException.ThrowIfNull(settings);
 
-        byte[] data = pdf.CreatePdf((pdfDoc, doc) =>
+        return await pdf.CreatePdfAsync((pdfDoc, doc) =>
         {
             pdfDoc.SetDefaultPageSize(new PageSize(settings.WidthInMillimeters.ToUnit(), settings.HeightInMillimeters.ToUnit()));
             doc.SetMargins(settings.Margins);
@@ -46,8 +46,9 @@ public sealed class ItextProductLabelGenerator(PdfGenerator pdf)
 
                 addPageBreak = true;
             }
+
+            return Task.CompletedTask;
         });
-        return await Task.FromResult(data);
     }
 
     private void AddProductLabel(PdfDocument pdfDoc, Document doc, ProductLabelDocumentModel model, LabelPrintSettings settings)

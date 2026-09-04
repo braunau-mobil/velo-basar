@@ -104,6 +104,7 @@ public class Program
             .AddHttpClient()
             .AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>()
             .AddSingleton<IClock, SystemClock>()
+            .AddSingleton<IVeloCache, VeloCache>()
             .AddSingleton<IFormatProvider>(formatProvider)
             .AddBusinessLogic()
             .AddVeloCookies()

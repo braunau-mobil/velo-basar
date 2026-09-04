@@ -32,9 +32,9 @@ public sealed class PdfGenerator
 
     public iColor Red { get; }
 
-    public byte[] CreatePdf(Action<PdfDocument, Document> decorate)
+    public async Task<byte[]> CreatePdfAsync(Func<PdfDocument, Document, Task> decorateAsync)
     {
-        ArgumentNullException.ThrowIfNull(decorate);
+        ArgumentNullException.ThrowIfNull(decorateAsync);
 
         byte[] bytes;
         using (MemoryStream memoryStream = new())
@@ -43,7 +43,7 @@ public sealed class PdfGenerator
             using (PdfDocument pdfDoc = new(pdfWriter))
             using (Document doc = new(pdfDoc))
             {
-                decorate(pdfDoc, doc);
+                await decorateAsync(pdfDoc, doc);
             }
 
             bytes = memoryStream.GetBuffer();
