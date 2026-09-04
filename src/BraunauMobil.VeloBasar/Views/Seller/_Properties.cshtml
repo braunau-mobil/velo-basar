@@ -44,6 +44,13 @@
             @Model.NewsletterPermissionTimesStamp.ToHtmlTimeStampDisplay()
         </dd>
     }
+
+    <dt class="col-sm-2">@Localizer[VeloTexts.CreatedAt]</dt>
+    <dd class="col-sm-10">@Model.CreatedAt.ToHtmlTimeStampDisplay()</dd>
+
+    <dt class="col-sm-2">@Localizer[VeloTexts.UpdatedAt]</dt>
+    <dd class="col-sm-10">@Model.UpdatedAt.ToHtmlTimeStampDisplay()</dd>
+
     @if (!string.IsNullOrEmpty(Model.Comment))
     {
         <dt class="col-sm-2">@Localizer[VeloTexts.Comment]</dt>
