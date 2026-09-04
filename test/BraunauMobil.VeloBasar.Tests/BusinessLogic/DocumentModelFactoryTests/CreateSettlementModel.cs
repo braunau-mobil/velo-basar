@@ -45,6 +45,7 @@ public class CreateSettlementModel
         seller.LastName = "Borthand";
         seller.Street = "Heßgasse 13a";
         seller.ZIP = "X45ZG";
+        seller.PhoneNumber = "+12345";
 
         TransactionEntity settlement = Fixture.BuildTransaction(basar)
             .With(settlement => settlement.Type, TransactionType.Settlement)
@@ -122,7 +123,7 @@ public class CreateSettlementModel
             expectedBannerFilePath,
             Settings.BannerSubtitle,
             Settings.Website,
-            "Ohtar Borthand".Line("Heßgasse 13a").Line("X45ZG Bree").Line(),
+            "Ohtar Borthand".Line("Heßgasse 13a").Line("X45ZG Bree").Line("+12345").Line(),
             "VeloBasar_SellerIdShort_55",
             new SettlementCommisionSummaryModel(
                 "VeloBasar_IncomeFromSoldProducts",
@@ -202,6 +203,7 @@ public class CreateSettlementModel
         seller.LastName = "Borthand";
         seller.Street = "Heßgasse 13a";
         seller.ZIP = "X45ZG";
+        seller.PhoneNumber = "+12345";
 
         TransactionEntity settlement = Fixture.BuildTransaction(basar)
             .With(settlement => settlement.Type, TransactionType.Settlement)
@@ -237,7 +239,7 @@ public class CreateSettlementModel
             expectedBannerFilePath,
             Settings.BannerSubtitle,
             Settings.Website,
-            "Ohtar Borthand".Line("Heßgasse 13a").Line("X45ZG Bree").Line(),
+            "Ohtar Borthand".Line("Heßgasse 13a").Line("X45ZG Bree").Line("+12345").Line(),
             "VeloBasar_SellerIdShort_55",
             new SettlementCommisionSummaryModel(
                 "VeloBasar_IncomeFromSoldProducts",
@@ -302,6 +304,7 @@ public class CreateSettlementModel
         seller.LastName = "Borthand";
         seller.Street = "Heßgasse 13a";
         seller.ZIP = "X45ZG";
+        seller.PhoneNumber = "+12345";
 
         TransactionEntity settlement = Fixture.BuildTransaction(basar)
             .With(settlement => settlement.Type, TransactionType.Settlement)
@@ -323,7 +326,7 @@ public class CreateSettlementModel
             expectedBannerFilePath,
             Settings.BannerSubtitle,
             Settings.Website,
-            "Ohtar Borthand".Line("Heßgasse 13a").Line("X45ZG Bree").Line(),
+            "Ohtar Borthand".Line("Heßgasse 13a").Line("X45ZG Bree").Line("+12345").Line(),
             "VeloBasar_SellerIdShort_55",
             null,
             null,

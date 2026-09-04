@@ -182,7 +182,7 @@ public class DocumentModelFactory
             bannerFilePath,
             _settings.BannerSubtitle,
             _settings.Website,
-            GetBigAddressText(settlement.Seller),
+            GetBigAddressText(settlement.Seller, includePhoneNumber: true),
             _localizer[VeloTexts.SellerIdShort, settlement.Seller.Id],
             commisisonSummary,
             payoutProductsTable,
@@ -282,13 +282,17 @@ public class DocumentModelFactory
     private string GetLocationAndDateText(BasarEntity basar)
         => string.Format(_formatProvider, "{0}, {1:d}", basar.Location, basar.Date);
 
-    private static string GetBigAddressText(SellerEntity seller)
+    private static string GetBigAddressText(SellerEntity seller, bool includePhoneNumber = false)
     {
         StringBuilder sb = new();
         sb
             .Append(seller.FirstName).Append(' ').AppendLine(seller.LastName)
             .AppendLine(seller.Street)
             .Append(seller.ZIP).Append(' ').AppendLine(seller.City);
+        if (includePhoneNumber)
+        {
+            sb.AppendLine(seller.PhoneNumber);
+        }
         return sb.ToString();
     }
 

@@ -13,7 +13,7 @@ public class UnsettleAndSettle(TestContext context)
         await SettleSeller(ID.Sellers.LanghöhlenSiriondil, "Seller #4 Langhöhlen Siriondil - Velo Basar", "Settlement #9 - Velo Basar", context.SettlementDocument(
             "XYZ - Second Bazaar : Settlement #9",
             "Thal, 6/4/2064",
-            "Langhöhlen Siriondil".Line("Börseplatz 11").Line("2178 Nargothrond").Line(),
+            "Langhöhlen Siriondil".Line("Börseplatz 11").Line("2178 Nargothrond").Line("74460686").Line(),
             "Seller.-ID: 4",
             "Sales commission (10.00% of $69.54):",
             "$69.54",

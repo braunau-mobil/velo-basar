@@ -20,7 +20,7 @@ public class Settle(TestContext context)
         document.Should().BeEquivalentTo(context.SettlementDocument(
             "XYZ - First Bazaar : Settlement #1",
             "Edoras, 5/4/2063",
-            "Schattenfell Magsame".Line("Heidenschuss 41").Line("6295 Hobbingen").Line(),
+            "Schattenfell Magsame".Line("Heidenschuss 41").Line("6295 Hobbingen").Line("71904814").Line(),
             "Seller.-ID: 1",
             "Sales commission (10.00% of $92.99):",
             "$92.99",

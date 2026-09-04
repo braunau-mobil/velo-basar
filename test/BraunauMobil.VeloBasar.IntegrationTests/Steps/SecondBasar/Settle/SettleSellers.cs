@@ -7,7 +7,7 @@ public class SettleSellers(TestContext context)
         await SettleSeller(ID.Sellers.MeneldorBorondir, "Seller #2 Meneldor Borondir - Velo Basar", "Settlement #1 - Velo Basar", context.SettlementDocument(
             "XYZ - Second Bazaar : Settlement #1",
             "Thal, 6/4/2064",
-            "Meneldor Borondir".Line("Heßgasse 10").Line("2828 Bree").Line(),
+            "Meneldor Borondir".Line("Heßgasse 10").Line("2828 Bree").Line("9332429156").Line(),
             "Seller.-ID: 2",
             "Sales commission (10.00% of $120.60):",
             "$120.60",
@@ -36,7 +36,7 @@ public class SettleSellers(TestContext context)
         await SettleSeller(ID.Sellers.AnsenGróin, "Seller #8 Ansen Gróin - Velo Basar", "Settlement #2 - Velo Basar", context.SettlementDocument(
             "XYZ - Second Bazaar : Settlement #2",
             "Thal, 6/4/2064",
-            "Ansen Gróin".Line("Liebiggasse 3").Line("4579 Tuckbergen").Line(),
+            "Ansen Gróin".Line("Liebiggasse 3").Line("4579 Tuckbergen").Line("07935794").Line(),
             "Seller.-ID: 8",
             "1 Product",
             "$75.29",
@@ -54,7 +54,7 @@ public class SettleSellers(TestContext context)
         await SettleSeller(ID.Sellers.AmrothGerstenmann, "Seller #3 Amroth Gerstenmann - Velo Basar", "Settlement #3 - Velo Basar", context.SettlementDocument(
             "XYZ - Second Bazaar : Settlement #3",
             "Thal, 6/4/2064",
-            "Amroth Gerstenmann".Line("Concordiaplatz 48").Line("7872 Dwollingen").Line(),
+            "Amroth Gerstenmann".Line("Concordiaplatz 48").Line("7872 Dwollingen").Line("161606605").Line(),
             "Seller.-ID: 3",
             false,
             "Amroth Gerstenmann",
@@ -67,7 +67,7 @@ public class SettleSellers(TestContext context)
         await SettleSeller(ID.Sellers.LanghöhlenSiriondil, "Seller #4 Langhöhlen Siriondil - Velo Basar", "Settlement #4 - Velo Basar", context.SettlementDocument(
             "XYZ - Second Bazaar : Settlement #4",
             "Thal, 6/4/2064",
-            "Langhöhlen Siriondil".Line("Börseplatz 11").Line("2178 Nargothrond").Line(),
+            "Langhöhlen Siriondil".Line("Börseplatz 11").Line("2178 Nargothrond").Line("74460686").Line(),
             "Seller.-ID: 4",
             "Sales commission (10.00% of $69.54):",
             "$69.54",
@@ -94,7 +94,7 @@ public class SettleSellers(TestContext context)
         await SettleSeller(ID.Sellers.FrórBilbo, "Seller #5 Frór Bilbo - Velo Basar", "Settlement #5 - Velo Basar", context.SettlementDocument(
             "XYZ - Second Bazaar : Settlement #5",
             "Thal, 6/4/2064",
-            "Frór Bilbo".Line("Helmut-Zilk-Platz 27").Line("8475 Andúnië").Line(),
+            "Frór Bilbo".Line("Helmut-Zilk-Platz 27").Line("8475 Andúnië").Line("14712192").Line(),
             "Seller.-ID: 5",
             "Sales commission (10.00% of $221.11):",
             "$221.11",
@@ -123,7 +123,7 @@ public class SettleSellers(TestContext context)
         await SettleSeller(ID.Sellers.MallorFimbrethil, "Seller #9 Mallor Fimbrethil - Velo Basar", "Settlement #6 - Velo Basar", context.SettlementDocument(
             "XYZ - Second Bazaar : Settlement #6",
             "Thal, 6/4/2064",
-            "Mallor Fimbrethil".Line("Schönlaterngasse 16").Line("2758 Edhellond").Line(),
+            "Mallor Fimbrethil".Line("Schönlaterngasse 16").Line("2758 Edhellond").Line("22870292").Line(),
             "Seller.-ID: 9",
             "1 Product",
             "$8.49",
@@ -141,7 +141,7 @@ public class SettleSellers(TestContext context)
         await SettleSeller(ID.Sellers.ChicaCiryatur, "Seller #6 Chica Ciryatur - Velo Basar", "Settlement #7 - Velo Basar", context.SettlementDocument(
             "XYZ - Second Bazaar : Settlement #7",
             "Thal, 6/4/2064",
-            "Chica Ciryatur".Line("Tiefer Graben 6").Line("7332 Avallóne").Line(),
+            "Chica Ciryatur".Line("Tiefer Graben 6").Line("7332 Avallóne").Line("26005835").Line(),
             "Seller.-ID: 6",
             "Sales commission (10.00% of $143.64):",
             "$143.64",
@@ -163,7 +163,7 @@ public class SettleSellers(TestContext context)
         await SettleSeller(ID.Sellers.FolcwineGollum, "Seller #7 Folcwine Gollum - Velo Basar", "Settlement #8 - Velo Basar", context.SettlementDocument(
             "XYZ - Second Bazaar : Settlement #8",
             "Thal, 6/4/2064",
-            "Folcwine Gollum".Line("Domgasse 25").Line("7356 Unterharg").Line(),
+            "Folcwine Gollum".Line("Domgasse 25").Line("7356 Unterharg").Line("192930419").Line(),
             "Seller.-ID: 7",
             "1 Product",
             "$149.87",
