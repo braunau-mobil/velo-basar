@@ -20,6 +20,9 @@ public sealed class SellerRouter
     public string ToSearchForAcceptance()
         => GetUriByAction(nameof(SellerController.SearchForAcceptance));
 
+    public string ToScanQrForAcceptance()
+        => GetUriByAction(nameof(SellerController.ScanQrForAcceptance));
+
     public string ToDetails(int id)
         => GetUriByAction(nameof(SellerController.Details), new { id });
 

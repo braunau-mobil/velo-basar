@@ -7,6 +7,13 @@
     <div class="card m-2">
         @VeloHtml.TitleCardHeader()
         <div class="card-body">
+            @if (!ViewContext.ModelState.IsValid)
+            {
+                @VeloHtml.Alert(MessageType.Danger, @VeloHtml.NonFieldValidationResults());
+            }
+
+            <partial name="_QrScanField" model="Router.Seller.ToScanQrForAcceptance()" />
+
             <partial name="_NameEdit.cshtml" model="Model.Seller" />
 
             <div class="mb-2">

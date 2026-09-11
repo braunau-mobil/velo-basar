@@ -43,6 +43,18 @@ public class SellerRouterTests
     }
 
     [Fact]
+    public void ToScanQrForAcceptance()
+    {
+        //  Arrange
+
+        //  Act
+        string actual = _sut.ToScanQrForAcceptance();
+
+        //  Assert
+        actual.Should().Be("//action=ScanQrForAcceptance&controller=Seller");
+    }
+
+    [Fact]
     public void ToDetails()
     {
         //  Arrange

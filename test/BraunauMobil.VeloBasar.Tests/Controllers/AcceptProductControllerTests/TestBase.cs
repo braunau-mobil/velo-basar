@@ -12,7 +12,7 @@ public class TestBase
         Validator = new (Localizer);
         A.CallTo(() => Router.AcceptProduct).Returns(AcceptProductRouter);
 
-        Sut = new AcceptProductController(AcceptProductService, Router, Validator);
+        Sut = new AcceptProductController(AcceptProductService, Router, Validator, QrImportService, Localizer);
     }
 
     protected IAcceptProductRouter AcceptProductRouter { get; } = X.StrictFake<IAcceptProductRouter>();
@@ -22,7 +22,9 @@ public class TestBase
     protected VeloFixture Fixture { get; } = new ();
 
     protected IStringLocalizer<SharedResources> Localizer { get; } = X.StringLocalizer;
-    
+
+    protected IQrImportService QrImportService { get; } = X.StrictFake<IQrImportService>();
+
     protected IVeloRouter Router { get; } = X.StrictFake<IVeloRouter>();
     
     protected AcceptProductController Sut { get; }

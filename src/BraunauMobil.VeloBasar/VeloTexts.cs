@@ -237,6 +237,16 @@ public static class VeloTexts
     public const string ProductTypeList = $"{Prefix}{nameof(ProductTypeList)}";
     public const string ProductWasSettled = $"{Prefix}{nameof(ProductWasSettled)}";
     public const string PushSellerStatus = $"{Prefix}{nameof(PushSellerStatus)}";
+    public const string QrScanButton = $"{Prefix}{nameof(QrScanButton)}";
+    public const string QrScanChecksumMismatch = $"{Prefix}{nameof(QrScanChecksumMismatch)}";
+    public const string QrScanCountryNotFound = $"{Prefix}{nameof(QrScanCountryNotFound)}";
+    public const string QrScanEmpty = $"{Prefix}{nameof(QrScanEmpty)}";
+    public const string QrScanFieldLabel = $"{Prefix}{nameof(QrScanFieldLabel)}";
+    public const string QrScanInvalidData = $"{Prefix}{nameof(QrScanInvalidData)}";
+    public const string QrScanProductTypeNotFound = $"{Prefix}{nameof(QrScanProductTypeNotFound)}";
+    public const string QrScanUnsupportedVersion = $"{Prefix}{nameof(QrScanUnsupportedVersion)}";
+    public const string QrScanWrongKindExpectedProduct = $"{Prefix}{nameof(QrScanWrongKindExpectedProduct)}";
+    public const string QrScanWrongKindExpectedSeller = $"{Prefix}{nameof(QrScanWrongKindExpectedSeller)}";
     public const string RememberMe = $"{Prefix}{nameof(RememberMe)}";
     public const string RemoteSingular = $"{Prefix}{nameof(RemoteSingular)}";
     public const string RemoteWithCount = $"{Prefix}{nameof(RemoteWithCount)}";

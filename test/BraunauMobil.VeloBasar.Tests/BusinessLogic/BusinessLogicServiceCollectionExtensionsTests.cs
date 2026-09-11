@@ -29,6 +29,7 @@ public class BusinessLogicServiceCollectionExtensionsTests
             X.CreateInspector<INumberService, NumberService>(ServiceLifetime.Scoped),
             X.CreateInspector<IProductService, ProductService>(ServiceLifetime.Scoped),
             X.CreateInspector<IProductTypeService, ProductTypeService>(ServiceLifetime.Scoped),
+            X.CreateInspector<IQrImportService, QrImportService>(ServiceLifetime.Scoped),
             X.CreateInspector<IStatusPushService, WordPressStatusPushService>(ServiceLifetime.Scoped),
             X.CreateInspector<ISellerService, SellerService>(ServiceLifetime.Scoped),
             X.CreateInspector<ISetupService, SetupService>(ServiceLifetime.Scoped),

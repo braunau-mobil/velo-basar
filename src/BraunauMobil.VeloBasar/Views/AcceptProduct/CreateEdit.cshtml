@@ -2,16 +2,28 @@
 @inject ISelectListService SelectLists
 @{
     ViewData.SetTitle(Localizer[VeloTexts.AcceptanceForSellerId, Model.SellerId]);
+    // Explicit action: after a QR scan the page URL is the ScanQr action, so the browser's default
+    // (post back to the current URL) would re-run the scan instead of adding/updating the product.
+    string formAction = Model.Entity.Id == 0
+        ? Router.AcceptProduct.ToCreate(Model.SessionId)
+        : Router.AcceptProduct.ToEdit(Model.Entity.Id);
 }
 
-<form method="post">
+<form method="post" action="@formAction">
     <div class="card m-2">
         @VeloHtml.TitleCardHeader()
         <div class="card-body">
+            @if (!ViewContext.ModelState.IsValid)
+            {
+                @VeloHtml.Alert(MessageType.Danger, @VeloHtml.NonFieldValidationResults());
+            }
+
+            <partial name="_QrScanField" model="Router.AcceptProduct.ToScanQr(Model.SessionId)" />
+
             @VeloHtml.HiddenInput(nameof(Model.Entity.Id), Model.Entity.Id)
             @VeloHtml.HiddenInput(nameof(Model.Entity.SessionId), Model.Entity.SessionId)
             <div class="row">
-                <div class="col-2">@VeloHtml.SelectField(nameof(Model.Entity.TypeId), Model.Entity.TypeId, await SelectLists.ProductTypesAsync(), Localizer[VeloTexts.ProductType], autoFocus: true)</div>
+                <div class="col-2">@VeloHtml.SelectField(nameof(Model.Entity.TypeId), Model.Entity.TypeId, await SelectLists.ProductTypesAsync(), Localizer[VeloTexts.ProductType])</div>
                 <div class="col-2">@VeloHtml.DataListField(nameof(Model.Entity.Brand), Model.Entity.Brand, await SelectLists.BrandsAsync(), Localizer[VeloTexts.Brand])</div>
                 <div class="col-3">@VeloHtml.TextInputField(nameof(Model.Entity.Color), Model.Entity.Color, Localizer[VeloTexts.Color])</div>
                 <div class="col-4">@VeloHtml.TextInputField(nameof(Model.Entity.FrameNumber), Model.Entity.FrameNumber, Localizer[VeloTexts.FrameNumber])</div>

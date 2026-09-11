@@ -1,0 +1,37 @@
+﻿@model string
+@*
+    QR scan field for the check-in forms (DataTransfer QR codes). The model is the URL of the scan action.
+    The scan button is type="button" on purpose: it must not become the form's default (first) submit button,
+    otherwise pressing Enter in any other field of the form would trigger a scan instead of the form's own action.
+    Scanning (button click, or the scanner's Enter suffix in the field) re-targets the form to the scan action.
+*@
+@{
+    string qrScanTextName = "QrScanText";
+}
+
+<div class="mb-2">
+    @VeloHtml.TextInputField(qrScanTextName, null, Localizer[VeloTexts.QrScanFieldLabel], autoFocus: true)
+    <button type="button" class="btn btn-secondary" id="qrScanButton" data-scan-action="@Model">@Localizer[VeloTexts.QrScanButton]</button>
+</div>
+
+<script>
+    (function () {
+        const input = document.getElementById("@VeloHtml.Id(qrScanTextName)");
+        const button = document.getElementById("qrScanButton");
+
+        function submitScan() {
+            const form = button.form;
+            form.action = button.dataset.scanAction;
+            form.submit();
+        }
+
+        button.addEventListener("click", submitScan);
+        input.addEventListener("keydown", function (event) {
+            if (event.key !== "Enter") {
+                return;
+            }
+            event.preventDefault();
+            submitScan();
+        });
+    })();
+</script>

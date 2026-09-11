@@ -22,6 +22,7 @@ public static class BusinessLogicServiceCollectionExtensions
             .AddScoped<INumberService, NumberService>()
             .AddScoped<IProductService, ProductService>()
             .AddScoped<IProductTypeService, ProductTypeService>()
+            .AddScoped<IQrImportService, QrImportService>()
             .AddScoped<IStatusPushService, WordPressStatusPushService>()
             .AddScoped<ISellerService, SellerService>()
             .AddScoped<ISetupService, SetupService>()

@@ -15,7 +15,7 @@ public class TestBase
         A.CallTo(() => Router.Seller).Returns(SellerRouter);
         A.CallTo(() => Router.Transaction).Returns(TransactionRouter);
 
-        Sut = new(SellerService, new SellerSearchModelValidator(Localizer), Router, SellerRouter, new SellerCrudModelFactory(Localizer, X.StrictFake<IHtmlHelper>(), SellerRouter, X.StrictFake<IVeloHtmlFactory>()), new SellerEntityValidator(Localizer));
+        Sut = new(SellerService, new SellerSearchModelValidator(Localizer), Router, SellerRouter, new SellerCrudModelFactory(Localizer, X.StrictFake<IHtmlHelper>(), SellerRouter, X.StrictFake<IVeloHtmlFactory>()), new SellerEntityValidator(Localizer), QrImportService, Localizer);
     }
 
     protected IAcceptSessionRouter AcceptSessionRouter { get; } = X.StrictFake<IAcceptSessionRouter>();
@@ -23,6 +23,8 @@ public class TestBase
     protected VeloFixture Fixture { get; } = new ();
 
     protected IStringLocalizer<SharedResources> Localizer { get; } = X.StringLocalizer;
+
+    protected IQrImportService QrImportService { get; } = X.StrictFake<IQrImportService>();
 
     protected IVeloRouter Router { get; } = X.StrictFake<IVeloRouter>();
 

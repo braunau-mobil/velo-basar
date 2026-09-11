@@ -7,4 +7,6 @@ public interface IAcceptProductRouter
     string ToDelete(int sessionId, int productId);
 
     string ToEdit(int productId);
+
+    string ToScanQr(int sessionId);
 }

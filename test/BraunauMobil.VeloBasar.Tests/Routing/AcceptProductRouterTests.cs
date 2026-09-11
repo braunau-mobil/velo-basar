@@ -37,4 +37,14 @@ public sealed class AcceptProductRouterTests
         // Assert
         actual.Should().Be("//productId=765&action=Edit&controller=AcceptProduct");
     }
+
+    [Fact]
+    public void ToScanQr()
+    {
+        // Act
+        string actual = _sut.ToScanQr(321);
+
+        // Assert
+        actual.Should().Be("//sessionId=321&action=ScanQr&controller=AcceptProduct");
+    }
 }

@@ -21,4 +21,7 @@ public sealed class AcceptProductRouter
 
     public string ToEdit(int productId)
         => GetUriByAction(nameof(AcceptProductController.Edit), new { productId });
+
+    public string ToScanQr(int sessionId)
+        => GetUriByAction(nameof(AcceptProductController.ScanQr), new { sessionId });
 }

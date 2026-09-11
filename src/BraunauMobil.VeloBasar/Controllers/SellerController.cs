@@ -4,24 +4,29 @@ using BraunauMobil.VeloBasar.Rendering;
 using BraunauMobil.VeloBasar.Routing;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 
 namespace BraunauMobil.VeloBasar.Controllers;
 
 public sealed class SellerController
     : AbstractCrudController<SellerEntity, SellerListParameter, ISellerRouter, ISellerService>
 {
+    private readonly IStringLocalizer<SharedResources> _localizer;
+    private readonly IQrImportService _qrImportService;
     private readonly ISellerService _sellerService;
     private readonly IVeloRouter _router;
     private readonly IValidator<SellerSearchModel> _searchValidator;
     private readonly IValidator<SellerEntity> _sellerValidator;
 
-    public SellerController(ISellerService sellerService, IValidator<SellerSearchModel> searchValidator, IVeloRouter router, ISellerRouter sellerRouter, SellerCrudModelFactory modelFactory, IValidator<SellerEntity> sellerValidator)
+    public SellerController(ISellerService sellerService, IValidator<SellerSearchModel> searchValidator, IVeloRouter router, ISellerRouter sellerRouter, SellerCrudModelFactory modelFactory, IValidator<SellerEntity> sellerValidator, IQrImportService qrImportService, IStringLocalizer<SharedResources> localizer)
         : base(sellerService, sellerRouter, modelFactory, sellerValidator)
     {
         _sellerService = sellerService ?? throw new ArgumentNullException(nameof(sellerService));
         _router = router ?? throw new ArgumentNullException(nameof(router));
         _searchValidator = searchValidator ?? throw new ArgumentNullException(nameof(searchValidator));
         _sellerValidator = sellerValidator ?? throw new ArgumentNullException(nameof(sellerValidator));
+        _qrImportService = qrImportService ?? throw new ArgumentNullException(nameof(qrImportService));
+        _localizer = localizer ?? throw new ArgumentNullException(nameof(localizer));
     }
 
     public async Task<IActionResult> CreateForAcceptance(int? id)
@@ -62,6 +67,20 @@ public sealed class SellerController
 
         SellerCreateForAcceptanceModel model = new(seller);
         return View(model);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> ScanQrForAcceptance(SellerEntity seller, string? qrScanText)
+    {
+        ArgumentNullException.ThrowIfNull(seller);
+
+        ModelState.Clear();
+
+        QrImportResult result = await _qrImportService.TryApplyToSellerAsync(qrScanText, seller);
+        AddQrImportModelErrors(result);
+
+        SellerCreateForAcceptanceModel model = new(seller);
+        return View(nameof(CreateForAcceptance), model);
     }
 
     public async Task<IActionResult> Details(SellerDetailsParameter parameter)
@@ -131,6 +150,34 @@ public sealed class SellerController
         await _sellerService.TriggerStatusPushAsync(basarId, id);
 
         return RedirectToReferer();
+    }
+
+    private void AddQrImportModelErrors(QrImportResult result)
+    {
+        switch (result.Status)
+        {
+            case QrImportStatus.Empty:
+                ModelState.AddModelError(string.Empty, _localizer[VeloTexts.QrScanEmpty]);
+                break;
+            case QrImportStatus.InvalidFormat:
+                ModelState.AddModelError(string.Empty, _localizer[VeloTexts.QrScanInvalidData]);
+                break;
+            case QrImportStatus.UnsupportedSchemaVersion:
+                ModelState.AddModelError(string.Empty, _localizer[VeloTexts.QrScanUnsupportedVersion]);
+                break;
+            case QrImportStatus.ChecksumMismatch:
+                ModelState.AddModelError(string.Empty, _localizer[VeloTexts.QrScanChecksumMismatch]);
+                break;
+            case QrImportStatus.WrongKind:
+                ModelState.AddModelError(string.Empty, _localizer[VeloTexts.QrScanWrongKindExpectedSeller, result.ActualKind ?? "?"]);
+                break;
+            case QrImportStatus.Success:
+                if (result.UnmatchedCountryIso3 is not null)
+                {
+                    ModelState.AddModelError(nameof(SellerEntity.CountryId), _localizer[VeloTexts.QrScanCountryNotFound, result.UnmatchedCountryIso3]);
+                }
+                break;
+        }
     }
 
     protected override IActionResult RedirectToOrigin(SellerEntity entity, string? origin)

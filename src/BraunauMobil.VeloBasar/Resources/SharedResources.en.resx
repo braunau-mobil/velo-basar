@@ -1032,4 +1032,34 @@
   <data name="VeloBasar_RemoteWithCount" xml:space="preserve">
     <value>Remote: {0}</value>
   </data>
+  <data name="VeloBasar_QrScanButton" xml:space="preserve">
+    <value>Read QR code</value>
+  </data>
+  <data name="VeloBasar_QrScanChecksumMismatch" xml:space="preserve">
+    <value>The QR code was not read completely. Please scan it again.</value>
+  </data>
+  <data name="VeloBasar_QrScanCountryNotFound" xml:space="preserve">
+    <value>Country '{0}' from the QR code was not found. Please select manually.</value>
+  </data>
+  <data name="VeloBasar_QrScanEmpty" xml:space="preserve">
+    <value>Please scan a QR code first.</value>
+  </data>
+  <data name="VeloBasar_QrScanFieldLabel" xml:space="preserve">
+    <value>QR code</value>
+  </data>
+  <data name="VeloBasar_QrScanInvalidData" xml:space="preserve">
+    <value>The scanned code is not a valid velo-basar QR code.</value>
+  </data>
+  <data name="VeloBasar_QrScanProductTypeNotFound" xml:space="preserve">
+    <value>Product type '{0}' from the QR code was not found. Please select manually.</value>
+  </data>
+  <data name="VeloBasar_QrScanUnsupportedVersion" xml:space="preserve">
+    <value>This QR code version is not supported.</value>
+  </data>
+  <data name="VeloBasar_QrScanWrongKindExpectedProduct" xml:space="preserve">
+    <value>This QR code does not contain product data (detected: '{0}'). Please scan a bike QR code.</value>
+  </data>
+  <data name="VeloBasar_QrScanWrongKindExpectedSeller" xml:space="preserve">
+    <value>This QR code does not contain seller data (detected: '{0}'). Please scan the seller QR code.</value>
+  </data>
 </root>

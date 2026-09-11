@@ -1032,4 +1032,34 @@
   <data name="VeloBasar_RemoteWithCount" xml:space="preserve">
     <value>Online Banking: {0}</value>
   </data>
+  <data name="VeloBasar_QrScanButton" xml:space="preserve">
+    <value>QR-Code einlesen</value>
+  </data>
+  <data name="VeloBasar_QrScanChecksumMismatch" xml:space="preserve">
+    <value>Der QR-Code wurde unvollständig eingelesen. Bitte erneut scannen.</value>
+  </data>
+  <data name="VeloBasar_QrScanCountryNotFound" xml:space="preserve">
+    <value>Land '{0}' aus dem QR-Code wurde nicht gefunden. Bitte manuell auswählen.</value>
+  </data>
+  <data name="VeloBasar_QrScanEmpty" xml:space="preserve">
+    <value>Bitte zuerst einen QR-Code einscannen.</value>
+  </data>
+  <data name="VeloBasar_QrScanFieldLabel" xml:space="preserve">
+    <value>QR-Code</value>
+  </data>
+  <data name="VeloBasar_QrScanInvalidData" xml:space="preserve">
+    <value>Der eingescannte Code ist kein gültiger velo-basar QR-Code.</value>
+  </data>
+  <data name="VeloBasar_QrScanProductTypeNotFound" xml:space="preserve">
+    <value>Fahrzeugtyp '{0}' aus dem QR-Code wurde nicht gefunden. Bitte manuell auswählen.</value>
+  </data>
+  <data name="VeloBasar_QrScanUnsupportedVersion" xml:space="preserve">
+    <value>Diese QR-Code-Version wird nicht unterstützt.</value>
+  </data>
+  <data name="VeloBasar_QrScanWrongKindExpectedProduct" xml:space="preserve">
+    <value>Dieser QR-Code enthält keine Fahrzeugdaten (erkannt: '{0}'). Bitte einen Fahrrad-QR-Code einscannen.</value>
+  </data>
+  <data name="VeloBasar_QrScanWrongKindExpectedSeller" xml:space="preserve">
+    <value>Dieser QR-Code enthält keine Verkäuferdaten (erkannt: '{0}'). Bitte den Verkäufer-QR-Code einscannen.</value>
+  </data>
 </root>

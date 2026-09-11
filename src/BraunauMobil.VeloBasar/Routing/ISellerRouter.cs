@@ -9,6 +9,8 @@ public interface ISellerRouter
 
     string ToSearchForAcceptance();
 
+    string ToScanQrForAcceptance();
+
     string ToDetails(int id);
 
     string ToLabels(int id);
