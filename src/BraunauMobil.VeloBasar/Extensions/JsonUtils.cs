@@ -12,7 +12,7 @@ public static class JsonUtils
         ArgumentNullException.ThrowIfNull(label);
 
         string color = ToChartJsColor(new Color());
-        if (points.Any())
+        if (points.Count > 0)
         {
             color = ToChartJsColor(points[0].Color);
         }
@@ -69,7 +69,7 @@ public static class JsonUtils
         ArgumentNullException.ThrowIfNull(label);
 
         string color = ToChartJsColor(new Color());
-        if (points.Any())
+        if (points.Count > 0)
         {
             color = ToChartJsColor(points[0].Color);
         }

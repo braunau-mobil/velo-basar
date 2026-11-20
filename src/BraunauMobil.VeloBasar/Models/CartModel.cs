@@ -9,7 +9,7 @@ namespace BraunauMobil.VeloBasar.Models;
 public sealed class CartModel
     : AbstractActiveBasarModel
 {
-    public bool HasProducts { get => Products.Any(); }
+    public bool HasProducts { get => Products.Count > 0; }
 
     public int ProductId { get; set; }
 
