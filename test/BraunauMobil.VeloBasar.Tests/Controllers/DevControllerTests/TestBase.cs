@@ -8,7 +8,7 @@ public class TestBase
 {
     public TestBase()
     {
-        Sut = new DevController(AppContext, DataGeneratorService, new UserManagerMock(), Router);
+        Sut = new DevController(AppContext, DataGeneratorService, new UserManagerMock(), Router, VeloCache);
     }
 
     protected IAppContext AppContext { get; } = X.StrictFake<IAppContext>();
@@ -20,5 +20,7 @@ public class TestBase
     protected IVeloRouter Router { get; } = X.StrictFake<IVeloRouter>();
 
     protected DevController Sut { get; }
+
+    protected IVeloCache VeloCache { get; } = X.StrictFake<IVeloCache>();
 
 }

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BraunauMobil.VeloBasar.Controllers;
 
-public sealed class DevController(IAppContext appContext, IDataGeneratorService generatorService, UserManager<IdentityUser> userManager, IVeloRouter router)
+public sealed class DevController(IAppContext appContext, IDataGeneratorService generatorService, UserManager<IdentityUser> userManager, IVeloRouter router, IVeloCache veloCache)
     : AbstractVeloController
 {
     public IActionResult DeleteCookies()
@@ -52,6 +52,7 @@ public sealed class DevController(IAppContext appContext, IDataGeneratorService 
             return Unauthorized();
         }
         await generatorService.DropDatabaseAsync();
+        veloCache.IsDatabaseReady = false;
         await generatorService.CreateDatabaseAsync();
 
         return Redirect(router.ToHome());

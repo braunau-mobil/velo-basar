@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 
 namespace BraunauMobil.VeloBasar.Filters;
 
-public sealed class IsDatabaseInitializedFilter(ILogger<IsDatabaseInitializedFilter> logger, IAppContext appContext, ISetupRouter router)
+public sealed class IsDatabaseInitializedFilter(ILogger<IsDatabaseInitializedFilter> logger, IAppContext appContext, ISetupRouter router, IVeloCache veloCache)
     : AbstractVeloActionFilter
 {
     protected override async Task ActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate nextDelegate)
@@ -13,7 +13,11 @@ public sealed class IsDatabaseInitializedFilter(ILogger<IsDatabaseInitializedFil
         ArgumentNullException.ThrowIfNull(context);
         ArgumentNullException.ThrowIfNull(nextDelegate);
 
-        if (await appContext.NeedsInitialSetupAsync())
+        if (veloCache.IsDatabaseReady)
+        {
+            await nextDelegate();
+        }
+        else if (await appContext.NeedsInitialSetupAsync())
         {
             logger.LogInformation("Redirecting to initial setup");
             context.Result = new RedirectResult(router.ToInitialSetup());
@@ -25,6 +29,7 @@ public sealed class IsDatabaseInitializedFilter(ILogger<IsDatabaseInitializedFil
         }
         else
         {
+            veloCache.IsDatabaseReady = true;
             await nextDelegate();
         }
     }

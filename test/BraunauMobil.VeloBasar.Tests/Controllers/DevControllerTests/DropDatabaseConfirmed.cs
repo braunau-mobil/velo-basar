@@ -28,6 +28,7 @@ public class DropDatabaseConfirmed
         A.CallTo(() => AppContext.DevToolsEnabled()).Returns(true);
         A.CallTo(() => DataGeneratorService.DropDatabaseAsync()).DoesNothing();
         A.CallTo(() => DataGeneratorService.CreateDatabaseAsync()).DoesNothing();
+        A.CallToSet(() => VeloCache.IsDatabaseReady).To(false).DoesNothing();
         A.CallTo(() => Router.ToHome()).Returns(url);
 
         //  Act
@@ -43,6 +44,7 @@ public class DropDatabaseConfirmed
         A.CallTo(() => AppContext.DevToolsEnabled()).MustHaveHappenedOnceExactly();
         A.CallTo(() => DataGeneratorService.DropDatabaseAsync()).MustHaveHappenedOnceExactly();
         A.CallTo(() => DataGeneratorService.CreateDatabaseAsync()).MustHaveHappenedOnceExactly();
+        A.CallToSet(() => VeloCache.IsDatabaseReady).To(false).MustHaveHappenedOnceExactly();
         A.CallTo(() => Router.ToHome()).MustHaveHappenedOnceExactly();
     }
 }

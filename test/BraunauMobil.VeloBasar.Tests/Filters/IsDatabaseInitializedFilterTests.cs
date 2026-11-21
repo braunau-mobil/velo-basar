@@ -17,10 +17,12 @@ public class IsDatabaseInitializedFilterTests
     private readonly Controller _controller;
     private readonly IAppContext _appContext = X.StrictFake<IAppContext>();
     private readonly ISetupRouter _router = X.StrictFake<ISetupRouter>();
+    private readonly IVeloCache _veloCache = X.StrictFake<IVeloCache>();
 
     public IsDatabaseInitializedFilterTests()
     {
-        _sut = new(A.Fake<ILogger<IsDatabaseInitializedFilter>>(), _appContext, _router);
+        _sut = new(A.Fake<ILogger<IsDatabaseInitializedFilter>>(), _appContext, _router, _veloCache);
+        A.CallTo(() => _veloCache.IsDatabaseReady).Returns(false);
 
         ActionContext actionContext = new(new DefaultHttpContext(), new RouteData(), new ActionDescriptor());
         IList<IFilterMetadata> filters = X.StrictFake<IList<IFilterMetadata>>();
@@ -35,11 +37,12 @@ public class IsDatabaseInitializedFilterTests
     }
 
     [Fact]
-    public async Task Initialized_Migrated_ShouldNotRedirect()
+    public async Task Initialized_Migrated_ShouldNotRedirectAndCacheReadyState()
     {
         //  Arrange
         A.CallTo(() => _appContext.NeedsInitialSetupAsync()).Returns(false);
         A.CallTo(() => _appContext.NeedsMigrationAsync()).Returns(false);
+        A.CallToSet(() => _veloCache.IsDatabaseReady).To(true).DoesNothing();
 
         //  Act
         await _sut.OnActionExecutionAsync(_executingContext, _actionExecutionDelegate);
@@ -49,6 +52,24 @@ public class IsDatabaseInitializedFilterTests
 
         A.CallTo(() => _appContext.NeedsInitialSetupAsync()).MustHaveHappenedOnceExactly();
         A.CallTo(() => _appContext.NeedsMigrationAsync()).MustHaveHappenedOnceExactly();
+        A.CallToSet(() => _veloCache.IsDatabaseReady).To(true).MustHaveHappenedOnceExactly();
+        A.CallTo(() => _actionExecutionDelegate.Invoke()).MustHaveHappenedOnceExactly();
+    }
+
+    [Fact]
+    public async Task ReadyStateCached_ShouldNotQueryDatabaseAndNotRedirect()
+    {
+        //  Arrange
+        A.CallTo(() => _veloCache.IsDatabaseReady).Returns(true);
+
+        //  Act
+        await _sut.OnActionExecutionAsync(_executingContext, _actionExecutionDelegate);
+
+        //  Assert
+        _executingContext.Result.Should().BeNull();
+
+        A.CallTo(() => _appContext.NeedsInitialSetupAsync()).MustNotHaveHappened();
+        A.CallTo(() => _appContext.NeedsMigrationAsync()).MustNotHaveHappened();
         A.CallTo(() => _actionExecutionDelegate.Invoke()).MustHaveHappenedOnceExactly();
     }
 

@@ -72,16 +72,21 @@ public sealed class VeloDbContext
 
 
     public async Task<bool> NeedsInitialSetupAsync()
-        => !await Users.AnyAsync();
+    {
+        //  No migration applied yet means there is no schema at all (e.g. a fresh database).
+        //  SQLite is created via EnsureCreated, which does not record any migrations.
+        if (!IsSQLITE() && !(await Database.GetAppliedMigrationsAsync()).Any())
+        {
+            return true;
+        }
+        return !await Users.AnyAsync();
+    }
 
     public async Task<bool> NeedsMigrationAsync()
     {
         IEnumerable<string> pendingMigrations = await Database.GetPendingMigrationsAsync();
         return pendingMigrations.Any();
     }
-
-    public async Task<bool> IsInitializedAsync()
-        => await Users.AnyAsync();
 
     public bool IsPostgreSQL() => Database.ProviderName == "Npgsql.EntityFrameworkCore.PostgreSQL";
 
