@@ -22,7 +22,7 @@ public class Program
         CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-US");
         CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-US");
 
-        await GeneratePostgresAsync("User ID=postgres;Password=postgres;Host=localhost;Port=5432;Database=velobasar;Pooling=true;");
+        await GeneratePostgresAsync("User ID=postgres;Password=postgres;Host=localhost;Port=55432;Database=velobasar;Pooling=true;");
     }
 
     private static async Task GeneratePostgresAsync(string connectionString)
